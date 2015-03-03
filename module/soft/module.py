@@ -273,6 +273,19 @@ def setup(i):
        if duid!=duoa: x+=' ('+duid+')'
        ck.out('Software entry found: '+x)
 
+    # Prepare first meta
+    tbits=tosd.get('bits','')
+    meta={"host_os":hos,
+          "target_os":tos,
+          "target_bits":tbits
+         }
+
+    misc={"host_os_dict":hosd,
+          "target_os_dict":tosd,
+          "target_device_id":tdid
+         }
+
+    # Check if script
     setup=d.get('setup',{})
     setup_script=setup.get('script','')
 
@@ -287,9 +300,8 @@ def setup(i):
        if rx['return']>0: return rx
        fn=rx['file_name']
 
-
        # Call setup script
-       rx=crx.setup({'path':p})
+       rx=crx.setup({"meta":meta, "misc":misc})
        if rx['return']>0: return rx
 
 
