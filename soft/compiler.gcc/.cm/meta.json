@@ -1,0 +1,9 @@
+{
+ "tags":["compiler","gcc"],
+ "version":{"cmd":"gcc --version > $#filename#$ 2>>&1", 
+            "type":"parse_first_string", 
+            "string_before":")",
+            "string_after":"",
+            "split":"."},
+ "setup":{"script":"setup"}
+}

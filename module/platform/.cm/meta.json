@@ -1,0 +1,20 @@
+{
+  "actions": {
+    "detect": {
+      "desc": "collect info about platforms"
+    }, 
+    "get_from_wmic": {
+      "desc": "Get info from WMIC on Windows"
+    }
+  }, 
+  "copyright": "See CK Copyright.txt for copyright details", 
+  "desc": "platform detection", 
+  "developer": "Grigori Fursin", 
+  "developer_email": "Grigori.Fursin@cTuning.org", 
+  "developer_webpage": "http://cTuning.org/lab/people/gfursin", 
+  "license": "See CK LICENSE.txt for licensing details", 
+  "module_deps": {
+    "platform.cpu":"aa6b542a420b8db9",
+    "platform.accelerator":"55ec7775f4afaabd"
+  }
+}

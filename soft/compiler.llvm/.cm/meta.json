@@ -1,0 +1,8 @@
+{
+ "tags":["compiler","llvm"],
+ "version":{"cmd":"clang --version > $#filename#$ 2>>&1", 
+            "type":"parse_first_string", 
+            "string_before":"version ",
+            "string_after":"(",
+            "split":"."}
+}

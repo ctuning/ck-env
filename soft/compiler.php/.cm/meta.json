@@ -1,0 +1,8 @@
+{
+ "tags":["compiler","php"],
+ "version":{"cmd":"php --version > $#filename#$ 2>>&1", 
+            "type":"parse_first_string", 
+            "string_before":"PHP ",
+            "string_after":" ",
+            "split":"."}
+}

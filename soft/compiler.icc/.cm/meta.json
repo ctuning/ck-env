@@ -1,0 +1,8 @@
+{
+ "tags":["compiler","icc"],
+ "version":{"cmd":"icl > $#filename#$ 2>>&1", 
+            "type":"parse_first_string", 
+            "string_before":"Version ",
+            "string_after":"Build",
+            "split":"."}
+}

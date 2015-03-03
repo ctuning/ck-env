@@ -1,0 +1,8 @@
+{
+ "tags":["compiler","python"],
+ "version":{"cmd":"python --version > $#filename#$ 2>>&1", 
+            "type":"parse_first_string", 
+            "string_before":"Python ",
+            "string_after_relaxed":" ",
+            "split":"."}
+}
