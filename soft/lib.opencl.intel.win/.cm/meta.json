@@ -1,0 +1,8 @@
+{
+ "tags":["lib","opencl","intel"],
+ "env_prefix":"CK_ENV_LIB_OPENCL",
+ "lenv":[
+         ["CK_OPENCL_STATIC_LIB", ""]
+        ],
+ "customize_script":"customize"
+}
