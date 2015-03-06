@@ -1,6 +1,7 @@
 {
  "tags":["compiler","java"],
- "version":{"cmd":"javac -version > $#filename#$ 2>>&1", 
+ "tool":"javac",
+ "version":{"cmd":"-version > $#filename#$ 2>>&1", 
             "type":"parse_first_string", 
             "string_before":"javac ",
             "string_after":"",

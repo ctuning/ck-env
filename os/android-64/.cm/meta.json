@@ -9,10 +9,13 @@
   "dir_sep": "/", 
   "env_call": ".", 
   "env_quotes": "\"", 
+  "env_quotes_if_space": "\"", 
+  "env_quotes_if_space_in_call": "\"", 
   "env_separator": ";", 
   "env_set": "export ", 
   "env_var_start": "$", 
   "env_var_stop": "", 
+  "env_var_separator":":", 
   "exec_prefix": "./", 
   "extract_package": {
     ".tar.bz2": "rm -f $#cm_file_without_one_ext#$ ; bzip2 -d $#cm_file#$ ; tar xvf $#cm_file_without_one_ext#$; rm -f $#cm_file_without_one_ext#$", 

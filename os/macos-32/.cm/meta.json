@@ -10,8 +10,11 @@
   "env_call": ".", 
   "env_dollar_if_remote": "yes", 
   "env_quotes": "\"", 
+  "env_quotes_if_space": "\"", 
+  "env_quotes_if_space_in_call": "\"", 
   "env_quotes_if_remote": "\"", 
   "env_separator": ";", 
+  "env_var_separator":":", 
   "env_set": "export", 
   "exec_prefix": "./", 
   "extract_package": {
