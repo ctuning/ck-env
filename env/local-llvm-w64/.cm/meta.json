@@ -1,0 +1,56 @@
+{
+  "deps": [], 
+  "env": {
+    "CK_AR": "ar", 
+    "CK_ASM_EXT": ".s", 
+    "CK_CC": "gcc", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": " -DWINDOWS", 
+    "CK_CXX": "g++ -fpermissive", 
+    "CK_DLL_EXT": ".so", 
+    "CK_EXE_EXT": ".out", 
+    "CK_F90": "gfortran", 
+    "CK_F95": "gfortran", 
+    "CK_FC": "gfortran", 
+    "CK_FLAGS_CREATE_ASM": "-S", 
+    "CK_FLAGS_CREATE_OBJ": "-c", 
+    "CK_FLAGS_DLL": "-shared -fPIC", 
+    "CK_FLAGS_DLL_EXTRA": "-ldl", 
+    "CK_FLAGS_OUTPUT": "-o", 
+    "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+    "CK_FLAGS_STATIC_LIB": "-fPIC", 
+    "CK_FLAG_PREFIX_INCLUDE": "-I", 
+    "CK_FLAG_PREFIX_VAR": "-D", 
+    "CK_LB": "ar rcs", 
+    "CK_LB_OUTPUT": "-o ", 
+    "CK_LD_FLAGS_EXTRA": "-lm -ldl", 
+    "CK_LIB_EXT": ".a", 
+    "CK_MAKE": "mingw32-make", 
+    "CK_OBJDUMP": "objdump -d", 
+    "CK_OBJ_EXT": ".o", 
+    "CK_PLUGIN_FLAG": "-fplugin=", 
+    "CK_PROFILER": "gprof"
+  }, 
+  "env_script": "env.bat", 
+  "misc": {
+    "env_prefix": "CK_ENV_COMPILER_LLVM", 
+    "path_bin": "\\bin", 
+    "path_install": "", 
+    "version": "local", 
+    "version_int": 888888
+  }, 
+  "resolved_deps_uoa": [], 
+  "setup": {
+    "host_os_uoa": "7a95e0754c37610a", 
+    "target_os_bits": "64", 
+    "target_os_uoa": "7a95e0754c37610a", 
+    "version": "local"
+  }, 
+  "tags": [
+    "compiler", 
+    "llvm", 
+    "host-os-windows-64", 
+    "target-os-windows-64", 
+    "64bits", 
+    "vlocal"
+  ]
+}

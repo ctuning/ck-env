@@ -11,7 +11,7 @@
  "deps":[
     {"name":"compiler_mvsc", 
      "tags":"compiler,mvsc", 
-     "use_setup_info":"yes"}
+     "local":"yes"}
   ],
  "lenv":[
          ["CK_CXX", "cl"],

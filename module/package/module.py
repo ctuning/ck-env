@@ -164,8 +164,9 @@ def install(i):
     # Convert tags to string
     stags=''
     for q in tags:
-        if stags!='': stags+=','
-        stags+=q.strip()
+        if q!='':
+           if stags!='': stags+=','
+           stags+=q.strip()
 
     # Check installation path
     pi=i.get('install_path','')
@@ -377,3 +378,24 @@ def install(i):
           if rx['return']>0: return rx
 
     return {'return':0}
+
+##############################################################################
+# setup package (only environment)
+
+def setup(i):
+    """
+    Input:  {
+               See 'install' function
+               skip_process=yes
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    i['skip_process']='yes'
+    return install(i)

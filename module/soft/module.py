@@ -144,7 +144,8 @@ def detect(i):
 #          return {'return':16, 'error':'executing command returned non-zero value ('+cmd+')'}
 
        if os.path.isfile(fn): 
-          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
+          import sys
+          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'encoding':sys.stdout.encoding})
           if rx['return']>0: return rx
           lst=rx['lst']
 
@@ -203,7 +204,7 @@ def setup(i):
               (target_os)         - target OS (detect, if omitted)
               (target_device_id)  - target device ID (detect, if omitted)
 
-              (data_uoa) or (uoa) - environment UOA entry
+              (data_uoa) or (uoa) - soft configuration UOA
                or
               (tags)              - search UOA by tags (separated by comma)
 
@@ -229,6 +230,9 @@ def setup(i):
                                     instead of creating env entry
 
               (quiet)             - if 'yes', minimize questions
+
+              (env_data_uoa)      - use this data UOA to record new env
+              (env_repo_uoa)      - use this repo to record new env
             }
 
     Output: {
@@ -336,7 +340,7 @@ def setup(i):
     # Add tags from the search!
     for q in tags.split(','):
         q1=q.strip()
-        if q1 not in ltags: ltags.append(q1)
+        if q1!='' and q1 not in ltags: ltags.append(q1)
 
     if o=='con':
        if duoa!='' and duid!='':
@@ -351,7 +355,7 @@ def setup(i):
 
     # Check installation path
     pi=i.get('install_path','')
-    if pi=='':
+    if pi=='' and i.get('skip_path','')!='yes':
        if o=='con':
           ck.out('')
           r=ck.inp({'text':'Enter path to installed tool: '})
@@ -364,13 +368,13 @@ def setup(i):
     ver=cus.get('version','')
     if ver=='' and o=='con' and cus.get('skip_version','')!='yes':
        ck.out('')
-       r=ck.inp({'text':'Enter tool version (or Enter to skip): '})
+       r=ck.inp({'text':'Enter soft version (or Enter to skip): '})
        ver=r['string']
 
     ver_int=cus.get('version_int','')
-    if ver=='' and o=='con' and cus.get('skip_version','')!='yes':
+    if o=='con' and cus.get('skip_version','')!='yes':
        ck.out('')
-       r=ck.inp({'text':'Enter integer tool version for comparison (for V5.2.3 use 50203): '})
+       r=ck.inp({'text':'Enter integer soft version for comparison (for V5.2.3 use 50203): '})
        verx=r['string']
        if verx=='': verx='0'
        ver_int=int(verx)
@@ -531,15 +535,15 @@ def setup(i):
        sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
        misc['path_bin']=pib
 
-       if cus.get('skip_add_to_ld_lib','')!='yes':
+       if cus.get('skip_add_to_ld_lib','')!='yes' and cus.get('skip_dirs','')!='yes':
           envp_l=envp+'_LIB'
           plib=pi+sdirs+'lib64'
-          if tbits=='64' and not os.path.isdir(plib):
+          if not os.path.isdir(plib):
              plib=pi+sdirs+'lib32'
              if not os.path.isdir(plib):
                 plib=pi+sdirs+'lib' 
-#                if not os.path.isdir(plib):
-#                   return {'return':1, 'error':'can\'t find lib path'}
+                if not os.path.isdir(plib):
+                   return {'return':1, 'error':'can\'t find lib path'}
           sb+=eset+' '+envp_l+'='+xs+plib+xs+'\n\n'
           misc['path_lib']=plib
 
@@ -550,10 +554,10 @@ def setup(i):
     sb+='\n'
 
     # Add to existing vars
-    if cus.get('skip_add_to_path','')!='yes':
+    if cus.get('skip_add_to_path','')!='yes' and cus.get('skip_dirs','')!='yes':
        sb+=eset+' PATH='+svarb+envp_b+svare+evs+svarb+'PATH'+svare+'\n'
 
-    if cus.get('skip_add_to_ld_path','')!='yes':
+    if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes':
        sb+=eset+' LD_LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LD_LIBRARY_PATH'+svare+'\n\n'
 
     # Finish batch
@@ -567,15 +571,16 @@ def setup(i):
     if ver!='': 
        setup['version']=ver
        tg='v'+ver
-       if tg not in ltags: ltags.append(tg)
+       if tg!='' and tg not in ltags: ltags.append(tg)
 
     search_dict={'setup':setup}
 
     # Finish tags
     stags=''
     for q in ltags:
-        if stags!='': stags+=','
-        stags+=q.strip()
+        if q!='':
+           if stags!='': stags+=','
+           stags+=q.strip()
 
     # Check if save to bat file
     bf=i.get('bat_file', '')
@@ -600,6 +605,9 @@ def setup(i):
        # Preparing to add or update entry
        xx='added'
 
+       enduoa=i.get('env_data_uoa','')
+       enruoa=i.get('env_repo_uoa','')
+
        dd={'tags':ltags,
            'setup':setup,
            'env':env,
@@ -613,6 +621,9 @@ def setup(i):
            'dict':dd,
            'sort_keys':'yes',
            'substitute':'yes'}
+
+       if enduoa!='': ii['data_uoa']=enduoa
+       if enruoa!='': ii['repo_uoa']=enruoa
 
        if len(lst)>0:
           fe=lst[0]

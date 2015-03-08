@@ -45,7 +45,6 @@ def setup(i):
     iv=i.get('interactive','')
     if iv=='yes': print ('')
 
-    deps=i.get('deps',{})
     env=i.get('env',{})
     cfg=i.get('cfg',{})
     cus=i.get('customize',{})
@@ -77,7 +76,7 @@ def setup(i):
        if 'retargeted' not in tags: tags.append('retargeted')
 
     add_m32=cus.get('add_m32','')
-    if add_m32=='' and iv=='yes':
+    if add_m32=='' and iv=='yes' and tbits=='32':
        x=raw_input('Target OS is 32 bit. Add -m32 to compilation flags (y/N)? ')
        x=x.lower()
        if x=='y' or x=='yes': add_m32='yes'
@@ -95,14 +94,11 @@ def setup(i):
               v=v+' -DWINDOWS'
               if tbits=='32': 
                  if add_m32=='yes': v+=' -m32'
-              else:
-                 v+=' -m64'
 
-              z1=cus.get('add_to_ck_compiler_flags_obligatory','')
-              if z1!='': v+=' '+z1
+           if k=='CK_MAKE': v='mingw32-make'
 
            if k=='CK_CXX': v=v+' -fpermissive'   
 
         env[k]=v
 
-    return {'return':0, 'bat':s, 'env':env, 'tags':tags, 'deps':deps}
+    return {'return':0, 'bat':s, 'env':env, 'tags':tags}

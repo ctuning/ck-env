@@ -41,5 +41,6 @@
   "rem": "rem", 
   "script_ext": ".bat", 
   "windows_base":"yes",
+  "mingw":"yes",
   "use_create_new_console_flag": "yes"
 }

@@ -45,7 +45,7 @@ def set(i):
                or
               (tags)     - search UOA by tags (separated by comma)
 
-              (use_setup_info) - if 'yes', add host_os, target_os, target_device_id to search
+              (local) - if 'yes', add host_os, target_os, target_device_id to search
 
               (bat_file) - if !='', use this filename to generate/append bat file ...
               (bat_new)  - if 'yes', start new bat file
@@ -113,7 +113,7 @@ def set(i):
            'tags':tags,
            'add_meta':'yes'} # Need to sort by version, if ambiguity
 
-       if i.get('use_setup_info','')=='yes':
+       if i.get('local','')=='yes':
           setup={'host_os_uoa':hos,
                  'target_os_uoa':tos,
                  'target_os_bits':tbits}
@@ -303,8 +303,9 @@ def show(i):
 
            stags=''
            for t in tags:
-               if stags!='': stags+=','
-               stags+=t
+               if t!='':
+                  if stags!='': stags+=','
+                  stags+=t
 
            vv['data_uid']=duid
            vv['repo_uid']=ruid
@@ -335,7 +336,7 @@ def show(i):
     if o=='con':
        if len(vs)>0:
           # Headers
-          sh ='Data UID:' + (' ' * (lv['data_uid']- 9))
+          sh ='Env UID:' + (' ' * (lv['data_uid']- 8))
           sh+=' Target OS:' + (' ' * (lv['target_os_uoa']-10))
           sh+=' Bits:'
           sh+=' Name:' + (' ' * (lv['data_name']- 5))
@@ -433,14 +434,14 @@ def resolve(i):
         
         name=q.get('name','')
         tags=q.get('tags','')
-        use_setup_info=q.get('use_setup_info','')
+        local=q.get('local','')
 
         rx=set({'host_os':hos,
                 'target_os':tos,
                 'target_device_id':tdid,
                 'tags':tags,
                 'env':env,
-                'use_setup_info':use_setup_info
+                'local':local
                })
         if rx['return']>0: return rx
 
