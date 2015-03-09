@@ -1,43 +1,141 @@
 {
- "tags":["compiler","icc"],
- "tool":"icl",
- "version":{"cmd":"> $#filename#$ 2>>&1", 
-            "type":"parse_first_string", 
-            "string_before":"Version ",
-            "string_after":"Build",
-            "split":"."},
- "customize_script":"customize",
- "env_prefix":"CK_ENV_COMPILER_ICC",
- "deps":[
-    {"name":"compiler_mvsc", 
-     "tags":"compiler,mvsc", 
-     "local":"yes"}
-  ],
- "lenv":[
-         ["CK_CXX", "cl"],
-         ["CK_OBJ_EXT", ".obj"],
-         ["CK_CC", "cl"],
-         ["CK_FLAGS_DLL", "/MT /DWin /LD /FIwindows.h"],
-         ["CK_FLAGS_DLL_EXTRA", "/link /dll"],
-         ["CK_FLAGS_OUTPUT", "/Fe"], 
-         ["CK_DLL_EXT", ".dll"],
-         ["CK_LIB_EXT", ".lib"],
-         ["CK_FLAGS_CREATE_OBJ", "/c"],
-         ["CK_LB", "lib"],
-         ["CK_AR", "lib"],
-         ["CK_LB_OUTPUT", "/OUT:"],
-         ["CK_EXE_EXT", ".exe"],
-         ["CK_FLAGS_STATIC_BIN", "/MT"],
-         ["CK_FLAGS_STATIC_LIB", "/MT"],
-         ["CK_FLAGS_DYNAMIC_BIN", "/MD"],
-         ["CK_LD_DYNAMIC_FLAGS", "/link /NODEFAULTLIB:LIBCMT"],
-         ["CK_FLAGS_CREATE_ASM", "/Fa /c"],
-         ["CK_ASM_EXT", ".asm"],
-         ["CK_COMPILER_FLAGS_OBLIGATORY", "/DWINDOWS /GS-"],
-         ["CK_LD_FLAGS_EXTRA", "bufferoverflowU.lib"],
-         ["CK_MAKE", "nmake"],
-         ["CK_OBJDUMP", "objdump -d"],
-         ["CK_FLAG_PREFIX_VAR", "/D"],
-         ["CK_FLAG_PREFIX_INCLUDE", "/I"]
-        ]
+  "customize": {
+    "env_prefix": "CK_ENV_COMPILER_ICC", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_path": "yes"
+  }, 
+  "customize_script": "customize", 
+  "deps": [
+    {
+      "local": "yes", 
+      "name": "compiler_mvsc", 
+      "tags": "compiler,mvsc"
+    }
+  ], 
+  "lenv": [
+    [
+      "CK_CXX", 
+      "icl"
+    ], 
+    [
+      "CK_OBJ_EXT", 
+      ".obj"
+    ], 
+    [
+      "CK_CC", 
+      "icl"
+    ], 
+    [
+      "CK_FC", 
+      "ifort"
+    ], 
+    [
+      "CK_F90", 
+      "ifort"
+    ], 
+    [
+      "CK_F95", 
+      "ifort"
+    ], 
+    [
+      "CK_FLAGS_DLL", 
+      "/MT /DWin /LD /FIwindows.h"
+    ], 
+    [
+      "CK_FLAGS_DLL_EXTRA", 
+      "/link /dll"
+    ], 
+    [
+      "CK_FLAGS_OUTPUT", 
+      "/Fe"
+    ], 
+    [
+      "CK_DLL_EXT", 
+      ".dll"
+    ], 
+    [
+      "CK_LIB_EXT", 
+      ".lib"
+    ], 
+    [
+      "CK_FLAGS_CREATE_OBJ", 
+      "/c"
+    ], 
+    [
+      "CK_LB", 
+      "lib"
+    ], 
+    [
+      "CK_AR", 
+      "lib"
+    ], 
+    [
+      "CK_LB_OUTPUT", 
+      "/OUT:"
+    ], 
+    [
+      "CK_EXE_EXT", 
+      ".exe"
+    ], 
+    [
+      "CK_FLAGS_STATIC_BIN", 
+      "/MT"
+    ], 
+    [
+      "CK_FLAGS_STATIC_LIB", 
+      "/MT"
+    ], 
+    [
+      "CK_FLAGS_DYNAMIC_BIN", 
+      "/MD"
+    ], 
+    [
+      "CK_LD_DYNAMIC_FLAGS", 
+      "/link /NODEFAULTLIB:LIBCMT"
+    ], 
+    [
+      "CK_FLAGS_CREATE_ASM", 
+      "/Fa /c"
+    ], 
+    [
+      "CK_ASM_EXT", 
+      ".asm"
+    ], 
+    [
+      "CK_COMPILER_FLAGS_OBLIGATORY", 
+      "/DWINDOWS /GS-"
+    ], 
+    [
+      "CK_LD_FLAGS_EXTRA", 
+      "bufferoverflowU.lib"
+    ], 
+    [
+      "CK_MAKE", 
+      "nmake"
+    ], 
+    [
+      "CK_OBJDUMP", 
+      "objdump -d"
+    ], 
+    [
+      "CK_FLAG_PREFIX_VAR", 
+      "/D"
+    ], 
+    [
+      "CK_FLAG_PREFIX_INCLUDE", 
+      "/I"
+    ]
+  ], 
+  "tags": [
+    "compiler", 
+    "icc"
+  ], 
+  "tool": "icl", 
+  "version": {
+    "cmd": "> $#filename#$ 2>>&1", 
+    "split": ".", 
+    "string_after": "Build", 
+    "string_before": "Version ", 
+    "type": "parse_first_string"
+  }
 }

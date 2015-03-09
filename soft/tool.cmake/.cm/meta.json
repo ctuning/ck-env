@@ -1,13 +1,21 @@
 {
- "tags":["tool","cmake"],
- "tool":"cmake",
- "version":{"cmd":"--version > $#filename#$ 2>>&1", 
-            "type":"parse_first_string", 
-            "string_before":"version ",
-            "string_after":"",
-            "split":"."},
- "env_prefix":"CK_ENV_TOOL_CMAKE",
- "lenv":[
-         ["CK_CMAKE", "cmake"]
-        ]
+  "customize": {
+    "env_prefix": "CK_ENV_TOOL_CMAKE", 
+    "skip_add_to_ld_path": "yes"
+  }, 
+  "env": {
+    "CK_CMAKE": "cmake"
+  }, 
+  "tags": [
+    "tool", 
+    "cmake"
+  ], 
+  "tool": "cmake", 
+  "version": {
+    "cmd": "--version > $#filename#$ 2>>&1", 
+    "split": ".", 
+    "string_after": "", 
+    "string_before": "version ", 
+    "type": "parse_first_string"
+  }
 }

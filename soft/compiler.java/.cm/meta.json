@@ -1,9 +1,28 @@
 {
- "tags":["compiler","java"],
- "tool":"javac",
- "version":{"cmd":"-version > $#filename#$ 2>>&1", 
-            "type":"parse_first_string", 
-            "string_before":"javac ",
-            "string_after":"",
-            "split":"."}
+  "customize": {
+    "env_prefix": "CK_ENV_COMPILER_JAVA", 
+    "languages": [
+      "JAVA"
+    ], 
+    "skip_add_to_ld_path": "yes"
+  }, 
+  "customize_script": "customize", 
+  "env": {
+    "CK_JAVAC": "javac", 
+    "CK_JAVA_OBJ_EXT": ".class", 
+    "CK_JAVA_RT": "java"
+  }, 
+  "soft_name": "Compiler - JAVA", 
+  "tags": [
+    "compiler", 
+    "java"
+  ], 
+  "tool": "javac", 
+  "version": {
+    "cmd": "-version > $#filename#$ 2>>&1", 
+    "split": ".", 
+    "string_after": "", 
+    "string_before": "javac ", 
+    "type": "parse_first_string"
+  }
 }

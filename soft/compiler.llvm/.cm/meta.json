@@ -1,41 +1,130 @@
 {
- "tags":["compiler","llvm"],
- "tool":"clang",
- "version":{"cmd":"--version > $#filename#$ 2>>&1", 
-            "type":"parse_first_string", 
-            "string_before":"version ",
-            "string_after":"(",
-            "split":"."},
- "customize_script":"customize",
- "env_prefix":"CK_ENV_COMPILER_LLVM",
- "lenv":[
-         ["CK_CXX", "$#tool_prefix#$g++"],
-         ["CK_OBJ_EXT", ".o"],
-         ["CK_CC", "$#tool_prefix#$gcc"],
-         ["CK_FC", "$#tool_prefix#$gfortran"],
-         ["CK_F90", "$#tool_prefix#$gfortran"],
-         ["CK_F95", "$#tool_prefix#$gfortran"],
-         ["CK_FLAGS_DLL", "-shared -fPIC"],
-         ["CK_FLAGS_DLL_EXTRA", "-ldl"],
-         ["CK_FLAGS_OUTPUT", "-o"], 
-         ["CK_DLL_EXT", ".so"],
-         ["CK_LIB_EXT", ".a"],
-         ["CK_FLAGS_CREATE_OBJ", "-c"],
-         ["CK_LB", "$#tool_prefix#$ar rcs"],
-         ["CK_AR", "$#tool_prefix#$ar"],
-         ["CK_LB_OUTPUT", "-o "],
-         ["CK_EXE_EXT", ".out"],
-         ["CK_FLAGS_STATIC_BIN", "-static -fPIC"],
-         ["CK_FLAGS_STATIC_LIB", "-fPIC"],
-         ["CK_FLAGS_CREATE_ASM", "-S"],
-         ["CK_ASM_EXT", ".s"],
-         ["CK_COMPILER_FLAGS_OBLIGATORY", ""],
-         ["CK_LD_FLAGS_EXTRA", "-lm -ldl"],
-         ["CK_PLUGIN_FLAG", "-fplugin="],
-         ["CK_MAKE", "make"],
-         ["CK_OBJDUMP", "$#tool_prefix#$objdump -d"],
-         ["CK_PROFILER", "gprof"],
-         ["CK_FLAG_PREFIX_VAR", "-D"],
-         ["CK_FLAG_PREFIX_INCLUDE", "-I"]
-        ]
+  "customize_script": "customize", 
+  "env_prefix": "CK_ENV_COMPILER_LLVM", 
+  "lenv": [
+    [
+      "CK_CXX", 
+      "$#tool_prefix#$g++"
+    ], 
+    [
+      "CK_OBJ_EXT", 
+      ".o"
+    ], 
+    [
+      "CK_CC", 
+      "$#tool_prefix#$gcc"
+    ], 
+    [
+      "CK_FC", 
+      "$#tool_prefix#$gfortran"
+    ], 
+    [
+      "CK_F90", 
+      "$#tool_prefix#$gfortran"
+    ], 
+    [
+      "CK_F95", 
+      "$#tool_prefix#$gfortran"
+    ], 
+    [
+      "CK_FLAGS_DLL", 
+      "-shared -fPIC"
+    ], 
+    [
+      "CK_FLAGS_DLL_EXTRA", 
+      "-ldl"
+    ], 
+    [
+      "CK_FLAGS_OUTPUT", 
+      "-o"
+    ], 
+    [
+      "CK_DLL_EXT", 
+      ".so"
+    ], 
+    [
+      "CK_LIB_EXT", 
+      ".a"
+    ], 
+    [
+      "CK_FLAGS_CREATE_OBJ", 
+      "-c"
+    ], 
+    [
+      "CK_LB", 
+      "$#tool_prefix#$ar rcs"
+    ], 
+    [
+      "CK_AR", 
+      "$#tool_prefix#$ar"
+    ], 
+    [
+      "CK_LB_OUTPUT", 
+      "-o "
+    ], 
+    [
+      "CK_EXE_EXT", 
+      ".out"
+    ], 
+    [
+      "CK_FLAGS_STATIC_BIN", 
+      "-static -fPIC"
+    ], 
+    [
+      "CK_FLAGS_STATIC_LIB", 
+      "-fPIC"
+    ], 
+    [
+      "CK_FLAGS_CREATE_ASM", 
+      "-S"
+    ], 
+    [
+      "CK_ASM_EXT", 
+      ".s"
+    ], 
+    [
+      "CK_COMPILER_FLAGS_OBLIGATORY", 
+      ""
+    ], 
+    [
+      "CK_LD_FLAGS_EXTRA", 
+      "-lm -ldl"
+    ], 
+    [
+      "CK_PLUGIN_FLAG", 
+      "-fplugin="
+    ], 
+    [
+      "CK_MAKE", 
+      "make"
+    ], 
+    [
+      "CK_OBJDUMP", 
+      "$#tool_prefix#$objdump -d"
+    ], 
+    [
+      "CK_PROFILER", 
+      "gprof"
+    ], 
+    [
+      "CK_FLAG_PREFIX_VAR", 
+      "-D"
+    ], 
+    [
+      "CK_FLAG_PREFIX_INCLUDE", 
+      "-I"
+    ]
+  ], 
+  "tags": [
+    "compiler", 
+    "llvm"
+  ], 
+  "tool": "clang", 
+  "version": {
+    "cmd": "--version > $#filename#$ 2>>&1", 
+    "split": ".", 
+    "string_after": "(", 
+    "string_before": "version ", 
+    "type": "parse_first_string"
+  }
 }

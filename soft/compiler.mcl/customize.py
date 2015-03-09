@@ -16,7 +16,7 @@ def setup(i):
               cfg          - dict of the soft entry
               tags         - list of tags
               env          - environment
-              deps         - dependencies
+              deps         - resolved deps
 
               interactive  - if 'yes', ask questions
 
@@ -30,12 +30,7 @@ def setup(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              bat          - prepared string for bat file
-              env          - updated environment
-              deps         - updated dependencies
-              tags         - updated tags
-
-              path         - install path
+              bat        - prepared string for bat file
             }
 
     """
@@ -55,28 +50,54 @@ def setup(i):
 
     target_d=i.get('target_os_dict',{})
     win=target_d.get('windows_base','')
-    remote=target_d.get('remote','')
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
-    ################################################################
-    if win=='yes':
-       ext='x64'
-       if tbits=='32': ext='x86'
-       if remote=='yes': ext='android32'
+    ############################################################
+    s+='\n'
+    s+='rem Setting environment\n'
 
-       cus['path_bin']=pi+'\\bin\\'+ext
-       cus['path_lib']=pi+'\\lib\\'+ext
+    yy='call "'+pi+'\\vcvarsall.bat" '
 
-       if remote=='yes': 
-          cus['dynamic_lib']='libOpenCL.so'
-       else:
-          cus['static_lib']='OpenCL.lib'
+    # Check which processor
+    arm=cus.get('target_arm','')
+    if target_d.get('remote','')=='yes' and arm=='':
+       arm='yes'
+       if iv=='yes':
+          ck.out('You selected remote platform as a target.')
 
-       env['CK_ENV_LIB_OPENCL_STATIC']=cus.get('static_lib','')
-       env['CK_ENV_LIB_OPENCL_DYNAMIC']=cus.get('dynamic_lib','')
+          x=raw_input('Do you target ARM processors (Y/n): ')
+          if x!='' and x!='Y' and x!='yes': 
+             arm='no'
+
+    if arm=='yes':
+       yy+=' x86_arm'
+    else:
+       if tbits=='32': yy+=' x86'
+       else: yy+=' amd64'
+
+    s+=yy+'\n\n'
+
+    if cus.get('add_win_sdk_path','')=='yes':
+       if iv=='yes':
+          x=env.get('CK_WINDOWS_SDK_PATH','')
+          print ''
+          if x=='':
+             x=raw_input('Input path to Windows SDK (example: C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A"): ')
+          else:
+             print 'Current Windows SDK path: '+x
+             x=raw_input('Input new path to Windows SDK (or press Enter to keep the same): ')
+
+          if x!='': env['CK_WINDOWS_SDK_PATH']=x
+
+       x=env.get('CK_WINDOWS_SDK_PATH','')
+       if x!='':
+          y=x+'\\'
+          if tbits=='32': y+='Lib'
+          else: y+='Lib\\'+'x64'
+          s+='set LIB='+y+';%LIB%\n\n'
 
     return {'return':0, 'bat':s}
