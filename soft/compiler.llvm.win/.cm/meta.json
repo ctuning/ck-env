@@ -1,147 +1,55 @@
 {
+  "customize": {
+    "env_prefix": "CK_ENV_COMPILER_LLVM", 
+    "languages": [
+      "C", 
+      "CPP"
+    ], 
+    "skip_add_to_ld_path": "yes"
+  }, 
   "customize_script": "customize", 
-  "deps": [
-    {
+  "deps": {
+    "compiler_mcl": {
       "local": "yes", 
-      "name": "compiler_mvsc", 
-      "tags": "compiler,mvsc"
+      "tags": "compiler,mcl"
     }
-  ], 
-  "env_prefix": "CK_ENV_COMPILER_LLVM", 
-  "lenv": [
-    [
-      "CK_CXX", 
-      "$#tool_prefix#$clang++"
-    ], 
-    [
-      "CK_OBJ_EXT", 
-      ".o"
-    ], 
-    [
-      "CK_CC", 
-      "$#tool_prefix#$clang"
-    ], 
-    [
-      "CK_FC", 
-      ""
-    ], 
-    [
-      "CK_F90", 
-      ""
-    ], 
-    [
-      "CK_F95", 
-      ""
-    ], 
-    [
-      "CK_FLAGS_DLL", 
-      ""
-    ], 
-    [
-      "CK_FLAGS_DLL_EXTRA", 
-      "-Xlinker /dll"
-    ], 
-    [
-      "CK_FLAGS_OUTPUT", 
-      "-o"
-    ], 
-    [
-      "CK_DLL_EXT", 
-      ".dll"
-    ], 
-    [
-      "CK_LIB_EXT", 
-      ".lib"
-    ], 
-    [
-      "CK_FLAGS_CREATE_OBJ", 
-      "-c"
-    ], 
-    [
-      "CK_LB", 
-      "lib"
-    ], 
-    [
-      "CK_AR", 
-      "lib"
-    ], 
-    [
-      "CK_LB_OUTPUT", 
-      "/OUT:"
-    ], 
-    [
-      "CK_EXE_EXT", 
-      ".exe"
-    ], 
-    [
-      "CK_FLAGS_STATIC_BIN", 
-      ""
-    ], 
-    [
-      "CK_FLAGS_STATIC_LIB", 
-      ""
-    ], 
-    [
-      "CK_FLAGS_CREATE_ASM", 
-      "-S"
-    ], 
-    [
-      "CK_FLAGS_CREATE_BC", 
-      "-c -emit-llvm"
-    ], 
-    [
-      "CK_BC_EXT", 
-      ".bc"
-    ], 
-    [
-      "CK_ASM_EXT", 
-      ".s"
-    ], 
-    [
-      "CK_AFTER_COMPILE_TO_BC", 
-      "ren *.o *"
-    ], 
-    [
-      "CM_INTERMEDIATE_OPT_TOOL", 
-      "opt"
-    ], 
-    [
-      "CM_INTERMEDIATE_OPT_TOOL_OUT", 
-      "-o"
-    ], 
-    [
-      "CK_COMPILER_FLAGS_OBLIGATORY", 
-      ""
-    ], 
-    [
-      "CK_LD_FLAGS_EXTRA", 
-      "-lm -ldl"
-    ], 
-    [
-      "CK_PLUGIN_FLAG", 
-      "-fplugin="
-    ], 
-    [
-      "CK_MAKE", 
-      "nmake"
-    ], 
-    [
-      "CK_OBJDUMP", 
-      "llvm-objdump -d"
-    ], 
-    [
-      "CK_PROFILER", 
-      "gprof"
-    ], 
-    [
-      "CK_FLAG_PREFIX_VAR", 
-      "-D"
-    ], 
-    [
-      "CK_FLAG_PREFIX_INCLUDE", 
-      "-I"
-    ]
-  ], 
+  }, 
+  "env": {
+    "CK_AFTER_COMPILE_TO_BC": "ren *.o *", 
+    "CK_AR": "lib", 
+    "CK_ASM_EXT": ".s", 
+    "CK_BC_EXT": ".bc", 
+    "CK_CC": "$#tool_prefix#$clang", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_CXX": "$#tool_prefix#$clang++", 
+    "CK_DLL_EXT": ".dll", 
+    "CK_EXE_EXT": ".exe", 
+    "CK_F90": "", 
+    "CK_F95": "", 
+    "CK_FC": "", 
+    "CK_FLAGS_CREATE_ASM": "-S", 
+    "CK_FLAGS_CREATE_BC": "-c -emit-llvm", 
+    "CK_FLAGS_CREATE_OBJ": "-c", 
+    "CK_FLAGS_DLL": "", 
+    "CK_FLAGS_DLL_EXTRA": "-Xlinker /dll", 
+    "CK_FLAGS_OUTPUT": "-o", 
+    "CK_FLAGS_STATIC_BIN": "", 
+    "CK_FLAGS_STATIC_LIB": "", 
+    "CK_FLAG_PREFIX_INCLUDE": "-I", 
+    "CK_FLAG_PREFIX_VAR": "-D", 
+    "CK_LB": "lib", 
+    "CK_LB_OUTPUT": "/OUT:", 
+    "CK_LD_FLAGS_EXTRA": "-lm -ldl", 
+    "CK_LIB_EXT": ".lib", 
+    "CK_MAKE": "nmake", 
+    "CK_OBJDUMP": "llvm-objdump -d", 
+    "CK_OBJ_EXT": ".o", 
+    "CK_PLUGIN_FLAG": "-fplugin=", 
+    "CK_PROFILER": "gprof", 
+    "CM_INTERMEDIATE_OPT_TOOL": "opt", 
+    "CM_INTERMEDIATE_OPT_TOOL_OUT": "-o"
+  }, 
+  "soft_name": "Compiler - LLVM", 
   "tags": [
     "compiler", 
     "llvm"
