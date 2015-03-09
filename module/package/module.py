@@ -383,6 +383,9 @@ def install(i):
        if rx['return']>0: return rx
 
        # Go to installation path
+       if not os.path.isdir(pi):
+          os.makedirs(pi)
+
        os.chdir(pi)
        rx=os.system(fn)
 

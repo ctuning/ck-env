@@ -14,6 +14,6 @@ of the same tools.
 Dependencies
 ============
 * Windows
-We suggest you to install unzip.exe, tar.exe, gzip.exe, bzip2.exe
+We suggest to install unzip.exe, tar.exe, gzip.exe, bzip2.exe
 
 
