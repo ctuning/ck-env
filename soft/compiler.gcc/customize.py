@@ -48,8 +48,11 @@ def setup(i):
     tags=i.get('tags',[])
     cus=i.get('customize',{})
 
+    host_d=i.get('host_os_dict',{})
     target_d=i.get('target_os_dict',{})
+    winh=host_d.get('windows_base','')
     win=target_d.get('windows_base','')
+    remote=target_d.get('remote','')
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
@@ -57,10 +60,7 @@ def setup(i):
     pi=cus.get('path_install','')
 
     ############################################################
-    if win=='yes':
-       if mingw!='yes':
-          return {'return':1, 'error':'target OS should be mingw-32 or mingw-64'}
-
+    if winh=='yes':
        # Ask a few more questions
        prefix_configured=cus.get('tool_prefix_configured','')
        prefix=cus.get('tool_prefix','')
@@ -82,23 +82,27 @@ def setup(i):
            env[k]=v
 
        retarget=cus.get('retarget','')
+       lfr=cus.get('linking_for_retargeting','')
        if retarget=='' and iv=='yes':
           x=raw_input('Using retargeting (for example, for ARM) (y/N)? ')
           x=x.lower()
           if x!='' and x=='y' or x=='yes':
+             retarget='yes'
              cus['retarget']='yes'
              if 'retargeted' not in tags: tags.append('retargeted')
 
-             lfr=cus.get('linking_for_retargeting','')
              if lfr=='' and iv=='yes':
                 y='-Wl,-dynamic-linker,/data/local/tmp/ld-linux.so.3 -Wl,--rpath -Wl,/data/local/tmp -lm -ldl'
                 lfr=raw_input('LD extra flags for retargeting (or Enter for "'+y+'"): ')
                 if lfr=='': lfr=y
 
-                cus['linking_for_retargeting']=lfr
-                env['CK_LD_FLAGS_EXTRA']=lfr
           else:
              cus['retarget']='no'
+
+       if retarget=='yes' and lfr!='':
+          cus['linking_for_retargeting']=lfr
+          env['CK_LD_FLAGS_EXTRA']=lfr
+
 
        add_m32=cus.get('add_m32','')
        if add_m32=='' and iv=='yes' and tbits=='32':
@@ -109,8 +113,9 @@ def setup(i):
              cus['add_m32']='yes'
 
        x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
-       if x.find('-DWINDOWS')<0: 
-          x+=' -DWINDOWS' 
+       if remote!='yes':
+          if x.find('-DWINDOWS')<0: 
+             x+=' -DWINDOWS' 
        if tbits=='32' and add_m32=='yes' and x.find('-m32')<0: 
           x+=' -m32' 
        env['CK_COMPILER_FLAGS_OBLIGATORY']=x
@@ -121,5 +126,9 @@ def setup(i):
        if x!='' and x.find('-fpermissive')<0:
           x+=' -fpermissive'
        env['CK_CXX']=x
+
+       x=cus.get('add_extra_path','')
+       if x!='':
+          s+='\nset PATH='+pi+x+';%PATH%\n\n'
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}

@@ -53,7 +53,9 @@ def setup(i):
     tags=i.get('tags',[])
     cus=i.get('customize',{})
 
+    host_d=i.get('host_os_dict',{})
     target_d=i.get('target_os_dict',{})
+    winh=host_d.get('windows_base','')
     win=target_d.get('windows_base','')
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
@@ -75,9 +77,6 @@ def setup(i):
           vs=raw_input('Enter Visual Studio dependency (vs2008shell or vs2013):')
        else:
           return {'return':1, 'error':'Visual Studio version is not recognized - should be either 15.x or 18.x'}
-
-    target_d=i.get('target_os_dict',{})
-    wb=target_d.get('windows_base','')
 
     s+='\n'
     s+='rem Setting Intel compiler environment\n'
