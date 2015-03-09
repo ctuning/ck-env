@@ -41,6 +41,8 @@ def set(i):
               (target_os)        - target OS (detect, if ommitted)
               (target_device_id) - target device ID (detect, if omitted)
 
+              (repo_uoa)         - repo where to limit search
+
               (uoa)      - environment UOA entry
                or
               (tags)     - search UOA by tags (separated by comma)
@@ -63,7 +65,8 @@ def set(i):
               env_uoa      - found environment UOA
               env          - updated environment
               bat          - string for bat file
-              len          - number of found entries
+              lst          - all found entries
+              dict         - meta of the selected env entry
             }
 
     """
@@ -102,15 +105,19 @@ def set(i):
     tbits=tosd.get('bits','')
 
     # Check environment UOA
+    enruoa=i.get('repo_uoa','')
+
+    tags=i.get('tags','')
     duoa=i.get('uoa','')
     lx=0
+    dd={}
     if duoa=='':
        # Search
-       tags=i.get('tags','')
-       
        ii={'action':'search',
            'module_uoa':work['self_module_uid'],
            'tags':tags,
+           'repo_uoa':enruoa,
+           'add_info':'yes',
            'add_meta':'yes'} # Need to sort by version, if ambiguity
 
        if i.get('local','')=='yes':
@@ -124,12 +131,46 @@ def set(i):
        l=r['lst']
        lx=len(l)
        if lx>0:
+          ilx=0
+
           if lx>1:
              ls=sorted(l, key=lambda k: k.get('meta',{}).get('misc',{}).get('version_int',0), reverse=True)
              l=ls
 
-          duid=l[0].get('data_uid')
+             if o=='con':
+                ck.out('')
+                ck.out('More than one environment found for tags ('+tags+'):')
+
+                ck.out('')
+                zz={}
+                for z in range(0, lx):
+                    j=l[z]
+
+                    zi=j.get('info',{})
+                    zm=j.get('meta',{})
+                    zu=j.get('data_uid','')
+                    zdn=zi.get('data_name',{})
+                    cus=zm.get('customize','')
+                    ver=cus.get('version','')
+
+                    zs=str(z)
+                    zz[zs]=zu
+
+                    ck.out(zs+') '+zdn+' - v'+ver+' ('+zu+')')
+
+                ck.out('')
+                rx=ck.inp({'text':'Choose first number to resolve dependency for tags ('+tags+'): '})
+                x=rx['string'].strip()
+
+                if x not in zz:
+                   return {'return':1, 'error':'dependency number is not found'}
+
+                ilx=int(x)
+
+          duid=l[ilx].get('data_uid')
           duoa=duid
+
+          dd=l[ilx].get('meta',{})
 
           if o=='con' and i.get('print','')=='yes':
              x=duoa
@@ -174,7 +215,7 @@ def set(i):
 
        fbf.close()
 
-    return {'return':0, 'env_uoa':duoa, 'env':env, 'bat':sb, 'len':lx}
+    return {'return':0, 'env_uoa':duoa, 'env':env, 'bat':sb, 'lst':l, 'dict':dd}
 
 ##############################################################################
 # show all installed environment
@@ -267,7 +308,7 @@ def show(i):
         info=q['info']
         meta=q['meta']
 
-        misc=meta.get('misc',{})
+        cus=meta.get('customize',{})
         setup=meta.get('setup','')
         tags=meta.get('tags',[])
 
@@ -275,7 +316,7 @@ def show(i):
         target_os_uoa=setup.get('target_os_uoa','')
         tbits=setup.get('target_os_bits','')
         version=setup.get('version','')
-        version_int=misc.get('version_int',0)
+        version_int=cus.get('version_int',0)
 
         dname=info.get('data_name','')
 
@@ -326,6 +367,9 @@ def show(i):
 
            view.append(vv)
 
+           if lv['data_name']<5: lv['version']=5
+           if lv['version']<8: lv['version']=8
+
     # Sort by target_os_uoa, name and version_int
     vs=sorted(view, key=lambda k: (k['target_os_uoa'],
                                    k['tbits'],
@@ -345,6 +389,7 @@ def show(i):
 
           ck.out(sh)
 
+          ck.out('')
           for q in vs:
               x=q['data_uid']
               sh=(' ' * (lv['data_uid']- len(x))) + x
@@ -359,7 +404,7 @@ def show(i):
               sh+=' '+ x + (' ' * (lv['data_name']- len(x)))
        
               x=q['version']
-              sh+=' '+(' ' * (8 - len(x))) + x
+              sh+=' '+ x + (' ' * (lv['version'] - len(x)))
 
               x=q['tags']
               sh+=' '+x
@@ -378,7 +423,9 @@ def resolve(i):
               (target_os)        - target OS (detect, if ommitted)
               (target_device_id) - target device ID (detect, if omitted)
 
-              deps               - dependencies
+              (repo_uoa)         - repo where to limit search
+
+              deps               - dependencies dict
 
               (env)              - env
             }
@@ -391,10 +438,15 @@ def resolve(i):
               bat          - string for bat file calling all bats ...
               deps         - updated deps (with uoa)
               env          - updated env
-              res_deps     - list of UOAs (resolved dependencies)
             }
 
     """
+
+    o=i.get('out','')
+
+    if o=='con':
+       ck.out('')
+       ck.out('Resolving dependencies ...')
 
     sb=''
 
@@ -424,34 +476,39 @@ def resolve(i):
     tdid=r['device_id']
     
     # Checking deps
-    ndeps=[]
     env=i.get('env',{})
 
+    enruoa=i.get('repo_uoa','')
+
     res=[]
-    for q in deps:
-        import copy
-        qq=copy.deepcopy(q)
+    for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
+        q=deps[k]
         
-        name=q.get('name','')
         tags=q.get('tags','')
         local=q.get('local','')
 
-        rx=set({'host_os':hos,
-                'target_os':tos,
-                'target_device_id':tdid,
-                'tags':tags,
-                'env':env,
-                'local':local
-               })
-        if rx['return']>0: return rx
+        ii={'host_os':hos,
+            'target_os':tos,
+            'target_device_id':tdid,
+            'tags':tags,
+            'repo_uoa':enruoa,
+            'env':env,
+            'local':local
+           }
+        if o=='con': ii['out']='con'
 
-        lx=rx['len']
+        rx=set(ii)
+        if rx['return']>0: return rx
+        
+        lst=rx['lst']
+        dd=rx['dict']
+
+        ver=dd.get('customize','').get('version','')
+        if ver!='': q['ver']=ver
 
         uoa=rx['env_uoa']
-        qq['uoa']=uoa
-        qq['num_entries']=lx
-
-        ndeps.append(qq)
+        q['uoa']=uoa
+        q['num_entries']=len(lst)
 
         if uoa not in res: res.append(uoa)
 
@@ -459,4 +516,4 @@ def resolve(i):
         
         sb+=rx['bat']
 
-    return {'return':0, 'deps':ndeps, 'env': env, 'bat':sb, 'res_deps':res}
+    return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'res_deps':res}

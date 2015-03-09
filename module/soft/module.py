@@ -119,7 +119,7 @@ def detect(i):
     if o=='con':
        x=duoa
        if duid!=duoa: x+=' ('+duid+')'
-       ck.out('Software entry found: '+x)
+       ck.out('Software description entry found: '+x)
 
     # Check if has version
     ver=d.get('version','')
@@ -208,7 +208,7 @@ def setup(i):
                or
               (tags)              - search UOA by tags (separated by comma)
 
-              (data_name)         - use this user friendly name for environment entry
+              (soft_name)         - use this user friendly name for environment entry
 
               (customize)         - dict with custom parameters 
                                     (usually passed to customize script)
@@ -216,6 +216,7 @@ def setup(i):
                                     skip_add_dirs
                                     skip_add_to_path
                                     skip_add_to_ld_path
+                                    add_include_path
 
                                     version      - add this version
                                     skip_version - if 'yes', do not add version
@@ -231,8 +232,9 @@ def setup(i):
 
               (quiet)             - if 'yes', minimize questions
 
-              (env_data_uoa)      - use this data UOA to record new env
+              (env_data_uoa)      - use this data UOA to record (new) env
               (env_repo_uoa)      - use this repo to record new env
+              (env_new)           - if 'yes', do not search for environment (was already done in package, for example)
             }
 
     Output: {
@@ -247,6 +249,7 @@ def setup(i):
 
     o=i.get('out','')
 
+    ########################################################################
     # Check host/target OS/CPU
     hos=i.get('host_os','')
     tos=i.get('target_os','')
@@ -274,10 +277,11 @@ def setup(i):
     tosd=r['os_dict']
     tdid=r['device_id']
 
-    # Check environment UOA
+    tbits=tosd.get('bits','')
+
+    # Check soft UOA
     duoa=i.get('uoa','')
-    duid=''
-    dname=i.get('data_name','')
+    duid=duoa
 
     tags=i.get('tags','')
 
@@ -299,11 +303,16 @@ def setup(i):
           if len(l)>0:
              duid=l[0].get('data_uid')
              duoa=duid
-             if dname=='': 
-                dname=l[0].get('data_name','')
 
     d={}
     p=''
+
+    ########################################################################
+    if duoa=='':
+       # Try to detect CID in current path
+       rx=ck.detect_cid_in_current_path({})
+       if rx['return']==0:
+          duoa=rx['data_uoa']
 
     if duoa!='':
        # Load defined or found soft entry
@@ -316,7 +325,8 @@ def setup(i):
 
        duoa=r['data_uoa']
        duid=r['data_uid']
-    else:
+
+    if duoa=='':
        p=os.getcwd()
        pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
     
@@ -330,82 +340,31 @@ def setup(i):
        if not found:
           return {'return':1, 'error':'software UOA (data_uoa) is not defined'}
 
-    ltags=d.get('tags',[])
+    dname=d.get('soft_name','')
+    if i.get('soft_name','')!='': dname=i['soft_name']
 
-    # Check deps
-    deps=d.get('deps',[])
-    udeps=i.get('deps',[])
-    if len(udeps)>0: deps=udeps
+    if o=='con':
+       if duoa!='' and duid!='':
+          x=': '+duoa
+          if duid!=duoa: x+=' ('+duid+')'
+       else:
+          x=' in local directory'
+       ck.out('Software entry found'+x)
+
+    # Check deps, customize, install path
+    ltags=d.get('tags',[])
+    deps=d.get('deps',{})
+    env=d.get('env',{})
+    cus=d.get('customize',{})
+    pi=''
+    envp=cus.get('env_prefix','')
 
     # Add tags from the search!
     for q in tags.split(','):
         q1=q.strip()
         if q1!='' and q1 not in ltags: ltags.append(q1)
 
-    if o=='con':
-       if duoa!='' and duid!='':
-          x=duoa
-          if duid!=duoa: x+=' ('+duid+')'
-       else:
-          x='local directory'
-       ck.out('Software entry found: '+x)
-
-    # Get customize dict
-    cus=i.get('customize',{})
-
-    # Check installation path
-    pi=i.get('install_path','')
-    if pi=='' and i.get('skip_path','')!='yes':
-       if o=='con':
-          ck.out('')
-          r=ck.inp({'text':'Enter path to installed tool: '})
-          pi=r['string']
-
-       if pi=='':
-          return {'return':1, 'error':'installation path is not specified'}
-
-    # Check version
-    ver=cus.get('version','')
-    if ver=='' and o=='con' and cus.get('skip_version','')!='yes':
-       ck.out('')
-       r=ck.inp({'text':'Enter soft version (or Enter to skip): '})
-       ver=r['string']
-
-    ver_int=cus.get('version_int','')
-    if o=='con' and cus.get('skip_version','')!='yes':
-       ck.out('')
-       r=ck.inp({'text':'Enter integer soft version for comparison (for V5.2.3 use 50203): '})
-       verx=r['string']
-       if verx=='': verx='0'
-       ver_int=int(verx)
-
-    # Prepare environment and batch
-    sb=''
-
-    ep=d.get('env_prefix','')
-    sdirs=hosd.get('dir_sep','')
-
-    wb=tosd.get('windows_base','')
-
-    tbits=tosd.get('bits','')
-
-    envp=d.get('env_prefix','')
-
-    rem=hosd.get('rem','')
-    eset=hosd.get('env_set','')
-    svarb=hosd.get('env_var_start','')
-    svare=hosd.get('env_var_stop','')
-    sdirs=hosd.get('dir_sep','')
-    evs=hosd.get('env_var_separator','')
-    eifs=hosd.get('env_quotes_if_space','')
-
-    misc={'env_prefix':ep}
-
-    # If install path has space, add quotes for some OS ...
-    xs=''
-    if pi.find(' ')>=0 and eifs!='':
-       xs=eifs
-
+    # Finish tags
     tg='host-os-'+hosx
     if tg not in ltags: ltags.append(tg)
 
@@ -415,165 +374,80 @@ def setup(i):
     tg=tbits+'bits'
     if tg not in ltags: ltags.append(tg)
 
-    lenv=d.get('lenv',[])
-    env={}
+    ########################################################################
+    # Check if environment already set (preload to update)
+    enduoa=i.get('env_data_uoa','')
+    enruoa=i.get('env_repo_uoa','')
+    update=False
 
-    for q in lenv:
-        k=q[0]
-        v=q[1]
-
-        k=k.replace('$#env_prefix#$', ep)
-        v=v.replace('$#install_path#$', pi)
-        v=v.replace('$#dir_sep#$',sdirs)
-
-        env[k]=v
-
-    # Check if customization script
-    customize_script=d.get('customize_script','')
-    sadd=''
-    if customize_script!='':
-       # Check individual prepare script
-       rx=ck.load_module_from_path({'path':p, 'module_code_name':customize_script, 'skip_init':'yes'})
-       if rx['return']>0: return rx
-       crx=rx['code']
-
-       # Prepare info
-       rx=ck.gen_tmp_file({})
-       if rx['return']>0: return rx
-       fn=rx['file_name']
-
-       # Call setup script
-       ii={"host_os_uoa":hos,
-           "target_os_uoa":tos,
-           "target_bits":tbits,
-           "host_os_dict":hosd,
-           "target_os_dict":tosd,
-           "target_device_id":tdid,
-           "host_os_uid":hos,
-           "host_os_uoa":hosx,
-           "target_os_uid":tos,
-           "target_os_uoa":tosx,
-           "target_os_bits":tbits,
-           "soft_uoa":duoa,
-           "tags":ltags,
-           "cfg":d,
-           "env":env,
-           "deps":deps,
-           "path":pi,
-           "customize":cus
-          }
-
-       if o=='con': ii['interactive']='yes'
-       if i.get('quiet','')=='yes' and cus.get('interactive','')!='yes':
-          ii['interactive']=''
-
-       rx=crx.setup(ii)
-       if rx['return']>0: return rx
-       env=rx['env']
-       deps=rx.get('deps',[])
-       ltags=rx['tags']
-       sadd=rx['bat']
-
-    # If user env, update it
-    xenv=i.get('env',{})
-    if len(xenv)>0:
-       env.update(xenv)
-
-    # Resolve deps
-    sdeps=''
-    res=[]
-    if len(deps)>0:
-       rx=ck.access({'action':'resolve',
+    if enduoa!='':
+       rx=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['env'],
-                     'host_os':hos,
-                     'target_os':tos,
-                     'target_device_id':tdid,
-                     'deps':deps})
+                     'data_uoa':enduoa,
+                     'repo_uoa':enruoa})
        if rx['return']>0: return rx
-       sdeps=rx['bat']
-       deps=rx['deps'] # Update deps (add UOA)
-       res=rx['res_deps']
 
-    # Finish batch
-    # Echo Off
-    sb+=hosd.get('batch_prefix','')+'\n'
+       update=True
 
-    x=duoa
-    if len(tags)>0:
-       y=''
-       for q in ltags:
-           if y!='': y+=','
-           y+=q
-       x+=' ('+y+')'
-    sb+=rem+' '+'Soft UOA         = '+x+'\n'
+       edx=rx['dict']
 
-    sb+=rem+' '+'Host OS UOA      = '+hosx+'\n'
-    sb+=rem+' '+'Target OS UOA    = '+tosx+'\n'
-    sb+=rem+' '+'Target OS bits   = '+tbits+'\n'
-    if ver!='':
-       sb+=rem+' '+'Tool version     = '+ver+'\n'
-       misc['version']=ver
-    if ver_int!=0:
-       sb+=rem+' '+'Tool int version = '+str(ver_int)+'\n'
-       misc['version_int']=ver_int
-    sb+='\n'
+       cus=edx.get('customize',{})
+       deps=edx.get('deps',{})
+       env=edx.get('env',{})
+       pi=cus.get('path_install','')
 
-    if sdeps!='':
-       sb+=rem+' Dependencies\n'
-       sb+=sdeps+'\n'
+    # Update from input
+    udeps=i.get('deps',{})
+    deps.update(udeps)
 
-    if sadd!='':
-       sb+=sadd
+    uenv=i.get('env',{})
+    env.update(uenv)
 
-    if cus.get('skip_add_dirs','')!='yes':
-       envp_i=envp
-       sb+=eset+' '+envp_i+'='+xs+pi+xs+'\n'
-       misc['path_install']=pi
+    ucus=i.get('customize',{})
+    cus.update(ucus)
 
-       envp_b=envp+'_BIN'
-       pib=pi+sdirs+'bin'
-       sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
-       misc['path_bin']=pib
+    pi1=i.get('install_path','')
+    if pi1!='': pi=pi1
 
-       if cus.get('skip_add_to_ld_lib','')!='yes' and cus.get('skip_dirs','')!='yes':
-          envp_l=envp+'_LIB'
-          plib=pi+sdirs+'lib64'
-          if not os.path.isdir(plib):
-             plib=pi+sdirs+'lib32'
-             if not os.path.isdir(plib):
-                plib=pi+sdirs+'lib' 
-                if not os.path.isdir(plib):
-                   return {'return':1, 'error':'can\'t find lib path'}
-          sb+=eset+' '+envp_l+'='+xs+plib+xs+'\n\n'
-          misc['path_lib']=plib
-
-    # Add all env
-    for k in sorted(env):
-        v=env[k]
-        sb+=eset+' '+k+'='+v+'\n'
-    sb+='\n'
-
-    # Add to existing vars
-    if cus.get('skip_add_to_path','')!='yes' and cus.get('skip_dirs','')!='yes':
-       sb+=eset+' PATH='+svarb+envp_b+svare+evs+svarb+'PATH'+svare+'\n'
-
-    if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes':
-       sb+=eset+' LD_LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LD_LIBRARY_PATH'+svare+'\n\n'
-
-    # Finish batch
-    if wb=='yes':
-       sb+='exit /b 0\n'
-
+    ########################################################################
     # Check meta
     setup={'host_os_uoa':hos,
            'target_os_uoa':tos,
            'target_os_bits':tbits}
+
+    # Resolve deps
+    sdeps=''
+    if len(deps)>0:
+       ii={'action':'resolve',
+           'module_uoa':cfg['module_deps']['env'],
+           'host_os':hos,
+           'target_os':tos,
+           'target_device_id':tdid,
+           'repo_uoa':enruoa,
+           'deps':deps}
+       if o=='con': ii['out']='con'
+
+       rx=ck.access(ii)
+       if rx['return']>0: return rx
+       sdeps=rx['bat']
+       deps=rx['deps'] # Update deps (add UOA)
+
+    for q in deps:
+        v=deps[q]
+        setup['deps_'+q]=v['uoa']
+
+    ########################################################################
+    # Check version
+    ver=cus.get('version','')
+    if ver==''  and cus.get('skip_version','')!='yes' and o=='con':
+       ck.out('')
+       r=ck.inp({'text':'Enter soft version: '})
+       ver=r['string']
+
     if ver!='': 
        setup['version']=ver
        tg='v'+ver
        if tg!='' and tg not in ltags: ltags.append(tg)
-
-    search_dict={'setup':setup}
 
     # Finish tags
     stags=''
@@ -582,58 +456,36 @@ def setup(i):
            if stags!='': stags+=','
            stags+=q.strip()
 
-    # Check if save to bat file
-    bf=i.get('bat_file', '')
-    pnew=''
+    ########################################################################
+    # Search
     finish=False
-
-    if bf=='':
-       bf=cfg['default_bat_name']+hosd.get('script_ext','')
-
+    if enduoa=='' and i.get('env_new','')!='yes':
        if o=='con':
           ck.out('')
-          ck.out('Searching if environment already exists using tags:')
-          ck.out('  '+stags)
+          ck.out('Searching if environment already exists using:')
+          ck.out('  * Tags: '+stags)
+          if len(deps)>0:
+             for q in deps:
+                 v=deps[q]
+                 ck.out('  * Dependency: '+q+'='+v.get('uoa',''))
 
        r=ck.access({'action':'search',
                     'module_uoa':cfg['module_deps']['env'],
+                    'repo_uoa':enruoa,
                     'tags':stags,
-                    'search_dict':search_dict})
+                    'search_dict':{'setup':setup}})
        if r['return']>0: return r
        lst=r['lst']
-
-       # Preparing to add or update entry
-       xx='added'
-
-       enduoa=i.get('env_data_uoa','')
-       enruoa=i.get('env_repo_uoa','')
-
-       dd={'tags':ltags,
-           'setup':setup,
-           'env':env,
-           'deps':deps,
-           'resolved_deps_uoa':res,
-           'misc':misc,
-           'env_script':bf}
-
-       ii={'action':'add',
-           'module_uoa':cfg['module_deps']['env'],
-           'dict':dd,
-           'sort_keys':'yes',
-           'substitute':'yes'}
-
-       if enduoa!='': ii['data_uoa']=enduoa
-       if enruoa!='': ii['repo_uoa']=enruoa
 
        if len(lst)>0:
           fe=lst[0]
 
-          eduoa=fe['data_uoa']
-          eduid=fe['data_uid']
+          enduoa=fe['data_uoa']
+          enduid=fe['data_uid']
 
           if o=='con':
-             x=eduoa
-             if eduid!=eduoa: x+=' ('+eduid+')'
+             x=enduoa
+             if enduid!=enduoa: x+=' ('+enduid+')'
 
              ck.out('')
              ck.out('Environment found: '+x)
@@ -644,16 +496,246 @@ def setup(i):
                    r=ck.inp({'text':'Would you like to update this entry (Y/n): '})
                    upd=r['string'].strip().lower()
 
-                   if upd!='' and upd!='y' and upd!='yes':
+                   if upd=='' or upd=='y' or upd=='yes':
+                      update=True
+                   else:
                       finish=True
 
-             if not finish:
-                ii['action']='update'
-                ii['data_uoa']=eduid
-                xx='updated'
+             if update:
+                rx=ck.access({'action':'load',
+                              'module_uoa':cfg['module_deps']['env'],
+                              'data_uoa':enduoa,
+                              'repo_uoa':enruoa})
+                if rx['return']>0: return rx
 
-       # Adding/updating
-       if not finish:
+                edx=rx['dict']
+
+                cus1=edx.get('customize',{})
+                deps1=edx.get('deps',{})
+                env1=edx.get('env',{})
+                
+                cus.update(cus1)
+                deps.update(deps1)
+                env.update(env1)
+
+                pi=cus.get('path_install','')
+
+       else:
+          if o=='con':
+             ck.out('')
+             ck.out('Environment not found ...')
+
+    ############################################################
+    if not finish:
+       # Prepare environment and batch
+       sb=''
+
+       sdirs=hosd.get('dir_sep','')
+
+       wb=tosd.get('windows_base','')
+
+       rem=hosd.get('rem','')
+       eset=hosd.get('env_set','')
+       svarb=hosd.get('env_var_start','')
+       svare=hosd.get('env_var_stop','')
+       sdirs=hosd.get('dir_sep','')
+       evs=hosd.get('env_var_separator','')
+       eifs=hosd.get('env_quotes_if_space','')
+
+       # Check installation path
+       if cus.get('skip_path','')!='yes':
+          if o=='con':
+             if update:
+                ck.out('')
+                ck.out('Current path to installed tool: '+pi)
+                r=ck.inp({'text':'Input new path to installed tool or press Enter to keep old: '})
+                pix=r['string'].strip()
+                if pix!='': pi=pix
+             elif pi=='':
+                ck.out('')
+                ye=cus.get('input_path_example','')
+                if ye!='': y=' (example: '+ye+')'
+                else: y=''
+                r=ck.inp({'text':'Enter path to installed tool'+y+': '})
+                pi=r['string'].strip()
+
+          if pi=='':
+             return {'return':1, 'error':'installation path is not specified'}
+
+       ver_int=cus.get('version_int',0)
+       if ver_int==0 and o=='con' and cus.get('skip_version','')!='yes':
+          ck.out('')
+          r=ck.inp({'text':'Enter soft version as integer for comparison (for V5.2.3 use 50203): '})
+          verx=r['string'].strip()
+          if verx=='': verx='0'
+          ver_int=int(verx)
+
+       if pi!='':
+          cus['path_install']=pi
+
+       if cus.get('skip_add_dirs','')!='yes' and pi!='':
+          if cus.get('add_include_path','')=='yes':
+             pii=pi+sdirs+'include'
+             cus['path_include']=pii
+
+          if cus.get('skip_add_to_bin','')!='yes':
+             pib=pi
+             if cus.get('skip_add_bin_ext','')!='yes': pib+=sdirs+'bin'
+             cus['path_bin']=pib
+
+          if cus.get('skip_add_to_ld_path','')!='yes':
+             plib=pi+sdirs+'lib64'
+             if not os.path.isdir(plib):
+                plib=pi+sdirs+'lib32'
+                if not os.path.isdir(plib):
+                   plib=pi+sdirs+'lib' 
+                   if not os.path.isdir(plib):
+                      return {'return':1, 'error':'can\'t find lib path'}
+             cus['path_lib']=plib
+
+       # If install path has space, add quotes for some OS ...
+       xs=''
+       if pi.find(' ')>=0 and eifs!='':
+          xs=eifs
+
+       # Check if customization script
+       customize_script=d.get('customize_script','')
+       sadd=''
+       if customize_script!='':
+          # Check individual prepare script
+          rx=ck.load_module_from_path({'path':p, 'module_code_name':customize_script, 'skip_init':'yes'})
+          if rx['return']>0: return rx
+          crx=rx['code']
+
+          # Prepare info
+          rx=ck.gen_tmp_file({})
+          if rx['return']>0: return rx
+          fn=rx['file_name']
+
+          # Call setup script
+          ii={"host_os_uoa":hosx,
+              "host_os_uid":hos,
+              "host_os_dict":hosd,
+              "target_os_uoa":tosx,
+              "target_os_uid":tos,
+              "target_os_dict":tosd,
+              "target_device_id":tdid,
+              "soft_uoa":duoa,
+              "tags":ltags,
+              "cfg":d,
+              "env":env,
+              "deps":deps,
+              "customize":cus
+             }
+
+          if o=='con': ii['interactive']='yes'
+          if i.get('quiet','')=='yes': ii['interactive']=''
+
+          rx=crx.setup(ii)
+          if rx['return']>0: return rx
+
+          sadd=rx['bat']
+          pi=cus.get('path_install','')
+
+       #########################################################
+       # Finish batch
+       sb+=hosd.get('batch_prefix','')+'\n'
+
+       x=duoa
+       if duid!=duoa: x+=' ('+duid+') '
+       if len(tags)>0:
+          y=''
+          for q in ltags:
+              if y!='': y+=','
+              y+=q
+          x+=' ('+y+')'
+       sb+=rem+' '+'Soft UOA         = '+x+'\n'
+
+       sb+=rem+' '+'Host OS UOA      = '+hosx+' ('+hos+')\n'
+       sb+=rem+' '+'Target OS UOA    = '+tosx+' ('+tos+')\n'
+       sb+=rem+' '+'Target OS bits   = '+tbits+'\n'
+       if ver!='':
+          sb+=rem+' '+'Tool version     = '+ver+'\n'
+          cus['version']=ver
+       if ver_int!=0:
+          sb+=rem+' '+'Tool int version = '+str(ver_int)+'\n'
+          cus['version_int']=ver_int
+       sb+='\n'
+
+       if sdeps!='':
+          sb+=rem+' Dependencies:\n'
+          sb+=sdeps+'\n'
+
+       if cus.get('skip_path','')!='yes' and pi!='':
+          sb+=eset+' '+envp+'='+xs+pi+xs+'\n'
+          cus['path_install']=pi
+
+       envp_b=envp+'_BIN'
+       pib=cus.get('path_bin','')
+       envp_l=envp+'_LIB'
+       plib=cus.get('path_lib','')
+       envp_i=envp+'_INCLUDE'
+       piib=cus.get('path_include','')
+
+       if cus.get('skip_add_dirs','')!='yes' and pi!='':
+          if pib!='': sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
+          if plib!='': sb+=eset+' '+envp_l+'='+xs+plib+xs+'\n'
+          if piib!='': sb+=eset+' '+envp_i+'='+xs+piib+xs+'\n'
+
+       if sadd!='':
+          sb+='\n'+sadd
+
+       # Add all env
+       for k in sorted(env):
+           v=env[k]
+           sb+=eset+' '+k+'='+v+'\n'
+       sb+='\n'
+
+       # Add to existing vars
+       if cus.get('skip_add_to_path','')!='yes' and cus.get('skip_add_to_bin','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!='':
+          sb+=eset+' PATH='+svarb+envp_b+svare+evs+svarb+'PATH'+svare+'\n'
+
+       if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!='':
+          sb+=eset+' LD_LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LD_LIBRARY_PATH'+svare+'\n'
+
+       # Finish batch
+       if wb=='yes':
+          sb+='\n'
+          sb+='exit /b 0\n'
+
+       # Check if save to bat file
+       bf=i.get('bat_file', '')
+       pnew=''
+
+       if bf=='':
+          bf=cfg['default_bat_name']+hosd.get('script_ext','')
+
+          # Preparing to add or update entry
+          xx='added'
+
+          ltags=sorted(ltags)
+
+          dd={'tags':ltags,
+              'setup':setup,
+              'env':env,
+              'deps':deps,
+              'customize':cus,
+              'env_script':bf}
+
+          ii={'action':'add',
+              'module_uoa':cfg['module_deps']['env'],
+              'dict':dd,
+              'sort_keys':'yes',
+              'substitute':'yes'}
+
+          if enduoa!='': ii['data_uoa']=enduoa
+          if enruoa!='': ii['repo_uoa']=enruoa
+
+          if update:
+             ii['action']='update'
+             xx='updated'
+
+          # Adding/updating
           if dname!='':
              ii['data_name']=dname
 
@@ -669,8 +751,7 @@ def setup(i):
              ck.out('')
              ck.out('Environment entry '+xx+' ('+eduoa+')!')
 
-    # Record batch file
-    if not finish:
+       # Record batch file
        if pnew=='': pb=bf
        else:        pb=os.path.join(pnew, bf)
 

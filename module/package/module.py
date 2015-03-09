@@ -42,7 +42,8 @@ def install(i):
 
               (data_uoa) or (uoa) - package UOA entry
 
-              (env_uoa)           - if env UOA is already known, take installation path
+              (env_data_uoa)      - use this data UOA to record (new) env
+              (env_repo_uoa)      - use this repo to record new env
 
               (install_path)      - path with soft is installed
 
@@ -67,14 +68,19 @@ def install(i):
 
     dname=''
 
+    if duoa=='':
+       # Try to detect CID in current path
+       rx=ck.detect_cid_in_current_path({})
+       if rx['return']==0:
+          duoa=rx['data_uoa']
+
     if duoa!='':
-       rx=ck.acces({'action':'load',
-                    'module_uoa':work['self_module_uid'],
-                    'data_uoa':duoa})
+       rx=ck.access({'action':'load',
+                     'module_uoa':work['self_module_uid'],
+                     'data_uoa':duoa})
        if rx['return']>0: return rx
        d=rx['dict']
        p=rx['path']
-       dname=rx.get('data_name','')
     else:
        # Attempt to load configuration from the current directory
        p=os.getcwd()
@@ -95,13 +101,11 @@ def install(i):
     cus=d.get('customize',{})
     env=d.get('env',{})
 
-    udeps=d.get('deps',[])
+    udeps=d.get('deps',{})
 
     suoa=d.get('soft_uoa','')
 
-    package_name=d.get('package_name','')
-    if package_name=='' and dname!='':
-       package_name=dname
+    dname=d.get('package_name','')
 
     ver=cus.get('version','')
     extra_dir=cus.get('extra_dir','')
@@ -154,12 +158,36 @@ def install(i):
     eifsc=hosd.get('env_quotes_if_space_in_call','')
     wb=tosd.get('windows_base','')
 
+    enruoa=i.get('env_repo_uoa','')
+    enduoa=i.get('env_data_uoa','')
+
     # Search by exact terms
     setup={'host_os_uoa':hos,
            'target_os_uoa':tos,
            'target_os_bits':tbits}
     if ver!='':
        setup['version']=ver
+
+    # Resolve deps
+    sdeps=''
+    if len(udeps)>0:
+       ii={'action':'resolve',
+           'module_uoa':cfg['module_deps']['env'],
+           'host_os':hos,
+           'target_os':tos,
+           'target_device_id':tdid,
+           'repo_uoa':enruoa,
+           'deps':udeps}
+       if o=='con': ii['out']='con'
+
+       rx=ck.access(ii)
+       if rx['return']>0: return rx
+       sdeps=rx['bat']
+       udeps=rx['deps'] # Update deps (add UOA)
+
+    for q in udeps:
+        v=udeps[q]
+        setup['deps_'+q]=v['uoa']
 
     # Convert tags to string
     stags=''
@@ -181,8 +209,16 @@ def install(i):
 
     if pi=='':
        # Check if environment already exists to check installation path
-       euoa=i.get('env_uoa','')
-       if euoa=='':
+       if enduoa=='':
+          if o=='con':
+             ck.out('')
+             ck.out('Searching if environment already exists using:')
+             ck.out('  * Tags: '+stags)
+             if len(udeps)>0:
+                for q in udeps:
+                    v=udeps[q]
+                    ck.out('  * Dependency: '+q+'='+v.get('uoa',''))
+
           r=ck.access({'action':'search',
                        'module_uoa':cfg['module_deps']['env'],
                        'tags':stags,
@@ -192,21 +228,29 @@ def install(i):
           if len(lst)>0:
              fe=lst[0]
 
-             euoa=fe['data_uoa']
-             euid=fe['data_uid']
+             enduoa=fe['data_uoa']
+             enduid=fe['data_uid']
 
              if o=='con':
+                x=enduoa
+                if enduid!=enduoa: x+=' ('+enduid+')'
+
                 ck.out('')
-                ck.out('Environment already exists ('+euoa+')')
+                ck.out('Environment found: '+x)
+          else:
+             if o=='con':
+                ck.out('')
+                ck.out('Environment not found ...')
 
        # Load env if exists
-       if euoa!='':
+       if enduoa!='':
           r=ck.access({'action':'load',
                        'module_uoa':cfg['module_deps']['env'],
-                       'data_uoa':euoa})
+                       'repo_uoa':enruoa,
+                       'data_uoa':enduoa})
           if r['return']>0: return r
           de=r['dict']
-          pi=de.get('misc',{}).get('path_install','')
+          pi=de.get('customize',{}).get('path_install','')
 
           if extra_dir!='':
              j=pi.rfind(extra_dir)
@@ -244,8 +288,12 @@ def install(i):
        if pi=='':
           if o=='con':
              ck.out('')
-             r=ck.inp({'text':'Enter installation path: '})
-             pi=r['string']
+             ye=cus.get('input_path_example','')
+             if ye!='': y=' (example: '+ye+')'
+             else: y=''
+             r=ck.inp({'text':'Enter path to installed tool'+y+': '})
+             pi=r['string'].strip()
+
 
        if pi=='':
           return {'return':1, 'error':'installation path is not specified'}
@@ -262,25 +310,23 @@ def install(i):
 
     # Update by package deps (more precise)
     for q in deps:
-        found=False
-        n=q.get('name')
-        for u in udeps:
-            un=u.get('name')
-            if n==un:
-               found=True
-               break
-        if not found:
-           udeps.append(q)
+        v=deps[q]
+        if q not in udeps:
+           udeps[q]=v
 
     # Prepare environment based on deps
     sdeps=''
     if len(udeps)>0:
-       rx=ck.access({'action':'resolve',
-                     'module_uoa':cfg['module_deps']['env'],
-                     'host_os':hos,
-                     'target_os':tos,
-                     'target_device_id':tdid,
-                     'deps':udeps})
+       ii={'action':'resolve',
+           'module_uoa':cfg['module_deps']['env'],
+           'host_os':hos,
+           'target_os':tos,
+           'target_device_id':tdid,
+           'repo_uoa':enruoa,
+           'deps':udeps}
+       if o=='con': ii['out']='con'
+
+       rx=ck.access(ii)
        if rx['return']>0: return rx
        sdeps=rx['bat']
 
@@ -294,7 +340,7 @@ def install(i):
           if o=='con':
              ck.out('')
              r=ck.inp({'text':'Enter installation path: '})
-             pi=r['string']
+             pi=r['string'].strip()
 
           if pi=='':
              return {'return':1, 'error':'installation path is not specified'}
@@ -359,19 +405,24 @@ def install(i):
              ck.out('Setting up environment for installed package ...')
              ck.out('')
 
+          nw='no'
+          if enduoa=='': nw='yes'
+
           ii={'action':'setup',
               'module_uoa':cfg['module_deps']['soft'],
               'data_uoa':suoa,
-              'data_name':package_name,
+              'soft_name':dname,
               'host_os':hos,
               'target_os':tos,
               'target_device_id':tdid,
               'tags':stags,
               'customize':cus,
+              'env_new':'yes',
+              'env_repo_uoa':enruoa,
+              'env_data_uoa':enduoa,
               'env':env,
               'deps':udeps,
-              'install_path':pi,
-              'quiet':'yes'
+              'install_path':pi
              }
           if o=='con': ii['out']='con'
           rx=ck.access(ii)
