@@ -169,6 +169,9 @@ def install(i):
        setup['version']=ver
 
     # Resolve deps
+    if cus.get('ignore_deps','')=='yes':
+       udeps={}
+
     sdeps=''
     if len(udeps)>0:
        ii={'action':'resolve',
@@ -285,7 +288,7 @@ def install(i):
              else:
                 return {'return':1, 'error':'package is already installed in path '+pi}
 
-       if pi=='':
+       if pi=='' and cus.get('skip_path','')!='yes':
           if o=='con':
              ck.out('')
              ye=cus.get('input_path_example','')
@@ -295,7 +298,7 @@ def install(i):
              pi=r['string'].strip()
 
 
-       if pi=='':
+       if pi=='' and cus.get('skip_path','')!='yes':
           return {'return':1, 'error':'installation path is not specified'}
 
     # Check dependencies
@@ -315,6 +318,9 @@ def install(i):
            udeps[q]=v
 
     # Prepare environment based on deps
+    if cus.get('ignore_deps','')=='yes':
+       udeps={}
+
     sdeps=''
     if len(udeps)>0:
        ii={'action':'resolve',
@@ -336,7 +342,7 @@ def install(i):
        sb=hosd.get('batch_prefix','')+'\n'
 
        # Check installation path
-       if pi=='':
+       if pi=='' and cus.get('skip_path','')!='yes':
           if o=='con':
              ck.out('')
              r=ck.inp({'text':'Enter installation path: '})

@@ -104,6 +104,12 @@ def setup(i):
        y=cus.get('add_to_ck_compiler_flags_obligatory','')
        if y!='' and x.find(y)<0:
           x+=' '+y
+
+       y='-target i686-pc-windows-msvc'
+       if tbits=='64': y='-target x86_64-pc-windows-msvc'
+       if x.find(y)<0:
+          x+=' '+y
+
        env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
        if mingw=='yes': env['CK_MAKE']='mingw32-make'
