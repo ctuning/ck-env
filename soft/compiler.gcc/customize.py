@@ -60,58 +60,58 @@ def setup(i):
     pi=cus.get('path_install','')
 
     ############################################################
-    if winh=='yes':
-       # Ask a few more questions
-       prefix_configured=cus.get('tool_prefix_configured','')
-       prefix=cus.get('tool_prefix','')
-       if prefix_configured!='yes' and iv=='yes':
-          if prefix!='':
-             ck.out('Current compiler name prefix: '+prefix)
-          else:
-             prefix=raw_input('Compiler name prefix, if needed (such as "arm-none-linux-gnueabi-"): ')
-             cus['tool_prefix_configured']='yes'
-
+    # Ask a few more questions
+    prefix_configured=cus.get('tool_prefix_configured','')
+    prefix=cus.get('tool_prefix','')
+    if prefix_configured!='yes' and iv=='yes':
        if prefix!='':
-          env['CK_COMPILER_PREFIX']=prefix
-          cus['tool_prefix']=prefix
+          ck.out('Current compiler name prefix: '+prefix)
+       else:
+          prefix=raw_input('Compiler name prefix, if needed (such as "arm-none-linux-gnueabi-"): ')
           cus['tool_prefix_configured']='yes'
 
-       for k in env:
-           v=env[k]
-           v=v.replace('$#tool_prefix#$',prefix)
-           env[k]=v
+    if prefix!='':
+       env['CK_COMPILER_PREFIX']=prefix
+       cus['tool_prefix']=prefix
+       cus['tool_prefix_configured']='yes'
 
-       retarget=cus.get('retarget','')
-       lfr=cus.get('linking_for_retargeting','')
-       if retarget=='' and iv=='yes':
-          x=raw_input('Using retargeting (for example, for ARM) (y/N)? ')
-          x=x.lower()
-          if x!='' and x=='y' or x=='yes':
-             retarget='yes'
-             cus['retarget']='yes'
-             if 'retargeted' not in tags: tags.append('retargeted')
+    for k in env:
+        v=env[k]
+        v=v.replace('$#tool_prefix#$',prefix)
+        env[k]=v
 
-             if lfr=='' and iv=='yes':
-                y='-Wl,-dynamic-linker,/data/local/tmp/ld-linux.so.3 -Wl,--rpath -Wl,/data/local/tmp -lm -ldl'
-                lfr=raw_input('LD extra flags for retargeting (or Enter for "'+y+'"): ')
-                if lfr=='': lfr=y
+    retarget=cus.get('retarget','')
+    lfr=cus.get('linking_for_retargeting','')
+    if retarget=='' and iv=='yes':
+       x=raw_input('Using retargeting (for example, for ARM) (y/N)? ')
+       x=x.lower()
+       if x!='' and x=='y' or x=='yes':
+          retarget='yes'
+          cus['retarget']='yes'
+          if 'retargeted' not in tags: tags.append('retargeted')
 
-          else:
-             cus['retarget']='no'
+          if lfr=='' and iv=='yes':
+             y='-Wl,-dynamic-linker,/data/local/tmp/ld-linux.so.3 -Wl,--rpath -Wl,/data/local/tmp -lm -ldl'
+             lfr=raw_input('LD extra flags for retargeting (or Enter for "'+y+'"): ')
+             if lfr=='': lfr=y
 
-       if retarget=='yes' and lfr!='':
-          cus['linking_for_retargeting']=lfr
-          env['CK_LD_FLAGS_EXTRA']=lfr
+       else:
+          cus['retarget']='no'
+
+    if retarget=='yes' and lfr!='':
+       cus['linking_for_retargeting']=lfr
+       env['CK_LD_FLAGS_EXTRA']=lfr
 
 
-       add_m32=cus.get('add_m32','')
-       if add_m32=='' and iv=='yes' and tbits=='32':
-          x=raw_input('Target OS is 32 bit. Add -m32 to compilation flags (y/N)? ')
-          x=x.lower()
-          if x=='y' or x=='yes': 
-             add_m32='yes'
-             cus['add_m32']='yes'
+    add_m32=cus.get('add_m32','')
+    if add_m32=='' and iv=='yes' and tbits=='32':
+       x=raw_input('Target OS is 32 bit. Add -m32 to compilation flags (y/N)? ')
+       x=x.lower()
+       if x=='y' or x=='yes': 
+          add_m32='yes'
+          cus['add_m32']='yes'
 
+    if winh=='yes':
        x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
        if remote!='yes':
           if x.find('-DWINDOWS')<0: 
@@ -127,8 +127,8 @@ def setup(i):
           x+=' -fpermissive'
        env['CK_CXX']=x
 
-       x=cus.get('add_extra_path','')
-       if x!='':
-          s+='\nset PATH='+pi+x+';%PATH%\n\n'
+    x=cus.get('add_extra_path','')
+    if x!='':
+       s+='\nset PATH='+pi+x+';%PATH%\n\n'
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}
