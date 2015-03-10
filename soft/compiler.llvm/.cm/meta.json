@@ -5,8 +5,8 @@
     "languages": [
       "C", 
       "CPP" 
-    ], 
-    "skip_add_to_ld_path": "yes" 
+    ],
+    "skip_add_to_ld_path": "no" 
   }, 
   "customize_script": "customize", 
   "env": {
