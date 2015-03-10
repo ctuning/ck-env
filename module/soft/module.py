@@ -417,7 +417,10 @@ def setup(i):
            'target_os_uoa':tos,
            'target_os_bits':tbits}
 
-    # Resolve deps
+    # Resolve deps (if not ignored, such as when installing local version with all dependencies set)
+    if cus.get('ignore_deps','')=='yes':
+       deps={}
+
     sdeps=''
     if len(deps)>0:
        ii={'action':'resolve',

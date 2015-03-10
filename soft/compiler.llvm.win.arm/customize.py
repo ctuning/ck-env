@@ -61,8 +61,8 @@ def setup(i):
 
     ############################################################
     if winh=='yes':
-       if remote=='yes':
-          return {'return':1, 'error':'retargeting to ARM is supported in another soft description (*.arm)'}
+       if remote!='yes':
+          return {'return':1, 'error':'this soft customization supported only (remote) ARM platforms'}
 
        # Ask a few more questions
        prefix_configured=cus.get('tool_prefix_configured','')
@@ -85,34 +85,11 @@ def setup(i):
           cus['linking_for_retargeting']=lfr
           env['CK_LD_FLAGS_EXTRA']=lfr
 
-
-       add_m32=cus.get('add_m32','')
-       if add_m32=='' and iv=='yes' and tbits=='32':
-          x=raw_input('Target OS is 32 bit. Add -m32 to compilation flags (y/N)? ')
-          x=x.lower()
-          if x=='y' or x=='yes': 
-             add_m32='yes'
-             cus['add_m32']='yes'
-
        x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
-       if remote!='yes':
-          if x.find('-DWINDOWS')<0: 
-             x+=' -DWINDOWS' 
-       if tbits=='32' and add_m32=='yes' and x.find('-m32')<0: 
-          x+=' -m32' 
-
-       y=cus.get('add_to_ck_compiler_flags_obligatory','')
-       if y!='' and x.find(y)<0:
-          x+=' '+y
-
-       y='-target i686-pc-windows-msvc'
-       if tbits=='64': y='-target x86_64-pc-windows-msvc'
-       if x.find(y)<0:
-          x+=' '+y
-
+       y='-target arm-none-linux-gnueabi -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_ENV_COMPILER_GCC%\\arm-none-linux-gnueabi\\libc'
+       x=x.replace('$#flags_for_arm_target#$',y)
+          
        env['CK_COMPILER_FLAGS_OBLIGATORY']=x
-
-       if mingw=='yes': env['CK_MAKE']='mingw32-make'
 
        x=env.get('CK_CXX','')
        if x!='' and x.find('-fpermissive')<0:
