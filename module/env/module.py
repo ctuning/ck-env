@@ -43,18 +43,18 @@ def set(i):
 
               (repo_uoa)         - repo where to limit search
 
-              (uoa)      - environment UOA entry
+              (uoa)              - environment UOA entry
                or
-              (tags)     - search UOA by tags (separated by comma)
+              (tags)             - search UOA by tags (separated by comma)
 
-              (local) - if 'yes', add host_os, target_os, target_device_id to search
+              (local)            - if 'yes', add host_os, target_os, target_device_id to search
 
-              (bat_file) - if !='', use this filename to generate/append bat file ...
-              (bat_new)  - if 'yes', start new bat file
+              (bat_file)         - if !='', use this filename to generate/append bat file ...
+              (bat_new)          - if 'yes', start new bat file
 
-              (env)      - existing environment
+              (env)              - existing environment
 
-              (print)    - if 'yes', print found environment
+              (print)            - if 'yes', print found environment
             }
 
     Output: {
@@ -87,7 +87,8 @@ def set(i):
     # Checking/detecting host OS
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':hos})
+                 'os':hos,
+                 'skip_info_collection':'yes'})
     if r['return']>0: return r
     hos=r['os_uid']
     hosd=r['os_dict']
@@ -96,7 +97,8 @@ def set(i):
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
                  'os':tos,
-                 'device_id':tdid})
+                 'device_id':tdid,
+                 'skip_info_collection':'yes'})
     if r['return']>0: return r
     tos=r['os_uid']
     tosd=r['os_dict']
@@ -111,6 +113,7 @@ def set(i):
     duoa=i.get('uoa','')
     lx=0
     dd={}
+    setup={}
     if duoa=='':
        # Search
        ii={'action':'search',
@@ -151,12 +154,22 @@ def set(i):
                     zu=j.get('data_uid','')
                     zdn=zi.get('data_name',{})
                     cus=zm.get('customize','')
+                    xsetup=zm.get('setup',{})
+                    xtags=zm.get('tags','')
                     ver=cus.get('version','')
+
+                    xtarget_os_uoa=xsetup.get('target_os_uoa','')
+
+                    xstags=''
+                    for t in xtags:
+                        if t!='':
+                           if xstags!='': xstags+=','
+                           xstags+=t
 
                     zs=str(z)
                     zz[zs]=zu
 
-                    ck.out(zs+') '+zdn+' - v'+ver+' ('+zu+')')
+                    ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
 
                 ck.out('')
                 rx=ck.inp({'text':'Choose first number to resolve dependency for tags ('+tags+'): '})
@@ -178,7 +191,11 @@ def set(i):
              ck.out('CK environment found using tags "'+tags+'" : '+x)
 
     if duoa=='':
-       return {'return':1, 'error':'environment was not found using tags "'+tags+'"'}
+       import json
+       x='environment was not found using tags "'+tags+'"'
+       if len(setup)>0:
+          x+=' and setup='+json.dumps(setup)
+       return {'return':1, 'error':x}
 
     # Load
     r=ck.access({'action':'load',
@@ -460,7 +477,8 @@ def resolve(i):
     # Checking/detecting host OS
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':hos})
+                 'os':hos,
+                 'skip_info_collection':'yes'})
     if r['return']>0: return r
     hos=r['os_uid']
     hosd=r['os_dict']
@@ -469,7 +487,8 @@ def resolve(i):
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
                  'os':tos,
-                 'device_id':tdid})
+                 'device_id':tdid,
+                 'skip_info_collection':'yes'})
     if r['return']>0: return r
     tos=r['os_uid']
     tosd=r['os_dict']

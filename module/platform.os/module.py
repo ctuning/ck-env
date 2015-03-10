@@ -36,14 +36,14 @@ def init(i):
 def detect(i):
     """
     Input:  {
-              (os)        - OS module to check (if omitted, analyze host)
-              (device_id) - device id if remote (such as adb)
+              (os)                   - OS module to check (if omitted, analyze host)
+              (device_id)            - device id if remote (such as adb)
 
               (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
 
-              (exchange)         - if 'yes', exchange info with some repo (by default, remote-ck)
-              (exchange_repo)    - which repo to record/update info (remote-ck by default)
-              (exchange_subrepo) - if remote, remote repo UOA
+              (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
+              (exchange_repo)        - which repo to record/update info (remote-ck by default)
+              (exchange_subrepo)     - if remote, remote repo UOA
             }
 
     Output: {

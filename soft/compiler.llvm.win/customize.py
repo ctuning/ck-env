@@ -61,15 +61,12 @@ def setup(i):
 
     ############################################################
     if winh=='yes':
+       if remote=='yes':
+          return {'return':1, 'error':'retargeting to ARM is supported in another soft description (*.arm)'}
+
        # Ask a few more questions
        prefix_configured=cus.get('tool_prefix_configured','')
        prefix=cus.get('tool_prefix','')
-       if prefix_configured!='yes' and iv=='yes':
-          if prefix!='':
-             ck.out('Current compiler name prefix: '+prefix)
-          else:
-             prefix=raw_input('Compiler name prefix, if needed (such as "arm-none-linux-gnueabi-"): ')
-             cus['tool_prefix_configured']='yes'
 
        if prefix!='':
           env['CK_COMPILER_PREFIX']=prefix
@@ -83,21 +80,6 @@ def setup(i):
 
        retarget=cus.get('retarget','')
        lfr=cus.get('linking_for_retargeting','')
-       if retarget=='' and iv=='yes':
-          x=raw_input('Using retargeting (for example, for ARM) (y/N)? ')
-          x=x.lower()
-          if x!='' and x=='y' or x=='yes':
-             retarget='yes'
-             cus['retarget']='yes'
-             if 'retargeted' not in tags: tags.append('retargeted')
-
-             if lfr=='' and iv=='yes':
-                y='-Wl,-dynamic-linker,/data/local/tmp/ld-linux.so.3 -Wl,--rpath -Wl,/data/local/tmp -lm -ldl'
-                lfr=raw_input('LD extra flags for retargeting (or Enter for "'+y+'"): ')
-                if lfr=='': lfr=y
-
-          else:
-             cus['retarget']='no'
 
        if retarget=='yes' and lfr!='':
           cus['linking_for_retargeting']=lfr
@@ -118,6 +100,10 @@ def setup(i):
              x+=' -DWINDOWS' 
        if tbits=='32' and add_m32=='yes' and x.find('-m32')<0: 
           x+=' -m32' 
+
+       y=cus.get('add_to_ck_compiler_flags_obligatory','')
+       if y!='' and x.find(y)<0:
+          x+=' '+y
        env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
        if mingw=='yes': env['CK_MAKE']='mingw32-make'
