@@ -20,7 +20,7 @@
   ], 
   "tool": "python", 
   "version": {
-    "cmd": "--version > $#filename#$ 2>>&1", 
+    "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
     "string_after_relaxed": " ", 
     "string_before": "Python ", 

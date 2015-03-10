@@ -385,14 +385,20 @@ def install(i):
        # Go to installation path
        if not os.path.isdir(pi):
           os.makedirs(pi)
-
        os.chdir(pi)
-       rx=os.system(fn)
 
+       # Check if need to set executable flags
+       se=hosd.get('set_executable','')
+       if se!='':
+          x=se+' '+fn
+          rx=os.system(x)
+
+       # Run script
+       rx=os.system(fn)
        if os.path.isfile(fn): os.remove(fn)
 
        if rx>0: 
-          return {'return':1, 'error':'processing archive failed!'}
+          return {'return':1, 'error':'processing archive failed'}
 
     # Check if need to setup environment
     if xsetup:

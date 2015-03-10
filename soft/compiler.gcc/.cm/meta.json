@@ -48,7 +48,7 @@
   ], 
   "tool": "gcc", 
   "version": {
-    "cmd": "--version > $#filename#$ 2>>&1", 
+    "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
     "string_after": "", 
     "string_before": ")", 

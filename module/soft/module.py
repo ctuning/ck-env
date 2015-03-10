@@ -70,7 +70,8 @@ def detect(i):
     # Checking/detecting host OS
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':hos})
+                 'os':hos,
+                 'skip_info_collection':'yes'})
     if r['return']>0: return r
     hos=r['os_uid']
     hosd=r['os_dict']
@@ -79,7 +80,8 @@ def detect(i):
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
                  'os':tos,
-                 'device_id':tdid})
+                 'device_id':tdid,
+                 'skip_info_collection':'yes'})
     if r['return']>0: return r
     tos=r['os_uid']
     tosd=r['os_dict']
@@ -688,6 +690,11 @@ def setup(i):
        # Add all env
        for k in sorted(env):
            v=env[k]
+
+           if eifs!='' and wb!='yes':
+              if v.find(' ')>=0 and not v.startswith(eifs):
+                 v=eifs+v+eifs
+
            sb+=eset+' '+k+'='+v+'\n'
        sb+='\n'
 

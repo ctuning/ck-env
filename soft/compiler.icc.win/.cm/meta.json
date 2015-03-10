@@ -56,7 +56,7 @@
   ], 
   "tool": "icl", 
   "version": {
-    "cmd": "> $#filename#$ 2>>&1", 
+    "cmd": "> $#filename#$ 2>&1", 
     "split": ".", 
     "string_after": "Build", 
     "string_before": "Version ", 
