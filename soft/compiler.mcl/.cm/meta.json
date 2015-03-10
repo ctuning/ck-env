@@ -46,7 +46,7 @@
   ], 
   "tool": "cl", 
   "version": {
-    "cmd": "> $#filename#$ 2>>&1", 
+    "cmd": "> $#filename#$ 2>&1", 
     "split": ".", 
     "string_after": "for", 
     "string_before": "Version ", 

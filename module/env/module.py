@@ -210,12 +210,15 @@ def set(i):
     xenv=d.get('env',{})
     env.update(xenv)
 
+    env_call=hosd.get('env_call','')
+    bin_prefix=hosd.get('bin_prefix','')
+
     # Process CMD first:
     sb=''
 
     es=d.get('env_script','')
     if es!='':
-       sb+='call '+os.path.join(p,es)+'\n'
+       sb+=env_call+' '+os.path.join(p,es)+'\n'
 
     # Check bat file
     if bf!='':
@@ -384,7 +387,8 @@ def show(i):
 
            view.append(vv)
 
-           if lv['data_name']<5: lv['version']=5
+           if lv['data_name']<5: lv['data_name']=5
+           if lv['target_os_uoa']<10: lv['target_os_uoa']=10
            if lv['version']<8: lv['version']=8
 
     # Sort by target_os_uoa, name and version_int
