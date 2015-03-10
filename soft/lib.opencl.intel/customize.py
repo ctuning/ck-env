@@ -79,4 +79,15 @@ def setup(i):
        env['CK_ENV_LIB_OPENCL_STATIC']=cus.get('static_lib','')
        env['CK_ENV_LIB_OPENCL_DYNAMIC']=cus.get('dynamic_lib','')
 
+    else:
+       x=''
+       if tbits=='64': x='64'
+
+       cus['path_bin']=pi+'/bin'
+       cus['path_lib']=pi+'/lib'+x
+
+       cus['dynamic_lib']='libOpenCL.so'
+
+       env['CK_ENV_LIB_OPENCL_DYNAMIC']=cus.get('dynamic_lib','')
+
     return {'return':0, 'bat':s}

@@ -16,7 +16,7 @@
     "math", 
     "r"
   ], 
-  "tool": "r", 
+  "tool": "R", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
