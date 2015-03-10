@@ -88,7 +88,7 @@ def setup(i):
        x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
        y='-target arm-none-linux-gnueabi -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_ENV_COMPILER_GCC%\\arm-none-linux-gnueabi\\libc'
        x=x.replace('$#flags_for_arm_target#$',y)
-          
+
        env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
        x=env.get('CK_CXX','')

@@ -42,43 +42,36 @@ def setup(i):
 
     import os
 
+    # Get variables
     s=''
 
     iv=i.get('interactive','')
-    if iv=='yes': print ('')
 
-    deps=i.get('deps',[])
     env=i.get('env',{})
     cfg=i.get('cfg',{})
-    cus=i.get('customize',{})
+    deps=i.get('deps',{})
     tags=i.get('tags',[])
+    cus=i.get('customize',{})
 
-    tbits=i.get('target_os_bits','')
-
-    vs_shell=cus.get('vs_shell','')
-    if vs_shell=='':
-       if iv=='yes':
-          vs_shell=raw_input('Choose Visual Studio Shell (vs2008shell or vs2013): ')
-          vs_shell=vs_shell.strip().lower()
-
-       if vs_shell=='':
-          return {'return':1, 'error':'"vs_shell" in "customize" is not defined'}
-
+    host_d=i.get('host_os_dict',{})
     target_d=i.get('target_os_dict',{})
-    wb=target_d.get('windows_base','')
+    winh=host_d.get('windows_base','')
+    win=target_d.get('windows_base','')
+    mingw=target_d.get('mingw','')
+    tbits=target_d.get('bits','')
 
-    envp=cfg.get('env_prefix','')
+    envp=cus.get('env_prefix','')
+    pi=cus.get('path_install','')
 
-    pi=i.get('path','')
-
+    ################################################################
     s+='\n'
-    s+='rem Intel environment\n'
+    s+='# Setting Intel compiler environment\n'
 
-    yy='call "'+pi+'\\bin\\compilervars.bat" '
+    yy='. "'+pi+'/bin/compilervars.sh" '
 
     if tbits=='32': yy+=' ia32'
     else: yy+=' intel64'
 
-    s+=yy+' '+vs_shell+'\n\n'
+    s+=yy+'\n\n'
 
-    return {'return':0, 'bat':s, 'env':env, 'tags':tags, 'deps':deps}
+    return {'return':0, 'bat':s}
