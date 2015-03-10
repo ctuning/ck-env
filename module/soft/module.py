@@ -548,7 +548,7 @@ def setup(i):
        eifs=hosd.get('env_quotes_if_space','')
 
        # Check installation path
-       if cus.get('skip_path','')!='yes':
+       if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes':
           if o=='con':
              if update:
                 ck.out('')
@@ -671,7 +671,7 @@ def setup(i):
           sb+=rem+' Dependencies:\n'
           sb+=sdeps+'\n'
 
-       if cus.get('skip_path','')!='yes' and pi!='':
+       if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and pi!='':
           sb+=eset+' '+envp+'='+xs+pi+xs+'\n'
           cus['path_install']=pi
 
