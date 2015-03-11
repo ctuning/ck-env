@@ -5,7 +5,6 @@
     "add_include_path":"yes"
   }, 
   "customize_script": "customize", 
-  "env_prefix": "CK_ENV_LIB_OPENCL", 
   "tags": [
     "lib", 
     "opencl", 

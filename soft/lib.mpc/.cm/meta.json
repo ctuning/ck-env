@@ -1,0 +1,23 @@
+{
+  "customize": {
+    "add_include_path": "yes", 
+    "env_prefix": "CK_ENV_LIB_MPC"
+  }, 
+  "soft_name": "Library - MPC", 
+  "deps": {
+    "lib_gmp": {
+      "local": "yes", 
+      "tags": "lib,gmp",
+      "sort":10
+    },
+    "lib_mpfr": {
+      "local": "yes", 
+      "tags": "lib,mpfr",
+      "sort":20
+    }
+  }, 
+  "tags": [
+    "lib", 
+    "mpc"
+  ]
+}

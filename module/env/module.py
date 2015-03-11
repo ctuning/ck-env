@@ -114,81 +114,82 @@ def set(i):
     lx=0
     dd={}
     setup={}
-    if duoa=='':
-       # Search
-       ii={'action':'search',
-           'module_uoa':work['self_module_uid'],
-           'tags':tags,
-           'repo_uoa':enruoa,
-           'add_info':'yes',
-           'add_meta':'yes'} # Need to sort by version, if ambiguity
 
-       if i.get('local','')=='yes':
-          setup={'host_os_uoa':hos,
-                 'target_os_uoa':tos,
-                 'target_os_bits':tbits}
-          ii['search_dict']={'setup':setup}
+    # Search
+    ii={'action':'search',
+        'module_uoa':work['self_module_uid'],
+        'tags':tags,
+        'repo_uoa':enruoa,
+        'data_uoa':duoa,
+        'add_info':'yes',
+        'add_meta':'yes'} # Need to sort by version, if ambiguity
 
-       r=ck.access(ii)
-       if r['return']>0: return r
-       l=r['lst']
-       lx=len(l)
-       if lx>0:
-          ilx=0
+    if i.get('local','')=='yes':
+       setup={'host_os_uoa':hos,
+              'target_os_uoa':tos,
+              'target_os_bits':tbits}
+       ii['search_dict']={'setup':setup}
 
-          if lx>1:
-             ls=sorted(l, key=lambda k: k.get('meta',{}).get('misc',{}).get('version_int',0), reverse=True)
-             l=ls
+    r=ck.access(ii)
+    if r['return']>0: return r
+    l=r['lst']
+    lx=len(l)
+    if lx>0:
+       ilx=0
 
-             if o=='con':
-                ck.out('')
-                ck.out('More than one environment found for tags ('+tags+'):')
+       if lx>1:
+          ls=sorted(l, key=lambda k: k.get('meta',{}).get('misc',{}).get('version_int',0), reverse=True)
+          l=ls
 
-                ck.out('')
-                zz={}
-                for z in range(0, lx):
-                    j=l[z]
+          if o=='con':
+             ck.out('')
+             ck.out('More than one environment found for tags ('+tags+'):')
 
-                    zi=j.get('info',{})
-                    zm=j.get('meta',{})
-                    zu=j.get('data_uid','')
-                    zdn=zi.get('data_name',{})
-                    cus=zm.get('customize','')
-                    xsetup=zm.get('setup',{})
-                    xtags=zm.get('tags','')
-                    ver=cus.get('version','')
+             ck.out('')
+             zz={}
+             for z in range(0, lx):
+                 j=l[z]
 
-                    xtarget_os_uoa=xsetup.get('target_os_uoa','')
+                 zi=j.get('info',{})
+                 zm=j.get('meta',{})
+                 zu=j.get('data_uid','')
+                 zdn=zi.get('data_name',{})
+                 cus=zm.get('customize','')
+                 xsetup=zm.get('setup',{})
+                 xtags=zm.get('tags','')
+                 ver=cus.get('version','')
 
-                    xstags=''
-                    for t in xtags:
-                        if t!='':
-                           if xstags!='': xstags+=','
-                           xstags+=t
+                 xtarget_os_uoa=xsetup.get('target_os_uoa','')
 
-                    zs=str(z)
-                    zz[zs]=zu
+                 xstags=''
+                 for t in xtags:
+                     if t!='':
+                        if xstags!='': xstags+=','
+                        xstags+=t
 
-                    ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
+                 zs=str(z)
+                 zz[zs]=zu
 
-                ck.out('')
-                rx=ck.inp({'text':'Choose first number to resolve dependency for tags ('+tags+'): '})
-                x=rx['string'].strip()
+                 ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
 
-                if x not in zz:
-                   return {'return':1, 'error':'dependency number is not found'}
+             ck.out('')
+             rx=ck.inp({'text':'Choose first number to resolve dependency for tags ('+tags+'): '})
+             x=rx['string'].strip()
 
-                ilx=int(x)
+             if x not in zz:
+                return {'return':1, 'error':'dependency number is not found'}
 
-          duid=l[ilx].get('data_uid')
-          duoa=duid
+             ilx=int(x)
 
-          dd=l[ilx].get('meta',{})
+       duid=l[ilx].get('data_uid')
+       duoa=duid
 
-          if o=='con' and i.get('print','')=='yes':
-             x=duoa
-             if duid!=duoa: x+=' ('+duid+')'
-             ck.out('CK environment found using tags "'+tags+'" : '+x)
+       dd=l[ilx].get('meta',{})
+
+       if o=='con' and i.get('print','')=='yes':
+          x=duoa
+          if duid!=duoa: x+=' ('+duid+')'
+          ck.out('CK environment found using tags "'+tags+'" : '+x)
 
     if duoa=='':
        import json
@@ -311,7 +312,7 @@ def show(i):
 
     # prepare view
     view=[]
-    
+
     lv={} # length of each field
 
     target_os_name={} # Caching target OS names
@@ -423,7 +424,7 @@ def show(i):
 
               x=q['data_name']
               sh+=' '+ x + (' ' * (lv['data_name']- len(x)))
-       
+
               x=q['version']
               sh+=' '+ x + (' ' * (lv['version'] - len(x)))
 
@@ -497,7 +498,7 @@ def resolve(i):
     tos=r['os_uid']
     tosd=r['os_dict']
     tdid=r['device_id']
-    
+
     # Checking deps
     env=i.get('env',{})
 
@@ -506,9 +507,11 @@ def resolve(i):
     res=[]
     for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
         q=deps[k]
-        
+
         tags=q.get('tags','')
         local=q.get('local','')
+
+        uoa=q.get('uoa','')
 
         ii={'host_os':hos,
             'target_os':tos,
@@ -516,13 +519,14 @@ def resolve(i):
             'tags':tags,
             'repo_uoa':enruoa,
             'env':env,
+            'uoa':uoa,
             'local':local
            }
         if o=='con': ii['out']='con'
 
         rx=set(ii)
         if rx['return']>0: return rx
-        
+
         lst=rx['lst']
         dd=rx['dict']
 
@@ -536,7 +540,7 @@ def resolve(i):
         if uoa not in res: res.append(uoa)
 
         env=rx['env']
-        
+
         sb+=rx['bat']
 
     return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'res_deps':res}
