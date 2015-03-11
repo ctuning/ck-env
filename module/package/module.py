@@ -62,6 +62,9 @@ def install(i):
 
     o=i.get('out','')
 
+    import time
+    start_time = time.time()
+
     # Check package description
     duoa=i.get('uoa','')
     d={}
@@ -443,7 +446,11 @@ def install(i):
           rx=ck.access(ii)
           if rx['return']>0: return rx
 
-    return {'return':0}
+    elapsed_time=time.time()-start_time
+    if o=='con':
+       out('Installation time: '+str(elapsed_time)+' sec.')
+
+    return {'return':0, 'elapsed_time':elapsed_time}
 
 ##############################################################################
 # setup package (only environment)
