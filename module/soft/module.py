@@ -535,6 +535,10 @@ def setup(i):
        # Prepare environment and batch
        sb=''
 
+       if o=='out':
+          ck.out('')
+          ck.out('Preparing environment and batch file ...')
+
        sdirs=hosd.get('dir_sep','')
 
        wb=tosd.get('windows_base','')

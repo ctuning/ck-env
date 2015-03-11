@@ -448,7 +448,7 @@ def install(i):
 
     elapsed_time=time.time()-start_time
     if o=='con':
-       out('Installation time: '+str(elapsed_time)+' sec.')
+       ck.out('Installation time: '+str(elapsed_time)+' sec.')
 
     return {'return':0, 'elapsed_time':elapsed_time}
 
