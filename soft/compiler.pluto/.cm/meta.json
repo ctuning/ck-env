@@ -1,10 +1,12 @@
 {
   "tags": [
     "compiler", 
+    "source_to_source":"yes",
     "pluto"
   ], 
   "customize_script": "customize", 
   "customize": {
+    "source_to_source":"yes",
     "languages": [
       "C", 
       "F77"
