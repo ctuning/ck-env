@@ -1,0 +1,57 @@
+{
+  "tags": [
+    "compiler", 
+    "pgi"
+  ], 
+  "customize": {
+    "languages": [
+      "C", 
+      "CPP", 
+      "F77", 
+      "F90", 
+      "F95"
+    ], 
+    "env_prefix": "CK_ENV_COMPILER_PGI", 
+    "skip_add_to_ld_path": "yes"
+  }, 
+  "tool": "pgcc", 
+  "soft_name": "Compiler - PGI", 
+  "version": {
+    "type": "parse_first_string", 
+    "string_before": ")", 
+    "cmd": "--version > $#filename#$ 2>&1", 
+    "string_after": "", 
+    "split": "."
+  }, 
+  "customize_script": "customize", 
+  "env": {
+    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_AR": "$#tool_prefix#$ar", 
+    "CK_FLAGS_DLL_EXTRA": "-ldl", 
+    "CK_LIB_EXT": ".a", 
+    "CK_CC": "$#tool_prefix#$pgcc", 
+    "CK_LB_OUTPUT": "-o ", 
+    "CK_FLAGS_STATIC_LIB": "-fPIC", 
+    "CK_FLAG_PREFIX_VAR": "-D", 
+    "CK_LD_FLAGS_EXTRA": "-lm -ldl", 
+    "CK_FLAGS_CREATE_OBJ": "-c", 
+    "CK_FLAG_PREFIX_INCLUDE": "-I", 
+    "CK_OBJ_EXT": ".o", 
+    "CK_FLAGS_OUTPUT": "-o", 
+    "CK_LB": "$#tool_prefix#$ar rcs", 
+    "CK_MAKE": "make", 
+    "CK_PLUGIN_FLAG": "-fplugin=", 
+    "CK_DLL_EXT": ".so", 
+    "CK_CXX": "$#tool_prefix#$pgcpp", 
+    "CK_ASM_EXT": ".s", 
+    "CK_FC": "$#tool_prefix#$pgf77", 
+    "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
+    "CK_EXE_EXT": ".out", 
+    "CK_F90": "$#tool_prefix#$pgf90", 
+    "CK_PROFILER": "gprof", 
+    "CK_FLAGS_DLL": "-shared -fPIC", 
+    "CK_FLAGS_STATIC_BIN": "-Bstatic -fPIC", 
+    "CK_F95": "$#tool_prefix#$pgf95", 
+    "CK_FLAGS_CREATE_ASM": "-S"
+  }
+}

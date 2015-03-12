@@ -1,0 +1,3 @@
+Collection of scripts to compile, run, auto-tuning 
+programs and libraries via CK as well as support
+collections of stats, etc ...

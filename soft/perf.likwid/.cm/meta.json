@@ -1,0 +1,11 @@
+{
+  "customize": {
+    "add_include_path": "yes", 
+    "env_prefix": "CK_ENV_PERF_LIKWID"
+  }, 
+  "soft_name": "Perf - Likwid", 
+  "tags": [
+    "perf", 
+    "likwid"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "version": {
+    "string_after_relaxed": " ", 
+    "string_before": "Python ", 
+    "cmd": "--version > $#filename#$ 2>&1", 
+    "type": "parse_first_string", 
+    "split": "."
+  }, 
+  "env": {
+    "CK_XSB_RT": "xsb", 
+    "CK_XSBC": "xsb"
+  }, 
+  "tags": [
+    "compiler", 
+    "xsb"
+  ], 
+  "customize": {
+    "languages": [
+      "PROLOG"
+    ], 
+    "skip_add_to_bin": "yes", 
+    "env_prefix": "CK_ENV_COMPILER_PROLOG", 
+    "skip_add_to_ld_path": "yes"
+  }, 
+  "tool": "xsb", 
+  "soft_name": "Compiler - XSB"
+}

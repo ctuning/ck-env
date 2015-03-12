@@ -111,28 +111,8 @@ def setup(i):
           add_m32='yes'
           cus['add_m32']='yes'
 
-    if winh=='yes':
-       x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
-       if remote!='yes':
-          if x.find('-DWINDOWS')<0: 
-             x+=' -DWINDOWS' 
-       if tbits=='32' and add_m32=='yes' and x.find('-m32')<0: 
-          x+=' -m32' 
-       env['CK_COMPILER_FLAGS_OBLIGATORY']=x
-
-       if mingw=='yes': env['CK_MAKE']='mingw32-make'
-
-       x=env.get('CK_CXX','')
-       if x!='' and x.find('-fpermissive')<0:
-          x+=' -fpermissive'
-       env['CK_CXX']=x
-
-    x=cus.get('bugfix1','')
-    if x=='yes' and winh!='yes':
-       s+='\nexport LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH\n'
-
     x=cus.get('add_extra_path','')
-    if x!='' and winh=='yes':
+    if x!='':
        s+='\nset PATH='+pi+x+';%PATH%\n\n'
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}

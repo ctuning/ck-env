@@ -12,6 +12,7 @@ work={} # Will be updated by CK (temporal data)
 ck=None # Will be updated by CK (initialized CK kernel) 
 
 # Local settings
+env_install_path='CK_TOOLS'
 
 ##############################################################################
 # Initialize module
@@ -88,7 +89,7 @@ def install(i):
        # Attempt to load configuration from the current directory
        p=os.getcwd()
        pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
-    
+
        found=False
        if os.path.isfile(pc):
           r=ck.load_json_file({'json_file':pc})
@@ -205,6 +206,10 @@ def install(i):
     # Check installation path
     pi=i.get('install_path','')
 
+    x=cus.get('input_path_example','')
+    if x!='': pie=' (example: '+ye+')'
+    else: pie=''
+
     xprocess=True
     xsetup=True
 
@@ -294,12 +299,21 @@ def install(i):
        if pi=='' and cus.get('skip_path','')!='yes':
           if o=='con':
              ck.out('')
-             ye=cus.get('input_path_example','')
-             if ye!='': y=' (example: '+ye+')'
-             else: y=''
-             r=ck.inp({'text':'Enter path to installed tool'+y+': '})
-             pi=r['string'].strip()
 
+             pix=''
+             sp=d.get('suggested_path','')
+             if os.environ.get(env_install_path,'')!='' and sp!='':
+                x=os.environ[env_install_path]
+                pix=os.path.join(x, sp+'-'+cus.get('version','')+'-'+tosx)
+                if not tosx.endswith(tbits): pix+='-'+tbits
+                ck.out('Suggested path: '+pix)
+
+                r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
+                pi=r['string'].strip()
+                if pi=='': pi=pix
+             else:
+                r=ck.inp({'text':'Enter installation path '+pie+': '})
+                pi=r['string'].strip()
 
        if pi=='' and cus.get('skip_path','')!='yes':
           return {'return':1, 'error':'installation path is not specified'}
@@ -348,8 +362,20 @@ def install(i):
        if pi=='' and cus.get('skip_path','')!='yes':
           if o=='con':
              ck.out('')
-             r=ck.inp({'text':'Enter installation path: '})
-             pi=r['string'].strip()
+
+             pix=''
+             sp=d.get('suggested_path','')
+             if os.environ.get(env_install_path,'')!='' and sp!='':
+                x=os.environ[env_install_path]
+                pix=os.path.join(x, sp+'-'+cus.get('version','')+'-'+tosx)
+                if not tosx.endswith(tbits): pix+='-'+tbits
+                ck.out('Suggested path: '+pix)
+                r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
+                pi=r['string'].strip()
+                if pi=='': pi=pix
+             else:
+                r=ck.inp({'text':'Enter installation path '+pie+': '})
+                pi=r['string'].strip()
 
           if pi=='':
              return {'return':1, 'error':'installation path is not specified'}
