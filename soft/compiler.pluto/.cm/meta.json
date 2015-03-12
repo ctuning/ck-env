@@ -3,12 +3,15 @@
     "compiler", 
     "pluto"
   ], 
+  "customize_script": "customize", 
   "customize": {
     "languages": [
       "C", 
       "F77"
     ], 
     "env_prefix": "CK_ENV_COMPILER_PLUTO", 
+    "skip_add_to_bin": "yes",
+    "skip_add_to_path": "yes",
     "skip_add_to_ld_path": "yes"
   }, 
   "soft_name": "Compiler - PLUTO",
@@ -40,8 +43,8 @@
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
-    "string_after": "", 
-    "string_before": ")", 
+    "string_after": " ", 
+    "string_before": "PLUTO ", 
     "type": "parse_first_string"
   }
 }
