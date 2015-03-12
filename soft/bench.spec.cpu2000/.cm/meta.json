@@ -1,0 +1,13 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_BENCH_SPEC_CPU2000", 
+    "skip_add_to_ld_path": "yes"
+  }, 
+  "tags": [
+    "bench", 
+    "spec", 
+    "cpu",
+    "2000",
+    "cpu2000"
+  ]
+}

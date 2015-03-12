@@ -454,6 +454,21 @@ def setup(i):
        tg='v'+ver
        if tg!='' and tg not in ltags: ltags.append(tg)
 
+       # Separate version into subversions for tags
+       if tg!='':
+          ltags1=[]
+          mf=tg.rfind('.')
+          if tg.startswith('v') and mf>=0:
+             while mf>=0:
+                   t=tg[:mf]
+                   if t not in ltags:
+                      ltags1.append(t)
+                   mf=tg.rfind('.',0,mf-1)
+
+          if len(ltags1)>0:
+             for z in ltags1:
+                 ltags.append(z)
+
     # Finish tags
     stags=''
     for q in ltags:
