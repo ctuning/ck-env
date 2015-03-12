@@ -108,7 +108,6 @@ def detect(i):
 
     prop_os_name_long=''
     prop_os_name_short=''
-    prop_os_name_sub=''   # On Android, name of Linux
 
     if sic!='yes':
        remote=os_dict.get('remote','')
@@ -232,31 +231,31 @@ def detect(i):
 
           prop_system_model=x2
 
-          prop_os_name_long=params.get('ro.build.kernel.version','')
+          prop_os_name_long='Linux '+params.get('ro.build.kernel.version','')
           prop_os_name_short='Android '+params.get('ro.build.version.release','')
-          
-
-
-
-
 
        else:
           import platform
           prop_os_name_long=platform.platform()
           prop_os_name_short=platform.system()+' '+platform.release()
 
+          if os_win!='yes':
+             # If Linux, remove extensions after - in a shorter version
+             x=prop_os_name_short.find('-')
+             if x>=0:
+                prop_os_name_short=prop_os_name_short[:x]
+
     prop['name_long']=prop_os_name_long
     prop['name_short']=prop_os_name_short
     prop['bits']=os_bits
 
     if o=='con':
+       ck.out('')
        ck.out('OS CK UOA:     '+os_uoa+' ('+os_uid+')')
        ck.out('')
-       ck.out('Short OS name: '+prop_os_name_short)
-       ck.out('Long OS name:  '+prop_os_name_long)
-       ck.out('Sub OS name:   '+prop_os_name_sub)
-       ck.out('OS bits:       '+os_bits)
-       ck.out('')
+       ck.out('Short OS name: '+prop.get('name_short',''))
+       ck.out('Long OS name:  '+prop.get('name_long',''))
+       ck.out('OS bits:       '+prop.get('bits',''))
 
     if ex=='yes':
        if o=='con':
@@ -283,5 +282,5 @@ def detect(i):
 
     return {'return':0, 'os_uoa':os_uoa, 'os_uid':os_uid, 'os_dict':os_dict, 
                         'host':host,
-                        'properties_unified':prop, 'properties_all':prop_all, 
+                        'os_properties_unified':prop, 'os_properties_all':prop_all, 
                         'device_id':device_id}
