@@ -19,9 +19,9 @@
   "soft_name": "Compiler - POCC", 
   "version": {
     "type": "parse_first_string", 
-    "string_before": "POCC ", 
+    "string_before": "version ", 
     "cmd": "--version > $#filename#$ 2>&1", 
-    "string_after": " ", 
+    "string_after": "", 
     "split": "."
   }, 
   "customize_script": "customize", 

@@ -68,6 +68,6 @@ def setup(i):
         v=v.replace('$#tool_prefix#$',prefix)
         env[k]=v
 
-    s+='\nexport PATH='+pi+':$PATH\n\n'
+    s+='\nexport PATH='+pi+'/bin:$PATH\n\n'
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}
