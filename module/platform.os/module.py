@@ -63,8 +63,10 @@ def detect(i):
               os_uid                 - target OS UID
               os_dict                - target OS meta
 
-              os_properties_unified  - OS properties, unified
-              os_properties_all      - assorted OS properties, platform dependent
+              features = {
+                os                   - OS features (properties), unified
+                os_misc              - assorted OS features (properties), platform dependent
+              }
 
               (devices)              - return devices if device_id==''
               (device_id)            - if device_id=='' and only 1 device, select it
@@ -333,8 +335,8 @@ def detect(i):
            'repo_uoa':er,
            'data_name':prop.get('name',''),
            'all':'yes',
-           'dict':{'prop':prop}} # Later we should add more properties from prop_all,
-                                 # but should be careful to remove any user-specific info
+           'dict':{'features':prop}} # Later we should add more properties from prop_all,
+                                     # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
 
        r=ck.access(ii)
@@ -347,5 +349,5 @@ def detect(i):
 
     return {'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
                         'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,
-                        'os_properties_unified':prop, 'os_properties_all':prop_all, 
+                        'features':{'os':prop, 'os_misc':prop_all}, 
                         'devices':devices, 'device_id':tdid}

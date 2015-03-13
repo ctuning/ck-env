@@ -55,8 +55,10 @@ def detect(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              acc_properties_unified - Accelerator properties, unified
-              acc_properties_all     - assorted Accelerator properties, platform dependent
+              features = {
+                acc          - Accelerator features (properties), unified
+                acc_misc     - assorted Accelerator features (properties), platform dependent
+              }
             }
 
     """
@@ -235,8 +237,8 @@ def detect(i):
            'repo_uoa':er,
            'data_name':prop.get('name',''),
            'all':'yes',
-           'dict':{'prop':prop}} # Later we should add more properties from prop_all,
-                                 # but should be careful to remove any user-specific info
+           'dict':{'features':prop}} # Later we should add more properties from prop_all,
+                                     # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
        r=ck.access(ii)
        if r['return']>0: return r
@@ -246,7 +248,9 @@ def detect(i):
        if o=='con' and r.get('found','')=='yes':
           ck.out('  Data already exists - reloading ...')
 
-    rr['acc_properties_unified']=prop
-    rr['acc_properties_all']=prop_all
+    if 'features' not in rr: rr['features']={}
+
+    rr['features']['acc']=prop
+    rr['features']['acc_misc']=prop_all
 
     return rr

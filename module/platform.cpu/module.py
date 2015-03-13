@@ -55,11 +55,13 @@ def detect(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              cpu_properties_unified - CPU properties, unified
-              cpu_properties_all     - assorted CPU properties, platform dependent
+              features = {
+                cpu        - CPU features (properties), unified
+                cpu_misc   - assorted CPU features (properties), platform dependent
 
-              os_properties_unified  - OS properties, unified
-              os_properties_all      - assorted OS properties, platform dependent
+                os         - OS features (properties), unified
+                os_misc    - assorted OS features (properties), platform dependent
+              }
             }
 
     """
@@ -327,8 +329,8 @@ def detect(i):
            'repo_uoa':er,
            'data_name':target.get('name',''),
            'all':'no',
-           'dict':{'prop':target}} # Later we should add more properties from prop_all,
-                                 # but should be careful to remove any user-specific info
+           'dict':{'features':target}} # Later we should add more properties from prop_all,
+                                       # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
        r=ck.access(ii)
        if r['return']>0: return r
@@ -338,7 +340,9 @@ def detect(i):
        if o=='con' and r.get('found','')=='yes':
           ck.out('  Data already exists - reloading ...')
 
-    rr['cpu_properties_unified']=target
-    rr['cpu_properties_all']=info_cpu
+    if 'features' not in rr: rr['features']={}
+
+    rr['features']['cpu']=target
+    rr['features']['cpu_misc']=info_cpu
 
     return rr

@@ -66,17 +66,19 @@ def detect(i):
               (devices)                   - return devices if device_id==''
               (device_id)                 - if device_id=='' and only 1 device, select it
 
-              cpu_properties_unified      - CPU properties, unified
-              cpu_properties_all          - assorted CPU properties, platform dependent
+              features = {
+                cpu            - CPU features (properties), unified
+                cpu_misc       - assorted CPU features (properties), platform dependent
 
-              os_properties_unified       - OS properties, unified
-              os_properties_all           - assorted OS properties, platform dependent
+                os             - OS features (properties), unified
+                os_misc        - assorted OS features (properties), platform dependent
 
-              platform_properties_unified - platform properties, unified
-              platform_properties_all     - assorted platform properties, platform dependent
+                platform       - platform features (properties), unified
+                platform_misc  - assorted platform features (properties), platform dependent
 
-              acc_properties_unified      - Accelerator properties, unified
-              acc_properties_all          - assorted Accelerator properties, platform dependent
+                acc            - Accelerator features (properties), unified
+                acc_misc       - assorted Accelerator features (properties), platform dependent
+              }
             }
 
     """
@@ -297,8 +299,8 @@ def detect(i):
            'repo_uoa':er,
            'data_name':prop.get('name',''),
            'all':'yes',
-           'dict':{'prop':prop}} # Later we should add more properties from prop_all,
-                                 # but should be careful to remove any user-specific info
+           'dict':{'features':prop}} # Later we should add more properties from prop_all,
+                                     # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
        r=ck.access(ii)
        if r['return']>0: return r
@@ -308,8 +310,10 @@ def detect(i):
        if o=='con' and r.get('found','')=='yes':
           ck.out('  Data already exists - reloading ...')
 
-    rr['platform_properties_unified']=prop
-    rr['platform_properties_all']=prop_all
+    if 'features' not in rr: rr['features']={}
+
+    rr['features']['platform']=prop
+    rr['features']['platform_misc']=prop_all
 
     return rr
 
@@ -473,7 +477,7 @@ def exchange(i):
     dname=i.get('data_name','')
 
     dd=i.get('dict',{})
-    ddp=dd.get('prop',{})
+    ddf=dd.get('features',{})
 
     al=i.get('all','')
 
@@ -524,14 +528,14 @@ def exchange(i):
 
 
              for q in dall.get('all',[]):
-                 rz=ck.compare_dicts({'dict1':q, 'dict2':ddp})
+                 rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
                  if rz['return']>0: return rz
                  if rz['equal']=='yes':
                     toadd=False
                     break
 
           if toadd:
-             dall['all'].append(ddp)
+             dall['all'].append(ddf)
              
              rz=ck.save_json_to_file({'json_file':p1, 'dict':dall})
              if rz['return']>0: return rz
