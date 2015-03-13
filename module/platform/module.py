@@ -457,7 +457,6 @@ def exchange(i):
 
               (all)          - if 'yes', check all dict['prop'] and add to separate file 
 
-              
             }
 
     Output: {
@@ -487,7 +486,7 @@ def exchange(i):
                      'module_uoa':smuoa,
                      'repo_uoa':ruoa,
                      'search_by_name':dname,
-                     'ignore_case:'yes'})
+                     'ignore_case':'yes'})
        if rx['return']>0: return rx
        lst=rx['lst']
 
@@ -537,7 +536,7 @@ def exchange(i):
 
           if toadd:
              dall['all'].append(ddf)
-             
+
              rz=ck.save_json_to_file({'json_file':p1, 'dict':dall})
              if rz['return']>0: return rz
 
