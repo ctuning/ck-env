@@ -45,5 +45,6 @@
   "suppress_output":"> /dev/null",
   "rem": "#", 
   "script_ext": ".sh", 
-  "set_executable": "chmod 755"
+  "set_executable": "chmod 755",
+  "priority":"yes"
 }
