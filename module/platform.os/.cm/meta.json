@@ -5,8 +5,6 @@
     }
   }, 
   "copyright": "See CK Copyright.txt for copyright details", 
-  "default_exchange_repo_uoa": "remote-ck", 
-  "default_exchange_subrepo_uoa": "ctuning", 
   "desc": "platform - OS", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 

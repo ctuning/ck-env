@@ -306,28 +306,44 @@ def detect(i):
        ck.out('Long OS name:  '+prop.get('name_long',''))
        ck.out('OS bits:       '+prop.get('bits',''))
 
+    # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
-          ck.out('Trying to exchange information with repository ...')
+          ck.out('')
+          ck.out('Exchanging information with repository ...')
+
+       xn=prop.get('name','')
+       if xn=='':
+          if o=='con':
+             r=ck.inp({'text':'Enter your OS name (for example, Windows 10 or Android 5.0): '})
+             xn=r['string'].lower()
+          if xn=='':
+             return {'return':1, 'error':'can\'t exchange information where main name is empty'}
+          prop['name']=xn
 
        er=i.get('exchange_repo','')
+       if er=='': er=ck.cfg['default_exchange_repo_uoa']
        esr=i.get('exchange_subrepo','')
-
        if er=='': 
-          er=cfg['default_exchange_repo_uoa']
-          if esr=='': esr=cfg['default_exchange_subrepo_uoa']
+          er=ck.cfg['default_exchange_repo_uoa']
+          if esr=='': esr=ck.cfg['default_exchange_subrepo_uoa']
 
+       ii={'action':'exchange',
+           'module_uoa':cfg['module_deps']['platform'],
+           'sub_module_uoa':work['self_module_uid'],
+           'repo_uoa':er,
+           'data_name':prop.get('name',''),
+           'all':'yes',
+           'dict':{'prop':prop}} # Later we should add more properties from prop_all,
+                                 # but should be careful to remove any user-specific info
+       if esr!='': ii['remote_repo_uoa']=esr
+       r=ck.access(ii)
+       if r['return']>0: return r
 
+       prop=r['dict']
 
-
-
-
-
-
-
-
-
-
+       if o=='con' and r.get('found','')=='yes':
+          ck.out('  Data already exists - reloading ...')
 
     return {'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
                         'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,

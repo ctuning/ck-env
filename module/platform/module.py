@@ -212,7 +212,7 @@ def detect(i):
           if model.lower().startswith(manu.lower()):
              model=model[len(manu)+1:]
 
-       prop['system_name']=manu+' '+model
+       prop['name']=manu+' '+model
        prop['model']=model
        prop['vendor']=manu
     else:
@@ -220,7 +220,7 @@ def detect(i):
        x2=''
 
        target_system_model=''
-       target_system_name=''
+       target_name=''
 
        if os_win=='yes':
           r=get_from_wmic({'group':'csproduct'})
@@ -230,7 +230,7 @@ def detect(i):
           x1=info1.get('Vendor','')
           x2=info1.get('Version','')
 
-          target_system_name=x1+' '+x2
+          target_name=x1+' '+x2
 
           r=get_from_wmic({'cmd':'computersystem get model'})
           if r['return']>0: return r
@@ -251,7 +251,7 @@ def detect(i):
              x2=r['string'].strip()
 
           if x1!='' and x2!='':
-             target_system_name=x1+' '+x2
+             target_name=x1+' '+x2
 
           file_with_id='/sys/devices/virtual/dmi/id/product_name'
           if os.path.isfile(file_with_id):
@@ -260,15 +260,54 @@ def detect(i):
              target_system_model=r['string'].strip()
 
        prop['vendor']=x1
-       prop['system_name']=target_system_name
+       prop['name']=target_name
        prop['model']=target_system_model
 
 
     if o=='con':
        ck.out('')
+       ck.out('Platform name:   '+prop.get('name',''))
        ck.out('Platform vendor: '+prop.get('vendor',''))
-       ck.out('Platform name:   '+prop.get('system_name',''))
        ck.out('Platform model:  '+prop.get('model',''))
+
+    # Exchanging info #################################################################
+    if ex=='yes':
+       if o=='con':
+          ck.out('')
+          ck.out('Exchanging information with repository ...')
+
+       xn=prop.get('name','')
+       if xn=='':
+          if o=='con':
+             r=ck.inp({'text':'Enter your platform name (for example Samsung Chromebook 2, Huawei Ascend Mate 7, IBM SyNAPSE): '})
+             xn=r['string'].lower()
+          if xn=='':
+             return {'return':1, 'error':'can\'t exchange information where main name is empty'}
+          prop['name']=xn
+
+       er=i.get('exchange_repo','')
+       if er=='': er=ck.cfg['default_exchange_repo_uoa']
+       esr=i.get('exchange_subrepo','')
+       if er=='': 
+          er=ck.cfg['default_exchange_repo_uoa']
+          if esr=='': esr=ck.cfg['default_exchange_subrepo_uoa']
+
+       ii={'action':'exchange',
+           'module_uoa':work['self_module_uid'],
+           'sub_module_uoa':work['self_module_uid'],
+           'repo_uoa':er,
+           'data_name':prop.get('name',''),
+           'all':'yes',
+           'dict':{'prop':prop}} # Later we should add more properties from prop_all,
+                                 # but should be careful to remove any user-specific info
+       if esr!='': ii['remote_repo_uoa']=esr
+       r=ck.access(ii)
+       if r['return']>0: return r
+
+       prop=r['dict']
+
+       if o=='con' and r.get('found','')=='yes':
+          ck.out('  Data already exists - reloading ...')
 
     rr['platform_properties_unified']=prop
     rr['platform_properties_all']=prop_all
@@ -399,3 +438,105 @@ def init_device(i):
        device_init='yes'
 
     return {'return':0}
+
+##############################################################################
+# exchange properties
+
+def exchange(i):
+    """
+    Input:  {
+              sub_module_uoa - module to search/exchange
+              data_name      - data name to search
+
+              (repo_uoa)     - where to record
+
+              (dict)         - dictionary to check/record
+
+              (all)          - if 'yes', check all dict['prop'] and add to separate file 
+
+              
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              dict         - if exists, load updated dict (can be collaboratively extended to add more properties!)
+              (found)      - if 'yes', entry was found
+            }
+
+    """
+
+    ruoa=i.get('repo_uoa','')
+    smuoa=i['sub_module_uoa']
+
+    dname=i.get('data_name','')
+
+    dd=i.get('dict',{})
+    ddp=dd.get('prop',{})
+
+    al=i.get('all','')
+
+    if dname!='':
+       # Search if already exists
+       rx=ck.access({'action':'search',
+                     'module_uoa':smuoa,
+                     'repo_uoa':ruoa,
+                     'search_by_name':dname})
+       if rx['return']>0: return rx
+       lst=rx['lst']
+
+       if len(lst)==0:
+          # Add info
+          rx=ck.access({'action':'add',
+                        'module_uoa':smuoa,
+                        'repo_uoa':ruoa,
+                        'data_name':dname,
+                        'dict':dd,
+                        'sort_keys':'yes'})
+
+       else:
+          # Load
+          ll=lst[0]
+          duoa=ll.get('data_uid','')
+          rx=ck.access({'action':'load',
+                        'module_uoa':smuoa,
+                        'repo_uoa':ruoa,
+                        'data_uoa':duoa})
+
+       if rx['return']>0: return rx
+
+       rx['found']='yes'
+
+       if al=='yes':
+          # Check if extra parameters are saved
+          import os
+          p=rx['path']
+          p1=os.path.join(p, 'all.json')
+
+          dall={'all':[]}
+          toadd=True
+
+          if os.path.isfile(p1):
+             ry=ck.load_json_file({'json_file':p1})
+             if ry['return']>0: return ry
+             dall=ry['dict']
+
+
+             for q in dall.get('all',[]):
+                 rz=ck.compare_dicts({'dict1':q, 'dict2':ddp})
+                 if rz['return']>0: return rz
+                 if rz['equal']=='yes':
+                    toadd=False
+                    break
+
+          if toadd:
+             dall['all'].append(ddp)
+             
+             rz=ck.save_json_to_file({'json_file':p1, 'dict':dall})
+             if rz['return']>0: return rz
+
+       return rx
+
+    return {'return':1, 'error':'name is empty in platform information exchange'}
