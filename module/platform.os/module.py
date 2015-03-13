@@ -322,11 +322,10 @@ def detect(i):
           prop['name']=xn
 
        er=i.get('exchange_repo','')
-       if er=='': er=ck.cfg['default_exchange_repo_uoa']
        esr=i.get('exchange_subrepo','')
        if er=='': 
           er=ck.cfg['default_exchange_repo_uoa']
-          if esr=='': esr=ck.cfg['default_exchange_subrepo_uoa']
+          esr=ck.cfg['default_exchange_subrepo_uoa']
 
        ii={'action':'exchange',
            'module_uoa':cfg['module_deps']['platform'],
@@ -337,6 +336,7 @@ def detect(i):
            'dict':{'prop':prop}} # Later we should add more properties from prop_all,
                                  # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
+
        r=ck.access(ii)
        if r['return']>0: return r
 

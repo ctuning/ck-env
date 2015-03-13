@@ -286,11 +286,10 @@ def detect(i):
           prop['name']=xn
 
        er=i.get('exchange_repo','')
-       if er=='': er=ck.cfg['default_exchange_repo_uoa']
        esr=i.get('exchange_subrepo','')
        if er=='': 
           er=ck.cfg['default_exchange_repo_uoa']
-          if esr=='': esr=ck.cfg['default_exchange_subrepo_uoa']
+          esr=ck.cfg['default_exchange_subrepo_uoa']
 
        ii={'action':'exchange',
            'module_uoa':work['self_module_uid'],
