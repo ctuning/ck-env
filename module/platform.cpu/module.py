@@ -105,7 +105,7 @@ def detect(i):
 
     tdid=rr['device_id']
 
-    prop=rr['os_properties_unified']
+    prop=rr['features']['os']
 
     # Some params
     ro=tosd.get('redirect_stdout','')
