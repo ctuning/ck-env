@@ -220,8 +220,12 @@ def detect(i):
            if len(ll)>0:
               llx=ll[0].strip()
               if llx!='':
-                 fr=float(llx)/1000
-                 target_freq[str(px)]=fr
+                 fr=0
+                 try:
+                   fr=float(llx)/1000
+                   target_freq[str(px)]=fr
+                 except ValueError:
+                   pass
 
            fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/cpuinfo_max_freq'
            if remote=='yes':
@@ -253,8 +257,11 @@ def detect(i):
            if len(ll)>0:
               llx=ll[0].strip()
               if llx!='':
-                 fr=float(llx)/1000
-                 target_freq_max[str(px)]=fr
+                 try:
+                   fr=float(llx)/1000
+                   target_freq_max[str(px)]=fr
+                 except ValueError:
+                   pass
 
        target['name']=target_cpu
        target['sub_name']=target_sub_cpu
