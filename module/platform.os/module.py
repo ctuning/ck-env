@@ -110,7 +110,7 @@ def detect(i):
     tosd=r['os_dict']
 
     tp=r['platform']
-    tbits=r['bits']
+    tbits=tosd.get('bits','')
 
     # Init params
     prop={}
