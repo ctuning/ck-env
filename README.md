@@ -1,6 +1,26 @@
+This is a Collective Knowledge Repository
+
 Current status
 ==============
 * Testing stage (stable, pre-release state) since 2015/02/13
+
+Compatibility
+=============
+Linux, Windows, Android
+
+Installation
+============
+* ck add repo:ck-env --shared --quiet
+
+We suggest to add environment variable for CK package installations:
+
+* Linux: export CK_TOOLS=[path]
+
+* Windows: set CK_TOOLS=[path]
+
+Update
+======
+* ck pull repo:ck-env
 
 Description
 ===========
