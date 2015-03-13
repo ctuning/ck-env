@@ -1,0 +1,21 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "retarget": "", 
+    "tool_prefix": "", 
+    "version": "2011", 
+    "version_int": 2011
+  }, 
+  "deps": {
+    "compiler_mcl": {
+      "local": "yes", 
+      "tags": "compiler,mcl,v15.00"
+    }
+  }, 
+  "soft_uoa": "f0e7b534fc84d18a", 
+  "tags": [
+    "compiler", 
+    "icc", 
+    "v2011"
+  ]
+}

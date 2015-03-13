@@ -1,0 +1,16 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "retarget": "", 
+    "tool_prefix": "", 
+    "version": "18.00", 
+    "version_int": 1800
+  }, 
+  "soft_uoa": "a4c8d6c8e946c49f", 
+  "tags": [
+    "compiler", 
+    "mcl", 
+    "v18.00", 
+    "v18"
+  ]
+}

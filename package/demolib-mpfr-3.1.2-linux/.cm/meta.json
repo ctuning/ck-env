@@ -1,0 +1,23 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "version": "3.1.2", 
+    "version_int": 30102
+  }, 
+  "deps": {
+    "lib_gmp": {
+      "local": "yes", 
+      "tags": "lib,gmp"
+    }
+  }, 
+  "process_script": "process", 
+  "soft_uoa": "b212226b44799964", 
+  "suggested_path": "mpfr", 
+  "tags": [
+    "lib", 
+    "mpfr", 
+    "v3.1.2", 
+    "v3.1", 
+    "v3"
+  ]
+}
