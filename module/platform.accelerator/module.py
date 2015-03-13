@@ -36,18 +36,27 @@ def init(i):
 def detect(i):
     """
     Input:  {
-              (os)               - OS module (needed to setup tools for CPU, if omitted use host)
-              (device_id)        - device id if remote (such as adb)
+              (host_os)              - host OS (detect, if omitted)
+              (os) or (target_os)    - OS module to check (if omitted, analyze host)
 
-              (exchange)         - if 'yes', exchange info with some repo (by default, remote-ck)
-              (exchange_repo)    - which repo to record/update info (remote-ck by default)
-              (exchange_subrepo) - if remote, remote repo UOA
+              (device_id)            - device id if remote (such as adb)
+              (skip_device_init)     - if 'yes', do not initialize device
+              (print_device_info)    - if 'yes', print extra device info
+
+              (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
+
+              (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
+              (exchange_repo)        - which repo to record/update info (remote-ck by default)
+              (exchange_subrepo)     - if remote, remote repo UOA
             }
 
     Output: {
               return       - return code =  0, if successful
                                          >  0, if error
               (error)      - error text if return > 0
+
+              acc_properties_unified - Accelerator properties, unified
+              acc_properties_all     - assorted Accelerator properties, platform dependent
             }
 
     """
@@ -56,100 +65,57 @@ def detect(i):
 
     o=i.get('out','')
 
-    xos=i.get('os','')
-    device_id=i.get('device_id','')
+    oo=''
+    if o=='con': oo=o
 
-    # Get info about host/target OS
-    ii={'action':'detect',
-        'module_uoa':cfg['module_deps']['platform.os'],
-        'os':xos,
-        'device_id':device_id}
-    rr=ck.access(ii)
-    if rr['return']>0: return rr # Careful will be updating this rr
+    # Various params
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    if tos=='': tos=i.get('os','')
+    tdid=i.get('device_id','')
 
-    host_name=rr['host']['name']
+    sic=i.get('skip_info_collection','')
+    sdi=i.get('skip_device_init','')
+    pdv=i.get('print_device_info','')
+    ex=i.get('exchange','')
 
-    os_uoa=rr['os_uoa']
-    os_uid=rr['os_uid']
-    os_dict=rr['os_dict']
+    # Get OS info
+    import copy
+    ii=copy.deepcopy(i)
+    ii['out']=''
+    ii['action']='detect'
+    ii['module_uoa']=cfg['module_deps']['platform.cpu']
+    rr=ck.access(ii) # DO NOT USE rr further - will be reused as return !
+    if rr['return']>0: return rr
 
-    remote=os_dict.get('remote','')
-    os_win=os_dict.get('windows_base','')
+    hos=rr['host_os_uid']
+    hosx=rr['host_os_uoa']
+    hosd=rr['host_os_dict']
 
-    target={}
+    tos=rr['os_uid']
+    tosx=rr['os_uoa']
+    tosd=rr['os_dict']
 
-    ro=os_dict.get('redirect_stdout','')
+    tbits=tosd.get('bits','')
+
+    tdid=rr['device_id']
+
+    # Some params
+    ro=tosd.get('redirect_stdout','')
+    remote=tosd.get('remote','')
+    win=tosd.get('windows_base','')
+
+    dv=''
+    if tdid!='': dv='-s '+tdid
+
+    # Init
+    prop={}
+    prop_all={}
 
     target_gpu_name=''
 
     # Get info about accelerator ######################################################
-    remote=os_dict.get('remote','')
     if remote=='yes':
-       remote_init=os_dict.get('remote_init','')
-       if remote_init!='':
-          if o=='con':
-             ck.out('Initializing remote device:')
-             ck.out('  '+remote_init)
-             ck.out('')
-
-          rx=os.system(remote_init)
-          if rx!=0:
-             if o=='con':
-                ck.out('')
-                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-             return {'return':1, 'error':'remote device initialization failed'}
-
-       # Get devices
-       rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-       if rx['return']>0: return rx
-       fn=rx['file_name']
-
-       adb_devices=os_dict.get('adb_devices','')
-       adb_devices=adb_devices.replace('$#redirect_stdout#$', ro)
-       adb_devices=adb_devices.replace('$#output_file#$', fn)
-
-       if o=='con':
-          ck.out('')
-          ck.out('Receiving list of devices:')
-          ck.out('  '+adb_devices)
-
-       rx=os.system(adb_devices)
-       if rx!=0:
-          if o=='con':
-             ck.out('')
-             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-          return {'return':1, 'error':'access to remote device failed'}
-
-       # Read and parse file
-       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
-       if rx['return']>0: return rx
-       ll=rx['lst']
-
-       devices=[]
-       for q in range(1, len(ll)):
-           s1=ll[q].strip()
-           if s1!='':
-              q2=s1.find('\t')
-              if q2>0:
-                 s2=s1[0:q2]
-                 devices.append(s2)
-
-       if os.path.isfile(fn): os.remove(fn)
-
-       if o=='con':
-          ck.out('')
-          ck.out('Available remote devices:')
-          for q in devices:
-              ck.out('  '+q)
-          ck.out('')
-
-       if device_id!='':
-          if device_id not in devices:
-             return {'return':1, 'error':'Device ID was not found in the list of attached devices'}
-       else:
-          if len(devices)>0:
-             device_id=devices[0]
-
        # Get all params
        params={}
 
@@ -158,17 +124,17 @@ def detect(i):
        fn=rx['file_name']
 
        # Get GPU
-       adb_params=os_dict.get('adb_dumpsys','')
-       adb_params=adb_params.replace('$#category#$','SurfaceFlinger')
-       adb_params=adb_params.replace('$#redirect_stdout#$', ro)
-       adb_params=adb_params.replace('$#output_file#$', fn)
+       x=tosd.get('adb_dumpsys','').replace('$#device#$',dv)
+       x=x.replace('$#category#$','SurfaceFlinger')
+       x=x.replace('$#redirect_stdout#$', ro)
+       x=x.replace('$#output_file#$', fn)
 
-       if o=='con':
+       if o=='con' and pdv=='yes':
           ck.out('')
           ck.out('Receiving all parameters:')
-          ck.out('  '+adb_params)
+          ck.out('  '+x)
 
-       rx=os.system(adb_params)
+       rx=os.system(x)
        if rx!=0:
           if o=='con':
              ck.out('')
@@ -176,7 +142,7 @@ def detect(i):
           return {'return':1, 'error':'access to remote device failed'}
 
        # Read and parse file
-       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
+       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
        if rx['return']>0: return rx
        ll=rx['lst']
 
@@ -186,13 +152,12 @@ def detect(i):
            if q2>=0:
               target_gpu_name=s1[6:].strip()
 
-              target['name']=target_gpu_name
-              target['possibly_related_cpu_name']=''
+              prop['name']=target_gpu_name
+              prop['possibly_related_cpu_name']=''
 
               break
-       if os.path.isfile(fn): os.remove(fn)
     else:
-       if os_win=='yes':
+       if win=='yes':
           r=ck.access({'action':'get_from_wmic',
                        'module_uoa':cfg['module_deps']['platform'],
                        'group':'cpu'})
@@ -207,8 +172,8 @@ def detect(i):
           if r['return']>0: return r
           target_gpu_name=r['value']
 
-          target['name']=target_gpu_name
-          target['possibly_related_cpu_name']=target_cpu
+          prop['name']=target_gpu_name
+          prop['possibly_related_cpu_name']=target_cpu
 
        else:
           # Get devices
@@ -237,12 +202,13 @@ def detect(i):
                           target_gpu_name=q[x2+1:].strip()
                           break
 
-          target['name']=target_gpu_name
+          prop['name']=target_gpu_name
 
     if o=='con':
        ck.out('')
-       ck.out('GPU name: '+target.get('name',''))
+       ck.out('GPU name: '+prop.get('name',''))
 
-    rr['gpu_properties_unified']=target
+    rr['acc_properties_unified']=prop
+    rr['acc_properties_all']=prop_all
 
     return rr

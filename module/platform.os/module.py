@@ -36,8 +36,12 @@ def init(i):
 def detect(i):
     """
     Input:  {
-              (os)                   - OS module to check (if omitted, analyze host)
+              (host_os)              - host OS (detect, if omitted)
+              (os) or (target_os)    - OS module to check (if omitted, analyze host)
+
               (device_id)            - device id if remote (such as adb)
+              (skip_device_init)     - if 'yes', do not initialize device
+              (print_device_info)    - if 'yes', print extra device info
 
               (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
 
@@ -51,12 +55,19 @@ def detect(i):
                                                   >  0, if error
               (error)               - error text if return > 0
 
-              os_uoa
-              os_uid
-              os_cfg
-              os_properties_unified
-              os_properties_all
-              device_id
+              host_os_uoa            - host OS UOA
+              host_os_uid            - host OS UID
+              host_os_dict           - host OS meta
+
+              os_uoa                 - target OS UOA
+              os_uid                 - target OS UID
+              os_dict                - target OS meta
+
+              os_properties_unified  - OS properties, unified
+              os_properties_all      - assorted OS properties, platform dependent
+
+              (devices)              - return devices if device_id==''
+              (device_id)            - if device_id=='' and only 1 device, select it
             }
 
     """
@@ -65,122 +76,112 @@ def detect(i):
 
     o=i.get('out','')
 
-    ex=i.get('exchange','')
+    # Various params
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    if tos=='': tos=i.get('os','')
+    tdid=i.get('device_id','')
 
     sic=i.get('skip_info_collection','')
+    sdi=i.get('skip_device_init','')
+    pdv=i.get('print_device_info','')
+    ex=i.get('exchange','')
 
-    host={}
-    prop={}
-    prop_all={}
-    work={}
-
-    xos=i.get('os','')
-
-    # Get a few host parameters + target platform
+    # Detect and find most close host OS or load already existing one
     r=ck.access({'action':'find_close',
                  'module_uoa':cfg['module_deps']['os'],
-                 'os_uoa':xos})
+                 'os_uoa':hos})
     if r['return']>0: return r
 
-    host_name=r['platform']
-    host_bits=r['bits']
-    host_cfg=ck.cfg.get('shell',{}).get(host_name,{})
+    hos=r['os_uid']
+    hosx=r['os_uoa']
+    hosd=r['os_dict']
 
-    host['name']=host_name
-    host['bits']=host_bits
-    host['cfg']=host_cfg
+    # Checking/detecting host OS
+    r=ck.access({'action':'find_close',
+                 'module_uoa':cfg['module_deps']['os'],
+                 'os_uoa':tos})
+    if r['return']>0: return r
 
-    ro=host_cfg.get('redirect_stdout','')
+    tos=r['os_uid']
+    tosx=r['os_uoa']
+    tosd=r['os_dict']
 
-    # Retrieved (most close) platform
-    os_uoa=r['os_uoa']
-    os_uid=r['os_uid']
+    tp=r['platform']
+    tbits=r['bits']
 
-    os_dict=r['os_dict']
-
-    prop['uoa']=os_uoa
-    prop['uid']=os_uid
-    prop['dict']=os_dict
-
-    device_id=i.get('device_id','')
-
-    # Checking platform
-    os_bits=os_dict.get('bits','')
-    os_win=os_dict.get('windows_base','')
+    # Init params
+    prop={}
+    prop_all={}
+    devices=[]
 
     prop_os_name=''
     prop_os_name_long=''
     prop_os_name_short=''
 
+    ro=hosd.get('redirect_stdout','')
+
+    remote=tosd.get('remote','')
+    win=tosd.get('windows_base','')
+
+    # Check devices, if remote
+    if remote=='yes' and tdid=='':
+       # Get devices
+       rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+       if rx['return']>0: return rx
+       fn=rx['file_name']
+
+       x=tosd.get('adb_devices','')
+       x=x.replace('$#redirect_stdout#$', ro)
+       x=x.replace('$#output_file#$', fn)
+
+       if o=='con' and pdv=='yes':
+          ck.out('')
+          ck.out('Receiving list of devices:')
+          ck.out('  '+x)
+
+       rx=os.system(x)
+       if rx!=0:
+          return {'return':1, 'error':'access to remote device failed (return code='+str(rx)+')'}
+
+       # Read and parse file
+       rx=ck.load_text_file({'text_file':fn, 
+                             'split_to_list':'yes',
+                             'delete_after_read':'yes'})
+       if rx['return']>0: return rx
+       ll=rx['lst']
+
+       devices=[]
+       for q in range(1, len(ll)):
+           s1=ll[q].strip()
+           if s1!='':
+              q2=s1.find('\t')
+              if q2>0:
+                 s2=s1[0:q2]
+                 devices.append(s2)
+
+       if o=='con':
+          ck.out('')
+          ck.out('Available remote devices:')
+          for q in devices:
+              ck.out('  '+q)
+          ck.out('')
+
+       if tdid=='' and len(devices)==1:
+          tdid=devices[0]
+
+    # Collect additional info unless skipped
     if sic!='yes':
-       remote=os_dict.get('remote','')
        if remote=='yes':
-          remote_init=os_dict.get('remote_init','')
-          if remote_init!='':
-             if o=='con':
-                ck.out('Initializing remote device:')
-                ck.out('  '+remote_init)
-                ck.out('')
-
-             rx=os.system(remote_init)
-             if rx!=0:
-                if o=='con':
-                   ck.out('')
-                   ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-                return {'return':1, 'error':'remote device initialization failed'}
-
-          # Get devices
-          rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-          if rx['return']>0: return rx
-          fn=rx['file_name']
-
-          adb_devices=os_dict.get('adb_devices','')
-          adb_devices=adb_devices.replace('$#redirect_stdout#$', ro)
-          adb_devices=adb_devices.replace('$#output_file#$', fn)
-
-          if o=='con':
-             ck.out('')
-             ck.out('Receiving list of devices:')
-             ck.out('  '+adb_devices)
-
-          rx=os.system(adb_devices)
-          if rx!=0:
-             if o=='con':
-                ck.out('')
-                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-             return {'return':1, 'error':'access to remote device failed'}
-
-          # Read and parse file
-          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
-          if rx['return']>0: return rx
-          ll=rx['lst']
-
-          devices=[]
-          for q in range(1, len(ll)):
-              s1=ll[q].strip()
-              if s1!='':
-                 q2=s1.find('\t')
-                 if q2>0:
-                    s2=s1[0:q2]
-                    devices.append(s2)
-
-          prop['devices']=devices
-
-          if os.path.isfile(fn): os.remove(fn)
-
-          if o=='con':
-             ck.out('')
-             ck.out('Available remote devices:')
-             for q in devices:
-                 ck.out('  '+q)
-             ck.out('')
-
-          if device_id!='':
-             if device_id not in devices:
-                return {'return':1, 'error':'Device ID was not found in the list of attached devices'}
-          else:
-             if len(devices)>0:
-                device_id=devices[0]
+          # Initialized device if needed
+          if sdi!='yes':
+             remote_init=tosd.get('remote_init','')
+             if remote_init!='':
+                r=ck.access({'action':'init_device',
+                             'module_uoa':cfg['module_deps']['platform'],
+                             'os_dict':tosd,
+                             'device_id':tdid})
+                if r['return']>0: return r
 
           # Get all params
           params={}
@@ -189,16 +190,20 @@ def detect(i):
           if rx['return']>0: return rx
           fn=rx['file_name']
 
-          adb_params=os_dict.get('adb_all_params','')
-          adb_params=adb_params.replace('$#redirect_stdout#$', ro)
-          adb_params=adb_params.replace('$#output_file#$', fn)
+          x=tosd.get('adb_all_params','')
+          x=x.replace('$#redirect_stdout#$', ro)
+          x=x.replace('$#output_file#$', fn)
 
-          if o=='con':
+          dv=''
+          if tdid!='': dv='-s '+tdid
+          x=x.replace('$#device#$',dv)
+
+          if o=='con' and pdv=='yes':
              ck.out('')
              ck.out('Receiving all parameters:')
-             ck.out('  '+adb_params)
+             ck.out('  '+x)
 
-          rx=os.system(adb_params)
+          rx=os.system(x)
           if rx!=0:
              if o=='con':
                 ck.out('')
@@ -206,7 +211,7 @@ def detect(i):
              return {'return':1, 'error':'access to remote device failed'}
 
           # Read and parse file
-          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
+          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
           if rx['return']>0: return rx
           ll=rx['lst']
 
@@ -222,27 +227,44 @@ def detect(i):
 
                  params[k]=v
 
-          prop['params']=params
+          prop_all['adb_params']=params
 
-          if os.path.isfile(fn): os.remove(fn)
+          prop_os_name='Android '+params.get('ro.build.version.release','')
 
-          # Get params
-          x1=params.get('ro.product.brand','')
-          x2=params.get('ro.product.model','')
+          # Get proc version
+          # Reuse fn as tmp name
 
-          prop_system_name=x1+' '+x2
+          x=tosd['remote_shell']+' cat /proc/version '+ro+' '+fn
+          x=x.replace('$#device#$',dv)
 
-          prop_system_model=x2
+          if o=='con' and pdv=='yes':
+             ck.out('')
+             ck.out('Receiving /proc/version:')
+             ck.out('  '+x)
 
-          prop_os_name_long='Linux '+params.get('ro.build.kernel.version','')
-          prop_os_name_short='Android '+params.get('ro.build.version.release','')
+          rx=os.system(x)
+          if rx==0:
+             # Read and parse file
+             rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
+             if rx['return']>0: return rx
+             ll=rx['lst']
+
+             if len(ll)>0:
+                prop_os_name_long=ll[0]
+                prop_os_name_short=prop_os_name_long
+
+                ix=prop_os_name_long.find(' (')
+                if ix>=0:
+                   ix1=prop_os_name_long.find('-')
+                   if ix1>=0 and ix1<ix: ix=ix1
+                   prop_os_name_short=prop_os_name_long[:ix]
 
        else:
           import platform
           prop_os_name_long=platform.platform()
           prop_os_name_short=platform.system()+' '+platform.release()
 
-          if os_win=='yes':
+          if win=='yes':
              prop_os_name=prop_os_name_short
           else:
              # If Linux, remove extensions after - in a shorter version
@@ -273,11 +295,11 @@ def detect(i):
     prop['name']=prop_os_name
     prop['name_long']=prop_os_name_long
     prop['name_short']=prop_os_name_short
-    prop['bits']=os_bits
+    prop['bits']=tbits
 
     if o=='con':
        ck.out('')
-       ck.out('OS CK UOA:     '+os_uoa+' ('+os_uid+')')
+       ck.out('OS CK UOA:     '+tosx+' ('+tos+')')
        ck.out('')
        ck.out('OS name:       '+prop.get('name',''))
        ck.out('Short OS name: '+prop.get('name_short',''))
@@ -307,7 +329,7 @@ def detect(i):
 
 
 
-    return {'return':0, 'os_uoa':os_uoa, 'os_uid':os_uid, 'os_dict':os_dict, 
-                        'host':host,
+    return {'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
+                        'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,
                         'os_properties_unified':prop, 'os_properties_all':prop_all, 
-                        'device_id':device_id}
+                        'devices':devices, 'device_id':tdid}

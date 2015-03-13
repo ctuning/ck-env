@@ -1,18 +1,19 @@
 {
   "actions": {
     "detect": {
-      "desc": "detect OS"
+      "desc": "detect host and target OS"
     }
   }, 
-  "default_exchange_repo_uoa":"remote-ck",
-  "default_exchange_subrepo_uoa":"ctuning",
   "copyright": "See CK Copyright.txt for copyright details", 
+  "default_exchange_repo_uoa": "remote-ck", 
+  "default_exchange_subrepo_uoa": "ctuning", 
   "desc": "platform - OS", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
   "developer_webpage": "http://cTuning.org/lab/people/gfursin", 
-  "license": "See CK LICENSE.txt for licensing details",
+  "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
-    "os":"0440cb72c2bc5cc6"
+    "os": "0440cb72c2bc5cc6",
+    "platform": "707ccdfe444cafac"
   }
 }

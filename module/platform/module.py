@@ -36,8 +36,18 @@ def init(i):
 def detect(i):
     """
     Input:  {
-              (os)        - OS module to check (if omitted, analyze host)
-              (device_id) - device id if remote and adb
+              (host_os)              - host OS (detect, if omitted)
+              (os) or (target_os)    - OS module to check (if omitted, analyze host)
+
+              (device_id)            - device id if remote (such as adb)
+              (skip_device_init)     - if 'yes', do not initialize device
+              (print_device_info)    - if 'yes', print extra device info
+
+              (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
+
+              (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
+              (exchange_repo)        - which repo to record/update info (remote-ck by default)
+              (exchange_subrepo)     - if remote, remote repo UOA
             }
 
     Output: {
@@ -45,8 +55,28 @@ def detect(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              os_ck
-              os
+              host_os_uoa                 - host OS UOA
+              host_os_uid                 - host OS UID
+              host_os_dict                - host OS meta
+
+              os_uoa                      - target OS UOA
+              os_uid                      - target OS UID
+              os_dict                     - target OS meta
+
+              (devices)                   - return devices if device_id==''
+              (device_id)                 - if device_id=='' and only 1 device, select it
+
+              cpu_properties_unified      - CPU properties, unified
+              cpu_properties_all          - assorted CPU properties, platform dependent
+
+              os_properties_unified       - OS properties, unified
+              os_properties_all           - assorted OS properties, platform dependent
+
+              platform_properties_unified - platform properties, unified
+              platform_properties_all     - assorted platform properties, platform dependent
+
+              acc_properties_unified      - Accelerator properties, unified
+              acc_properties_all          - assorted Accelerator properties, platform dependent
             }
 
     """
@@ -58,54 +88,52 @@ def detect(i):
     oo=''
     if o=='con': oo=o
 
-    xos=i.get('os','')
-    device_id=i.get('device_id','')
+    # Various params
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    if tos=='': tos=i.get('os','')
+    tdid=i.get('device_id','')
 
-    target={}
+    sic=i.get('skip_info_collection','')
+    sdi=i.get('skip_device_init','')
+    pdv=i.get('print_device_info','')
+    ex=i.get('exchange','')
 
-    # Get info about host/target OS and CPU at the same time
-    ii={'action':'detect',
-        'module_uoa':cfg['module_deps']['platform.cpu'],
-        'os':xos,
-        'device_id':device_id}
-    rr=ck.access(ii)
-    if rr['return']>0: return rr # Careful will be updating this rr
+    # Get OS info
+    import copy
+    ii=copy.deepcopy(i)
+    ii['out']=oo
+    ii['action']='detect'
+    ii['module_uoa']=cfg['module_deps']['platform.cpu']
+    rr=ck.access(ii) # DO NOT USE rr further - will be reused as return !
+    if rr['return']>0: return rr
 
-    prop=rr['os_properties_unified']
-    os_uoa=rr['os_uoa']
-    os_uid=rr['os_uid']
+    hos=rr['host_os_uid']
+    hosx=rr['host_os_uoa']
+    hosd=rr['host_os_dict']
 
-    if o=='con':
-       ck.out('')
-       ck.out('OS CK UOA:     '+os_uoa+' ('+os_uid+')')
-       ck.out('')
-       ck.out('Short OS name: '+prop.get('name_short',''))
-       ck.out('Long OS name:  '+prop.get('name_long',''))
-       ck.out('OS bits:       '+prop.get('bits',''))
+    tos=rr['os_uid']
+    tosx=rr['os_uoa']
+    tosd=rr['os_dict']
 
-    target=rr['cpu_properties_unified']
+    tbits=tosd.get('bits','')
 
-    if o=='con':
-       ck.out('')
-       ck.out('Number of logical processors: '+str(target.get('num_proc',0)))
-       ck.out('')
-       ck.out('CPU name:                     '+target.get('name',''))
-       ck.out('')
-       ck.out('CPU frequency:')
-       x=target.get('current_freq',{})
-       for k in sorted(x, key=ck.convert_str_key_to_int):
-           v=x[k]
-           ck.out('  CPU'+k+' = '+str(v)+' MHz')
-       ck.out('CPU max frequency:')
-       x=target.get('max_freq',{})
-       for k in sorted(x, key=ck.convert_str_key_to_int):
-           v=x[k]
-           ck.out('  CPU'+k+' = '+str(v)+' MHz')
+    tdid=rr['device_id']
+
+    # Some params
+    ro=tosd.get('redirect_stdout','')
+    remote=tosd.get('remote','')
+    win=tosd.get('windows_base','')
+
+    dv=''
+    if tdid!='': dv='-s '+tdid
+
+    # Init
+    prop={}
+    prop_all={}
 
     xos=rr['os_uoa']
     device_id=rr['device_id']
-
-    host_name=rr['host']['name']
 
     os_uoa=rr['os_uoa']
     os_uid=rr['os_uid']
@@ -116,116 +144,47 @@ def detect(i):
 
     ro=os_dict.get('redirect_stdout','')
 
-    # Get info about accelerator (GPU)
-    ii={'action':'detect',
-        'module_uoa':cfg['module_deps']['platform.accelerator'],
-        'os':xos,
-        'device_id':device_id}
-    rx=ck.access(ii)
-    if rx['return']>0: return rx # Careful will be updating this rr
-
-    gpu=rx['gpu_properties_unified']
-
-    ck.out('')
-    ck.out('GPU name: '+gpu.get('name',''))
-
+    # Get accelerator info (GPU, etc.)
+    import copy
+    ii=copy.deepcopy(i)
+    ii['out']=oo
+    ii['action']='detect'
+    ii['module_uoa']=cfg['module_deps']['platform.accelerator']
+    rx=ck.access(ii) # DO NOT USE rr further - will be reused as return !
+    if rx['return']>0: return rr
     rr.update(rx)
-
-    info1={}
 
     # Get info about system ######################################################
     remote=os_dict.get('remote','')
     if remote=='yes':
-       remote_init=os_dict.get('remote_init','')
-       if remote_init!='':
-#          if o=='con':
-#             ck.out('Initializing remote device:')
-#             ck.out('  '+remote_init)
-#             ck.out('')
-
-          rx=os.system(remote_init)
-          if rx!=0:
-#             if o=='con':
-#                ck.out('')
-#                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-             return {'return':1, 'error':'remote device initialization failed'}
-
-       # Get devices
-       rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-       if rx['return']>0: return rx
-       fn=rx['file_name']
-
-       adb_devices=os_dict.get('adb_devices','')
-       adb_devices=adb_devices.replace('$#redirect_stdout#$', ro)
-       adb_devices=adb_devices.replace('$#output_file#$', fn)
-
-#       if o=='con':
-#          ck.out('')
-#          ck.out('Receiving list of devices:')
-#          ck.out('  '+adb_devices)
-
-       rx=os.system(adb_devices)
-       if rx!=0:
-#          if o=='con':
-#             ck.out('')
-#             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-          return {'return':1, 'error':'access to remote device failed'}
-
-       # Read and parse file
-       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
-       if rx['return']>0: return rx
-       ll=rx['lst']
-
-       devices=[]
-       for q in range(1, len(ll)):
-           s1=ll[q].strip()
-           if s1!='':
-              q2=s1.find('\t')
-              if q2>0:
-                 s2=s1[0:q2]
-                 devices.append(s2)
-
-       if os.path.isfile(fn): os.remove(fn)
-
-       if o=='con':
-          ck.out('')
-          ck.out('Available remote devices:')
-          for q in devices:
-              ck.out('  '+q)
-          ck.out('')
-
-       if device_id!='':
-          if device_id not in devices:
-             return {'return':1, 'error':'Device ID was not found in the list of attached devices'}
-       else:
-          if len(devices)>0:
-             device_id=devices[0]
-
-       # Get all params
        params={}
 
        rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
        if rx['return']>0: return rx
        fn=rx['file_name']
 
-       adb_params=os_dict.get('adb_all_params','')
-       adb_params=adb_params.replace('$#redirect_stdout#$', ro)
-       adb_params=adb_params.replace('$#output_file#$', fn)
+       x=tosd.get('adb_all_params','')
+       x=x.replace('$#redirect_stdout#$', ro)
+       x=x.replace('$#output_file#$', fn)
 
-#       if o=='con':
-#          ck.out('')
-#          ck.out('Receiving all parameters:')
-#          ck.out('  '+adb_params)
+       dv=''
+       if tdid!='': dv='-s '+tdid
+       x=x.replace('$#device#$',dv)
 
-       rx=os.system(adb_params)
+       if o=='con' and pdv=='yes':
+          ck.out('')
+          ck.out('Receiving all parameters:')
+          ck.out('  '+x)
+
+       rx=os.system(x)
        if rx!=0:
-#          if o=='con':
-#             ck.out('')
-#             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+          if o=='con':
+             ck.out('')
+             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
           return {'return':1, 'error':'access to remote device failed'}
 
        # Read and parse file
-       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
+       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
        if rx['return']>0: return rx
        ll=rx['lst']
 
@@ -241,15 +200,28 @@ def detect(i):
 
               params[k]=v
 
-       if os.path.isfile(fn): os.remove(fn)
+       prop_all['adb_params']=params
 
 #       for q in params:
 #           v=params[q]
 #           print q+'='+v
 
-       target['system_name']=params.get('ro.product.model','')
-       target['model']=params.get('ro.product.board','')
+       model=params.get('ro.product.model','')
+       manu=params.get('ro.product.manufacturer','')
+       if model!='' and manu!='':
+          if model.lower().startswith(manu.lower()):
+             model=model[len(manu)+1:]
+
+       prop['system_name']=manu+' '+model
+       prop['model']=model
+       prop['vendor']=manu
     else:
+       x1=''
+       x2=''
+
+       target_system_model=''
+       target_system_name=''
+
        if os_win=='yes':
           r=get_from_wmic({'group':'csproduct'})
           if r['return']>0: return r
@@ -264,16 +236,8 @@ def detect(i):
           if r['return']>0: return r
           target_system_model=r['value']
 
-          target['system_name']=target_system_name
-          target['model']=target_system_model
+          prop_all['cs_product']=info1
        else:
-          x1=''
-          x2=''
-          info1={}
-
-          target_system_model=''
-          target_system_name=''
-
           file_with_vendor='/sys/devices/virtual/dmi/id/sys_vendor'
           if os.path.isfile(file_with_vendor):
              r=ck.load_text_file({'text_file':file_with_vendor})
@@ -295,16 +259,19 @@ def detect(i):
              if r['return']>0: return r
              target_system_model=r['string'].strip()
 
-          target['system_name']=target_system_name
-          target['model']=target_system_model
+       prop['vendor']=x1
+       prop['system_name']=target_system_name
+       prop['model']=target_system_model
+
 
     if o=='con':
        ck.out('')
-       ck.out('System name:        '+target.get('system_name',''))
-       ck.out('System model:       '+target.get('model',''))
+       ck.out('Platform vendor: '+prop.get('vendor',''))
+       ck.out('Platform name:   '+prop.get('system_name',''))
+       ck.out('Platform model:  '+prop.get('model',''))
 
-    rr['cpu_properties_unified']=target
-    rr['cpu_properties_all']={'cs_product':info1}
+    rr['platform_properties_unified']=prop
+    rr['platform_properties_all']=prop_all
 
     return rr
 
@@ -385,3 +352,50 @@ def get_from_wmic(i):
               dd[k]=v
 
     return {'return':0, 'value':value, 'dict':dd}
+
+##############################################################################
+# Init remote device
+
+def init_device(i):
+    """
+    Input:  {
+              os_dict      - OS dict to get info about how to init device
+              device_id    - ID of the device if more than one
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+
+    osd=i['os_dict']
+    tdid=i['device_id'].strip()
+
+    ri=osd.get('remote_init','')
+    if ri!='':
+       if o=='con':
+          ck.out('Initializing remote device:')
+          ck.out('  '+ri)
+          ck.out('')
+
+       dv=''
+       if tdid!='': dv='-s '+tdid
+       ri=ri.replace('$#device#$',dv)
+
+       rx=os.system(ri)
+       if rx!=0:
+          if o=='con':
+             ck.out('')
+             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+          return {'return':1, 'error':'remote device initialization failed'}
+
+       device_init='yes'
+
+    return {'return':0}

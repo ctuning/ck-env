@@ -67,25 +67,21 @@ def detect(i):
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
 
-    # Checking/detecting host OS
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':hos,
+                 'host_os':hos,
+                 'target_os':tos,
+                 'target_device_id':tdid,
                  'skip_info_collection':'yes'})
     if r['return']>0: return r
-    hos=r['os_uid']
-    hosd=r['os_dict']
 
-    # Checking/detecting host OS
-    r=ck.access({'action':'detect',
-                 'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':tos,
-                 'device_id':tdid,
-                 'skip_info_collection':'yes'})
-    if r['return']>0: return r
+    hos=r['host_os_uid']
+    hosx=r['host_os_uoa']
+    hosd=r['host_os_dict']
+
     tos=r['os_uid']
+    tosx=r['os_uoa']
     tosd=r['os_dict']
-    tdid=r['device_id']
 
     # Check environment UOA
     duoa=i.get('uoa','')
@@ -257,27 +253,21 @@ def setup(i):
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
 
-    # Checking/detecting host OS
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':hos,
+                 'host_os':hos,
+                 'target_os':tos,
+                 'target_device_id':tdid,
                  'skip_info_collection':'yes'})
     if r['return']>0: return r
-    hos=r['os_uid']
-    hosx=r['os_uoa']
-    hosd=r['os_dict']
 
-    # Checking/detecting host OS
-    r=ck.access({'action':'detect',
-                 'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':tos,
-                 'device_id':tdid,
-                 'skip_info_collection':'yes'})
-    if r['return']>0: return r
+    hos=r['host_os_uid']
+    hosx=r['host_os_uoa']
+    hosd=r['host_os_dict']
+
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
-    tdid=r['device_id']
 
     tbits=tosd.get('bits','')
 

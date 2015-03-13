@@ -36,14 +36,30 @@ def init(i):
 def detect(i):
     """
     Input:  {
-              (os)        - OS module (needed to setup tools for CPU, if omitted use host)
-              (device_id) - device id if remote (such as adb)
+              (host_os)              - host OS (detect, if omitted)
+              (os) or (target_os)    - OS module to check (if omitted, analyze host)
+
+              (device_id)            - device id if remote (such as adb)
+              (skip_device_init)     - if 'yes', do not initialize device
+              (print_device_info)    - if 'yes', print extra device info
+
+              (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
+
+              (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
+              (exchange_repo)        - which repo to record/update info (remote-ck by default)
+              (exchange_subrepo)     - if remote, remote repo UOA
             }
 
     Output: {
               return       - return code =  0, if successful
                                          >  0, if error
               (error)      - error text if return > 0
+
+              cpu_properties_unified - CPU properties, unified
+              cpu_properties_all     - assorted CPU properties, platform dependent
+
+              os_properties_unified  - OS properties, unified
+              os_properties_all      - assorted OS properties, platform dependent
             }
 
     """
@@ -55,178 +71,120 @@ def detect(i):
     oo=''
     if o=='con': oo=o
 
-    xos=i.get('os','')
-    device_id=i.get('device_id','')
+    # Various params
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    if tos=='': tos=i.get('os','')
+    tdid=i.get('device_id','')
 
-    # Get info about host/target OS
-    ii={'action':'detect',
-        'module_uoa':cfg['module_deps']['platform.os'],
-        'os':xos,
-        'device_id':device_id}
-    rr=ck.access(ii)
-    if rr['return']>0: return rr # Careful will be updating this rr
+    sic=i.get('skip_info_collection','')
+    sdi=i.get('skip_device_init','')
+    pdv=i.get('print_device_info','')
+    ex=i.get('exchange','')
+
+    # Get OS info
+    import copy
+    ii=copy.deepcopy(i)
+    ii['out']=oo
+    ii['action']='detect'
+    ii['module_uoa']=cfg['module_deps']['platform.os']
+    rr=ck.access(ii) # DO NOT USE rr further - will be reused as return !
+    if rr['return']>0: return rr
+
+    hos=rr['host_os_uid']
+    hosx=rr['host_os_uoa']
+    hosd=rr['host_os_dict']
+
+    tos=rr['os_uid']
+    tosx=rr['os_uoa']
+    tosd=rr['os_dict']
+
+    tbits=tosd.get('bits','')
+
+    tdid=rr['device_id']
 
     prop=rr['os_properties_unified']
-    os_uoa=rr['os_uoa']
-    os_uid=rr['os_uid']
 
-    if o=='con':
-       ck.out('')
-       ck.out('OS CK UOA:     '+os_uoa+' ('+os_uid+')')
-       ck.out('')
-       ck.out('Short OS name: '+prop.get('name_short',''))
-       ck.out('Long OS name:  '+prop.get('name_long',''))
-       ck.out('OS bits:       '+prop.get('bits',''))
+    # Some params
+    ro=tosd.get('redirect_stdout','')
+    remote=tosd.get('remote','')
+    win=tosd.get('windows_base','')
 
-    host_name=rr['host']['name']
+    dv=''
+    if tdid!='': dv='-s '+tdid
 
-    os_uoa=rr['os_uoa']
-    os_uid=rr['os_uid']
-    os_dict=rr['os_dict']
-
-    remote=os_dict.get('remote','')
-    os_win=os_dict.get('windows_base','')
-
+    # Init
     target={}
-    info_cpu={}
-
     target_freq={}
     target_freq_max={}
+    target_num_proc=''
+    info_cpu={}
 
-    ro=os_dict.get('redirect_stdout','')
-
-    if remote=='yes' or os_win!='yes':
+    if remote=='yes' or win!='yes':
        # Read cpuinfo
        fnx='/proc/cpuinfo'
 
        if remote=='yes':
-          remote_init=os_dict.get('remote_init','')
-          if remote_init!='':
-             if o=='con':
-                ck.out('Initializing remote device:')
-                ck.out('  '+remote_init)
-                ck.out('')
 
-             rx=os.system(remote_init)
-             if rx!=0:
-                if o=='con':
-                   ck.out('')
-                   ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-                return {'return':1, 'error':'remote device initialization failed'}
-
-          # Get devices
-          rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-          if rx['return']>0: return rx
-          fn=rx['file_name']
-
-          adb_devices=os_dict.get('adb_devices','')
-          adb_devices=adb_devices.replace('$#redirect_stdout#$', ro)
-          adb_devices=adb_devices.replace('$#output_file#$', fn)
-
-          if o=='con':
-             ck.out('')
-             ck.out('Receiving list of devices:')
-             ck.out('  '+adb_devices)
-
-          rx=os.system(adb_devices)
-          if rx!=0:
-             if o=='con':
-                ck.out('')
-                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-             return {'return':1, 'error':'access to remote device failed'}
-
-          # Read and parse file
-          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
-          if rx['return']>0: return rx
-          ll=rx['lst']
-
-          devices=[]
-          for q in range(1, len(ll)):
-              s1=ll[q].strip()
-              if s1!='':
-                 q2=s1.find('\t')
-                 if q2>0:
-                    s2=s1[0:q2]
-                    devices.append(s2)
-
-          prop['devices']=devices
-
-          if os.path.isfile(fn): os.remove(fn)
-
-          if o=='con':
-             ck.out('')
-             ck.out('Available remote devices:')
-             for q in devices:
-                 ck.out('  '+q)
-             ck.out('')
-
-          if device_id!='':
-             if device_id not in devices:
-                return {'return':1, 'error':'Device ID was not found in the list of attached devices'}
-          else:
-             if len(devices)>0:
-                device_id=devices[0]
-
-          # Get all params
-          params={}
-
+          # Read file
           rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
           if rx['return']>0: return rx
           fcpuinfo=rx['file_name']
 
-          x=os_dict.get('remote_shell','')+' cat '+fnx+' '+ro+fcpuinfo
+          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+ro+fcpuinfo
 
-          if o=='con':
+          if o=='con' and pdv=='yes':
              ck.out('')
              ck.out('Receiving info: '+x)
 
           rx=os.system(x)
-          if rx!=0:
-             if o=='con':
-                ck.out('')
-                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-             return {'return':1, 'error':'access to remote device failed'}
+          if rx!=0: 
+             if os.path.isfile(fnx): os.remove(fcpuinfo)
+             fcpuinfo='' # Do not process further
+
        else:
           fcpuinfo=fnx
 
        # Read and parse file
-       rx=ck.load_text_file({'text_file':fcpuinfo, 'split_to_list':'yes'})
-       if rx['return']>0: return rx
-       ll=rx['lst']
-       if remote=='yes' and os.path.isfile(fcpuinfo): os.remove(fcpuinfo)
+       if fcpuinfo!='':
+          rx=ck.load_text_file({'text_file':fcpuinfo, 'split_to_list':'yes'})
+          if rx['return']>0: return rx
+          ll=rx['lst']
+          if remote=='yes' and os.path.isfile(fcpuinfo): os.remove(fcpuinfo)
 
-       pp=0 # current logical processor
-       spp=str(pp)
-       info_cpu[spp]={}
-       target_freq[spp]=0
-       target_freq_max[spp]=0
-       first_skipped=False
-       for q in ll:
-           q=q.strip()
-           if q!='':
-              x1=q.find(':')
-              if x1>0:
-                 k=q[0:x1-1].strip()
-                 v=q[x1+1:].strip()
+          pp=0 # current logical processor
+          spp=str(pp)
+          info_cpu[spp]={}
+          target_freq[spp]=0
+          target_freq_max[spp]=0
+          first_skipped=False
+          for q in ll:
+              q=q.strip()
+              if q!='':
+                 x1=q.find(':')
+                 if x1>0:
+                    k=q[0:x1-1].strip()
+                    v=q[x1+1:].strip()
 
-                 if k=='processor':
-                    if not first_skipped:
-                       first_skipped=True
-                    else:
-                       pp+=1
-                       spp=str(pp)
-                       info_cpu[spp]={}
+                    if k=='processor':
+                       if not first_skipped:
+                          first_skipped=True
+                       else:
+                          pp+=1
+                          spp=str(pp)
+                          info_cpu[spp]={}
 
-                 if k!='':
-                    info_cpu[spp][k]=v
+                    if k!='':
+                       info_cpu[spp][k]=v
 
-                    if k.find('MHz')>=0:
-                       target_freq[spp]=float(v)
-       target_num_proc=str(pp+1)
+                       if k.find('MHz')>=0:
+                          target_freq[spp]=float(v)
+          target_num_proc=str(pp+1)
 
        target_cpu=info_cpu[spp].get('Hardware','')
        if target_cpu=='':
           target_cpu=info_cpu[spp].get('model name','')
+       target_sub_cpu=info_cpu[spp].get('Processor','')
 
        # Collect all frequencies
        for px in range(0, pp+1):
@@ -236,9 +194,9 @@ def detect(i):
               if rx['return']>0: return rx
               ffreq=rx['file_name']
 
-              x=os_dict.get('remote_shell','')+' cat '+fnx+' '+ro+ffreq
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+ro+ffreq
 
-              if o=='con':
+              if o=='con' and pdv=='yes':
                  ck.out('')
                  ck.out('Receiving info: '+x)
 
@@ -269,9 +227,9 @@ def detect(i):
               if rx['return']>0: return rx
               ffreq=rx['file_name']
 
-              x=os_dict.get('remote_shell','')+' cat '+fnx+' '+ro+ffreq
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+ro+ffreq
 
-              if o=='con':
+              if o=='con' and pdv=='yes':
                  ck.out('')
                  ck.out('Receiving info: '+x)
 
@@ -297,6 +255,7 @@ def detect(i):
                  target_freq_max[str(px)]=fr
 
        target['name']=target_cpu
+       target['sub_name']=target_sub_cpu
        target['num_proc']=target_num_proc
        target['current_freq']=target_freq
        target['max_freq']=target_freq_max
@@ -309,7 +268,7 @@ def detect(i):
 
 
     else:
-       if os_win=='yes':
+       if win=='yes':
           r=ck.access({'action':'get_from_wmic',
                        'module_uoa':cfg['module_deps']['platform'],
                        'group':'cpu'})
@@ -324,6 +283,7 @@ def detect(i):
           target_num_proc=int(info_cpu.get('NumberOfLogicalProcessors','0'))
 
           target['name']=target_cpu
+          target['sub_name']=target_cpu
           target['num_proc']=target_num_proc
           target['current_freq']={"0":target_freq}
           target['max_freq']={"0":target_freq_max}
@@ -332,8 +292,8 @@ def detect(i):
     if o=='con':
        ck.out('')
        ck.out('Number of logical processors: '+str(target.get('num_proc',0)))
-       ck.out('')
        ck.out('CPU name:                     '+target.get('name',''))
+       ck.out('CPU sub name:                 '+target.get('sub_name',''))
        ck.out('')
        ck.out('CPU frequency:')
        x=target.get('current_freq',{})
