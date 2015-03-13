@@ -80,6 +80,8 @@ def detect(i):
 
     ro=os_dict.get('redirect_stdout','')
 
+    target_gpu_name=''
+
     # Get info about accelerator ######################################################
     remote=os_dict.get('remote','')
     if remote=='yes':
