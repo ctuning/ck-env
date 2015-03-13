@@ -108,6 +108,7 @@ def detect(i):
     os_bits=os_dict.get('bits','')
     os_win=os_dict.get('windows_base','')
 
+    prop_os_name=''
     prop_os_name_long=''
     prop_os_name_short=''
 
@@ -241,12 +242,35 @@ def detect(i):
           prop_os_name_long=platform.platform()
           prop_os_name_short=platform.system()+' '+platform.release()
 
-          if os_win!='yes':
+          if os_win=='yes':
+             prop_os_name=prop_os_name_short
+          else:
              # If Linux, remove extensions after - in a shorter version
              x=prop_os_name_short.find('-')
              if x>=0:
                 prop_os_name_short=prop_os_name_short[:x]
 
+             if prop_os_name=='':
+                #Try to detect via /etc/*-release
+
+                r=ck.gen_tmp_file({})
+                if r['return']>0: return r
+                fn=r['file_name']
+
+                cmd='cat > /etc/*-release > '+fn
+                rx=os.system(cmd)
+                if rx==0:
+                   r=load_text_file({'text_file':fn, 
+                                     'convert_to_dict':'yes',
+                                     'str_split':'=',
+                                     'remote_quotes':'yes',
+                                     'delete_after_read':'yes'})
+                   if r['return']==0:
+                      ver=r['dict']
+                      print ver
+
+
+    prop['name']=prop_os_name
     prop['name_long']=prop_os_name_long
     prop['name_short']=prop_os_name_short
     prop['bits']=os_bits
@@ -255,6 +279,7 @@ def detect(i):
        ck.out('')
        ck.out('OS CK UOA:     '+os_uoa+' ('+os_uid+')')
        ck.out('')
+       ck.out('OS name:       '+prop.get('name',''))
        ck.out('Short OS name: '+prop.get('name_short',''))
        ck.out('Long OS name:  '+prop.get('name_long',''))
        ck.out('OS bits:       '+prop.get('bits',''))
