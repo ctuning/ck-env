@@ -221,26 +221,19 @@ def detect(i):
              ck.out('Executing: '+x)
 
           rx=os.system(x)
-          if rx!=0:
-             if o=='con':
-                ck.out('')
-                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-             return {'return':1, 'error':'executing lspci likely failed'}
+          if rx==0:
+             # Read and parse file
+             rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
+             if rx['return']==0: 
+                ll=rx['lst']
 
-          # Read and parse file
-          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes'})
-          if rx['return']>0: return rx
-          ll=rx['lst']
-
-          for q in ll:
-              x1=q.find('VGA ')
-              if x1>=0:
-                 x2=q.find(':', x1+1)
-                 if x2>=0:
-                    target_gpu_name=q[x2+1:].strip()
-                    break
-
-          if os.path.isfile(fn): os.remove(fn)
+                for q in ll:
+                    x1=q.find('VGA ')
+                    if x1>=0:
+                       x2=q.find(':', x1+1)
+                       if x2>=0:
+                          target_gpu_name=q[x2+1:].strip()
+                          break
 
           target['name']=target_gpu_name
 
