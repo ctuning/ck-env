@@ -326,7 +326,7 @@ def detect(i):
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':target.get('name',''),
-           'all':'yes',
+           'all':'no',
            'dict':{'prop':target}} # Later we should add more properties from prop_all,
                                  # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
