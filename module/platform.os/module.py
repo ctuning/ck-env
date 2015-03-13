@@ -77,7 +77,9 @@ def detect(i):
     xos=i.get('os','')
 
     # Get a few host parameters + target platform
-    r=ck.get_os_ck({'os_uoa':xos, 'find_close':'yes'})
+    r=ck.access({'action':'find_close',
+                 'module_uoa':cfg['module_deps']['os'],
+                 'os_uoa':xos})
     if r['return']>0: return r
 
     host_name=r['platform']

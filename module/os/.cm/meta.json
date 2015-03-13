@@ -1,5 +1,9 @@
 {
-  "actions": {}, 
+  "actions": {
+    "find_close": {
+      "desc": "find close OS"
+    }
+  }, 
   "copyright": "See CK Copyright.txt for copyright details", 
   "desc": "os", 
   "developer": "Grigori Fursin", 
