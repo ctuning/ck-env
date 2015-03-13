@@ -257,17 +257,17 @@ def detect(i):
                 if r['return']>0: return r
                 fn=r['file_name']
 
-                cmd='cat > /etc/*-release > '+fn
+                cmd='cat /etc/*-release > '+fn
                 rx=os.system(cmd)
                 if rx==0:
-                   r=load_text_file({'text_file':fn, 
-                                     'convert_to_dict':'yes',
-                                     'str_split':'=',
-                                     'remote_quotes':'yes',
-                                     'delete_after_read':'yes'})
+                   r=ck.load_text_file({'text_file':fn, 
+                                        'convert_to_dict':'yes',
+                                        'str_split':'=',
+                                        'remove_quotes':'yes',
+                                        'delete_after_read':'yes'})
                    if r['return']==0:
                       ver=r['dict']
-                      print ver
+                      prop_os_name=ver.get('DISTRIB_DESCRIPTION','')
 
 
     prop['name']=prop_os_name
