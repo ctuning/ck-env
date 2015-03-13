@@ -50,6 +50,5 @@
   "remote_push": "adb push", 
   "remote_shell": "adb shell", 
   "script_ext": ".sh", 
-  "set_executable": "chmod 755",
-  "priority":"yes"
+  "set_executable": "chmod 755"
 }
