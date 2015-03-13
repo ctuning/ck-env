@@ -220,7 +220,7 @@ def detect(i):
        if xn=='':
           if o=='con':
              r=ck.inp({'text':'Enter your accelerator name (for example ARM MALI-T860, Nvidia Tesla K80): '})
-             xn=r['string'].lower()
+             xn=r['string']
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
           prop['name']=xn

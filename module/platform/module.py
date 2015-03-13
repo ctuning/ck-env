@@ -282,7 +282,7 @@ def detect(i):
        if xn=='':
           if o=='con':
              r=ck.inp({'text':'Enter your platform name (for example Samsung Chromebook 2, Huawei Ascend Mate 7, IBM SyNAPSE): '})
-             xn=r['string'].lower()
+             xn=r['string']
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
           prop['name']=xn
@@ -486,7 +486,8 @@ def exchange(i):
        rx=ck.access({'action':'search',
                      'module_uoa':smuoa,
                      'repo_uoa':ruoa,
-                     'search_by_name':dname})
+                     'search_by_name':dname,
+                     'ignore_case:'yes'})
        if rx['return']>0: return rx
        lst=rx['lst']
 
