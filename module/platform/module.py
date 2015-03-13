@@ -504,9 +504,9 @@ def exchange(i):
                         'repo_uoa':ruoa,
                         'data_uoa':duoa})
 
-       if rx['return']>0: return rx
+          rx['found']='yes'
 
-       rx['found']='yes'
+       if rx['return']>0: return rx
 
        if al=='yes':
           # Check if extra parameters are saved
