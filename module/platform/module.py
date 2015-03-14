@@ -48,6 +48,8 @@ def detect(i):
               (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+
+              (force_platform_name)  - if !='', use this for platform name
             }
 
     Output: {
@@ -265,6 +267,9 @@ def detect(i):
        prop['name']=target_name
        prop['model']=target_system_model
 
+       fpn=i.get('force_platform_name','')
+       if fpn!='':
+          prop['name']=fpn
 
     if o=='con':
        ck.out('')
