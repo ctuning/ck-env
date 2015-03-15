@@ -11,6 +11,7 @@
     "cmake"
   ], 
   "tool": "cmake", 
+  "soft_name": "Tool - cmake", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
