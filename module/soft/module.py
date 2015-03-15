@@ -233,6 +233,8 @@ def setup(i):
               (env_data_uoa)      - use this data UOA to record (new) env
               (env_repo_uoa)      - use this repo to record new env
               (env_new)           - if 'yes', do not search for environment (was already done in package, for example)
+
+              (package_uoa)       - if called from package, record package_uoa just in case
             }
 
     Output: {
@@ -273,7 +275,6 @@ def setup(i):
 
     # Check soft UOA
     duoa=i.get('uoa','')
-    duid=duoa
 
     tags=i.get('tags','')
 
@@ -283,6 +284,8 @@ def setup(i):
        xcids=i.get('xcids',[])
        if len(xcids)>0:
           duoa=xcids[0].get('data_uoa','')
+
+    duid=duoa
 
     if duoa=='':
        # Search
@@ -738,8 +741,16 @@ def setup(i):
               'setup':setup,
               'env':env,
               'deps':deps,
+              'soft_uoa':duid,
               'customize':cus,
               'env_script':bf}
+
+          if duid!='':
+             dd['soft_uoa']=duid
+
+          pduoa=i.get('package_uoa','')
+          if pduoa!='':
+             dd['package_uoa']=pduoa
 
           ii={'action':'add',
               'module_uoa':cfg['module_deps']['env'],

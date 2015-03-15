@@ -1,5 +1,8 @@
 {
   "actions": {
+    "refresh": {
+      "desc": "refresh environment (re-setup soft)"
+    }, 
     "resolve": {
       "desc": "resolve all dependencies"
     }, 
@@ -18,6 +21,7 @@
   "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
     "os": "0440cb72c2bc5cc6", 
-    "platform.os": "41e31cc4496b8a8e"
+    "platform.os": "41e31cc4496b8a8e",
+    "soft":"5e1100048ab875d7"
   }
 }

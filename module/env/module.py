@@ -142,9 +142,13 @@ def set(i):
           l=ls
 
           if o=='con':
-             ck.out('')
-             ck.out('More than one environment found for tags ('+tags+'):')
+             xq='tags="'+tags+'"'
+             if len(setup)>0:
+                import json
+                xq+=' and setup='+json.dumps(setup)
 
+             ck.out('')
+             ck.out('More than one environment found for '+xq+':')
              ck.out('')
              zz={}
              for z in range(0, lx):
@@ -173,11 +177,11 @@ def set(i):
                  ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
 
              ck.out('')
-             rx=ck.inp({'text':'Choose first number to resolve dependency for tags ('+tags+'): '})
+             rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+': '})
              x=rx['string'].strip()
 
              if x not in zz:
-                return {'return':1, 'error':'dependency number is not found'}
+                return {'return':1, 'error':'dependency number is not recognized'}
 
              ilx=int(x)
 
@@ -193,7 +197,7 @@ def set(i):
 
     if duoa=='':
        import json
-       x='environment was not found using tags "'+tags+'"'
+       x='environment was not found using tags="'+tags+'"'
        if len(setup)>0:
           x+=' and setup='+json.dumps(setup)
        return {'return':1, 'error':x}
@@ -530,7 +534,7 @@ def resolve(i):
         lst=rx['lst']
         dd=rx['dict']
 
-        ver=dd.get('customize','').get('version','')
+        ver=dd.get('customize',{}).get('version','')
         if ver!='': q['ver']=ver
 
         uoa=rx['env_uoa']
@@ -544,3 +548,194 @@ def resolve(i):
         sb+=rx['bat']
 
     return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'res_deps':res}
+
+##############################################################################
+# refresh environment (re-setup soft)
+
+def refresh(i):
+    """
+    Input:  {
+              (repo_uoa)          - repository UOA (with wildcards)
+              (module_uoa)        - module UOA (with wildcards)
+              (data_uoa)          - data UOA (with wildcards)
+
+              (tags)              - prune by tags
+              (target_os)         - prune by target OS
+              (target_bits)       - prune by target bits
+              (version)           - prune by version
+              (name)              - prune by name with wildcards
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              lst          - list from search function
+              view         - sorted view list
+            }
+
+    """
+
+    o=i.get('out','')
+
+    ruoa=i.get('repo_uoa','')
+    muoa=i.get('module_uoa','')
+    duoa=i.get('data_uoa','')
+
+    tags=i.get('tags','')
+
+    tos_uoa=i.get('target_os','')
+    if tos_uoa!='':
+       # Load OS
+       ry=ck.access({'action':'load',
+                     'module_uoa':cfg['module_deps']['os'],
+                     'data_uoa':tos_uoa})
+       if ry['return']>0: return ry
+       tags+='target-os-'+ry['data_uoa']
+
+    tb=i.get('target_bits','')
+    if tb!='':
+       tags+=tb+'bits'
+
+    ver=i.get('version','')
+    if ver!='':
+       tags+='v'+ver
+
+    name=i.get('name','')
+    wname=False
+    if name.find('*')>=0 or name.find('?')>=0:
+       import fnmatch
+       wname=True 
+       name=name.lower()
+
+    ii={'action':'search',
+        'module_uoa':muoa,
+        'repo_uoa':ruoa,
+        'data_uoa':duoa,
+        'tags':tags,
+        'add_info':'yes',
+        'add_meta':'yes'}
+    rx=ck.access(ii)
+    if rx['return']>0: return rx
+
+    lst=rx['lst']
+
+    # prepare view
+    view=[]
+
+    lv={} # length of each field
+
+    target_os_name={} # Caching target OS names
+
+    for q in lst:
+        vv={}
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        ruoa=q['repo_uoa']
+        ruid=q['repo_uid']
+
+        info=q['info']
+        meta=q['meta']
+
+        cus=meta.get('customize',{})
+        deps=meta.get('deps',{})
+        setup=meta.get('setup','')
+        tags=meta.get('tags',[])
+
+        sftags=''
+        for t in tags:
+            if t!='':
+               if sftags!='': sftags+=','
+               sftags+=t
+
+        host_os_uoa=setup.get('host_os_uoa','')
+        target_os_uoa=setup.get('target_os_uoa','')
+        tbits=setup.get('target_os_bits','')
+        version=setup.get('version','')
+        version_int=cus.get('version_int',0)
+
+        dname=info.get('data_name','')
+
+        ck.out('***********************************************************************')
+        ck.out(dname+' ('+duid+')')
+
+        ck.out('')
+        ck.out('  Tags="'+sftags+'"')
+
+        soft_uoa=meta.get('soft_uoa','')
+        if soft_uoa=='':
+           # Trying to detect by some tags
+           tagsx=[]
+           for q in tags:
+               if not q.startswith('host-os-') and not q.startswith('target-os-') and \
+                  not q.endswith('bits') and not q.startswith('v') and \
+                  q!='retargeted':
+                  tagsx.append(q)
+
+           stags=''
+           for t in tagsx:
+               if t!='':
+                  if stags!='': stags+=','
+                  stags+=t
+
+           ck.out('  All tags="'+sftags+'"')
+           ck.out('  Searching soft UOA by tags="'+stags+'" ...')
+
+           rx=ck.access({'action':'search',
+                         'module_uoa':cfg['module_deps']['soft'],
+                         'tags':stags})
+           if rx['return']>0: return rx
+           
+           lst=rx['lst']
+           if len(lst)==0:
+              return {'return':1, 'error':'no soft found'}
+           elif len(lst)==1:
+              soft_uoa=lst[0]['data_uid']
+              ck.out('     Unique soft UOA found='+lst[0]['data_uoa'])
+           else:
+              ck.out('')
+              ck.out('  Available soft for these tags:')
+              num={}
+              ix=0
+              for q in lst:
+                  num[str(ix)]=q['data_uid']
+                  ck.out('     '+str(ix)+') '+q['data_uoa'])
+                  ix+=1
+
+              rx=ck.inp({'text':'  Choose first number to select soft UOA: '})
+              x=rx['string'].strip()
+
+              if x not in num:
+                 return {'return':1, 'error':'number is not found'}
+
+              soft_uoa=num[x]
+
+           meta['soft_uoa']=soft_uoa
+
+           # Update soft_uoa
+           rx=ck.access({'action':'update',
+                         'module_uoa':work['self_module_uid'],
+                         'data_uoa':duoa,
+                         'dict':meta,
+                         'sort_keys':'yes'})
+           if rx['return']>0: return rx
+
+        # Trying new setup
+        ck.out('')
+        ck.out('  Refreshing setup ...')
+
+        ii={'action':'setup',
+            'module_uoa':cfg['module_deps']['soft'],
+            'host_os':host_os_uoa,
+            'target_os':target_os_uoa,
+            'data_uoa':soft_uoa,
+            'customize':cus,
+            'deps':deps,
+            'env_data_uoa':duid}
+        rx=ck.access(ii)
+        if rx['return']>0: return rx
+
+    return {'return':0}

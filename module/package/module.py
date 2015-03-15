@@ -68,6 +68,7 @@ def install(i):
 
     # Check package description
     duoa=i.get('uoa','')
+
     d={}
 
     dname=''
@@ -78,6 +79,8 @@ def install(i):
        if rx['return']==0:
           duoa=rx['data_uoa']
 
+    duid=duoa
+
     if duoa!='':
        rx=ck.access({'action':'load',
                      'module_uoa':work['self_module_uid'],
@@ -85,6 +88,9 @@ def install(i):
        if rx['return']>0: return rx
        d=rx['dict']
        p=rx['path']
+
+       duoa=rx['data_uoa']
+       duid=rx['data_uid']
     else:
        # Attempt to load configuration from the current directory
        p=os.getcwd()
@@ -461,6 +467,7 @@ def install(i):
               'deps':udeps,
               'install_path':pi
              }
+          if duid!='': ii['package_uoa']=duid
           if o=='con': ii['out']='con'
           rx=ck.access(ii)
           if rx['return']>0: return rx
