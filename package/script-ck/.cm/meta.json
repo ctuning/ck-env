@@ -1,0 +1,16 @@
+{
+  "customize": {
+    "version": "1.0", 
+    "version_int": 10000, 
+    "extra_dir": ""
+  }, 
+  "process_script": "process", 
+  "suggested_path": "script-ck", 
+  "soft_uoa": "bafd1045d2b025f8", 
+  "tags": [
+    "script", 
+    "ck", 
+    "v1.0",
+    "v1"
+  ]
+}
