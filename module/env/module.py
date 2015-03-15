@@ -660,7 +660,7 @@ def refresh(i):
         dname=info.get('data_name','')
 
         ck.out('***********************************************************************')
-        ck.out(dname+' ('+duid+')')
+        ck.out(dname+' (Env: '+duid+')')
 
         ck.out('')
         ck.out('  Tags="'+sftags+'"')
@@ -688,10 +688,14 @@ def refresh(i):
                          'module_uoa':cfg['module_deps']['soft'],
                          'tags':stags})
            if rx['return']>0: return rx
-           
+
            lst=rx['lst']
            if len(lst)==0:
-              return {'return':1, 'error':'no soft found'}
+              ck.out('')
+              ck.out('  No soft found')
+
+              rx=ck.inp({'text':'  Please, enter soft UOA: '})
+              soft_uoa=rx['string'].strip()
            elif len(lst)==1:
               soft_uoa=lst[0]['data_uid']
               ck.out('     Unique soft UOA found='+lst[0]['data_uoa'])

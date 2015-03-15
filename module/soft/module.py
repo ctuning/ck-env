@@ -324,7 +324,7 @@ def setup(i):
     if duoa=='':
        p=os.getcwd()
        pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
-    
+
        found=False
        if os.path.isfile(pc):
           r=ck.load_json_file({'json_file':pc})
@@ -526,7 +526,7 @@ def setup(i):
                 cus1=edx.get('customize',{})
                 deps1=edx.get('deps',{})
                 env1=edx.get('env',{})
-                
+
                 cus.update(cus1)
                 deps.update(deps1)
                 env.update(env1)
@@ -609,6 +609,8 @@ def setup(i):
                    if not os.path.isdir(plib):
                       return {'return':1, 'error':'can\'t find lib path'}
              cus['path_lib']=plib
+       else:
+          cus['skip_path']='yes'
 
        # If install path has space, add quotes for some OS ...
        xs=''
