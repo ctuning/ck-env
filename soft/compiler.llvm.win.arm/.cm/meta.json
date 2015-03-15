@@ -46,7 +46,9 @@
   "tags": [
     "compiler", 
     "llvm", 
-    "retargeted"
+    "retargeted",
+    "lang-c",
+    "lang-cpp"
   ], 
   "tool": "clang", 
   "version": {

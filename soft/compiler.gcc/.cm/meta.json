@@ -44,7 +44,12 @@
   "soft_name": "Compiler - GCC", 
   "tags": [
     "compiler", 
-    "gcc"
+    "gcc",
+    "lang-c",
+    "lang-cpp",
+    "lang-f77",
+    "lang-f90",
+    "lang-f95"
   ], 
   "tool": "gcc", 
   "version": {

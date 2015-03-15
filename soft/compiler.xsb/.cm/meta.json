@@ -12,7 +12,8 @@
   }, 
   "tags": [
     "compiler", 
-    "xsb"
+    "xsb",
+    "lang-prolog"
   ], 
   "customize": {
     "languages": [

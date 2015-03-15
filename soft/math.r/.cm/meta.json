@@ -14,7 +14,8 @@
   "tags": [
     "tool", 
     "math", 
-    "r"
+    "r",
+    "lang-r"
   ], 
   "tool": "R", 
   "version": {

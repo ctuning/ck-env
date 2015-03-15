@@ -1,7 +1,9 @@
 {
   "tags": [
     "compiler", 
-    "llvm"
+    "llvm",
+    "lang-c",
+    "lang-cpp"
   ], 
   "deps": {
     "compiler_gcc": {

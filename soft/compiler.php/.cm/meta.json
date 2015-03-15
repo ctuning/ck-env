@@ -14,7 +14,8 @@
   "soft_name": "Compiler - PHP", 
   "tags": [
     "compiler", 
-    "php"
+    "php",
+    "lang-php"
   ], 
   "tool": "php", 
   "version": {

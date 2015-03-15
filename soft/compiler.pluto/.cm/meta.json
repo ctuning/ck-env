@@ -2,7 +2,8 @@
   "tags": [
     "compiler", 
     "source-to-source",
-    "pluto"
+    "pluto",
+    "lang-c"
   ], 
   "customize_script": "customize", 
   "customize": {

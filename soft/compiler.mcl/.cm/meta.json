@@ -42,7 +42,9 @@
   "soft_name": "Compiler - Microsoft CL", 
   "tags": [
     "compiler", 
-    "mcl"
+    "mcl",
+    "lang-c",
+    "lang-cpp"
   ], 
   "tool": "cl", 
   "version": {

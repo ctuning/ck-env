@@ -14,7 +14,8 @@
   "soft_name": "Compiler - JAVA", 
   "tags": [
     "compiler", 
-    "java"
+    "java",
+    "lang-java"
   ], 
   "tool": "javac", 
   "version": {

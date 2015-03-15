@@ -46,8 +46,13 @@
   "soft_name": "Compiler - Intel", 
   "tags": [
     "compiler", 
-    "icc"
-  ], 
+    "icc",
+    "lang-c",
+    "lang-cpp",
+    "lang-f77",
+    "lang-f90",
+    "lang-f95"
+ ], 
   "tool": "icc", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 

@@ -39,7 +39,9 @@
   "soft_name": "Compiler - LLVM", 
   "tags": [
     "compiler", 
-    "llvm"
+    "llvm",
+    "lang-c",
+    "lang-cpp"
   ], 
   "tool": "clang", 
   "version": {

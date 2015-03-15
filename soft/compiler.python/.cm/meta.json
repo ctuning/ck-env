@@ -15,7 +15,8 @@
   "soft_name": "Compiler - Python", 
   "tags": [
     "compiler", 
-    "python"
+    "python",
+    "lang-python"
   ], 
   "tool": "python", 
   "version": {

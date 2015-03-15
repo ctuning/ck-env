@@ -1,6 +1,6 @@
 {
   "customize": {
-    "add_include_path": "yes", 
+    "skip_add_dirs": "yes",
     "env_prefix": "CK_ENV_LIB_CJSON"
   }, 
   "soft_name": "Library - CJSON", 

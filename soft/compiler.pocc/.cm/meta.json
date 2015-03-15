@@ -2,7 +2,9 @@
   "tags": [
     "compiler", 
     "source-to-source",
-    "pocc"
+    "pocc",
+    "lang-c",
+    "lang-f77"
   ], 
   "customize": {
     "languages": [
