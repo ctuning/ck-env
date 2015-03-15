@@ -264,7 +264,7 @@ def detect(i):
              target_system_model=r['string'].strip()
 
        prop['vendor']=x1
-       prop['name']=target_name
+       prop['name']=target_name+' ('+target_system_model+')'
        prop['model']=target_system_model
 
        fpn=i.get('force_platform_name','')
