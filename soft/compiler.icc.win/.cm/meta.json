@@ -48,7 +48,9 @@
     "CK_LIB_EXT": ".lib", 
     "CK_MAKE": "nmake", 
     "CK_OBJDUMP": "dumpbin /disasm", 
-    "CK_OBJ_EXT": ".obj"
+    "CK_OBJ_EXT": ".obj",
+    "CK_EXTRA_LIB_M":"",
+    "CK_EXTRA_LIB_DL":""
   }, 
   "soft_name": "Compiler - Intel", 
   "tags": [

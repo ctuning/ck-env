@@ -36,6 +36,7 @@
     "CK_FLAGS_OUTPUT": "-o", 
     "CK_FLAGS_STATIC_BIN": "", 
     "CK_FLAGS_STATIC_LIB": "", 
+    "CK_LD_DYNAMIC_FLAGS": "" ,
     "CK_FLAG_PREFIX_INCLUDE": "-I", 
     "CK_FLAG_PREFIX_VAR": "-D", 
     "CK_LB": "lib", 
@@ -48,7 +49,9 @@
     "CK_PLUGIN_FLAG": "-fplugin=", 
     "CK_PROFILER": "gprof", 
     "CM_INTERMEDIATE_OPT_TOOL": "opt", 
-    "CM_INTERMEDIATE_OPT_TOOL_OUT": "-o"
+    "CM_INTERMEDIATE_OPT_TOOL_OUT": "-o",
+    "CK_EXTRA_LIB_M":"",
+    "CK_EXTRA_LIB_DL":""
   }, 
   "soft_name": "Compiler - LLVM", 
   "tags": [

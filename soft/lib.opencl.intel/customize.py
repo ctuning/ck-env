@@ -76,8 +76,7 @@ def setup(i):
        else:
           cus['static_lib']='OpenCL.lib'
 
-       env['CK_ENV_LIB_OPENCL_STATIC']=cus.get('static_lib','')
-       env['CK_ENV_LIB_OPENCL_DYNAMIC']=cus.get('dynamic_lib','')
+       cus['include_name']='CL\\opencl.h'
 
     else:
        x=''
@@ -86,8 +85,12 @@ def setup(i):
        cus['path_bin']=pi+'/bin'
        cus['path_lib']=pi+'/lib'+x
 
+       cus['include_name']='CL/opencl.h'
+
        cus['dynamic_lib']='libOpenCL.so'
 
-       env['CK_ENV_LIB_OPENCL_DYNAMIC']=cus.get('dynamic_lib','')
+    env['CK_ENV_LIB_OPENCL_INCLUDE_NAME']=cus.get('include_name','')
+    env['CK_ENV_LIB_OPENCL_STATIC_NAME']=cus.get('static_lib','')
+    env['CK_ENV_LIB_OPENCL_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
     return {'return':0, 'bat':s}

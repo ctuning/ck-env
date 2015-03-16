@@ -26,7 +26,7 @@
     "CK_FLAGS_CREATE_ASM": "-S", 
     "CK_FLAGS_CREATE_OBJ": "-c", 
     "CK_FLAGS_DLL": "-shared -fPIC", 
-    "CK_FLAGS_DLL_EXTRA": "-ldl", 
+    "CK_FLAGS_DLL_EXTRA": "", 
     "CK_FLAGS_OUTPUT": "-o", 
     "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
     "CK_FLAGS_STATIC_LIB": "-fPIC", 
@@ -34,12 +34,14 @@
     "CK_FLAG_PREFIX_VAR": "-D", 
     "CK_LB": "$#tool_prefix#$ar rcs", 
     "CK_LB_OUTPUT": "-o ", 
-    "CK_LD_FLAGS_EXTRA": "-lm -ldl", 
+    "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".a", 
     "CK_MAKE": "make", 
     "CK_OBJ_EXT": ".o", 
     "CK_PLUGIN_FLAG": "-fplugin=", 
-    "CK_PROFILER": "gprof"
+    "CK_PROFILER": "gprof",
+    "CK_EXTRA_LIB_M":"-lm",
+    "CK_EXTRA_LIB_DL":"-ldl"
   }, 
   "soft_name": "Compiler - LLVM", 
   "tags": [
