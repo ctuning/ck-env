@@ -301,9 +301,22 @@ def install(i):
 
              pix=''
              sp=d.get('suggested_path','')
+
              if os.environ.get(env_install_path,'')!='' and sp!='':
                 x=os.environ[env_install_path]
-                pix=os.path.join(x, sp+'-'+cus.get('version','')+'-'+tosx)
+
+                nm=sp+'-'+cus.get('version','')
+
+                bdn=udeps.get('compiler',{}).get('build_dir_name','')
+                if bdn!='':
+                   nm+='-'+bdn
+                   vr=udeps.get('compiler',{}).get('ver','')
+                   if vr!='':
+                      nm+='-'+vr
+
+                nm+='-'+tosx
+
+                pix=os.path.join(x, nm)
                 if not tosx.endswith(tbits): pix+='-'+tbits
                 ck.out('Suggested path: '+pix)
 

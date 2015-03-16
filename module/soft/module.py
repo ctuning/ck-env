@@ -237,6 +237,8 @@ def setup(i):
               (env_new)           - if 'yes', do not search for environment (was already done in package, for example)
 
               (package_uoa)       - if called from package, record package_uoa just in case
+
+              (reset_env)         - if 'yes', do not use environment from existing entry, but use original one
             }
 
     Output: {
@@ -388,9 +390,10 @@ def setup(i):
 
        edx=rx['dict']
 
-       cus=edx.get('customize',{})
+       cus.update(edx.get('customize',{}))
        deps=edx.get('deps',{})
-       env=edx.get('env',{})
+       if i.get('reset_env','')!='yes':
+          env=edx.get('env',{})
        pi=cus.get('path_install','')
 
     # Update from input

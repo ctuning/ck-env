@@ -202,7 +202,7 @@ def set(i):
           x+=' and setup='+json.dumps(setup)
        return {'return':1, 'error':x}
 
-    # Load
+    # Load selected environment entry
     r=ck.access({'action':'load',
                  'module_uoa':work['self_module_uid'],
                  'data_uoa':duoa})
@@ -534,12 +534,17 @@ def resolve(i):
         lst=rx['lst']
         dd=rx['dict']
 
-        ver=dd.get('customize',{}).get('version','')
+        cus=dd.get('customize',{})
+
+        ver=cus.get('version','')
         if ver!='': q['ver']=ver
 
         uoa=rx['env_uoa']
         q['uoa']=uoa
         q['num_entries']=len(lst)
+
+        bdn=cus.get('build_dir_name','')
+        if bdn!='': q['build_dir_name']=bdn # Needed to suggest directory name for building libs
 
         if uoa not in res: res.append(uoa)
 
@@ -564,6 +569,8 @@ def refresh(i):
               (target_bits)       - prune by target bits
               (version)           - prune by version
               (name)              - prune by name with wildcards
+
+              (reset_env)         - if 'yes', do not use environment from existing entry, but use original one
             }
 
     Output: {
@@ -739,6 +746,7 @@ def refresh(i):
             'customize':cus,
             'deps':deps,
             'env_data_uoa':duid}
+        if i.get('reset_env','')!='': ii['reset_env']=i['reset_env']
         rx=ck.access(ii)
         if rx['return']>0: return rx
 
