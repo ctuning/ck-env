@@ -1,12 +1,12 @@
 {
-  "customize_script": "customize", 
   "customize": {
+    "build_dir_name": "llvm", 
     "env_prefix": "CK_ENV_COMPILER_LLVM", 
     "languages": [
       "C", 
-      "CPP" 
-    ],
-    "skip_add_to_ld_path": "no" 
+      "CPP"
+    ], 
+    "skip_add_to_ld_path": "no"
   }, 
   "customize_script": "customize", 
   "env": {
@@ -39,8 +39,8 @@
   "soft_name": "Compiler - LLVM", 
   "tags": [
     "compiler", 
-    "llvm",
-    "lang-c",
+    "llvm", 
+    "lang-c", 
     "lang-cpp"
   ], 
   "tool": "clang", 

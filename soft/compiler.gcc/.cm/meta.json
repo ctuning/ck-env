@@ -1,5 +1,6 @@
 {
   "customize": {
+    "build_dir_name": "gcc", 
     "env_prefix": "CK_ENV_COMPILER_GCC", 
     "languages": [
       "C", 
@@ -8,7 +9,7 @@
       "F90", 
       "F95"
     ], 
-    "skip_add_to_ld_path": "yes" 
+    "skip_add_to_ld_path": "yes"
   }, 
   "customize_script": "customize", 
   "env": {
@@ -44,11 +45,11 @@
   "soft_name": "Compiler - GCC", 
   "tags": [
     "compiler", 
-    "gcc",
-    "lang-c",
-    "lang-cpp",
-    "lang-f77",
-    "lang-f90",
+    "gcc", 
+    "lang-c", 
+    "lang-cpp", 
+    "lang-f77", 
+    "lang-f90", 
     "lang-f95"
   ], 
   "tool": "gcc", 

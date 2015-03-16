@@ -1,16 +1,17 @@
 {
   "customize": {
+    "build_dir_name": "icc", 
     "env_prefix": "CK_ENV_COMPILER_ICC", 
-    "skip_add_to_bin": "yes", 
-    "skip_add_to_ld_path": "yes", 
-    "skip_add_to_path": "yes",
     "languages": [
       "C", 
-      "CPP",
-      "F77",
-      "F90",
+      "CPP", 
+      "F77", 
+      "F90", 
       "F95"
-    ] 
+    ], 
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_path": "yes"
   }, 
   "customize_script": "customize", 
   "env": {
@@ -46,13 +47,13 @@
   "soft_name": "Compiler - Intel", 
   "tags": [
     "compiler", 
-    "icc",
-    "lang-c",
-    "lang-cpp",
-    "lang-f77",
-    "lang-f90",
+    "icc", 
+    "lang-c", 
+    "lang-cpp", 
+    "lang-f77", 
+    "lang-f90", 
     "lang-f95"
- ], 
+  ], 
   "tool": "icc", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 

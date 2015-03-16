@@ -1,28 +1,29 @@
 {
-  "version": {
-    "string_after_relaxed": " ", 
-    "string_before": "Python ", 
-    "cmd": "--version > $#filename#$ 2>&1", 
-    "type": "parse_first_string", 
-    "split": "."
-  }, 
-  "env": {
-    "CK_XSB_RT": "xsb", 
-    "CK_XSBC": "xsb"
-  }, 
-  "tags": [
-    "compiler", 
-    "xsb",
-    "lang-prolog"
-  ], 
   "customize": {
+    "build_dir_name": "xsb", 
+    "env_prefix": "CK_ENV_COMPILER_PROLOG", 
     "languages": [
       "PROLOG"
     ], 
     "skip_add_to_bin": "yes", 
-    "env_prefix": "CK_ENV_COMPILER_PROLOG", 
     "skip_add_to_ld_path": "yes"
   }, 
+  "env": {
+    "CK_XSBC": "xsb", 
+    "CK_XSB_RT": "xsb"
+  }, 
+  "soft_name": "Compiler - XSB", 
+  "tags": [
+    "compiler", 
+    "xsb", 
+    "lang-prolog"
+  ], 
   "tool": "xsb", 
-  "soft_name": "Compiler - XSB"
+  "version": {
+    "cmd": "--version > $#filename#$ 2>&1", 
+    "split": ".", 
+    "string_after_relaxed": " ", 
+    "string_before": "Python ", 
+    "type": "parse_first_string"
+  }
 }

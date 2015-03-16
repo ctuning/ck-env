@@ -3,24 +3,24 @@
     "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_PPL"
   }, 
-  "soft_name": "Library - PPL", 
   "deps": {
-    "lib_mpc": {
-      "sort": 30, 
+    "lib_gmp": {
       "local": "yes", 
+      "sort": 10, 
+      "tags": "lib,gmp"
+    }, 
+    "lib_mpc": {
+      "local": "yes", 
+      "sort": 30, 
       "tags": "lib,mpc"
     }, 
     "lib_mpfr": {
+      "local": "yes", 
       "sort": 20, 
-      "local": "yes", 
       "tags": "lib,mpfr"
-    }, 
-    "lib_gmp": {
-      "sort": 10, 
-      "local": "yes", 
-      "tags": "lib,gmp"
     }
   }, 
+  "soft_name": "Library - PPL", 
   "tags": [
     "lib", 
     "ppl"

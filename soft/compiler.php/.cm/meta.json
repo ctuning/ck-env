@@ -1,5 +1,6 @@
 {
   "customize": {
+    "build_dir_name": "php", 
     "env_prefix": "CK_ENV_COMPILER_PHP", 
     "languages": [
       "PHP"
@@ -14,7 +15,7 @@
   "soft_name": "Compiler - PHP", 
   "tags": [
     "compiler", 
-    "php",
+    "php", 
     "lang-php"
   ], 
   "tool": "php", 

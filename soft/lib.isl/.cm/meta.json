@@ -3,14 +3,14 @@
     "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_ISL"
   }, 
-  "soft_name": "Library - ISL", 
   "deps": {
     "lib_gmp": {
       "local": "yes", 
-      "tags": "lib,isl",
-      "sort":10
+      "sort": 10, 
+      "tags": "lib,isl"
     }
   }, 
+  "soft_name": "Library - ISL", 
   "tags": [
     "lib", 
     "isl"

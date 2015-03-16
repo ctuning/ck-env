@@ -1,6 +1,7 @@
 {
   "customize": {
     "add_win_sdk_path": "yes", 
+    "build_dir_name": "mcl", 
     "env_prefix": "CK_ENV_COMPILER_MVSC", 
     "input_path_example": "C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC", 
     "languages": [
@@ -42,8 +43,8 @@
   "soft_name": "Compiler - Microsoft CL", 
   "tags": [
     "compiler", 
-    "mcl",
-    "lang-c",
+    "mcl", 
+    "lang-c", 
     "lang-cpp"
   ], 
   "tool": "cl", 

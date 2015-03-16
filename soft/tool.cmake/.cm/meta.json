@@ -6,12 +6,12 @@
   "env": {
     "CK_CMAKE": "cmake"
   }, 
+  "soft_name": "Tool - cmake", 
   "tags": [
     "tool", 
     "cmake"
   ], 
   "tool": "cmake", 
-  "soft_name": "Tool - cmake", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 

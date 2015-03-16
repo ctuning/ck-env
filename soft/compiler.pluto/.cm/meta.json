@@ -1,23 +1,17 @@
 {
-  "tags": [
-    "compiler", 
-    "source-to-source",
-    "pluto",
-    "lang-c"
-  ], 
-  "customize_script": "customize", 
   "customize": {
-    "source_to_source":"yes",
+    "build_dir_name": "pluto", 
+    "env_prefix": "CK_ENV_COMPILER_PLUTO", 
     "languages": [
       "C", 
       "F77"
     ], 
-    "env_prefix": "CK_ENV_COMPILER_PLUTO", 
-    "skip_add_to_bin": "yes",
-    "skip_add_to_path": "yes",
-    "skip_add_to_ld_path": "yes"
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_path": "yes", 
+    "source_to_source": "yes"
   }, 
-  "soft_name": "Compiler - PLUTO",
+  "customize_script": "customize", 
   "env": {
     "CK_AR": "$#tool_prefix#$ar", 
     "CK_ASM_EXT": ".s", 
@@ -42,6 +36,13 @@
     "CK_OBJ_EXT": ".o", 
     "CK_PROFILER": "gprof"
   }, 
+  "soft_name": "Compiler - PLUTO", 
+  "tags": [
+    "compiler", 
+    "source-to-source", 
+    "pluto", 
+    "lang-c"
+  ], 
   "tool": "polycc", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 

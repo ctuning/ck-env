@@ -1,7 +1,7 @@
 {
   "customize": {
-    "skip_add_dirs": "yes",
-    "env_prefix": "CK_ENV_LIB_CJSON"
+    "env_prefix": "CK_ENV_LIB_CJSON", 
+    "skip_add_dirs": "yes"
   }, 
   "soft_name": "Library - CJSON", 
   "tags": [

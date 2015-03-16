@@ -1,5 +1,6 @@
 {
   "customize": {
+    "build_dir_name": "llvm", 
     "env_prefix": "CK_ENV_COMPILER_LLVM", 
     "languages": [
       "C", 
@@ -39,7 +40,7 @@
     "CK_FLAG_PREFIX_VAR": "-D", 
     "CK_LB": "lib", 
     "CK_LB_OUTPUT": "/OUT:", 
-    "CK_LD_FLAGS_EXTRA": "-lm -ldl", 
+    "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".lib", 
     "CK_MAKE": "nmake", 
     "CK_OBJDUMP": "llvm-objdump -d", 
@@ -52,8 +53,8 @@
   "soft_name": "Compiler - LLVM", 
   "tags": [
     "compiler", 
-    "llvm",
-    "lang-c",
+    "llvm", 
+    "lang-c", 
     "lang-cpp"
   ], 
   "tool": "clang", 

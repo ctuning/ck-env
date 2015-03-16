@@ -1,5 +1,6 @@
 {
   "customize": {
+    "build_dir_name": "java", 
     "env_prefix": "CK_ENV_COMPILER_JAVA", 
     "languages": [
       "JAVA"
@@ -14,7 +15,7 @@
   "soft_name": "Compiler - JAVA", 
   "tags": [
     "compiler", 
-    "java",
+    "java", 
     "lang-java"
   ], 
   "tool": "javac", 
