@@ -213,6 +213,7 @@ def setup(i):
 
                                     skip_add_dirs
                                     skip_add_to_path
+                                    skip_add_to_bin
                                     skip_add_to_ld_path
                                     add_include_path
 
@@ -702,7 +703,7 @@ def setup(i):
        piib=cus.get('path_include','')
 
        if cus.get('skip_add_dirs','')!='yes' and pi!='':
-          if pib!='': sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
+          if pib!='' and cus.get('skip_add_to_bin','')!='yes': sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
           if plib!='': sb+=eset+' '+envp_l+'='+xs+plib+xs+'\n'
           if piib!='': sb+=eset+' '+envp_i+'='+xs+piib+xs+'\n'
 
