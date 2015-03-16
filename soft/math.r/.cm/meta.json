@@ -10,11 +10,15 @@
     "CK_RC": "r", 
     "CK_R_RT": "r"
   }, 
-  "soft_name": "Tool - Math - R", 
+  "soft_name": "Math - R", 
   "tags": [
     "tool", 
     "math", 
     "r",
+    "machine learing",
+    "data mining",
+    "statistics",
+    "predictive analytics",
     "lang-r"
   ], 
   "tool": "R", 

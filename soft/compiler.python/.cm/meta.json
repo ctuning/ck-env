@@ -19,6 +19,7 @@
     "lang-python"
   ], 
   "tool": "python", 
+  "customize_script": "customize", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
