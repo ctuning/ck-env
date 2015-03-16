@@ -216,6 +216,8 @@ def setup(i):
                                     skip_add_to_ld_path
                                     add_include_path
 
+                                    skip_path - skiping installation path (for local versions)
+
                                     version      - add this version
                                     skip_version - if 'yes', do not add version
 
