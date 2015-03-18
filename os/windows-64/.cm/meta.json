@@ -44,5 +44,6 @@
   "script_ext": ".bat", 
   "windows_base":"yes",
   "use_create_new_console_flag": "yes",
-  "priority":"yes"
+  "priority":"yes",
+  "quit_if_error":"if %errorlevel% neq 0 exit /b %errorlevel%"
 }

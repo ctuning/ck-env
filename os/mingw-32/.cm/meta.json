@@ -43,5 +43,6 @@
   "script_ext": ".bat", 
   "windows_base":"yes",
   "mingw":"yes",
-  "use_create_new_console_flag": "yes"
+  "use_create_new_console_flag": "yes",
+  "quit_if_error":"if %errorlevel% neq 0 exit /b %errorlevel%"
 }

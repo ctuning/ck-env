@@ -159,6 +159,7 @@ def set(i):
                  zu=j.get('data_uid','')
                  zdn=zi.get('data_name',{})
                  cus=zm.get('customize','')
+                 zdeps=zm.get('deps',{})
                  xsetup=zm.get('setup',{})
                  xtags=zm.get('tags','')
                  ver=cus.get('version','')
@@ -174,7 +175,19 @@ def set(i):
                  zs=str(z)
                  zz[zs]=zu
 
+                 ck.out('')
                  ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
+
+                 if len(zdeps)>0:
+                    for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
+                        jj=zdeps[j]
+                        juoa=jj.get('uoa','')
+                        jtags=jj.get('tags','')
+                        jver=jj.get('ver','')
+
+                        js='                                  '
+                        js+='Dependency '+j+' (UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
+                        ck.out(js)
 
              ck.out('')
              rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+': '})

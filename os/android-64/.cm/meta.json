@@ -50,5 +50,6 @@
   "remote_push": "adb $#device#$ push", 
   "remote_shell": "adb $#device#$ shell", 
   "script_ext": ".sh", 
-  "set_executable": "chmod 755"
+  "set_executable": "chmod 755",
+  "quit_if_error":"er=$?; if [[ $er != 0 ]]; then exit $er; fi"
 }

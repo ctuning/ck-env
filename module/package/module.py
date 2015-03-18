@@ -77,7 +77,7 @@ def install(i):
        # Try to detect CID in current path
        rx=ck.detect_cid_in_current_path({})
        if rx['return']==0:
-          duoa=rx['data_uoa']
+          duoa=rx.get('data_uoa','')
 
     duid=duoa
 

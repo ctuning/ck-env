@@ -46,5 +46,6 @@
   "rem": "#", 
   "script_ext": ".sh", 
   "set_executable": "chmod 755",
-  "priority":"yes"
+  "priority":"yes",
+  "quit_if_error":"er=$?; if [[ $er != 0 ]]; then exit $er; fi"
 }
