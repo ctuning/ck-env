@@ -43,7 +43,10 @@
     "CM_INTERMEDIATE_OPT_TOOL": "opt", 
     "CM_INTERMEDIATE_OPT_TOOL_OUT": "-o",
     "CK_EXTRA_LIB_M":"-lm",
-    "CK_EXTRA_LIB_DL":"-ldl"
+    "CK_EXTRA_LIB_DL":"-ldl",
+    "CK_OPT_SIZE":"-Os",
+    "CK_OPT_SPEED_SAFE":"-O2",
+    "CK_OPT_SPEED":"-O3"
   }, 
   "soft_name": "Compiler - LLVM", 
   "tags": [

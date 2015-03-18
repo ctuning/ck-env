@@ -21,7 +21,7 @@
     "CK_ASM_EXT": ".s", 
     "CK_BC_EXT": ".bc", 
     "CK_CC": "$#tool_prefix#$clang", 
-    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": "-DWINDOWS", 
     "CK_CXX": "$#tool_prefix#$clang++", 
     "CK_DLL_EXT": ".dll", 
     "CK_EXE_EXT": ".exe", 
@@ -34,7 +34,8 @@
     "CK_FLAGS_DLL": "", 
     "CK_FLAGS_DLL_EXTRA": "-Xlinker /dll", 
     "CK_FLAGS_OUTPUT": "-o", 
-    "CK_FLAGS_STATIC_BIN": "", 
+    "CK_FLAGS_DYNAMIC_BIN": "", 
+    "CK_FLAGS_STATIC_BIN": "-static", 
     "CK_FLAGS_STATIC_LIB": "", 
     "CK_LD_DYNAMIC_FLAGS": "" ,
     "CK_FLAG_PREFIX_INCLUDE": "-I", 
@@ -51,7 +52,10 @@
     "CM_INTERMEDIATE_OPT_TOOL": "opt", 
     "CM_INTERMEDIATE_OPT_TOOL_OUT": "-o",
     "CK_EXTRA_LIB_M":"",
-    "CK_EXTRA_LIB_DL":""
+    "CK_EXTRA_LIB_DL":"",
+    "CK_OPT_SIZE":"-Os",
+    "CK_OPT_SPEED_SAFE":"-O2",
+    "CK_OPT_SPEED":"-O3"
   }, 
   "soft_name": "Compiler - LLVM", 
   "tags": [

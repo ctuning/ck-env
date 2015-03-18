@@ -42,7 +42,10 @@
     "CK_PLUGIN_FLAG": "-fplugin=", 
     "CK_PROFILER": "gprof",
     "CK_EXTRA_LIB_M":"-lm",
-    "CK_EXTRA_LIB_DL":"-ldl"
+    "CK_EXTRA_LIB_DL":"-ldl",
+    "CK_OPT_SIZE":"-Os",
+    "CK_OPT_SPEED_SAFE":"-O2",
+    "CK_OPT_SPEED":"-O3"
   }, 
   "soft_name": "Compiler - GCC", 
   "tags": [
