@@ -13,6 +13,8 @@
   "env_quotes_if_space_in_call": "\"", 
   "env_separator": ";", 
   "env_set": "export ", 
+  "env_var_extra1": "{",
+  "env_var_extra2": "}",
   "env_var_start": "$", 
   "env_var_stop": "", 
   "env_var_separator":":", 
@@ -51,5 +53,5 @@
   "remote_shell": "adb $#device#$ shell", 
   "script_ext": ".sh", 
   "set_executable": "chmod 755",
-  "quit_if_error":"er=$?; if [[ $er != 0 ]]; then exit $er; fi"
+  "quit_if_error":"er=$?; if [ $er != 0 ]; then exit $er; fi"
 }
