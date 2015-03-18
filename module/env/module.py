@@ -739,13 +739,24 @@ def refresh(i):
 
            meta['soft_uoa']=soft_uoa
 
-           # Update soft_uoa
+           # Update environment entry
            rx=ck.access({'action':'update',
                          'module_uoa':work['self_module_uid'],
                          'data_uoa':duoa,
                          'dict':meta,
                          'sort_keys':'yes'})
            if rx['return']>0: return rx
+
+        # Check if package available to take env
+        penv={}
+        package_uoa=meta.get('package_uoa','')
+        if package_uoa!='':
+           rx=ck.access({'action':'load',
+                         'module_uoa':cfg['module_deps']['package'],
+                         'data_uoa':package_uoa})
+           if rx['return']>0: return rx
+           pdd=rx['dict']
+           penv=pdd.get('env',{})
 
         # Trying new setup
         ck.out('')
@@ -758,6 +769,7 @@ def refresh(i):
             'data_uoa':soft_uoa,
             'customize':cus,
             'deps':deps,
+            'env':penv,
             'env_data_uoa':duid}
         if i.get('reset_env','')!='': ii['reset_env']=i['reset_env']
         rx=ck.access(ii)
