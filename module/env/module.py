@@ -1,4 +1,4 @@
-#
+#                                                          	
 # Collective Knowledge (environment)
 #
 # See CK LICENSE.txt for licensing details
@@ -467,6 +467,9 @@ def resolve(i):
               deps               - dependencies dict
 
               (env)              - env
+
+              (add_customize)    - if 'yes', add to deps customize field from the environment 
+                                   (useful for program compilation)
             }
 
     Output: {
@@ -521,6 +524,8 @@ def resolve(i):
 
     enruoa=i.get('repo_uoa','')
 
+    ac=i.get('add_customize','')
+
     res=[]
     for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
         q=deps[k]
@@ -548,6 +553,9 @@ def resolve(i):
         dd=rx['dict']
 
         cus=dd.get('customize',{})
+
+        if ac=='yes':
+           q['cus']=cus
 
         ver=cus.get('version','')
         if ver!='': q['ver']=ver
