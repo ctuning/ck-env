@@ -27,7 +27,7 @@
     "CK_FLAGS_CREATE_OBJ": "-c", 
     "CK_FLAGS_DLL": "-shared -fPIC", 
     "CK_FLAGS_DLL_EXTRA": "", 
-    "CK_FLAGS_OUTPUT": "-o", 
+    "CK_FLAGS_OUTPUT": "-o ", 
     "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
     "CK_FLAGS_STATIC_LIB": "-fPIC", 
     "CK_FLAG_PREFIX_INCLUDE": "-I", 
