@@ -95,7 +95,7 @@ def setup(i):
              env['CK_WINDOWS_SDK_PATH']=x
              cus['CK_WINDOWS_SDK_PATH']=x
 
-       x=env.get('CK_WINDOWS_SDK_PATH','')
+       x=cus.get('CK_WINDOWS_SDK_PATH','')
        if x!='':
           y=x+'\\'
           if tbits=='32': y+='Lib'

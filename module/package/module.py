@@ -79,8 +79,6 @@ def install(i):
        if rx['return']==0:
           duoa=rx.get('data_uoa','')
 
-    duid=duoa
-
     if duoa!='':
        rx=ck.access({'action':'load',
                      'module_uoa':work['self_module_uid'],

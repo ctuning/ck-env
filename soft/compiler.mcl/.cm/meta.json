@@ -23,7 +23,7 @@
     "CK_EXE_EXT": ".exe", 
     "CK_FLAGS_CREATE_ASM": "/Fa /c", 
     "CK_FLAGS_CREATE_OBJ": "/c", 
-    "CK_FLAGS_DLL": "/MT /DWin /LD /FIwindows.h", 
+    "CK_FLAGS_DLL": "/MT /DWin /LD", 
     "CK_FLAGS_DLL_EXTRA": "/link /dll", 
     "CK_FLAGS_DYNAMIC_BIN": "/MD", 
     "CK_FLAGS_OUTPUT": "/Fe", 

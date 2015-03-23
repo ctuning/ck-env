@@ -22,6 +22,7 @@
   "module_deps": {
     "os": "0440cb72c2bc5cc6", 
     "platform.os": "41e31cc4496b8a8e",
-    "soft":"5e1100048ab875d7"
+    "soft":"5e1100048ab875d7",
+    "package":"1dc07ee0f4742028"
   }
 }
