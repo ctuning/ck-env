@@ -87,6 +87,7 @@ def setup(i):
 
        cus['include_name']='CL/opencl.h'
 
+       cus['static_lib']='libOpenCL.so'
        cus['dynamic_lib']='libOpenCL.so'
 
     env['CK_ENV_LIB_OPENCL_INCLUDE_NAME']=cus.get('include_name','')
