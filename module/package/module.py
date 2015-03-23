@@ -68,10 +68,9 @@ def install(i):
 
     # Check package description
     duoa=i.get('uoa','')
-
-    d={}
-
+    duid=''
     dname=''
+    d={}
 
     if duoa=='':
        # Try to detect CID in current path
