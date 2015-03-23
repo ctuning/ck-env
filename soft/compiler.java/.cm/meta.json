@@ -9,8 +9,10 @@
   }, 
   "env": {
     "CK_JAVAC": "javac", 
-    "CK_JAVA_OBJ_EXT": ".class", 
-    "CK_JAVA_RT": "java"
+    "CK_OBJ_EXT": ".class", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_FLAG_PREFIX_INCLUDE": "-classpath ", 
+    "CK_JAVA_RT": "java -classpath ."
   }, 
   "soft_name": "Compiler - JAVA", 
   "tags": [
