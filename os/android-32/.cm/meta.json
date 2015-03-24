@@ -5,6 +5,7 @@
   "change_dir": "cd", 
   "ck_name": "linux", 
   "cm_tool_prefix": "./", 
+  "bin_prefix": "./", 
   "delete_file": "rm ", 
   "dir_sep": "/", 
   "env_call": ".", 
