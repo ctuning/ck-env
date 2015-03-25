@@ -10,6 +10,11 @@
 ##############################################################################
 # setup environment setup
 
+import sys
+if sys.version_info[0]>2:
+   def raw_input(i):
+       return input(i)
+
 def setup(i):
     """
     Input:  {

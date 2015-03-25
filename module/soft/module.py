@@ -222,6 +222,8 @@ def setup(i):
                                     version      - add this version
                                     skip_version - if 'yes', do not add version
 
+              (skip_path)         - skiping installation path (for local versions)
+
               (env)               - update default env with this dict
 
               (deps)              - list with dependencies (in special format, possibly resolved (from package))
@@ -320,6 +322,7 @@ def setup(i):
                     'module_uoa':work['self_module_uid'],
                     'data_uoa':duoa})
        if r['return']>0: return r
+
        d=r['dict']
        p=r['path']
 
@@ -385,17 +388,16 @@ def setup(i):
                      'module_uoa':cfg['module_deps']['env'],
                      'data_uoa':enduoa,
                      'repo_uoa':enruoa})
-       if rx['return']>0: return rx
+       if rx['return']==0:
+          update=True
 
-       update=True
+          edx=rx['dict']
 
-       edx=rx['dict']
-
-       cus.update(edx.get('customize',{}))
-       deps=edx.get('deps',{})
-       if i.get('reset_env','')!='yes':
-          env=edx.get('env',{})
-       pi=cus.get('path_install','')
+          cus.update(edx.get('customize',{}))
+          deps=edx.get('deps',{})
+          if i.get('reset_env','')!='yes':
+             env=edx.get('env',{})
+          pi=cus.get('path_install','')
 
     # Update from input
     udeps=i.get('deps',{})
