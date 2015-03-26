@@ -1,0 +1,60 @@
+{
+  "tags": [
+    "compiler",
+    "cuda",
+    "lang-c-cuda",
+    "lang-cpp-cuda"
+  ],
+  "soft_name": "Compiler - NVIDIA CUDA",
+  "customize": {
+    "skip_add_to_ld_path": "yes",
+    "skip_add_to_path": "yes",
+    "skip_add_to_lib": "yes",
+    "env_prefix": "CK_ENV_COMPILER_CUDA",
+    "skip_add_to_bin": "no",
+    "input_path_example": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v5.5",
+    "languages": [
+      "C",
+      "CPP"
+    ]
+  },
+  "version": {
+    "type": "parse_first_string",
+    "cmd": "> $#filename#$ 2>&1",
+    "string_after": "for",
+    "split": ".",
+    "string_before": "Version "
+  },
+  "env": {
+    "CK_AR": "ar", 
+    "CK_ASM_EXT": ".s", 
+    "CK_CC": "nvcc", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": "-DWINDOWS", 
+    "CK_CXX": "nvcc", 
+    "CK_DLL_EXT": ".so", 
+    "CK_EXE_EXT": ".out", 
+    "CK_FLAGS_CREATE_ASM": "-S", 
+    "CK_FLAGS_CREATE_OBJ": "-c", 
+    "CK_FLAGS_DLL": "-shared -fPIC", 
+    "CK_FLAGS_DLL_EXTRA": "", 
+    "CK_FLAGS_OUTPUT": "-o ", 
+    "CK_FLAGS_DYNAMIC_BIN":"",
+    "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+    "CK_FLAGS_STATIC_LIB": "-fPIC", 
+    "CK_FLAG_PREFIX_INCLUDE": "-I", 
+    "CK_FLAG_PREFIX_VAR": "-D", 
+    "CK_LB": "ar rcs", 
+    "CK_LB_OUTPUT": "-o ", 
+    "CK_LD_FLAGS_EXTRA": "", 
+    "CK_LIB_EXT": ".a", 
+    "CK_MAKE": "make.exe", 
+    "CK_OBJDUMP": "cuobjdump -d", 
+    "CK_OBJ_EXT": ".o", 
+    "CK_PLUGIN_FLAG": "-fplugin=", 
+    "CK_PROFILER": "gprof",
+    "CK_EXTRA_LIB_M":"-lm",
+    "CK_EXTRA_LIB_DL":"-ldl"
+  },
+  "customize_script": "customize",
+  "tool": "nvcc"
+}
