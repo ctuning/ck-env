@@ -103,6 +103,19 @@ def detect(i):
     pdv=i.get('print_device_info','')
     ex=i.get('exchange','')
 
+    # If exchange, check that repo from this env is cached and recache if needed
+    if ex=='yes':
+       er=i.get('exchange_repo','')
+       rx=ck.load_repo_info_from_cache({'repo_uoa':ex})
+       if rx['return']>0: 
+          if o=='con':
+             ck.out('')
+             ck.out('Adding repo from this "env" package to local cache ...')
+
+          rx=ck.access({'action':'recache',
+                        'module_uoa':cfg['module_deps']['repo']})
+          if rx['return']>0: return rx
+
     # Get OS info
     import copy
     ii=copy.deepcopy(i)
