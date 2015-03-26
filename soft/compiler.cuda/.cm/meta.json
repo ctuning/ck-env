@@ -19,11 +19,10 @@
     ]
   },
   "version": {
-    "type": "parse_first_string",
-    "cmd": "> $#filename#$ 2>&1",
-    "string_after": "for",
+    "cmd": "--version > $#filename#$ 2>&1",
+    "string_after": "",
     "split": ".",
-    "string_before": "Version "
+    "string_before": ", V"
   },
   "env": {
     "CK_AR": "ar", 

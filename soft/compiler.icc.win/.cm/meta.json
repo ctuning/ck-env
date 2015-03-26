@@ -67,7 +67,6 @@
     "cmd": "> $#filename#$ 2>&1", 
     "split": ".", 
     "string_after": "Build", 
-    "string_before": "Version ", 
-    "type": "parse_first_string"
+    "string_before": "Version "
   }
 }

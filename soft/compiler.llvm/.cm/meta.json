@@ -53,7 +53,6 @@
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
     "string_after": "(", 
-    "string_before": "version ", 
-    "type": "parse_first_string"
+    "string_before": "version "
   }
 }

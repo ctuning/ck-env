@@ -45,6 +45,8 @@ def detect(i):
               (tags)              - search UOA by tags (separated by comma)
 
               (tool)              - force this tool name
+
+              (show)              - if 'yes', show output
             }
 
     Output: {
@@ -152,43 +154,47 @@ def detect(i):
     if len(lst)==0:
        return {'return':16, 'error':'version output file is empty'}
 
-    tp=ver.get('type','')
-    if tp=='parse_first_string':
-       s=lst[0]
+    if i.get('show','')=='yes':
+       ck.out('Output:')
+       ck.out('')
+       for q in lst:
+           ck.out('  '+q)
 
-       sbefore=ver.get('string_before','')
-       safter=ver.get('string_after','')
-       safter_rel=ver.get('string_after_relaxed','')
+    dver=''
+    for s in lst:
+        sbefore=ver.get('string_before','')
+        safter=ver.get('string_after','')
+        safter_rel=ver.get('string_after_relaxed','')
 
-       i1=0
-       i2=len(s)
+        i1=0
+        i2=len(s)
 
-       if sbefore!='':
-          i1=s.find(sbefore)
-          if i1<0: return {'return':16, 'error':'version was not parsed'}
+        if sbefore!='':
+           i1=s.find(sbefore)
+           if i1<0: continue
 
-       if safter!='':
-          if sbefore!='': i2=s.find(safter, i1+len(sbefore)+1)
-          else: i2=s.find(safter)
+        if safter!='':
+           if sbefore!='': i2=s.find(safter, i1+len(sbefore)+1)
+           else: i2=s.find(safter)
 
-          if i2<0: return {'return':16, 'error':'version was not parsed'}
-       elif safter_rel!='':
-          if sbefore!='': i3=s.find(safter_rel, i1+len(sbefore)+1)
-          else: i3=s.find(safter_rel)
+           if i2<0: continue
+        elif safter_rel!='':
+           if sbefore!='': i3=s.find(safter_rel, i1+len(sbefore)+1)
+           else: i3=s.find(safter_rel)
 
-          if i3>=0: i2=i3
+           if i3>=0: i2=i3
 
-       dver=s[i1+len(sbefore):i2].strip()
+        dver=s[i1+len(sbefore):i2].strip()
 
-       spl=ver.get('split','')
-       if spl!='':
-          lver=dver.split(spl)
+        spl=ver.get('split','')
+        if spl!='':
+           lver=dver.split(spl)
 
     if dver=='':
        return {'return':16, 'error':'version was not detected'}
     else:
        if o=='con':
-          ck.out('Version detected: V'+dver)
+          ck.out('Version detected: '+dver)
 
     return {'return':0, 'version_str':dver, 'version_lst':lver}
 
