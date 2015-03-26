@@ -1,4 +1,4 @@
-#                                                          	
+#
 # Collective Knowledge (environment)
 #
 # See CK LICENSE.txt for licensing details
@@ -571,6 +571,7 @@ def resolve(i):
 
         env=rx['env']
 
+        q['bat']=rx['bat']
         sb+=rx['bat']
 
     return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'res_deps':res}
