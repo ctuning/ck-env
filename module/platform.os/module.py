@@ -127,7 +127,7 @@ def detect(i):
     win=tosd.get('windows_base','')
 
     # Check devices, if remote
-    if remote=='yes' and tdid=='':
+    if sic!='yes' and remote=='yes' and tdid=='':
        # Get devices
        rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
        if rx['return']>0: return rx
