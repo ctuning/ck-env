@@ -34,7 +34,7 @@
     "CK_LB": "lib", 
     "CK_LB_OUTPUT": "/OUT:", 
     "CK_LD_DYNAMIC_FLAGS": "/link /NODEFAULTLIB:LIBCMT", 
-    "CK_LD_FLAGS_EXTRA": "bufferoverflowU.lib", 
+    "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".lib", 
     "CK_MAKE": "nmake", 
     "CK_OBJDUMP": "dumpbin /disasm", 

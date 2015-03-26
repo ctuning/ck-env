@@ -89,11 +89,11 @@ def setup(i):
     if cus.get('add_win_sdk_path','')=='yes':
        if iv=='yes':
           x=cus.get('CK_WINDOWS_SDK_PATH','')
-          print ''
+          print ('')
           if x=='':
              x=raw_input('Input path to Windows SDK (example: C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A"): ')
           else:
-             print 'Current Windows SDK path: '+x
+             print ('Current Windows SDK path: '+x)
              x=raw_input('Input new path to Windows SDK (or press Enter to keep the same): ')
 
           if x!='': 
