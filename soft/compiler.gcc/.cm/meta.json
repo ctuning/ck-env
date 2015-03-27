@@ -59,10 +59,11 @@
   ],
   "tool": "gcc",
   "version": {
+    "check_lines":1,
     "cmd": "--version > $#filename#$ 2>&1",
     "split": ".",
     "string_after": " ",
-    "string_after1": "",
+    "string_after1": "@@@",
     "string_before": ") "
   }
 }

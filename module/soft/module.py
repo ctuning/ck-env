@@ -161,7 +161,13 @@ def detect(i):
            ck.out('  '+q)
 
     dver=''
+    cl=ver.get('check_lines',-1)
+
+    jj=0
     for s in lst:
+        jj+=1
+        if cl!=-1 and jj>cl: break
+
         sbefore=ver.get('string_before','')
         safter=ver.get('string_after','')
         safter1=ver.get('string_after1','')
@@ -179,8 +185,10 @@ def detect(i):
            else: i2=s.find(safter)
 
            if i2<0 and safter1!='':
-              if sbefore!='': i2=s.find(safter1, i1+len(sbefore)+1)
-              else: i2=s.find(safter1)
+              if safter1=='@@@': i2=len(s)
+              else:
+                if sbefore!='': i2=s.find(safter1, i1+len(sbefore)+1)
+                else: i2=s.find(safter1)
 
            if i2<0: continue
         elif safter_rel!='':
