@@ -1,72 +1,72 @@
 {
   "control": [
     {
-      "author": "Grigori Fursin", 
-      "author_email": "Grigori.Fursin@cTuning.org", 
-      "author_webpage": "http://cTuning.org/lab/people/gfursin", 
-      "copyright": "See CK Copyright.txt for copyright details", 
-      "engine": "CK", 
-      "iso_datetime": "2015-02-24T09:44:13.398000", 
-      "license": "See CK LICENSE.txt for licensing details", 
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://cTuning.org/lab/people/gfursin",
+      "copyright": "See CK Copyright.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-02-24T09:44:13.398000",
+      "license": "See CK LICENSE.txt for licensing details",
       "version": [
-        "1", 
-        "1", 
+        "1",
+        "1",
         "0205"
       ]
-    }, 
+    },
     {
-      "author": "Grigori Fursin", 
-      "author_email": "Grigori.Fursin@cTuning.org", 
-      "author_webpage": "http://cTuning.org/lab/people/gfursin", 
-      "copyright": "See CK Copyright.txt for copyright details", 
-      "engine": "CK", 
-      "iso_datetime": "2015-02-26T14:14:28.795000", 
-      "license": "See CK LICENSE.txt for licensing details", 
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://cTuning.org/lab/people/gfursin",
+      "copyright": "See CK Copyright.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-02-26T14:14:28.795000",
+      "license": "See CK LICENSE.txt for licensing details",
       "version": [
-        "1", 
-        "1", 
+        "1",
+        "1",
         "0205"
       ]
-    }, 
+    },
     {
-      "author": "Grigori Fursin", 
-      "author_email": "Grigori.Fursin@cTuning.org", 
-      "author_webpage": "http://cTuning.org/lab/people/gfursin", 
-      "copyright": "See CK Copyright.txt for copyright details", 
-      "engine": "CK", 
-      "iso_datetime": "2015-03-13T13:37:12.843000", 
-      "license": "See CK LICENSE.txt for licensing details", 
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://cTuning.org/lab/people/gfursin",
+      "copyright": "See CK Copyright.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-03-13T13:37:12.843000",
+      "license": "See CK LICENSE.txt for licensing details",
       "version": [
-        "1", 
-        "1", 
+        "1",
+        "1",
         "0205"
       ]
-    }, 
+    },
     {
-      "author": "Grigori Fursin", 
-      "author_email": "Grigori.Fursin@cTuning.org", 
-      "author_webpage": "http://cTuning.org/lab/people/gfursin", 
-      "copyright": "See CK Copyright.txt for copyright details", 
-      "engine": "CK", 
-      "iso_datetime": "2015-03-13T13:39:11.304000", 
-      "license": "See CK LICENSE.txt for licensing details", 
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://cTuning.org/lab/people/gfursin",
+      "copyright": "See CK Copyright.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-03-13T13:39:11.304000",
+      "license": "See CK LICENSE.txt for licensing details",
       "version": [
-        "1", 
-        "1", 
+        "1",
+        "1",
         "0205"
       ]
-    }, 
+    },
     {
-      "author": "Grigori Fursin", 
-      "author_email": "Grigori.Fursin@cTuning.org", 
-      "author_webpage": "http://cTuning.org/lab/people/gfursin", 
-      "copyright": "See CK Copyright.txt for copyright details", 
-      "engine": "CK", 
-      "iso_datetime": "2015-03-13T18:00:25.474000", 
-      "license": "See CK LICENSE.txt for licensing details", 
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://cTuning.org/lab/people/gfursin",
+      "copyright": "See CK Copyright.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-03-13T18:00:25.474000",
+      "license": "See CK LICENSE.txt for licensing details",
       "version": [
-        "1", 
-        "1", 
+        "1",
+        "1",
         "0205"
       ]
     }

@@ -1,15 +1,15 @@
 {
   "customize": {
-    "add_include_path": "yes", 
-    "skip_add_to_bin": "yes", 
-    "env_prefix": "CK_ENV_LIB_OPENME", 
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_OPENME",
+    "skip_add_to_bin": "yes",
     "skip_add_to_path": "yes"
-  }, 
-  "soft_name": "Library - OpenME", 
-  "customize_script": "customize", 
+  },
+  "customize_script": "customize",
+  "soft_name": "Library - OpenME",
   "tags": [
-    "lib", 
-    "plugins", 
+    "lib",
+    "plugins",
     "openme"
   ]
 }

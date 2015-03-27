@@ -1,11 +1,11 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_AUTOTUNING_CCC", 
+    "env_prefix": "CK_ENV_AUTOTUNING_CCC",
     "skip_add_to_ld_path": "yes"
-  }, 
-  "soft_name": "Autotuning - CCC - outdated", 
+  },
+  "soft_name": "Autotuning - CCC - outdated",
   "tags": [
-    "autotuning", 
+    "autotuning",
     "ccc"
   ]
 }

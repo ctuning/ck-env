@@ -1,11 +1,11 @@
 {
   "customize": {
-    "add_include_path": "yes", 
+    "add_include_path": "yes",
     "env_prefix": "CK_ENV_LIB_CLOOG"
-  }, 
-  "soft_name": "Library - CLOOG", 
+  },
+  "soft_name": "Library - CLOOG",
   "tags": [
-    "lib", 
+    "lib",
     "cloog"
   ]
 }

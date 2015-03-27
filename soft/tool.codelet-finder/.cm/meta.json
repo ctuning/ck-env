@@ -1,11 +1,11 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_TOOL_CODELET_FINDER", 
+    "env_prefix": "CK_ENV_TOOL_CODELET_FINDER",
     "skip_add_to_ld_path": "yes"
-  }, 
-  "soft_name": "Tool - Codelet Finder", 
+  },
+  "soft_name": "Tool - Codelet Finder",
   "tags": [
-    "tool", 
+    "tool",
     "codelet-finder"
   ]
 }

@@ -1,14 +1,14 @@
 {
+  "customize": {
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_OPENCL",
+    "skip_add_to_ld_path": "yes"
+  },
+  "customize_script": "customize",
+  "soft_name": "Library - OpenCL - NVIDIA CUDA",
   "tags": [
     "lib",
     "opencl",
     "cuda"
-  ],
-  "customize_script": "customize",
-  "soft_name": "Library - OpenCL - NVIDIA CUDA",
-  "customize": {
-    "skip_add_to_ld_path": "yes",
-    "add_include_path": "yes",
-    "env_prefix": "CK_ENV_LIB_OPENCL"
-  }
+  ]
 }

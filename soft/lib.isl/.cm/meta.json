@@ -1,18 +1,18 @@
 {
   "customize": {
-    "add_include_path": "yes", 
+    "add_include_path": "yes",
     "env_prefix": "CK_ENV_LIB_ISL"
-  }, 
+  },
   "deps": {
     "lib_gmp": {
-      "local": "yes", 
-      "sort": 10, 
+      "local": "yes",
+      "sort": 10,
       "tags": "lib,isl"
     }
-  }, 
-  "soft_name": "Library - ISL", 
+  },
+  "soft_name": "Library - ISL",
   "tags": [
-    "lib", 
+    "lib",
     "isl"
   ]
 }

@@ -3,15 +3,15 @@
     "detect": {
       "desc": "detect CPU"
     }
-  }, 
-  "copyright": "See CK Copyright.txt for copyright details", 
-  "desc": "platform - cpu", 
-  "developer": "Grigori Fursin", 
-  "developer_email": "Grigori.Fursin@cTuning.org", 
-  "developer_webpage": "http://cTuning.org/lab/people/gfursin", 
+  },
+  "copyright": "See CK Copyright.txt for copyright details",
+  "desc": "platform - cpu",
+  "developer": "Grigori Fursin",
+  "developer_email": "Grigori.Fursin@cTuning.org",
+  "developer_webpage": "http://cTuning.org/lab/people/gfursin",
   "license": "See CK LICENSE.txt for licensing details",
-  "module_deps":{
-    "platform":"707ccdfe444cafac",
-    "platform.os":"41e31cc4496b8a8e"
+  "module_deps": {
+    "platform": "707ccdfe444cafac",
+    "platform.os": "41e31cc4496b8a8e"
   }
 }
