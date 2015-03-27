@@ -164,6 +164,7 @@ def detect(i):
     for s in lst:
         sbefore=ver.get('string_before','')
         safter=ver.get('string_after','')
+        safter1=ver.get('string_after1','')
         safter_rel=ver.get('string_after_relaxed','')
 
         i1=0
@@ -177,6 +178,10 @@ def detect(i):
            if sbefore!='': i2=s.find(safter, i1+len(sbefore)+1)
            else: i2=s.find(safter)
 
+           if i2<0 and safter1!='':
+              if sbefore!='': i2=s.find(safter1, i1+len(sbefore)+1)
+              else: i2=s.find(safter1)
+
            if i2<0: continue
         elif safter_rel!='':
            if sbefore!='': i3=s.find(safter_rel, i1+len(sbefore)+1)
@@ -189,6 +194,8 @@ def detect(i):
         spl=ver.get('split','')
         if spl!='':
            lver=dver.split(spl)
+
+        break
 
     if dver=='':
        return {'return':16, 'error':'version was not detected'}

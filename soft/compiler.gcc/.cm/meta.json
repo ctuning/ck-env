@@ -61,7 +61,8 @@
   "version": {
     "cmd": "--version > $#filename#$ 2>&1",
     "split": ".",
-    "string_after": "",
-    "string_before": ")"
+    "string_after": " ",
+    "string_after1": "",
+    "string_before": ") "
   }
 }
