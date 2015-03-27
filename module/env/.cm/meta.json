@@ -2,27 +2,27 @@
   "actions": {
     "refresh": {
       "desc": "refresh environment (re-setup soft)"
-    },
+    }, 
     "resolve": {
       "desc": "resolve all dependencies"
-    },
+    }, 
     "set": {
       "desc": "set environment"
-    },
+    }, 
     "show": {
       "desc": "show all installed environment"
     }
-  },
-  "copyright": "See CK Copyright.txt for copyright details",
-  "desc": "environment",
-  "developer": "Grigori Fursin",
-  "developer_email": "Grigori.Fursin@cTuning.org",
-  "developer_webpage": "http://cTuning.org/lab/people/gfursin",
-  "license": "See CK LICENSE.txt for licensing details",
+  }, 
+  "copyright": "See CK Copyright.txt for copyright details", 
+  "desc": "environment", 
+  "developer": "Grigori Fursin", 
+  "developer_email": "Grigori.Fursin@cTuning.org", 
+  "developer_webpage": "http://cTuning.org/lab/people/gfursin", 
+  "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
-    "os": "0440cb72c2bc5cc6",
-    "package": "1dc07ee0f4742028",
-    "platform.os": "41e31cc4496b8a8e",
+    "os": "0440cb72c2bc5cc6", 
+    "package": "1dc07ee0f4742028", 
+    "platform.os": "41e31cc4496b8a8e", 
     "soft": "5e1100048ab875d7"
   }
 }

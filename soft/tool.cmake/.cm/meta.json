@@ -1,21 +1,21 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_TOOL_CMAKE",
+    "env_prefix": "CK_ENV_TOOL_CMAKE", 
     "skip_add_to_ld_path": "yes"
-  },
+  }, 
   "env": {
     "CK_CMAKE": "cmake"
-  },
-  "soft_name": "Tool - cmake",
+  }, 
+  "soft_name": "Tool - cmake", 
   "tags": [
-    "tool",
+    "tool", 
     "cmake"
-  ],
-  "tool": "cmake",
+  ], 
+  "tool": "cmake", 
   "version": {
-    "cmd": "--version > $#filename#$ 2>&1",
-    "split": ".",
-    "string_after": "",
+    "cmd": "--version > $#filename#$ 2>&1", 
+    "split": ".", 
+    "string_after": "", 
     "string_before": "version "
   }
 }

@@ -1,21 +1,21 @@
 {
   "customize": {
-    "extra_dir": "",
-    "retarget": "",
-    "tool_prefix": "",
-    "version": "2015",
+    "extra_dir": "", 
+    "retarget": "", 
+    "tool_prefix": "", 
+    "version": "2015", 
     "version_int": 2015
-  },
+  }, 
   "deps": {
     "compiler_mcl": {
-      "local": "yes",
+      "local": "yes", 
       "tags": "compiler,mcl,v18.00"
     }
-  },
-  "soft_uoa": "f0e7b534fc84d18a",
+  }, 
+  "soft_uoa": "f0e7b534fc84d18a", 
   "tags": [
-    "compiler",
-    "icc",
+    "compiler", 
+    "icc", 
     "v2015"
   ]
 }

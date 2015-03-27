@@ -1,17 +1,17 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_MATH_ORANGE",
-    "skip_add_dirs": "yes",
+    "env_prefix": "CK_ENV_MATH_ORANGE", 
+    "skip_add_dirs": "yes", 
     "skip_path": "yes"
-  },
-  "soft_name": "Math - Orange",
+  }, 
+  "soft_name": "Math - Orange", 
   "tags": [
-    "tool",
-    "math",
-    "machine learing",
-    "data mining",
-    "statistics",
-    "predictive analytics",
+    "tool", 
+    "math", 
+    "machine learing", 
+    "data mining", 
+    "statistics", 
+    "predictive analytics", 
     "orange"
   ]
 }

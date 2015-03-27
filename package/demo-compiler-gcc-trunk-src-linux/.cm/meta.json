@@ -1,46 +1,46 @@
 {
   "customize": {
-    "add_m32": "no",
-    "bugfix1": "yes",
-    "extra_dir": "",
-    "retarget": "no",
-    "tool_prefix_configured": "yes",
-    "version": "trunk",
+    "add_m32": "no", 
+    "bugfix1": "yes", 
+    "extra_dir": "", 
+    "retarget": "no", 
+    "tool_prefix_configured": "yes", 
+    "version": "trunk", 
     "version_int": 999999
-  },
+  }, 
   "deps": {
     "lib_cloog": {
-      "local": "yes",
-      "sort": 50,
+      "local": "yes", 
+      "sort": 50, 
       "tags": "lib,cloog"
-    },
+    }, 
     "lib_gmp": {
-      "local": "yes",
-      "sort": 10,
+      "local": "yes", 
+      "sort": 10, 
       "tags": "lib,gmp"
-    },
+    }, 
     "lib_isl": {
-      "local": "yes",
-      "sort": 60,
+      "local": "yes", 
+      "sort": 60, 
       "tags": "lib,isl"
-    },
+    }, 
     "lib_mpc": {
-      "local": "yes",
-      "sort": 30,
+      "local": "yes", 
+      "sort": 30, 
       "tags": "lib,mpc"
-    },
+    }, 
     "lib_mpfr": {
-      "local": "yes",
-      "sort": 20,
+      "local": "yes", 
+      "sort": 20, 
       "tags": "lib,mpfr"
     }
-  },
-  "process_script": "process",
-  "soft_uoa": "3a8a82fa40bf992d",
-  "suggested_path": "gcc",
+  }, 
+  "process_script": "process", 
+  "soft_uoa": "3a8a82fa40bf992d", 
+  "suggested_path": "gcc", 
   "tags": [
-    "compiler",
-    "gcc",
+    "compiler", 
+    "gcc", 
     "vtrunk"
   ]
 }

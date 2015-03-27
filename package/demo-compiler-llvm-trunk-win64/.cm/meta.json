@@ -1,28 +1,28 @@
 {
   "customize": {
-    "add_to_ck_compiler_flags_obligatory": "",
-    "extra_dir": "obj\\Debug",
-    "retarget": "no",
-    "tool_prefix": "",
-    "version": "trunk",
+    "add_to_ck_compiler_flags_obligatory": "", 
+    "extra_dir": "obj\\Debug", 
+    "retarget": "no", 
+    "tool_prefix": "", 
+    "version": "trunk", 
     "version_int": 999999
-  },
-  "default_target_os_uoa": "windows-64",
+  }, 
+  "default_target_os_uoa": "windows-64", 
   "deps": {
     "compiler_mcl": {
-      "local": "yes",
+      "local": "yes", 
       "tags": "compiler,mcl,v18.00"
-    },
+    }, 
     "tool_cmake": {
-      "local": "yes",
+      "local": "yes", 
       "tags": "tool,cmake"
     }
-  },
-  "soft_uoa": "41d42741f4f4474a",
-  "suggested_path": "llvm",
+  }, 
+  "soft_uoa": "41d42741f4f4474a", 
+  "suggested_path": "llvm", 
   "tags": [
-    "compiler",
-    "llvm",
+    "compiler", 
+    "llvm", 
     "vtrunk"
   ]
 }
