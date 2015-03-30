@@ -143,7 +143,7 @@ def detect(i):
     win=tosd.get('windows_base','')
 
     dv=''
-    if tdid!='': dv='-s '+tdid
+    if tdid!='': dv=tdid
 
     # Init
     prop={}
@@ -185,7 +185,7 @@ def detect(i):
        x=x.replace('$#output_file#$', fn)
 
        dv=''
-       if tdid!='': dv='-s '+tdid
+       if tdid!='': dv=tdid
        x=x.replace('$#device#$',dv)
 
        if o=='con' and pdv=='yes':
@@ -446,7 +446,7 @@ def init_device(i):
           ck.out('')
 
        dv=''
-       if tdid!='': dv='-s '+tdid
+       if tdid!='': dv=tdid
        ri=ri.replace('$#device#$',dv)
 
        rx=os.system(ri)

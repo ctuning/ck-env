@@ -169,8 +169,11 @@ def detect(i):
               ck.out('  '+q)
           ck.out('')
 
-       if tdid=='' and len(devices)==1:
-          tdid=devices[0]
+       if tdid=='':
+          if len(devices)==1:
+             tdid=devices[0]
+          else:
+             return {'return':1, 'error':'more than one remote device - specify via device_id'}
 
     # Collect additional info unless skipped
     if sic!='yes':
@@ -197,7 +200,7 @@ def detect(i):
           x=x.replace('$#output_file#$', fn)
 
           dv=''
-          if tdid!='': dv='-s '+tdid
+          if tdid!='': dv=tdid
           x=x.replace('$#device#$',dv)
 
           if o=='con' and pdv=='yes':
