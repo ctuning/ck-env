@@ -9,7 +9,7 @@
     "lib_openme": {
       "local": "yes", 
       "sort": 10, 
-      "tags": "lib,plugins,openme"
+      "tags": "lib,plugins,openme,lang-c"
     }
   }, 
   "soft_name": "Plugin - OpenME - cTuning", 

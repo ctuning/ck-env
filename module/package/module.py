@@ -400,6 +400,11 @@ def install(i):
        if sdeps!='':
           sb+=sdeps
 
+       # Add compiler dep again, if there
+       x=udeps.get('compiler',{}).get('bat','')
+       if x!='' and not sb.endswith(x):
+          sb+='\n'+x+'\n'
+
        # If install path has space, add quotes for some OS ...
        xs=''
        if pi.find(' ')>=0 and eifs!='': xs=eifs
