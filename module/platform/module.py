@@ -143,7 +143,7 @@ def detect(i):
     win=tosd.get('windows_base','')
 
     dv=''
-    if tdid!='': dv=tdid
+    if tdid!='': dv=' -s '+tdid
 
     # Init
     prop={}
@@ -185,7 +185,7 @@ def detect(i):
        x=x.replace('$#output_file#$', fn)
 
        dv=''
-       if tdid!='': dv=tdid
+       if tdid!='': dv=' -s '+tdid
        x=x.replace('$#device#$',dv)
 
        if o=='con' and pdv=='yes':
@@ -440,14 +440,14 @@ def init_device(i):
 
     ri=osd.get('remote_init','')
     if ri!='':
+       dv=''
+       if tdid!='': dv=' -s '+tdid
+       ri=ri.replace('$#device#$',dv)
+
        if o=='con':
           ck.out('Initializing remote device:')
-          ck.out('  '+ri)
           ck.out('')
-
-       dv=''
-       if tdid!='': dv=tdid
-       ri=ri.replace('$#device#$',dv)
+          ck.out('  '+ri)
 
        rx=os.system(ri)
        if rx!=0:

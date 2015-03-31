@@ -113,7 +113,7 @@ def detect(i):
     win=tosd.get('windows_base','')
 
     dv=''
-    if tdid!='': dv=tdid
+    if tdid!='': dv=' -s '+tdid
 
     # Init
     target={}

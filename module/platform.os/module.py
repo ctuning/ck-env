@@ -173,7 +173,24 @@ def detect(i):
           if len(devices)==1:
              tdid=devices[0]
           else:
-             return {'return':1, 'error':'more than one remote device - specify via device_id'}
+             if o=='con':
+                ck.out('')
+                zz={}
+                iz=0
+                for j in range(0, len(devices)):
+                    zs=str(j)
+                    ck.out(zs+') '+devices[j])
+
+                ck.out('')
+                rx=ck.inp({'text':'Choose first number to select device: '})
+                x=int(rx['string'].strip())
+
+                if x<0 or x>=len(devices):
+                   return {'return':1, 'error':'devic number is not recognized'}
+
+                tdid=devices[x]
+             else:
+                return {'return':1, 'error':'more than one remote device - specify via device_id'}
 
     # Collect additional info unless skipped
     if sic!='yes':
@@ -200,7 +217,7 @@ def detect(i):
           x=x.replace('$#output_file#$', fn)
 
           dv=''
-          if tdid!='': dv=tdid
+          if tdid!='': dv=' -s '+tdid
           x=x.replace('$#device#$',dv)
 
           if o=='con' and pdv=='yes':
