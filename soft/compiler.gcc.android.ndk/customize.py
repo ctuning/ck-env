@@ -146,9 +146,9 @@ def setup(i):
        x=sysroot+' '+x
     env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
-    x=env.get('CK_LD_FLAGS_EXTRA','')
-    if sysroot not in x:
-       x=sysroot+' '+x
-    env['CK_LD_FLAGS_EXTRA']=x
+#    x=env.get('CK_LD_FLAGS_EXTRA','')
+#    if sysroot not in x:
+#       x=sysroot+' '+x
+#    env['CK_LD_FLAGS_EXTRA']=x
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags, 'cus':cus}
