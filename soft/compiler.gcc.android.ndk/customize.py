@@ -137,9 +137,12 @@ def setup(i):
 
     ##############
     if winh=='yes':
-       sysroot='--sysroot "'+platform_path+'\\'+platform+'\\arch-'+arch+'"'
+       psysroot=platform_path+'\\'+platform+'\\arch-'+arch
     else:
-       sysroot='--sysroot "'+platform_path+'/'+platform+'/arch-'+arch+'"'
+       psysroot=platform_path+'/'+platform+'/arch-'+arch
+    sysroot='--sysroot "'+psysroot+'"'
+
+    env['CK_SYS_ROOT']=psysroot
 
     x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
     if sysroot not in x:

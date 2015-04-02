@@ -85,8 +85,24 @@ def setup(i):
           cus['linking_for_retargeting']=lfr
           env['CK_LD_FLAGS_EXTRA']=lfr
 
+       # Ask a few more questions
+       target_configured=cus.get('target_configured','')
+       target=cus.get('target','')
+       if target_configured!='yes' and iv=='yes':
+          if target!='':
+             ck.out('Current target: '+target)
+          else:
+             target=raw_input('Enter compiler target from GCC (arm-linux-androideabi, arm-none-linux-gnueabi, etc): ')
+             cus['target_configured']='yes'
+
+       if target=='':
+          return {'return':1, 'error':'target is not defined'}
+
+       env['CK_LLVM_TARGET']=target
+       cus['target']=target
+
        x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
-       y='-target arm-none-linux-gnueabi -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_ENV_COMPILER_GCC%\\arm-none-linux-gnueabi\\libc'
+       y='-target '+target+' -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_SYS_ROOT%'
        x=x.replace('$#flags_for_arm_target#$',y)
 
        env['CK_COMPILER_FLAGS_OBLIGATORY']=x

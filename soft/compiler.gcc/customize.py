@@ -96,9 +96,9 @@ def setup(i):
           if 'retargeted' not in tags: tags.append('retargeted')
 
           if lfr=='' and iv=='yes':
-             y='-Wl,-dynamic-linker,/data/local/tmp/ld-linux.so.3 -Wl,--rpath -Wl,/data/local/tmp -lm -ldl'
-             lfr=raw_input('LD extra flags for retargeting (or Enter for "'+y+'"): ')
-             if lfr=='': lfr=y
+#             y='-Wl,-dynamic-linker,/data/local/tmp/ld-linux.so.3 -Wl,--rpath -Wl,/data/local/tmp'
+             lfr=raw_input('LD extra flags for retargeting: ')
+#             if lfr=='': lfr=y
 
        else:
           cus['retarget']='no'
@@ -107,6 +107,16 @@ def setup(i):
        cus['linking_for_retargeting']=lfr
        env['CK_LD_FLAGS_EXTRA']=lfr
 
+       if winh=='yes':
+          env['CK_SYS_ROOT']=pi+'\\arm-none-linux-gnueabi\\libc'
+       else:
+          env['CK_SYS_ROOT']=pi+'/arm-none-linux-gnueabi/libc'
+
+       x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+       y='--sysroot="'+env['CK_SYS_ROOT']+'"'
+       if y not in x: 
+          x+=y+' '
+          env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
     add_m32=cus.get('add_m32','')
     if add_m32=='' and iv=='yes' and tbits=='32':
