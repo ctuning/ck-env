@@ -56,6 +56,7 @@ def setup(i):
     host_d=i.get('host_os_dict',{})
     target_d=i.get('target_os_dict',{})
     win=target_d.get('windows_base','')
+    winh=host_d.get('windows_base','')
     remote=target_d.get('remote','')
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
@@ -66,25 +67,40 @@ def setup(i):
     ################################################################
     cus['include_name']='CL/opencl.h'
 
-    cus['static_lib']='libOpenCL.so'
-    cus['dynamic_lib']='libOpenCL.so'
+    pl=os.path.join(pi,'lib')
+
+    if remote=='yes': # Libraries are on remote device, use stubs
+      cus['static_lib']='libOpenCL.so'
+      cus['dynamic_lib']='libOpenCL.so'
+    else:
+      cus['static_lib']='libmali.so'
+      cus['dynamic_lib']='libmali.so'
+
+      if not os.path.isfile(os.path.join(pl,cus['dynamic_lib'])):
+         return {'return':1, 'error':'libmali.so is not in lib directory - please copy driver libs there'}
 
     env['CK_ENV_LIB_OPENCL_INCLUDE_NAME']=cus.get('include_name','')
     env['CK_ENV_LIB_OPENCL_STATIC_NAME']=cus.get('static_lib','')
     env['CK_ENV_LIB_OPENCL_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
-    print ("")
-    print ("Trying to compile OpenCL stubs lib ...")
+    if remote=='yes':
+       print ("")
+       print ("Trying to compile OpenCL stubs lib ...")
 
-    make=deps['compiler'].get('dict',{}).get('env',{}).get('CK_MAKE','')
-    if make=='': make='make'
+       make=deps['compiler'].get('dict',{}).get('env',{}).get('CK_MAKE','')
+       if make=='': make='make'
 
-    cmd=deps['compiler']['bat'].strip()+' '+host_d['env_separator']+' '+make
+       if winh=='yes':
+          x='CC="%CK_CXX%"'
+       else:
+          x='CC="$CK_CXX"'
 
-    print ("")
-    print (cmd)
+       cmd=deps['compiler']['bat'].strip()+' '+host_d['env_separator']+' '+make+' '+x
 
-    os.chdir(os.path.join(pi,'lib'))
-    rx=os.system(cmd)
+       print ("")
+       print (cmd)
+
+       os.chdir(pl)
+       rx=os.system(cmd)
 
     return {'return':0, 'bat':s}
