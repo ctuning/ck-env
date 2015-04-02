@@ -96,7 +96,7 @@ def setup(i):
              cus['target_configured']='yes'
 
        if target=='':
-          return {'return':1, 'error':'target is not defined'}
+          target='arm-none-linux-gnueabi'
 
        env['CK_LLVM_TARGET']=target
        cus['target']=target

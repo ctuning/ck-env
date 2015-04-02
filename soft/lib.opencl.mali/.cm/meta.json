@@ -1,0 +1,20 @@
+{
+  "deps": {
+    "compiler": {
+      "local": "yes", 
+      "tags": "compiler,lang-c"
+    }
+  }, 
+  "customize": {
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_OPENCL"
+  },
+  "customize_script": "customize",
+  "soft_name": "Library - OpenCL - MALI",
+  "tags": [
+    "lib",
+    "opencl",
+    "arm",
+    "mali"
+  ]
+}
