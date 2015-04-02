@@ -126,6 +126,7 @@ def setup(i):
        env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
        if mingw=='yes': env['CK_MAKE']='mingw32-make'
+       elif remote=='yes': env['CK_MAKE']='cs-make'
 
        x=env.get('CK_CXX','')
        if x!='' and x.find('-fpermissive')<0:
