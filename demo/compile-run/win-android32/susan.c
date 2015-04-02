@@ -2021,7 +2021,7 @@ CORNER_LIST corner_list;
           if (++argindex >= argc){
 	    printf ("No argument following -d\n");
 	    exit(0);}
-	  dt=atof(argv[argindex]);
+	  dt=strtod(argv[argindex],NULL);
           if (dt<0) three_by_three=1;
 	  break;
 	case 't': /* brightness threshold */

@@ -470,6 +470,9 @@ def resolve(i):
 
               (add_customize)    - if 'yes', add to deps customize field from the environment 
                                    (useful for program compilation)
+
+              (skip_dict)        - if 'yes', do not add to deps dict field from the environment 
+                                   (useful for program compilation)
             }
 
     Output: {
@@ -525,6 +528,7 @@ def resolve(i):
     enruoa=i.get('repo_uoa','')
 
     ac=i.get('add_customize','')
+    sd=i.get('skip_dict','')
 
     res=[]
     for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
@@ -554,8 +558,8 @@ def resolve(i):
 
         cus=dd.get('customize',{})
 
-        if ac=='yes':
-           q['cus']=cus
+        if ac=='yes': q['cus']=cus
+        if sd!='yes': q['dict']=dd
 
         ver=cus.get('version','')
         if ver!='': q['ver']=ver

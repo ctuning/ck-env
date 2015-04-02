@@ -280,7 +280,11 @@ def setup(i):
     ########################################################################
     # Check host/target OS/CPU
     hos=i.get('host_os','')
+
     tos=i.get('target_os','')
+    if tos=='':
+       tos=cfg.get('default_target_os_uoa','')
+
     tdid=i.get('target_device_id','')
 
     r=ck.access({'action':'detect',
@@ -669,6 +673,7 @@ def setup(i):
               "target_os_dict":tosd,
               "target_device_id":tdid,
               "soft_uoa":duoa,
+              "soft_name":dname,
               "tags":ltags,
               "cfg":d,
               "env":env,
@@ -684,6 +689,9 @@ def setup(i):
 
           sadd=rx['bat']
           pi=cus.get('path_install','')
+
+          if cus.get('soft_name','')!='':
+             dname=cus['soft_name']
 
        #########################################################
        # Finish batch

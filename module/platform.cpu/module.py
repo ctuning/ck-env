@@ -168,6 +168,7 @@ def detect(i):
                     k=q[0:x1-1].strip()
                     v=q[x1+1:].strip()
 
+                    print k
                     if k=='processor':
                        if not first_skipped:
                           first_skipped=True

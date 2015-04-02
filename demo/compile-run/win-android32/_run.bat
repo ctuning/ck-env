@@ -1,3 +1,5 @@
+del data.out.pgm
+
 adb push a.out /data/local/tmp/a.out
 adb push data.pgm /data/local/tmp/data.pgm
 
