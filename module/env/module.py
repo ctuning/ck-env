@@ -37,24 +37,27 @@ def init(i):
 def set(i):
     """
     Input:  {
-              (host_os)          - host OS (detect, if ommitted)
-              (target_os)        - target OS (detect, if ommitted)
-              (target_device_id) - target device ID (detect, if omitted)
+              (host_os)              - host OS (detect, if ommitted)
+              (target_os)            - target OS (detect, if ommitted)
+              (target_device_id)     - target device ID (detect, if omitted)
 
-              (repo_uoa)         - repo where to limit search
+              (repo_uoa)             - repo where to limit search
 
-              (uoa)              - environment UOA entry
+              (uoa)                  - environment UOA entry
                or
-              (tags)             - search UOA by tags (separated by comma)
+              (tags)                 - search UOA by tags (separated by comma)
 
-              (local)            - if 'yes', add host_os, target_os, target_device_id to search
+              (local)                - if 'yes', add host_os, target_os, target_device_id to search
 
-              (bat_file)         - if !='', use this filename to generate/append bat file ...
-              (bat_new)          - if 'yes', start new bat file
+              (deps)                 - already resolved deps
+              (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
 
-              (env)              - existing environment
+              (bat_file)             - if !='', use this filename to generate/append bat file ...
+              (bat_new)              - if 'yes', start new bat file
 
-              (print)            - if 'yes', print found environment
+              (env)                  - existing environment
+
+              (print)                - if 'yes', print found environment
             }
 
     Output: {
@@ -75,6 +78,9 @@ def set(i):
 
     # Clean output file
     import os
+
+    sar=i.get('skip_auto_resolution','')
+    cdeps=i.get('deps',{})
 
     bf=i.get('bat_file','')
     if bf!='' and os.path.isfile(bf): os.remove(bf)
@@ -137,6 +143,38 @@ def set(i):
     if lx>0:
        ilx=0
 
+       if lx>1 and sar!='yes':
+          # Try auto-resolve or prune choices
+          nls=[]
+          for z in range(0, lx):
+              j=l[z]
+              zm=j.get('meta',{})
+              cus=zm.get('customize','')
+              zdeps=zm.get('deps',{})
+
+
+              skip=False
+              for q in zdeps:
+                  jj=zdeps[q]
+                  juoa=jj.get('uoa','')
+
+                  for a in cdeps:
+                      if a==q:
+                         aa=cdeps[a]
+                         auoa=aa.get('uoa','')
+
+                         if auoa!=juoa:
+                            skip=True
+                            break
+
+                  if skip: break
+              if not skip: nls.append(j)    
+
+          l=nls
+          lx=len(l)
+
+
+       # Choose sub-deps
        if lx>1:
           ls=sorted(l, key=lambda k: k.get('meta',{}).get('misc',{}).get('version_int',0), reverse=True)
           l=ls
@@ -458,21 +496,23 @@ def show(i):
 def resolve(i):
     """
     Input:  {
-              (host_os)          - host OS (detect, if ommitted)
-              (target_os)        - target OS (detect, if ommitted)
-              (target_device_id) - target device ID (detect, if omitted)
+              (host_os)              - host OS (detect, if ommitted)
+              (target_os)            - target OS (detect, if ommitted)
+              (target_device_id)     - target device ID (detect, if omitted)
 
-              (repo_uoa)         - repo where to limit search
+              (repo_uoa)             - repo where to limit search
 
-              deps               - dependencies dict
+              deps                   - dependencies dict
 
-              (env)              - env
+              (env)                  - env
 
-              (add_customize)    - if 'yes', add to deps customize field from the environment 
-                                   (useful for program compilation)
+              (add_customize)        - if 'yes', add to deps customize field from the environment 
+                                       (useful for program compilation)
 
-              (skip_dict)        - if 'yes', do not add to deps dict field from the environment 
-                                   (useful for program compilation)
+              (skip_dict)            - if 'yes', do not add to deps dict field from the environment 
+                                       (useful for program compilation)
+
+              (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
             }
 
     Output: {
@@ -494,6 +534,8 @@ def resolve(i):
        ck.out('Resolving dependencies ...')
 
     sb=''
+
+    sar=i.get('skip_auto_resolution','')
 
     deps=i.get('deps',{})
 
@@ -546,6 +588,8 @@ def resolve(i):
             'repo_uoa':enruoa,
             'env':env,
             'uoa':uoa,
+            'deps':deps,
+            'skip_auto_resolution':sar,
             'local':local
            }
         if o=='con': ii['out']='con'

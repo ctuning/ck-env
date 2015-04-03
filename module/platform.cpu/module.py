@@ -168,7 +168,6 @@ def detect(i):
                     k=q[0:x1-1].strip()
                     v=q[x1+1:].strip()
 
-                    print k
                     if k=='processor':
                        if not first_skipped:
                           first_skipped=True
@@ -190,6 +189,7 @@ def detect(i):
        target_sub_cpu=info_cpu[spp].get('Processor','')
        if target_sub_cpu=='':
           target_sub_cpu=info_cpu[spp].get('model name','')
+       target_cpu_features=info_cpu[spp].get('Features','')
 
        # Collect all frequencies
        for px in range(0, pp+1):
@@ -266,8 +266,64 @@ def detect(i):
                  except ValueError:
                    pass
 
+       # Initialized device if needed
+       if sdi!='yes':
+          remote_init=tosd.get('remote_init','')
+          if remote_init!='':
+             r=ck.access({'action':'init_device',
+                          'module_uoa':cfg['module_deps']['platform'],
+                          'os_dict':tosd,
+                          'device_id':tdid})
+             if r['return']>0: return r
+
+       # Get all params
+       params={}
+
+       rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+       if rx['return']>0: return rx
+       fn=rx['file_name']
+
+       x=tosd.get('adb_all_params','')
+       x=x.replace('$#redirect_stdout#$', ro)
+       x=x.replace('$#output_file#$', fn)
+
+       dv=''
+       if tdid!='': dv=' -s '+tdid
+       x=x.replace('$#device#$',dv)
+
+       if o=='con' and pdv=='yes':
+          ck.out('')
+          ck.out('Receiving all parameters:')
+          ck.out('  '+x)
+
+       rx=os.system(x)
+       if rx!=0:
+          if o=='con':
+             ck.out('')
+             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+          return {'return':1, 'error':'access to remote device failed'}
+
+       # Read and parse file
+       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
+       if rx['return']>0: return rx
+       ll=rx['lst']
+
+       for s in ll:
+           s1=s.strip()
+
+           q2=s1.find(']: [')
+           k=''
+           if q2>=0:
+              k=s1[1:q2].strip()
+              v=s1[q2+4:].strip()
+              v=v[:-1].strip()
+
+              params[k]=v
+
        target['name']=target_cpu
        target['sub_name']=target_sub_cpu
+       target['cpu_features']=target_cpu_features
+       target['cpu_abi']=params.get('ro.product.cpu.abi','')
        target['num_proc']=target_num_proc
        target['current_freq']=target_freq
        target['max_freq']=target_freq_max
@@ -300,6 +356,8 @@ def detect(i):
        ck.out('CPU name:                     '+target.get('name',''))
        if target.get('name','')!=target.get('sub_name',''):
           ck.out('CPU sub name:                 '+target.get('sub_name',''))
+       ck.out('CPU ABI:                      '+target.get('cpu_abi',''))
+       ck.out('CPU features:                 '+target.get('cpu_features',''))
        ck.out('')
        ck.out('CPU frequency:')
        x=target.get('current_freq',{})
