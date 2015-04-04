@@ -40,11 +40,13 @@ def detect(i):
               (target_os)         - target OS (detect, if omitted)
               (target_device_id)  - target device ID (detect, if omitted)
 
-              (data_uoa) or (uoa) - environment UOA entry
+              (data_uoa) or (uoa) - software UOA entry
                or
               (tags)              - search UOA by tags (separated by comma)
 
               (tool)              - force this tool name
+
+              (env)               - if !='', use this env string before calling compiler (to set up env)
 
               (show)              - if 'yes', show output
             }
@@ -85,7 +87,9 @@ def detect(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
-    # Check environment UOA
+    env=i.get('env','')
+
+    # Check soft UOA
     duoa=i.get('uoa','')
     if duoa=='': duoa=i.get('data_uoa','')
     if duoa=='':
@@ -139,6 +143,9 @@ def detect(i):
        fn=rx['file_name']
 
        cmd=cmd.replace('$#filename#$', fn)
+
+       if env!='': cmd=env.strip()+' '+hosd.get('env_separator','')+' '+cmd
+
        ry=os.system(cmd)
 #       if ry>0:
 #          return {'return':16, 'error':'executing command returned non-zero value ('+cmd+')'}
