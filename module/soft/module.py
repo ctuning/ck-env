@@ -58,6 +58,7 @@ def detect(i):
 
               version_str  - version as string
               version_lst  - version as list of strings
+              version_raw  - raw list of strings (output of --version)
             }
 
     """
@@ -218,7 +219,9 @@ def detect(i):
        if o=='con':
           ck.out('Version detected: '+dver)
 
-    return {'return':0, 'version_str':dver, 'version_lst':lver}
+    return {'return':0, 'version_str':dver, 
+                        'version_lst':lver, 
+                        'version_raw':lst}
 
 ##############################################################################
 # setup environment
