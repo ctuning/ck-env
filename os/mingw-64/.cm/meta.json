@@ -37,6 +37,7 @@
   "md5sum": "md5sum", 
   "mingw": "yes", 
   "name": "windows-linux", 
+  "processor": "x64", 
   "quit_if_error": "if %errorlevel% neq 0 exit /b %errorlevel%", 
   "redirect_stderr": "2>", 
   "redirect_stderr_aggr": "2>>", 

@@ -42,6 +42,7 @@
   "generic": "yes", 
   "lib_dir": "lib", 
   "no_script_execution": "yes", 
+  "processor": "arm64", 
   "quit_if_error": "er=$?; if [ $er != 0 ]; then exit $er; fi", 
   "redirect_stderr": "2>", 
   "redirect_stderr_aggr": "2>>", 

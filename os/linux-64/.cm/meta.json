@@ -44,6 +44,7 @@
   "md5sum": "md5sum", 
   "name": "unix", 
   "priority": "yes", 
+  "processor": "x64", 
   "quit_if_error": "er=$?; if [ $er != 0 ]; then exit $er; fi", 
   "redirect_stderr": "2>", 
   "redirect_stderr_aggr": "2>>", 
