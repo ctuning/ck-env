@@ -48,6 +48,8 @@ def detect(i):
               (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+
+              (return_multi_devices) - if 'yes' and multiple devices detected, return error=32 and devices
             }
 
     Output: {
@@ -173,7 +175,7 @@ def detect(i):
           if len(devices)==1:
              tdid=devices[0]
           else:
-             if o=='con':
+             if o=='con' and i.get('return_multi_devices','')!='yes':
                 ck.out('')
                 zz={}
                 iz=0
@@ -190,7 +192,7 @@ def detect(i):
 
                 tdid=devices[x]
              else:
-                return {'return':1, 'error':'more than one remote device - specify via device_id'}
+                return {'return':32, 'error':'more than one remote device - specify via device_id', 'devices':devices}
 
     # Collect additional info unless skipped
     if sic!='yes':
