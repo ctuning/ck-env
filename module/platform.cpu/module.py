@@ -133,7 +133,7 @@ def detect(i):
           if rx['return']>0: return rx
           fcpuinfo=rx['file_name']
 
-          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+ro+fcpuinfo
+          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+fcpuinfo
 
           if o=='con' and pdv=='yes':
              ck.out('')
@@ -199,7 +199,7 @@ def detect(i):
               if rx['return']>0: return rx
               ffreq=rx['file_name']
 
-              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+ro+ffreq
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
 
               if o=='con' and pdv=='yes':
                  ck.out('')
@@ -236,7 +236,7 @@ def detect(i):
               if rx['return']>0: return rx
               ffreq=rx['file_name']
 
-              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+ro+ffreq
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
 
               if o=='con' and pdv=='yes':
                  ck.out('')

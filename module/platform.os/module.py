@@ -164,6 +164,9 @@ def detect(i):
                  s2=s1[0:q2]
                  devices.append(s2)
 
+       if len(devices)==0:
+          return {'return':1, 'error':'no attached remoted devices found'}
+
        if o=='con':
           ck.out('')
           ck.out('Available remote devices:')
@@ -258,7 +261,7 @@ def detect(i):
           # Get proc version
           # Reuse fn as tmp name
 
-          x=tosd['remote_shell']+' cat /proc/version '+ro+' '+fn
+          x=tosd['remote_shell']+' cat /proc/version '+tosd.get('remote_shell_end','')+' '+ro+' '+fn
           x=x.replace('$#device#$',dv)
 
           if o=='con' and pdv=='yes':
@@ -316,6 +319,8 @@ def detect(i):
                       prop_os_name=ver.get('DISTRIB_DESCRIPTION','')
 
 
+    prop['ck_os_uoa']=tosx
+    prop['ck_base_os_uoa']=tosd.get('base_uoa','')
     prop['name']=prop_os_name
     prop['name_long']=prop_os_name_long
     prop['name_short']=prop_os_name_short
