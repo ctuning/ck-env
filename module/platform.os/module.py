@@ -320,7 +320,7 @@ def detect(i):
 
 
     prop['ck_os_uoa']=tosx
-    prop['ck_base_os_uoa']=tosd.get('base_uoa','')
+    prop['ck_os_base_uoa']=tosd.get('base_uoa','')
     prop['name']=prop_os_name
     prop['name_long']=prop_os_name_long
     prop['name_short']=prop_os_name_short
