@@ -1,28 +1,28 @@
 {
   "customize": {
-    "build_dir_name": "php", 
-    "env_prefix": "CK_ENV_COMPILER_PHP", 
+    "build_dir_name": "php",
+    "env_prefix": "CK_ENV_COMPILER_PHP",
     "languages": [
       "PHP"
-    ], 
-    "skip_add_bin_ext": "yes", 
+    ],
+    "skip_add_bin_ext": "yes",
     "skip_add_to_ld_path": "yes"
-  }, 
+  },
   "env": {
-    "CK_PC": "php", 
+    "CK_PC": "php",
     "CK_PHP_RT": "php"
-  }, 
-  "soft_name": "Compiler - PHP", 
+  },
+  "soft_name": "Compiler - PHP",
   "tags": [
-    "compiler", 
-    "php", 
+    "compiler",
+    "php",
     "lang-php"
-  ], 
-  "tool": "php", 
+  ],
+  "tool": "php",
   "version": {
-    "cmd": "--version > $#filename#$ 2>&1", 
-    "split": ".", 
-    "string_after": " ", 
+    "cmd": "--version > $#filename#$ 2>&1",
+    "split": ".",
+    "string_after": " ",
     "string_before": "PHP "
   }
 }

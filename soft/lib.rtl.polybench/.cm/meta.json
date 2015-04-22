@@ -1,15 +1,15 @@
 {
   "customize": {
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_RTL_POLYBENCH", 
-    "skip_add_to_bin": "yes", 
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_RTL_POLYBENCH",
+    "skip_add_to_bin": "yes",
     "skip_add_to_path": "yes"
-  }, 
-  "customize_script": "customize", 
-  "soft_name": "Library - RTL - Polybench", 
+  },
+  "customize_script": "customize",
+  "soft_name": "Library - RTL - Polybench",
   "tags": [
-    "lib", 
-    "rtl", 
+    "lib",
+    "rtl",
     "polybench"
   ]
 }

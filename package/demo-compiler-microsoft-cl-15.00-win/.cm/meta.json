@@ -1,16 +1,16 @@
 {
   "customize": {
-    "extra_dir": "", 
-    "retarget": "", 
-    "tool_prefix": "", 
-    "version": "15.00", 
+    "extra_dir": "",
+    "retarget": "",
+    "tool_prefix": "",
+    "version": "15.00",
     "version_int": 1500
-  }, 
-  "soft_uoa": "a4c8d6c8e946c49f", 
+  },
+  "soft_uoa": "a4c8d6c8e946c49f",
   "tags": [
-    "compiler", 
-    "mcl", 
-    "v15.00", 
+    "compiler",
+    "mcl",
+    "v15.00",
     "v15"
   ]
 }

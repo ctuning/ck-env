@@ -1,30 +1,30 @@
 {
   "customize": {
-    "build_dir_name": "python", 
-    "env_prefix": "CK_ENV_COMPILER_PYTHON", 
+    "build_dir_name": "python",
+    "env_prefix": "CK_ENV_COMPILER_PYTHON",
     "languages": [
       "PYTHON"
-    ], 
-    "skip_add_to_bin": "yes", 
+    ],
+    "skip_add_to_bin": "yes",
     "skip_add_to_ld_path": "yes"
-  }, 
-  "customize_script": "customize", 
+  },
+  "customize_script": "customize",
   "env": {
-    "CK_PYC": "python", 
-    "CK_PY_OBJ_EXT": ".pyc", 
+    "CK_PYC": "python",
+    "CK_PY_OBJ_EXT": ".pyc",
     "CK_PY_RT": "python"
-  }, 
-  "soft_name": "Compiler - Python", 
+  },
+  "soft_name": "Compiler - Python",
   "tags": [
-    "compiler", 
-    "python", 
+    "compiler",
+    "python",
     "lang-python"
-  ], 
-  "tool": "python", 
+  ],
+  "tool": "python",
   "version": {
-    "cmd": "--version > $#filename#$ 2>&1", 
-    "split": ".", 
-    "string_after_relaxed": " ", 
+    "cmd": "--version > $#filename#$ 2>&1",
+    "split": ".",
+    "string_after_relaxed": " ",
     "string_before": "Python "
   }
 }

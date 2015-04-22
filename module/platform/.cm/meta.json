@@ -2,27 +2,27 @@
   "actions": {
     "detect": {
       "desc": "collect info about platforms"
-    }, 
+    },
     "exchange": {
       "desc": "exchange properties"
-    }, 
+    },
     "get_from_wmic": {
       "desc": "Get info from WMIC on Windows"
-    }, 
+    },
     "init_device": {
       "desc": "Init remote device"
     }
-  }, 
-  "copyright": "See CK Copyright.txt for copyright details", 
-  "desc": "platform detection", 
-  "developer": "Grigori Fursin", 
-  "developer_email": "Grigori.Fursin@cTuning.org", 
-  "developer_webpage": "http://cTuning.org/lab/people/gfursin", 
-  "license": "See CK LICENSE.txt for licensing details", 
+  },
+  "copyright": "See CK Copyright.txt for copyright details",
+  "desc": "platform detection",
+  "developer": "Grigori Fursin",
+  "developer_email": "Grigori.Fursin@cTuning.org",
+  "developer_webpage": "http://cTuning.org/lab/people/gfursin",
+  "license": "See CK LICENSE.txt for licensing details",
   "module_deps": {
-    "os": "0440cb72c2bc5cc6", 
-    "platform.accelerator": "55ec7775f4afaabd", 
-    "platform.cpu": "aa6b542a420b8db9", 
+    "os": "0440cb72c2bc5cc6",
+    "platform.accelerator": "55ec7775f4afaabd",
+    "platform.cpu": "aa6b542a420b8db9",
     "repo": "befd7892b0d469e9"
   }
 }

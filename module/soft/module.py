@@ -767,6 +767,7 @@ def setup(i):
           sb+=eset+' PATH='+svarb+envp_b+svare+evs+svarb+'PATH'+svare+'\n'
 
        if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!='':
+          sb+=eset+' LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LIBRARY_PATH'+svare+'\n'
           sb+=eset+' LD_LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LD_LIBRARY_PATH'+svare+'\n'
 
        # Finish batch

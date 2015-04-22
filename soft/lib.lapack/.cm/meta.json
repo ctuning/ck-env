@@ -1,11 +1,11 @@
 {
   "customize": {
-    "add_include_path": "yes", 
+    "add_include_path": "yes",
     "env_prefix": "CK_ENV_LIB_LAPACK"
-  }, 
-  "soft_name": "Library - LAPACK", 
+  },
+  "soft_name": "Library - LAPACK",
   "tags": [
-    "lib", 
+    "lib",
     "lapack"
   ]
 }
