@@ -315,6 +315,18 @@ def setup(i):
 
     tbits=tosd.get('bits','')
 
+    # Check if base is different
+    x1=hosd.get('base_uid','')
+    x2=hosd.get('base_uoa','')
+    if x1!='' and x2!='': 
+       hos=x1
+       hosx=x2
+    x1=tosd.get('base_uid','')
+    x2=tosd.get('base_uoa','')
+    if x1!='' and x2!='': 
+       tos=x1
+       tosx=x2
+
     # Check soft UOA
     duoa=i.get('uoa','')
 

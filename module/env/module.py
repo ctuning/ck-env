@@ -110,6 +110,18 @@ def set(i):
     tosd=r['os_dict']
     tdid=r['device_id']
 
+    # Check if base is different
+    x1=hosd.get('base_uid','')
+    x2=hosd.get('base_uoa','')
+    if x1!='' and x2!='': 
+       hos=x1
+       hosx=x2
+    x1=tosd.get('base_uid','')
+    x2=tosd.get('base_uoa','')
+    if x1!='' and x2!='': 
+       tos=x1
+       tosx=x2
+
     tbits=tosd.get('bits','')
 
     # Check environment UOA
@@ -336,7 +348,11 @@ def show(i):
                      'module_uoa':cfg['module_deps']['os'],
                      'data_uoa':tos_uoa})
        if ry['return']>0: return ry
-       tags+='target-os-'+ry['data_uoa']
+
+       tos_uoa=ry['data_uoa']
+       tosz=ry['dict'].get('base_uoa','')
+       if tosz!='': tos_uoa=tosz
+       tags+='target-os-'+tos_uoa
 
     tb=i.get('target_bits','')
     if tb!='':
@@ -564,6 +580,18 @@ def resolve(i):
     tosd=r['os_dict']
     tdid=r['device_id']
 
+    # Check if base is different
+    x1=hosd.get('base_uid','')
+    x2=hosd.get('base_uoa','')
+    if x1!='' and x2!='': 
+       hos=x1
+       hosx=x2
+    x1=tosd.get('base_uid','')
+    x2=tosd.get('base_uoa','')
+    if x1!='' and x2!='': 
+       tos=x1
+       tosx=x2
+
     # Checking deps
     env=i.get('env',{})
 
@@ -669,7 +697,10 @@ def refresh(i):
                      'module_uoa':cfg['module_deps']['os'],
                      'data_uoa':tos_uoa})
        if ry['return']>0: return ry
-       tags+='target-os-'+ry['data_uoa']
+       tos_uoa=ry['data_uoa']
+       tosz=ry['dict'].get('base_uoa','')
+       if tosz!='': tos_uoa=tosz
+       tags+='target-os-'+tos_uoa
 
     tb=i.get('target_bits','')
     if tb!='':
