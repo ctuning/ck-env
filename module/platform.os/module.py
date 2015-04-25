@@ -101,7 +101,7 @@ def detect(i):
     hosx=r['os_uoa']
     hosd=r['os_dict']
 
-    # Checking/detecting host OS
+    # Checking/detecting target OS
     r=ck.access({'action':'find_close',
                  'module_uoa':cfg['module_deps']['os'],
                  'os_uoa':tos})
@@ -326,7 +326,7 @@ def detect(i):
     prop['name_short']=prop_os_name_short
     prop['bits']=tbits
 
-    if o=='con':
+    if o=='con' and i.get('skip_print_os','')!='yes':
        ck.out('')
        ck.out('OS CK UOA:     '+tosx+' ('+tos+')')
        ck.out('')

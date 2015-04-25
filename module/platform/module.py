@@ -421,6 +421,8 @@ def init_device(i):
     Input:  {
               os_dict      - OS dict to get info about how to init device
               device_id    - ID of the device if more than one
+              (key)        - key from OS to use, by default remote_init
+                             useful for deinitialization, i.e. use key=remote_deinit
             }
 
     Output: {
@@ -435,10 +437,13 @@ def init_device(i):
 
     o=i.get('out','')
 
+    key=i.get('key','')
+    if key=='': key='remote_init'
+
     osd=i['os_dict']
     tdid=i['device_id'].strip()
 
-    ri=osd.get('remote_init','')
+    ri=osd.get(key,'')
     if ri!='':
        dv=''
        if tdid!='': dv=' -s '+tdid
@@ -561,3 +566,59 @@ def exchange(i):
        return rx
 
     return {'return':1, 'error':'name is empty in platform information exchange'}
+
+##############################################################################
+# deinitialize device (put to powersave mode)
+
+def deinit(i):
+    """
+    Input:  {
+              (host_os)              - host OS (detect, if omitted)
+              (os) or (target_os)    - OS module to check (if omitted, analyze host)
+              (device_id)            - device id if remote (such as adb)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    o=i.get('out','')
+
+    # Various params
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    if tos=='': tos=i.get('os','')
+    tdid=i.get('device_id','')
+
+    # Get OS info
+    import copy
+    ii=copy.deepcopy(i)
+    ii['out']=o
+    ii['action']='detect'
+    ii['skip_device_init']='yes'     # consider that device was already initialized
+    ii['skip_info_collection']='yes'
+    ii['module_uoa']=cfg['module_deps']['platform.os']
+    rr=ck.access(ii) # DO NOT USE rr further - will be reused as return !
+    if rr['return']>0: return rr
+
+    hos=rr['host_os_uid']
+    hosx=rr['host_os_uoa']
+    hosd=rr['host_os_dict']
+
+    tos=rr['os_uid']
+    tosx=rr['os_uoa']
+    tosd=rr['os_dict']
+
+    tbits=tosd.get('bits','')
+
+    tdid=rr['device_id']
+
+    ii={'os_dict':tosd,
+        'device_id':tdid,
+        'key':'remote_deinit',
+        'out':o}
+    return init_device(ii)
