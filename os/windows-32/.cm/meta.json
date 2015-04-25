@@ -48,5 +48,6 @@
   "script_ext": ".bat",
   "suppress_output": "> nul",
   "use_create_new_console_flag": "yes",
-  "windows_base": "yes"
+  "windows_base": "yes",
+  "tags":["os","windows"]
 }

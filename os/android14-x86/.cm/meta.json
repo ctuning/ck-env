@@ -60,5 +60,6 @@
   "remote_shell": "adb $#device#$ shell",
   "script_ext": ".sh",
   "set_executable": "chmod 755",
-  "suppress_output": "> /dev/null"
+  "suppress_output": "> /dev/null",
+  "tags":["os","remote","android","android-14","x86"]
 }

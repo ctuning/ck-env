@@ -51,5 +51,6 @@
   "script_ext": ".sh",
   "set_executable": "chmod 755",
   "suppress_output": "> /dev/null",
-  "use_bash_to_run": "bash -c \"$#cmd#$\""
+  "use_bash_to_run": "bash -c \"$#cmd#$\"",
+  "tags":["os","linux"]
 }
