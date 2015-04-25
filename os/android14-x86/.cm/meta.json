@@ -4,7 +4,7 @@
   "adb_dumpsys": "adb $#device#$ shell dumpsys $#category#$ $#redirect_stdout#$ $#output_file#$",
   "android_ndk_arch": "x86",
   "android_ndk_platform": "android-14",
-  "base_uoa": "android-32",
+  "base_uoa": "",
   "batch_prefix": "#! /bin/sh\n# CK generated script\n",
   "bin_prefix": "./",
   "bits": "32",
