@@ -216,19 +216,19 @@ def detect(i):
 
            # Read and parse file
            rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
-           if rx['return']>0: return rx
-           ll=rx['lst']
-           if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
+           if rx['return']==0: 
+              ll=rx['lst']
+              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
 
-           if len(ll)>0:
-              llx=ll[0].strip()
-              if llx!='':
-                 fr=0
-                 try:
-                   fr=float(llx)/1000
-                   target_freq[str(px)]=fr
-                 except ValueError:
-                   pass
+              if len(ll)>0:
+                 llx=ll[0].strip()
+                 if llx!='':
+                    fr=0
+                    try:
+                      fr=float(llx)/1000
+                      target_freq[str(px)]=fr
+                    except ValueError:
+                      pass
 
            fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/cpuinfo_max_freq'
            if remote=='yes':
@@ -253,18 +253,18 @@ def detect(i):
 
            # Read and parse file
            rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
-           if rx['return']>0: return rx
-           ll=rx['lst']
-           if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
+           if rx['return']==0:
+              ll=rx['lst']
+              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
 
-           if len(ll)>0:
-              llx=ll[0].strip()
-              if llx!='':
-                 try:
-                   fr=float(llx)/1000
-                   target_freq_max[str(px)]=fr
-                 except ValueError:
-                   pass
+              if len(ll)>0:
+                 llx=ll[0].strip()
+                 if llx!='':
+                    try:
+                      fr=float(llx)/1000
+                      target_freq_max[str(px)]=fr
+                    except ValueError:
+                      pass
 
        # Initialized device if needed
        if sdi!='yes':
@@ -278,47 +278,47 @@ def detect(i):
 
        # Get all params
        params={}
+       if remote=='yes':
+          rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+          if rx['return']>0: return rx
+          fn=rx['file_name']
 
-       rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-       if rx['return']>0: return rx
-       fn=rx['file_name']
+          x=tosd.get('adb_all_params','')
+          x=x.replace('$#redirect_stdout#$', ro)
+          x=x.replace('$#output_file#$', fn)
 
-       x=tosd.get('adb_all_params','')
-       x=x.replace('$#redirect_stdout#$', ro)
-       x=x.replace('$#output_file#$', fn)
+          dv=''
+          if tdid!='': dv=' -s '+tdid
+          x=x.replace('$#device#$',dv)
 
-       dv=''
-       if tdid!='': dv=' -s '+tdid
-       x=x.replace('$#device#$',dv)
-
-       if o=='con' and pdv=='yes':
-          ck.out('')
-          ck.out('Receiving all parameters:')
-          ck.out('  '+x)
-
-       rx=os.system(x)
-       if rx!=0:
-          if o=='con':
+          if o=='con' and pdv=='yes':
              ck.out('')
-             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-          return {'return':1, 'error':'access to remote device failed'}
+             ck.out('Receiving all parameters:')
+             ck.out('  '+x)
 
-       # Read and parse file
-       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
-       if rx['return']>0: return rx
-       ll=rx['lst']
+          rx=os.system(x)
+          if rx!=0:
+             if o=='con':
+                ck.out('')
+                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+             return {'return':1, 'error':'access to remote device failed'}
 
-       for s in ll:
-           s1=s.strip()
+          # Read and parse file
+          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
+          if rx['return']>0: return rx
+          ll=rx['lst']
 
-           q2=s1.find(']: [')
-           k=''
-           if q2>=0:
-              k=s1[1:q2].strip()
-              v=s1[q2+4:].strip()
-              v=v[:-1].strip()
+          for s in ll:
+              s1=s.strip()
 
-              params[k]=v
+              q2=s1.find(']: [')
+              k=''
+              if q2>=0:
+                 k=s1[1:q2].strip()
+                 v=s1[q2+4:].strip()
+                 v=v[:-1].strip()
+
+                 params[k]=v
 
        target['name']=target_cpu
        target['sub_name']=target_sub_cpu
