@@ -64,7 +64,7 @@ def setup(i):
 
     ################################################################
     if win=='yes':
-       if remote=='yes': 
+       if remote=='yes' or mingw=='yes': 
           sext='.a'
           dext='.so'
        else:
