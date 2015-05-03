@@ -154,7 +154,6 @@ def set(i):
     lx=len(l)
     if lx>0:
        ilx=0
-
        if lx>1 and sar!='yes':
           # Try auto-resolve or prune choices
           nls=[]
@@ -184,7 +183,6 @@ def set(i):
 
           l=nls
           lx=len(l)
-
 
        # Choose sub-deps
        if lx>1:
@@ -248,15 +246,16 @@ def set(i):
 
              ilx=int(x)
 
-       duid=l[ilx].get('data_uid')
-       duoa=duid
+       if ilx<len(l):
+          duid=l[ilx].get('data_uid')
+          duoa=duid
 
-       dd=l[ilx].get('meta',{})
+          dd=l[ilx].get('meta',{})
 
-       if o=='con' and i.get('print','')=='yes':
-          x=duoa
-          if duid!=duoa: x+=' ('+duid+')'
-          ck.out('CK environment found using tags "'+tags+'" : '+x)
+          if o=='con' and i.get('print','')=='yes':
+             x=duoa
+             if duid!=duoa: x+=' ('+duid+')'
+             ck.out('CK environment found using tags "'+tags+'" : '+x)
 
     if duoa=='':
        import json
