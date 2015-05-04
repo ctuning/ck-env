@@ -576,6 +576,7 @@ def deinit(i):
               (host_os)              - host OS (detect, if omitted)
               (os) or (target_os)    - OS module to check (if omitted, analyze host)
               (device_id)            - device id if remote (such as adb)
+              (key)                  - {'remote_init' or 'remote_deinit'}
             }
 
     Output: {
@@ -617,8 +618,11 @@ def deinit(i):
 
     tdid=rr['device_id']
 
+    key=i.get('key','')
+    if key=='': key='remote_deinit'
+
     ii={'os_dict':tosd,
         'device_id':tdid,
-        'key':'remote_deinit',
+        'key':key,
         'out':o}
     return init_device(ii)
