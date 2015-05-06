@@ -18,6 +18,7 @@
   "env": {
     "CK_AR": "ar",
     "CK_ASM_EXT": ".s",
+    "CK_CSTD99": "-Qstd=c99",
     "CK_CC": "icc",
     "CK_COMPILER_FLAGS_OBLIGATORY": "",
     "CK_CXX": "icc",

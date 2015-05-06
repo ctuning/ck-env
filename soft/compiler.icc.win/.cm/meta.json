@@ -23,7 +23,8 @@
   "env": {
     "CK_AR": "lib",
     "CK_ASM_EXT": ".asm",
-    "CK_CC": "icl /Qstd=c99",
+    "CK_CSTD99": "/Qstd=c99",
+    "CK_CC": "icl",
     "CK_COMPILER_FLAGS_OBLIGATORY": "/DWINDOWS /GS-",
     "CK_CXX": "icl",
     "CK_DLL_EXT": ".dll",
