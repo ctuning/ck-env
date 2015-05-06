@@ -158,8 +158,14 @@ def setup(i):
           libstdcpppath=raw_input('* If needed, enter full path to lib directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a: ')
           cus['libstdcpppath_configured']='yes'
 
+    if winh=='yes':
+       sep='\\'
+    else:
+       sep='/'
+
     cus['libstdcpppath']=libstdcpppath
-    env['CK_ENV_LIB_STDCPP']=libstdcpppath
+    env['CK_ENV_LIB_STDCPP_STATIC']=libstdcpppath+sep+'libgnustl_static.a'
+    env['CK_ENV_LIB_STDCPP_DYNAMIC']=libstdcpppath+sep+'libgnustl_shared.so'
     cus['libstdcpppath_configured']='yes'
 
     ##############
