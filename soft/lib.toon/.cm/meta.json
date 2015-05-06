@@ -1,0 +1,14 @@
+{
+  "customize": {
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_TOON", 
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_path": "yes"
+  }, 
+  "soft_name": "Library - TooN", 
+  "tags": [
+    "lib", 
+    "toon"
+  ]
+}
