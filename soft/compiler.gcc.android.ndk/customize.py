@@ -166,6 +166,7 @@ def setup(i):
     cus['libstdcpppath']=libstdcpppath
     env['CK_ENV_LIB_STDCPP_STATIC']=libstdcpppath+sep+'libgnustl_static.a'
     env['CK_ENV_LIB_STDCPP_DYNAMIC']=libstdcpppath+sep+'libgnustl_shared.so'
+    env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=libstdcpppath+sep+'include'
     cus['libstdcpppath_configured']='yes'
 
     ##############
