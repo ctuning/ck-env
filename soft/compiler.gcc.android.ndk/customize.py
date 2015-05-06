@@ -135,6 +135,33 @@ def setup(i):
     if arch=='':
        return {'return':1, 'error':'platform architecture is not defined in target OS'}
 
+    ############################################################
+    libstdcpppathi_configured=cus.get('libstdcpppath_include_configured','')
+    libstdcpppathi=cus.get('libstdcpppath_include','')
+    if libstdcpppathi_configured!='yes' and iv=='yes':
+       if libstdcpppathi!='':
+          ck.out('Full path to include directory with libstdc++: '+libstdcpppathi)
+       else:
+          libstdcpppathi=raw_input('* If needed, enter full path to include directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/inlcude: ')
+          cus['libstdcpppath_include_configured']='yes'
+
+    cus['libstdcpppath_include']=libstdcpppathi
+    env['CK_ENV_LIB_STDCPP_INCLUDE']=libstdcpppathi
+    cus['libstdcpppath_include_configured']='yes'
+
+    libstdcpppath_configured=cus.get('libstdcpppath_configured','')
+    libstdcpppath=cus.get('libstdcpppath','')
+    if libstdcpppath_configured!='yes' and iv=='yes':
+       if libstdcpppath!='':
+          ck.out('Full path to include directory with libstdc++: '+libstdcpppath)
+       else:
+          libstdcpppath=raw_input('* If needed, enter full path to lib directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a: ')
+          cus['libstdcpppath_configured']='yes'
+
+    cus['libstdcpppath']=libstdcpppath
+    env['CK_ENV_LIB_STDCPP']=libstdcpppath
+    cus['libstdcpppath_configured']='yes'
+
     ##############
     if winh=='yes':
        psysroot=platform_path+'\\'+platform+'\\arch-'+arch
