@@ -1,0 +1,54 @@
+{
+  "customize": {
+    "build_dir_name": "pencil", 
+    "env_prefix": "CK_ENV_COMPILER_PENCIL", 
+    "languages": [
+      "C", 
+      "CPP" 
+    ], 
+    "skip_add_to_bin": "no", 
+    "skip_add_to_ld_path": "no", 
+    "skip_add_to_path": "no", 
+    "source_to_source": "yes"
+  }, 
+  "customize_script": "customize", 
+  "env": {
+    "CK_AR": "$#tool_prefix#$ar", 
+    "CK_ASM_EXT": ".s", 
+    "CK_CC": "$#tool_prefix#$pencilcc", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_DLL_EXT": ".so", 
+    "CK_EXE_EXT": ".out", 
+    "CK_FLAGS_CREATE_ASM": "-S", 
+    "CK_FLAGS_CREATE_OBJ": "-c", 
+    "CK_FLAGS_DLL": "-shared -fPIC", 
+    "CK_FLAGS_DLL_EXTRA": "-ldl", 
+    "CK_FLAGS_OUTPUT": "-o ", 
+    "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+    "CK_FLAGS_STATIC_LIB": "-fPIC", 
+    "CK_FLAG_PREFIX_INCLUDE": "-I", 
+    "CK_FLAG_PREFIX_LIB_DIR": "-L", 
+    "CK_FLAG_PREFIX_VAR": "-D", 
+    "CK_LB": "$#tool_prefix#$ar rcs", 
+    "CK_LB_OUTPUT": "-o ", 
+    "CK_LD_FLAGS_EXTRA": "-lm -ldl", 
+    "CK_LIB_EXT": ".a", 
+    "CK_MAKE": "make", 
+    "CK_OBJ_EXT": ".o", 
+    "CK_PROFILER": "gprof"
+  }, 
+  "soft_name": "Compiler - PENCIL", 
+  "tags": [
+    "compiler", 
+    "source-to-source", 
+    "pencil", 
+    "lang-c" 
+  ], 
+  "tool": "pencilcc", 
+  "version": {
+    "cmd": "--version > $#filename#$ 2>&1", 
+    "split": ".", 
+    "string_after": "", 
+    "string_before": "version "
+  }
+}
