@@ -62,6 +62,7 @@ def set(i):
 
     Output: {
               return       - return code =  0, if successful
+                                         = 32, if environment was deleted (env_uoa - env which was not found)
                                          >  0, if error
               (error)      - error text if return > 0
 
@@ -268,7 +269,11 @@ def set(i):
     r=ck.access({'action':'load',
                  'module_uoa':work['self_module_uid'],
                  'data_uoa':duoa})
-    if r['return']>0: return r
+    if r['return']>0: 
+       if r['return']==16:
+          r['return']=32
+          r['env_uoa']=duoa
+       return r
     d=r['dict']
     p=r['path']
 
@@ -620,7 +625,6 @@ def resolve(i):
             'local':local
            }
         if o=='con': ii['out']='con'
-
         rx=set(ii)
         if rx['return']>0: return rx
 
@@ -860,6 +864,20 @@ def refresh(i):
             'env_data_uoa':duid}
         if i.get('reset_env','')!='': ii['reset_env']=i['reset_env']
         rx=ck.access(ii)
-        if rx['return']>0: return rx
+        if rx['return']>0: 
+           if rx['return']!=32:
+              return rx
+           if o=='con':
+              ck.out('')
+              ck.out('One of the dependencies is missing for this setup!')
+              ry=ck.inp({'text':'Would you like to delete it (Y/n)? '})
+              x=ry['string'].strip().lower()
+              if x!='n' and x!='no':
+                 ry=ck.access({'action':'delete',
+                               'module_uoa':work['self_module_uid'],
+                               'data_uoa':duid})
+                 if ry['return']>0: return ry
+           else:
+              return rx
 
     return {'return':0}

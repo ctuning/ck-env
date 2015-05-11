@@ -164,9 +164,14 @@ def setup(i):
        sep='/'
 
     cus['libstdcpppath']=libstdcpppath
-    env['CK_ENV_LIB_STDCPP_STATIC']=libstdcpppath+sep+'libgnustl_static.a'
-    env['CK_ENV_LIB_STDCPP_DYNAMIC']=libstdcpppath+sep+'libgnustl_shared.so'
-    env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=libstdcpppath+sep+'include'
+    if libstdcpppath!='':
+       env['CK_ENV_LIB_STDCPP_STATIC']=libstdcpppath+sep+'libgnustl_static.a'
+       env['CK_ENV_LIB_STDCPP_DYNAMIC']=libstdcpppath+sep+'libgnustl_shared.so'
+       env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=libstdcpppath+sep+'include'
+    else:
+       env['CK_ENV_LIB_STDCPP_STATIC']=''
+       env['CK_ENV_LIB_STDCPP_DYNAMIC']=''
+       env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=''
     cus['libstdcpppath_configured']='yes'
 
     ##############

@@ -52,8 +52,7 @@ def replace_string_in_file(i):
 
     """
 
-    import sys
-    import shutil
+    import copy
 
     o=i.get('out','')
 
@@ -68,12 +67,12 @@ def replace_string_in_file(i):
     if rx['return']>0: return rx
 
     s=rx['string']
-    s1=rx['string'].replace(s1,s2)
+    sx=s.replace(s1,s2)
 
     r={'return':0, 'updated':'no'}
 
-    if s!=s1 or fin!=fout:
-       r=ck.save_text_file({'text_file':fout, 'string':s})
+    if s!=sx or fin!=fout:
+       r=ck.save_text_file({'text_file':fout, 'string':sx})
        r['updated']='yes'
 
     return r
