@@ -1,5 +1,8 @@
 {
   "actions": {
+    "refresh_json": {
+      "desc": "updating json file"
+    }, 
     "replace_string_in_file": {
       "desc": "Replace string in file"
     }

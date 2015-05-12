@@ -76,3 +76,33 @@ def replace_string_in_file(i):
        r['updated']='yes'
 
     return r
+
+##############################################################################
+# updating json file
+
+def refresh_json(i):
+    """
+    Input:  {
+              json_file     - file with json
+              (output_file) - if !='' use this file for output instead of rewriting original file
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    jf=i['json_file']
+
+    of=i.get('output_file','')
+    if of=='': of=jf
+
+    r=ck.load_json_file({'json_file':jf})
+    if r['return']>0: return r
+
+    d=r['dict']
+
+    return ck.save_json_to_file({'json_file':of, 'dict':d, 'sort_keys':'yes'})
