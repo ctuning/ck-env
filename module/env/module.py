@@ -239,8 +239,10 @@ def set(i):
                         ck.out(js)
 
              ck.out('')
-             rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+': '})
+             rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+' or press Enter for 0: '})
              x=rx['string'].strip()
+
+             if x=='': x='0'
 
              if x not in zz:
                 return {'return':1, 'error':'dependency number is not recognized'}
