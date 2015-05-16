@@ -71,6 +71,7 @@ def setup(i):
 
        s+='set PATH="'+pi+'\\bin"; "'+pi+'\\libnvvp"; "'+pi+'\\nnvm\\bin"; "'+pi+'\\open64\\bin"; %PATH%\n\n'
 
+       env['CK_COMPILER_FLAGS_OBLIGATORY']='-DWINDOWS'
        env[envp+'_LIB']=pi+'\\lib'
        if tbits=='32':
           env[envp+'_LIB']+='\\Win32'

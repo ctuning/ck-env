@@ -8,16 +8,16 @@
       "CPP"
     ],
     "skip_add_to_bin": "no",
-    "skip_add_to_ld_path": "yes",
+    "skip_add_to_ld_path": "no",
     "skip_add_to_lib": "yes",
-    "skip_add_to_path": "yes"
+    "skip_add_to_path": "no"
   },
   "customize_script": "customize",
   "env": {
     "CK_AR": "ar",
     "CK_ASM_EXT": ".s",
     "CK_CC": "nvcc",
-    "CK_COMPILER_FLAGS_OBLIGATORY": "-DWINDOWS",
+    "CK_COMPILER_FLAGS_OBLIGATORY": "",
     "CK_CXX": "nvcc",
     "CK_DLL_EXT": ".so",
     "CK_EXE_EXT": ".out",
