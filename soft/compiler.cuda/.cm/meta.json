@@ -39,7 +39,7 @@
     "CK_LD_FLAGS_EXTRA": "",
     "CK_LIB_EXT": ".a",
     "CK_MAKE": "make.exe",
-    "CK_OBJDUMP": "cuobjdump -d",
+    "CK_OBJDUMP": "cuobjdump --dump-sass",
     "CK_OBJ_EXT": ".o",
     "CK_PLUGIN_FLAG": "-fplugin=",
     "CK_PROFILER": "gprof"
