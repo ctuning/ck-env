@@ -279,6 +279,9 @@ def setup(i):
               return       - return code =  0, if successful
                                          >  0, if error
               (error)      - error text if return > 0
+
+              env_data_uoa - environment entry UOA
+              env_data_uid - environment entry UID
             }
 
     """
@@ -341,17 +344,15 @@ def setup(i):
 
     duid=duoa
 
-    if duoa=='':
-       # Search
-       if tags!='':
-          r=ck.access({'action':'search',
-                       'module_uoa':work['self_module_uid'],
-                       'tags':tags})
-          if r['return']>0: return r
-          l=r['lst']
-          if len(l)>0:
-             duid=l[0].get('data_uid')
-             duoa=duid
+    if duoa=='' and tags!='':
+       r=ck.access({'action':'search',
+                    'module_uoa':work['self_module_uid'],
+                    'tags':tags})
+       if r['return']>0: return r
+       l=r['lst']
+       if len(l)>0:
+          duid=l[0].get('data_uid')
+          duoa=duid
 
     d={}
     p=''
@@ -834,14 +835,14 @@ def setup(i):
           rx=ck.access(ii)
           if rx['return']>0: return rx
 
-          eduoa=rx['data_uoa']
-          eduid=rx['data_uid']
+          enduoa=rx['data_uoa']
+          enduid=rx['data_uid']
 
           pnew=rx['path']
 
           if o=='con':
              ck.out('')
-             ck.out('Environment entry '+xx+' ('+eduoa+')!')
+             ck.out('Environment entry '+xx+' ('+enduoa+')!')
 
        # Record batch file
        if pnew=='': pb=bf
@@ -851,4 +852,4 @@ def setup(i):
        rx=ck.save_text_file({'text_file':pb, 'string':sb})
        if rx['return']>0: return rx
 
-    return {'return':0}
+    return {'return':0, 'env_data_uoa':enduoa, 'env_data_uid':enduid}

@@ -76,6 +76,8 @@ def set(i):
     """
 
     o=i.get('out','')
+    oo=''
+    if o=='con': oo='con'
 
     # Clean output file
     import os
@@ -265,7 +267,31 @@ def set(i):
        x='environment was not found using tags="'+tags+'"'
        if len(setup)>0:
           x+=' and setup='+json.dumps(setup)
-       return {'return':1, 'error':x}
+
+       if o=='con' and tags!='':
+          ck.out('')
+          ck.out('WARNING: '+x)
+          ck.out('')
+          rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
+          a=rx['string'].strip().lower()
+
+          if a=='' and a!='n' and a!='no':
+             vv={'action':'install',
+                 'module_uoa':cfg['module_deps']['package'],
+                 'out':oo,
+                 'tags':tags}
+             vv['host_os']=hos
+             vv['target_os']=tos
+             vv['target_device_id']=tdid
+             rx=ck.access(vv)
+             if rx['return']>0: return rx
+
+             duoa=rx['env_data_uoa']
+             duid=rx['env_data_uid']
+          else:
+             return {'return':1, 'error':x}
+       else:
+          return {'return':1, 'error':x}
 
     # Load selected environment entry
     r=ck.access({'action':'load',

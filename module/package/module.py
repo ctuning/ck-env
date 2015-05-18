@@ -42,6 +42,8 @@ def install(i):
               (target_device_id)  - target device ID (detect, if omitted)
 
               (data_uoa) or (uoa) - package UOA entry
+                       or
+              (tags)              - tags to search package if data_uoa=='' before searching in current path
 
               (env_data_uoa)      - use this data UOA to record (new) env
               (env_repo_uoa)      - use this repo to record new env
@@ -56,12 +58,17 @@ def install(i):
               return       - return code =  0, if successful
                                          >  0, if error
               (error)      - error text if return > 0
+
+              env_data_uoa - if installed fine
+              env_data_uid - if installed fine
             }
 
     """
     import os
 
     o=i.get('out','')
+
+    xtags=i.get('tags','')
 
     import time
     start_time = time.time()
@@ -72,7 +79,7 @@ def install(i):
     dname=''
     d={}
 
-    if duoa=='':
+    if duoa=='' and xtags=='':
        # Try to detect CID in current path
        rx=ck.detect_cid_in_current_path({})
        if rx['return']==0:
@@ -89,19 +96,42 @@ def install(i):
        duoa=rx['data_uoa']
        duid=rx['data_uid']
     else:
-       # Attempt to load configuration from the current directory
-       p=os.getcwd()
-       pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
+       # First, search by tags
+       if xtags!='':
 
-       found=False
-       if os.path.isfile(pc):
-          r=ck.load_json_file({'json_file':pc})
-          if r['return']==0:
-             d=r['dict']
-             found=True
+          r=ck.access({'action':'search',
+                       'module_uoa':work['self_module_uid'],
+                       'add_meta':'yes',
+                       'tags':xtags})
+          if r['return']>0: return r
+          l=r['lst']
+          if len(l)>0:
+             duid=l[0].get('data_uid','')
+             duoa=duid
+             duoax=l[0].get('data_uoa','')
 
-       if not found:
-          return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
+             d=l[0]['meta']
+             p=l[0]['path']
+
+             if o=='con':
+                ck.out('Package found: '+duoax+' ('+duid+')')
+                ck.out('')
+
+       if duoa=='':
+          found=False
+
+          # Attempt to load configuration from the current directory
+          p=os.getcwd()
+          pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
+
+          if os.path.isfile(pc):
+             r=ck.load_json_file({'json_file':pc})
+             if r['return']==0:
+                d=r['dict']
+                found=True
+
+          if not found:
+             return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
 
     # Get main params
     tags=d.get('tags',[])
@@ -172,6 +202,7 @@ def install(i):
 
     enruoa=i.get('env_repo_uoa','')
     enduoa=i.get('env_data_uoa','')
+    enduid=i.get('env_data_uid','')
 
     # Search by exact terms
     setup={'host_os_uoa':hos,
@@ -499,11 +530,14 @@ def install(i):
           rx=ck.access(ii)
           if rx['return']>0: return rx
 
+          enduoa=rx['env_data_uoa']
+          enduid=rx['env_data_uid']
+
     elapsed_time=time.time()-start_time
     if o=='con':
        ck.out('Installation time: '+str(elapsed_time)+' sec.')
 
-    return {'return':0, 'elapsed_time':elapsed_time}
+    return {'return':0, 'elapsed_time':elapsed_time, 'env_data_uoa':enduoa, 'env_data_uid':enduid}
 
 ##############################################################################
 # setup package (only environment)
