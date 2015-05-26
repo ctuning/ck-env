@@ -75,6 +75,7 @@ def install(i):
 
     # Check package description
     duoa=i.get('uoa','')
+    if duoa=='': duoa=i.get('data_uoa','')
     duid=''
     dname=''
     d={}

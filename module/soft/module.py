@@ -332,10 +332,9 @@ def setup(i):
 
     # Check soft UOA
     duoa=i.get('uoa','')
+    if duoa=='': duoa=i.get('data_uoa','')
 
     tags=i.get('tags','')
-
-    if duoa=='': duoa=i.get('data_uoa','')
 
     if duoa=='':
        xcids=i.get('xcids',[])
@@ -471,6 +470,7 @@ def setup(i):
        deps={}
 
     sdeps=''
+    sdeps1=''
     if len(deps)>0:
        ii={'action':'resolve',
            'module_uoa':cfg['module_deps']['env'],
@@ -484,6 +484,7 @@ def setup(i):
        rx=ck.access(ii)
        if rx['return']>0: return rx
        sdeps=rx['bat']
+       sdeps1=rx['cut_bat']
        deps=rx['deps'] # Update deps (add UOA)
 
     for q in deps:
@@ -743,8 +744,7 @@ def setup(i):
 
        if sdeps!='':
           sb+=rem+' Dependencies:\n'
-          sb+=sdeps+'\n'
-
+          sb+=sdeps1+'\n'
        if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and pi!='':
           sb+=eset+' '+envp+'='+xs+pi+xs+'\n'
           cus['path_install']=pi

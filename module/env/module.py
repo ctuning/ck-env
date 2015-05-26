@@ -569,6 +569,7 @@ def resolve(i):
               (error)      - error text if return > 0
 
               bat          - string for bat file calling all bats ...
+              cut_bat      - string for bat file calling all bats (dos not include deps that are explicitly excluded) ...
               deps         - updated deps (with uoa)
               env          - updated env
             }
@@ -582,6 +583,7 @@ def resolve(i):
        ck.out('Resolving dependencies ...')
 
     sb=''
+    sb1=''
 
     sar=i.get('skip_auto_resolution','')
 
@@ -678,10 +680,15 @@ def resolve(i):
 
         env=rx['env']
 
-        q['bat']=rx['bat']
-        sb+=rx['bat']
+        bt=rx['bat']
 
-    return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'res_deps':res}
+        q['bat']=bt
+        sb+=bt
+
+        if q.get('skip_from_bat','')!='yes':
+           sb1+=bt
+
+    return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'cut_bat':sb1, 'res_deps':res}
 
 ##############################################################################
 # refresh environment (re-setup soft)

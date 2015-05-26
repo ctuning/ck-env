@@ -73,7 +73,7 @@ def setup(i):
        pc=cus.get('path_extension_configured','')
        pp=cus.get('path_extension','')
 
-       if pc!='yes' or pp=='':
+       if pc!='yes' and pp=='':
           pp=raw_input('Enter installation path extension related to compiler (Enter for vc12): ')
           pp=pp.strip()
           if pp=='': pp='vc12'
@@ -88,7 +88,7 @@ def setup(i):
        lec=cus.get('lib_extension_configured','')
        le=cus.get('lib_extension','')
 
-       if lec!='yes':
+       if lec!='yes' and le=='':
           le=raw_input('Enter lib extension (for example, 2411d for 2.4.11d): ')
           le=le.strip()
 
@@ -104,15 +104,13 @@ def setup(i):
        cus['static_lib']='opencv_core'+le+'.lib'
        cus['dynamic_lib']='opencv_core'+le+'.dll'
 
-       cus['static_libs']={'opencv_core':'opencv_core'+le+'.lib',
-                           'opencv_imgproc':'opencv_imgproc'+le+'.lib',
-                           'opencv_ocl':'opencv_ocl'+le+'.lib',
-                           'opencv_highgui':'opencv_highgui'+le+'.lib'}
+       cus['extra_static_libs']={'opencv_imgproc':'opencv_imgproc'+le+'.lib',
+                                 'opencv_ocl':'opencv_ocl'+le+'.lib',
+                                 'opencv_highgui':'opencv_highgui'+le+'.lib'}
  
-       cus['dynamic_libs']={'opencv_core':'opencv_core'+le+'.dll',
-                            'opencv_imgproc':'opencv_imgproc'+le+'.dll',
-                            'opencv_ocl':'opencv_ocl'+le+'.dll',
-                            'opencv_highgui':'opencv_highgui'+le+'.dll'}
+       cus['extra_dynamic_libs']={'opencv_imgproc':'opencv_imgproc'+le+'.dll',
+                                  'opencv_ocl':'opencv_ocl'+le+'.dll',
+                                  'opencv_highgui':'opencv_highgui'+le+'.dll'}
 
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
        env['CK_ENV_LIB_OPENCV_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
