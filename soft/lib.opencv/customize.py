@@ -119,4 +119,16 @@ def setup(i):
        cus['path_bin']=pi+'/bin'
        cus['path_lib']=pi+'/lib'
 
+       cus['path_static_lib']=cus['path_lib']
+       cus['path_dynamic_lib']=cus['path_lib']
+
+       cus['dynamic_lib']='libopencv_core.so'
+
+       cus['extra_dynamic_libs']={'opencv_imgproc':'libopencv_imgproc.so',
+                                  'opencv_ocl':'libopencv_ocl.so',
+                                  'opencv_highgui':'libopencv_highgui.so'}
+
+       env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
+       env['CK_ENV_LIB_OPENCV_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
+
     return {'return':0, 'bat':s}

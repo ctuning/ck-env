@@ -94,9 +94,26 @@ def setup(i):
 
     else:
        cus['path_bin']=pi+'/bin'
+
+       ext1=''
+       if ext=='intel64' or ext=='ia32':
+          # check extra params
+          ext1=cus.get('extra_compiler','')
+          ext1c=cus.get('extra_compiler_configured','')
+          if ext1c!='yes' or ext1=='':
+             ext1=raw_input('Which compiler configuration to use (Enter for gcc4.4)? ')
+             ext1=ext1.strip()
+
+             if ext1=='': ext1='gcc4.4'
+
+             cus['extra_compiler']=ext1
+             cus['extra_compiler_configured']='yes'
+
        cus['path_lib']=pi+'/lib/'+ext
+       if ext1!='':
+          cus['path_lib']+='/'+ext1
 
        s+='# Setting Intel TBB environment\n'
-       s+='. "'+pi+'\\bin\\tbbvars.sh" '+ext+' '+vc+'\n'
+       s+='. "'+pi+'/bin/tbbvars.sh" '+ext+'\n'
 
     return {'return':0, 'bat':s}
