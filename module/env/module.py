@@ -901,6 +901,9 @@ def refresh(i):
         penv={}
         package_uoa=meta.get('package_uoa','')
         if package_uoa!='':
+           ck.out('')
+           ck.out('  Related package: '+package_uoa)
+
            rx=ck.access({'action':'load',
                          'module_uoa':cfg['module_deps']['package'],
                          'data_uoa':package_uoa})
@@ -919,6 +922,7 @@ def refresh(i):
             'data_uoa':soft_uoa,
             'customize':cus,
             'deps':deps,
+            'package_uoa':package_uoa,
             'env':penv,
             'env_data_uoa':duid}
         if i.get('reset_env','')!='': ii['reset_env']=i['reset_env']

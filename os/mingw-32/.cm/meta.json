@@ -1,5 +1,5 @@
 {
-  "batch_check_if_set": "if defined $#ck_var#$ exit /b 0\n", 
+  "batch_check_if_set": "if not [%1] == [1] (if defined CK_ENV_COMPILER_ICC_SET exit /b 0)\n", 
   "batch_prefix": "@echo off\n\nrem CK generated script\n", 
   "bits": "32", 
   "bits_all": [
