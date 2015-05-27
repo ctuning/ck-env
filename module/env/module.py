@@ -196,7 +196,12 @@ def set(i):
              xq='tags="'+tags+'"'
              if len(setup)>0:
                 import json
-                xq+=' and setup='+json.dumps(setup)
+
+                ro=readable_os({'setup':setup})
+                if ro['return']>0: return ro
+                setup1=ro['setup1']
+
+                xq+=' and setup='+json.dumps(setup1)
 
              ck.out('')
              ck.out('More than one environment found for '+xq+':')
@@ -266,16 +271,25 @@ def set(i):
        import json
        x='environment was not found using tags="'+tags+'"'
        if len(setup)>0:
-          x+=' and setup='+json.dumps(setup)
+
+          ro=readable_os({'setup':setup})
+          if ro['return']>0: return ro
+          setup1=ro['setup1']
+
+          x+=' and setup='+json.dumps(setup1)
 
        if o=='con' and tags!='':
           ck.out('')
+          ck.out('==========================================================================================')
           ck.out('WARNING: '+x)
           ck.out('')
           rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
           a=rx['string'].strip().lower()
 
           if a=='' and a!='n' and a!='no':
+
+             save_cur_dir=os.getcwd()
+
              vv={'action':'install',
                  'module_uoa':cfg['module_deps']['package'],
                  'out':oo,
@@ -283,11 +297,21 @@ def set(i):
              vv['host_os']=hos
              vv['target_os']=tos
              vv['target_device_id']=tdid
+
+             # Check if there is a compiler in resolved deps to reuse it
+             xdeps={}
+             if len(cdeps.get('compiler',{}))>0: xdeps['compiler']=cdeps['compiler']
+             if len(cdeps.get('compiler_mcl',{}))>0: xdeps['compiler_mcl']=cdeps['compiler_mcl']
+             if len(xdeps)>0: vv['deps']=xdeps
+
              rx=ck.access(vv)
              if rx['return']>0: return rx
 
              duoa=rx['env_data_uoa']
              duid=rx['env_data_uid']
+
+             os.chdir(save_cur_dir)
+
           else:
              return {'return':1, 'error':x}
        else:
@@ -335,7 +359,7 @@ def set(i):
 
        fbf.close()
 
-    return {'return':0, 'env_uoa':duoa, 'env':env, 'bat':sb, 'lst':l, 'dict':dd}
+    return {'return':0, 'env_uoa':duoa, 'env':env, 'bat':sb, 'lst':l, 'dict':d}
 
 ##############################################################################
 # show all installed environment
@@ -916,3 +940,46 @@ def refresh(i):
               return rx
 
     return {'return':0}
+
+##############################################################################
+# internal function to convert host_os and target_os from UID to UOA to be readable
+
+def readable_os(i):
+    """
+    Input:  {
+              setup 
+                (host_os_uoa)    - UID or UOA
+                (target_os_uoa)  - UID or UOA
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              setup1       - processed setup with host_os_uoa and target_os_uoa as UOA
+            }
+    """
+
+    setup=i.get('setup',{})
+
+    import copy
+    setup1=copy.deepcopy(setup)
+
+    x=setup.get('host_os_uoa','')
+    if x!='':
+       r=ck.access({'action':'load',
+                    'module_uoa':cfg['module_deps']['os'],
+                    'data_uoa':x})
+       if r['return']>0: return r
+       setup1['host_os_uoa']=r['data_uoa']
+
+    x=setup.get('target_os_uoa','')
+    if x!='':
+       r=ck.access({'action':'load',
+                    'module_uoa':cfg['module_deps']['os'],
+                    'data_uoa':x})
+       if r['return']>0: return r
+       setup1['target_os_uoa']=r['data_uoa']
+
+    return {'return':0, 'setup1':setup1}

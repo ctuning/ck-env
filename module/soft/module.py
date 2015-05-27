@@ -408,6 +408,7 @@ def setup(i):
     cus=d.get('customize',{})
     pi=''
     envp=cus.get('env_prefix','')
+    envps=envp+'_SET'
 
     # Add tags from the search!
     for q in tags.split(','):
@@ -721,6 +722,10 @@ def setup(i):
        # Finish batch
        sb+=hosd.get('batch_prefix','')+'\n'
 
+       check_if_set=hosd.get('batch_check_if_set','')
+       if check_if_set!='':
+          sb+=check_if_set.replace('$#ck_var#$',envps)+'\n'
+
        x=duoa
        if duid!=duoa: x+=' ('+duid+') '
        if len(tags)>0:
@@ -745,6 +750,7 @@ def setup(i):
        if sdeps!='':
           sb+=rem+' Dependencies:\n'
           sb+=sdeps1+'\n'
+
        if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and pi!='':
           sb+=eset+' '+envp+'='+xs+pi+xs+'\n'
           cus['path_install']=pi
@@ -782,6 +788,9 @@ def setup(i):
        if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!='':
           sb+=eset+' LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LIBRARY_PATH'+svare+'\n'
           sb+=eset+' LD_LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LD_LIBRARY_PATH'+svare+'\n'
+
+       # Say that environment is set (to avoid recursion)
+       sb+=eset+' '+envps+'=1\n'
 
        # Finish batch
        if wb=='yes':

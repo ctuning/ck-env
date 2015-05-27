@@ -52,6 +52,8 @@ def install(i):
 
               (skip_process)      - if 'yes', skip archive processing
               (skip_setup)        - if 'yes', skip environment setup
+
+              (deps)              - pre-set some deps, for example for compiler
             }
 
     Output: {
@@ -140,6 +142,9 @@ def install(i):
     env=d.get('env',{})
 
     udeps=d.get('deps',{})
+
+    depsx=i.get('deps',{})
+    if len(depsx)>0: udeps.update(depsx)
 
     suoa=d.get('soft_uoa','')
 
