@@ -28,7 +28,7 @@
     "CK_FLAGS_DYNAMIC_BIN": "/MD",
     "CK_FLAGS_OUTPUT": "/Fe",
     "CK_FLAGS_STATIC_BIN": "/MT",
-    "CK_FLAGS_STATIC_LIB": "/MT",
+    "CK_FLAGS_STATIC_LIB": "/MD",
     "CK_FLAG_PREFIX_INCLUDE": "/I",
     "CK_FLAG_PREFIX_VAR": "/D",
     "CK_LB": "lib",
