@@ -78,8 +78,8 @@ def setup(i):
     cus['static_lib']='libxopenme'+sext
     cus['dynamic_lib']='libxopenme'+dext
 
-    env['CK_ENV_LIB_XOPENME_INCLUDE_NAME']=cus.get('include_name','')
-    env['CK_ENV_LIB_XOPENME_STATIC_NAME']=cus.get('static_lib','')
-    env['CK_ENV_LIB_XOPENME_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+    env['CK_ENV_LIB_RTL_XOPENME_INCLUDE_NAME']=cus.get('include_name','')
+    env['CK_ENV_LIB_RTL_XOPENME_STATIC_NAME']=cus.get('static_lib','')
+    env['CK_ENV_LIB_RTL_XOPENME_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
     return {'return':0, 'bat':s}
