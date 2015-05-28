@@ -1,12 +1,12 @@
 {
   "customize": {
     "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_XOPENME", 
+    "env_prefix": "CK_ENV_LIB_RTL_XOPENME", 
     "skip_add_to_bin": "yes", 
     "skip_add_to_path": "yes"
   }, 
   "customize_script": "customize", 
-  "soft_name": "Library - XOpenME", 
+  "soft_name": "Library - RTL - XOpenME", 
   "tags": [
     "lib", 
     "plugins", 
