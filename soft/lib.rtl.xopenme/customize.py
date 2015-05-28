@@ -75,8 +75,8 @@ def setup(i):
        dext='.so'
 
     cus['include_name']='xopenme.h'
-    cus['static_lib']='libxopenme'+sext
-    cus['dynamic_lib']='libxopenme'+dext
+    cus['static_lib']='librtlxopenme'+sext
+    cus['dynamic_lib']='librtlxopenme'+dext
 
     env['CK_ENV_LIB_RTL_XOPENME_INCLUDE_NAME']=cus.get('include_name','')
     env['CK_ENV_LIB_RTL_XOPENME_STATIC_NAME']=cus.get('static_lib','')
