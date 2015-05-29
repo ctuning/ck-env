@@ -54,6 +54,9 @@ def install(i):
               (skip_setup)        - if 'yes', skip environment setup
 
               (deps)              - pre-set some deps, for example for compiler
+
+              (param)             - string converted into CK_PARAM and passed to processing script
+              (params)            - dict, keys are onverted into CK_PARAM_<KEY>=<VALUE> and passed to processing script
             }
 
     Output: {
@@ -415,6 +418,26 @@ def install(i):
     if ps!='' and xprocess:
        # start bat
        sb=hosd.get('batch_prefix','')+'\n'
+
+       # Check if params
+       param=i.get('param',None)
+       params=i.get('params',{})
+
+       if param!=None:
+          sb+='\n'
+          xs=''
+          if param.find(' ')>=0 and eifs!='': xs=eifs
+          sb+=eset+' CK_PARAM='+xs+param+xs+'\n'
+
+       if len(params)>0:
+          for q in params:
+              v=params[q]
+              if v!=None:
+                 xs=''
+                 if v.find(' ')>=0 and eifs!='': xs=eifs
+                 sb+=eset+' CK_PARAM_'+q+'='+xs+v+xs+'\n'
+
+       sb+='\n'
 
        # Check installation path
        if pi=='' and cus.get('skip_path','')!='yes':
