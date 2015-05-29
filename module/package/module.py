@@ -56,7 +56,7 @@ def install(i):
               (deps)              - pre-set some deps, for example for compiler
 
               (param)             - string converted into CK_PARAM and passed to processing script
-              (params)            - dict, keys are onverted into CK_PARAM_<KEY>=<VALUE> and passed to processing script
+              (params)            - dict, keys are onverted into <KEY>=<VALUE> and passed to processing script
             }
 
     Output: {
@@ -435,7 +435,7 @@ def install(i):
               if v!=None:
                  xs=''
                  if v.find(' ')>=0 and eifs!='': xs=eifs
-                 sb+=eset+' CK_PARAM_'+q+'='+xs+v+xs+'\n'
+                 sb+=eset+' '+q+'='+xs+v+xs+'\n'
 
        sb+='\n'
 
