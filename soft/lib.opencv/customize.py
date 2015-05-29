@@ -64,8 +64,26 @@ def setup(i):
     pi=cus.get('path_install','')
 
     ################################################################
-    # check visual studio extension
-    if win=='yes':
+    if remote=='yes':
+
+
+       cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
+       cus['path_lib']=pi+'\\OpenCV-android-sdk\\sdk\\native\\libs\\armeabi'
+
+       cus['path_include']=pi+'\\opencv-2.4.11\\include'
+       cus['path_includes']=[pi+'\\opencv-2.4.11\\3rdparty\\include\\opencl\\1.2']
+
+       cus['path_static_lib']=cus['path_lib']
+
+       cus['static_lib']='libopencv_core.a'
+
+       cus['extra_static_libs']={'opencv_imgproc':'libopencv_imgproc.a',
+                                  'opencv_ocl':'libopencv_ocl.a',
+                                  'opencv_highgui':'libopencv_highgui.a'}
+
+       env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
+
+    elif win=='yes':
        ext='x64'
        if tbits=='32': ext='ia32'
 
