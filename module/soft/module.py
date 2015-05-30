@@ -90,6 +90,8 @@ def detect(i):
 
     env=i.get('env','')
 
+    ubtr=hosd.get('use_bash_to_run','')
+
     # Check soft UOA
     duoa=i.get('uoa','')
     if duoa=='': duoa=i.get('data_uoa','')
@@ -147,6 +149,7 @@ def detect(i):
 
        if env!='': cmd=env.strip()+' '+hosd.get('env_separator','')+' '+cmd
 
+       if ubtr!='': cmd=ubtr.replace('$#cmd#$',cmd)
        ry=os.system(cmd)
 #       if ry>0:
 #          return {'return':16, 'error':'executing command returned non-zero value ('+cmd+')'}
