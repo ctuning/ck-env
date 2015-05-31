@@ -65,8 +65,6 @@ def setup(i):
 
     ################################################################
     if remote=='yes':
-
-
        cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
        cus['path_lib']=pi+'\\OpenCV-android-sdk\\sdk\\native\\libs\\armeabi'
 
@@ -82,6 +80,11 @@ def setup(i):
                                   'opencv_highgui':'libopencv_highgui.a'}
 
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
+
+       if win=='yes':
+          s+='\nset LD_LIBRARY_PATH=%CK_ENV_LIB_OPENCV_LIB%;%LD_LIBRARY_PATH%\n'
+       else:
+          s+='\nexport LD_LIBRARY_PATH=$CK_ENV_LIB_OPENCV_LIB:$LD_LIBRARY_PATH\n'
 
     elif win=='yes':
        ext='x64'
@@ -137,6 +140,8 @@ def setup(i):
        cus['path_bin']=pi+'/bin'
        cus['path_lib']=pi+'/lib'
 
+       cus['path_include']=pi+'/include'
+
        cus['path_static_lib']=cus['path_lib']
        cus['path_dynamic_lib']=cus['path_lib']
 
@@ -148,5 +153,7 @@ def setup(i):
 
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
        env['CK_ENV_LIB_OPENCV_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
+
+       s+='\nexport LD_LIBRARY_PATH=$CK_ENV_LIB_OPENCV_LIB:$LD_LIBRARY_PATH\n'
 
     return {'return':0, 'bat':s}
