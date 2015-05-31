@@ -49,6 +49,7 @@ def install(i):
               (env_repo_uoa)      - use this repo to record new env
 
               (install_path)      - path with soft is installed
+              (ask)               - if 'yes', ask path
 
               (skip_process)      - if 'yes', skip archive processing
               (skip_setup)        - if 'yes', skip environment setup
@@ -367,11 +368,17 @@ def install(i):
 
                 pix=os.path.join(x, nm)
                 if not tosx.endswith(tbits): pix+='-'+tbits
-                ck.out('Suggested path: '+pix)
 
-                r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
-                pi=r['string'].strip()
-                if pi=='': pi=pix
+                if i.get('ask','')=='yes':
+                   ck.out('*** Suggested installation path: '+pix)
+                   r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
+                   pi=r['string'].strip()
+                   if pi=='': pi=pix
+                else:
+                   pi=pix
+                   ck.out('*** Installation path used: '+pix)
+                ck.out('')
+
              else:
                 r=ck.inp({'text':'Enter installation path '+pie+': '})
                 pi=r['string'].strip()
