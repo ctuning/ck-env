@@ -47,6 +47,7 @@
     "CK_FLAG_PREFIX_VAR": "-D", 
     "CK_GPROF_OUT_FILE": "gmon.out", 
     "CK_LD_FLAGS_EXTRA": "", 
+    "CK_LINKER_FLAG_OPENMP":"-lgomp -lrt",
     "CK_OBJ_EXT": ".o", 
     "CK_OPT_SIZE": "-Os", 
     "CK_OPT_SPEED": "-O3", 

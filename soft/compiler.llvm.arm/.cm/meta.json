@@ -46,6 +46,7 @@
     "CK_LB_OUTPUT": "-o ", 
     "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".a", 
+    "CK_LINKER_FLAG_OPENMP":"-lgomp -lrt",
     "CK_MAKE": "make", 
     "CK_OBJ_EXT": ".o", 
     "CK_OPT_SIZE": "-Os", 

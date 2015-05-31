@@ -53,6 +53,7 @@
     "CK_LD_DYNAMIC_FLAGS": "", 
     "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".lib", 
+    "CK_LINKER_FLAG_OPENMP":"-lgomp -lrt",
     "CK_MAKE": "nmake", 
     "CK_OBJDUMP": "llvm-objdump -d", 
     "CK_OBJ_EXT": ".o", 
