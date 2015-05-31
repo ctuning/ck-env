@@ -42,7 +42,7 @@
     "compiler", 
     "source-to-source", 
     "ppcg", 
-    "lang-c" 
+    "lang-c"
   ], 
   "tool": "ppcg", 
   "version": {

@@ -89,31 +89,47 @@ def setup(i):
        cus['path_bin']=pi+'\\bin\\'+ext+'\\'+vc
        cus['path_lib']=pi+'\\lib\\'+ext+'\\'+vc
 
+       cus['static_lib']='tbb.lib'
+       cus['extra_static_libs']={'libtbbmalloc':'tbbmalloc.lib',
+                                 'libtbbproxy':'tbbproxy.lib'}
+
+       cus['dynamic_lib']='libtbb.dll'
+       cus['extra_dynamic_libs']={'libtbbmalloc':'tbb.dll',
+                                  'libtbbproxy':'tbbproxy.dll'}
+
        s+='rem Setting Intel TBB environment\n'
        s+='call "'+pi+'\\bin\\tbbvars.bat" '+ext+' '+vc+'\n'
 
     else:
-       cus['path_bin']=pi+'/bin'
+       if cus.get('from_sources','')=='yes':
+          pix=pi+'/build/install_release'
+          cus['path_lib']=pix
+          cus['path_dynamic_lib']=pix
+          cus['dynamic_lib']='libtbb.so'
+          cus['extra_dynamic_libs']={'libtbbmalloc':'libtbbmalloc.so'}
 
-       ext1=''
-       if ext=='intel64' or ext=='ia32':
-          # check extra params
-          ext1=cus.get('extra_compiler','')
-          ext1c=cus.get('extra_compiler_configured','')
-          if ext1c!='yes' or ext1=='':
-             ext1=raw_input('Which compiler configuration to use (Enter for gcc4.4)? ')
-             ext1=ext1.strip()
+       else:
+          cus['path_bin']=pi+'/bin'
 
-             if ext1=='': ext1='gcc4.4'
+          ext1=''
+          if ext=='intel64' or ext=='ia32':
+             # check extra params
+             ext1=cus.get('extra_compiler','')
+             ext1c=cus.get('extra_compiler_configured','')
+             if ext1c!='yes' or ext1=='':
+                ext1=raw_input('Which compiler configuration to use (Enter for gcc4.4)? ')
+                ext1=ext1.strip()
 
-             cus['extra_compiler']=ext1
-             cus['extra_compiler_configured']='yes'
+                if ext1=='': ext1='gcc4.4'
 
-       cus['path_lib']=pi+'/lib/'+ext
-       if ext1!='':
-          cus['path_lib']+='/'+ext1
+                cus['extra_compiler']=ext1
+                cus['extra_compiler_configured']='yes'
+
+          pix=pi+'/lib'+ext
+          if ext1!='': pix+='/'+ext1
+          cus['path_lib']=pix
 
        s+='# Setting Intel TBB environment\n'
-       s+='. "'+pi+'/bin/tbbvars.sh" '+ext+'\n'
+       s+='. "'+pix+'/tbbvars.sh"\n'
 
     return {'return':0, 'bat':s}
