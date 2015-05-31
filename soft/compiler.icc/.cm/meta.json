@@ -18,6 +18,13 @@
   "env": {
     "CK_AR": "ar",
     "CK_ASM_EXT": ".s",
+    "CK_COMPILER_FLAG_CPP11": "-Qstd=c++11", 
+    "CK_COMPILER_FLAG_STD90": "-Qstd=c90",
+    "CK_COMPILER_FLAG_STD99": "-Qstd=c99",
+    "CK_COMPILER_FLAG_GPROF": "-pg", 
+    "CK_COMPILER_FLAG_OPENMP": "-openmp", 
+    "CK_COMPILER_FLAG_PTHREAD_LIB": "-pthread", 
+    "CK_GPROF_OUT_FILE":"gmon.out",
     "CK_CSTD99": "-Qstd=c99",
     "CK_CC": "icc",
     "CK_COMPILER_FLAGS_OBLIGATORY": "",

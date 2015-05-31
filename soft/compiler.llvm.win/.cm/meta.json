@@ -19,6 +19,11 @@
   "env": {
     "CK_AFTER_COMPILE_TO_BC": "ren *.o *",
     "CK_AR": "lib",
+    "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
+    "CK_COMPILER_FLAG_STD90": "-std=c90",
+    "CK_COMPILER_FLAG_STD99": "-std=c99",
+    "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
+    "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
     "CK_ASM_EXT": ".s",
     "CK_BC_EXT": ".bc",
     "CK_CC": "$#tool_prefix#$clang",

@@ -16,6 +16,11 @@
   "env": {
     "CK_AR": "lib",
     "CK_ASM_EXT": ".asm",
+    "CK_COMPILER_FLAG_CPP11": "/Qstd=c++11", 
+    "CK_COMPILER_FLAG_STD90": "/Qstd=c90",
+    "CK_COMPILER_FLAG_STD99": "/Qstd=c99",
+    "CK_COMPILER_FLAG_OPENMP": "/openmp", 
+    "CK_COMPILER_FLAG_PTHREAD_LIB": "/pthread", 
     "CK_CC": "cl",
     "CK_COMPILER_FLAGS_OBLIGATORY": "/DWINDOWS /GS-",
     "CK_CXX": "cl",

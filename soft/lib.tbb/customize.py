@@ -89,6 +89,14 @@ def setup(i):
        cus['path_bin']=pi+'\\bin\\'+ext+'\\'+vc
        cus['path_lib']=pi+'\\lib\\'+ext+'\\'+vc
 
+       cus['static_lib']='tbb.lib'
+       cus['extra_static_libs']={'libtbbmalloc':'tbbmalloc.lib',
+                                 'libtbbproxy':'tbbproxy.lib'}
+
+       cus['dynamic_lib']='libtbb.dll'
+       cus['extra_dynamic_libs']={'libtbbmalloc':'tbb.dll',
+                                  'libtbbproxy':'tbbproxy.dll'}
+
        s+='rem Setting Intel TBB environment\n'
        s+='call "'+pi+'\\bin\\tbbvars.bat" '+ext+' '+vc+'\n'
 
