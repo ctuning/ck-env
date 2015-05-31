@@ -720,7 +720,7 @@ def resolve(i):
 def refresh(i):
     """
     Input:  {
-              (repo_uoa)          - repository UOA (with wildcards)
+              (repo_uoa)          - repository UOA (with wildcards), default = local (to avoid updating other repos)
               (module_uoa)        - module UOA (with wildcards)
               (data_uoa)          - data UOA (with wildcards)
 
@@ -747,6 +747,8 @@ def refresh(i):
     o=i.get('out','')
 
     ruoa=i.get('repo_uoa','')
+    if ruoa=='': ruoa='local'
+
     muoa=i.get('module_uoa','')
     duoa=i.get('data_uoa','')
 
