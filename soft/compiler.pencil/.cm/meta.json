@@ -4,7 +4,7 @@
     "env_prefix": "CK_ENV_COMPILER_PENCIL", 
     "languages": [
       "C", 
-      "CPP" 
+      "CPP"
     ], 
     "skip_add_to_bin": "no", 
     "skip_add_to_ld_path": "no", 
@@ -42,7 +42,7 @@
     "compiler", 
     "source-to-source", 
     "pencil", 
-    "lang-c" 
+    "lang-c"
   ], 
   "tool": "pencilcc", 
   "version": {
