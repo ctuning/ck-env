@@ -428,7 +428,8 @@ def install(i):
 
        # Check if params
        param=i.get('param',None)
-       params=i.get('params',{})
+       params=d.get('params',{})
+       params.update(i.get('params',{}))
 
        if param!=None:
           sb+='\n'
