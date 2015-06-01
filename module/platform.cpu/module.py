@@ -414,3 +414,108 @@ def detect(i):
     rr['features']['cpu_misc']=info_cpu
 
     return rr
+
+##############################################################################
+# set frequency
+
+def set_freq(i):
+    """
+    Input:  {
+              (host_os)              - host OS (detect, if omitted)
+              (os) or (target_os)    - OS module to check (if omitted, analyze host)
+
+              (device_id)            - device id if remote (such as adb)
+
+              (value) = "max" (default)
+                        "min"
+                        int value
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+    oo=''
+    if o=='con': oo=o
+
+    v=i.get('value','')
+    if v=='': v='max'
+
+    # Various params
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    if tos=='': tos=i.get('os','')
+    tdid=i.get('device_id','')
+
+    # Get OS info
+    import copy
+    ii=copy.deepcopy(i)
+    ii['out']=''
+    ii['action']='detect'
+    ii['module_uoa']=cfg['module_deps']['platform.os']
+    ii['skip_info_collection']='yes'
+    ii['skip_device_init']='yes'
+    rr=ck.access(ii)
+    if rr['return']>0: return rr
+
+    hos=rr['host_os_uid']
+    hosx=rr['host_os_uoa']
+    hosd=rr['host_os_dict']
+
+    tos=rr['os_uid']
+    tosx=rr['os_uoa']
+    tosd=rr['os_dict']
+
+    tbits=tosd.get('bits','')
+
+    tdid=rr['device_id']
+
+    dir_sep=tosd.get('dir_sep','')
+
+    remote=tosd.get('remote','')
+
+    # Prepare scripts
+    cmd=''
+    if v=='min':
+       cmd=tosd.get('script_set_min_cpu_freq','')
+    elif v=='max':
+       cmd=tosd.get('script_set_max_cpu_freq','')
+    else:
+       cmd=tosd.get('script_set_cpu_freq','').replace('$#freq#$',str(v))
+
+    path_to_scripts=tosd.get('path_to_scripts','')
+    if path_to_scripts!='': cmd=path_to_scripts+dir_sep+cmd
+
+    if cmd!='':
+       ck.out('')
+       ck.out('CMD to set CPU frequency:')
+       ck.out('  '+cmd)
+
+    # Get all params
+    if remote=='yes':
+       dv=''
+       if tdid!='': dv=' -s '+tdid
+
+       x=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd
+
+       rx=os.system(x)
+       if rx!=0:
+          if o=='con':
+             ck.out('')
+             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+
+    else:
+          rx=os.system(cmd)
+          if rx!=0:
+             if o=='con':
+                ck.out('')
+                ck.out('  Warning: setting frequency possibly failed - return code '+str(rx))
+
+    return {'return':0}
