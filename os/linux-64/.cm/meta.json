@@ -54,6 +54,7 @@
   "redirect_stdout_aggr": ">>", 
   "rem": "#", 
   "script_ext": ".sh", 
+  "script_get_gpu_frequency": "ck-print-gpu-freq", 
   "script_set_cpu_freq": "ck-set-cpu-online-and-frequency $#freq#$", 
   "script_set_gpu_freq": "ck-set-gpu-online-and-frequency $#freq#$", 
   "script_set_max_cpu_freq": "ck-set-cpu-performance", 

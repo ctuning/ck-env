@@ -1,6 +1,11 @@
 {
   "actions": {
-    "detect": {}
+    "detect": {
+      "desc": "detect accelerator features"
+    }, 
+    "set_freq": {
+      "desc": "set frequency"
+    }
   },
   "copyright": "See CK Copyright.txt for copyright details",
   "desc": "platform - accelerator",

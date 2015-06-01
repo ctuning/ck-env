@@ -118,6 +118,7 @@ def detect(i):
     # Init
     target={}
     target_freq={}
+    target_freq_all={}
     target_freq_max={}
     target_num_proc=''
     info_cpu={}
@@ -266,6 +267,42 @@ def detect(i):
                     except ValueError:
                       pass
 
+           fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/scaling_available_frequencies'
+           if remote=='yes':
+              rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+              if rx['return']>0: return rx
+              ffreq=rx['file_name']
+
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
+
+              if o=='con' and pdv=='yes':
+                 ck.out('')
+                 ck.out('Receiving info: '+x)
+
+              rx=os.system(x)
+              if rx!=0:
+                 if o=='con':
+                    ck.out('')
+                    ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+                 return {'return':1, 'error':'access to remote device failed'}
+           else:
+              ffreq=fnx
+
+           # Read and parse file
+           rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
+           if rx['return']==0:
+              ll=rx['lst']
+              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
+
+              if len(ll)>0:
+                 llx=ll[0].strip()
+                 if llx!='':
+                    all=llx.split(' ')
+                    for h in all:
+                        ppx=str(px)
+                        if ppx not in target_freq_all: target_freq_all[ppx]=[]
+                        target_freq_all[ppx].append(int(h))
+
        # Initialized device if needed
        if sdi!='yes':
           remote_init=tosd.get('remote_init','')
@@ -327,6 +364,7 @@ def detect(i):
        target['num_proc']=target_num_proc
        target['current_freq']=target_freq
        target['max_freq']=target_freq_max
+       target['all_freqs']=target_freq_all
 
     else:
        if win=='yes':
@@ -349,7 +387,6 @@ def detect(i):
           target['current_freq']={"0":target_freq}
           target['max_freq']={"0":target_freq_max}
 
-
     if o=='con':
        ck.out('')
        ck.out('Number of logical processors: '+str(target.get('num_proc',0)))
@@ -369,6 +406,12 @@ def detect(i):
        for k in sorted(x, key=ck.convert_str_key_to_int):
            v=x[k]
            ck.out('  CPU'+k+' = '+str(v)+' MHz')
+       ck.out('CPU all frequencies (Hz):')
+       x=target.get('all_freqs',{})
+       import json
+       for k in sorted(x, key=ck.convert_str_key_to_int):
+           v=x[k]
+           ck.out('  CPU'+k+' = '+json.dumps(v))
 
     # Exchanging info #################################################################
     if ex=='yes':

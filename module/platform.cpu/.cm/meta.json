@@ -1,7 +1,7 @@
 {
   "actions": {
     "detect": {
-      "desc": "detect CPU"
+      "desc": "detect CPU features"
     }, 
     "set_freq": {
       "desc": "set frequency"
