@@ -141,23 +141,22 @@ def detect(i):
           if o=='con':
              ck.out('')
              ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-          return {'return':1, 'error':'access to remote device failed'}
+       else:
+          # Read and parse file
+          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
+          if rx['return']>0: return rx
+          ll=rx['lst']
 
-       # Read and parse file
-       rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
-       if rx['return']>0: return rx
-       ll=rx['lst']
+          for s in ll:
+              s1=s.strip()
+              q2=s1.find('GLES: ')
+              if q2>=0:
+                 target_gpu_name=s1[6:].strip()
 
-       for s in ll:
-           s1=s.strip()
-           q2=s1.find('GLES: ')
-           if q2>=0:
-              target_gpu_name=s1[6:].strip()
+                 prop['name']=target_gpu_name
+                 prop['possibly_related_cpu_name']=''
 
-              prop['name']=target_gpu_name
-              prop['possibly_related_cpu_name']=''
-
-              break
+                 break
     else:
        if win=='yes':
           r=ck.access({'action':'get_from_wmic',
@@ -206,9 +205,73 @@ def detect(i):
 
           prop['name']=target_gpu_name
 
-    if o=='con':
+    if o=='con' and prop.get('name','')!='':
        ck.out('')
        ck.out('GPU name: '+prop.get('name',''))
+
+    # Check frequency via script
+    if win!='yes':
+       rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+       if rx['return']>0: return rx
+       fn=rx['file_name']
+
+       cmd=tosd.get('script_get_gpu_frequency','')+' '+ro+fn
+
+       path_to_scripts=tosd.get('path_to_scripts','')
+       if path_to_scripts!='': cmd=path_to_scripts+dir_sep+cmd
+
+       if remote=='yes':
+          # Execute script
+          cmd=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd
+
+       if o=='con':
+          ck.out('')
+          ck.out('Trying to read GPU frequency:')
+          ck.out('  '+cmd)
+
+       rx=os.system(cmd)
+       if rx!=0:
+          if o=='con':
+             ck.out('')
+             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+             ck.out('')
+       else:
+          # Read and parse file
+          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
+          if rx['return']>0: return rx
+          ll=rx['lst']
+
+          cur_freq=''
+          freqs=[]
+
+          jl=len(ll)
+          for j in range(0,jl):
+              s=ll[j]
+              if s.lower().startswith('*** current gpu frequency:'):
+                 if (j+1)<jl:
+                    cur_freq=ll[j+1]
+
+              if s.lower().startswith('*** available gpu frequencies:'):
+                 while s!='' and j<jl:
+                    j+=1
+                    if j<jl:
+                       s=ll[j]
+                       if s!='':
+                          freqs.append(s)
+                 break
+
+          prop['current_freq']=cur_freq
+          prop['all_freqs']=freqs
+
+          if o=='con' and cur_freq!='':
+             ck.out('')
+             ck.out('Current GPU frequency:')
+             ck.out('  '+str(cur_freq))
+             if len(freqs)>0:
+                ck.out('')
+                ck.out('All frequencies:')
+                for q in freqs:
+                    ck.out('  '+q)
 
     # Exchanging info #################################################################
     if ex=='yes':
@@ -254,3 +317,109 @@ def detect(i):
     rr['features']['acc_misc']=prop_all
 
     return rr
+
+
+##############################################################################
+# set frequency
+
+def set_freq(i):
+    """
+    Input:  {
+              (host_os)              - host OS (detect, if omitted)
+              (os) or (target_os)    - OS module to check (if omitted, analyze host)
+
+              (device_id)            - device id if remote (such as adb)
+
+              (value) = "max" (default)
+                        "min"
+                        int value
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+    oo=''
+    if o=='con': oo=o
+
+    v=i.get('value','')
+    if v=='': v='max'
+
+    # Various params
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    if tos=='': tos=i.get('os','')
+    tdid=i.get('device_id','')
+
+    # Get OS info
+    import copy
+    ii=copy.deepcopy(i)
+    ii['out']=''
+    ii['action']='detect'
+    ii['module_uoa']=cfg['module_deps']['platform.os']
+    ii['skip_info_collection']='yes'
+    ii['skip_device_init']='yes'
+    rr=ck.access(ii)
+    if rr['return']>0: return rr
+
+    hos=rr['host_os_uid']
+    hosx=rr['host_os_uoa']
+    hosd=rr['host_os_dict']
+
+    tos=rr['os_uid']
+    tosx=rr['os_uoa']
+    tosd=rr['os_dict']
+
+    tbits=tosd.get('bits','')
+
+    tdid=rr['device_id']
+
+    dir_sep=tosd.get('dir_sep','')
+
+    remote=tosd.get('remote','')
+
+    # Prepare scripts
+    cmd=''
+    if v=='min':
+       cmd=tosd.get('script_set_min_gpu_freq','')
+    elif v=='max':
+       cmd=tosd.get('script_set_max_gpu_freq','')
+    else:
+       cmd=tosd.get('script_set_gpu_freq','').replace('$#freq#$',str(v))
+
+    path_to_scripts=tosd.get('path_to_scripts','')
+    if path_to_scripts!='': cmd=path_to_scripts+dir_sep+cmd
+
+    if cmd!='':
+       ck.out('')
+       ck.out('CMD to set GPU frequency:')
+       ck.out('  '+cmd)
+
+    # Get all params
+    if remote=='yes':
+       dv=''
+       if tdid!='': dv=' -s '+tdid
+
+       x=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd
+
+       rx=os.system(x)
+       if rx!=0:
+          if o=='con':
+             ck.out('')
+             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+
+    else:
+          rx=os.system(cmd)
+          if rx!=0:
+             if o=='con':
+                ck.out('')
+                ck.out('  Warning: setting frequency possibly failed - return code '+str(rx))
+
+    return {'return':0}
