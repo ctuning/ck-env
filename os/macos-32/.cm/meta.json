@@ -51,7 +51,7 @@
   "rem": "#",
   "script_ext": ".sh",
   "set_executable": "chmod 755",
-  "sudo_init":"sudo echo \\\"Initializing sudo ...\\\"",
+  "sudo_init":"sudo echo sudo_init...",
   "sudo_pre":"sudo ",
   "sudo_post":"sudo chown -R $USER:$USER ",
   "suppress_output": "> /dev/null",
