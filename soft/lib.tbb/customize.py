@@ -104,10 +104,6 @@ def setup(i):
        if cus.get('from_sources','')=='yes':
           pix=pi+'/build/install_release'
           cus['path_lib']=pix
-          cus['path_dynamic_lib']=pix
-          cus['dynamic_lib']='libtbb.so'
-          cus['extra_dynamic_libs']={'libtbbmalloc':'libtbbmalloc.so'}
-
        else:
           cus['path_bin']=pi+'/bin'
 
@@ -125,9 +121,13 @@ def setup(i):
                 cus['extra_compiler']=ext1
                 cus['extra_compiler_configured']='yes'
 
-          pix=pi+'/lib'+ext
+          pix=pi+'/lib/'+ext
           if ext1!='': pix+='/'+ext1
           cus['path_lib']=pix
+
+       cus['path_dynamic_lib']=pix
+       cus['dynamic_lib']='libtbb.so'
+       cus['extra_dynamic_libs']={'libtbbmalloc':'libtbbmalloc.so'}
 
        s+='# Setting Intel TBB environment\n'
        s+='. "'+pix+'/tbbvars.sh"\n'
