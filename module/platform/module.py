@@ -12,6 +12,7 @@ work={} # Will be updated by CK (temporal data)
 ck=None # Will be updated by CK (initialized CK kernel) 
 
 # Local settings
+sep='***************************************************************************************'
 
 ##############################################################################
 # Initialize module
@@ -116,7 +117,11 @@ def detect(i):
                         'module_uoa':cfg['module_deps']['repo']})
           if rx['return']>0: return rx
 
-    # Get OS info
+    # Get OS info ###############################################################
+    if oo=='con': 
+       ck.out(sep)
+       ck.out('Detecting OS and CPU features ...')
+
     import copy
     ii=copy.deepcopy(i)
     ii['out']=oo
@@ -161,7 +166,11 @@ def detect(i):
 
     ro=os_dict.get('redirect_stdout','')
 
-    # Get accelerator info (GPU, etc.)
+    # Get accelerator info (GPU, etc.) ####################################################
+    if oo=='con': 
+       ck.out(sep)
+       ck.out('Detecting accelerator features ...')
+
     import copy
     ii=copy.deepcopy(i)
     ii['out']=oo
@@ -173,6 +182,10 @@ def detect(i):
     rr.update(rx)
 
     # Get info about system ######################################################
+    if oo=='con': 
+       ck.out(sep)
+       ck.out('Detecting system features ...')
+
     remote=os_dict.get('remote','')
     if remote=='yes':
        params={}
