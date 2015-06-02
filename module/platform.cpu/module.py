@@ -86,7 +86,7 @@ def detect(i):
     pdv=i.get('print_device_info','')
     ex=i.get('exchange','')
 
-    # Get OS info
+    # Get OS info ##############################################################
     import copy
     ii=copy.deepcopy(i)
     ii['out']=oo
@@ -311,15 +311,16 @@ def detect(i):
                            pass
 
 
-       # Initialized device if needed
-       if sdi!='yes':
-          remote_init=tosd.get('remote_init','')
-          if remote_init!='':
-             r=ck.access({'action':'init_device',
-                          'module_uoa':cfg['module_deps']['platform'],
-                          'os_dict':tosd,
-                          'device_id':tdid})
-             if r['return']>0: return r
+# FGG - it is already initalized here!
+#       # Initialized device if needed
+#       if sdi!='yes':
+#          remote_init=tosd.get('remote_init','')
+#          if remote_init!='':
+#             r=ck.access({'action':'init_device',
+#                          'module_uoa':cfg['module_deps']['platform'],
+#                          'os_dict':tosd,
+#                          'device_id':tdid})
+#             if r['return']>0: return r
 
        # Get all params
        params={}
