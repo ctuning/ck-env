@@ -165,6 +165,7 @@ def detect(i):
     import copy
     ii=copy.deepcopy(i)
     ii['out']=oo
+    ii['skip_print_os_info']='yes'
     ii['action']='detect'
     ii['module_uoa']=cfg['module_deps']['platform.accelerator']
     rx=ck.access(ii) # DO NOT USE rr further - will be reused as return !
@@ -277,7 +278,8 @@ def detect(i):
              target_system_model=r['string'].strip()
 
        prop['vendor']=x1
-       prop['name']=target_name+' ('+target_system_model+')'
+       prop['name']=target_name
+       if target_system_model!='': prop['name']+=' ('+target_system_model+')'
        prop['model']=target_system_model
 
        fpn=i.get('force_platform_name','')

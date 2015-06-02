@@ -45,6 +45,8 @@ def detect(i):
 
               (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
 
+              (skip_print_os_info)   - if 'yes', do not print OS info
+
               (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
@@ -88,6 +90,7 @@ def detect(i):
     import copy
     ii=copy.deepcopy(i)
     ii['out']=oo
+    if i.get('skip_print_os_info','')=='yes':ii['out']=''
     ii['action']='detect'
     ii['module_uoa']=cfg['module_deps']['platform.os']
     rr=ck.access(ii) # DO NOT USE rr further - will be reused as return !
@@ -301,7 +304,12 @@ def detect(i):
                     for h in all:
                         ppx=str(px)
                         if ppx not in target_freq_all: target_freq_all[ppx]=[]
-                        target_freq_all[ppx].append(int(h))
+                        try:
+                           h=int(h)
+                           target_freq_all[ppx].append(h)
+                        except ValueError:
+                           pass
+
 
        # Initialized device if needed
        if sdi!='yes':
@@ -406,12 +414,14 @@ def detect(i):
        for k in sorted(x, key=ck.convert_str_key_to_int):
            v=x[k]
            ck.out('  CPU'+k+' = '+str(v)+' MHz')
-       ck.out('CPU all frequencies (Hz):')
+
        x=target.get('all_freqs',{})
-       import json
-       for k in sorted(x, key=ck.convert_str_key_to_int):
-           v=x[k]
-           ck.out('  CPU'+k+' = '+json.dumps(v))
+       if len(x)>0:
+          ck.out('CPU all frequencies (Hz):')
+          import json
+          for k in sorted(x, key=ck.convert_str_key_to_int):
+              v=x[k]
+              ck.out('  CPU'+k+' = '+json.dumps(v))
 
     # Exchanging info #################################################################
     if ex=='yes':

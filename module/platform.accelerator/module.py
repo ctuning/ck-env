@@ -45,6 +45,8 @@ def detect(i):
 
               (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
 
+              (skip_print_os_info)   - if 'yes', do not print OS info
+
               (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
@@ -84,7 +86,8 @@ def detect(i):
     # Get OS info
     import copy
     ii=copy.deepcopy(i)
-    ii['out']=''
+    ii['out']=oo
+    if i.get('skip_print_os_info','')=='yes': ii['out']=''
     ii['action']='detect'
     ii['module_uoa']=cfg['module_deps']['platform.cpu']
     rr=ck.access(ii) # DO NOT USE rr further - will be reused as return !
@@ -271,7 +274,7 @@ def detect(i):
                 ck.out('')
                 ck.out('All frequencies:')
                 for q in freqs:
-                    ck.out('  '+q)
+                    ck.out(' '+q)
 
     # Exchanging info #################################################################
     if ex=='yes':
