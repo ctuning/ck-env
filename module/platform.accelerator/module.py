@@ -110,6 +110,8 @@ def detect(i):
     remote=tosd.get('remote','')
     win=tosd.get('windows_base','')
 
+    stdirs=tosd.get('dir_sep','')
+
     dv=''
     if tdid!='': dv=' -s '+tdid
 
@@ -221,7 +223,7 @@ def detect(i):
        cmd=tosd.get('script_get_gpu_frequency','')+' '+ro+fn
 
        path_to_scripts=tosd.get('path_to_scripts','')
-       if path_to_scripts!='': cmd=path_to_scripts+dir_sep+cmd
+       if path_to_scripts!='': cmd=path_to_scripts+stdirs+cmd
 
        if remote=='yes':
           # Execute script
