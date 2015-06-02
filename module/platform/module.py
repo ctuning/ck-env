@@ -243,7 +243,9 @@ def detect(i):
           if model.lower().startswith(manu.lower()):
              model=model[len(manu)+1:]
 
-       prop['name']=manu+' '+model
+       if manu=='' and model!='': manu=model
+       prop['name']=manu
+       if model!='': prop['name']+=' '+model
        prop['model']=model
        prop['vendor']=manu
     else:
@@ -291,6 +293,7 @@ def detect(i):
              target_system_model=r['string'].strip()
 
        prop['vendor']=x1
+       if target_name=='' and x1!='': target_name=x1
        prop['name']=target_name
        if target_system_model!='': prop['name']+=' ('+target_system_model+')'
        prop['model']=target_system_model
