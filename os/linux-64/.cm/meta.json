@@ -1,5 +1,4 @@
 {
-  "set_affinity":"taskset -c $#ck_affinity#$",
   "batch_bash_prefix": "#! /bin/bash\n", 
   "batch_check_if_set": "if [ \"$1\" != \"1\" ]; then if [ \"$$#ck_var#$\" == \"1\" ]; then return; fi; fi\n", 
   "batch_prefix": "#! /bin/bash\n# CK generated script\n", 
@@ -64,6 +63,7 @@
   "script_set_min_gpu_freq": "ck-set-gpu-powersave", 
   "script_start_power_monitor": "ck-set-power-sensors 1", 
   "script_stop_power_monitor": "ck-set-power-sensors 0", 
+  "set_affinity": "taskset -c $#ck_affinity#$", 
   "set_executable": "chmod 755", 
   "sudo_init": "sudo echo sudo_init...", 
   "sudo_post": "sudo chown -R $USER:$USER ", 

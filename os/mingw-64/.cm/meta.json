@@ -1,6 +1,5 @@
 {
-   "set_affinity":"taskset -c $#ck_affinity#$",
- "batch_check_if_set": "if not [%1] == [1] (if defined $$#ck_var#$ exit /b 0)\n", 
+  "batch_check_if_set": "if not [%1] == [1] (if defined $$#ck_var#$ exit /b 0)\n", 
   "batch_prefix": "@echo off\n\nrem CK generated script\n", 
   "bits": "64", 
   "bits_all": [
@@ -49,6 +48,7 @@
   "redirect_stdout_aggr": ">>", 
   "rem": "rem", 
   "script_ext": ".bat", 
+  "set_affinity": "taskset -c $#ck_affinity#$", 
   "suppress_output": "> nul", 
   "tags": [
     "os", 

@@ -1,5 +1,4 @@
 {
-  "set_affinity":"taskset -c $#ck_affinity#$",
   "adb_all_params": "adb $#device#$ shell getprop $#redirect_stdout#$ $#output_file#$", 
   "adb_devices": "adb devices $#redirect_stdout#$ $#output_file#$", 
   "adb_dumpsys": "adb $#device#$ shell dumpsys $#category#$ $#redirect_stdout#$ $#output_file#$", 
@@ -71,6 +70,7 @@
   "script_set_min_gpu_freq": "ck-set-gpu-powersave", 
   "script_start_power_monitor": "ck-set-power-sensors 1", 
   "script_stop_power_monitor": "ck-set-power-sensors 0", 
+  "set_affinity": "taskset -c $#ck_affinity#$", 
   "set_executable": "chmod 755", 
   "suppress_output": "> /dev/null", 
   "tags": [
