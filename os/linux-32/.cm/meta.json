@@ -1,4 +1,5 @@
 {
+  "set_affinity":"taskset -c $#ck_affinity#$",
   "batch_bash_prefix": "#! /bin/bash\n", 
   "batch_check_if_set": "if [ \"$1\" != \"1\" ]; then if [ \"$$#ck_var#$\" == \"1\" ]; then return; fi; fi\n", 
   "batch_prefix": "#! /bin/bash\n# CK generated script\n", 

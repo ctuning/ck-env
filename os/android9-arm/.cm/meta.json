@@ -1,4 +1,5 @@
 {
+  "set_affinity":"taskset -c $#ck_affinity#$",
   "adb_all_params": "adb $#device#$ shell getprop $#redirect_stdout#$ $#output_file#$", 
   "adb_devices": "adb devices $#redirect_stdout#$ $#output_file#$", 
   "adb_dumpsys": "adb $#device#$ shell dumpsys $#category#$ $#redirect_stdout#$ $#output_file#$", 
