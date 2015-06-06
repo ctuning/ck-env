@@ -544,32 +544,33 @@ def set_freq(i):
     else:
        cmd=tosd.get('script_set_cpu_freq','').replace('$#freq#$',str(v))
 
-    path_to_scripts=tosd.get('path_to_scripts','')
-    if path_to_scripts!='': cmd=path_to_scripts+dir_sep+cmd
-
     if cmd!='':
-       ck.out('')
-       ck.out('CMD to set CPU frequency:')
-       ck.out('  '+cmd)
+       path_to_scripts=tosd.get('path_to_scripts','')
+       if path_to_scripts!='': cmd=path_to_scripts+dir_sep+cmd
 
-    # Get all params
-    if remote=='yes':
-       dv=''
-       if tdid!='': dv=' -s '+tdid
+       if o=='con':
+          ck.out('')
+          ck.out('CMD to set CPU frequency:')
+          ck.out('  '+cmd)
 
-       x=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd
+       # Get all params
+       if remote=='yes':
+          dv=''
+          if tdid!='': dv=' -s '+tdid
 
-       rx=os.system(x)
-       if rx!=0:
-          if o=='con':
-             ck.out('')
-             ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd
 
-    else:
-          rx=os.system(cmd)
+          rx=os.system(x)
           if rx!=0:
              if o=='con':
                 ck.out('')
-                ck.out('  Warning: setting frequency possibly failed - return code '+str(rx))
+                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+
+       else:
+             rx=os.system(cmd)
+             if rx!=0:
+                if o=='con':
+                   ck.out('')
+                   ck.out('  Warning: setting frequency possibly failed - return code '+str(rx))
 
     return {'return':0}

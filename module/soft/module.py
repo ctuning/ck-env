@@ -92,6 +92,16 @@ def detect(i):
 
     ubtr=hosd.get('use_bash_to_run','')
 
+    svarb=hosd.get('env_var_start','')
+    svarb1=hosd.get('env_var_extra1','')
+    svare=hosd.get('env_var_stop','')
+    svare1=hosd.get('env_var_extra2','')
+    sexe=hosd.get('set_executable','')
+    sbp=hosd.get('bin_prefix','')
+    envsep=hosd.get('env_separator','')
+    scall=hosd.get('env_call','')
+    sext=hosd.get('script_ext','')
+
     # Check soft UOA
     duoa=i.get('uoa','')
     if duoa=='': duoa=i.get('data_uoa','')
@@ -130,9 +140,15 @@ def detect(i):
 
     # Check if has version
     ver=d.get('version','')
-    tool=i.get('tool','')
-    if tool=='':
+
+    tool=ver.get('tool_via_env','')
+    if tool!='':
+       tool=svarb+svarb1+tool+svare1+svare
+    else:
        tool=d.get('tool','')
+
+    if i.get('tool','')!='':
+       tool=i['tool']
 
     cmd=tool+' '+ver.get('cmd','')
     lst=[]
@@ -147,10 +163,28 @@ def detect(i):
 
        cmd=cmd.replace('$#filename#$', fn)
 
-       if env!='': cmd=env.strip()+' '+hosd.get('env_separator','')+' '+cmd
+       if env!='': cmd=env.strip()+'\n'+cmd
 
-       if ubtr!='': cmd=ubtr.replace('$#cmd#$',cmd)
-       ry=os.system(cmd)
+       # Record to tmp batch and run
+       rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'yes'})
+       if rx['return']>0: return rx
+       fnb=rx['file_name']
+
+       rx=ck.save_text_file({'text_file':fnb, 'string':cmd})
+       if rx['return']>0: return rx
+
+       y=''
+       if sexe!='':
+          y+=sexe+' '+sbp+fnb+envsep
+       y+=' '+scall+' '+sbp+fnb
+
+       if ubtr!='': y=ubtr.replace('$#cmd#$',y)
+
+       if o=='con':
+          ck.out('')
+          ck.out('Executing cmd: '+y+' ...')
+
+       ry=os.system(y)
 #       if ry>0:
 #          return {'return':16, 'error':'executing command returned non-zero value ('+cmd+')'}
 

@@ -62,6 +62,7 @@
   ], 
   "tool": "gcc", 
   "version": {
+    "tool_via_env":"CK_CC",
     "check_lines": 1, 
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
