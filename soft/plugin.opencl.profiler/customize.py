@@ -71,8 +71,10 @@ def setup(i):
     else:
        dext='.so'
 
-    cus['dynamic_plugin']='plugin-openme-dvdt-profiler'+dext
+    cus['dynamic_plugin']='plugin-opencl-dvdt-profiler'+dext
 
-    env[envp+'_DYNAMIC_NAME']=cus.get('dynamic_plugin','')
+
+    env[envp+'_DYNAMIC_NAME']=cus['dynamic_plugin']
+    env[envp+'_DYNAMIC_NAME_FULL']=pi+'/lib/'+cus['dynamic_plugin']
 
     return {'return':0, 'bat':s}
