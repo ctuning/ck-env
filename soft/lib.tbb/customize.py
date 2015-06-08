@@ -113,10 +113,10 @@ def setup(i):
              ext1=cus.get('extra_compiler','')
              ext1c=cus.get('extra_compiler_configured','')
              if ext1c!='yes' or ext1=='':
-                ext1=raw_input('Which compiler configuration to use (Enter for gcc4.4)? ')
+                ext1=raw_input('Which compiler configuration to use (for example, gcc4.4)? ')
                 ext1=ext1.strip()
 
-                if ext1=='': ext1='gcc4.4'
+#                if ext1=='': ext1='gcc4.4'
 
                 cus['extra_compiler']=ext1
                 cus['extra_compiler_configured']='yes'
