@@ -55,6 +55,9 @@ def run(i):
 
     import os
 
+    print i
+    exit(1)
+
     ruoa=i.get('repo_uoa','')
     muoa=i.get('script_module_uoa','')
     if muoa=='': muoa=work['self_module_uoa']
@@ -73,7 +76,7 @@ def run(i):
     p=rx['path']
 
     ss=d.get('sub_scripts',{})
-    
+
     xs=ss.get(name,{})
 
     if len(xs)==0:
