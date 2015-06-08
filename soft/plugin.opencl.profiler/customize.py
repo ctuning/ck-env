@@ -77,6 +77,6 @@ def setup(i):
     env[envp+'_DYNAMIC_NAME']=cus['dynamic_plugin']
     env[envp+'_DYNAMIC_NAME_FULL']=pi+'/lib/'+cus['dynamic_plugin']
 
-    env[envp+'_CONVERT_TO_CK']=pi+'/src/ck/convert_output_to_ck_format.py'
+    env[envp+'_CONVERT_TO_CK']='python '+pi+'/src/ck/convert_output_to_ck_format.py'
 
     return {'return':0, 'bat':s}
