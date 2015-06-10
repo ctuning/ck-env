@@ -55,9 +55,6 @@ def run(i):
 
     import os
 
-    print i
-    exit(1)
-
     ruoa=i.get('repo_uoa','')
     muoa=i.get('script_module_uoa','')
     if muoa=='': muoa=work['self_module_uoa']
