@@ -318,7 +318,6 @@ def detect(i):
                       ver=r['dict']
                       prop_os_name=ver.get('DISTRIB_DESCRIPTION','')
 
-
     prop['ck_os_uoa']=tosx
     prop['ck_os_base_uoa']=tosd.get('base_uoa','')
     prop['name']=prop_os_name
