@@ -13,6 +13,7 @@ ck=None # Will be updated by CK (initialized CK kernel)
 
 # Local settings
 env_install_path='CK_TOOLS'
+install_path='CK-TOOLS'
 
 ##############################################################################
 # Initialize module
@@ -352,9 +353,17 @@ def install(i):
              pix=''
              sp=d.get('suggested_path','')
 
-             if os.environ.get(env_install_path,'')!='' and sp!='':
-                x=os.environ[env_install_path]
+             # Moved Tools to $HOME by default if CK_TOOLS is not defined
+             x=os.environ.get(env_install_path,'')
+             if x=='':
+                # Get home user directory
+                from os.path import expanduser
+                home = expanduser("~")
+                x=os.path.join(home, install_path)
+                if not os.path.isdir(x):
+                   os.makedirs(x)
 
+             if x!='' and sp!='':
                 nm=sp+'-'+cus.get('version','')
 
                 bdn=udeps.get('compiler',{}).get('build_dir_name','')
@@ -454,8 +463,18 @@ def install(i):
 
              pix=''
              sp=d.get('suggested_path','')
-             if os.environ.get(env_install_path,'')!='' and sp!='':
-                x=os.environ[env_install_path]
+
+             # Moved Tools to $HOME by default if CK_TOOLS is not defined
+             x=os.environ.get(env_install_path,'')
+             if x=='':
+                # Get home user directory
+                from os.path import expanduser
+                home = expanduser("~")
+                x=os.path.join(home, install_path)
+                if not os.path.isdir(x):
+                   os.makedirs(x)
+
+             if x!='' and sp!='':
                 pix=os.path.join(x, sp+'-'+cus.get('version','')+'-'+tosx)
                 if not tosx.endswith(tbits): pix+='-'+tbits
                 ck.out('Suggested path: '+pix)
