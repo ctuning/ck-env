@@ -245,6 +245,8 @@ def set(i):
                         js+='Dependency '+j+' (UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
                         ck.out(js)
 
+
+
              ck.out('')
              rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+' or press Enter for 0: '})
              x=rx['string'].strip()
@@ -684,6 +686,14 @@ def resolve(i):
 
         lst=rx['lst']
         dd=rx['dict']
+
+        # add choices
+        zchoices=[]
+        for zw in lst:
+            zchoices.append(zw['data_uid'])
+
+        if 'choices' not in q or len('choices')==0: 
+           q['choices']=zchoices
 
         cus=dd.get('customize',{})
 
