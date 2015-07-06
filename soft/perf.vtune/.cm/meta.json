@@ -1,0 +1,16 @@
+{
+  "customize": {
+    "add_include_path": "no", 
+    "env_prefix": "CK_ENV_PERF_VTUNE", 
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_path": "yes"
+  }, 
+  "customize_script": "customize", 
+  "soft_name": "Perf - VTune", 
+  "tags": [
+    "perf", 
+    "intel", 
+    "vtune"
+  ]
+}
