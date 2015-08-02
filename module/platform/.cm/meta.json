@@ -1,23 +1,23 @@
 {
   "actions": {
     "deinit": {
-      "desc": "deinitialize device (put to powersave mode)"
+      "desc": "de-initialize device (put shared computational devices to powersave mode after experiments)"
     }, 
     "detect": {
-      "desc": "collect info about platforms"
+      "desc": "detect various properties (features) of a given platform"
     }, 
     "exchange": {
-      "desc": "exchange properties"
+      "desc": "exchange various information with a public server (for crowd-benchmarking/crow-tuning)"
     }, 
     "get_from_wmic": {
-      "desc": "Get info from WMIC on Windows"
+      "desc": "get information from WMIC tool on Windows"
     }, 
     "init_device": {
-      "desc": "Init remote device"
+      "desc": "init remote device (useful when preparing shared computational device)"
     }
   }, 
   "copyright": "See CK Copyright.txt for copyright details", 
-  "desc": "platform detection", 
+  "desc": "detecting and describin platforms", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
   "developer_webpage": "http://cTuning.org/lab/people/gfursin", 

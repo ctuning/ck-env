@@ -1,11 +1,11 @@
 {
   "actions": {
     "detect": {
-      "desc": "detect host and target OS"
+      "desc": "detect various properties (features) of a host and target OS"
     }
   },
   "copyright": "See CK Copyright.txt for copyright details",
-  "desc": "platform - OS",
+  "desc": "describing and detecting platform's operating systems",
   "developer": "Grigori Fursin",
   "developer_email": "Grigori.Fursin@cTuning.org",
   "developer_webpage": "http://cTuning.org/lab/people/gfursin",

@@ -1,14 +1,14 @@
 {
   "actions": {
     "refresh_json": {
-      "desc": "updating json file"
+      "desc": "update json file"
     }, 
     "replace_string_in_file": {
-      "desc": "Replace string in file"
+      "desc": "replace string in a file"
     }
   }, 
   "copyright": "See CK Copyright.txt for copyright details", 
-  "desc": "Grigori's misc research functions", 
+  "desc": "auxiliary functions shared by Grigori Fursin", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
   "developer_webpage": "http://cTuning.org/lab/people/gfursin", 

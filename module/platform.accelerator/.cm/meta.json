@@ -1,14 +1,14 @@
 {
   "actions": {
     "detect": {
-      "desc": "detect accelerator features"
+      "desc": "detect various properties (features) of a given accelerator (GPU, FPGA, neural network accelerator, etc)"
     }, 
     "set_freq": {
-      "desc": "set frequency"
+      "desc": "set frequency of a given acelerator (if supported)"
     }
   },
   "copyright": "See CK Copyright.txt for copyright details",
-  "desc": "platform - accelerator",
+  "desc": "describing and detecting platform's accelerators",
   "developer": "Grigori Fursin",
   "developer_email": "Grigori.Fursin@cTuning.org",
   "developer_webpage": "http://cTuning.org/lab/people/gfursin",

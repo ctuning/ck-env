@@ -1,20 +1,20 @@
 {
   "actions": {
     "refresh": {
-      "desc": "refresh environment (re-setup soft)"
+      "desc": "refresh environment setup (re-setup related software version)"
     },
     "resolve": {
-      "desc": "resolve all dependencies"
+      "desc": "resolve all dependencies for a given software"
     },
     "set": {
-      "desc": "set environment"
+      "desc": "prepare and set environment for a given software"
     },
     "show": {
-      "desc": "show all installed environment"
+      "desc": "show all installed software environments"
     }
   },
   "copyright": "See CK Copyright.txt for copyright details",
-  "desc": "environment",
+  "desc": "software environments (to abstract multiple tools and their versions)",
   "developer": "Grigori Fursin",
   "developer_email": "Grigori.Fursin@cTuning.org",
   "developer_webpage": "http://cTuning.org/lab/people/gfursin",

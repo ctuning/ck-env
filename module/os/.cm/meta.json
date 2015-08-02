@@ -1,11 +1,11 @@
 {
   "actions": {
     "find_close": {
-      "desc": "find close OS"
+      "desc": "find the most close description for the host OS"
     }
   },
   "copyright": "See CK Copyright.txt for copyright details",
-  "desc": "os",
+  "desc": "description of operating systems (OS)",
   "developer": "Grigori Fursin",
   "developer_email": "Grigori.Fursin@cTuning.org",
   "developer_webpage": "http://cTuning.org/lab/people/gfursin",

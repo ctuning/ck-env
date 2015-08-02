@@ -1,15 +1,15 @@
 {
   "actions": {
     "detect": {
-      "desc": "detect soft"
+      "desc": "detect version of a given software"
     },
     "setup": {
-      "desc": "setup environment"
+      "desc": "setup CK environment for a given software"
     }
   },
   "copyright": "See CK Copyright.txt for copyright details",
   "default_bat_name": "env",
-  "desc": "checking and installing software",
+  "desc": "managing software (registering in CK environment)",
   "developer": "Grigori Fursin",
   "developer_email": "Grigori.Fursin@cTuning.org",
   "developer_webpage": "http://cTuning.org/lab/people/gfursin",

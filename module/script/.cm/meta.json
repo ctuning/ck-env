@@ -1,11 +1,11 @@
 {
   "actions": {
     "run": {
-      "desc": "run script"
+      "desc": "run a given script (host OS dependent)"
     }
   }, 
   "copyright": "See CK Copyright.txt for copyright details", 
-  "desc": "script", 
+  "desc": "scripts", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
   "developer_webpage": "http://cTuning.org/lab/people/gfursin", 
