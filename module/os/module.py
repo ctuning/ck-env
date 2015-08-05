@@ -70,6 +70,14 @@ def find_close(i):
                           'generic':'yes',
                           'priority':'yes'},
            'internal':'yes'}
+
+       # Adding extra tags to separate different Linux flavours such as Mac OS X:
+       import sys
+       pl=sys.platform
+
+       if pl=='darwin':
+          ii['tags']='macos'
+
        rx=ck.access(ii)
        if rx['return']>0: return rx
 
