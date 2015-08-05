@@ -41,6 +41,7 @@
   "lib_dir": "lib", 
   "md5sum": "md5sum", 
   "name": "unix", 
+  "priority": "yes", 
   "processor": "x86", 
   "quit_if_error": "er=$?; if [ $er != 0 ]; then exit $er; fi", 
   "redirect_stderr": "2>", 
@@ -67,7 +68,8 @@
   "suppress_output": "> /dev/null", 
   "tags": [
     "os", 
-    "linux"
-  ], 
+    "linux",
+    "macos"
+ ], 
   "use_bash_to_run": "bash -c \"$#cmd#$\""
 }
