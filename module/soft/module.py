@@ -654,6 +654,11 @@ def setup(i):
        evs=hosd.get('env_var_separator','')
        eifs=hosd.get('env_quotes_if_space','')
 
+       ellp=hosd.get('env_ld_library_path','')
+       if ellp=='': ellp='LD_LIBRARY_PATH'
+       elp=hosd.get('env_library_path','')
+       if elp=='': elp='LIBRARY_PATH'
+
        # Check installation path
        if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes':
           if o=='con':
@@ -823,8 +828,8 @@ def setup(i):
           sb+=eset+' PATH='+svarb+envp_b+svare+evs+svarb+'PATH'+svare+'\n'
 
        if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!='':
-          sb+=eset+' LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LIBRARY_PATH'+svare+'\n'
-          sb+=eset+' LD_LIBRARY_PATH='+svarb+envp_l+svare+evs+svarb+'LD_LIBRARY_PATH'+svare+'\n'
+          sb+=eset+' '+elp+'='+svarb+envp_l+svare+evs+svarb+elp+svare+'\n'
+          sb+=eset+' '+ellp+'='+svarb+envp_l+svare+evs+svarb+ellp+svare+'\n'
 
        # Say that environment is set (to avoid recursion)
        sb+=eset+' '+envps+'=1\n'

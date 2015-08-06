@@ -63,6 +63,13 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    hosd=i.get('host_os_dict',{})
+
+    ellp=hosd.get('env_ld_library_path','')
+    if ellp=='': ellp='LD_LIBRARY_PATH'
+    elp=hosd.get('env_library_path','')
+    if elp=='': elp='LIBRARY_PATH'
+
     ################################################################
     if remote=='yes':
        cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
@@ -82,9 +89,9 @@ def setup(i):
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
 
        if win=='yes':
-          s+='\nset LD_LIBRARY_PATH=%CK_ENV_LIB_OPENCV_LIB%;%LD_LIBRARY_PATH%\n'
+          s+='\nset '+ellp+'=%CK_ENV_LIB_OPENCV_LIB%;%'+ellp+'%\n'
        else:
-          s+='\nexport LD_LIBRARY_PATH=$CK_ENV_LIB_OPENCV_LIB:$LD_LIBRARY_PATH\n'
+          s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:$'+ellp+'\n'
 
     elif win=='yes':
        ext='x64'
@@ -154,6 +161,6 @@ def setup(i):
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
        env['CK_ENV_LIB_OPENCV_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
 
-       s+='\nexport LD_LIBRARY_PATH=$CK_ENV_LIB_OPENCV_LIB:$LD_LIBRARY_PATH\n'
+       s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:$'+ellp+'\n'
 
     return {'return':0, 'bat':s}

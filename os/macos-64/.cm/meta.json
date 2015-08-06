@@ -14,6 +14,8 @@
   "dir_sep": "/", 
   "env_call": ".", 
   "env_dollar_if_remote": "yes", 
+  "env_ld_library_path": "DYLD_LIBRARY_PATH", 
+  "env_library_path": "LIBRARY_PATH", 
   "env_quotes": "\"", 
   "env_quotes_if_remote": "\"", 
   "env_quotes_if_space": "\"", 
@@ -42,7 +44,8 @@
   "generic": "yes", 
   "html_for_detached_console": "<html>\r\n<body>\r\n<script language=\"javascript\">\r\n<!--\r\nself.close();\r\n//-->\r\n</script> \r\nConsole was detached. This window can be closed!\r\n</body>\r\n</html>", 
   "lib_dir": "lib64", 
-  "md5sum": "md5sum", 
+  "macos": "yes", 
+  "md5sum": "md5 -r", 
   "name": "unix", 
   "priority": "yes", 
   "processor": "x64", 
@@ -71,7 +74,7 @@
   "suppress_output": "> /dev/null", 
   "tags": [
     "os", 
-    "linux",
+    "linux", 
     "macos"
   ], 
   "use_bash_to_run": "bash -c \"$#cmd#$\""
