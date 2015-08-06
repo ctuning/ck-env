@@ -22,6 +22,8 @@
   "env_var_extra1": "{", 
   "env_var_extra2": "}", 
   "env_var_separator": ":", 
+  "env_var_start": "$", 
+  "env_var_stop": "", 
   "exec_prefix": "./", 
   "extract_package": {
     ".tar.bz2": "rm -f $#cm_file_without_one_ext#$ ; bzip2 -d $#cm_file#$ ; tar xvf $#cm_file_without_one_ext#$; rm -f $#cm_file_without_one_ext#$", 
