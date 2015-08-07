@@ -93,6 +93,9 @@ def set(i):
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
 
+    user_env=False
+    if hos!='' or tos!='' or tdid!='': user_env=True
+
     # Checking/detecting host OS
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
@@ -145,7 +148,7 @@ def set(i):
         'add_info':'yes',
         'add_meta':'yes'} # Need to sort by version, if ambiguity
 
-    if i.get('local','')=='yes':
+    if user_env or i.get('local','')=='yes':
        setup={'host_os_uoa':hos,
               'target_os_uoa':tos,
               'target_os_bits':tbits}
@@ -213,7 +216,7 @@ def set(i):
                  zi=j.get('info',{})
                  zm=j.get('meta',{})
                  zu=j.get('data_uid','')
-                 zdn=zi.get('data_name',{})
+                 zdn=zi.get('data_name','')
                  cus=zm.get('customize','')
                  zdeps=zm.get('deps',{})
                  xsetup=zm.get('setup',{})

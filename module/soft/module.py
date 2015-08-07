@@ -188,6 +188,8 @@ def detect(i):
 #       if ry>0:
 #          return {'return':16, 'error':'executing command returned non-zero value ('+cmd+')'}
 
+       os.remove(fnb)
+
        if os.path.isfile(fn): 
           import sys
           rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'encoding':sys.stdout.encoding})
