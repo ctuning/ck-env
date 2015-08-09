@@ -1,1 +1,2 @@
+* 2015.08.09 - FGG: fixing stupid bug with Y/N when installing packages automatically (detected by Cedric)
 * 2015.08.07 - FGG: fixed a small bug with setting environment for a given target OS

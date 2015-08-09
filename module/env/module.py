@@ -291,8 +291,7 @@ def set(i):
           rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
           a=rx['string'].strip().lower()
 
-          if a=='' and a!='n' and a!='no':
-
+          if a!='n' and a!='no':
              save_cur_dir=os.getcwd()
 
              vv={'action':'install',
