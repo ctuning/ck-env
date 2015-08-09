@@ -412,14 +412,18 @@ def show(i):
        tos_uoa=ry['data_uoa']
        tosz=ry['dict'].get('base_uoa','')
        if tosz!='': tos_uoa=tosz
+
+       if tags!='': tags+=','
        tags+='target-os-'+tos_uoa
 
     tb=i.get('target_bits','')
     if tb!='':
+       if tags!='': tags+=','
        tags+=tb+'bits'
 
     ver=i.get('version','')
     if ver!='':
+       if tags!='': tags+=','
        tags+='v'+ver
 
     name=i.get('name','')
