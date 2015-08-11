@@ -70,7 +70,8 @@
   "suppress_output": "> /dev/null", 
   "tags": [
     "os", 
-    "linux"
+    "linux",
+    "standard"
   ], 
   "use_bash_to_run": "bash -c \"$#cmd#$\""
 }

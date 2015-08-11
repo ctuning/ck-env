@@ -77,6 +77,8 @@ def find_close(i):
 
        if pl=='darwin':
           ii['tags']='macos'
+       elif plat=='linux':
+          ii['tags']='standard'
 
        rx=ck.access(ii)
        if rx['return']>0: return rx
