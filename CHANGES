@@ -1,3 +1,4 @@
+* 2015.08.24 - FGG: * adding support to detect Windows 10 ...
 * 2015.08.11 - FGG: * fixing bug with detection of standard Linux
 * 2015.08.09 - FGG: * fixing stupid bug with Y/N when installing packages automatically (detected by Cedric)
                     * fixing "ck show env" when using tags and target_os -> was no comma separating sub-tags

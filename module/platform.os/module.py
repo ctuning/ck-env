@@ -292,7 +292,31 @@ def detect(i):
           prop_os_name_short=platform.system()+' '+platform.release()
 
           if win=='yes':
+             # If detected Windows 8, it may be Windows 10 ...
+             if prop_os_name_short.find(' 8'):
+
+                r=ck.gen_tmp_file({})
+                if r['return']>0: return r
+                fn=r['file_name']
+
+                cmd='ver > '+fn
+                rx=os.system(cmd)
+                if rx==0:
+                   r=ck.load_text_file({'text_file':fn, 
+                                        'delete_after_read':'yes'})
+                   if r['return']==0:
+                      s=r['string']
+                      j1=s.find('[Version ']
+                      if j1>0:
+                         j2=s.find(']',j1)
+                         s0=s[j1+6:j2]
+                         s1=s0.split('.')
+                         if len(s1)>0 and s1[0]='10':
+                            prop_os_name_short='Windows 10'
+                            prop_os_name_long='Windows-'+s1
+
              prop_os_name=prop_os_name_short
+
           else:
              # If Linux, remove extensions after - in a shorter version
              x=prop_os_name_short.find('-')
