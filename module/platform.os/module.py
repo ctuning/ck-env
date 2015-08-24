@@ -306,14 +306,14 @@ def detect(i):
                                         'delete_after_read':'yes'})
                    if r['return']==0:
                       s=r['string']
-                      j1=s.find('[Version ']
+                      j1=s.find('[Version ')
                       if j1>0:
                          j2=s.find(']',j1)
-                         s0=s[j1+6:j2]
+                         s0=s[j1+9:j2]
                          s1=s0.split('.')
-                         if len(s1)>0 and s1[0]='10':
+                         if len(s1)>0 and s1[0]=='10':
                             prop_os_name_short='Windows 10'
-                            prop_os_name_long='Windows-'+s1
+                            prop_os_name_long='Windows-'+s0
 
              prop_os_name=prop_os_name_short
 
