@@ -48,6 +48,7 @@ def detect(i):
               (skip_print_os_info)   - if 'yes', do not print OS info
 
               (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
+              (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
             }
@@ -85,6 +86,7 @@ def detect(i):
     sdi=i.get('skip_device_init','')
     pdv=i.get('print_device_info','')
     ex=i.get('exchange','')
+    if ex=='': ex=i.get('share','')
 
     # Get OS info ##############################################################
     import copy

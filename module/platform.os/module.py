@@ -46,6 +46,7 @@ def detect(i):
               (skip_info_collection) - if 'yes', do not collect info (particularly for remote)
 
               (exchange)             - if 'yes', exchange info with some repo (by default, remote-ck)
+              (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
 
@@ -90,6 +91,7 @@ def detect(i):
     sdi=i.get('skip_device_init','')
     pdv=i.get('print_device_info','')
     ex=i.get('exchange','')
+    if ex=='': ex=i.get('share','')
 
     # Detect and find most close host OS or load already existing one
     r=ck.access({'action':'find_close',
