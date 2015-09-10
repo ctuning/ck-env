@@ -106,3 +106,54 @@ def refresh_json(i):
     d=r['dict']
 
     return ck.save_json_to_file({'json_file':of, 'dict':d, 'sort_keys':'yes'})
+
+##############################################################################
+# process all files recursively using some action
+
+def process_all_files_recursively(i):
+    """
+    Input:  {
+               (path)    - starting path (or current)
+               (pattern) - file pattern
+               (cmd)     - perform action with a file
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+
+    p=i.get('path','')
+    if p=='':
+       p=os.getcwd()
+
+    pat=i.get('pattern','')
+
+    if o=='con':
+       x=''
+       if pat!='': x=' ('+pat+')'
+       ck.out('Obtaining list of all files'+x+'. May take some time ...')
+
+    r=ck.list_all_files({'path':p, 'pattern':pat})
+    if r['return']>0: return r
+
+    lst=r['list']
+    print len(lst)
+
+
+
+
+
+
+
+
+
+
+    return {'return':0, 'list':lst}

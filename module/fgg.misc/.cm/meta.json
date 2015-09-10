@@ -1,5 +1,8 @@
 {
   "actions": {
+    "process_all_files_recursively": {
+      "desc": "process all files recursively using some action"
+    }, 
     "refresh_json": {
       "desc": "update json file"
     }, 
