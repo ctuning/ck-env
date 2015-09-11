@@ -16,11 +16,11 @@
       "desc": "init remote device (useful when preparing shared computational device)"
     }
   }, 
-  "copyright": "See CK Copyright.txt for copyright details", 
+  "copyright": "See CK COPYRIGHT.txt for copyright details", 
   "desc": "detecting and describin platforms", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
-  "developer_webpage": "http://cTuning.org/lab/people/gfursin", 
+  "developer_webpage": "http://fursin.net", 
   "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
     "os": "0440cb72c2bc5cc6", 

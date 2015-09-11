@@ -2,9 +2,9 @@
 # Collective Knowledge (Grigori's misc research functions)
 #
 # See CK LICENSE.txt for licensing details
-# See CK Copyright.txt for copyright details
+# See CK COPYRIGHT.txt for copyright details
 #
-# Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://cTuning.org/lab/people/gfursin
+# Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
 cfg={}  # Will be updated by CK (meta description of this module)
@@ -113,9 +113,12 @@ def refresh_json(i):
 def process_all_files_recursively(i):
     """
     Input:  {
-               (path)    - starting path (or current)
-               (pattern) - file pattern
-               (cmd)     - perform action with a file
+               (path)     - starting path (or current)
+               (pattern)  - file pattern
+               (cmd)      - perform action with a file
+
+               (ck)       - call CK access
+               (file_key) - substitute this key in 'ck' with file name with full path
             }
 
     Output: {
@@ -134,26 +137,34 @@ def process_all_files_recursively(i):
     if p=='':
        p=os.getcwd()
 
+    cka=i.get('ck',{})
+    fk=i.get('file_key','')
+
     pat=i.get('pattern','')
 
     if o=='con':
+       ck.out('')
        x=''
        if pat!='': x=' ('+pat+')'
        ck.out('Obtaining list of all files'+x+'. May take some time ...')
 
-    r=ck.list_all_files({'path':p, 'pattern':pat})
+    r=ck.list_all_files({'path':p, 'pattern':pat, 'all':'yes'})
     if r['return']>0: return r
 
     lst=r['list']
-    print len(lst)
 
+    for qq in lst:
+        if p=='': q=qq
+        else:     q=os.path.join(p,qq)
 
+        if len(cka)>0:
+           if fk!='':
+              cka[fk]=q
 
+           if o=='con':
+              ck.out('  '+q)
 
-
-
-
-
-
+           r=ck.access(cka)
+           if r['return']>0: return r
 
     return {'return':0, 'list':lst}
