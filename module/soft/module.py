@@ -684,10 +684,31 @@ def setup(i):
        ver_int=cus.get('version_int',0)
        if ver_int==0 and o=='con' and cus.get('skip_version','')!='yes':
           ck.out('')
-          r=ck.inp({'text':'Enter soft version as integer for comparison (for V5.2.3 use 50203): '})
-          verx=r['string'].strip()
-          if verx=='': verx='0'
-          ver_int=int(verx)
+
+          # Trying to calculate version ourselves (XX.YY.ZZZZ)
+          if ver!='':
+             bver=ver.split('.')
+             bl=len(bver)
+             for b in range(0, bl):
+                 bb=bver[b]
+                 try:
+                    ib=int(bb)
+                 except ValueError:
+                    ib=0
+                 bver[b]=ib
+
+             ver_int=0
+             if bl>0: ver_int+=bver[0]*1000000
+             if bl>1: ver_int+=bver[1]*10000
+             if bl>2: ver_int+=bver[2]
+
+             ck.out('')
+             ck.out('Calculated integer version for internal comparison: '+str(ver_int))
+
+#          r=ck.inp({'text':'Enter soft version as integer for comparison (for V5.2.3 use 50203): '})
+#          verx=r['string'].strip()
+#          if verx=='': verx='0'
+#          ver_int=int(verx)
 
        if pi!='':
           cus['path_install']=pi

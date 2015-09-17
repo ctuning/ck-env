@@ -43,7 +43,7 @@
     "CK_LD": "$#tool_prefix#$ld", 
     "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".a", 
-    "CK_LINKER_FLAG_OPENMP":"-lgomp",
+    "CK_LINKER_FLAG_OPENMP": "-lgomp", 
     "CK_MAKE": "make", 
     "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
     "CK_OBJ_EXT": ".o", 
@@ -62,12 +62,12 @@
   ], 
   "tool": "gcc", 
   "version": {
-    "tool_via_env":"CK_CC",
     "check_lines": 1, 
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
     "string_after": " ", 
     "string_after1": "@@@", 
-    "string_before": ") "
+    "string_before": ") ", 
+    "tool_via_env": "CK_CC"
   }
 }

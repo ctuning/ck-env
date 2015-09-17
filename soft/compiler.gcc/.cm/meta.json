@@ -47,7 +47,7 @@
     "CK_LD": "$#tool_prefix#$ld", 
     "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".a", 
-    "CK_LINKER_FLAG_OPENMP":"-lgomp -lrt",
+    "CK_LINKER_FLAG_OPENMP": "-lgomp -lrt", 
     "CK_MAKE": "make", 
     "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
     "CK_OBJ_EXT": ".o", 

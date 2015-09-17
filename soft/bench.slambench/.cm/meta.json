@@ -1,10 +1,10 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_BENCH_SLAMBENCH",
+    "env_prefix": "CK_ENV_BENCH_SLAMBENCH", 
     "skip_add_to_ld_path": "yes"
-  },
+  }, 
   "tags": [
-    "bench",
+    "bench", 
     "slambench"
   ]
 }

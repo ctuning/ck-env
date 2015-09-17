@@ -1,20 +1,20 @@
 {
   "customize": {
-    "add_include_path": "yes",
+    "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_OPENCL"
-  },
-  "customize_script": "customize",
+  }, 
+  "customize_script": "customize", 
   "deps": {
     "compiler": {
-      "local": "yes",
+      "local": "yes", 
       "tags": "compiler,lang-c"
     }
-  },
-  "soft_name": "Library - OpenCL - MALI",
+  }, 
+  "soft_name": "Library - OpenCL - MALI", 
   "tags": [
-    "lib",
-    "opencl",
-    "arm",
+    "lib", 
+    "opencl", 
+    "arm", 
     "mali"
   ]
 }

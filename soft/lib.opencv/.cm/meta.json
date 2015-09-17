@@ -1,7 +1,7 @@
 {
   "customize": {
     "add_include_path": "no", 
-    "env_prefix": "CK_ENV_LIB_OPENCV",
+    "env_prefix": "CK_ENV_LIB_OPENCV", 
     "skip_add_to_ld_path": "yes"
   }, 
   "customize_script": "customize", 

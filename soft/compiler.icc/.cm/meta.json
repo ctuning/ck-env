@@ -50,7 +50,7 @@
     "CK_LB_OUTPUT": "-o ", 
     "CK_LD_FLAGS_EXTRA": "", 
     "CK_LIB_EXT": ".a", 
-    "CK_LINKER_FLAG_OPENMP":"-lpthread -liomp5",
+    "CK_LINKER_FLAG_OPENMP": "-lpthread -liomp5", 
     "CK_MAKE": "make", 
     "CK_OBJDUMP": "objdump -d", 
     "CK_OBJ_EXT": ".o", 

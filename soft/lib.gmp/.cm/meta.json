@@ -1,11 +1,11 @@
 {
   "customize": {
-    "add_include_path": "yes",
+    "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_GMP"
-  },
-  "soft_name": "Library - GMP",
+  }, 
+  "soft_name": "Library - GMP", 
   "tags": [
-    "lib",
+    "lib", 
     "gmp"
   ]
 }

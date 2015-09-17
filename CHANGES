@@ -1,3 +1,5 @@
+* 2015.09.17 - FGG: * automatically calculating integer soft version for internal comparisons
+
 * 2015.09.10 - FGG: * adding 'platform.init' module to share scripts and tools that can initialize a given platform
 
 * 2015.08.24 - FGG: * adding support to detect Windows 10 ...

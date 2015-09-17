@@ -1,11 +1,11 @@
 {
   "customize": {
-    "add_include_path": "yes",
+    "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_MPFR"
-  },
-  "soft_name": "Library - MPFR",
+  }, 
+  "soft_name": "Library - MPFR", 
   "tags": [
-    "lib",
+    "lib", 
     "mpfr"
   ]
 }
