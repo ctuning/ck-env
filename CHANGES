@@ -1,3 +1,6 @@
+* 2015.09.25 - FGG: * renaming soft:compiler.mcl to compiler.msvc (for Microsoft C compilers)
+                      (suggested by Anton)
+
 * 2015.09.17 - FGG: * automatically calculating integer soft version for internal comparisons
 
 * 2015.09.10 - FGG: * adding 'platform.init' module to share scripts and tools that can initialize a given platform
