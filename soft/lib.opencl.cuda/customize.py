@@ -64,7 +64,7 @@ def setup(i):
 
     ################################################################
     if win=='yes':
-       ext='Win64'
+       ext='x64'
        if tbits=='32': ext='Win32'
 
        cus['path_bin']=pi+'\\bin\\'
