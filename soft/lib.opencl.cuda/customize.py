@@ -10,6 +10,8 @@
 ##############################################################################
 # setup environment setup
 
+import os
+
 def setup(i):
     """
     Input:  {
@@ -64,7 +66,11 @@ def setup(i):
 
     ################################################################
     if win=='yes':
+       # FGG had 'Win64', however on Anton's machine it was 'x64'
+       # we should check backwards compatibility in the future ...
        ext='x64'
+       if os.path.isdir(pi+'\\lib\\Win64'): ext='Win64'
+
        if tbits=='32': ext='Win32'
 
        cus['path_bin']=pi+'\\bin\\'
