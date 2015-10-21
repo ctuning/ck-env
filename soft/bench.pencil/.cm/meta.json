@@ -1,0 +1,10 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_BENCH_PENCIL", 
+    "skip_add_to_ld_path": "yes"
+  }, 
+  "tags": [
+    "bench", 
+    "pencil"
+  ]
+}

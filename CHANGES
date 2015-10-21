@@ -1,4 +1,5 @@
 * 2015.10.21 - * fixing pencil description from CARP project
+               * adding pencil benchmark env description
 
 * 2015.09.25 - * renaming soft:compiler.mcl to compiler.msvc (for Microsoft C compilers)
                  (suggested by Anton)
