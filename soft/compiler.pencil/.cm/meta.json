@@ -9,6 +9,7 @@
     "skip_add_to_bin": "no", 
     "skip_add_to_ld_path": "no", 
     "skip_add_to_path": "no", 
+    "add_include_path": "yes", 
     "source_to_source": "yes"
   }, 
   "customize_script": "customize", 
@@ -40,8 +41,9 @@
   "soft_name": "Compiler - PENCIL", 
   "tags": [
     "compiler", 
-    "source-to-source", 
     "pencil", 
+    "polyhedral",
+    "source-to-source", 
     "lang-c"
   ], 
   "tool": "pencilcc", 
