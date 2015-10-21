@@ -68,6 +68,8 @@ def setup(i):
        s+='\n'
        s+='# Setting environment\n'
 
+       env['BENCHMARK_ROOT_DIRECTORY']='${CK_ENV_BENCH_PENCIL}'
+
        s+='export PATH='+pi+'/scripts:$PATH\n'
 
     return {'return':0, 'bat':s}

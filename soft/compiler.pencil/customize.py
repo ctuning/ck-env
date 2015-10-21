@@ -63,11 +63,10 @@ def setup(i):
     # Ask a few more questions
     prefix=''
 
-    for k in env:
-        v=env[k]
-        v=v.replace('$#tool_prefix#$',prefix)
-        env[k]=v
+    env['PENCIL_COMPILER_EXTRA_OPTIONS']='--target=prl -D__PENCIL__ --opencl-include-file=$CK_ENV_COMPILER_PENCIL_INCLUDE/pencil_opencl.h'
+    env['PENCIL_INCLUDE_DIR']='$CK_ENV_COMPILER_PENCIL_INCLUDE'
 
-    s+='\nexport PATH='+pi+'/bin:$PATH\n\n'
+    env['PRL_LIB_DIR']='$CK_ENV_COMPILER_PENCIL_LIB'
+    env['PRL_INCLUDE_DIR']='$CK_ENV_COMPILER_PENCIL_INCLUDE'
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}

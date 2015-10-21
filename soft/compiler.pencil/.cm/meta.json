@@ -15,7 +15,8 @@
   "customize_script": "customize", 
   "env": {
     "CK_PPCG": "ppcg", 
-    "CK_PENCILCC": "pencilcc"
+    "CK_PENCILCC": "pencilcc",
+    "PENCIL_COMPILER_BINARY":"ppcg"
   }, 
   "soft_name": "Compiler - PENCIL", 
   "tags": [

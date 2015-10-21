@@ -8,7 +8,9 @@
     "add_include_path":"yes"
   }, 
   "tags": [
-    "bench", 
-    "pencil"
+    "benchmark", 
+    "pencil", 
+    "lang-c", 
+    "lang-cpp"
   ]
 }
