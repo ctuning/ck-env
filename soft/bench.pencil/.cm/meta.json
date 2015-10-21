@@ -1,7 +1,11 @@
 {
+  "customize_script": "customize", 
   "customize": {
     "env_prefix": "CK_ENV_BENCH_PENCIL", 
-    "skip_add_to_ld_path": "yes"
+    "skip_add_to_ld_path": "yes",
+    "skip_add_to_bin":"yes",
+    "skip_add_to_path":"yes",
+    "add_include_path":"yes"
   }, 
   "tags": [
     "bench", 

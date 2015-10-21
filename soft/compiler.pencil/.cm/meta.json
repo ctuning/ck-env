@@ -14,29 +14,8 @@
   }, 
   "customize_script": "customize", 
   "env": {
-    "CK_AR": "$#tool_prefix#$ar", 
-    "CK_ASM_EXT": ".s", 
-    "CK_CC": "$#tool_prefix#$pencilcc", 
-    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
-    "CK_DLL_EXT": ".so", 
-    "CK_EXE_EXT": ".out", 
-    "CK_FLAGS_CREATE_ASM": "-S", 
-    "CK_FLAGS_CREATE_OBJ": "-c", 
-    "CK_FLAGS_DLL": "-shared -fPIC", 
-    "CK_FLAGS_DLL_EXTRA": "-ldl", 
-    "CK_FLAGS_OUTPUT": "-o ", 
-    "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
-    "CK_FLAGS_STATIC_LIB": "-fPIC", 
-    "CK_FLAG_PREFIX_INCLUDE": "-I", 
-    "CK_FLAG_PREFIX_LIB_DIR": "-L", 
-    "CK_FLAG_PREFIX_VAR": "-D", 
-    "CK_LB": "$#tool_prefix#$ar rcs", 
-    "CK_LB_OUTPUT": "-o ", 
-    "CK_LD_FLAGS_EXTRA": "-lm -ldl", 
-    "CK_LIB_EXT": ".a", 
-    "CK_MAKE": "make", 
-    "CK_OBJ_EXT": ".o", 
-    "CK_PROFILER": "gprof"
+    "CK_PPCG": "ppcg", 
+    "CK_PENCILCC": "pencilcc"
   }, 
   "soft_name": "Compiler - PENCIL", 
   "tags": [
@@ -44,7 +23,8 @@
     "pencil", 
     "polyhedral",
     "source-to-source", 
-    "lang-c"
+    "lang-c",
+    "lang-cpp"
   ], 
   "tool": "pencilcc", 
   "version": {
