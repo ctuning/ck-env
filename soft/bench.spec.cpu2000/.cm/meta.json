@@ -3,6 +3,7 @@
     "env_prefix": "CK_ENV_BENCH_SPEC_CPU2000", 
     "skip_add_to_ld_path": "yes"
   }, 
+  "soft_name": "Benchmark - SPEC - CPU2000", 
   "tags": [
     "bench", 
     "spec", 

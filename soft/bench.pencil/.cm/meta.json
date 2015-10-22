@@ -7,6 +7,7 @@
     "skip_add_to_path":"yes",
     "add_include_path":"yes"
   }, 
+  "soft_name": "Benchmark - PENCIL", 
   "tags": [
     "benchmark", 
     "pencil", 
