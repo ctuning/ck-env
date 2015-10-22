@@ -1,6 +1,6 @@
 {
   "customize": {
-    "build_dir_name": "pencil", 
+    "build_dir_name": "pencilcc", 
     "env_prefix": "CK_ENV_COMPILER_PENCIL", 
     "languages": [
       "C", 
