@@ -304,8 +304,10 @@ def set(i):
 
              # Check if there is a compiler in resolved deps to reuse it
              xdeps={}
-             if len(cdeps.get('compiler',{}))>0: xdeps['compiler']=cdeps['compiler']
-             if len(cdeps.get('compiler_mcl',{}))>0: xdeps['compiler_mcl']=cdeps['compiler_mcl']
+#             if len(cdeps.get('compiler',{}))>0: xdeps['compiler']=cdeps['compiler']
+             if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
+#             if len(cdeps.get('compiler_mcl',{}))>0: xdeps['compiler_mcl']=cdeps['compiler_mcl']
+             if cdeps.get('compiler_mcl',{}).get('uoa','')!='': xdeps['compiler_mcl']=cdeps['compiler_mcl']
              if len(xdeps)>0: vv['deps']=xdeps
 
              rx=ck.access(vv)

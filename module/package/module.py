@@ -114,12 +114,41 @@ def install(i):
           if r['return']>0: return r
           l=r['lst']
           if len(l)>0:
-             duid=l[0].get('data_uid','')
-             duoa=duid
-             duoax=l[0].get('data_uoa','')
+             # Select package
+             il=0
+             if len(l)>1:
+                ck.out('')
+                ck.out('More than one package found:')
+                ck.out('')
+                zz={}
+                iz=0
+                for z1 in sorted(l, key=lambda v: v['data_uoa']):
+                    z=z1['data_uid']
+                    zu=z1['data_uoa']
 
-             d=l[0]['meta']
-             p=l[0]['path']
+                    zs=str(iz)
+                    zz[zs]=z
+
+                    ck.out(zs+') '+zu+' ('+z+')')
+
+                    iz+=1
+
+                ck.out('')
+                rx=ck.inp({'text':'Select package number (or Enter to select 0): '})
+                ll=rx['string'].strip()
+                if ll=='': ll='0'
+
+                if ll not in zz:
+                   return {'return':1, 'error':'package number is not recognized'}
+
+                il=int(ll)
+
+             duid=l[il].get('data_uid','')
+             duoa=duid
+             duoax=l[il].get('data_uoa','')
+
+             d=l[il]['meta']
+             p=l[il]['path']
 
              if o=='con':
                 ck.out('Package found: '+duoax+' ('+duid+')')

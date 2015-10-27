@@ -1,3 +1,7 @@
+* 2015.10.27 - * if more than one package avaliable, allow selection
+               * fixing bug with compiler dependencies when installing packages
+               * fixing pencil deps
+
 * 2015.10.21 - * fixing pencil description from CARP project
                * adding pencil benchmark env description
 
