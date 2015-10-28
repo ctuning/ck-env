@@ -396,6 +396,9 @@ def install(i):
                 nm=sp+'-'+cus.get('version','')
 
                 bdn=udeps.get('compiler',{}).get('build_dir_name','')
+                if bdn=='':
+                   bdn=udeps.get('support_compiler',{}).get('build_dir_name','')
+
                 if bdn!='':
                    nm+='-'+bdn
                    vr=udeps.get('compiler',{}).get('ver','')

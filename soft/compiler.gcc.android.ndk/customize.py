@@ -96,7 +96,7 @@ def setup(i):
        if extra_path!='':
           ck.out('Full path to pre-built Android tools: '+extra_path)
        else:
-          extra_path=raw_input('Enter full path to pre-built Android tools (such as prebuilt/linux-x86_64/bin) : ')
+          extra_path=raw_input('Enter full path to pre-built Android tools (such as ...prebuilt/linux-x86_64/bin) : ')
           cus['extra_path_configured']='yes'
 
     if extra_path!='':

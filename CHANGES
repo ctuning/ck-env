@@ -1,3 +1,6 @@
+* 2015.10.28 - * when automatically installing packages, add not only 'compiler' to dir name,
+                 but also 'support_compiler' ...
+
 * 2015.10.27 - * if more than one package avaliable, allow selection
                * fixing bug with compiler dependencies when installing packages
                * fixing pencil deps
