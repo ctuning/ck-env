@@ -20,10 +20,9 @@
   }, 
   "soft_name": "Compiler - PENCIL", 
   "tags": [
-    "compiler", 
+    "source-to-source-compiler", 
     "pencilcc", 
     "polyhedral",
-    "source-to-source", 
     "lang-c",
     "lang-cpp"
   ], 
