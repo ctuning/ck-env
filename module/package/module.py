@@ -401,14 +401,14 @@ def install(i):
                 nm=sp+'-'+cus.get('version','')
 
                 bdn=udeps.get('compiler',{}).get('build_dir_name','')
+                vr=udeps.get('compiler',{}).get('ver','')
                 if bdn=='':
                    bdn=udeps.get('support_compiler',{}).get('build_dir_name','')
+                   vr=udeps.get('support_compiler',{}).get('ver','')
 
                 if bdn!='':
                    nm+='-'+bdn
-                   vr=udeps.get('compiler',{}).get('ver','')
-                   if vr!='':
-                      nm+='-'+vr
+                   if vr!='': nm+='-'+vr
 
                 nm+='-'+tosx
 
