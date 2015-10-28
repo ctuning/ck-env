@@ -114,12 +114,13 @@ def install(i):
           if r['return']>0: return r
           l=r['lst']
           if len(l)>0:
-             # Select package
+             # Select package 
              il=0
              if len(l)>1:
                 ck.out('')
                 ck.out('More than one package found:')
                 ck.out('')
+
                 zz={}
                 iz=0
                 for z1 in sorted(l, key=lambda v: v['data_uoa']):
@@ -141,7 +142,11 @@ def install(i):
                 if ll not in zz:
                    return {'return':1, 'error':'package number is not recognized'}
 
-                il=int(ll)
+                zduid=zz[ll]
+                for il in range(0, len(l)):
+                    if l[il]['data_uid']==zduid: break
+
+                ck.out('')
 
              duid=l[il].get('data_uid','')
              duoa=duid
