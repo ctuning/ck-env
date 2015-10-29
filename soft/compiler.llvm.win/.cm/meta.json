@@ -28,6 +28,7 @@
     "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
     "CK_COMPILER_FLAG_STD90": "-std=c90", 
     "CK_COMPILER_FLAG_STD99": "-std=c99", 
+    "CK_COMPILER_FLAG_MFLOAT_ABI_HARD": "-mfloat-abi=hard", 
     "CK_CXX": "$#tool_prefix#$clang++", 
     "CK_DLL_EXT": ".dll", 
     "CK_EXE_EXT": ".exe", 

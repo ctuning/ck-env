@@ -20,6 +20,7 @@
     "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
     "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
     "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+    "CK_COMPILER_FLAG_MFLOAT_ABI_HARD": "-mfloat-abi=hard", 
     "CK_CXX": "$#tool_prefix#$clang++", 
     "CK_DLL_EXT": ".so", 
     "CK_EXE_EXT": ".out", 
