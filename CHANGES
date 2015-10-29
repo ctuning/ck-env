@@ -1,3 +1,5 @@
+* 2015.10.29 - * adding env "CK_COMPILER_FLAG_MFLOAT_ABI_HARD": "-mfloat-abi=hard" to LLVM
+
 * 2015.10.28 - * when automatically installing packages, add not only 'compiler' to dir name,
                  but also 'support_compiler' ...
                * changing 'compiler' to 'source-to-source-compiler' tag for pencilcc
