@@ -13,7 +13,7 @@
   "env": {
     "CK_AR": "$#tool_prefix#$ar", 
     "CK_ASM_EXT": ".s", 
-    "CK_CC": "$#tool_prefix#$clang", 
+    "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$", 
     "CK_COMPILER_FLAGS_OBLIGATORY": "", 
     "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
     "CK_COMPILER_FLAG_GPROF": "-pg", 
@@ -21,7 +21,7 @@
     "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
     "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
     "CK_COMPILER_FLAG_MFLOAT_ABI_HARD": "-mfloat-abi=hard", 
-    "CK_CXX": "$#tool_prefix#$clang++", 
+    "CK_CXX": "$#tool_prefix#$clang++$#tool_postfix#$", 
     "CK_DLL_EXT": ".so", 
     "CK_EXE_EXT": ".out", 
     "CK_EXTRA_LIB_DL": "-ldl", 

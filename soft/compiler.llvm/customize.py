@@ -69,6 +69,7 @@ def setup(i):
        return {'return':1, 'error':'this soft customization is for non-Windows target only'}
 
     # Ask a few more questions
+    # (tool prefix)
     prefix_configured=cus.get('tool_prefix_configured','')
     prefix=cus.get('tool_prefix','')
 
@@ -80,6 +81,25 @@ def setup(i):
     for k in env:
         v=env[k]
         v=v.replace('$#tool_prefix#$',prefix)
+        env[k]=v
+
+    # (tool postfix such as -3.6)
+    postfix_configured=cus.get('tool_postfix_configured','')
+    postfix=cus.get('tool_postfix','')
+
+    if postfix=='':
+       print ('')
+       postfix=raw_input('Input clang postfix if needed (for example, -3.6 for clang-3.6) or Enter to skip: ')
+       postfix=postfix.strip()
+
+    if postfix!='':
+       env['CK_COMPILER_POSTFIX']=postfix
+       cus['tool_postfix']=postfix
+       cus['tool_postfix_configured']='yes'
+
+    for k in env:
+        v=env[k]
+        v=v.replace('$#tool_postfix#$',postfix)
         env[k]=v
 
     retarget=cus.get('retarget','')
