@@ -88,7 +88,7 @@ def setup(i):
     cus['dynamic_lib']='libOpenCL.so'
 
     if not os.path.isfile(os.path.join(pl,cus['dynamic_lib'])):
-       return {'return':1, 'error':'libmali.so is not in lib directory - please copy driver libs there'}
+       return {'return':1, 'error':cus['dynamic_lib']+' is not in lib directory - please install OpenCL driver or check paths'}
 
     env['CK_ENV_LIB_OPENCL_INCLUDE_NAME']=cus.get('include_name','')
     env['CK_ENV_LIB_OPENCL_STATIC_NAME']=cus.get('static_lib','')
