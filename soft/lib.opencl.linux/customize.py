@@ -69,6 +69,21 @@ def setup(i):
 
     pl=os.path.join(pi,'lib')
 
+    # On some Ubuntu there can be extra dir such as x86_64-linux-gnu
+    # reported by Michael Kruse
+
+    dir_extra_configured=cus.get('tool_dir_extra_configured','')
+    dir_extra=cus.get('tool_dir_extra','')
+    if dir_extra_configured!='yes':
+       if dir_extra!='':
+          ck.out('Current extra dir: '+dir_extra)
+       else:
+          dir_extra=raw_input('Enter extra directory if needed (such as x86_64-linux-gnu on Ubuntu) or Enter to skip it: ')
+          cus['tool_dir_extra_configured']='yes'
+
+    if dir_extra!='':
+       pl=os.path.join(pl,dir_extra)
+
     cus['static_lib']='libOpenCL.so'
     cus['dynamic_lib']='libOpenCL.so'
 
