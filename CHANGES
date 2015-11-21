@@ -1,3 +1,5 @@
+* 2015.11.21 - * adding "batch_exit" : "exit /b $#return_code#$" to Windows and MingW OS descriptions
+
 * 2015.11.20 - * improving OpenCL lib setup on Ubuntu
 
 * 2015.11.09 - * extending soft:compiler.llvm - adding tool_postfix, for example -3.6 for clang-3.6
