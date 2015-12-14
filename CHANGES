@@ -1,3 +1,5 @@
+* 2015.12.14 - * fixing soft:lib.opencl.mali compilation for Android
+
 * 2015.11.21 - * adding "batch_exit" : "exit /b $#return_code#$" to Windows and MingW OS descriptions
 
 * 2015.11.20 - * improving OpenCL lib setup on Ubuntu

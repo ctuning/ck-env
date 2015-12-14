@@ -91,16 +91,31 @@ def setup(i):
        if make=='': make='make'
 
        if winh=='yes':
-          x='CC="%CK_CXX%"'
+          x='CC="%CK_CXX% %CK_COMPILER_FLAGS_OBLIGATORY%"'
        else:
-          x='CC="$CK_CXX"'
+          x='CC="$CK_CXX $CK_COMPILER_FLAGS_OBLIGATORY"'
 
-       cmd=deps['compiler']['bat'].strip()+' '+host_d['env_separator']+' '+make+' '+x
+       # Prepare tmp script to run
+       cmd=host_d.get('batch_prefix','')+'\n'
+       cmd+=host_d['change_dir']+pl+'\n'
+       cmd+=deps['compiler']['bat'].strip()+'\n'
+       cmd+=make+' '+x+'\n'
 
-       print ("")
+       print ("******************")
        print (cmd)
+       print ("******************")
 
-       os.chdir(pl)
-       rx=os.system(cmd)
+       fscript='tmp-script'+host_d['script_ext']
+       fx=open(fscript, 'w')
+       fx.write(cmd)
+       fx.close()
+
+       rx=os.system(host_d.get('env_call','')+' '+fscript)
+
+       os.remove(fscript)
+
+       if rx>0:
+          print ('')
+          print ('Possible Error: script returned non-zero code ('+str(rx)+') ...')
 
     return {'return':0, 'bat':s}
