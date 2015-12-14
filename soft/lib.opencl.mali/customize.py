@@ -110,7 +110,7 @@ def setup(i):
        fx.write(cmd)
        fx.close()
 
-       rx=os.system(host_d.get('env_call','')+' '+fscript)
+       rx=os.system(host_d.get('env_call','')+' '+host_d.get('bin_prefix','')+fscript)
 
        os.remove(fscript)
 
