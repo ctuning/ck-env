@@ -1,4 +1,8 @@
 * 2015.12.14 - * fixing soft:lib.opencl.mali compilation for Android
+               * added /data/local/tmp/lib to LD_LIBRARY_PATH when 
+                 benchmarking/running/autotuning/crowdtuning on Android 
+                 (to copy there development libs for dynamic apps
+                  while keeping directory clean)
 
 * 2015.11.21 - * adding "batch_exit" : "exit /b $#return_code#$" to Windows and MingW OS descriptions
 

@@ -26,7 +26,7 @@
   "env_var_start": "$", 
   "env_var_stop": "", 
   "exec_prefix": "./", 
-  "extra_env": "export LD_LIBRARY_PATH=/data/local/tmp:$LD_LIBRARY_PATH", 
+  "extra_env": "export LD_LIBRARY_PATH=/data/local/tmp:/data/local/tmp/lib:$LD_LIBRARY_PATH", 
   "extract_package": {
     ".tar.bz2": "rm -f $#cm_file_without_one_ext#$ ; bzip2 -d $#cm_file#$ ; tar xvf $#cm_file_without_one_ext#$; rm -f $#cm_file_without_one_ext#$", 
     ".tar.gz": "rm -f $#cm_file_without_one_ext#$ ; gzip -d $#cm_file#$ ; tar xvf $#cm_file_without_one_ext#$; rm -f $#cm_file_without_one_ext#$", 
