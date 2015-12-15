@@ -112,6 +112,7 @@ def setup(i):
 
        scall=host_d.get('env_call','')
        sexe=host_d.get('set_executable','')
+       envsep=host_d.get('env_separator','')
 
        y=''
        if sexe!='':
