@@ -97,7 +97,7 @@ def setup(i):
 
        # Prepare tmp script to run
        cmd=host_d.get('batch_prefix','')+'\n'
-       cmd+=host_d['change_dir']+pl+'\n'
+       cmd+=host_d['change_dir']+' '+pl+'\n'
        cmd+=deps['compiler']['bat'].strip()+'\n'
        cmd+=make+' '+x+'\n'
 
@@ -110,7 +110,18 @@ def setup(i):
        fx.write(cmd)
        fx.close()
 
-       rx=os.system(host_d.get('bin_prefix','')+fscript)
+       scall=host_d.get('env_call','')
+       sexe=host_d.get('set_executable','')
+
+       y=''
+       if sexe!='':
+          y+=sexe+' '+fscript+envsep
+       y+=' '+scall+' '+host_d.get('bin_prefix','')+fscript
+
+       print('')
+       print(' Executing "'+y+'"')
+
+       rx=os.system(y)
 
        os.remove(fscript)
 
