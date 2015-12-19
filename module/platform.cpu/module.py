@@ -547,7 +547,19 @@ def set_freq(i):
        cmd=tosd.get('script_set_cpu_freq','').replace('$#freq#$',str(v))
 
     if cmd!='':
-       path_to_scripts=tosd.get('path_to_scripts','')
+       # Check path to scripts from env
+       path_to_scripts=''
+       piu=os.environ.get('CK_PLATFORM_INIT_UOA','')
+       if piu!='' and remote!='yes':
+          rx=ck.access({'action':'find',
+                        'module_uoa':cfg['module_deps']['platform.init'],
+                        'data_uoa':piu})
+          if rx['return']>0: return rx
+          path_to_scripts=rx['path']
+
+       if path_to_scripts=='':
+          path_to_scripts=tosd.get('path_to_scripts','')
+
        if path_to_scripts!='': cmd=path_to_scripts+dir_sep+cmd
 
        if o=='con':

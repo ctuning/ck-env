@@ -1,3 +1,6 @@
+* 2015.12.19 - * adding env var CK_PLATFORM_INIT_UOA to automatically 
+                 add platform scripts to PATH when dealing with CPU/GPU frequency
+
 * 2015.12.14 - * fixing soft:lib.opencl.mali compilation for Android
                * added /data/local/tmp/lib to LD_LIBRARY_PATH when 
                  benchmarking/running/autotuning/crowdtuning on Android 

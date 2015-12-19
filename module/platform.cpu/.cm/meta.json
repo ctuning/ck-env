@@ -15,6 +15,7 @@
   "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
     "platform": "707ccdfe444cafac", 
-    "platform.os": "41e31cc4496b8a8e"
+    "platform.os": "41e31cc4496b8a8e",
+    "platform.init": "38a2f5438d8555b6"
   }
 }
