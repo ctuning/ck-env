@@ -449,14 +449,19 @@ def detect(i):
           er=ck.cfg['default_exchange_repo_uoa']
           esr=ck.cfg['default_exchange_subrepo_uoa']
 
+       # Copy nearly all (remove cur freq)
+       import copy
+       xtarget=copy.deepcopy(target)
+       if 'current_freq' in xtarget: del(xtarget['current_freq'])
+
        ii={'action':'exchange',
            'module_uoa':cfg['module_deps']['platform'],
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':target.get('name',''),
            'all':'no',
-           'dict':{'features':target}} # Later we should add more properties from prop_all,
-                                       # but should be careful to remove any user-specific info
+           'dict':{'features':xtarget}} # Later we should add more properties from prop_all,
+                                        # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
        r=ck.access(ii)
        if r['return']>0: return r
