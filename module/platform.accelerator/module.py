@@ -51,6 +51,8 @@ def detect(i):
               (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+
+              (extra_info)           - extra info about author, etc (see add from CK kernel)
             }
 
     Output: {
@@ -82,8 +84,12 @@ def detect(i):
     sic=i.get('skip_info_collection','')
     sdi=i.get('skip_device_init','')
     pdv=i.get('print_device_info','')
+
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
+
+    einf=i.get('extra_info','')
+    if einf=='': einf={}
 
     # Get OS info
     import copy
@@ -338,6 +344,7 @@ def detect(i):
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':prop.get('name',''),
+           'extra_info':einf,
            'all':'yes',
            'dict':{'features':prop}} # Later we should add more properties from prop_all,
                                      # but should be careful to remove any user-specific info

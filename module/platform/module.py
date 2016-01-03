@@ -52,6 +52,8 @@ def detect(i):
               (exchange_subrepo)     - if remote, remote repo UOA
 
               (force_platform_name)  - if !='', use this for platform name
+
+              (extra_info)           - extra info about author, etc (see add from CK kernel)
             }
 
     Output: {
@@ -105,6 +107,9 @@ def detect(i):
     pdv=i.get('print_device_info','')
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
+
+    einf=i.get('extra_info','')
+    if einf=='': einf={}
 
     # If exchange, check that repo from this env is cached and recache if needed
     if ex=='yes':
@@ -340,6 +345,7 @@ def detect(i):
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':prop.get('name',''),
+           'extra_info':einf,
            'all':'yes',
            'dict':{'features':prop}} # Later we should add more properties from prop_all,
                                      # but should be careful to remove any user-specific info
@@ -504,6 +510,7 @@ def exchange(i):
 
               (all)          - if 'yes', check all dict['features'] and add to separate file 
 
+              (extra_info)   - extra info about author, etc (see add from CK kernel)
             }
 
     Output: {
@@ -542,12 +549,15 @@ def exchange(i):
        lst=rx['lst']
 
        if len(lst)==0:
+          ei=i.get('extra_info',{})
+
           # Add info
           rx=ck.access({'action':'add',
                         'module_uoa':smuoa,
                         'repo_uoa':ruoa,
                         'data_name':dname,
                         'dict':dd,
+                        'extra_info':ei,
                         'sort_keys':'yes'})
 
        else:
