@@ -529,10 +529,13 @@ def exchange(i):
     al=i.get('all','')
 
     if dname!='':
-       # Search if already exists
+       # Search if already exists (and not only in upload)
        rx=ck.access({'action':'search',
                      'module_uoa':smuoa,
-                     'repo_uoa':ruoa,
+# FGG: I commented next line since we can move 
+#      well-known entries to other repositories
+#      such as ck-crowdtuning instead of upload
+#                     'repo_uoa':ruoa,
                      'search_by_name':dname,
                      'ignore_case':'yes'})
        if rx['return']>0: return rx
@@ -551,9 +554,10 @@ def exchange(i):
           # Load
           ll=lst[0]
           duoa=ll.get('data_uid','')
+	  xruoa=ll.get('repo_uoa','')
           rx=ck.access({'action':'load',
                         'module_uoa':smuoa,
-                        'repo_uoa':ruoa,
+                        'repo_uoa':xruoa,
                         'data_uoa':duoa})
 
           rx['found']='yes'

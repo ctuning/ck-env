@@ -1,3 +1,6 @@
+* 2016.01.03 - * fixing exchange of information during crowd-tuning
+                 (possiblity to find platform description in all repos)
+
 * 2016.01.02 - * fixing GPU/accelerator detection for ARM/Qualcomm (for crowdtuning)
                * fixing platform name detection (to crowdsource optimization)
 
