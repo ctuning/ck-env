@@ -196,6 +196,8 @@ def detect(i):
        if target_sub_cpu=='':
           target_sub_cpu=info_cpu[spp].get('model name','')
        target_cpu_features=info_cpu[spp].get('Features','')
+       if target_cpu_fetaures=='':
+          target_cpu_features=info_cpu[spp].get('flags','')
 
        # Collect all frequencies
        for px in range(0, pp+1):
