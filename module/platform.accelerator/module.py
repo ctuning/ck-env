@@ -122,6 +122,7 @@ def detect(i):
     prop_all={}
 
     target_gpu_name=''
+    target_gpu_vendor=''
 
     # Get info about accelerator ######################################################
     if remote=='yes':
@@ -160,10 +161,13 @@ def detect(i):
               if q2>=0:
                  x=s1[6:].strip().split(',')
 
-                 if len(x)>0: target_gpu_name+=x[0].strip()
-                 if len(x)>1: target_gpu_name+=', '+x[1].strip()
+                 if len(x)>0: 
+                    target_gpu_vendor=x[0].strip()
+                    target_gpu_name+=target_gpu_vendor
+                 if len(x)>1: target_gpu_name+=' '+x[1].strip()
 
                  prop['name']=target_gpu_name
+                 prop['vendor']=target_gpu_vendor
                  prop['possibly_related_cpu_name']=''
 
                  break
@@ -183,7 +187,12 @@ def detect(i):
           if r['return']>0: return r
           target_gpu_name=r['value']
 
+          x=target_gpu_name.split(' ')
+          if len(x)>0:
+             target_gpu_vendor=x[0].strip()
+
           prop['name']=target_gpu_name
+          prop['vendor']=target_gpu_vendor
           prop['possibly_related_cpu_name']=target_cpu
 
        else:
@@ -213,11 +222,17 @@ def detect(i):
                           target_gpu_name=q[x2+1:].strip()
                           break
 
+          x=target_gpu_name.split(' ')
+          if len(x)>0:
+             target_gpu_vendor=x[0].strip()
+
           prop['name']=target_gpu_name
+          prop['vendor']=target_gpu_vendor
 
     if o=='con' and prop.get('name','')!='':
        ck.out('')
-       ck.out('GPU name: '+prop.get('name',''))
+       ck.out('GPU name:   '+prop.get('name',''))
+       ck.out('GPU vendor: '+prop.get('vendor',''))
 
     # Check frequency via script
     if win!='yes':

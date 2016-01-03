@@ -502,7 +502,7 @@ def exchange(i):
 
               (dict)         - dictionary to check/record
 
-              (all)          - if 'yes', check all dict['prop'] and add to separate file 
+              (all)          - if 'yes', check all dict['features'] and add to separate file 
 
             }
 
@@ -511,7 +511,8 @@ def exchange(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              dict         - if exists, load updated dict (can be collaboratively extended to add more properties!)
+              dict         - if exists, load updated dict (can be collaboratively extended to add more properties 
+                                        (or unique/representative species -> software, hardware, gpu, accelerators, programs, data sets!)
               (found)      - if 'yes', entry was found
             }
 
