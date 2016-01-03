@@ -196,7 +196,7 @@ def detect(i):
        if target_sub_cpu=='':
           target_sub_cpu=info_cpu[spp].get('model name','')
        target_cpu_features=info_cpu[spp].get('Features','')
-       if target_cpu_fetaures=='':
+       if target_cpu_features=='':
           target_cpu_features=info_cpu[spp].get('flags','')
 
        # Collect all frequencies
