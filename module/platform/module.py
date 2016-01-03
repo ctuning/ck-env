@@ -554,7 +554,7 @@ def exchange(i):
           # Load
           ll=lst[0]
           duoa=ll.get('data_uid','')
-	  xruoa=ll.get('repo_uoa','')
+          xruoa=ll.get('repo_uoa','')
           rx=ck.access({'action':'load',
                         'module_uoa':smuoa,
                         'repo_uoa':xruoa,
