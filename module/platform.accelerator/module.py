@@ -158,7 +158,10 @@ def detect(i):
               s1=s.strip()
               q2=s1.find('GLES: ')
               if q2>=0:
-                 target_gpu_name=s1[6:].strip()
+                 x=s1[6:].strip().split(',')
+
+                 if len(x)>0: target_gpu_name+=x[0].strip()
+                 if len(x)>1: target_gpu_name+=', '+x[1].strip()
 
                  prop['name']=target_gpu_name
                  prop['possibly_related_cpu_name']=''

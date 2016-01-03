@@ -1,3 +1,6 @@
+* 2016.01.02 - * fixing GPU/accelerator detection for ARM/Qualcomm (for crowdtuning)
+               * fixing platform name detection (to crowdsource optimization)
+
 * 2015.12.19 - * adding env var CK_PLATFORM_INIT_UOA to automatically 
                  add platform scripts to PATH when dealing with CPU/GPU frequency
 

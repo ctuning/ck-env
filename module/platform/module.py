@@ -246,6 +246,10 @@ def detect(i):
              model=model[len(manu)+1:]
 
        if manu=='' and model!='': manu=model
+
+       manu=manu.upper()
+       model=model.upper()
+
        prop['name']=manu
        if model!='': prop['name']+=' '+model
        prop['model']=model
