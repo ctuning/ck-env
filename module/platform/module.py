@@ -665,3 +665,98 @@ def deinit(i):
         'key':key,
         'out':o}
     return init_device(ii)
+
+##############################################################################
+# viewing entries as html
+
+def show(i):
+    """
+    Input:  {
+              data_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html         - generated HTML
+            }
+
+    """
+
+
+    h='<h2>Platforms participating in crowd-tuning</h2>\n'
+
+    h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
+
+    # Check host URL prefix and default module/action
+    url0=ck.cfg.get('wfe_url_prefix','')
+
+    h+=' <tr style="background-color:#cfcfff;">\n'
+    h+='  <td><b>\n'
+    h+='   #\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Vendor\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Model\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
+    h+='  </b></td>\n'
+    h+=' </tr>\n'
+
+    ruoa=i.get('repo_uoa','')
+    muoa=work['self_module_uoa']
+    duoa=i.get('data_uoa','')
+
+    r=ck.access({'action':'search',
+                 'module_uoa':muoa,
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'add_info':'yes',
+                 'add_meta':'yes'})
+    if r['return']>0: 
+       return {'return':0, 'html':'Error: '+r['error']}
+
+    lst=r['lst']
+
+    num=0
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('vendor','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('model','').upper())):
+
+        num+=1
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        meta=q['meta']
+        ft=meta.get('features',{})
+        
+        name=ft.get('name','')
+        vendor=ft.get('vendor','')
+        model=ft.get('model','')
+
+        h+=' <tr>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(num)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+vendor+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+model+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
+        h+='  </td>\n'
+        h+=' </tr>\n'
+
+
+    h+='</table><br><br>\n'
+
+    h+='<i>List of platforms participating in crowd-tuning using previous version (<a href="https://play.google.com/store/apps/details?id=com.collective_mind.node&hl=en">Collective Mind Node</a>) and Android mobile phones is still available <a href="http://cTuning.org/crowdtuning-mobiles">here</a>!</i><br><br>\n' 
+
+    return {'return':0, 'html':h}

@@ -602,3 +602,132 @@ def set_freq(i):
                    ck.out('  Warning: setting frequency possibly failed - return code '+str(rx))
 
     return {'return':0}
+
+##############################################################################
+# viewing entries as html
+
+def show(i):
+    """
+    Input:  {
+              data_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html         - generated HTML
+            }
+
+    """
+
+
+    h='<h2>Processors of platforms participating in crowd-tuning</h2>\n'
+
+    h+='<table class="ck_table" border="0">\n'
+
+    # Check host URL prefix and default module/action
+    url0=ck.cfg.get('wfe_url_prefix','')
+
+    h+=' <tr style="background-color:#cfcfff;">\n'
+    h+='  <td><b>\n'
+    h+='   #\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Sub name\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Cores\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Max frequency (MHz)\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   ABI\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Features\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
+    h+='  </b></td>\n'
+    h+=' </tr>\n'
+
+    ruoa=i.get('repo_uoa','')
+    muoa=work['self_module_uoa']
+    duoa=i.get('data_uoa','')
+
+    r=ck.access({'action':'search',
+                 'module_uoa':muoa,
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'add_info':'yes',
+                 'add_meta':'yes'})
+    if r['return']>0: 
+       return {'return':0, 'html':'Error: '+r['error']}
+
+    lst=r['lst']
+
+    num=0
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('name','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('sub_name','').upper())):
+
+        num+=1
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        meta=q['meta']
+        ft=meta.get('features',{})
+        
+        name=ft.get('name','')
+        sub_name=ft.get('sub_name','')
+        cores=ft.get('num_proc','')
+        abi=ft.get('cpu_abi','')
+        features=ft.get('cpu_features','')
+        frequency=ft.get('max_freq',{})
+
+        freq=''
+        for x in range(0,1024):
+            xx=str(x)
+            if xx not in frequency: break
+            if freq!='': freq+=', '
+            freq+=str(frequency[xx])
+
+        h+=' <tr>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(num)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+sub_name+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(cores)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+freq+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+abi+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+features+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
+        h+='  </td>\n'
+        h+=' </tr>\n'
+
+
+    h+='</table><br><br>\n'
+
+    h+='<i>List of CPUs participating in crowd-tuning using previous version (<a href="https://play.google.com/store/apps/details?id=com.collective_mind.node&hl=en">Collective Mind Node</a>) and Android mobile phones is still available <a href="http://cTuning.org/crowdtuning-processors">here</a>!</i><br><br>\n' 
+
+    return {'return':0, 'html':h}

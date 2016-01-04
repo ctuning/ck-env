@@ -12,6 +12,10 @@
     "get_from_wmic": {
       "desc": "get information from WMIC tool on Windows"
     }, 
+    "show": {
+      "desc": "show entries in user-friendly html format", 
+      "for_web": "yes"
+    }, 
     "init_device": {
       "desc": "init remote device (useful when preparing shared computational device)"
     }
@@ -25,8 +29,8 @@
   "module_deps": {
     "os": "0440cb72c2bc5cc6", 
     "platform.accelerator": "55ec7775f4afaabd", 
-    "platform.os": "41e31cc4496b8a8e",
     "platform.cpu": "aa6b542a420b8db9", 
+    "platform.os": "41e31cc4496b8a8e", 
     "repo": "befd7892b0d469e9"
   }
 }

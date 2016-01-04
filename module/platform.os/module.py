@@ -410,3 +410,113 @@ def detect(i):
                         'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,
                         'features':{'os':prop, 'os_misc':prop_all}, 
                         'devices':devices, 'device_id':tdid}
+
+##############################################################################
+# viewing entries as html
+
+def show(i):
+    """
+    Input:  {
+              data_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html         - generated HTML
+            }
+
+    """
+
+
+    h='<h2>Operating Systems of platforms participating in crowd-tuning</h2>\n'
+
+    h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
+
+    # Check host URL prefix and default module/action
+    url0=ck.cfg.get('wfe_url_prefix','')
+
+    h+=' <tr style="background-color:#cfcfff;">\n'
+    h+='  <td><b>\n'
+    h+='   #\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Bits\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name Long\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name Short\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
+    h+='  </b></td>\n'
+    h+=' </tr>\n'
+
+    ruoa=i.get('repo_uoa','')
+    muoa=work['self_module_uoa']
+    duoa=i.get('data_uoa','')
+
+    r=ck.access({'action':'search',
+                 'module_uoa':muoa,
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'add_info':'yes',
+                 'add_meta':'yes'})
+    if r['return']>0: 
+       return {'return':0, 'html':'Error: '+r['error']}
+
+    lst=r['lst']
+
+    num=0
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('name','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('name_short','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('name_long','').upper())):
+
+        num+=1
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        meta=q['meta']
+        ft=meta.get('features',{})
+        
+        name=ft.get('name','')
+        bits=ft.get('bits','')
+        name_long=ft.get('name_long','')
+        name_short=ft.get('name_short','')
+
+
+        h+=' <tr>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(num)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+bits+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name_short+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name_long+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
+        h+='  </td>\n'
+        h+=' </tr>\n'
+
+
+    h+='</table><br><br>\n'
+
+    h+='<i>List of OSes participating in crowd-tuning using previous version (<a href="https://play.google.com/store/apps/details?id=com.collective_mind.node&hl=en">Collective Mind Node</a>) and Android mobile phones is still available <a href="http://cTuning.org/crowdtuning-os">here</a>!</i><br><br>\n' 
+
+    return {'return':0, 'html':h}

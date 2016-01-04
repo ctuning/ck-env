@@ -1,3 +1,6 @@
+* 2016.01.04 - * adding 'show' function to platform.* to list all platforms 
+                 participating in crowd-tuning and their parameters
+
 * 2016.01.03 - * fixing exchange of information during crowd-tuning
                  (possiblity to find platform description in all repos)
                * adding possibility to identify user when recording
