@@ -635,10 +635,10 @@ def show(i):
     h+='   #\n'
     h+='  </b></td>\n'
     h+='  <td><b>\n'
-    h+='   Name\n'
+    h+='   Name 1\n'
     h+='  </b></td>\n'
     h+='  <td><b>\n'
-    h+='   Sub name\n'
+    h+='   Name 2\n'
     h+='  </b></td>\n'
     h+='  <td><b>\n'
     h+='   Cores\n'
@@ -673,8 +673,8 @@ def show(i):
     lst=r['lst']
 
     num=0
-    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('name','').upper(), \
-                                          x.get('meta',{}).get('features',{}).get('sub_name','').upper())):
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('sub_name','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('name','').upper())):
 
         num+=1
 
@@ -703,10 +703,10 @@ def show(i):
         h+='   '+str(num)+'\n'
         h+='  </td>\n'
         h+='  <td valign="top">\n'
-        h+='   '+name+'\n'
+        h+='   '+sub_name+'\n'
         h+='  </td>\n'
         h+='  <td valign="top">\n'
-        h+='   '+sub_name+'\n'
+        h+='   '+name+'\n'
         h+='  </td>\n'
         h+='  <td valign="top">\n'
         h+='   '+str(cores)+'\n'
