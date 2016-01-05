@@ -582,15 +582,23 @@ def exchange(i):
           p=rx['path']
           p1=os.path.join(p, 'all.json')
 
-          dall={'all':[]}
+          d={'all':[]}
           toadd=True
+
+          touched=0
 
           if os.path.isfile(p1):
              ry=ck.load_json_file({'json_file':p1})
              if ry['return']>0: return ry
-             dall=ry['dict']
+             d=ry['dict']
 
-             for q in dall.get('all',[]):
+             touched=d.get('touched',0)
+             touched+=1
+
+             if 'all' not in d: d['all']=[]
+             dall=d.get('all',[])
+
+             for q in dall:
                  rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
                  if rz['return']>0: return rz
                  if rz['equal']=='yes':
@@ -598,10 +606,10 @@ def exchange(i):
                     break
 
           if toadd:
-             dall['all'].append(ddf)
+             d['all'].append(ddf)
 
-             rz=ck.save_json_to_file({'json_file':p1, 'dict':dall})
-             if rz['return']>0: return rz
+          rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
+          if rz['return']>0: return rz
 
        return rx
 
