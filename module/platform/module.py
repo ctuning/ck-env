@@ -575,6 +575,8 @@ def exchange(i):
        if rx['return']>0: return rx
 
        if al=='yes':
+          # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...
+
           # Check if extra parameters are saved
           import os
           p=rx['path']
@@ -587,7 +589,6 @@ def exchange(i):
              ry=ck.load_json_file({'json_file':p1})
              if ry['return']>0: return ry
              dall=ry['dict']
-
 
              for q in dall.get('all',[]):
                  rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
