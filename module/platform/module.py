@@ -605,6 +605,8 @@ def exchange(i):
                     toadd=False
                     break
 
+          d['touched']=touched
+
           if toadd:
              d['all'].append(ddf)
 
