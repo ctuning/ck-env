@@ -159,7 +159,7 @@ def install(i):
                 ck.out('Package found: '+duoax+' ('+duid+')')
                 ck.out('')
 
-       if duoa=='':
+       if duoa=='' and xtags=='':
           found=False
 
           # Attempt to load configuration from the current directory
@@ -174,6 +174,13 @@ def install(i):
 
           if not found:
              return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
+
+       if duoa=='':
+          return {'return':1, 'error':'package with such tags and for this environment was not found!'}
+
+    # Check if found package
+    
+
 
     # Get main params
     tags=d.get('tags',[])

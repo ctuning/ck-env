@@ -1,5 +1,6 @@
 * 2016.01.11 - * fixing remote repo recaching if selecting different public CK server
                  during program optimization crowdsourcing
+               * fixing automatic package installation bug (when crowdsourcing autotuning)
 
 * 2016.01.04 - * adding 'show' function to platform.* to list all platforms 
                  participating in crowd-tuning and their parameters
