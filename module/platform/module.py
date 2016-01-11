@@ -114,15 +114,17 @@ def detect(i):
     # If exchange, check that repo from this env is cached and recache if needed
     if ex=='yes':
        er=i.get('exchange_repo','')
-       rx=ck.load_repo_info_from_cache({'repo_uoa':ex})
-       if rx['return']>0: 
-          if o=='con':
-             ck.out('')
-             ck.out('Adding repo from this "env" package to local cache ...')
 
-          rx=ck.access({'action':'recache',
-                        'module_uoa':cfg['module_deps']['repo']})
-          if rx['return']>0: return rx
+       if er!='':
+          rx=ck.load_repo_info_from_cache({'repo_uoa':er})
+          if rx['return']>0: 
+             if o=='con':
+                ck.out('')
+                ck.out('Seems like CK remote repo ('+er+') is not in CK cache - recaching ...')
+
+             rx=ck.access({'action':'recache',
+                           'module_uoa':cfg['module_deps']['repo']})
+             if rx['return']>0: return rx
 
     # Get OS info ###############################################################
     if oo=='con': 
