@@ -353,7 +353,8 @@ def detect(i):
                 xn=xxn
 
                 if 'platform_name' not in dcfg: dcfg['platform_name']={}
-                dcfg['platform_name'][x]=xn
+                if tos not in dcfg['platform_name']: dcfg['platform_name'][tos]={}
+                dcfg['platform_name'][tos][x]=xn
 
                 ii={'action':'update',
                     'module_uoa':cfg['module_deps']['cfg'],
@@ -364,6 +365,13 @@ def detect(i):
 
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
+
+          ixn=xn.find(' ')
+          if ixn>0: 
+             xx=xn[:ixn].strip()
+             prop['vendor']=xx
+             prop['model']=xn[ixn+1:].strip()
+
           prop['name']=xn
 
        er=i.get('exchange_repo','')

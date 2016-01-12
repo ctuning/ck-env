@@ -466,7 +466,8 @@ def detect(i):
                 xn=xxn
 
                 if 'platform_cpu_name' not in dcfg: dcfg['platform_cpu_name']={}
-                dcfg['platform_cpu_name'][x]=xn
+                if tos not in dcfg['platform_cpu_name']: dcfg['platform_cpu_name'][tos]={}
+                dcfg['platform_cpu_name'][tos][x]=xn
 
                 ii={'action':'update',
                     'module_uoa':cfg['module_deps']['cfg'],

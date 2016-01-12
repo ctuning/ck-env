@@ -398,7 +398,8 @@ def detect(i):
                 xn=xxn
 
                 if 'platform_os_name' not in dcfg: dcfg['platform_os_name']={}
-                dcfg['platform_os_name'][x]=xn
+                if tos not in dcfg['platform_os_name']: dcfg['platform_os_name'][tos]={}
+                dcfg['platform_os_name'][tos][x]=xn
 
                 ii={'action':'update',
                     'module_uoa':cfg['module_deps']['cfg'],
