@@ -1,3 +1,6 @@
+* 2016.01.12 - * adding possibility to enter and record name of accelerator to local cfg
+                 if not automatically detected (for crowdtuning)
+
 * 2016.01.11 - * fixing remote repo recaching if selecting different public CK server
                  during program optimization crowdsourcing
                * fixing automatic package installation bug (when crowdsourcing autotuning)
