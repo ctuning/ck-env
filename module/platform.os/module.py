@@ -388,7 +388,7 @@ def detect(i):
           dx=dcfg.get('platform_os_name',{}).get(tos,{})
           x=tdid
           if x=='': x='default'
-          xn=dx.get(x)
+          xn=dx.get(x,'')
 
           if (xn=='' and o=='con'):
              r=ck.inp({'text':'Enter your OS name (for example, Windows 10 or Android 5.0): '})
