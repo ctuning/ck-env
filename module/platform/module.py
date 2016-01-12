@@ -329,9 +329,39 @@ def detect(i):
 
        xn=prop.get('name','')
        if xn=='':
-          if o=='con':
+          # Check if exists in configuration
+
+          dcfg={}
+          ii={'action':'load',
+              'module_uoa':cfg['module_deps']['cfg'],
+              'data_uoa':cfg['cfg_uoa']}
+          r=ck.access(ii)
+          if r['return']>0 and r['return']!=16: return r
+          if r['return']!=16:
+             dcfg=r['dict']
+
+          dx=dcfg.get('platform_name',{}).get(tos,{})
+          x=tdid
+          if x=='': x='default'
+          xn=dx.get(x)
+
+          if (xn=='' and o=='con'):
              r=ck.inp({'text':'Enter your platform name (for example Samsung Chromebook 2, Huawei Ascend Mate 7, IBM SyNAPSE): '})
-             xn=r['string']
+             xxn=r['string'].strip()
+
+             if xxn!=xn:
+                xn=xxn
+
+                if 'platform_name' not in dcfg: dcfg['platform_name']={}
+                dcfg['platform_name'][x]=xn
+
+                ii={'action':'update',
+                    'module_uoa':cfg['module_deps']['cfg'],
+                    'data_uoa':cfg['cfg_uoa'],
+                    'dict':dcfg}
+                r=ck.access(ii)
+                if r['return']>0: return r
+
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
           prop['name']=xn

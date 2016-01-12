@@ -337,20 +337,20 @@ def detect(i):
           if r['return']!=16:
              dcfg=r['dict']
 
-          dx=dcfg.get('platform_accelerator',{}).get(tos,{})
+          dx=dcfg.get('platform_accelerator_name',{}).get(tos,{})
           x=tdid
           if x=='': x='default'
           xn=dx.get(x)
 
           if (xn=='' and o=='con'):
              r=ck.inp({'text':'Enter your accelerator name (for example ARM MALI-T860, Nvidia Tesla K80): '})
-             xxn=r['string']
+             xxn=r['string'].strip()
 
              if xxn!=xn:
                 xn=xxn
 
-                if 'platform_accelerator' not in dcfg: dcfg['platform_accelerator']={}
-                dcfg['platform_accelerator'][x]=xn
+                if 'platform_accelerator_name' not in dcfg: dcfg['platform_accelerator_name']={}
+                dcfg['platform_accelerator_name'][x]=xn
 
                 ii={'action':'update',
                     'module_uoa':cfg['module_deps']['cfg'],

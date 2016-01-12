@@ -20,6 +20,7 @@
       "desc": "init remote device (useful when preparing shared computational device)"
     }
   }, 
+  "cfg_uoa":"program-crowdtuning",
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
   "desc": "detecting and describin platforms", 
   "developer": "Grigori Fursin", 
@@ -31,6 +32,7 @@
     "platform.accelerator": "55ec7775f4afaabd", 
     "platform.cpu": "aa6b542a420b8db9", 
     "platform.os": "41e31cc4496b8a8e", 
-    "repo": "befd7892b0d469e9"
+    "repo": "befd7892b0d469e9",
+    "cfg":"b34231a3467566f8"
   }
 }
