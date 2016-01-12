@@ -759,6 +759,4 @@ def show(i):
 
     h+='</table><br><br>\n'
 
-    h+='<i>List of CPUs participating in crowd-tuning using previous version (<a href="https://play.google.com/store/apps/details?id=com.collective_mind.node&hl=en">Collective Mind Node</a>) and Android mobile phones is still available <a href="http://cTuning.org/crowdtuning-processors">here</a>!</i><br><br>\n' 
-
     return {'return':0, 'html':h}
