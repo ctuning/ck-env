@@ -1,3 +1,5 @@
+* 2016.01.16 - * adding UOA and UID of found platforms into detection stream
+
 * 2016.01.12 - * adding possibility to enter and record name of platform, accelerator, cpu and OS
                  to local cfg if not automatically detected (for crowdtuning)
 

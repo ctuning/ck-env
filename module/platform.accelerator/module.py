@@ -318,6 +318,9 @@ def detect(i):
                    for q in freqs:
                        ck.out(' '+q)
 
+    fuoa=''
+    fuid=''
+
     # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
@@ -390,18 +393,24 @@ def detect(i):
        r=ck.access(ii)
        if r['return']>0: return r
 
-       prop=r['dict']
+       fuoa=r.get('data_uoa','')
+       fuid=r.get('data_uid','')
+
+       prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists - reloading ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
 
     if 'features' not in rr: rr['features']={}
 
     rr['features']['acc']=prop
     rr['features']['acc_misc']=prop_all
 
-    return rr
+    if fuoa!='' or fuid!='':
+       rr['features']['acc_uoa']=fuoa
+       rr['features']['acc_misc_uid']=fuid
 
+    return rr
 
 ##############################################################################
 # set frequency

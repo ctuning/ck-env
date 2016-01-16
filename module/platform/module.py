@@ -321,6 +321,9 @@ def detect(i):
        ck.out('Platform vendor: '+prop.get('vendor',''))
        ck.out('Platform model:  '+prop.get('model',''))
 
+    fuoa=''
+    fuid=''
+
     # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
@@ -393,16 +396,23 @@ def detect(i):
        r=ck.access(ii)
        if r['return']>0: return r
 
-       prop=r['dict']
+       fuoa=r.get('data_uoa','')
+       fuid=r.get('data_uid','')
+
+       prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists - reloading ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
 
     if 'features' not in rr: rr['features']={}
 
     rr['features']['platform']=prop
     rr['features']['platform_misc']=prop_all
 
+    if fuoa!='' or fuid!='':
+       rr['features']['platform_uoa']=fuoa
+       rr['features']['platform_uid']=fuid
+      
     return rr
 
 ##############################################################################

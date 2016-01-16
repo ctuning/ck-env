@@ -366,6 +366,9 @@ def detect(i):
        ck.out('Long OS name:  '+prop.get('name_long',''))
        ck.out('OS bits:       '+prop.get('bits',''))
 
+    fuoa=''
+    fuid=''
+
     # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
@@ -432,15 +435,24 @@ def detect(i):
        r=ck.access(ii)
        if r['return']>0: return r
 
-       prop=r['dict']
+       fuoa=r.get('data_uoa','')
+       fuid=r.get('data_uid','')
+
+       prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists - reloading ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
 
-    return {'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
-                        'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,
-                        'features':{'os':prop, 'os_misc':prop_all}, 
-                        'devices':devices, 'device_id':tdid}
+    rr={'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
+                    'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,
+                    'features':{'os':prop, 'os_misc':prop_all}, 
+                    'devices':devices, 'device_id':tdid}
+
+    if fuoa!='' or fuid!='':
+       rr['features']['os_uoa']=fuoa
+       rr['features']['os_uid']=fuid
+
+    return rr
 
 ##############################################################################
 # viewing entries as html
