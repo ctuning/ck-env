@@ -3,6 +3,9 @@
     "detect": {
       "desc": "detect version of a given software"
     },
+    "search_tool": {
+      "desc": "search tool in pre-defined paths"
+    },
     "setup": {
       "desc": "setup CK environment for a given software"
     }

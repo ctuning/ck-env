@@ -532,6 +532,16 @@ def setup(i):
         setup['deps_'+q]=v['uoa']
 
     ########################################################################
+    # xyz
+#    ii={'path_list':['/usr/lib'],
+#        'file_name':'libkms.so'}
+#    r=search_tool(ii)
+#    if r['return']>0: return r
+#    lst=r['list']
+#    print (lst)
+#    exit(1)
+
+    ########################################################################
     # Check version
     ver=cus.get('version','')
     if ver==''  and cus.get('skip_version','')!='yes' and o=='con':
@@ -927,3 +937,33 @@ def setup(i):
        if rx['return']>0: return rx
 
     return {'return':0, 'env_data_uoa':enduoa, 'env_data_uid':enduid}
+
+##############################################################################
+# search tool in pre-defined paths
+
+def search_tool(i):
+    """
+    Input:  {
+              path_list - path list
+              file_name - name of file to find (can be with patterns)
+            }
+
+    Output: {
+              return    - return code =  0, if successful
+                                         >  0, if error
+              (error)   - error text if return > 0
+
+              list      - list of file (see ck.list_all_files)
+            }
+    """
+
+    pl=i['path_list']
+    fn=i['file_name']
+
+    for p in pl:
+        r=ck.list_all_files({'path':p, 'file_name':fn, 'all':'yes', 
+                             'ignore_symb_dirs':'yes', 'add_path':'yes'})
+        if r['return']>0: return r
+        lst=r['list']
+
+    return {'return':0, 'list':lst}
