@@ -51,6 +51,8 @@ def detect(i):
               (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+
+              (extra_info)           - extra info about author, etc (see add from CK kernel)
             }
 
     Output: {
@@ -82,8 +84,12 @@ def detect(i):
     sic=i.get('skip_info_collection','')
     sdi=i.get('skip_device_init','')
     pdv=i.get('print_device_info','')
+
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
+
+    einf=i.get('extra_info','')
+    if einf=='': einf={}
 
     # Get OS info
     import copy
@@ -122,6 +128,7 @@ def detect(i):
     prop_all={}
 
     target_gpu_name=''
+    target_gpu_vendor=''
 
     # Get info about accelerator ######################################################
     if remote=='yes':
@@ -158,9 +165,15 @@ def detect(i):
               s1=s.strip()
               q2=s1.find('GLES: ')
               if q2>=0:
-                 target_gpu_name=s1[6:].strip()
+                 x=s1[6:].strip().split(',')
+
+                 if len(x)>0: 
+                    target_gpu_vendor=x[0].strip()
+                    target_gpu_name+=target_gpu_vendor
+                 if len(x)>1: target_gpu_name+=' '+x[1].strip()
 
                  prop['name']=target_gpu_name
+                 prop['vendor']=target_gpu_vendor
                  prop['possibly_related_cpu_name']=''
 
                  break
@@ -180,7 +193,12 @@ def detect(i):
           if r['return']>0: return r
           target_gpu_name=r['value']
 
+          x=target_gpu_name.split(' ')
+          if len(x)>0:
+             target_gpu_vendor=x[0].strip()
+
           prop['name']=target_gpu_name
+          prop['vendor']=target_gpu_vendor
           prop['possibly_related_cpu_name']=target_cpu
 
        else:
@@ -210,11 +228,17 @@ def detect(i):
                           target_gpu_name=q[x2+1:].strip()
                           break
 
+          x=target_gpu_name.split(' ')
+          if len(x)>0:
+             target_gpu_vendor=x[0].strip()
+
           prop['name']=target_gpu_name
+          prop['vendor']=target_gpu_vendor
 
     if o=='con' and prop.get('name','')!='':
        ck.out('')
-       ck.out('GPU name: '+prop.get('name',''))
+       ck.out('GPU name:   '+prop.get('name',''))
+       ck.out('GPU vendor: '+prop.get('vendor',''))
 
     # Check frequency via script
     if win!='yes':
@@ -294,6 +318,9 @@ def detect(i):
                    for q in freqs:
                        ck.out(' '+q)
 
+    fuoa=''
+    fuid=''
+
     # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
@@ -302,11 +329,49 @@ def detect(i):
 
        xn=prop.get('name','')
        if xn=='':
-          if o=='con':
+          # Check if exists in configuration
+
+          dcfg={}
+          ii={'action':'load',
+              'module_uoa':cfg['module_deps']['cfg'],
+              'data_uoa':cfg['cfg_uoa']}
+          r=ck.access(ii)
+          if r['return']>0 and r['return']!=16: return r
+          if r['return']!=16:
+             dcfg=r['dict']
+
+          dx=dcfg.get('platform_accelerator_name',{}).get(tos,{})
+          x=tdid
+          if x=='': x='default'
+          xn=dx.get(x,'')
+
+          if (xn=='' and o=='con'):
              r=ck.inp({'text':'Enter your accelerator name (for example ARM MALI-T860, Nvidia Tesla K80): '})
-             xn=r['string']
+             xxn=r['string'].strip()
+
+             if xxn!=xn:
+                xn=xxn
+
+                if 'platform_accelerator_name' not in dcfg: dcfg['platform_accelerator_name']={}
+                if tos not in dcfg['platform_accelerator_name']: dcfg['platform_accelerator_name'][tos]={}
+                dcfg['platform_accelerator_name'][tos][x]=xn
+
+                ii={'action':'update',
+                    'module_uoa':cfg['module_deps']['cfg'],
+                    'data_uoa':cfg['cfg_uoa'],
+                    'dict':dcfg}
+                r=ck.access(ii)
+                if r['return']>0: return r
+
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
+
+          ixn=xn.find(' ')
+          if ixn>0: 
+             xx=xn[:ixn].strip()
+             prop['vendor']=xx
+             xn=xn[ixn+1:].strip()
+
           prop['name']=xn
 
        er=i.get('exchange_repo','')
@@ -320,6 +385,7 @@ def detect(i):
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':prop.get('name',''),
+           'extra_info':einf,
            'all':'yes',
            'dict':{'features':prop}} # Later we should add more properties from prop_all,
                                      # but should be careful to remove any user-specific info
@@ -327,18 +393,24 @@ def detect(i):
        r=ck.access(ii)
        if r['return']>0: return r
 
-       prop=r['dict']
+       fuoa=r.get('data_uoa','')
+       fuid=r.get('data_uid','')
+
+       prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists - reloading ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
 
     if 'features' not in rr: rr['features']={}
 
     rr['features']['acc']=prop
     rr['features']['acc_misc']=prop_all
 
-    return rr
+    if fuoa!='' or fuid!='':
+       rr['features']['acc_uoa']=fuoa
+       rr['features']['acc_misc_uid']=fuid
 
+    return rr
 
 ##############################################################################
 # set frequency
@@ -445,3 +517,98 @@ def set_freq(i):
                    ck.out('  Warning: setting frequency possibly failed - return code '+str(rx))
 
     return {'return':0}
+
+##############################################################################
+# viewing entries as html
+
+##############################################################################
+# viewing entries as html
+
+def show(i):
+    """
+    Input:  {
+              data_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html         - generated HTML
+            }
+
+    """
+
+
+    h='<h2>Accelerators of platforms participating in crowd-tuning</h2>\n'
+
+    h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
+
+    # Check host URL prefix and default module/action
+    url0=ck.cfg.get('wfe_url_prefix','')
+
+    h+=' <tr style="background-color:#cfcfff;">\n'
+    h+='  <td><b>\n'
+    h+='   #\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Vendor\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
+    h+='  </b></td>\n'
+    h+=' </tr>\n'
+
+    ruoa=i.get('repo_uoa','')
+    muoa=work['self_module_uoa']
+    duoa=i.get('data_uoa','')
+
+    r=ck.access({'action':'search',
+                 'module_uoa':muoa,
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'add_info':'yes',
+                 'add_meta':'yes'})
+    if r['return']>0: 
+       return {'return':0, 'html':'Error: '+r['error']}
+
+    lst=r['lst']
+
+    num=0
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('vendor','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('name','').upper())):
+
+        num+=1
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        meta=q['meta']
+        ft=meta.get('features',{})
+        
+        vendor=ft.get('vendor','')
+        name=ft.get('name','')
+
+        h+=' <tr>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(num)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+vendor+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
+        h+='  </td>\n'
+        h+=' </tr>\n'
+
+
+    h+='</table><br><br>\n'
+
+    return {'return':0, 'html':h}

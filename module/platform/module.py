@@ -52,6 +52,8 @@ def detect(i):
               (exchange_subrepo)     - if remote, remote repo UOA
 
               (force_platform_name)  - if !='', use this for platform name
+
+              (extra_info)           - extra info about author, etc (see add from CK kernel)
             }
 
     Output: {
@@ -106,18 +108,23 @@ def detect(i):
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
 
+    einf=i.get('extra_info','')
+    if einf=='': einf={}
+
     # If exchange, check that repo from this env is cached and recache if needed
     if ex=='yes':
        er=i.get('exchange_repo','')
-       rx=ck.load_repo_info_from_cache({'repo_uoa':ex})
-       if rx['return']>0: 
-          if o=='con':
-             ck.out('')
-             ck.out('Adding repo from this "env" package to local cache ...')
 
-          rx=ck.access({'action':'recache',
-                        'module_uoa':cfg['module_deps']['repo']})
-          if rx['return']>0: return rx
+       if er!='':
+          rx=ck.load_repo_info_from_cache({'repo_uoa':er})
+          if rx['return']>0: 
+             if o=='con':
+                ck.out('')
+                ck.out('Seems like CK remote repo ('+er+') is not in CK cache - recaching ...')
+
+             rx=ck.access({'action':'recache',
+                           'module_uoa':cfg['module_deps']['repo']})
+             if rx['return']>0: return rx
 
     # Get OS info ###############################################################
     if oo=='con': 
@@ -246,6 +253,10 @@ def detect(i):
              model=model[len(manu)+1:]
 
        if manu=='' and model!='': manu=model
+
+       manu=manu.upper()
+       model=model.upper()
+
        prop['name']=manu
        if model!='': prop['name']+=' '+model
        prop['model']=model
@@ -310,6 +321,9 @@ def detect(i):
        ck.out('Platform vendor: '+prop.get('vendor',''))
        ck.out('Platform model:  '+prop.get('model',''))
 
+    fuoa=''
+    fuid=''
+
     # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
@@ -318,11 +332,49 @@ def detect(i):
 
        xn=prop.get('name','')
        if xn=='':
-          if o=='con':
+          # Check if exists in configuration
+
+          dcfg={}
+          ii={'action':'load',
+              'module_uoa':cfg['module_deps']['cfg'],
+              'data_uoa':cfg['cfg_uoa']}
+          r=ck.access(ii)
+          if r['return']>0 and r['return']!=16: return r
+          if r['return']!=16:
+             dcfg=r['dict']
+
+          dx=dcfg.get('platform_name',{}).get(tos,{})
+          x=tdid
+          if x=='': x='default'
+          xn=dx.get(x,'')
+
+          if (xn=='' and o=='con'):
              r=ck.inp({'text':'Enter your platform name (for example Samsung Chromebook 2, Huawei Ascend Mate 7, IBM SyNAPSE): '})
-             xn=r['string']
+             xxn=r['string'].strip()
+
+             if xxn!=xn:
+                xn=xxn
+
+                if 'platform_name' not in dcfg: dcfg['platform_name']={}
+                if tos not in dcfg['platform_name']: dcfg['platform_name'][tos]={}
+                dcfg['platform_name'][tos][x]=xn
+
+                ii={'action':'update',
+                    'module_uoa':cfg['module_deps']['cfg'],
+                    'data_uoa':cfg['cfg_uoa'],
+                    'dict':dcfg}
+                r=ck.access(ii)
+                if r['return']>0: return r
+
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
+
+          ixn=xn.find(' ')
+          if ixn>0: 
+             xx=xn[:ixn].strip()
+             prop['vendor']=xx
+             prop['model']=xn[ixn+1:].strip()
+
           prop['name']=xn
 
        er=i.get('exchange_repo','')
@@ -336,6 +388,7 @@ def detect(i):
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':prop.get('name',''),
+           'extra_info':einf,
            'all':'yes',
            'dict':{'features':prop}} # Later we should add more properties from prop_all,
                                      # but should be careful to remove any user-specific info
@@ -343,16 +396,23 @@ def detect(i):
        r=ck.access(ii)
        if r['return']>0: return r
 
-       prop=r['dict']
+       fuoa=r.get('data_uoa','')
+       fuid=r.get('data_uid','')
+
+       prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists - reloading ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
 
     if 'features' not in rr: rr['features']={}
 
     rr['features']['platform']=prop
     rr['features']['platform_misc']=prop_all
 
+    if fuoa!='' or fuid!='':
+       rr['features']['platform_uoa']=fuoa
+       rr['features']['platform_uid']=fuid
+      
     return rr
 
 ##############################################################################
@@ -498,8 +558,9 @@ def exchange(i):
 
               (dict)         - dictionary to check/record
 
-              (all)          - if 'yes', check all dict['prop'] and add to separate file 
+              (all)          - if 'yes', check all dict['features'] and add to separate file 
 
+              (extra_info)   - extra info about author, etc (see add from CK kernel)
             }
 
     Output: {
@@ -507,7 +568,8 @@ def exchange(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              dict         - if exists, load updated dict (can be collaboratively extended to add more properties!)
+              dict         - if exists, load updated dict (can be collaboratively extended to add more properties 
+                                        (or unique/representative species -> software, hardware, gpu, accelerators, programs, data sets!)
               (found)      - if 'yes', entry was found
             }
 
@@ -524,31 +586,38 @@ def exchange(i):
     al=i.get('all','')
 
     if dname!='':
-       # Search if already exists
+       # Search if already exists (and not only in upload)
        rx=ck.access({'action':'search',
                      'module_uoa':smuoa,
-                     'repo_uoa':ruoa,
+# FGG: I commented next line since we can move 
+#      well-known entries to other repositories
+#      such as ck-crowdtuning instead of upload
+#                     'repo_uoa':ruoa,
                      'search_by_name':dname,
                      'ignore_case':'yes'})
        if rx['return']>0: return rx
        lst=rx['lst']
 
        if len(lst)==0:
+          ei=i.get('extra_info',{})
+
           # Add info
           rx=ck.access({'action':'add',
                         'module_uoa':smuoa,
                         'repo_uoa':ruoa,
                         'data_name':dname,
                         'dict':dd,
+                        'extra_info':ei,
                         'sort_keys':'yes'})
 
        else:
           # Load
           ll=lst[0]
           duoa=ll.get('data_uid','')
+          xruoa=ll.get('repo_uoa','')
           rx=ck.access({'action':'load',
                         'module_uoa':smuoa,
-                        'repo_uoa':ruoa,
+                        'repo_uoa':xruoa,
                         'data_uoa':duoa})
 
           rx['found']='yes'
@@ -556,32 +625,43 @@ def exchange(i):
        if rx['return']>0: return rx
 
        if al=='yes':
+          # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...
+
           # Check if extra parameters are saved
           import os
           p=rx['path']
           p1=os.path.join(p, 'all.json')
 
-          dall={'all':[]}
+          d={'all':[]}
           toadd=True
+
+          touched=0
 
           if os.path.isfile(p1):
              ry=ck.load_json_file({'json_file':p1})
              if ry['return']>0: return ry
-             dall=ry['dict']
+             d=ry['dict']
 
+             touched=d.get('touched',0)
+             touched+=1
 
-             for q in dall.get('all',[]):
+             if 'all' not in d: d['all']=[]
+             dall=d.get('all',[])
+
+             for q in dall:
                  rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
                  if rz['return']>0: return rz
                  if rz['equal']=='yes':
                     toadd=False
                     break
 
-          if toadd:
-             dall['all'].append(ddf)
+          d['touched']=touched
 
-             rz=ck.save_json_to_file({'json_file':p1, 'dict':dall})
-             if rz['return']>0: return rz
+          if toadd:
+             d['all'].append(ddf)
+
+          rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
+          if rz['return']>0: return rz
 
        return rx
 
@@ -646,3 +726,96 @@ def deinit(i):
         'key':key,
         'out':o}
     return init_device(ii)
+
+##############################################################################
+# viewing entries as html
+
+def show(i):
+    """
+    Input:  {
+              data_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html         - generated HTML
+            }
+
+    """
+
+
+    h='<h2>Platforms participating in crowd-tuning</h2>\n'
+
+    h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
+
+    # Check host URL prefix and default module/action
+    url0=ck.cfg.get('wfe_url_prefix','')
+
+    h+=' <tr style="background-color:#cfcfff;">\n'
+    h+='  <td><b>\n'
+    h+='   #\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Vendor\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Model\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
+    h+='  </b></td>\n'
+    h+=' </tr>\n'
+
+    ruoa=i.get('repo_uoa','')
+    muoa=work['self_module_uoa']
+    duoa=i.get('data_uoa','')
+
+    r=ck.access({'action':'search',
+                 'module_uoa':muoa,
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'add_info':'yes',
+                 'add_meta':'yes'})
+    if r['return']>0: 
+       return {'return':0, 'html':'Error: '+r['error']}
+
+    lst=r['lst']
+
+    num=0
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('vendor','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('model','').upper())):
+
+        num+=1
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        meta=q['meta']
+        ft=meta.get('features',{})
+        
+        name=ft.get('name','')
+        vendor=ft.get('vendor','')
+        model=ft.get('model','')
+
+        h+=' <tr>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(num)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+vendor+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+model+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
+        h+='  </td>\n'
+        h+=' </tr>\n'
+
+
+    h+='</table><br><br>\n'
+
+    return {'return':0, 'html':h}

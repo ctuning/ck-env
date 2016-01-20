@@ -50,6 +50,8 @@ def detect(i):
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
 
+              (extra_info)           - extra info about author, etc (see add from CK kernel)
+
               (return_multi_devices) - if 'yes' and multiple devices detected, return error=32 and devices
             }
 
@@ -90,8 +92,12 @@ def detect(i):
     sic=i.get('skip_info_collection','')
     sdi=i.get('skip_device_init','')
     pdv=i.get('print_device_info','')
+
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
+
+    einf=i.get('extra_info','')
+    if einf=='': einf={}
 
     # Detect and find most close host OS or load already existing one
     r=ck.access({'action':'find_close',
@@ -360,6 +366,9 @@ def detect(i):
        ck.out('Long OS name:  '+prop.get('name_long',''))
        ck.out('OS bits:       '+prop.get('bits',''))
 
+    fuoa=''
+    fuid=''
+
     # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
@@ -368,9 +377,40 @@ def detect(i):
 
        xn=prop.get('name','')
        if xn=='':
-          if o=='con':
+          # Check if exists in configuration
+
+          dcfg={}
+          ii={'action':'load',
+              'module_uoa':cfg['module_deps']['cfg'],
+              'data_uoa':cfg['cfg_uoa']}
+          r=ck.access(ii)
+          if r['return']>0 and r['return']!=16: return r
+          if r['return']!=16:
+             dcfg=r['dict']
+
+          dx=dcfg.get('platform_os_name',{}).get(tos,{})
+          x=tdid
+          if x=='': x='default'
+          xn=dx.get(x,'')
+
+          if (xn=='' and o=='con'):
              r=ck.inp({'text':'Enter your OS name (for example, Windows 10 or Android 5.0): '})
-             xn=r['string']
+             xxn=r['string'].strip()
+
+             if xxn!=xn:
+                xn=xxn
+
+                if 'platform_os_name' not in dcfg: dcfg['platform_os_name']={}
+                if tos not in dcfg['platform_os_name']: dcfg['platform_os_name'][tos]={}
+                dcfg['platform_os_name'][tos][x]=xn
+
+                ii={'action':'update',
+                    'module_uoa':cfg['module_deps']['cfg'],
+                    'data_uoa':cfg['cfg_uoa'],
+                    'dict':dcfg}
+                r=ck.access(ii)
+                if r['return']>0: return r
+
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
           prop['name']=xn
@@ -386,6 +426,7 @@ def detect(i):
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':prop.get('name',''),
+           'extra_info':einf,
            'all':'yes',
            'dict':{'features':prop}} # Later we should add more properties from prop_all,
                                      # but should be careful to remove any user-specific info
@@ -394,12 +435,129 @@ def detect(i):
        r=ck.access(ii)
        if r['return']>0: return r
 
-       prop=r['dict']
+       fuoa=r.get('data_uoa','')
+       fuid=r.get('data_uid','')
+
+       prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists - reloading ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
 
-    return {'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
-                        'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,
-                        'features':{'os':prop, 'os_misc':prop_all}, 
-                        'devices':devices, 'device_id':tdid}
+    rr={'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
+                    'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,
+                    'features':{'os':prop, 'os_misc':prop_all}, 
+                    'devices':devices, 'device_id':tdid}
+
+    if fuoa!='' or fuid!='':
+       rr['features']['os_uoa']=fuoa
+       rr['features']['os_uid']=fuid
+
+    return rr
+
+##############################################################################
+# viewing entries as html
+
+def show(i):
+    """
+    Input:  {
+              data_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html         - generated HTML
+            }
+
+    """
+
+
+    h='<h2>Operating Systems of platforms participating in crowd-tuning</h2>\n'
+
+    h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
+
+    # Check host URL prefix and default module/action
+    url0=ck.cfg.get('wfe_url_prefix','')
+
+    h+=' <tr style="background-color:#cfcfff;">\n'
+    h+='  <td><b>\n'
+    h+='   #\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Bits\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name Long\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name Short\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
+    h+='  </b></td>\n'
+    h+=' </tr>\n'
+
+    ruoa=i.get('repo_uoa','')
+    muoa=work['self_module_uoa']
+    duoa=i.get('data_uoa','')
+
+    r=ck.access({'action':'search',
+                 'module_uoa':muoa,
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'add_info':'yes',
+                 'add_meta':'yes'})
+    if r['return']>0: 
+       return {'return':0, 'html':'Error: '+r['error']}
+
+    lst=r['lst']
+
+    num=0
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('name','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('name_short','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('name_long','').upper())):
+
+        num+=1
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        meta=q['meta']
+        ft=meta.get('features',{})
+        
+        name=ft.get('name','')
+        bits=ft.get('bits','')
+        name_long=ft.get('name_long','')
+        name_short=ft.get('name_short','')
+
+
+        h+=' <tr>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(num)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+bits+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name_short+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name_long+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
+        h+='  </td>\n'
+        h+=' </tr>\n'
+
+
+    h+='</table><br><br>\n'
+
+    return {'return':0, 'html':h}

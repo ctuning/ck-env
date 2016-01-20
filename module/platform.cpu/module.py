@@ -51,6 +51,8 @@ def detect(i):
               (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+
+              (extra_info)           - extra info about author, etc (see add from CK kernel)
             }
 
     Output: {
@@ -85,8 +87,12 @@ def detect(i):
     sic=i.get('skip_info_collection','')
     sdi=i.get('skip_device_init','')
     pdv=i.get('print_device_info','')
+
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
+
+    einf=i.get('extra_info','')
+    if einf=='': einf={}
 
     # Get OS info ##############################################################
     import copy
@@ -196,6 +202,8 @@ def detect(i):
        if target_sub_cpu=='':
           target_sub_cpu=info_cpu[spp].get('model name','')
        target_cpu_features=info_cpu[spp].get('Features','')
+       if target_cpu_features=='':
+          target_cpu_features=info_cpu[spp].get('flags','')
 
        # Collect all frequencies
        for px in range(0, pp+1):
@@ -426,6 +434,9 @@ def detect(i):
               v=x[k]
               ck.out('  CPU'+k+' = '+json.dumps(v))
 
+    fuoa=''
+    fuid=''
+
     # Exchanging info #################################################################
     if ex=='yes':
        if o=='con':
@@ -434,9 +445,40 @@ def detect(i):
 
        xn=target.get('name','')
        if xn=='':
-          if o=='con':
+          # Check if exists in configuration
+
+          dcfg={}
+          ii={'action':'load',
+              'module_uoa':cfg['module_deps']['cfg'],
+              'data_uoa':cfg['cfg_uoa']}
+          r=ck.access(ii)
+          if r['return']>0 and r['return']!=16: return r
+          if r['return']!=16:
+             dcfg=r['dict']
+
+          dx=dcfg.get('platform_cpu_name',{}).get(tos,{})
+          x=tdid
+          if x=='': x='default'
+          xn=dx.get(x,'')
+
+          if (xn=='' and o=='con'):
              r=ck.inp({'text':'Enter your processor name: '})
-             xn=r['string']
+             xxn=r['string'].strip()
+
+             if xxn!=xn:
+                xn=xxn
+
+                if 'platform_cpu_name' not in dcfg: dcfg['platform_cpu_name']={}
+                if tos not in dcfg['platform_cpu_name']: dcfg['platform_cpu_name'][tos]={}
+                dcfg['platform_cpu_name'][tos][x]=xn
+
+                ii={'action':'update',
+                    'module_uoa':cfg['module_deps']['cfg'],
+                    'data_uoa':cfg['cfg_uoa'],
+                    'dict':dcfg}
+                r=ck.access(ii)
+                if r['return']>0: return r
+
           if xn=='':
              return {'return':1, 'error':'can\'t exchange information where main name is empty'}
           target['name']=xn
@@ -447,27 +489,40 @@ def detect(i):
           er=ck.cfg['default_exchange_repo_uoa']
           esr=ck.cfg['default_exchange_subrepo_uoa']
 
+       # Copy nearly all (remove cur freq)
+       import copy
+       xtarget=copy.deepcopy(target)
+       if 'current_freq' in xtarget: del(xtarget['current_freq'])
+
        ii={'action':'exchange',
            'module_uoa':cfg['module_deps']['platform'],
            'sub_module_uoa':work['self_module_uid'],
            'repo_uoa':er,
            'data_name':target.get('name',''),
+           'extra_info':einf,
            'all':'no',
-           'dict':{'features':target}} # Later we should add more properties from prop_all,
-                                       # but should be careful to remove any user-specific info
+           'dict':{'features':xtarget}} # Later we should add more properties from prop_all,
+                                        # but should be careful to remove any user-specific info
        if esr!='': ii['remote_repo_uoa']=esr
        r=ck.access(ii)
        if r['return']>0: return r
 
-       prop=r['dict']
+       fuoa=r.get('data_uoa','')
+       fuid=r.get('data_uid','')
+
+       prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists - reloading ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
 
     if 'features' not in rr: rr['features']={}
 
     rr['features']['cpu']=target
     rr['features']['cpu_misc']=info_cpu
+
+    if fuoa!='' or fuid!='':
+       rr['features']['cpu_uoa']=fuoa
+       rr['features']['cpu_uid']=fuid
 
     return rr
 
@@ -588,3 +643,130 @@ def set_freq(i):
                    ck.out('  Warning: setting frequency possibly failed - return code '+str(rx))
 
     return {'return':0}
+
+##############################################################################
+# viewing entries as html
+
+def show(i):
+    """
+    Input:  {
+              data_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html         - generated HTML
+            }
+
+    """
+
+
+    h='<h2>Processors of platforms participating in crowd-tuning</h2>\n'
+
+    h+='<table class="ck_table" border="0">\n'
+
+    # Check host URL prefix and default module/action
+    url0=ck.cfg.get('wfe_url_prefix','')
+
+    h+=' <tr style="background-color:#cfcfff;">\n'
+    h+='  <td><b>\n'
+    h+='   #\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name 1\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Name 2\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Cores\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Max frequency (MHz)\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   ABI\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Features\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
+    h+='  </b></td>\n'
+    h+=' </tr>\n'
+
+    ruoa=i.get('repo_uoa','')
+    muoa=work['self_module_uoa']
+    duoa=i.get('data_uoa','')
+
+    r=ck.access({'action':'search',
+                 'module_uoa':muoa,
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'add_info':'yes',
+                 'add_meta':'yes'})
+    if r['return']>0: 
+       return {'return':0, 'html':'Error: '+r['error']}
+
+    lst=r['lst']
+
+    num=0
+    for q in sorted(lst, key = lambda x: (x.get('meta',{}).get('features',{}).get('sub_name','').upper(), \
+                                          x.get('meta',{}).get('features',{}).get('name','').upper())):
+
+        num+=1
+
+        duoa=q['data_uoa']
+        duid=q['data_uid']
+
+        meta=q['meta']
+        ft=meta.get('features',{})
+        
+        name=ft.get('name','')
+        sub_name=ft.get('sub_name','')
+        cores=ft.get('num_proc','')
+        abi=ft.get('cpu_abi','')
+        features=ft.get('cpu_features','')
+        frequency=ft.get('max_freq',{})
+
+        freq=''
+        for x in range(0,1024):
+            xx=str(x)
+            if xx not in frequency: break
+            if freq!='': freq+=', '
+            freq+=str(frequency[xx])
+
+        h+=' <tr>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(num)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+sub_name+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+name+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+str(cores)+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+freq+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+abi+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   '+features+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
+        h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
+        h+='  </td>\n'
+        h+=' </tr>\n'
+
+
+    h+='</table><br><br>\n'
+
+    return {'return':0, 'html':h}

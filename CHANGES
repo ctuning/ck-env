@@ -1,3 +1,23 @@
+* 2016.01.16 - * adding UOA and UID of found platforms into detection stream
+
+* 2016.01.12 - * adding possibility to enter and record name of platform, accelerator, cpu and OS
+                 to local cfg if not automatically detected (for crowdtuning)
+
+* 2016.01.11 - * fixing remote repo recaching if selecting different public CK server
+                 during program optimization crowdsourcing
+               * fixing automatic package installation bug (when crowdsourcing autotuning)
+
+* 2016.01.04 - * adding 'show' function to platform.* to list all platforms 
+                 participating in crowd-tuning and their parameters
+
+* 2016.01.03 - * fixing exchange of information during crowd-tuning
+                 (possiblity to find platform description in all repos)
+               * adding possibility to identify user when recording
+                 results during crowdtuning
+
+* 2016.01.02 - * fixing GPU/accelerator detection for ARM/Qualcomm (for crowdtuning)
+               * fixing platform name detection (to crowdsource optimization)
+
 * 2015.12.19 - * adding env var CK_PLATFORM_INIT_UOA to automatically 
                  add platform scripts to PATH when dealing with CPU/GPU frequency
 
