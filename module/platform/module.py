@@ -587,6 +587,7 @@ def exchange(i):
 
     if dname!='':
        # Search if already exists (and not only in upload)
+       print dname
        rx=ck.access({'action':'search',
                      'module_uoa':smuoa,
 # FGG: I commented next line since we can move 
@@ -597,6 +598,8 @@ def exchange(i):
                      'ignore_case':'yes'})
        if rx['return']>0: return rx
        lst=rx['lst']
+
+       print (lst)
 
        if len(lst)==0:
           ei=i.get('extra_info',{})
