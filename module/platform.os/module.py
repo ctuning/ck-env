@@ -441,7 +441,7 @@ def detect(i):
        prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta (features) ...')
 
     rr={'return':0, 'os_uoa':tosx, 'os_uid':tos, 'os_dict':tosd, 
                     'host_os_uoa':hosx, 'host_os_uid':hos, 'host_os_dict':hosd,

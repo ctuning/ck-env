@@ -399,7 +399,7 @@ def detect(i):
        prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists ('+fuid+') - loading latest meta ...')
+          ck.out('  Data already exists ('+fuid+') - loading latest meta (features) ...')
 
     if 'features' not in rr: rr['features']={}
 
