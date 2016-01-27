@@ -1,3 +1,6 @@
+* 2016.01.27 - * fixing installation of GCC trunk and LLVM trunk 
+                 (preparing new engine to crowdsource optimizations)
+
 * 2016.01.16 - * adding UOA and UID of found platforms into detection stream
 
 * 2016.01.12 - * adding possibility to enter and record name of platform, accelerator, cpu and OS

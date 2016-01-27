@@ -16,8 +16,8 @@ export PACKAGE_NAME=gmp-6.0.0
 export PACKAGE_NAME1=${PACKAGE_NAME}a
 
 cd ${INSTALL_DIR}
-cp ${PACKAGE_DIR}/${PACKAGE_NAME1}.tar.gz .
-gzip -d ${PACKAGE_NAME1}.tar.gz
+cp ${PACKAGE_DIR}/${PACKAGE_NAME1}.tar.bz2 .
+bzip2 -d ${PACKAGE_NAME1}.tar.bz2
 tar xvf ${PACKAGE_NAME1}.tar
 rm ${PACKAGE_NAME1}.tar
 
