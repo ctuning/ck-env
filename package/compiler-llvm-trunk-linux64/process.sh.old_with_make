@@ -30,7 +30,7 @@ echo "Configuring ..."
 mkdir $OBJ_DIR
 cd $OBJ_DIR
 
-cmake ../trunk/llvm
+../trunk/llvm/configure --prefix=${INSTALL_DIR}
 if [ "$?" != "0" ]; then
  echo "Error: failed configuring ..."
  read -p "Press any key to continue!"
@@ -41,7 +41,7 @@ fi
 echo ""
 echo "Building ..."
 
-cmake --build .
+make
 if [ "$?" != "0" ]; then
  echo "Error: failed making ..."
  read -p "Press any key to continue!"
@@ -51,7 +51,7 @@ fi
 echo ""
 echo "Installing ..."
 
-cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -P cmake_install.cmake
+make install
 if [ "$?" != "0" ]; then
  echo "Error: failed installing ..."
  read -p "Press any key to continue!"
