@@ -1,5 +1,7 @@
 * 2016.01.27 - * fixing installation of GCC trunk and LLVM trunk 
                  (preparing new engine to crowdsource optimizations)
+               * adding support to select SW dependencies randomly
+                 (useful to crowdsource experiments)
 
 * 2016.01.16 - * adding UOA and UID of found platforms into detection stream
 

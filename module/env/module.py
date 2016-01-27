@@ -58,6 +58,9 @@ def set(i):
               (env)                  - existing environment
 
               (print)                - if 'yes', print found environment
+
+              (random)               - if 'yes' and there is a choice, select random
+                                       (useful for quiet experiment crowdsourcing such as sw/hw crowdtuning)
             }
 
     Output: {
@@ -78,6 +81,8 @@ def set(i):
     o=i.get('out','')
     oo=''
     if o=='con': oo='con'
+
+    ran=i.get('random','')
 
     # Clean output file
     import os
@@ -195,71 +200,75 @@ def set(i):
           ls=sorted(l, key=lambda k: k.get('meta',{}).get('misc',{}).get('version_int',0), reverse=True)
           l=ls
 
-          if o=='con':
-             xq='tags="'+tags+'"'
-             if len(setup)>0:
-                import json
+          if ran=='yes':
+             from random import randint
+             ilx=randint(0, lx-1)
+          else:
+             if o=='con':
+                xq='tags="'+tags+'"'
+                if len(setup)>0:
+                   import json
 
-                ro=readable_os({'setup':setup})
-                if ro['return']>0: return ro
-                setup1=ro['setup1']
+                   ro=readable_os({'setup':setup})
+                   if ro['return']>0: return ro
+                   setup1=ro['setup1']
 
-                xq+=' and setup='+json.dumps(setup1)
+                   xq+=' and setup='+json.dumps(setup1)
 
-             ck.out('')
-             ck.out('More than one environment found for '+xq+':')
-             ck.out('')
-             zz={}
-             for z in range(0, lx):
-                 j=l[z]
+                ck.out('')
+                ck.out('More than one environment found for '+xq+':')
+                ck.out('')
+                zz={}
+                for z in range(0, lx):
+                    j=l[z]
 
-                 zi=j.get('info',{})
-                 zm=j.get('meta',{})
-                 zu=j.get('data_uid','')
-                 zdn=zi.get('data_name','')
-                 cus=zm.get('customize','')
-                 zdeps=zm.get('deps',{})
-                 xsetup=zm.get('setup',{})
-                 xtags=zm.get('tags','')
-                 ver=cus.get('version','')
+                    zi=j.get('info',{})
+                    zm=j.get('meta',{})
+                    zu=j.get('data_uid','')
+                    zdn=zi.get('data_name','')
+                    cus=zm.get('customize','')
+                    zdeps=zm.get('deps',{})
+                    xsetup=zm.get('setup',{})
+                    xtags=zm.get('tags','')
+                    ver=cus.get('version','')
 
-                 xtarget_os_uoa=xsetup.get('target_os_uoa','')
+                    xtarget_os_uoa=xsetup.get('target_os_uoa','')
 
-                 xstags=''
-                 for t in xtags:
-                     if t!='':
-                        if xstags!='': xstags+=','
-                        xstags+=t
+                    xstags=''
+                    for t in xtags:
+                        if t!='':
+                           if xstags!='': xstags+=','
+                           xstags+=t
 
-                 zs=str(z)
-                 zz[zs]=zu
+                    zs=str(z)
+                    zz[zs]=zu
 
-                 ck.out('')
-                 ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
+                    ck.out('')
+                    ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
 
-                 if len(zdeps)>0:
-                    for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
-                        jj=zdeps[j]
-                        juoa=jj.get('uoa','')
-                        jtags=jj.get('tags','')
-                        jver=jj.get('ver','')
+                    if len(zdeps)>0:
+                       for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
+                           jj=zdeps[j]
+                           juoa=jj.get('uoa','')
+                           jtags=jj.get('tags','')
+                           jver=jj.get('ver','')
 
-                        js='                                  '
-                        js+='Dependency '+j+' (UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
-                        ck.out(js)
+                           js='                                  '
+                           js+='Dependency '+j+' (UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
+                           ck.out(js)
 
 
 
-             ck.out('')
-             rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+' or press Enter for 0: '})
-             x=rx['string'].strip()
+                ck.out('')
+                rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+' or press Enter for 0: '})
+                x=rx['string'].strip()
 
-             if x=='': x='0'
+                if x=='': x='0'
 
-             if x not in zz:
-                return {'return':1, 'error':'dependency number is not recognized'}
+                if x not in zz:
+                   return {'return':1, 'error':'dependency number is not recognized'}
 
-             ilx=int(x)
+                ilx=int(x)
 
        if ilx<len(l):
           duid=l[ilx].get('data_uid')
@@ -595,6 +604,9 @@ def resolve(i):
                                        (useful for program compilation)
 
               (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
+
+              (random)               - if 'yes' and there is a choice, select random
+                                       (useful for quiet experiment crowdsourcing such as sw/hw crowdtuning)
             }
 
     Output: {
@@ -622,6 +634,8 @@ def resolve(i):
     sar=i.get('skip_auto_resolution','')
 
     deps=i.get('deps',{})
+
+    ran=i.get('random','')
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -686,7 +700,8 @@ def resolve(i):
             'uoa':uoa,
             'deps':deps,
             'skip_auto_resolution':sar,
-            'local':local
+            'local':local,
+            'random':ran
            }
         if o=='con': ii['out']='con'
         rx=set(ii)
