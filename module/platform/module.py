@@ -667,8 +667,8 @@ def exchange(i):
 
              d['touched']=touched
 
-#             if toadd:
-             d['all'].append(ddf)
+             if toadd:
+                d['all'].append(ddf)
 
              rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
              if rz['return']>0: return rz
