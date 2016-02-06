@@ -645,16 +645,15 @@ def exchange(i):
              d={'all':[]}
              toadd=True
 
-#             removed to avoid mess when sharing local and global platform info
-#             touched=0
+             touched=0
 
              if os.path.isfile(p1):
                 ry=ck.load_json_file({'json_file':p1})
                 if ry['return']>0: return ry
                 d=ry['dict']
 
-#                touched=d.get('touched',0)
-#                touched+=1
+                touched=d.get('touched',0)
+                touched+=1
 
                 if 'all' not in d: d['all']=[]
                 dall=d.get('all',[])
@@ -666,13 +665,13 @@ def exchange(i):
                        toadd=False
                        break
 
-#             d['touched']=touched
+             d['touched']=touched
 
-             if toadd:
-                d['all'].append(ddf)
+#             if toadd:
+             d['all'].append(ddf)
 
-                rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
-                if rz['return']>0: return rz
+             rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
+             if rz['return']>0: return rz
 
        return rx
 
