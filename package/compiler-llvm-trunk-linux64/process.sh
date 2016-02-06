@@ -20,8 +20,8 @@ echo "Getting LLVM trunk from SVN"
 svn co http://llvm.org/svn/llvm-project/llvm/trunk ${INSTALL_DIR}/trunk/llvm
 svn co http://llvm.org/svn/llvm-project/cfe/trunk  ${INSTALL_DIR}/trunk/llvm/tools/clang
 svn co http://llvm.org/svn/llvm-project/polly/trunk  ${INSTALL_DIR}/trunk/llvm/tools/polly
-svn co http://llvm.org/svn/llvm-project/dragonegg/trunk  ${INSTALL_DIR}/trunk/llvm/projects/dragonegg
 
+#svn co http://llvm.org/svn/llvm-project/dragonegg/trunk  ${INSTALL_DIR}/trunk/llvm/projects/dragonegg
 #svn co http://llvm.org/svn/llvm-project/lnt/trunk  ${INSTALL_DIR}/trunk/llvm/tools/lnt
 
 echo ""

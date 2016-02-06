@@ -1,3 +1,8 @@
+* 2016.02.05 - * record all info during platform detection only 
+                 when CK_RECORD_ALL_PLATFORM_INFO environment is set to 'yes'.
+                 Needed to avoid mess when recording local or global info
+                 during experiment crowdsourcing.
+
 * 2016.01.27 - * fixing installation of GCC trunk and LLVM trunk 
                  (preparing new engine to crowdsource optimizations)
                * adding support to select SW dependencies randomly

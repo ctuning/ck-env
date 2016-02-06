@@ -575,6 +575,8 @@ def exchange(i):
 
     """
 
+    import os
+
     ruoa=i.get('repo_uoa','')
     smuoa=i['sub_module_uoa']
 
@@ -625,44 +627,52 @@ def exchange(i):
        if rx['return']>0: return rx
 
        if al=='yes':
-          # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...
+          # We also record all info only if forced to do so
+          #  by environment variable. It is needed to aggregate
+          #  such info on experiment crowdsourcing servers
+          #  and then share this info via GitHub,
+          #  but not locally, otherwise it will be a mess...
 
-          # Check if extra parameters are saved
-          import os
-          p=rx['path']
-          p1=os.path.join(p, 'all.json')
+          rap=os.environ.get('CK_RECORD_ALL_PLATFORM_INFO','')
+          if rap=='yes':
 
-          d={'all':[]}
-          toadd=True
+             # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...
 
-#          removed to avoid mess when sharing local and global platform info
-#          touched=0
+             # Check if extra parameters are saved
+             p=rx['path']
+             p1=os.path.join(p, 'all.json')
 
-          if os.path.isfile(p1):
-             ry=ck.load_json_file({'json_file':p1})
-             if ry['return']>0: return ry
-             d=ry['dict']
+             d={'all':[]}
+             toadd=True
 
-#             touched=d.get('touched',0)
-#             touched+=1
+#             removed to avoid mess when sharing local and global platform info
+#             touched=0
 
-             if 'all' not in d: d['all']=[]
-             dall=d.get('all',[])
+             if os.path.isfile(p1):
+                ry=ck.load_json_file({'json_file':p1})
+                if ry['return']>0: return ry
+                d=ry['dict']
 
-             for q in dall:
-                 rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
-                 if rz['return']>0: return rz
-                 if rz['equal']=='yes':
-                    toadd=False
-                    break
+#                touched=d.get('touched',0)
+#                touched+=1
 
-#          d['touched']=touched
+                if 'all' not in d: d['all']=[]
+                dall=d.get('all',[])
 
-          if toadd:
-             d['all'].append(ddf)
+                for q in dall:
+                    rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
+                    if rz['return']>0: return rz
+                    if rz['equal']=='yes':
+                       toadd=False
+                       break
 
-             rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
-             if rz['return']>0: return rz
+#             d['touched']=touched
+
+             if toadd:
+                d['all'].append(ddf)
+
+                rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
+                if rz['return']>0: return rz
 
        return rx
 
