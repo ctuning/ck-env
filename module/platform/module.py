@@ -628,12 +628,12 @@ def exchange(i):
 
        if al=='yes':
           # We also record all info only if forced to do so
-          #  by environment variable. It is needed to aggregate
+          #  by CK local kernel configuration. It is needed to aggregate
           #  such info on experiment crowdsourcing servers
           #  and then share this info via GitHub,
           #  but not locally, otherwise it will be a mess...
 
-          rap=os.environ.get('CK_RECORD_ALL_PLATFORM_INFO','')
+          rap=ck.cfg.get('record_all_platform_info','')
           if rap=='yes':
 
              # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...

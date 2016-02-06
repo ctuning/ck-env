@@ -168,3 +168,45 @@ def process_all_files_recursively(i):
            if r['return']>0: return r
 
     return {'return':0, 'list':lst}
+
+##############################################################################
+# merge dictionaries in 2 files
+
+def merge_dicts(i):
+    """
+    Input:  {
+              file1   - dict1
+              file2   - dict2
+              (file3) - output to this file. If empty use file1
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    f1=i['file1']
+    f2=i['file2']
+    
+    fo=i.get('file3','')
+    if fo=='': fo=f1
+
+    r=ck.load_json_file({'json_file':f1})
+    if r['return']>0: return r
+    d1=r['dict']
+
+    r=ck.load_json_file({'json_file':f2})
+    if r['return']>0: return r
+    d2=r['dict']
+
+    r=ck.merge_dicts({'dict1':d1, 'dict2':d2})
+    if r['return']>0: return r
+    d1=r['dict1']
+
+    r=ck.save_json_to_file({'json_file':fo, 'dict':d1})
+    if r['return']>0: return r
+
+    return {'return':0}

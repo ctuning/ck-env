@@ -1,5 +1,5 @@
 * 2016.02.05 - * record all info during platform detection only 
-                 when CK_RECORD_ALL_PLATFORM_INFO environment is set to 'yes'.
+                 when ck.cfg['record_all_platform_info']=='yes'.
                  Needed to avoid mess when recording local or global info
                  during experiment crowdsourcing.
 

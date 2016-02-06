@@ -1,5 +1,8 @@
 {
   "actions": {
+    "merge_dicts": {
+      "desc": "merge dictionaries in 2 files"
+    }, 
     "process_all_files_recursively": {
       "desc": "process all files recursively using some action"
     }, 
