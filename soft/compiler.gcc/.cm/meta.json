@@ -74,6 +74,7 @@
     "split": ".", 
     "string_after": " ", 
     "string_after1": "@@@", 
-    "string_before": ") "
+    "string_before": ") ",
+    "tool_via_env": "CK_CC"
   }
 }
