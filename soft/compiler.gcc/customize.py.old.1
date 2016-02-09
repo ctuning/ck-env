@@ -85,25 +85,6 @@ def setup(i):
         v=v.replace('$#tool_prefix#$',prefix)
         env[k]=v
 
-    # (tool postfix such as -4.6)
-    postfix_configured=cus.get('tool_postfix_configured','')
-    postfix=cus.get('tool_postfix','')
-
-    if postfix_configured!='yes':
-       print ('')
-       postfix=raw_input('Input clang postfix if needed (for example, -4.6 for gcc-4.6) or Enter to skip: ')
-       postfix=postfix.strip()
-
-    if postfix!='':
-       env['CK_COMPILER_POSTFIX']=postfix
-       cus['tool_postfix']=postfix
-       cus['tool_postfix_configured']='yes'
-
-    for k in env:
-        v=env[k]
-        v=v.replace('$#tool_postfix#$',postfix)
-        env[k]=v
-
     retarget=cus.get('retarget','')
     lfr=cus.get('linking_for_retargeting','')
     if retarget=='' and iv=='yes':

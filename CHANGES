@@ -1,3 +1,5 @@
+* 2016.02.09 - * adding postfix for GCC env registration (such as -4.6)
+
 * 2016.02.05 - * record all info during platform detection only 
                  when ck.cfg['record_all_platform_info']=='yes'.
                  Needed to avoid mess when recording local or global info
