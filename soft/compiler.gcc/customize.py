@@ -90,14 +90,12 @@ def setup(i):
     postfix=cus.get('tool_postfix','')
 
     if postfix_configured!='yes':
-       print ('')
-       postfix=raw_input('Input clang postfix if needed (for example, -4.6 for gcc-4.6) or Enter to skip: ')
+       postfix=raw_input('Input gcc postfix if needed (for example, -4.6 for gcc-4.6) or Enter to skip: ')
        postfix=postfix.strip()
 
-    if postfix!='':
-       env['CK_COMPILER_POSTFIX']=postfix
-       cus['tool_postfix']=postfix
-       cus['tool_postfix_configured']='yes'
+    env['CK_COMPILER_POSTFIX']=postfix
+    cus['tool_postfix']=postfix
+    cus['tool_postfix_configured']='yes'
 
     for k in env:
         v=env[k]
