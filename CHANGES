@@ -1,4 +1,5 @@
 * 2016.02.10 - * improving CLANG description for Android/ARM via Android NDK
+               * improving CLANG version detection
 
 * 2016.02.09 - * adding postfix for GCC env registration (such as -4.6)
 

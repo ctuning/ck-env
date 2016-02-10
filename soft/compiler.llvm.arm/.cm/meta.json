@@ -68,6 +68,7 @@
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
     "string_after": "(", 
+    "string_after_end": "yes", 
     "string_before": "version ",
     "tool_via_env": "CK_CC"
   }

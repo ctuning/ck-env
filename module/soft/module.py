@@ -156,6 +156,10 @@ def detect(i):
     dver=''
     lver=[]
 
+    if o=='con':
+       ck.out('')
+       ck.out('Prepared cmd: '+cmd+' ...')
+
     if cmd!='':
        rx=ck.gen_tmp_file({})
        if rx['return']>0: return rx
@@ -182,7 +186,7 @@ def detect(i):
 
        if o=='con':
           ck.out('')
-          ck.out('Executing cmd: '+y+' ...')
+          ck.out('Executing "'+y+'" ...')
 
        ry=os.system(y)
 #       if ry>0:
@@ -217,6 +221,7 @@ def detect(i):
 
         sbefore=ver.get('string_before','')
         safter=ver.get('string_after','')
+        saftere=ver.get('string_after_end','')
         safter1=ver.get('string_after1','')
         safter_rel=ver.get('string_after_relaxed','')
 
@@ -237,7 +242,11 @@ def detect(i):
                 if sbefore!='': i2=s.find(safter1, i1+len(sbefore)+1)
                 else: i2=s.find(safter1)
 
-           if i2<0: continue
+           if i2<0: 
+              if saftere=='yes':
+                 i2=len(s)-1
+              else:
+                 continue
         elif safter_rel!='':
            if sbefore!='': i3=s.find(safter_rel, i1+len(sbefore)+1)
            else: i3=s.find(safter_rel)
