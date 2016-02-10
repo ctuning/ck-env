@@ -73,10 +73,9 @@ def setup(i):
     prefix_configured=cus.get('tool_prefix_configured','')
     prefix=cus.get('tool_prefix','')
 
-    if prefix!='':
-       env['CK_COMPILER_PREFIX']=prefix
-       cus['tool_prefix']=prefix
-       cus['tool_prefix_configured']='yes'
+    env['CK_COMPILER_PREFIX']=prefix
+    cus['tool_prefix']=prefix
+    cus['tool_prefix_configured']='yes'
 
     for k in env:
         v=env[k]
@@ -87,15 +86,14 @@ def setup(i):
     postfix_configured=cus.get('tool_postfix_configured','')
     postfix=cus.get('tool_postfix','')
 
-    if postfix=='':
+    if postfix_configure!='yes':
        print ('')
        postfix=raw_input('Input clang postfix if needed (for example, -3.6 for clang-3.6) or Enter to skip: ')
        postfix=postfix.strip()
 
-    if postfix!='':
-       env['CK_COMPILER_POSTFIX']=postfix
-       cus['tool_postfix']=postfix
-       cus['tool_postfix_configured']='yes'
+    env['CK_COMPILER_POSTFIX']=postfix
+    cus['tool_postfix']=postfix
+    cus['tool_postfix_configured']='yes'
 
     for k in env:
         v=env[k]

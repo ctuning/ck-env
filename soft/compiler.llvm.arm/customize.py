@@ -10,6 +10,11 @@
 ##############################################################################
 # setup environment setup
 
+import sys
+if sys.version_info[0]>2:
+   def raw_input(i):
+       return input(i)
+
 def setup(i):
     """
     Input:  {
@@ -67,10 +72,14 @@ def setup(i):
     prefix_configured=cus.get('tool_prefix_configured','')
     prefix=cus.get('tool_prefix','')
 
-    if prefix!='':
-       env['CK_COMPILER_PREFIX']=prefix
-       cus['tool_prefix']=prefix
-       cus['tool_prefix_configured']='yes'
+    if prefix_configured!='yes':
+       print ('')
+       prefix=raw_input('Input clang prefix if needed (for example, arm-linux-androideabi-) or Enter to skip: ')
+       prefix=prefix.strip()
+
+    env['CK_COMPILER_PREFIX']=prefix
+    cus['tool_prefix']=prefix
+    cus['tool_prefix_configured']='yes'
 
     for k in env:
         v=env[k]
@@ -84,8 +93,23 @@ def setup(i):
        cus['linking_for_retargeting']=lfr
        env['CK_LD_FLAGS_EXTRA']=lfr
 
+    # Check which eabi to use
+    target_configured=cus.get('target_configured','')
+    target=cus.get('target','')
+
+    if target_configured!='yes':
+       print ('')
+       target=raw_input('Input platform target (such as arm-none-linux-gnueabi) or Enter to use default (armv7-none-linux-androideabi): ')
+       target=target.strip()
+
+    if target=='': target='armv7-none-linux-androideabi'
+
+    env['CK_COMPILER_TARGET']=target
+    cus['target']=target
+    cus['target_configured']='yes'
+
     x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
-    y='-target arm-none-linux-gnueabi -gcc-toolchain ${CK_ENV_COMPILER_GCC} --sysroot=${CK_SYS_ROOT}'
+    y='-target '+target+' -gcc-toolchain ${CK_ENV_COMPILER_GCC} --sysroot=${CK_SYS_ROOT}'
     x=x.replace('$#flags_for_arm_target#$',y)
     env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
