@@ -188,9 +188,12 @@ def merge_dicts(i):
 
     """
 
-    f1=i['file1']
-    f2=i['file2']
-    
+    f1=i.get('file1','')
+    f2=i.get('file2','')
+
+    if f1=='' or f2=='':
+       return {'return':1, 'error':'--file1 and --file2 should be specified'}
+
     fo=i.get('file3','')
     if fo=='': fo=f1
 
@@ -202,9 +205,13 @@ def merge_dicts(i):
     if r['return']>0: return r
     d2=r['dict']
 
-    r=ck.merge_dicts({'dict1':d1, 'dict2':d2})
-    if r['return']>0: return r
-    d1=r['dict1']
+    if type(d1)==list and type(d2)==list:
+       for q in d2:
+           d1.append(q)
+    else:
+       r=ck.merge_dicts({'dict1':d1, 'dict2':d2})
+       if r['return']>0: return r
+       d1=r['dict1']
 
     r=ck.save_json_to_file({'json_file':fo, 'dict':d1})
     if r['return']>0: return r
