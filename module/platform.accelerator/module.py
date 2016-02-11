@@ -399,9 +399,9 @@ def detect(i):
        prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists ('+fuid+') - loading latest meta (features) ...')
+          ck.out('  GPU CK entry already exists ('+fuid+') - loading latest meta (features) ...')
 
-    if 'features' not in rr: rr['features']={}
+    rr={'return':0, 'features':{}}
 
     rr['features']['acc']=prop
     rr['features']['acc_misc']=prop_all

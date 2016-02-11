@@ -510,10 +510,11 @@ def detect(i):
        fuoa=r.get('data_uoa','')
        fuid=r.get('data_uid','')
 
-       prop=r['dict'].get('features',{})
+       eft=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists ('+fuid+') - loading latest meta (features) ...')
+          ck.out('  CPU CK entry already exists ('+fuid+') - loading latest meta (features) ...')
+          target=eft
 
     if 'features' not in rr: rr['features']={}
 

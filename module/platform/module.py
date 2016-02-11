@@ -188,7 +188,11 @@ def detect(i):
     ii['module_uoa']=cfg['module_deps']['platform.accelerator']
     rx=ck.access(ii) # DO NOT USE rr further - will be reused as return !
     if rx['return']>0: return rr
-    rr.update(rx)
+
+    # Merge with other features
+    ry=ck.merge_dicts({'dict1':rr, 'dict2':rx})
+    if ry['return']>0: return ry
+    rr=ry['dict1']
 
     # Get info about system ######################################################
     if oo=='con': 
@@ -402,7 +406,7 @@ def detect(i):
        prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  Data already exists ('+fuid+') - loading latest meta (features) ...')
+          ck.out('  Platform CK entry already exists ('+fuid+') - loading latest meta (features) ...')
 
     if 'features' not in rr: rr['features']={}
 
@@ -412,7 +416,7 @@ def detect(i):
     if fuoa!='' or fuid!='':
        rr['features']['platform_uoa']=fuoa
        rr['features']['platform_uid']=fuid
-      
+
     return rr
 
 ##############################################################################
