@@ -1,3 +1,6 @@
+* 2016.02.13 - * adding support to automatically resolve, search and install dependencies 
+                 (flag - quiet - useful when crowdsourcing optimization and machine learning)
+
 * 2016.02.10 - * improving CLANG description for Android/ARM via Android NDK
                * improving CLANG version detection
                * fixing detection of platform features (correct reloading of existing features 
@@ -28,7 +31,7 @@
                  participating in crowd-tuning and their parameters
 
 * 2016.01.03 - * fixing exchange of information during crowd-tuning
-                 (possiblity to find platform description in all repos)
+                 (possibility to find platform description in all repos)
                * adding possibility to identify user when recording
                  results during crowdtuning
 
@@ -56,7 +59,7 @@
                  but also 'support_compiler' ...
                * changing 'compiler' to 'source-to-source-compiler' tag for pencilcc
 
-* 2015.10.27 - * if more than one package avaliable, allow selection
+* 2015.10.27 - * if more than one package available, allow selection
                * fixing bug with compiler dependencies when installing packages
                * fixing pencil deps
 

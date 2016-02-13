@@ -61,6 +61,8 @@ def set(i):
 
               (random)               - if 'yes' and there is a choice, select random
                                        (useful for quiet experiment crowdsourcing such as sw/hw crowdtuning)
+
+              (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
             }
 
     Output: {
@@ -83,6 +85,7 @@ def set(i):
     if o=='con': oo='con'
 
     ran=i.get('random','')
+    quiet=i.get('quiet','')
 
     # Clean output file
     import os
@@ -203,6 +206,8 @@ def set(i):
           if ran=='yes':
              from random import randint
              ilx=randint(0, lx-1)
+          elif quiet=='yes':
+             ilx=0
           else:
              if o=='con':
                 xq='tags="'+tags+'"'
@@ -297,8 +302,13 @@ def set(i):
           ck.out('==========================================================================================')
           ck.out('WARNING: '+x)
           ck.out('')
-          rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
-          a=rx['string'].strip().lower()
+
+          if quiet=='yes':
+             ck.out('  Searching and installing package with these tags automatically ...')
+             a='y'
+          else:
+             rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
+             a=rx['string'].strip().lower()
 
           if a!='n' and a!='no':
              save_cur_dir=os.getcwd()
@@ -607,6 +617,8 @@ def resolve(i):
 
               (random)               - if 'yes' and there is a choice, select random
                                        (useful for quiet experiment crowdsourcing such as sw/hw crowdtuning)
+
+              (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
             }
 
     Output: {
@@ -636,6 +648,7 @@ def resolve(i):
     deps=i.get('deps',{})
 
     ran=i.get('random','')
+    quiet=i.get('quiet','')
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -701,7 +714,8 @@ def resolve(i):
             'deps':deps,
             'skip_auto_resolution':sar,
             'local':local,
-            'random':ran
+            'random':ran,
+            'quiet':quiet
            }
         if o=='con': ii['out']='con'
         rx=set(ii)
