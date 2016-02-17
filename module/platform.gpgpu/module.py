@@ -1,5 +1,5 @@
 #
-# Collective Knowledge (platform - GPU)
+# Collective Knowledge (platform - GPGPU)
 #
 # See CK LICENSE.txt for licensing details
 # See CK COPYRIGHT.txt for copyright details
@@ -31,7 +31,7 @@ def init(i):
     return {'return':0}
 
 ##############################################################################
-# Detect GPU
+# Detect GPGPU
 
 def detect(i):
     """
@@ -61,8 +61,8 @@ def detect(i):
               (error)      - error text if return > 0
 
               features = {
-                gpu          - GPU features (properties), unified
-                gpu_misc     - assorted GPU features (properties), platform dependent
+                gpgpu          - GPGPU features (properties), unified
+                gpgpu_misc     - assorted GPGPU features (properties), platform dependent
               }
             }
 
@@ -127,10 +127,10 @@ def detect(i):
     prop={}
     prop_all={}
 
-    target_gpu_name=''
-    target_gpu_vendor=''
+    target_gpgpu_name=''
+    target_gpgpu_vendor=''
 
-    # Get info about GPU ######################################################
+    # Get info about GPGPU ######################################################
     if remote=='yes':
        # Get all params
        params={}
@@ -139,7 +139,7 @@ def detect(i):
        if rx['return']>0: return rx
        fn=rx['file_name']
 
-       # Get GPU
+       # Get GPGPU
        x=tosd.get('adb_dumpsys','').replace('$#device#$',dv)
        x=x.replace('$#category#$','SurfaceFlinger')
        x=x.replace('$#redirect_stdout#$', ro)
@@ -168,12 +168,12 @@ def detect(i):
                  x=s1[6:].strip().split(',')
 
                  if len(x)>0: 
-                    target_gpu_vendor=x[0].strip()
-                    target_gpu_name+=target_gpu_vendor
-                 if len(x)>1: target_gpu_name+=' '+x[1].strip()
+                    target_gpgpu_vendor=x[0].strip()
+                    target_gpgpu_name+=target_gpgpu_vendor
+                 if len(x)>1: target_gpgpu_name+=' '+x[1].strip()
 
-                 prop['name']=target_gpu_name
-                 prop['vendor']=target_gpu_vendor
+                 prop['name']=target_gpgpu_name
+                 prop['vendor']=target_gpgpu_vendor
                  prop['possibly_related_cpu_name']=''
 
                  break
@@ -191,14 +191,14 @@ def detect(i):
                        'module_uoa':cfg['module_deps']['platform'],
                        'cmd':'path Win32_VideoController get Name'})
           if r['return']>0: return r
-          target_gpu_name=r['value']
+          target_gpgpu_name=r['value']
 
-          x=target_gpu_name.split(' ')
+          x=target_gpgpu_name.split(' ')
           if len(x)>0:
-             target_gpu_vendor=x[0].strip()
+             target_gpgpu_vendor=x[0].strip()
 
-          prop['name']=target_gpu_name
-          prop['vendor']=target_gpu_vendor
+          prop['name']=target_gpgpu_name
+          prop['vendor']=target_gpgpu_vendor
           prop['possibly_related_cpu_name']=target_cpu
 
        else:
@@ -225,20 +225,20 @@ def detect(i):
                     if x1>=0:
                        x2=q.find(':', x1+1)
                        if x2>=0:
-                          target_gpu_name=q[x2+1:].strip()
+                          target_gpgpu_name=q[x2+1:].strip()
                           break
 
-          x=target_gpu_name.split(' ')
+          x=target_gpgpu_name.split(' ')
           if len(x)>0:
-             target_gpu_vendor=x[0].strip()
+             target_gpgpu_vendor=x[0].strip()
 
-          prop['name']=target_gpu_name
-          prop['vendor']=target_gpu_vendor
+          prop['name']=target_gpgpu_name
+          prop['vendor']=target_gpgpu_vendor
 
     if o=='con' and prop.get('name','')!='':
        ck.out('')
-       ck.out('GPU name:   '+prop.get('name',''))
-       ck.out('GPU vendor: '+prop.get('vendor',''))
+       ck.out('GPGPU name:   '+prop.get('name',''))
+       ck.out('GPGPU vendor: '+prop.get('vendor',''))
 
     # Check frequency via script
     if win!='yes':
@@ -246,7 +246,7 @@ def detect(i):
        if rx['return']>0: return rx
        fn=rx['file_name']
 
-       cmd=tosd.get('script_get_gpu_frequency','')
+       cmd=tosd.get('script_get_gpgpu_frequency','')
        if cmd!='':
           cmd+=' '+ro+fn
 
@@ -271,7 +271,7 @@ def detect(i):
 
           if o=='con':
              ck.out('')
-             ck.out('Trying to read GPU frequency:')
+             ck.out('Trying to read GPGPU frequency:')
              ck.out('  '+cmd)
 
           rx=os.system(cmd)
@@ -292,11 +292,11 @@ def detect(i):
              jl=len(ll)
              for j in range(0,jl):
                  s=ll[j]
-                 if s.lower().startswith('*** current gpu frequency:'):
+                 if s.lower().startswith('*** current GPGPU frequency:'):
                     if (j+1)<jl:
                        cur_freq=ll[j+1]
 
-                 if s.lower().startswith('*** available gpu frequencies:'):
+                 if s.lower().startswith('*** available GPGPU frequencies:'):
                     while s!='' and j<jl:
                        j+=1
                        if j<jl:
@@ -310,7 +310,7 @@ def detect(i):
 
              if o=='con' and cur_freq!='':
                 ck.out('')
-                ck.out('Current GPU frequency:')
+                ck.out('Current GPGPU frequency:')
                 ck.out('  '+str(cur_freq))
                 if len(freqs)>0:
                    ck.out('')
@@ -340,21 +340,21 @@ def detect(i):
           if r['return']!=16:
              dcfg=r['dict']
 
-          dx=dcfg.get('platform_gpu_name',{}).get(tos,{})
+          dx=dcfg.get('platform_gpgpu_name',{}).get(tos,{})
           x=tdid
           if x=='': x='default'
           xn=dx.get(x,'')
 
           if (xn=='' and o=='con'):
-             r=ck.inp({'text':'Enter your GPU name (for example ARM MALI-T860, Nvidia Tesla K80): '})
+             r=ck.inp({'text':'Enter your GPGPU name (for example ARM MALI-T860, Nvidia Tesla K80): '})
              xxn=r['string'].strip()
 
              if xxn!=xn:
                 xn=xxn
 
-                if 'platform_gpu_name' not in dcfg: dcfg['platform_gpu_name']={}
-                if tos not in dcfg['platform_gpu_name']: dcfg['platform_gpu_name'][tos]={}
-                dcfg['platform_gpu_name'][tos][x]=xn
+                if 'platform_gpgpu_name' not in dcfg: dcfg['platform_gpgpu_name']={}
+                if tos not in dcfg['platform_gpgpu_name']: dcfg['platform_gpgpu_name'][tos]={}
+                dcfg['platform_gpgpu_name'][tos][x]=xn
 
                 ii={'action':'update',
                     'module_uoa':cfg['module_deps']['cfg'],
@@ -399,16 +399,16 @@ def detect(i):
        prop=r['dict'].get('features',{})
 
        if o=='con' and r.get('found','')=='yes':
-          ck.out('  GPU CK entry already exists ('+fuid+') - loading latest meta (features) ...')
+          ck.out('  GPGPU CK entry already exists ('+fuid+') - loading latest meta (features) ...')
 
     rr={'return':0, 'features':{}}
 
-    rr['features']['gpu']=prop
-    rr['features']['gpu_misc']=prop_all
+    rr['features']['gpgpu']=prop
+    rr['features']['gpgpu_misc']=prop_all
 
     if fuoa!='' or fuid!='':
-       rr['features']['gpu_uoa']=fuoa
-       rr['features']['gpu_misc_uid']=fuid
+       rr['features']['gpgpu_uoa']=fuoa
+       rr['features']['gpgpu_misc_uid']=fuid
 
     return rr
 
@@ -481,11 +481,11 @@ def set_freq(i):
     # Prepare scripts
     cmd=''
     if v=='min':
-       cmd=tosd.get('script_set_min_gpu_freq','')
+       cmd=tosd.get('script_set_min_gpgpu_freq','')
     elif v=='max':
-       cmd=tosd.get('script_set_max_gpu_freq','')
+       cmd=tosd.get('script_set_max_gpgpu_freq','')
     else:
-       cmd=tosd.get('script_set_gpu_freq','').replace('$#freq#$',str(v))
+       cmd=tosd.get('script_set_gpgpu_freq','').replace('$#freq#$',str(v))
 
     if cmd!='':
        path_to_scripts=tosd.get('path_to_scripts','')
@@ -493,7 +493,7 @@ def set_freq(i):
 
        if o=='con':
           ck.out('')
-          ck.out('CMD to set GPU frequency:')
+          ck.out('CMD to set GPGPU frequency:')
           ck.out('  '+cmd)
 
        # Get all params
@@ -538,7 +538,7 @@ def show(i):
     """
 
 
-    h='<h2>GPUs of platforms participating in crowd-tuning</h2>\n'
+    h='<h2>GPGPUs of platforms participating in crowd-tuning</h2>\n'
 
     h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
 
