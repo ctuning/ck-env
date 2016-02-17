@@ -82,8 +82,8 @@ def detect(i):
                 platform       - platform features (properties), unified
                 platform_misc  - assorted platform features (properties), platform dependent
 
-                acc            - Accelerator features (properties), unified
-                acc_misc       - assorted Accelerator features (properties), platform dependent
+                gpu            - GPU features (properties), unified
+                gpu_misc       - assorted GPU features (properties), platform dependent
               }
             }
 
@@ -175,17 +175,17 @@ def detect(i):
 
     ro=os_dict.get('redirect_stdout','')
 
-    # Get accelerator info (GPU, etc.) ####################################################
+    # Get GPU info ####################################################
     if oo=='con': 
        ck.out(sep)
-       ck.out('Detecting accelerator features ...')
+       ck.out('Detecting GPU features ...')
 
     import copy
     ii=copy.deepcopy(i)
     ii['out']=oo
     ii['skip_print_os_info']='yes'
     ii['action']='detect'
-    ii['module_uoa']=cfg['module_deps']['platform.accelerator']
+    ii['module_uoa']=cfg['module_deps']['platform.gpu']
     rx=ck.access(ii) # DO NOT USE rr further - will be reused as return !
     if rx['return']>0: return rr
 
@@ -573,7 +573,7 @@ def exchange(i):
               (error)      - error text if return > 0
 
               dict         - if exists, load updated dict (can be collaboratively extended to add more properties 
-                                        (or unique/representative species -> software, hardware, gpu, accelerators, programs, data sets!)
+                                        (or unique/representative species -> software, hardware, gpu, programs, data sets!)
               (found)      - if 'yes', entry was found
             }
 

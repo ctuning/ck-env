@@ -51,7 +51,7 @@ package - managing software packages (installing tools, registering in CK enviro
   * install - install CK package (download a tool if needed, install it, and register environment
   * setup - setup package (only register environment but do not install it)
 
-platform - detecting and describin platforms
+platform - detecting and describing platforms
 
   * deinit - de-initialize device (put shared computational devices to powersave mode after experiments)
   * detect - detect various properties (features) of a given platform
@@ -59,9 +59,9 @@ platform - detecting and describin platforms
   * get_from_wmic - get information from WMIC tool on Windows
   * init_device - init remote device (useful when preparing shared computational device)
 
-platform.accelerator - describing and detecting platform's accelerators
+platform.gpu - describing and detecting platform GPU
 
-  * detect - detect various properties (features) of a given accelerator (GPU, FPGA, neural network accelerator, etc)
+  * detect - detect various properties (features) of a given GPU
   * set_freq - set frequency of a given acelerator (if supported)
 
 platform.cpu - describing and detecting platform's CPUs

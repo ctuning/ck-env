@@ -1,5 +1,5 @@
 #
-# Collective Knowledge (platform - accelerator)
+# Collective Knowledge (platform - GPU)
 #
 # See CK LICENSE.txt for licensing details
 # See CK COPYRIGHT.txt for copyright details
@@ -31,7 +31,7 @@ def init(i):
     return {'return':0}
 
 ##############################################################################
-# Detect accelerators (GPU, etc)
+# Detect GPU
 
 def detect(i):
     """
@@ -61,8 +61,8 @@ def detect(i):
               (error)      - error text if return > 0
 
               features = {
-                acc          - Accelerator features (properties), unified
-                acc_misc     - assorted Accelerator features (properties), platform dependent
+                gpu          - GPU features (properties), unified
+                gpu_misc     - assorted GPU features (properties), platform dependent
               }
             }
 
@@ -130,7 +130,7 @@ def detect(i):
     target_gpu_name=''
     target_gpu_vendor=''
 
-    # Get info about accelerator ######################################################
+    # Get info about GPU ######################################################
     if remote=='yes':
        # Get all params
        params={}
@@ -340,21 +340,21 @@ def detect(i):
           if r['return']!=16:
              dcfg=r['dict']
 
-          dx=dcfg.get('platform_accelerator_name',{}).get(tos,{})
+          dx=dcfg.get('platform_gpu_name',{}).get(tos,{})
           x=tdid
           if x=='': x='default'
           xn=dx.get(x,'')
 
           if (xn=='' and o=='con'):
-             r=ck.inp({'text':'Enter your accelerator name (for example ARM MALI-T860, Nvidia Tesla K80): '})
+             r=ck.inp({'text':'Enter your GPU name (for example ARM MALI-T860, Nvidia Tesla K80): '})
              xxn=r['string'].strip()
 
              if xxn!=xn:
                 xn=xxn
 
-                if 'platform_accelerator_name' not in dcfg: dcfg['platform_accelerator_name']={}
-                if tos not in dcfg['platform_accelerator_name']: dcfg['platform_accelerator_name'][tos]={}
-                dcfg['platform_accelerator_name'][tos][x]=xn
+                if 'platform_gpu_name' not in dcfg: dcfg['platform_gpu_name']={}
+                if tos not in dcfg['platform_gpu_name']: dcfg['platform_gpu_name'][tos]={}
+                dcfg['platform_gpu_name'][tos][x]=xn
 
                 ii={'action':'update',
                     'module_uoa':cfg['module_deps']['cfg'],
@@ -403,12 +403,12 @@ def detect(i):
 
     rr={'return':0, 'features':{}}
 
-    rr['features']['acc']=prop
-    rr['features']['acc_misc']=prop_all
+    rr['features']['gpu']=prop
+    rr['features']['gpu_misc']=prop_all
 
     if fuoa!='' or fuid!='':
-       rr['features']['acc_uoa']=fuoa
-       rr['features']['acc_misc_uid']=fuid
+       rr['features']['gpu_uoa']=fuoa
+       rr['features']['gpu_misc_uid']=fuid
 
     return rr
 
@@ -541,7 +541,7 @@ def show(i):
     """
 
 
-    h='<h2>Accelerators of platforms participating in crowd-tuning</h2>\n'
+    h='<h2>GPUs of platforms participating in crowd-tuning</h2>\n'
 
     h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
 

@@ -1,3 +1,5 @@
+* 2016.02.18 - changing platform.accelerator -> platform.gpu
+
 * 2016.02.13 - * adding support to automatically resolve, search and install dependencies 
                  (flag - quiet - useful when crowdsourcing optimization and machine learning)
 

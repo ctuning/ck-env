@@ -1,10 +1,10 @@
 {
   "actions": {
     "detect": {
-      "desc": "detect various properties (features) of a given accelerator (GPU, FPGA, neural network accelerator, etc)"
+      "desc": "detect various properties (features) of a given GPU"
     }, 
     "set_freq": {
-      "desc": "set frequency of a given acelerator (if supported)"
+      "desc": "set frequency of a given GPU (if supported)"
     }, 
     "show": {
       "desc": "viewing entries as html", 
@@ -13,7 +13,7 @@
   }, 
   "cfg_uoa":"program-crowdtuning",
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
-  "desc": "describing and detecting platform's accelerators", 
+  "desc": "describing and detecting platform's GPU", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
   "developer_webpage": "http://fursin.net", 
