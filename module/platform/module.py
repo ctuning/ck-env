@@ -187,7 +187,7 @@ def detect(i):
     ii['action']='detect'
     ii['module_uoa']=cfg['module_deps']['platform.gpu']
     rx=ck.access(ii) # DO NOT USE rr further - will be reused as return !
-    if rx['return']>0: return rr
+    if rx['return']>0: return rx
 
     # Merge with other features
     ry=ck.merge_dicts({'dict1':rr, 'dict2':rx})
