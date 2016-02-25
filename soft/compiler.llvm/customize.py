@@ -86,7 +86,7 @@ def setup(i):
     postfix_configured=cus.get('tool_postfix_configured','')
     postfix=cus.get('tool_postfix','')
 
-    if postfix_configure!='yes':
+    if postfix_configured!='yes':
        print ('')
        postfix=raw_input('Input clang postfix if needed (for example, -3.6 for clang-3.6) or Enter to skip: ')
        postfix=postfix.strip()
