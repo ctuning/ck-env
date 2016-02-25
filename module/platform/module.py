@@ -638,44 +638,44 @@ def exchange(i):
           #  but not locally, otherwise it will be a mess...
 
           rap=ck.cfg.get('record_all_platform_info','')
-          if rap=='yes':
-
-             # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...
-
-             # Check if extra parameters are saved
-             p=rx['path']
-             p1=os.path.join(p, 'all.json')
-
-             d={'all':[]}
-             toadd=True
-
-             touched=0
-
-             if os.path.isfile(p1):
-                ry=ck.load_json_file({'json_file':p1})
-                if ry['return']>0: return ry
-                d=ry['dict']
-
-                touched=d.get('touched',0)
-                touched+=1
-
-                if 'all' not in d: d['all']=[]
-                dall=d.get('all',[])
-
-                for q in dall:
-                    rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
-                    if rz['return']>0: return rz
-                    if rz['equal']=='yes':
-                       toadd=False
-                       break
-
-             d['touched']=touched
-
-             if toadd:
-                d['all'].append(ddf)
-
-             rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
-             if rz['return']>0: return rz
+#          if rap=='yes':
+#
+#             # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...
+#
+#             # Check if extra parameters are saved
+#             p=rx['path']
+#             p1=os.path.join(p, 'all.json')
+#
+#             d={'all':[]}
+#             toadd=True
+#
+#             touched=0
+#
+#             if os.path.isfile(p1):
+#                ry=ck.load_json_file({'json_file':p1})
+#                if ry['return']>0: return ry
+#                d=ry['dict']
+#
+#                touched=d.get('touched',0)
+#                touched+=1
+#
+#                if 'all' not in d: d['all']=[]
+#                dall=d.get('all',[])
+#
+#                for q in dall:
+#                    rz=ck.compare_dicts({'dict1':q, 'dict2':ddf})
+#                    if rz['return']>0: return rz
+#                    if rz['equal']=='yes':
+#                       toadd=False
+#                       break
+#
+#             d['touched']=touched
+#
+#             if toadd:
+#                d['all'].append(ddf)
+#
+#             rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
+#             if rz['return']>0: return rz
 
        return rx
 
