@@ -1,0 +1,11 @@
+{
+  "customize": {
+    "add_include_path": "yes", 
+    "env_prefix": "CK_ENV_LIB_CLBLAST" 
+  }, 
+  "soft_name": "Library - CLBlast", 
+  "tags": [
+    "lib", 
+    "clblast"
+  ]
+}

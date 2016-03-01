@@ -160,18 +160,19 @@ def detect(i):
           fcpuinfo=fnx
 
        # Read and parse file
+       pp=0 # current logical processor
+       spp=str(pp)
+       info_cpu[spp]={}
+       target_freq[spp]=0
+       target_freq_max[spp]=0
+       first_skipped=False
+
        if fcpuinfo!='':
           rx=ck.load_text_file({'text_file':fcpuinfo, 'split_to_list':'yes'})
           if rx['return']>0: return rx
           ll=rx['lst']
           if remote=='yes' and os.path.isfile(fcpuinfo): os.remove(fcpuinfo)
 
-          pp=0 # current logical processor
-          spp=str(pp)
-          info_cpu[spp]={}
-          target_freq[spp]=0
-          target_freq_max[spp]=0
-          first_skipped=False
           for q in ll:
               q=q.strip()
               if q!='':
