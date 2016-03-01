@@ -668,6 +668,8 @@ def show(i):
 
     h='<h2>Processors of platforms participating in crowd-tuning</h2>\n'
 
+    h+='<i>View/update meta information in <a href="http://github.com/ctuning/ck">CK format</a> via <a href="http://github.com/ctuning/ck-crowdtuning-platforms">GitHub</a> ...</i><br><br>\n'
+
     h+='<table class="ck_table" border="0">\n'
 
     # Check host URL prefix and default module/action
