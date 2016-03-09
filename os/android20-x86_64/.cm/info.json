@@ -1,5 +1,5 @@
 {
-  "backup_data_uid": "c25ad5814473a6ce", 
+  "backup_data_uid": "f935404e87eb13a9", 
   "backup_module_uid": "0440cb72c2bc5cc6", 
   "backup_module_uoa": "os", 
   "control": {
@@ -8,7 +8,7 @@
     "author_webpage": "http://fursin.net", 
     "copyright": "See CK COPYRIGHT.txt for copyright details", 
     "engine": "CK", 
-    "iso_datetime": "2016-03-09T21:18:12.074000", 
+    "iso_datetime": "2016-03-09T21:35:56.992000", 
     "license": "See CK LICENSE.txt for licensing details", 
     "version": [
       "1", 
@@ -16,5 +16,5 @@
       "14"
     ]
   }, 
-  "data_name": "android19-x86_64"
+  "data_name": "android20-x86_64"
 }

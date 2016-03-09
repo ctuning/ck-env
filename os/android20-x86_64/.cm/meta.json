@@ -3,7 +3,7 @@
   "adb_devices": "adb devices $#redirect_stdout#$ $#output_file#$", 
   "adb_dumpsys": "adb $#device#$ shell dumpsys $#category#$ $#redirect_stdout#$ $#output_file#$", 
   "android_ndk_arch": "x86_64", 
-  "android_ndk_platform": "android-19", 
+  "android_ndk_platform": "android-20", 
   "base_uoa": "", 
   "batch_prefix": "#! /bin/sh\n# CK generated script\n", 
   "bin_prefix": "./", 
@@ -77,7 +77,7 @@
     "os", 
     "remote", 
     "android", 
-    "android-19", 
+    "android-20", 
     "x86_64"
   ]
 }
