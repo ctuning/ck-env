@@ -1,0 +1,19 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_TOOL_TEXINFO", 
+    "skip_add_to_ld_path": "yes"
+  }, 
+  "env": {
+  }, 
+  "soft_name": "Tool - texinfo", 
+  "tags": [
+    "tool", 
+    "texinfo"
+  ], 
+  "version": {
+    "cmd": "--version > $#filename#$ 2>&1", 
+    "split": ".", 
+    "string_after": "", 
+    "string_before": "version "
+  }
+}

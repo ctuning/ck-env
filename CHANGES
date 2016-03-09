@@ -1,4 +1,6 @@
 * 2016.03.09 - adding soft description for compiler.llvm.android (arm,x86,x86_64)
+               adding soft description for texinfo to reproduce MILEPOST GCC 
+               (for semantic features extraction)
 
 * 2016.03.01 - adding soft description for CLBLAS, CLBLAST, CLTUNE
 
