@@ -142,7 +142,7 @@ def setup(i):
        if libstdcpppathi!='':
           ck.out('Full path to include directory with libstdc++: '+libstdcpppathi)
        else:
-          libstdcpppathi=raw_input('* If needed, enter full path to include directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/inlcude: ')
+          libstdcpppathi=raw_input('* If needed, enter full path to include directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/include: ')
           cus['libstdcpppath_include_configured']='yes'
 
     cus['libstdcpppath_include']=libstdcpppathi
@@ -174,6 +174,14 @@ def setup(i):
        env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=''
     cus['libstdcpppath_configured']='yes'
 
+    ############################################################
+    ef_configured=cus.get('ef_configured','')
+    ef=cus.get('ef','')
+    if ef_configured!='yes' and iv=='yes':
+       ef=raw_input('Force extra flags if needed (such as -fPIE -pie for aarch64): ')
+       cus['ef']=ef
+       cus['ef_configured']='yes'
+
     ##############
     if winh=='yes':
        psysroot=platform_path+'\\'+platform+'\\arch-'+arch
@@ -186,6 +194,9 @@ def setup(i):
     x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
     if sysroot not in x:
        x=sysroot+' '+x
+
+    if ef not in x:
+       x+=' '+ef
     env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
 #    x=env.get('CK_LD_FLAGS_EXTRA','')
