@@ -1,0 +1,12 @@
+{
+  "customize": {
+    "add_include_path": "yes", 
+    "env_prefix": "CK_ENV_LIB_OPENCL"
+  }, 
+  "customize_script": "customize", 
+  "soft_name": "Library - OpenCL - Android", 
+  "tags": [
+    "lib", 
+    "opencl"
+  ]
+}

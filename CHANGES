@@ -1,3 +1,5 @@
+* 2016.03.21 - adding universal OpenCL lib soft description for Android devices
+
 * 2016.03.09 - adding soft description for compiler.llvm.android (arm,x86,x86_64)
                adding soft description for texinfo to reproduce MILEPOST GCC 
                (for semantic features extraction)
