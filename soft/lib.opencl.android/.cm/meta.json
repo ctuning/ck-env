@@ -4,7 +4,7 @@
     "env_prefix": "CK_ENV_LIB_OPENCL"
   }, 
   "customize_script": "customize", 
-  "soft_name": "Library - OpenCL - Android", 
+  "soft_name": "Library - OpenCL Stubs - Android", 
   "tags": [
     "lib", 
     "opencl"
