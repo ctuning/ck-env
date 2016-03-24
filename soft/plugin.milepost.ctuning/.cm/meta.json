@@ -1,0 +1,28 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_PLUGIN_MILEPOST_CTUNING",
+    "skip_add_to_bin": "no",
+    "skip_add_to_path": "no"
+  },
+  "customize_script": "customize",
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "sort": 10,
+      "tags": "compiler,milepost,lang-c"
+    },
+    "xsb": {
+      "local": "yes",
+      "sort": 20,
+      "tags": "compiler,xsb,lang-prolog"
+    }
+  },
+  "soft_name": "Plugin - MILEPOST - cTuning",
+  "tags": [
+    "plugin",
+    "milepost",
+    "ctuning",
+    "features",
+    "passes"
+  ]
+}

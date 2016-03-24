@@ -139,7 +139,7 @@ def detect(i):
        ck.out('Software description entry found: '+x)
 
     # Check if has version
-    ver=d.get('version','')
+    ver=d.get('version',{})
 
     tool=ver.get('tool_via_env','')
     if tool!='':

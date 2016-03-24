@@ -5,7 +5,7 @@
     "languages": [
       "PROLOG"
     ], 
-    "skip_add_to_bin": "yes", 
+    "skip_add_to_bin": "no", 
     "skip_add_to_ld_path": "yes"
   }, 
   "env": {
@@ -19,10 +19,11 @@
     "lang-prolog"
   ], 
   "tool": "xsb", 
+  "customize_script": "customize", 
   "version": {
     "cmd": "--version > $#filename#$ 2>&1", 
     "split": ".", 
     "string_after_relaxed": " ", 
-    "string_before": "Python "
+    "string_before": "XSB "
   }
 }
