@@ -222,7 +222,7 @@ def show(i):
     """
 
 
-    h='<h2>Neural Network Accelerators of platforms participating in crowd-tuning</h2>\n'
+    h='<h2>Neural Network Accelerators participating in crowd-tuning</h2>\n'
 
     h+='<i>View/update meta information in <a href="http://github.com/ctuning/ck">CK format</a> via <a href="http://github.com/ctuning/ck-crowdtuning-platforms">GitHub</a> ...</i><br><br>\n'
 
@@ -240,6 +240,9 @@ def show(i):
     h+='  </b></td>\n'
     h+='  <td><b>\n'
     h+='   Name\n'
+    h+='  </b></td>\n'
+    h+='  <td><b>\n'
+    h+='   Notes\n'
     h+='  </b></td>\n'
     h+='  <td><b>\n'
     h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':">CK UID</a>\n'
@@ -272,7 +275,15 @@ def show(i):
 
         meta=q['meta']
         ft=meta.get('features',{})
-        
+
+        ecid=meta.get('extra_cid','')
+        notes=meta.get('notes','')
+
+        if ecid!='':
+           if notes!='':
+              notes+='\n<br><br>\n'
+           notes+='<a href="'+url0+'wcid='+ecid+'">Extra description</a>\n'
+
         vendor=ft.get('vendor','')
         name=ft.get('name','')
 
@@ -287,10 +298,12 @@ def show(i):
         h+='   '+name+'\n'
         h+='  </td>\n'
         h+='  <td valign="top">\n'
+        h+='   '+notes+'\n'
+        h+='  </td>\n'
+        h+='  <td valign="top">\n'
         h+='   <a href="'+url0+'wcid='+work['self_module_uoa']+':'+duid+'">'+duid+'</a>\n'
         h+='  </td>\n'
         h+=' </tr>\n'
-
 
     h+='</table><br><br>\n'
 

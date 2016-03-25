@@ -538,7 +538,7 @@ def show(i):
     """
 
 
-    h='<h2>GPGPUs of platforms participating in crowd-tuning</h2>\n'
+    h='<h2>GPGPUs (CUDA/OpenCL) participating in crowd-tuning</h2>\n'
 
     h+='<i>View/update meta information in <a href="http://github.com/ctuning/ck">CK format</a> via <a href="http://github.com/ctuning/ck-crowdtuning-platforms">GitHub</a> ...</i><br><br>\n'
 
