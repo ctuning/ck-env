@@ -1,24 +1,27 @@
 {
   "actions": {
+    "check": {
+      "desc": "check if software is installed"
+    }, 
     "detect": {
       "desc": "detect version of a given software"
-    },
+    }, 
     "search_tool": {
       "desc": "search tool in pre-defined paths"
-    },
+    }, 
     "setup": {
       "desc": "setup CK environment for a given software"
     }
-  },
-  "copyright": "See CK COPYRIGHT.txt for copyright details",
-  "default_bat_name": "env",
-  "desc": "managing software (registering in CK environment)",
-  "developer": "Grigori Fursin",
-  "developer_email": "Grigori.Fursin@cTuning.org",
-  "developer_webpage": "http://fursin.net",
-  "license": "See CK LICENSE.txt for licensing details",
+  }, 
+  "copyright": "See CK COPYRIGHT.txt for copyright details", 
+  "default_bat_name": "env", 
+  "desc": "managing software (registering in CK environment)", 
+  "developer": "Grigori Fursin", 
+  "developer_email": "Grigori.Fursin@cTuning.org", 
+  "developer_webpage": "http://fursin.net", 
+  "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
-    "env": "9b9b3208ac44b891",
+    "env": "9b9b3208ac44b891", 
     "platform.os": "41e31cc4496b8a8e"
   }
 }

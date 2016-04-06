@@ -160,6 +160,7 @@ def detect(i):
        ck.out('')
        ck.out('Prepared cmd: '+cmd+' ...')
 
+    cmd=cmd.strip()
     if cmd!='':
        rx=ck.gen_tmp_file({})
        if rx['return']>0: return rx
@@ -541,16 +542,6 @@ def setup(i):
         setup['deps_'+q]=v['uoa']
 
     ########################################################################
-    # xyz
-#    ii={'path_list':['/usr/lib'],
-#        'file_name':'libkms.so'}
-#    r=search_tool(ii)
-#    if r['return']>0: return r
-#    lst=r['list']
-#    print (lst)
-#    exit(1)
-
-    ########################################################################
     # Check version
     ver=cus.get('version','')
     if ver==''  and cus.get('skip_version','')!='yes' and o=='con':
@@ -652,7 +643,7 @@ def setup(i):
        else:
           if o=='con':
              ck.out('')
-             ck.out('Environment not found ...')
+             ck.out('    Environment is not yet registered ...')
 
     ############################################################
     if not finish:
@@ -702,8 +693,6 @@ def setup(i):
 
        ver_int=cus.get('version_int',0)
        if ver_int==0 and o=='con' and cus.get('skip_version','')!='yes':
-          ck.out('')
-
           # Trying to calculate version ourselves (XX.YY.ZZZZ)
           if ver!='':
              bver=ver.split('.')
@@ -733,7 +722,7 @@ def setup(i):
           cus['path_install']=pi
 
        if cus.get('skip_add_dirs','')!='yes' and pi!='':
-          if cus.get('add_include_path','')=='yes':
+          if cus.get('add_include_path','')=='yes' and cus.get('path_include','')=='':
              pii=pi+sdirs+'include'
              cus['path_include']=pii
 
@@ -742,7 +731,7 @@ def setup(i):
              if cus.get('skip_add_bin_ext','')!='yes': pib+=sdirs+'bin'
              cus['path_bin']=pib
 
-          if cus.get('skip_add_to_ld_path','')!='yes':
+          if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('path_lib','')=='':
              plib=pi+sdirs+'lib64'
              if not os.path.isdir(plib):
                 plib=pi+sdirs+'lib32'
@@ -976,3 +965,127 @@ def search_tool(i):
         lst=r['list']
 
     return {'return':0, 'list':lst}
+
+##############################################################################
+# check if software is installed
+
+def check(i):
+    """
+    Input:  {
+              (host_os)           - host OS (detect, if omitted)
+              (target_os)         - target OS (detect, if omitted)
+              (target_device_id)  - target device ID (detect, if omitted)
+
+              (data_uoa) or (uoa) - software UOA entry
+               or
+              (tags)              - search UOA by tags (separated by comma)
+
+              (interactive)       - if 'yes', and has questions, ask user
+              (quiet)             - if 'yes', do not ask questions but select default value
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              path_install - path to the detected software
+              cus          - dict with filled in info for the software
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+
+    # Check host/target OS/CPU
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('target_device_id','')
+
+    r=ck.access({'action':'detect',
+                 'module_uoa':cfg['module_deps']['platform.os'],
+                 'host_os':hos,
+                 'target_os':tos,
+                 'target_device_id':tdid,
+                 'skip_info_collection':'yes'})
+    if r['return']>0: return r
+
+    hos=r['host_os_uid']
+    hosx=r['host_os_uoa']
+    hosd=r['host_os_dict']
+
+    tos=r['os_uid']
+    tosx=r['os_uoa']
+    tosd=r['os_dict']
+
+    # Check soft UOA
+    duoa=i.get('uoa','')
+    if duoa=='': duoa=i.get('data_uoa','')
+    if duoa=='':
+       # Search
+       tags=i.get('tags','')
+
+       if tags!='':
+          r=ck.access({'action':'search',
+                       'module_uoa':work['self_module_uid'],
+                       'tags':tags})
+          if r['return']>0: return r
+          l=r['lst']
+          if len(l)>0:
+             duid=l[0].get('data_uid')
+             duoa=duid
+
+    if duoa=='':
+       return {'return':1, 'error':'software entry was not found'}
+
+    # Load
+    r=ck.access({'action':'load',
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':duoa})
+    if r['return']>0: return r
+    d=r['dict']
+    p=r['path']
+
+    duoa=r['data_uoa']
+    duid=r['data_uid']
+
+    if o=='con':
+       x=duoa
+       if duid!=duoa: x+=' ('+duid+')'
+       ck.out('Software description entry found: '+x)
+
+    rr={'return':0}
+
+    # Check if has detect script
+    ds=d.get('check_script','')
+    if ds!='':
+       # Check individual prepare script
+       rx=ck.load_module_from_path({'path':p, 'module_code_name':ds, 'skip_init':'yes'})
+       if rx['return']>0: return rx
+       crx=rx['code']
+
+       # Call setup script
+       ii={"host_os_uoa":hosx,
+           "host_os_uid":hos,
+           "host_os_dict":hosd,
+           "target_os_uoa":tosx,
+           "target_os_uid":tos,
+           "target_os_dict":tosd,
+           "target_device_id":tdid,
+           "cfg":d,
+           "ck_kernel":ck
+          }
+
+#       if o=='con': ii['interactive']='yes'
+       ii['interactive']='yes'
+       if i.get('quiet','')=='yes': ii['interactive']=''
+
+       rx=crx.setup(ii)
+       if rx['return']>0: return rx
+
+       rr['path_install']=rx['path_install']
+       rr['cus']=rx['cus']
+
+    return rr

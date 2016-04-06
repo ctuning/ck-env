@@ -66,13 +66,11 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
     ################################################################
-    cus['include_name']='CL/opencl.h'
-
-    pl=os.path.join(pi,'lib')
+    if cus.get('include_name','')=='': 
+       cus['include_name']='CL/opencl.h'
 
     # On some Ubuntu there can be extra dir such as x86_64-linux-gnu
     # reported by Michael Kruse
@@ -86,11 +84,16 @@ def setup(i):
           dir_extra=raw_input('Enter extra directory if needed (such as x86_64-linux-gnu on Ubuntu) or Enter to skip it: ')
           cus['tool_dir_extra_configured']='yes'
 
-    if dir_extra!='':
-       pl=os.path.join(pl,dir_extra)
+    pl=cus.get('path_lib','')
+    if pl=='': 
+       pl=os.path.join(pi,'lib')
+       if dir_extra!='':
+          pl=os.path.join(pl,dir_extra)
 
-    cus['static_lib']='libOpenCL.so'
-    cus['dynamic_lib']='libOpenCL.so'
+    if cus.get('static_lib','')=='': 
+       cus['static_lib']='libOpenCL.so'
+    if cus.get('dynamic_lib','')=='': 
+       cus['dynamic_lib']='libOpenCL.so'
 
     if not os.path.isfile(os.path.join(pl,cus['dynamic_lib'])):
        return {'return':1, 'error':cus['dynamic_lib']+' is not in lib directory - please install OpenCL driver or check paths'}

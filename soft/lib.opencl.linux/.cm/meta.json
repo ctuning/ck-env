@@ -3,7 +3,9 @@
     "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_OPENCL"
   }, 
+  "sort":-1000,
   "customize_script": "customize", 
+  "check_script":"check", 
   "soft_name": "Library - OpenCL - Linux", 
   "tags": [
     "lib", 

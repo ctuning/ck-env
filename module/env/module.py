@@ -51,6 +51,7 @@ def set(i):
 
               (deps)                 - already resolved deps
               (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
+              (skip_default)         - if 'yes', skip detection of default installed software version
 
               (bat_file)             - if !='', use this filename to generate/append bat file ...
               (bat_new)              - if 'yes', start new bat file
@@ -80,6 +81,10 @@ def set(i):
 
     """
 
+    import os
+    import copy
+    import json
+
     o=i.get('out','')
     oo=''
     if o=='con': oo='con'
@@ -88,10 +93,10 @@ def set(i):
     quiet=i.get('quiet','')
 
     # Clean output file
-    import os
-
     sar=i.get('skip_auto_resolution','')
     cdeps=i.get('deps',{})
+
+    sd=i.get('skip_default','')
 
     bf=i.get('bat_file','')
     if bf!='' and os.path.isfile(bf): os.remove(bf)
@@ -140,9 +145,9 @@ def set(i):
 
     # Check environment UOA
     enruoa=i.get('repo_uoa','')
-
     tags=i.get('tags','')
     duoa=i.get('uoa','')
+
     lx=0
     dd={}
     setup={}
@@ -162,10 +167,103 @@ def set(i):
               'target_os_bits':tbits}
        ii['search_dict']={'setup':setup}
 
+    iii=copy.deepcopy(ii) # may need to repeat after registration
+
+    # Prepare possible warning
+    war='no registered CK environment was found for software with tags="'+tags+'"'
+    if len(setup)>0:
+       ro=readable_os({'setup':setup})
+       if ro['return']>0: return ro
+       setup1=ro['setup1']
+
+       war+=' and setup='+json.dumps(setup1)
+
+    # Search for environment entries
     r=ck.access(ii)
     if r['return']>0: return r
     l=r['lst']
     lx=len(l)
+
+    # If no entries, try to detect default ones and repeat
+    if lx==0:
+       if o=='con' and tags!='':
+          ck.out('')
+          ck.out('==========================================================================================')
+          ck.out('WARNING: '+war)
+          ck.out('')
+
+       # First, try to detect already installed software, but not registered (default)
+       if sd!='yes':
+          if o=='con':
+             ck.out('Trying to automatically detect installed software ...')
+
+          ii={'action':'search',
+              'module_uoa':cfg['module_deps']['soft'],
+              'tags':tags,
+              'add_meta':'yes'}
+          rx=ck.access(ii)
+          if rx['return']>0: return rx
+
+          slst=rx['lst']
+
+          # Sorting and checking which has detection module
+          detected=''
+          ssi=0
+          for q in sorted(slst, key=lambda v: v.get('meta',{}).get('sort',0)):
+              met=q.get('meta',{})
+              ds=met.get('check_script','')
+              if ds!='':
+                 ssi+=1
+
+                 auoa=q.get('data_uoa','')
+                 auid=q.get('data_uid','')
+                 aname=met.get('soft_name','')
+
+                 if o=='con':
+                    ck.out('')
+                    ck.out('  '+str(ssi)+') Checking if "'+aname+'" ('+auoa+' / '+auid+') is installed ...')
+
+
+                 ii={'action':'check',
+                     'module_uoa':cfg['module_deps']['soft'],
+                     'data_uoa':auid}
+                 if len(setup)>0:
+                    ii.update(setup)
+                 ry=ck.access(ii)
+                 if ry['return']>0 and ry['return']!=16: return ry
+
+                 if ry['return']!=16:
+                    pi=ry['path_install']
+                    cus=ry['cus']
+                    cus['version']='default'
+
+                    if o=='con':
+                       ck.out('       Found in '+pi+' - registering in CK ...')
+
+                    ii={'action':'setup',
+                        'module_uoa':cfg['module_deps']['soft'],
+                        'data_uoa':auid,
+                        'customize':cus,
+                        'install_path':pi,
+                        'quiet':quiet}
+                    if len(setup)>0:
+                       ii.update(setup)
+                    rz=ck.access(ii)
+                    if rz['return']>0: return rz
+
+                    xeduoa=rz['env_data_uoa']
+                    xeduid=rz['env_data_uid']
+
+                    if o=='con':
+                       ck.out('       Successfully registered with UID: '+xeduid)
+
+          # repeat search
+          r=ck.access(iii)
+          if r['return']>0: return r
+          l=r['lst']
+          lx=len(l)
+
+    # Re-check existing environment
     if lx>0:
        ilx=0
        if lx>1 and sar!='yes':
@@ -176,7 +274,6 @@ def set(i):
               zm=j.get('meta',{})
               cus=zm.get('customize','')
               zdeps=zm.get('deps',{})
-
 
               skip=False
               for q in zdeps:
@@ -193,7 +290,7 @@ def set(i):
                             break
 
                   if skip: break
-              if not skip: nls.append(j)    
+              if not skip: nls.append(j)
 
           l=nls
           lx=len(l)
@@ -286,23 +383,15 @@ def set(i):
              if duid!=duoa: x+=' ('+duid+')'
              ck.out('CK environment found using tags "'+tags+'" : '+x)
 
+    # No registered environments found and environment UOA is not explicitly defined
     if duoa=='':
-       import json
-       x='environment was not found using tags="'+tags+'"'
-       if len(setup)>0:
-
-          ro=readable_os({'setup':setup})
-          if ro['return']>0: return ro
-          setup1=ro['setup1']
-
-          x+=' and setup='+json.dumps(setup1)
-
        if o=='con' and tags!='':
           ck.out('')
           ck.out('==========================================================================================')
-          ck.out('WARNING: '+x)
+          ck.out('WARNING: '+war)
           ck.out('')
 
+          # Next, try to install via package for a given software
           if quiet=='yes':
              ck.out('  Searching and installing package with these tags automatically ...')
              a='y'
@@ -701,6 +790,7 @@ def resolve(i):
 
         tags=q.get('tags','')
         local=q.get('local','')
+        sd=q.get('skip_deafult','')
 
         uoa=q.get('uoa','')
 
@@ -713,6 +803,7 @@ def resolve(i):
             'uoa':uoa,
             'deps':deps,
             'skip_auto_resolution':sar,
+            'skip_default':sd,
             'local':local,
             'random':ran,
             'quiet':quiet
