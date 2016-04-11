@@ -1,0 +1,16 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_TOOL_ANTLR", 
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_lib": "yes", 
+    "skip_add_to_path": "yes"
+  }, 
+  "env": {}, 
+  "customize_script": "customize", 
+  "soft_name": "Tool - antlr", 
+  "tags": [
+    "tool", 
+    "antlr"
+  ] 
+}

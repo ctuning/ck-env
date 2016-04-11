@@ -776,7 +776,9 @@ def setup(i):
               "cfg":d,
               "env":env,
               "deps":deps,
-              "customize":cus
+              "customize":cus,
+              "self_cfg":cfg,
+              "ck_kernel":ck
              }
 
           if o=='con': ii['interactive']='yes'
@@ -1075,6 +1077,7 @@ def check(i):
            "target_os_dict":tosd,
            "target_device_id":tdid,
            "cfg":d,
+           "self_cfg":cfg,
            "ck_kernel":ck
           }
 

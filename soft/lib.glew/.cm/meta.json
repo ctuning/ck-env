@@ -1,0 +1,16 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_LIB_GLEW",
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_lib": "yes", 
+    "skip_add_to_path": "yes",
+    "add_include_path": "yes"
+  }, 
+  "customize_script": "customize", 
+  "soft_name": "Lib - GLEW", 
+  "tags": [
+    "lib", 
+    "glew" 
+  ] 
+}
