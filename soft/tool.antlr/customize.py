@@ -72,7 +72,7 @@ def setup(i):
 
     ################################################################
     if win=='yes':
-       env[envp+'_LIB']=pi+'\\'+jn
+       env[envp+'_LIB']=pi+'\\lib\\'+jn
 
     else:
        return {'return':1, 'error':'Linux version is not yet supported'}
