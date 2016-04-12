@@ -75,7 +75,7 @@ def setup(i):
        else: 
           yy='Release\\Win32'
 
-       s+='set PATH="'+pi+'\\bin\\'+yy+'"; %PATH%\n\n'
+       s+='set PATH='+pi+'\\bin\\'+yy+';%PATH%\n\n'
        env[envp+'_LIB']=pi+'\\lib\\'+yy
        env[envp+'_BIN']=pi+'\\bin\\'+yy
 

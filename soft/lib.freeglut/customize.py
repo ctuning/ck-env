@@ -74,7 +74,7 @@ def setup(i):
        if tbits=='64': 
           yy='x64'
 
-       s+='set PATH="'+pi+'\\bin\\'+yy+'"; %PATH%\n\n'
+       s+='set PATH='+pi+'\\bin\\'+yy+';%PATH%\n\n'
        env[envp+'_LIB']=pi+'\\lib\\'+yy
        env[envp+'_BIN']=pi+'\\bin\\'+yy
 
