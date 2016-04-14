@@ -10,24 +10,31 @@
 ##############################################################################
 # setup environment setup
 
-import sys
-if sys.version_info[0]>2:
-   def raw_input(i):
-       return input(i)
-
 def setup(i):
     """
     Input:  {
-              cfg          - dict of the soft entry
-              tags         - list of tags
-              env          - environment
-              deps         - resolved deps
+              cfg              - meta of this soft entry
+              self_cfg         - meta of module soft
+              ck_kernel        - import CK kernel module (to reuse functions)
 
-              interactive  - if 'yes', ask questions
+              host_os_uoa      - host OS UOA
+              host_os_uid      - host OS UID
+              host_os_dict     - host OS meta
+              
+              target_os_uoa    - target OS UOA
+              target_os_uid    - target OS UID
+              target_os_dict   - target OS meta
 
-              (customize)  - external params for possible customization:
+              target_device_id - target device ID (if via ADB)
 
-                             target_arm - if 'yes', target ARM
+              tags             - list of tags used to search this entry
+
+              env              - updated environment vars from meta
+              customize        - updated customize vars from meta
+
+              deps             - resolved dependencies for this soft
+
+              interactive      - if 'yes', can ask questions, otherwise quiet
             }
 
     Output: {
@@ -35,7 +42,7 @@ def setup(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              bat        - prepared string for bat file
+              bat          - prepared string for bat file
             }
 
     """
@@ -43,6 +50,7 @@ def setup(i):
     import os
 
     # Get variables
+    ck=i['ck_kernel']
     s=''
 
     iv=i.get('interactive','')
@@ -74,8 +82,9 @@ def setup(i):
        if iv=='yes':
           ck.out('You selected remote platform as a target.')
 
-          x=raw_input('Do you target ARM processors (Y/n): ')
-          if x!='' and x!='Y' and x!='yes': 
+          ra=ck.inp({'text':'Do you target ARM processors (Y/n): '})
+          x=ra['string'].strip().lower()
+          if x!='' and x!='y' and x!='yes': 
              arm='no'
 
     if arm=='yes':
@@ -89,12 +98,14 @@ def setup(i):
     if cus.get('add_win_sdk_path','')=='yes':
        if iv=='yes':
           x=cus.get('CK_WINDOWS_SDK_PATH','')
-          print ('')
+          ck.out('')
           if x=='':
-             x=raw_input('Input path to Windows SDK (example: C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A"): ')
+             ra=ck.inp({'text':'Input path to Windows SDK (example: C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A"): '})
+             x=ra['string'].strip()
           else:
-             print ('Current Windows SDK path: '+x)
-             x=raw_input('Input new path to Windows SDK (or press Enter to keep the same): ')
+             ck.out('Current Windows SDK path: '+x)
+             ra=ck.inp({'text':'Input new path to Windows SDK (or press Enter to keep the same): '})
+             x=ra['string'].strip()
 
           if x!='': 
              env['CK_WINDOWS_SDK_PATH']=x

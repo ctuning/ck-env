@@ -10,11 +10,6 @@
 ##############################################################################
 # setup environment setup
 
-import sys
-if sys.version_info[0]>2:
-   def raw_input(i):
-       return input(i)
-
 def setup(i):
     """
     Input:  {
@@ -55,6 +50,8 @@ def setup(i):
     import os
 
     # Get variables
+    ck=i['ck_kernel']
+
     s=''
 
     iv=i.get('interactive','')

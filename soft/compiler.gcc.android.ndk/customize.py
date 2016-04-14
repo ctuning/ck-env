@@ -10,24 +10,31 @@
 ##############################################################################
 # setup environment setup
 
-import sys
-if sys.version_info[0]>2:
-   def raw_input(i):
-       return input(i)
-
 def setup(i):
     """
     Input:  {
-              cfg          - dict of the soft entry
-              tags         - list of tags
-              env          - environment
-              deps         - resolved deps
+              cfg              - meta of this soft entry
+              self_cfg         - meta of module soft
+              ck_kernel        - import CK kernel module (to reuse functions)
 
-              interactive  - if 'yes', ask questions
+              host_os_uoa      - host OS UOA
+              host_os_uid      - host OS UID
+              host_os_dict     - host OS meta
+              
+              target_os_uoa    - target OS UOA
+              target_os_uid    - target OS UID
+              target_os_dict   - target OS meta
 
-              (customize)  - external params for possible customization:
+              target_device_id - target device ID (if via ADB)
 
-                             target_arm - if 'yes', target ARM
+              tags             - list of tags used to search this entry
+
+              env              - updated environment vars from meta
+              customize        - updated customize vars from meta
+
+              deps             - resolved dependencies for this soft
+
+              interactive      - if 'yes', can ask questions, otherwise quiet
             }
 
     Output: {
@@ -35,7 +42,7 @@ def setup(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              bat        - prepared string for bat file
+              bat          - prepared string for bat file
             }
 
     """
@@ -43,6 +50,7 @@ def setup(i):
     import os
 
     # Get variables
+    ck=i['ck_kernel']
     s=''
 
     iv=i.get('interactive','')
@@ -76,7 +84,8 @@ def setup(i):
        if prefix!='':
           ck.out('Current compiler name prefix: '+prefix)
        else:
-          prefix=raw_input('Enter compiler name prefix, if needed (such as aarch64-linux-android-): ')
+          ra=ck.inp({'text':'Enter compiler name prefix, if needed (such as aarch64-linux-android-): '})
+          prefix=ra['string'].strip()
           cus['tool_prefix_configured']='yes'
 
     if prefix!='':
@@ -96,7 +105,8 @@ def setup(i):
        if extra_path!='':
           ck.out('Full path to pre-built Android tools: '+extra_path)
        else:
-          extra_path=raw_input('Enter full path to pre-built Android tools (such as ...prebuilt/linux-x86_64/bin) : ')
+          ra=ck.inp({'text':'Enter full path to pre-built Android tools (such as ...prebuilt/linux-x86_64/bin) : '})
+          extra_path=ra['string']
           cus['extra_path_configured']='yes'
 
     if extra_path!='':
@@ -116,7 +126,8 @@ def setup(i):
        if platform_path!='':
           ck.out('Full path to directory with Android NDK platforms: '+platform_path)
        else:
-          platform_path=raw_input('Enter full path to directory with Android NDK platforms : ')
+          ra=ck.inp({'text':'Enter full path to directory with Android NDK platforms : '})
+          platform_path=ra['string']
           cus['platform_path_configured']='yes'
 
     if platform_path=='':
@@ -142,7 +153,8 @@ def setup(i):
        if libstdcpppathi!='':
           ck.out('Full path to include directory with libstdc++: '+libstdcpppathi)
        else:
-          libstdcpppathi=raw_input('* If needed, enter full path to include directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/include: ')
+          ra=ck.inp({'text':'* If needed, enter full path to include directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/include: '})
+          libstdcpppathi=ra['string']
           cus['libstdcpppath_include_configured']='yes'
 
     cus['libstdcpppath_include']=libstdcpppathi
@@ -155,7 +167,8 @@ def setup(i):
        if libstdcpppath!='':
           ck.out('Full path to include directory with libstdc++: '+libstdcpppath)
        else:
-          libstdcpppath=raw_input('* If needed, enter full path to lib directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a: ')
+          ra=ck.inp({'text':'* If needed, enter full path to lib directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a: '})
+          libstdcpppath=ra['string']
           cus['libstdcpppath_configured']='yes'
 
     if winh=='yes':
@@ -178,7 +191,8 @@ def setup(i):
     ef_configured=cus.get('ef_configured','')
     ef=cus.get('ef','')
     if ef_configured!='yes' and iv=='yes':
-       ef=raw_input('Force extra flags if needed (such as -fPIE -pie for aarch64): ')
+       ra=ck.inp({'text':'Force extra flags, if needed (such as -fPIE -pie for aarch64): '})
+       ef=ra['string']
        cus['ef']=ef
        cus['ef_configured']='yes'
 

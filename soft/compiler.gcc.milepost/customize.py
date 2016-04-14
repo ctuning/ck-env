@@ -10,24 +10,31 @@
 ##############################################################################
 # setup environment setup
 
-import sys
-if sys.version_info[0]>2:
-   def raw_input(i):
-       return input(i)
-
 def setup(i):
     """
     Input:  {
-              cfg          - dict of the soft entry
-              tags         - list of tags
-              env          - environment
-              deps         - resolved deps
+              cfg              - meta of this soft entry
+              self_cfg         - meta of module soft
+              ck_kernel        - import CK kernel module (to reuse functions)
 
-              interactive  - if 'yes', ask questions
+              host_os_uoa      - host OS UOA
+              host_os_uid      - host OS UID
+              host_os_dict     - host OS meta
+              
+              target_os_uoa    - target OS UOA
+              target_os_uid    - target OS UID
+              target_os_dict   - target OS meta
 
-              (customize)  - external params for possible customization:
+              target_device_id - target device ID (if via ADB)
 
-                             target_arm - if 'yes', target ARM
+              tags             - list of tags used to search this entry
+
+              env              - updated environment vars from meta
+              customize        - updated customize vars from meta
+
+              deps             - resolved dependencies for this soft
+
+              interactive      - if 'yes', can ask questions, otherwise quiet
             }
 
     Output: {
@@ -35,7 +42,7 @@ def setup(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              bat        - prepared string for bat file
+              bat          - prepared string for bat file
             }
 
     """
@@ -43,6 +50,7 @@ def setup(i):
     import os
 
     # Get variables
+    ck=i['ck_kernel']
     s=''
 
     iv=i.get('interactive','')
@@ -95,7 +103,8 @@ def setup(i):
 
     add_m32=cus.get('add_m32','')
     if add_m32=='' and iv=='yes' and tbits=='32':
-       x=raw_input('Target OS is 32 bit. Add -m32 to compilation flags (y/N)? ')
+       ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})
+       x=ra['string'].strip().lower()
        x=x.lower()
        if x=='y' or x=='yes': 
           add_m32='yes'

@@ -13,16 +13,28 @@
 def setup(i):
     """
     Input:  {
-              cfg          - dict of the soft entry
-              tags         - list of tags
-              env          - environment
-              deps         - dependencies
+              cfg              - meta of this soft entry
+              self_cfg         - meta of module soft
+              ck_kernel        - import CK kernel module (to reuse functions)
 
-              interactive  - if 'yes', ask questions
+              host_os_uoa      - host OS UOA
+              host_os_uid      - host OS UID
+              host_os_dict     - host OS meta
+              
+              target_os_uoa    - target OS UOA
+              target_os_uid    - target OS UID
+              target_os_dict   - target OS meta
 
-              (customize)  - external params for possible customization:
+              target_device_id - target device ID (if via ADB)
 
-                             target_arm - if 'yes', target ARM
+              tags             - list of tags used to search this entry
+
+              env              - updated environment vars from meta
+              customize        - updated customize vars from meta
+
+              deps             - resolved dependencies for this soft
+
+              interactive      - if 'yes', can ask questions, otherwise quiet
             }
 
     Output: {
@@ -31,11 +43,6 @@ def setup(i):
               (error)      - error text if return > 0
 
               bat          - prepared string for bat file
-              env          - updated environment
-              deps         - updated dependencies
-              tags         - updated tags
-
-              path         - install path
             }
 
     """
@@ -43,6 +50,7 @@ def setup(i):
     import os
 
     # Get variables
+    ck=i['ck_kernel']
     s=''
 
     iv=i.get('interactive','')
@@ -84,8 +92,8 @@ def setup(i):
     env['CK_ENV_LIB_OPENCL_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
     if remote=='yes':
-       print ("")
-       print ("Trying to compile OpenCL stubs lib ...")
+       ck.out('')
+       ck.out('Trying to compile OpenCL stubs lib ...')
 
        make=deps['compiler'].get('dict',{}).get('env',{}).get('CK_MAKE','')
        if make=='': make='make'
@@ -101,9 +109,9 @@ def setup(i):
        cmd+=deps['compiler']['bat'].strip()+'\n'
        cmd+=make+' '+x+'\n'
 
-       print ("******************")
-       print (cmd)
-       print ("******************")
+       ck.out ('******************')
+       ck.out (cmd)
+       ck.out ('******************')
 
        fscript='tmp-script'+host_d['script_ext']
        fx=open(fscript, 'w')
@@ -119,15 +127,15 @@ def setup(i):
           y+=sexe+' '+fscript+envsep
        y+=' '+scall+' '+host_d.get('bin_prefix','')+fscript
 
-       print('')
-       print(' Executing "'+y+'"')
+       ck.out('')
+       ck.out(' Executing "'+y+'"')
 
        rx=os.system(y)
 
        os.remove(fscript)
 
        if rx>0:
-          print ('')
-          print ('Possible Error: script returned non-zero code ('+str(rx)+') ...')
+          ck.out ('')
+          ck.out ('Possible Error: script returned non-zero code ('+str(rx)+') ...')
 
     return {'return':0, 'bat':s}
