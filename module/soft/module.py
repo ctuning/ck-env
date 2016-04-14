@@ -273,7 +273,8 @@ def detect(i):
                         'version_raw':lst}
 
 ##############################################################################
-# setup environment
+# setup environment for a given software - 
+# it is a low level routine which ask you the exact path to the tool and its version
 
 def setup(i):
     """
@@ -336,6 +337,7 @@ def setup(i):
     """
 
     import os
+    import json
 
     o=i.get('out','')
 
@@ -459,6 +461,8 @@ def setup(i):
     envp=cus.get('env_prefix','')
     envps=envp+'_SET'
 
+    csp=d.get('can_skip_path','')
+
     # Add tags from the search!
     for q in tags.split(','):
         q1=q.strip()
@@ -546,8 +550,8 @@ def setup(i):
     ver=cus.get('version','')
     if ver==''  and cus.get('skip_version','')!='yes' and o=='con':
        ck.out('')
-       r=ck.inp({'text':'Enter soft version: '})
-       ver=r['string']
+       r=ck.inp({'text':'Enter version of this software (for example, 3.21.6-2 or press Enter if default/unknown): '})
+       ver=r['string'].strip().lower()
 
     if ver!='': 
        setup['version']=ver
@@ -608,18 +612,34 @@ def setup(i):
              if enduid!=enduoa: x+=' ('+enduid+')'
 
              ck.out('')
-             ck.out('Environment found: '+x)
+             ck.out('Environment already registered: '+x)
 
-             if i.get('update','')!='yes':
+             if i.get('update','')=='yes':
+                update=True
+             else:
                 if o=='con':
                    ck.out('')
-                   r=ck.inp({'text':'Would you like to update this entry (Y/n): '})
-                   upd=r['string'].strip().lower()
+                   r=ck.inp({'text':'Would you like to delete this entry and re-register environment (Y/n): '})
+                   dl=r['string'].strip().lower()
 
-                   if upd=='' or upd=='y' or upd=='yes':
-                      update=True
+                   if dl=='' or dl=='y' or dl=='yes':
+                      update=False
+
+                      rx=ck.access({'action':'delete',
+                                    'module_uoa':cfg['module_deps']['env'],
+                                    'data_uoa':enduoa,
+                                    'repo_uoa':enruoa})
+                      if rx['return']>0: return rx
+
                    else:
-                      finish=True
+                      ck.out('')
+                      r=ck.inp({'text':'Would you like to update this entry (Y/n): '})
+                      upd=r['string'].strip().lower()
+
+                      if upd=='' or upd=='y' or upd=='yes':
+                         update=True
+                      else:
+                         finish=True
 
              if update:
                 rx=ck.access({'action':'load',
@@ -643,7 +663,7 @@ def setup(i):
        else:
           if o=='con':
              ck.out('')
-             ck.out('    Environment is not yet registered ...')
+             ck.out('    Environment with above tags is not yet registered in CK ...')
 
     ############################################################
     if not finish:
@@ -672,46 +692,72 @@ def setup(i):
        if elp=='': elp='LIBRARY_PATH'
 
        # Check installation path
-       if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes':
+       if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and not update:
           if o=='con':
-             if update:
+#             if update:
+#                ck.out('')
+#                ck.out('Current path to installed tool: '+pi)
+#                r=ck.inp({'text':'Input new path to installed tool or press Enter to keep old: '})
+#                pix=r['string'].strip()
+#                if pix!='': pi=pix
+             if pi=='':
                 ck.out('')
-                ck.out('Current path to installed tool: '+pi)
-                r=ck.inp({'text':'Input new path to installed tool or press Enter to keep old: '})
-                pix=r['string'].strip()
-                if pix!='': pi=pix
-             elif pi=='':
-                ck.out('')
+
                 ye=cus.get('input_path_example','')
                 if ye!='': y=' (example: '+ye+')'
                 else: y=''
-                r=ck.inp({'text':'Enter path to installed tool'+y+': '})
-                pi=r['string'].strip()
 
-          if pi=='':
+                y1=cus.get('input_path_text','')
+                if y1=='': y1='path to installed software (root directory possibly pointing to bin, lib, include, etc)'
+ 
+                r=ck.inp({'text':'Enter '+y1+y+': '})
+                pi=r['string'].strip().strip('"')
+
+                ipr=cus.get('input_path_remove','')
+                if ipr!='' and ipr>0:
+                   for q in range(0,ipr):
+                       try:
+                          pi=os.path.split(pi)[0]
+                       except:
+                          pass
+
+          if pi=='' and csp!='yes':
              return {'return':1, 'error':'installation path is not specified'}
 
-       ver_int=cus.get('version_int',0)
-       if ver_int==0 and o=='con' and cus.get('skip_version','')!='yes':
-          # Trying to calculate version ourselves (XX.YY.ZZZZ)
-          if ver!='':
-             bver=ver.split('.')
-             bl=len(bver)
-             for b in range(0, bl):
-                 bb=bver[b]
-                 try:
-                    ib=int(bb)
-                 except ValueError:
-                    ib=0
-                 bver[b]=ib
+       # Split version to be able to compare/search results
+       sver=[]
+       if ver!='':
+          import re
+          sver1=re.split('\.|\-|\_', ver)
+          for q in sver1:
+              x=q
+              try:
+                 x=int(q)
+              except:
+                 pass
+              sver.append(x)
 
-             ver_int=0
-             if bl>0: ver_int+=bver[0]*1000000
-             if bl>1: ver_int+=bver[1]*10000
-             if bl>2: ver_int+=bver[2]
-
-             ck.out('')
-             ck.out('Calculated integer version for internal comparison: '+str(ver_int))
+#       ver_int=cus.get('version_int',0)
+#       if ver_int==0 and o=='con' and cus.get('skip_version','')!='yes':
+#          # Trying to calculate version ourselves (XX.YY.ZZZZ)
+#          if ver!='':
+#             bver=ver.split('.')
+#             bl=len(bver)
+#             for b in range(0, bl):
+#                 bb=bver[b]
+#                 try:
+#                    ib=int(bb)
+#                 except ValueError:
+#                    ib=0
+#                 bver[b]=ib
+#
+#             ver_int=0
+#             if bl>0: ver_int+=bver[0]*1000000
+#             if bl>1: ver_int+=bver[1]*10000
+#             if bl>2: ver_int+=bver[2]
+#
+#             ck.out('')
+#             ck.out('Calculated integer version for internal comparison: '+str(ver_int))
 
 #          r=ck.inp({'text':'Enter soft version as integer for comparison (for V5.2.3 use 50203): '})
 #          verx=r['string'].strip()
@@ -809,17 +855,20 @@ def setup(i):
               if y!='': y+=','
               y+=q
           x+=' ('+y+')'
-       sb+=rem+' '+'Soft UOA         = '+x+'\n'
+       sb+=rem+' '+'Soft UOA           = '+x+'\n'
 
-       sb+=rem+' '+'Host OS UOA      = '+hosx+' ('+hos+')\n'
-       sb+=rem+' '+'Target OS UOA    = '+tosx+' ('+tos+')\n'
-       sb+=rem+' '+'Target OS bits   = '+tbits+'\n'
+       sb+=rem+' '+'Host OS UOA        = '+hosx+' ('+hos+')\n'
+       sb+=rem+' '+'Target OS UOA      = '+tosx+' ('+tos+')\n'
+       sb+=rem+' '+'Target OS bits     = '+tbits+'\n'
        if ver!='':
-          sb+=rem+' '+'Tool version     = '+ver+'\n'
+          sb+=rem+' '+'Tool version       = '+ver+'\n'
           cus['version']=ver
-       if ver_int!=0:
-          sb+=rem+' '+'Tool int version = '+str(ver_int)+'\n'
-          cus['version_int']=ver_int
+#       if ver_int!=0:
+#          sb+=rem+' '+'Tool int version = '+str(ver_int)+'\n'
+#          cus['version_int']=ver_int
+       if len(sver)>0:
+          sb+=rem+' '+'Tool split version = '+json.dumps(sver)+'\n'
+          cus['version_split']=sver
        sb+='\n'
 
        if sdeps!='':

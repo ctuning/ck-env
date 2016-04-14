@@ -1,5 +1,7 @@
 {
   "customize": {
+    "input_path_text":"full path to javacc",
+    "input_path_remove":1,
     "build_dir_name": "java", 
     "env_prefix": "CK_ENV_COMPILER_JAVA", 
     "languages": [

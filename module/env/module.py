@@ -209,6 +209,7 @@ def set(i):
           # Sorting and checking which has detection module
           detected=''
           ssi=0
+          found=False
           for q in sorted(slst, key=lambda v: v.get('meta',{}).get('sort',0)):
               met=q.get('meta',{})
               ds=met.get('check_script','')
@@ -257,11 +258,14 @@ def set(i):
                     if o=='con':
                        ck.out('       Successfully registered with UID: '+xeduid)
 
-          # repeat search
-          r=ck.access(iii)
-          if r['return']>0: return r
-          l=r['lst']
-          lx=len(l)
+                    found=True
+
+          # repeat search if at least one above setup was performed
+          if found:
+             r=ck.access(iii)
+             if r['return']>0: return r
+             l=r['lst']
+             lx=len(l)
 
     # Re-check existing environment
     if lx>0:
