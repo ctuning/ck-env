@@ -616,6 +616,9 @@ def set_freq(i):
           r=ck.access(ii)
           if r['return']>0 and r['return']!=16: return r
           if r['return']!=16:
+             pi_key=tosx
+             if remote=='yes' and tdid!='': pi_key+='-'+tdid
+
              dcfg=r['dict']
              pi_uoa=dcfg.get('platform_init_uoa',{}).get(pi_key,'')
 
