@@ -1,3 +1,6 @@
+* 2016.04.15 - moving platform.init entries from ck-autotuning here;
+               providing support for Windows third-party tools (wget, unzip, md5sum, etc)
+
 * 2016.04.14 - adding lib.toon for PAMELA project
                improving customize.py format to setup up software
 
