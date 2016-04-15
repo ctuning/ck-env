@@ -385,7 +385,7 @@ def detect(i):
 
     first_time=False
     pi_uoa=dcfg.get('platform_init_uoa',{}).get(pi_key,'')
-    if pi_uoa=='':
+    if pi_uoa=='' and sic!='yes':
        first_time=True
        # Check if there are related platform.init
        tags='os-'+tp

@@ -115,7 +115,7 @@ def set(i):
         'host_os':hos,
         'target_os':tos,
         'device_id':tdid,
-        'skip_ifo_collection':'yes'}
+        'skip_info_collection':'yes'}
     r=ck.access(ii)
     if r['return']>0: return r
 
@@ -790,25 +790,28 @@ def resolve(i):
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
 
-    # Checking/detecting host OS
-    r=ck.access({'action':'detect',
-                 'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':hos,
-                 'skip_info_collection':'yes'})
-    if r['return']>0: return r
-    hos=r['os_uid']
-    hosd=r['os_dict']
+    user_env=False
+    if hos!='' or tos!='' or tdid!='': user_env=True
 
-    # Checking/detecting host OS
-    r=ck.access({'action':'detect',
-                 'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':tos,
-                 'device_id':tdid,
-                 'skip_info_collection':'yes'})
+    # Get some info about OS
+    ii={'action':'detect',
+        'module_uoa':cfg['module_deps']['platform.os'],
+        'host_os':hos,
+        'target_os':tos,
+        'device_id':tdid,
+        'skip_info_collection':'yes'}
+    r=ck.access(ii)
     if r['return']>0: return r
+
+    hos=r['host_os_uid']
+    hosx=r['host_os_uoa']
+    hosd=r['host_os_dict']
+
     tos=r['os_uid']
+    tosx=r['os_uoa']
     tosd=r['os_dict']
-    tdid=r['device_id']
+
+    add_path=r.get('add_path',[])
 
     # Check if base is different
     x1=hosd.get('base_uid','')
@@ -821,6 +824,10 @@ def resolve(i):
     if x1!='' and x2!='': 
        tos=x1
        tosx=x2
+
+    remote=tosd.get('remote','')
+
+    tbits=tosd.get('bits','')
 
     # Checking deps
     env=i.get('env',{})
