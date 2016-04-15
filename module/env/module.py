@@ -49,6 +49,8 @@ def set(i):
 
               (local)                - if 'yes', add host_os, target_os, target_device_id to search
 
+              (name)                 - user-friendly name of the dependency (if needs to be resolved)
+
               (deps)                 - already resolved deps
               (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
               (skip_default)         - if 'yes', skip detection of default installed software version
@@ -91,6 +93,8 @@ def set(i):
 
     ran=i.get('random','')
     quiet=i.get('quiet','')
+
+    name=i.get('name','')
 
     # Clean output file
     sar=i.get('skip_auto_resolution','')
@@ -178,7 +182,9 @@ def set(i):
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
     # Prepare possible warning
-    war='no registered CK environment was found for required software with tags="'+tags+'"'
+    x='required software'
+    if name!='': x='"'+name+'"'
+    war='no registered CK environment was found for '+x+' dependency with tags="'+tags+'"'
     if len(setup)>0:
        ro=readable_os({'setup':setup})
        if ro['return']>0: return ro
@@ -838,6 +844,7 @@ def resolve(i):
         q=deps[k]
 
         tags=q.get('tags','')
+        name=q.get('name','')
         local=q.get('local','')
         sd=q.get('skip_deafult','')
 
@@ -855,6 +862,7 @@ def resolve(i):
             'skip_default':sd,
             'local':local,
             'random':ran,
+            'name':name,
             'quiet':quiet
            }
         if o=='con': ii['out']='con'

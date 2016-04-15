@@ -2,6 +2,7 @@
              - added windows tools to windows-32 OS entry
              - added DragonBoard platform.init  
              - improving software/package installation; showing wiki page when problem
+             - added possibility to show user-friendly soft description when resolving dependencies
 
 * 2016.04.14 - added lib.toon for PAMELA project
                improving customize.py format to setup up software
