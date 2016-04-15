@@ -40,14 +40,19 @@ def find_close(i):
             }
 
     Output: {
-              return   - return code =  0
+              return     - return code =  0
 
-              platform - 'win' or 'linux'
-              bits     - (str) 32 or 64
+              platform   - 'win' or 'linux'. Careful - it is always for current host OS! 
+                           Use 'ck_name' key from meta for the target OS!
 
-              os_uoa   - UOA of the most close OS
-              os_uid   - UID of the most close OS
-              os_dict  - meta of the most close OS
+              bits       - (str) 32 or 64. Careful - it is always for current host OS!
+                           Use 'bits' key from meta for the target OS!
+
+              os_uoa     - UOA of the most close OS
+              os_uid     - UID of the most close OS
+              os_dict    - meta of the most close OS
+
+              (add_path) - list of extra path ...
             }
     """
 
@@ -108,5 +113,16 @@ def find_close(i):
        rr['os_uoa']=os_uoa
        rr['os_uid']=os_uid
        rr['os_dict']=dd
+
+       # Check if need to add path
+       x=dd.get('add_to_path_os_uoa','')
+       if x!='':
+          rx=ck.access({'action':'find',
+                        'module_uoa':work['self_module_uid'],
+                        'data_uoa':x})
+          if rx['return']>0: return rx
+          px=rx['path']
+
+          rr['add_path']=[px]
 
     return rr

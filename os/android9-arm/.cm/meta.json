@@ -44,6 +44,7 @@
   }, 
   "generic": "yes", 
   "lib_dir": "lib", 
+  "make_dir": "mkdir ", 
   "no_script_execution": "yes", 
   "path_to_scripts": "/data/local/tmp/tools", 
   "processor": "arm", 

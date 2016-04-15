@@ -1,0 +1,19 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK Copyright.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+echo "*** Current GPU frequency:"
+#TBD: which file to read?
+cat ?????
+
+echo ""
+echo "*** Available GPU frequencies:"
+cat /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies
+

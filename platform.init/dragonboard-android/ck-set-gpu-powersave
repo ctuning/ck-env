@@ -1,0 +1,20 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK Copyright.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+export CK_GPU_FREQ_GOVERNER=off
+
+stop mpdecision
+
+echo 0 > /sys/class/kgsl/kgsl-3d0/force_clk_on
+echo 0 > /sys/class/kgsl/kgsl-3d0/force_bus_on
+echo 0 > /sys/class/kgsl/kgsl-3d0/force_rail_on
+
+. ck-set-gpu-online-and-frequency 200000000

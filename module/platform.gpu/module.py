@@ -252,11 +252,23 @@ def detect(i):
 
           # Check path to scripts from env
           path_to_scripts=''
-          piu=os.environ.get('CK_PLATFORM_INIT_UOA','')
-          if piu!='' and remote!='yes':
+
+          pi_uoa=os.environ.get('CK_PLATFORM_INIT_UOA','')
+          if pi_uoa=='':
+             dcfg={}
+             ii={'action':'load',
+                 'module_uoa':cfg['module_deps']['cfg'],
+                 'data_uoa':cfg['lcfg_uoa']}
+             r=ck.access(ii)
+             if r['return']>0 and r['return']!=16: return r
+             if r['return']!=16:
+                dcfg=r['dict']
+                pi_uoa=dcfg.get('platform_init_uoa',{}).get(pi_key,'')
+
+          if pi_uoa!='' and remote!='yes':
              rx=ck.access({'action':'find',
                            'module_uoa':cfg['module_deps']['platform.init'],
-                           'data_uoa':piu})
+                           'data_uoa':pi_uoa})
              if rx['return']>0: return rx
              path_to_scripts=rx['path']
 

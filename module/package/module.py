@@ -176,7 +176,7 @@ def install(i):
              return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
 
        if duoa=='':
-          return {'return':1, 'error':'package with such tags and for this environment was not found!'}
+          return {'return':16, 'error':'package with such tags and for this environment was not found!'}
 
     # Check if found package
     
@@ -221,6 +221,8 @@ def install(i):
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
+
+    add_path_string=r.get('add_path_string','')
 
     # Check if base is different
     x1=hosd.get('base_uid','')
@@ -478,6 +480,9 @@ def install(i):
     if ps!='' and xprocess:
        # start bat
        sb=hosd.get('batch_prefix','')+'\n'
+
+       if add_path_string!='':
+          sb+=add_path_string+'\n\n'
 
        # Check if params
        param=i.get('param',None)

@@ -9,6 +9,7 @@
     }
   }, 
   "cfg_uoa":"program-crowdtuning",
+  "lcfg_uoa":"local-platform",
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
   "desc": "describing and detecting platform's operating systems", 
   "developer": "Grigori Fursin", 
@@ -18,6 +19,7 @@
   "module_deps": {
     "os": "0440cb72c2bc5cc6", 
     "platform": "707ccdfe444cafac",
+    "platform.init": "38a2f5438d8555b6",
     "cfg":"b34231a3467566f8"
   }
 }

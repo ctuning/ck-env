@@ -1,4 +1,5 @@
 {
+  "add_to_path_os_uoa":"4e3ac1901f4b25bc",
   "batch_check_if_set": "if not [%1] == [1] (if defined $#ck_var#$ exit /b 0)\n", 
   "batch_exit" : "exit /b $#return_code#$",
   "batch_prefix": "@echo off\n\nrem CK generated script\n", 

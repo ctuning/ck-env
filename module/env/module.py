@@ -109,25 +109,25 @@ def set(i):
     user_env=False
     if hos!='' or tos!='' or tdid!='': user_env=True
 
-    # Checking/detecting host OS
-    r=ck.access({'action':'detect',
-                 'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':hos,
-                 'skip_info_collection':'yes'})
+    # Get some info about OS
+    ii={'action':'detect',
+        'module_uoa':cfg['module_deps']['platform.os'],
+        'host_os':hos,
+        'target_os':tos,
+        'device_id':tdid,
+        'skip_ifo_collection':'yes'}
+    r=ck.access(ii)
     if r['return']>0: return r
-    hos=r['os_uid']
-    hosd=r['os_dict']
 
-    # Checking/detecting host OS
-    r=ck.access({'action':'detect',
-                 'module_uoa':cfg['module_deps']['platform.os'],
-                 'os':tos,
-                 'device_id':tdid,
-                 'skip_info_collection':'yes'})
-    if r['return']>0: return r
+    hos=r['host_os_uid']
+    hosx=r['host_os_uoa']
+    hosd=r['host_os_dict']
+
     tos=r['os_uid']
+    tosx=r['os_uoa']
     tosd=r['os_dict']
-    tdid=r['device_id']
+
+    add_path=r.get('add_path',[])
 
     # Check if base is different
     x1=hosd.get('base_uid','')
@@ -141,7 +141,17 @@ def set(i):
        tos=x1
        tosx=x2
 
+    remote=tosd.get('remote','')
+
     tbits=tosd.get('bits','')
+
+    eset=hosd.get('env_set','')
+    svarb=hosd.get('env_var_start','')
+    svare=hosd.get('env_var_stop','')
+    sdirs=hosd.get('dir_sep','')
+    evs=hosd.get('env_var_separator','')
+    eifs=hosd.get('env_quotes_if_space','')
+    nout=hosd.get('no_output','')
 
     # Check environment UOA
     enruoa=i.get('repo_uoa','')
@@ -170,7 +180,7 @@ def set(i):
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
     # Prepare possible warning
-    war='no registered CK environment was found for software with tags="'+tags+'"'
+    war='no registered CK environment was found for required software with tags="'+tags+'"'
     if len(setup)>0:
        ro=readable_os({'setup':setup})
        if ro['return']>0: return ro
@@ -184,7 +194,10 @@ def set(i):
     l=r['lst']
     lx=len(l)
 
+    auoas=[]
+
     # If no entries, try to detect default ones and repeat
+    showed_warning=False
     if lx==0:
        if o=='con' and tags!='':
           ck.out('')
@@ -192,10 +205,12 @@ def set(i):
           ck.out('WARNING: '+war)
           ck.out('')
 
+          showed_warning=True
+
        # First, try to detect already installed software, but not registered (default)
        if sd!='yes':
           if o=='con':
-             ck.out('Trying to automatically detect installed software ...')
+             ck.out('  Checking if it is possible to automatically detect already installed software ...')
 
           ii={'action':'search',
               'module_uoa':cfg['module_deps']['soft'],
@@ -212,18 +227,18 @@ def set(i):
           found=False
           for q in sorted(slst, key=lambda v: v.get('meta',{}).get('sort',0)):
               met=q.get('meta',{})
+              auoa=q['data_uoa']
+              auid=q['data_uid']
+              aname=met.get('soft_name','')
+
+              auoas.append(q['data_uoa'])
               ds=met.get('check_script','')
               if ds!='':
                  ssi+=1
 
-                 auoa=q.get('data_uoa','')
-                 auid=q.get('data_uid','')
-                 aname=met.get('soft_name','')
-
                  if o=='con':
                     ck.out('')
                     ck.out('  '+str(ssi)+') Checking if "'+aname+'" ('+auoa+' / '+auid+') is installed ...')
-
 
                  ii={'action':'check',
                      'module_uoa':cfg['module_deps']['soft'],
@@ -261,7 +276,17 @@ def set(i):
                     found=True
 
           # repeat search if at least one above setup was performed
-          if found:
+          if not found:
+             if o=='con':
+                ck.out('    No software auto-detection scripts found for this software in CK :( ...')
+
+                if len(auoas)>0:
+                   ck.out('')
+                   ck.out('       Checked following related CK soft entries:')
+                   for q in auoas:
+                       ck.out('        * '+q)
+
+          else:
              r=ck.access(iii)
              if r['return']>0: return r
              l=r['lst']
@@ -363,8 +388,6 @@ def set(i):
                            js+='Dependency '+j+' (UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
                            ck.out(js)
 
-
-
                 ck.out('')
                 rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+' or press Enter for 0: '})
                 x=rx['string'].strip()
@@ -390,50 +413,69 @@ def set(i):
     # No registered environments found and environment UOA is not explicitly defined
     if duoa=='':
        if o=='con' and tags!='':
-          ck.out('')
-          ck.out('==========================================================================================')
-          ck.out('WARNING: '+war)
-          ck.out('')
+
+          if not showed_warning:
+             ck.out('==========================================================================================')
+             ck.out('WARNING: '+war)
 
           # Next, try to install via package for a given software
-          if quiet=='yes':
-             ck.out('  Searching and installing package with these tags automatically ...')
-             a='y'
-          else:
-             rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
-             a=rx['string'].strip().lower()
+          ck.out('')
+          ck.out('  Searching and installing CK software packages with these tags ...')
 
-          if a!='n' and a!='no':
-             save_cur_dir=os.getcwd()
+#          if quiet=='yes':
+#             ck.out('  Searching and installing package with these tags automatically ...')
+#             a='y'
+#          else:
+#             rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
+#             a=rx['string'].strip().lower()
+#
+#          if a!='n' and a!='no':
+          save_cur_dir=os.getcwd()
 
-             vv={'action':'install',
-                 'module_uoa':cfg['module_deps']['package'],
-                 'out':oo,
-                 'tags':tags}
-             vv['host_os']=hos
-             vv['target_os']=tos
-             vv['target_device_id']=tdid
+          vv={'action':'install',
+              'module_uoa':cfg['module_deps']['package'],
+              'out':oo,
+              'tags':tags}
+          vv['host_os']=hos
+          vv['target_os']=tos
+          vv['target_device_id']=tdid
 
-             # Check if there is a compiler in resolved deps to reuse it
-             xdeps={}
+          # Check if there is a compiler in resolved deps to reuse it
+          xdeps={}
 #             if len(cdeps.get('compiler',{}))>0: xdeps['compiler']=cdeps['compiler']
-             if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
+          if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
 #             if len(cdeps.get('compiler_mcl',{}))>0: xdeps['compiler_mcl']=cdeps['compiler_mcl']
-             if cdeps.get('compiler_mcl',{}).get('uoa','')!='': xdeps['compiler_mcl']=cdeps['compiler_mcl']
-             if len(xdeps)>0: vv['deps']=xdeps
+          if cdeps.get('compiler_mcl',{}).get('uoa','')!='': xdeps['compiler_mcl']=cdeps['compiler_mcl']
+          if len(xdeps)>0: vv['deps']=xdeps
 
-             rx=ck.access(vv)
-             if rx['return']>0: return rx
-
+          rx=ck.access(vv)
+          if rx['return']==0:
              duoa=rx['env_data_uoa']
              duid=rx['env_data_uid']
 
              os.chdir(save_cur_dir)
+          elif rx['return']!=16:
+             return rx
 
-          else:
-             return {'return':1, 'error':x}
-       else:
-          return {'return':1, 'error':x}
+       if duoa=='':
+          if o=='con':
+             ck.out('    CK packages are not found for this software :( !')
+             ck.out('')
+
+             if len(auoas)>0:
+                rx=ck.inp({'text':'       Would you like to open wiki pages about related software (with possible installation info) (Y/n): '})
+                x=rx['string'].strip().lower()
+
+                if x!='n' and x!='no':
+                   ck.out('')
+                   for q in auoas:
+                       rx=ck.access({'action':'wiki',
+                                     'module_uoa':cfg['module_deps']['soft'],
+                                     'data_uoa':q})
+                       if rx['return']>0: return rx
+                   ck.out('')
+
+          return {'return':1, 'error':war}
 
     # Load selected environment entry
     r=ck.access({'action':'load',

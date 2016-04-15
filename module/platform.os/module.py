@@ -75,6 +75,9 @@ def detect(i):
 
               (devices)              - return devices if device_id==''
               (device_id)            - if device_id=='' and only 1 device, select it
+
+              (add_path)             - list of paths to add before executing tools ...
+              (add_path_string)      - adding paths to PATH environment in a host OS format
             }
 
     """
@@ -109,7 +112,17 @@ def detect(i):
     hosx=r['os_uoa']
     hosd=r['os_dict']
 
-    # Checking/detecting target OS
+    add_path=r.get('add_path',[])
+
+    eset=hosd.get('env_set','')
+    svarb=hosd.get('env_var_start','')
+    svare=hosd.get('env_var_stop','')
+    sdirs=hosd.get('dir_sep','')
+    evs=hosd.get('env_var_separator','')
+    eifs=hosd.get('env_quotes_if_space','')
+    nout=hosd.get('no_output','')
+
+    # Check/detect target OS
     r=ck.access({'action':'find_close',
                  'module_uoa':cfg['module_deps']['os'],
                  'os_uoa':tos})
@@ -119,8 +132,11 @@ def detect(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
-    tp=r['platform']
+    tp=tosd.get('ck_name','')
     tbits=tosd.get('bits','')
+
+    remote=tosd.get('remote','')
+    win=tosd.get('windows_base','')
 
     # Init params
     prop={}
@@ -132,9 +148,6 @@ def detect(i):
     prop_os_name_short=''
 
     ro=hosd.get('redirect_stdout','')
-
-    remote=tosd.get('remote','')
-    win=tosd.get('windows_base','')
 
     # Check devices, if remote
     if sic!='yes' and remote=='yes' and tdid=='':
@@ -357,14 +370,152 @@ def detect(i):
     prop['name_short']=prop_os_name_short
     prop['bits']=tbits
 
+    # Check if platform.init is defined for this target (to add target-specific scripts to PATH)
+    dcfg={}
+    ii={'action':'load',
+        'module_uoa':cfg['module_deps']['cfg'],
+        'data_uoa':cfg['lcfg_uoa']}
+    r=ck.access(ii)
+    if r['return']>0 and r['return']!=16: return r
+    if r['return']!=16:
+       dcfg=r['dict']
+
+    pi_key=tosx
+    if remote=='yes' and tdid!='': pi_key+='-'+tdid
+
+    first_time=False
+    pi_uoa=dcfg.get('platform_init_uoa',{}).get(pi_key,'')
+    if pi_uoa=='':
+       first_time=True
+       # Check if there are related platform.init
+       tags='os-'+tp
+       if remote=='yes':
+          tags+=',remote'
+
+       rx=ck.access({'action':'search',
+                     'module_uoa':cfg['module_deps']['platform.init'],
+                     'tags':tags})
+       if rx['return']>0: return rx
+       lrx=rx['lst']
+       if len(lrx)==1:
+          pi_uoa=lrx[0]['data_uid']
+       elif len(lrx)>1:
+          if o=='con':
+             # Select platform.init
+             ck.out('')
+             ck.out('Some support tools and scripts may be available for your target platform in CK:')
+             ck.out('')
+             zz={}
+             iz=0
+             for z1 in sorted(lrx, key=lambda v: v['data_uoa']):
+                 z=z1['data_uid']
+                 zu=z1['data_uoa']
+
+                 zs=str(iz)
+                 zz[zs]=z
+
+                 ck.out(zs+') '+zu+' ('+z+')')
+
+                 iz+=1
+
+             ck.out('')
+             rx=ck.inp({'text':'Select number (or Enter to skip selection and do not ask this question agian for your target OS): '})
+             z=rx['string'].strip()
+
+             if z=='':
+                pi_uoa='-'
+             else:
+                if z not in zz:
+                   return {'return':1, 'error':'number is not recognized'}
+
+                pi_uoa=zz[z]
+
+       # Record if new
+       if pi_uoa!='':
+          if 'platform_init_uoa' not in dcfg:
+             dcfg['platform_init_uoa']={}
+
+          dcfg['platform_init_uoa'][pi_key]=pi_uoa
+
+          ii={'action':'update',
+              'module_uoa':cfg['module_deps']['cfg'],
+              'data_uoa':cfg['lcfg_uoa'],
+              'dict':dcfg}
+          r=ck.access(ii)
+          if r['return']>0: return r
+                
+    if pi_uoa!='' and pi_uoa!='-':
+       rx=ck.access({'action':'find',
+                     'module_uoa':cfg['module_deps']['platform.init'],
+                     'data_uoa':pi_uoa})
+       if rx['return']>0: return rx
+       px=rx['path']
+
+       if remote=='yes' and first_time:
+          dv=''
+          if tdid!='': dv=' -s '+tdid
+          xsp=tosd.get('dir_sep','')
+
+          # Create directory if needed
+          z=tosd.get('path_to_scripts','')
+          if z=='':
+             z=tosd.get('remote_dir','')
+          else:
+             y=tosd.get('remote_shell','')+' '+tosd.get('make_dir','')+' '+z
+             y=y.replace('$#device#$',dv)
+
+             if o=='con':
+                ck.out('')
+                ck.out('* Creating directory with scripts on remote device:')
+                ck.out('  '+y)
+
+             rx=os.system(y)
+             # Ignore output (can be already created)
+
+          # Copying files and setting chmod 755
+          x=os.listdir(px)
+          for q in x:
+              xx=os.path.join(px,q)
+              if os.path.isfile(xx):
+                 xr=z+xsp+q
+
+                 # Push file to remote device
+                 y=tosd.get('remote_push','')
+                 y=y.replace('$#device#$',dv)
+                 y=y.replace('$#file1#$', xx)
+                 y=y.replace('$#file2#$', xr)
+
+                 ck.out('')
+                 ck.out('* Copying file to remote device:')
+                 ck.out('  '+y)
+
+                 rx=os.system(y)
+                 # Ignore output (can be already exist)
+
+                 # Set executable
+                 y=tosd.get('remote_shell','')+' '+tosd.get('set_executable','')+' '+xr
+                 y=y.replace('$#device#$',dv)
+
+                 ck.out('')
+                 ck.out('* Setting executable for this file:')
+                 ck.out('  '+y)
+
+                 rx=os.system(y)
+
+       else:
+          add_path.append(px)
+
     if o=='con' and i.get('skip_print_os','')!='yes':
        ck.out('')
-       ck.out('OS CK UOA:     '+tosx+' ('+tos+')')
+       ck.out('OS CK UOA:         '+tosx+' ('+tos+')')
        ck.out('')
-       ck.out('OS name:       '+prop.get('name',''))
-       ck.out('Short OS name: '+prop.get('name_short',''))
-       ck.out('Long OS name:  '+prop.get('name_long',''))
-       ck.out('OS bits:       '+prop.get('bits',''))
+       ck.out('OS name:           '+prop.get('name',''))
+       ck.out('Short OS name:     '+prop.get('name_short',''))
+       ck.out('Long OS name:      '+prop.get('name_long',''))
+       ck.out('OS bits:           '+prop.get('bits',''))
+       if pi_uoa!='' and pi_uoa!='':
+          ck.out('')
+          ck.out('Platform init UOA: '+pi_uoa)
 
     fuoa=''
     fuid=''
@@ -452,6 +603,20 @@ def detect(i):
        rr['features']['os_uoa']=fuoa
        rr['features']['os_uid']=fuid
 
+    if len(add_path)>0:
+       rr['add_path']=add_path
+
+       # Add to PATH and prepare as string
+       x=''
+       for q in add_path:
+           if x!='':x+=evs
+           if q.find(' ')>=0 and not q.startswith(eifs):
+              q=eifs+q+eifs
+           x+=q
+       sb=nout+eset+' PATH='+x+evs+svarb+'PATH'+svare+'\n'
+
+       rr['add_path_string']=sb
+
     return rr
 
 ##############################################################################
@@ -472,7 +637,6 @@ def show(i):
             }
 
     """
-
 
     h='<h2>Operating Systems of platforms participating in crowd-tuning</h2>\n'
 

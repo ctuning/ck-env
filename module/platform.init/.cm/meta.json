@@ -1,8 +1,5 @@
 {
   "actions": {
-    "set": {
-      "desc": "select and set platform.init scripts"
-    }
   }, 
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
   "desc": "scripts and tools to initialize a given platform", 

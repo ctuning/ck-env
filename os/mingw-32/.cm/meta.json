@@ -6,6 +6,7 @@
   "bits_all": [
     "32"
   ], 
+  "ck_name": "win", 
   "change_dir": "cd /D", 
   "cmd_for_detached_console": "start $#cmd#$", 
   "dir_sep": "\\", 
