@@ -1,0 +1,13 @@
+http://www.hardkernel.com/main/products/prdt_info.php?g_code=G140448267127
+
+Power sensors:
+echo "  3-0040 -> CPU A15 cores"
+echo "  3-0041 -> memory"
+echo "  3-0044 -> GPU"
+echo "  3-0045 -> CPU A7 cores"
+
+XOPENME
+file_0 -> A15
+file_1 -> memory
+file_2 -> GPU
+file_3 -> A7

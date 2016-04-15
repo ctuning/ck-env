@@ -363,8 +363,6 @@ def setup(i):
     hosx=r['host_os_uoa']
     hosd=r['host_os_dict']
 
-    ck_os_name=hosd['ck_name']
-
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
@@ -796,7 +794,7 @@ def setup(i):
        if pi.find(' ')>=0 and eifs!='':
           xs=eifs
 
-       # Check if customization script **************************************************************************
+       # Check if customization script
        customize_script=d.get('customize_script','')
        sadd=''
        if customize_script!='':
@@ -844,20 +842,7 @@ def setup(i):
        #########################################################
        # Check if file exists ...
        if cus.get('check_that_exists','')=='yes':
-          ctek=cus.get('check_that_exists_key','')
-          if ctek!='':
-             sname=cus.get('soft_file',{}).get(ck_os_name,'')
-             if sname!='':
-                px=cus.get(ctek,'')
-                pxx=os.path.join(px, sname)
-                if not os.path.isfile(pxx):
-                   return {'return':5, 'error':'file '+sname+' was not found in path '+px}
-
-                cus['check_file']=pxx
-
-       #########################################################
-       # Check version ...
-
+          exit(1)
 
        #########################################################
        # Finish batch
@@ -941,7 +926,7 @@ def setup(i):
           sb+='\n'
           sb+='exit /b 0\n'
 
-       # Check if save to bat file *****************************************************************************************
+       # Check if save to bat file
        bf=i.get('bat_file', '')
        pnew=''
 

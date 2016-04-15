@@ -1,0 +1,30 @@
+#! /bin/bash
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK Copyright.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+echo "*** Current GPU frequency:"
+cat /sys/class/misc/mali*/device/clock
+
+echo ""
+echo "*** Available GPU frequencies:"
+cat /sys/class/misc/mali*/device/dvfs_table
+
+echo ""
+echo "*** Available GPU frequencies/voltages:"
+cat /sys/class/misc/mali*/device/asv_table
+
+echo ""
+echo "*** Current GPU DVFS state:"
+cat /sys/class/misc/mali*/device/dvfs
+
+echo ""
+echo "*** Available GPU governors:"
+cat /sys/class/misc/mali*/device/dvfs_governor
+

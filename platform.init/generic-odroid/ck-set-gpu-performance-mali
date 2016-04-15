@@ -1,0 +1,14 @@
+#! /bin/bash
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK Copyright.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+export CK_GPU_FREQ_GOVERNER=1
+
+. ck-set-gpu-online-and-frequency 600

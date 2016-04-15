@@ -1,0 +1,32 @@
+#! /bin/bash
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK Copyright.txt for copyright details.
+#
+# Developer: Grigori Fursin (some info suggested by colleagues from Slambench team)
+#
+
+echo "Known sensors (Exynos5):"
+echo ""
+echo "  3-0040 -> CPU A15 cores"
+echo "  3-0041 -> memory"
+echo "  3-0044 -> GPU"
+echo "  3-0045 -> CPU A7 cores"
+
+for dr in /sys/bus/i2c/drivers/INA231/*
+do
+   if [ -f "$dr/sensor_V" ]; then
+      echo ""
+      echo "Processing sensor $dr ..."
+
+      CV=`cat $dr/sensor_V`
+      CI=`cat $dr/sensor_A`
+      CW=`cat $dr/sensor_W`
+
+      echo ""
+      echo "  ${CV} volts; ${CI} ampers; ${CW} watts"
+   fi
+done

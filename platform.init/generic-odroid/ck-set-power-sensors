@@ -1,0 +1,30 @@
+#! /bin/bash
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK Copyright.txt for copyright details.
+#
+# Developer: Grigori Fursin (some info suggested by colleagues from Slambench team)
+#
+
+state="1"
+if [ "$CK_POWER_SENSOR_STATE" != "" ]; then
+  state=$CK_POWER_SENSOR_STATE
+fi
+if [ "$1" != "" ]; then
+  state=$1
+fi
+
+echo ""
+for dr in /sys/bus/i2c/drivers/INA231/*
+do
+   if [ -f "$dr/enable" ]; then
+      echo "Setting sensor $dr to state $state ..."
+      echo $state | sudo tee $dr/enable
+   fi
+done
+
+# sleep a bit to be sure that all sensors are initialized
+sleep 2
