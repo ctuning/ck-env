@@ -127,8 +127,6 @@ def set(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
-    add_path=r.get('add_path',[])
-
     # Check if base is different
     x1=hosd.get('base_uid','')
     x2=hosd.get('base_uoa','')
@@ -810,8 +808,6 @@ def resolve(i):
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
-
-    add_path=r.get('add_path',[])
 
     # Check if base is different
     x1=hosd.get('base_uid','')

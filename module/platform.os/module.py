@@ -76,8 +76,11 @@ def detect(i):
               (devices)              - return devices if device_id==''
               (device_id)            - if device_id=='' and only 1 device, select it
 
-              (add_path)             - list of paths to add before executing tools ...
-              (add_path_string)      - adding paths to PATH environment in a host OS format
+              (host_add_path)          - list of paths to add before executing host tools ...
+              (host_add_path_string)   - adding paths to PATH environment in a host OS format
+
+              (target_add_path)        - list of paths to add before executing target tools ...
+              (target_add_path_string) - adding paths to PATH environment in a target OS format
             }
 
     """
@@ -112,15 +115,10 @@ def detect(i):
     hosx=r['os_uoa']
     hosd=r['os_dict']
 
-    add_path=r.get('add_path',[])
-
-    eset=hosd.get('env_set','')
-    svarb=hosd.get('env_var_start','')
-    svare=hosd.get('env_var_stop','')
-    sdirs=hosd.get('dir_sep','')
-    evs=hosd.get('env_var_separator','')
-    eifs=hosd.get('env_quotes_if_space','')
-    nout=hosd.get('no_output','')
+    hadd_path=r.get('add_path',[])
+    hadd_path_string=''
+    tadd_path=[]
+    tadd_path_string=''
 
     # Check/detect target OS
     r=ck.access({'action':'find_close',
@@ -451,59 +449,60 @@ def detect(i):
        if rx['return']>0: return rx
        px=rx['path']
 
-       if remote=='yes' and first_time:
-          dv=''
-          if tdid!='': dv=' -s '+tdid
-          xsp=tosd.get('dir_sep','')
+       if remote=='yes':
+          if first_time:
+             dv=''
+             if tdid!='': dv=' -s '+tdid
+             xsp=tosd.get('dir_sep','')
 
-          # Create directory if needed
-          z=tosd.get('path_to_scripts','')
-          if z=='':
-             z=tosd.get('remote_dir','')
-          else:
-             y=tosd.get('remote_shell','')+' '+tosd.get('make_dir','')+' '+z
-             y=y.replace('$#device#$',dv)
+             # Create directory if needed
+             z=tosd.get('path_to_scripts','')
+             if z=='':
+                z=tosd.get('remote_dir','')
+             else:
+                y=tosd.get('remote_shell','')+' '+tosd.get('make_dir','')+' '+z
+                y=y.replace('$#device#$',dv)
 
-             if o=='con':
-                ck.out('')
-                ck.out('* Creating directory with scripts on remote device:')
-                ck.out('  '+y)
+                if o=='con':
+                   ck.out('')
+                   ck.out('* Creating directory with scripts on remote device:')
+                   ck.out('  '+y)
 
-             rx=os.system(y)
-             # Ignore output (can be already created)
+                rx=os.system(y)
+                # Ignore output (can be already created)
 
-          # Copying files and setting chmod 755
-          x=os.listdir(px)
-          for q in x:
-              xx=os.path.join(px,q)
-              if os.path.isfile(xx):
-                 xr=z+xsp+q
+             # Copying files and setting chmod 755
+             x=os.listdir(px)
+             for q in x:
+                 xx=os.path.join(px,q)
+                 if os.path.isfile(xx):
+                    xr=z+xsp+q
 
-                 # Push file to remote device
-                 y=tosd.get('remote_push','')
-                 y=y.replace('$#device#$',dv)
-                 y=y.replace('$#file1#$', xx)
-                 y=y.replace('$#file2#$', xr)
+                    # Push file to remote device
+                    y=tosd.get('remote_push','')
+                    y=y.replace('$#device#$',dv)
+                    y=y.replace('$#file1#$', xx)
+                    y=y.replace('$#file2#$', xr)
 
-                 ck.out('')
-                 ck.out('* Copying file to remote device:')
-                 ck.out('  '+y)
+                    ck.out('')
+                    ck.out('* Copying file to remote device:')
+                    ck.out('  '+y)
 
-                 rx=os.system(y)
-                 # Ignore output (can be already exist)
+                    rx=os.system(y)
+                    # Ignore output (can be already exist)
 
-                 # Set executable
-                 y=tosd.get('remote_shell','')+' '+tosd.get('set_executable','')+' '+xr
-                 y=y.replace('$#device#$',dv)
+                    # Set executable
+                    y=tosd.get('remote_shell','')+' '+tosd.get('set_executable','')+' '+xr
+                    y=y.replace('$#device#$',dv)
 
-                 ck.out('')
-                 ck.out('* Setting executable for this file:')
-                 ck.out('  '+y)
+                    ck.out('')
+                    ck.out('* Setting executable for this file:')
+                    ck.out('  '+y)
 
-                 rx=os.system(y)
+                    rx=os.system(y)
 
        else:
-          add_path.append(px)
+          tadd_path.append(px)
 
     if o=='con' and i.get('skip_print_os','')!='yes':
        ck.out('')
@@ -603,19 +602,49 @@ def detect(i):
        rr['features']['os_uoa']=fuoa
        rr['features']['os_uid']=fuid
 
-    if len(add_path)>0:
-       rr['add_path']=add_path
+    if len(hadd_path)>0:
+       rr['host_add_path']=hadd_path
+
+       eset=hosd.get('env_set','')
+       svarb=hosd.get('env_var_start','')
+       svare=hosd.get('env_var_stop','')
+       sdirs=hosd.get('dir_sep','')
+       evs=hosd.get('env_var_separator','')
+       eifs=hosd.get('env_quotes_if_space','')
+       nout=hosd.get('no_output','')
 
        # Add to PATH and prepare as string
        x=''
-       for q in add_path:
+       for q in hadd_path:
            if x!='':x+=evs
            if q.find(' ')>=0 and not q.startswith(eifs):
               q=eifs+q+eifs
            x+=q
        sb=nout+eset+' PATH='+x+evs+svarb+'PATH'+svare+'\n'
 
-       rr['add_path_string']=sb
+       rr['host_add_path_string']=sb
+
+    if len(tadd_path)>0:
+       rr['target_add_path']=tadd_path
+
+       eset=tosd.get('env_set','')
+       svarb=tosd.get('env_var_start','')
+       svare=tosd.get('env_var_stop','')
+       sdirs=tosd.get('dir_sep','')
+       evs=tosd.get('env_var_separator','')
+       eifs=tosd.get('env_quotes_if_space','')
+       nout=tosd.get('no_output','')
+
+       # Add to PATH and prepare as string
+       x=''
+       for q in tadd_path:
+           if x!='':x+=evs
+           if q.find(' ')>=0 and not q.startswith(eifs):
+              q=eifs+q+eifs
+           x+=q
+       sb=nout+eset+' PATH='+x+evs+svarb+'PATH'+svare+'\n'
+
+       rr['target_add_path_string']=sb
 
     return rr
 

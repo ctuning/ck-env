@@ -222,7 +222,7 @@ def install(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
-    add_path_string=r.get('add_path_string','')
+    host_add_path_string=r.get('host_add_path_string','')
 
     # Check if base is different
     x1=hosd.get('base_uid','')
@@ -481,8 +481,8 @@ def install(i):
        # start bat
        sb=hosd.get('batch_prefix','')+'\n'
 
-       if add_path_string!='':
-          sb+=add_path_string+'\n\n'
+       if host_add_path_string!='':
+          sb+=host_add_path_string+'\n\n'
 
        # Check if params
        param=i.get('param',None)
