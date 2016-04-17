@@ -23,6 +23,7 @@
     "cfg": "b34231a3467566f8", 
     "platform": "707ccdfe444cafac", 
     "platform.cpu": "aa6b542a420b8db9", 
+    "platform.init": "38a2f5438d8555b6", 
     "platform.os": "41e31cc4496b8a8e"
   }
 }
