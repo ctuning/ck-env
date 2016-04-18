@@ -1,3 +1,5 @@
+* 2016.04.18 - adding compiler flag via environment -std=c++0x (CK_COMPILER_FLAG_CPP0X)
+
 * 2016.04.15 - moved platform.init entries from ck-autotuning here
              - added windows tools to windows-32 OS entry
              - added DragonBoard platform.init  

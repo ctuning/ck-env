@@ -22,6 +22,7 @@
     "CK_CC": "$#tool_prefix#$clang", 
     "CK_COMPILER_FLAGS_OBLIGATORY": "$#flags_for_arm_target#$", 
     "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
+    "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
     "CK_COMPILER_FLAG_GPROF": "-pg", 
     "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
     "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 

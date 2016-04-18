@@ -21,6 +21,7 @@
     "CK_CC": "icc", 
     "CK_COMPILER_FLAGS_OBLIGATORY": "", 
     "CK_COMPILER_FLAG_CPP11": "-Qstd=c++11", 
+    "CK_COMPILER_FLAG_CPP0X": "-Qstd=c++0x", 
     "CK_COMPILER_FLAG_GPROF": "-pg", 
     "CK_COMPILER_FLAG_OPENMP": "-openmp", 
     "CK_COMPILER_FLAG_PTHREAD_LIB": "-pthread", 
