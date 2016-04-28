@@ -262,7 +262,13 @@ def setup(i):
        retarget=cus.get('retarget','')
        lfr=cus.get('linking_for_retargeting','')
 
-       if retarget=='yes' and lfr!='':
+       if remote=='yes':
+          ### Android target #########################################################
+
+          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+          y='-target %CK_ANDROID_TOOLCHAIN% -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_SYS_ROOT%'
+          env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+y
+       elif retarget=='yes' and lfr!='':
           cus['linking_for_retargeting']=lfr
           env['CK_LD_FLAGS_EXTRA']=lfr
 
@@ -440,6 +446,6 @@ def setup(i):
 
        x=cus.get('add_extra_path','')
        if x!='':
-          s+='\nset PATH='+pi+x+';%PATH%\n\n'
+          s+='\nexport PATH='+pi+x+':%PATH%\n\n'
 
     return {'return':0, 'bat':s}
