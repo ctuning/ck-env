@@ -453,49 +453,52 @@ def install(i):
           if o=='con':
              ck.out('')
 
-             pix=''
-             sp=d.get('suggested_path','')
+          pix=''
+          sp=d.get('suggested_path','')
 
-             # Moved Tools to $HOME by default if CK_TOOLS is not defined
-             x=os.environ.get(env_install_path,'')
-             if x=='':
-                # Get home user directory
-                from os.path import expanduser
-                home = expanduser("~")
-                x=os.path.join(home, install_path)
-                if not os.path.isdir(x):
-                   os.makedirs(x)
+          # Moved Tools to $HOME by default if CK_TOOLS is not defined
+          x=os.environ.get(env_install_path,'')
+          if x=='':
+             # Get home user directory
+             from os.path import expanduser
+             home = expanduser("~")
+             x=os.path.join(home, install_path)
+             if not os.path.isdir(x):
+                os.makedirs(x)
 
-             if x!='' and sp!='':
-                nm=sp+'-'+cus.get('version','')
+          if x!='' and sp!='':
+             nm=sp+'-'+cus.get('version','')
 
-                bdn=udeps.get('compiler',{}).get('build_dir_name','')
-                vr=udeps.get('compiler',{}).get('ver','')
-                if bdn=='':
-                   bdn=udeps.get('support_compiler',{}).get('build_dir_name','')
-                   vr=udeps.get('support_compiler',{}).get('ver','')
+             bdn=udeps.get('compiler',{}).get('build_dir_name','')
+             vr=udeps.get('compiler',{}).get('ver','')
+             if bdn=='':
+                bdn=udeps.get('support_compiler',{}).get('build_dir_name','')
+                vr=udeps.get('support_compiler',{}).get('ver','')
 
-                if bdn!='':
-                   nm+='-'+bdn
-                   if vr!='': nm+='-'+vr
+             if bdn!='':
+                nm+='-'+bdn
+                if vr!='': nm+='-'+vr
 
-                nm+='-'+tosx
+             nm+='-'+tosx
 
-                pix=os.path.join(x, nm)
-                if not tosx.endswith(tbits): pix+='-'+tbits
+             pix=os.path.join(x, nm)
+             if not tosx.endswith(tbits): pix+='-'+tbits
 
-                if i.get('ask','')=='yes':
-                   ck.out('*** Suggested installation path: '+pix)
-                   r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
-                   pi=r['string'].strip()
-                   if pi=='': pi=pix
-                else:
-                   pi=pix
-                   if d.get('no_install_path','')!='yes':
-                      ck.out('*** Installation path used: '+pix)
+             if o=='con' and i.get('ask','')=='yes':
+                ck.out('*** Suggested installation path: '+pix)
+                r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
+                pi=r['string'].strip()
+                if pi=='': pi=pix
+             else:
+                pi=pix
+                if d.get('no_install_path','')!='yes':
+                   ck.out('*** Installation path used: '+pix)
+             
+             if o=='con':
                 ck.out('')
 
-             else:
+          else:
+             if o=='con':
                 r=ck.inp({'text':'Enter installation path '+pie+': '})
                 pi=r['string'].strip()
 
