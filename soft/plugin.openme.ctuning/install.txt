@@ -1,0 +1,6 @@
+This is a demo OpenME plugin to open up "black-box" compilers,
+tools and programs, and enable autotuning and run-time adaptation.
+
+You can find related package in 
+$ ck pull repo:ck-autotuning
+$ ck list package:*plugin*

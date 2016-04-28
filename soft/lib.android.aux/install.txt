@@ -1,0 +1,7 @@
+Auxilary libraries and tools for Android (perf, strace, etc).
+Rather outdated. 
+
+Package can be found in 
+$ ck pull repo:reproduce-ck-paper
+$ ck list package
+

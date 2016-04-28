@@ -1,0 +1,52 @@
+{
+  "customize": {
+    "ck_version":10,
+    "input_path_text":"full path to javac",
+    "input_path_remove":4,
+    "limit_recursion_dir_search":3,
+    "soft_file":{"win":"javac.exe", "linux":"javac"},
+    "soft_version_cmd":{"win":"-version > $#filename#$ 2>&1", "linux":"-version > $#filename#$ 2>&1"},
+    "soft_path_example":{"win":"C:\\Program Files\\Java\\jdk1.8.0_77\\bin\\javac.exe", "linux":""},
+    "check_that_exists":"yes",
+    "check_that_exists_key":"path_bin",
+    "build_dir_name": "java", 
+    "env_prefix": "CK_ENV_COMPILER_JAVA", 
+    "languages": [
+      "JAVA"
+    ], 
+    "skip_add_to_ld_path": "yes"
+  }, 
+
+
+  "deps":{
+    "lib_opencl": {
+      "local": "yes", 
+      "sort": 20, 
+      "tags": "lib,opencl"
+    }
+  },
+
+
+
+  "env": {
+    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_FLAG_PREFIX_INCLUDE": "-classpath ", 
+    "CK_JAVAC": "javac", 
+    "CK_JAVA_RT": "java -classpath .", 
+    "CK_OBJ_EXT": ".class"
+  }, 
+  "soft_name": "Compiler - Java", 
+  "tags": [
+    "compiler", 
+    "java", 
+    "lang-java"
+  ], 
+  "auto_detect":"yes",
+  "tool": "javac", 
+  "version": {
+    "cmd": "-version > $#filename#$ 2>&1", 
+    "split": ".", 
+    "string_after": "", 
+    "string_before": "javac "
+  }
+}

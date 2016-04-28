@@ -1,0 +1,4 @@
+This is a Pencil benchmark from the EU CARP project.
+You can get it via CK:
+
+* ck pull repo:reproduce-carp-project

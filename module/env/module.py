@@ -69,16 +69,17 @@ def set(i):
             }
 
     Output: {
-              return       - return code =  0, if successful
-                                         = 32, if environment was deleted (env_uoa - env which was not found)
-                                         >  0, if error
-              (error)      - error text if return > 0
+              return           - return code =  0, if successful
+                                             = 32, if environment was deleted (env_uoa - env which was not found)
+                                             >  0, if error
+              (error)          - error text if return > 0
 
-              env_uoa      - found environment UOA
-              env          - updated environment
-              bat          - string for bat file
-              lst          - all found entries
-              dict         - meta of the selected env entry
+              env_uoa          - found environment UOA
+              env              - updated environment
+              bat              - string for bat file
+              lst              - all found entries
+              dict             - meta of the selected env entry
+              detected_version - detected version of a software
             }
 
     """
@@ -127,6 +128,8 @@ def set(i):
     hosx=r['host_os_uoa']
     hosd=r['host_os_dict']
 
+    ck_os_name=hosd['ck_name']
+
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
@@ -146,6 +149,8 @@ def set(i):
     remote=tosd.get('remote','')
 
     tbits=tosd.get('bits','')
+
+    hplat=hosd.get('ck_name','')
 
     eset=hosd.get('env_set','')
     svarb=hosd.get('env_var_start','')
@@ -200,13 +205,17 @@ def set(i):
 
     auoas=[]
 
+    if lx==0 and duoa!='':
+       return {'return':33, 'error':'either missing dependencies or mismatch between registered software environment and current setup (target_os)'}
+
     # If no entries, try to detect default ones and repeat
+    history_deps=[]
     showed_warning=False
     if lx==0:
        if o=='con' and tags!='':
           ck.out('')
-          ck.out('==========================================================================================')
-          ck.out('WARNING: '+war)
+          ck.out(' ********')
+          ck.out(' WARNING: '+war)
           ck.out('')
 
           showed_warning=True
@@ -214,7 +223,7 @@ def set(i):
        # First, try to detect already installed software, but not registered (default)
        if sd!='yes':
           if o=='con':
-             ck.out('  Checking if it is possible to automatically detect already installed software ...')
+             ck.out('  Trying to automatically detect required software ...')
 
           ii={'action':'search',
               'module_uoa':cfg['module_deps']['soft'],
@@ -236,48 +245,49 @@ def set(i):
               aname=met.get('soft_name','')
 
               auoas.append(q['data_uoa'])
-              ds=met.get('check_script','')
-              if ds!='':
-                 ssi+=1
+              ds=met.get('auto_detect','')
+              if ds=='yes':
+                 if auid not in history_deps:
+                    # Check target
+                    rx=ck.access({'action':'check_target',
+                                  'module_uoa':cfg['module_deps']['soft'],
+                                  'dict':met.get('customize',{}),
+                                  'host_os_uoa':hosx,
+                                  'host_os_dict':hosd,
+                                  'target_os_uoa':tosx,
+                                  'target_os_dict':tosd})
+                    if rx['return']>0:
+                       continue
 
-                 if o=='con':
-                    ck.out('')
-                    ck.out('  '+str(ssi)+') Checking if "'+aname+'" ('+auoa+' / '+auid+') is installed ...')
-
-                 ii={'action':'check',
-                     'module_uoa':cfg['module_deps']['soft'],
-                     'data_uoa':auid}
-                 if len(setup)>0:
-                    ii.update(setup)
-                 ry=ck.access(ii)
-                 if ry['return']>0 and ry['return']!=16: return ry
-
-                 if ry['return']!=16:
-                    pi=ry['path_install']
-                    cus=ry['cus']
-                    cus['version']='default'
+                    history_deps.append(auid)
+                    ssi+=1
 
                     if o=='con':
-                       ck.out('       Found in '+pi+' - registering in CK ...')
+                       ck.out('')
+                       ck.out('  '+str(ssi)+') Checking if "'+aname+'" ('+auoa+' / '+auid+') is installed ...')
 
-                    ii={'action':'setup',
+                    # Detect software
+                    ii={'action':'check',
                         'module_uoa':cfg['module_deps']['soft'],
                         'data_uoa':auid,
-                        'customize':cus,
-                        'install_path':pi,
-                        'quiet':quiet}
+                        'skip_help':'yes',
+                        'host_os':hos,
+                        'target_os':tos,
+                        'target_device_id':tdid,
+#                        'deps':cdeps,
+                        'out':oo}
                     if len(setup)>0:
                        ii.update(setup)
-                    rz=ck.access(ii)
-                    if rz['return']>0: return rz
+                    ry=ck.access(ii)
+                    if ry['return']==0:
+                       found=True
 
-                    xeduoa=rz['env_data_uoa']
-                    xeduid=rz['env_data_uid']
-
-                    if o=='con':
-                       ck.out('       Successfully registered with UID: '+xeduid)
-
-                    found=True
+                       hdeps=ry.get('deps',{})
+                       for hd in hdeps:
+                           xhd=hdeps[hd]
+                           xxhd=xhd.get('dict',{}).get('soft_uoa','')
+                           if xxhd not in history_deps:
+                              history_deps.append(xxhd)
 
           # repeat search if at least one above setup was performed
           if not found:
@@ -318,6 +328,7 @@ def set(i):
                          aa=cdeps[a]
                          auoa=aa.get('uoa','')
 
+                         # Tricky part ...
                          if auoa!=juoa:
                             skip=True
                             break
@@ -328,9 +339,16 @@ def set(i):
           l=nls
           lx=len(l)
 
-       # Choose sub-deps
+       # Choose sub-deps (sort by version)
        if lx>1:
-          ls=sorted(l, key=lambda k: k.get('meta',{}).get('misc',{}).get('version_int',0), reverse=True)
+          ls=sorted(l, key=lambda k: (k.get('info',{}).get('data_name',k['data_uoa']),
+                                      internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 0, 0),
+                                      internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 1, 0),
+                                      internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 2, 0),
+                                      internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 3, 0),
+                                      internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 4, 0)),
+                    reverse=True)
+
           l=ls
 
           if ran=='yes':
@@ -340,7 +358,11 @@ def set(i):
              ilx=0
           else:
              if o=='con':
-                xq='tags="'+tags+'"'
+                xq='required software'
+                if name!='': xq='"'+name+'"'
+
+                xq+=' with tags="'+tags+'"'
+
                 if len(setup)>0:
                    import json
 
@@ -352,7 +374,6 @@ def set(i):
 
                 ck.out('')
                 ck.out('More than one environment found for '+xq+':')
-                ck.out('')
                 zz={}
                 for z in range(0, lx):
                     j=l[z]
@@ -424,7 +445,7 @@ def set(i):
 
           # Next, try to install via package for a given software
           ck.out('')
-          ck.out('  Searching and installing CK software packages with these tags ...')
+          ck.out('  Searching and installing CK software packages with these tags (if exist) ...')
 
 #          if quiet=='yes':
 #             ck.out('  Searching and installing package with these tags automatically ...')
@@ -467,18 +488,40 @@ def set(i):
              ck.out('')
 
              if len(auoas)>0:
-                rx=ck.inp({'text':'       Would you like to open wiki pages about related software (with possible installation info) (Y/n): '})
-                x=rx['string'].strip().lower()
+                if len(auoas)==1:
+                   rx=ck.access({'action':'print_help',
+                                 'module_uoa':cfg['module_deps']['soft'],
+                                 'data_uoa':auoas[0],
+                                 'platform':hplat})
 
-                if x!='n' and x!='no':
-                   ck.out('')
-                   for q in auoas:
-                       rx=ck.access({'action':'wiki',
-                                     'module_uoa':cfg['module_deps']['soft'],
-                                     'data_uoa':q})
-                       if rx['return']>0: return rx
-                   ck.out('')
+                   rx=ck.inp({'text':'       Would you like to manually register software, i.e. if it is in an unusual path (Y/n): '})
+                   x=rx['string'].strip().lower()
+                   if x!='n' and x!='no':
+                      ck.out('')
+                      rx=ck.access({'action':'setup',
+                                    'module_uoa':cfg['module_deps']['soft'],
+                                    'data_uoa':auoas[0],
+                                    'out':'con'})
+                      if rx['return']>0: return rx
+                      ck.out('')
 
+                else:
+                   # Show possible Wiki page
+                   rx=ck.inp({'text':'       Would you like to open wiki pages about related software (with possible installation info) (Y/n): '})
+                   x=rx['string'].strip().lower()
+
+                   if x!='n' and x!='no':
+                      ck.out('')
+                      for q in auoas:
+                          rx=ck.access({'action':'wiki',
+                                        'module_uoa':cfg['module_deps']['soft'],
+                                        'data_uoa':q})
+                          if rx['return']>0: return rx
+                      ck.out('')
+
+
+          if o=='con':
+             ck.out('')
           return {'return':1, 'error':war}
 
     # Load selected environment entry
@@ -492,6 +535,98 @@ def set(i):
        return r
     d=r['dict']
     p=r['path']
+
+    suoa=d.get('soft_uoa','')
+    cs=None
+    if suoa!='':
+       r=ck.access({'action':'load',
+                    'module_uoa':cfg['module_deps']['soft'],
+                    'data_uoa':suoa})
+       if r['return']>0: return r
+
+       # Check if has custom script
+       rx=ck.load_module_from_path({'path':r['path'], 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+       if rx['return']==0: 
+          cs=rx['code']
+
+    # Check that all sub dependencies still exists (if full path)
+    outdated=False
+    to_delete=False
+    err=''
+
+    edeps=d.get('deps',{}) # dependencies of environment (normally resolved, but may change if software changes)
+    for q in edeps:
+        qq=edeps[q]
+        cqq=qq.get('dict',{}).get('customize',{})
+        sfc=cqq.get('skip_file_check','')
+        fp=cqq.get('full_path','')
+
+        if sfc!='yes' and fp!='' and not os.path.isfile(fp):
+           outdated=True
+           err='one of sub-dependencies ('+q+') have changed (file '+fp+' not found)'
+           break
+
+        deuoa=qq.get('uoa','')
+        if deuoa!='':
+           rx=ck.access({'action':'find',
+                         'module_uoa':work['self_module_uid'],
+                         'data_uoa':deuoa})
+           if rx['return']>0:
+              if rx['return']!=16: return rx
+              outdated=True
+              err='one of sub-dependencies ('+q+') have changed (CK environment '+deuoa+' not found)'
+              break
+           
+    # Check if file exists for current dependency
+    verx=''
+    cus=d.get('customize',{})
+    fp=cus.get('full_path','')
+
+    if not outdated and fp!='' and cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
+       err='seems like your environment\'ve changed - software file not found in a specified path ('+fp+')'
+       outdated=True
+
+    if outdated:
+       if o=='con':
+          ck.out('')
+          ck.out('WARNING: '+err)
+
+          ck.out('')
+          rx=ck.inp({'text':'Would you like to remove outdated environment entry from CK (Y/n)? '})
+          x=rx['string'].strip()
+
+          if x=='n' or x=='no':
+             return {'return':1, 'error':err}
+          to_delete=True
+       else:
+          # Check version
+          scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
+          if scmd!='' and 'parse_version' in dir(cs):
+             # Check version (via customized script) ...
+             ii={'action':'get_version',
+                 'module_uoa':cfg['module_deps']['soft'],
+                 'full_path':fp,
+                 'bat':'',
+                 'host_os_dict':hosd,
+                 'target_os_dict':tosd,
+                 'cmd':scmd,
+                 'custom_script_obj':cs}
+             rx=ck.access(ii)
+             if rx['return']==0:
+                verx=rx['version']
+
+       # Deleting outdated environment
+       if to_delete:
+          if o=='con':
+             ck.out('')
+             ck.out('Removing outdated environment entry '+duoa+' ...')
+
+          rx=ck.access({'action':'delete',
+                        'module_uoa':work['self_module_uid'],
+                        'data_uoa':duoa})
+          if rx['return']>0: return rx
+
+          return {'return':1, 'error':'Outdated environment was removed - please, try again!'}
 
     # Prepare environment and bat
     env=i.get('env',{})
@@ -523,7 +658,7 @@ def set(i):
 
        fbf.close()
 
-    return {'return':0, 'env_uoa':duoa, 'env':env, 'bat':sb, 'lst':l, 'dict':d}
+    return {'return':0, 'env_uoa':duoa, 'env':env, 'bat':sb, 'lst':l, 'dict':d, 'detected_version':verx}
 
 ##############################################################################
 # show all installed environment
@@ -632,7 +767,7 @@ def show(i):
         target_os_uoa=setup.get('target_os_uoa','')
         tbits=setup.get('target_os_bits','')
         version=setup.get('version','')
-        version_int=cus.get('version_int',0)
+        sversion=setup.get('version_split',[])
 
         dname=info.get('data_name','')
 
@@ -671,7 +806,7 @@ def show(i):
            vv['target_os_uoa']=tduoa
            vv['tbits']=tbits
            vv['version']=version
-           vv['version_int']=version_int
+           vv['version_split']=sversion
            vv['data_name']=dname
 
            # Check length
@@ -687,11 +822,16 @@ def show(i):
            if lv['target_os_uoa']<10: lv['target_os_uoa']=10
            if lv['version']<8: lv['version']=8
 
-    # Sort by target_os_uoa, name and version_int
+    # Sort by target_os_uoa, name and split version
     vs=sorted(view, key=lambda k: (k['target_os_uoa'],
                                    k['tbits'],
                                    k['data_name'],
-                                   k['version_int']))
+                                   internal_get_val(k.get('version_split',[]), 0, 0),
+                                   internal_get_val(k.get('version_split',[]), 1, 0),
+                                   internal_get_val(k.get('version_split',[]), 2, 0),
+                                   internal_get_val(k.get('version_split',[]), 3, 0),
+                                   internal_get_val(k.get('version_split',[]), 4, 0)),
+              reverse=True)
 
     # Print
     if o=='con':
@@ -766,7 +906,7 @@ def resolve(i):
               (error)      - error text if return > 0
 
               bat          - string for bat file calling all bats ...
-              cut_bat      - string for bat file calling all bats (dos not include deps that are explicitly excluded) ...
+              cut_bat      - string for bat file calling all bats (does not include deps that are explicitly excluded) ...
               deps         - updated deps (with uoa)
               env          - updated env
             }
@@ -777,7 +917,7 @@ def resolve(i):
 
     if o=='con':
        ck.out('')
-       ck.out('Resolving dependencies ...')
+       ck.out('Resolving software dependencies ...')
 
     sb=''
     sb1=''
@@ -840,6 +980,7 @@ def resolve(i):
     sd=i.get('skip_dict','')
 
     res=[]
+    iv=0
     for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
         q=deps[k]
 
@@ -849,6 +990,27 @@ def resolve(i):
         sd=q.get('skip_deafult','')
 
         uoa=q.get('uoa','')
+
+        # Check if restricts dependency to a given host or target OS
+        rx=ck.access({'action':'check_target',
+                      'module_uoa':cfg['module_deps']['soft'],
+                      'dict':q,
+                      'host_os_uoa':hosx,
+                      'host_os_dict':hosd,
+                      'target_os_uoa':tosx,
+                      'target_os_dict':tosd})
+        if rx['return']>0:
+           continue
+
+        # Try to set environment
+        iv+=1
+
+        if o=='con':
+           x='*** Dependency '+str(iv)+' = '+k
+           if name!='': x+=' ('+name+')'
+           x+=':'
+           ck.out('')
+           ck.out(x)
 
         ii={'host_os':hos,
             'target_os':tos,
@@ -872,6 +1034,9 @@ def resolve(i):
         lst=rx['lst']
         dd=rx['dict']
 
+        dver=rx.get('detected_version','')
+        if dver!='': q['detected_ver']=dver
+
         # add choices
         zchoices=[]
         for zw in lst:
@@ -892,6 +1057,12 @@ def resolve(i):
         q['uoa']=uoa
         q['num_entries']=len(lst)
 
+        if o=='con':
+           ck.out('')
+           x='    Resolved. CK environment UID = '+uoa
+           if dver!='': x+=' (detected version '+dver+')'
+           ck.out(x)
+
         bdn=cus.get('build_dir_name','')
         if bdn!='': q['build_dir_name']=bdn # Needed to suggest directory name for building libs
 
@@ -906,6 +1077,9 @@ def resolve(i):
 
         if q.get('skip_from_bat','')!='yes':
            sb1+=bt
+
+    if o=='con':
+       ck.out('')
 
     return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'cut_bat':sb1, 'res_deps':res}
 
@@ -1022,7 +1196,6 @@ def refresh(i):
         target_os_uoa=setup.get('target_os_uoa','')
         tbits=setup.get('target_os_bits','')
         version=setup.get('version','')
-        version_int=cus.get('version_int',0)
 
         dname=info.get('data_name','')
 
@@ -1119,17 +1292,25 @@ def refresh(i):
             'data_uoa':soft_uoa,
             'customize':cus,
             'deps':deps,
+            'tags':sftags,
             'package_uoa':package_uoa,
             'env':penv,
             'env_data_uoa':duid}
         if i.get('reset_env','')!='': ii['reset_env']=i['reset_env']
         rx=ck.access(ii)
         if rx['return']>0: 
-           if rx['return']!=32:
+           rrx=rx['return']
+           if rrx!=32 and rrx!=33:
               return rx
            if o=='con':
+              if rrx==32:
+                 ck.out('')
+                 ck.out('One of the dependencies is missing for this CK environment!')
+              elif rrx==33:
+                 ck.out('')
+                 ck.out('This environment has either missing dependencies or strange mismatch between registered software environment and current setup!')
+
               ck.out('')
-              ck.out('One of the dependencies is missing for this setup!')
               ry=ck.inp({'text':'Would you like to delete it (Y/n)? '})
               x=ry['string'].strip().lower()
               if x!='n' and x!='no':
@@ -1184,3 +1365,12 @@ def readable_os(i):
        setup1['target_os_uoa']=r['data_uoa']
 
     return {'return':0, 'setup1':setup1}
+
+##############################################################################
+# internal function: get value from list without error if out of bounds
+
+def internal_get_val(lst, index, default_value):
+    v=default_value
+    if index<len(lst):
+       v=lst[index]
+    return v

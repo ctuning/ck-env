@@ -3,17 +3,30 @@
     "check": {
       "desc": "check if software is installed"
     }, 
+    "check_target": {
+      "desc": "check that host and target OS is supported"
+    }, 
     "detect": {
       "desc": "detect version of a given software"
+    }, 
+    "get_version": {
+      "desc": "low-level function to get version (will be substituted)"
+    }, 
+    "print_help": {
+      "desc": "print help for this software entry"
     }, 
     "search_tool": {
       "desc": "search tool in pre-defined paths"
     }, 
     "setup": {
       "desc": "setup CK environment for a given software"
+    }, 
+    "split_version": {
+      "desc": "split version"
     }
   }, 
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
+  "custom_script_name": "customize", 
   "default_bat_name": "env", 
   "desc": "managing software (registering in CK environment)", 
   "developer": "Grigori Fursin", 

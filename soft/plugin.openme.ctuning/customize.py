@@ -20,7 +20,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -70,14 +70,31 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    host_d=i.get('host_os_dict',{})
+    sdirs=host_d.get('dir_sep','')
+
+    fp=cus.get('full_path','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
+
+       cus['path_lib']=pi+sdirs+'lib'
+
+    ep=cus.get('env_prefix','')
+    if pi!='' and ep!='':
+       env[ep]=pi
+
     ################################################################
     if win=='yes':
-       if remote=='yes': 
+       if remote=='yes' or mingw=='yes': 
           dext='.so'
        else:
           dext='.dll'
     else:
        dext='.so'
+
+       if cus.get('path_lib','')!='':
+          s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
 
     cus['dynamic_plugin']='plugin-openme-ctuning-1.5'+dext
 

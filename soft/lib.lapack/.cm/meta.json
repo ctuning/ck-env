@@ -3,7 +3,7 @@
     "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_LAPACK"
   }, 
-  "soft_name": "Library - LAPACK", 
+  "soft_name": "LAPACK library", 
   "tags": [
     "lib", 
     "lapack"

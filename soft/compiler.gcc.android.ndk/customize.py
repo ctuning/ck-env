@@ -8,6 +8,107 @@
 #
 
 ##############################################################################
+# customize directories to automatically find and register software
+
+import os
+
+def dirs(i):
+    return {'return':0}
+
+##############################################################################
+# prepare env
+
+def version_cmd(i):
+
+    fp=i['full_path']
+    cmdx=i['cmd']
+
+    cmd=fp+' '+cmdx
+
+    return {'return':0, 'cmd':cmd}
+
+##############################################################################
+# limit directories 
+
+def limit(i):
+
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+
+    phosd=hosd.get('ck_name','')
+    hbits=hosd.get('bits','')
+    tbits=tosd.get('bits','')
+
+    prebuilt=''
+    if phosd=='win':
+       if hbits=='64':
+          prebuilt='windows-x86_64'
+       else:
+          prebuilt='windows-x86'
+    else:
+       if hbits=='64':
+          prebuilt='linux-x86_64'
+       else:
+          prebuilt='linux-x86'
+
+    acp=tosd.get('android_compiler_prefix','')
+    if acp=='':
+       return {'return':1, 'error':'android_compiler_prefix is not specified in target OS meta'}
+
+    fn=acp+'-gcc'
+    if phosd=='win':
+       fn+='.exe'
+
+    atc=tosd.get('android_toolchain','')
+    if atc=='':
+       return {'return':1, 'error':'android_toolchain is not specified in target OS meta'}
+
+    dr=i.get('list',[])
+    drx=[]
+
+    for q in dr:
+        print(q)
+        p0=os.path.dirname(q)
+        p1=os.path.join(p0,'toolchains')
+        if os.path.isdir(p1):
+           x=[]
+           try:
+              x=os.listdir(p1)
+           except:
+              pass
+
+           for f in x:
+               if f.startswith(atc+'-') and f.find('clang')<0:
+                  p2=os.path.join(p1,f,'prebuilt',prebuilt,'bin',fn)
+                  if os.path.isfile(p2):
+                     drx.append(p2)
+
+    return {'return':0, 'list':drx}
+
+##############################################################################
+# parse software version
+
+def parse_version(i):
+
+    lst=i['output']
+
+    ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q!='':
+           j=q.lower().find(') ')
+           if j>0:
+              q=q[j+2:]
+              j=q.find(' ')
+              if j>0:
+                 q=q[:j]
+              ver=q
+              break
+
+    return {'return':0, 'version':ver}
+
+##############################################################################
 # setup environment setup
 
 def setup(i):
@@ -20,7 +121,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -61,11 +162,15 @@ def setup(i):
     tags=i.get('tags',[])
     cus=i.get('customize',{})
 
-    soft_name=i.get('soft_name','')
+    hosd=i['host_os_dict']
+    tosd=i['target_os_dict']
 
-    host_d=i.get('host_os_dict',{})
+    hplat=hosd.get('ck_name','')
+    hbits=hosd.get('bits','')
+    tbits=tosd.get('bits','')
+
     target_d=i.get('target_os_dict',{})
-    winh=host_d.get('windows_base','')
+    winh=hosd.get('windows_base','')
     win=target_d.get('windows_base','')
     remote=target_d.get('remote','')
     mingw=target_d.get('mingw','')
@@ -73,6 +178,130 @@ def setup(i):
 
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
+
+    fp=cus.get('full_path','')
+
+    ############################################################
+    platform=target_d.get('android_ndk_platform','')
+    if platform=='':
+       return {'return':1, 'error':'platform is not defined in target OS'}
+
+    ############################################################
+    arch=target_d.get('android_ndk_arch','')
+    if arch=='':
+       return {'return':1, 'error':'platform architecture is not defined in target OS'}
+
+    ############################################################
+    abi=target_d.get('abi','')
+    if arch=='':
+       return {'return':1, 'error':'abi is not defined in target OS'}
+
+    ############################################################
+    atc=tosd.get('android_toolchain','')
+    if atc=='':
+       return {'return':1, 'error':'android_toolchain is not specified in target OS meta'}
+
+    acp=tosd.get('android_compiler_prefix','')
+    if acp=='':
+       return {'return':1, 'error':'android_compiler_prefix is not specified in target OS meta'}
+
+    env['CK_ANDROID_COMPILER_PREFIX']=acp
+    env['CK_ANDROID_TOOLCHAIN']=atc
+    env['CK_ANDROID_ABI']=abi
+    env['CK_ANDROID_NDK_ARCH']=arch
+    env['CK_ANDROID_NDK_PLATFORM']=platform
+
+    # Check path
+    ep=cus.get('env_prefix','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       p2=os.path.dirname(p1)
+       p3=os.path.dirname(p2)
+       p4=os.path.dirname(p3)
+       p5=os.path.dirname(p4)
+       pi=os.path.dirname(p5)
+
+       if ep!='':
+          env[ep]=p2
+          env[ep+'_BIN']=p1
+
+       prebuilt=''
+       if hplat=='win':
+          if hbits=='64':
+             prebuilt='windows-x86_64'
+          else:
+             prebuilt='windows-x86'
+       else:
+          if hbits=='64':
+             prebuilt='linux-x86_64'
+          else:
+             prebuilt='linux-x86'
+
+       cus['tool_prefix_configured']='yes'
+       cus['tool_prefix']=acp+'-'
+       cus['platform_path_configured']='yes'
+       cus['platform_path']=os.path.join(pi,'platforms')
+       cus['add_extra_path_configured']='yes'
+       cus['add_extra_path']=os.path.join(pi,'prebuilt',prebuilt,'bin')
+
+       cus['ef_configured']='yes'
+       x=''
+       if arch=='arm64': 
+          x='-fPIE -pie'
+       cus['ef']=x
+
+       j=p4.find(atc)
+       if j>0:
+          ver=p4[j+len(atc)+1:]
+
+          cus['libstdcpppath_include_configured']='yes'
+          cus['libstdcpppath_include']=os.path.join(pi,'sources','cxx-stl','gnu-libstdc++',ver,'include')
+
+          cus['libstdcpppath_configured']='yes'
+          cus['libstdcpppath']=os.path.join(pi,'sources','cxx-stl','gnu-libstdc++',ver,'libs',abi)
+
+    env.update({
+      "CK_AR": "$#tool_prefix#$ar", 
+      "CK_ASM_EXT": ".s", 
+      "CK_CC": "$#tool_prefix#$gcc", 
+      "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+      "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
+      "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+      "CK_COMPILER_FLAG_GPROF": "-pg", 
+      "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
+      "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
+      "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+      "CK_CXX": "$#tool_prefix#$g++", 
+      "CK_DLL_EXT": ".so", 
+      "CK_EXE_EXT": ".out", 
+      "CK_EXTRA_LIB_DL": "-ldl", 
+      "CK_EXTRA_LIB_M": "-lm", 
+      "CK_FLAGS_CREATE_ASM": "-S", 
+      "CK_FLAGS_CREATE_OBJ": "-c", 
+      "CK_FLAGS_DLL": "-shared -fPIC", 
+      "CK_FLAGS_DLL_EXTRA": "", 
+      "CK_FLAGS_OUTPUT": "-o ", 
+      "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+      "CK_FLAGS_STATIC_LIB": "-fPIC", 
+      "CK_FLAG_PREFIX_INCLUDE": "-I", 
+      "CK_FLAG_PREFIX_LIB_DIR": "-L", 
+      "CK_FLAG_PREFIX_VAR": "-D", 
+      "CK_GPROF_OUT_FILE": "gmon.out", 
+      "CK_LB": "$#tool_prefix#$ar rcs", 
+      "CK_LB_OUTPUT": "", 
+      "CK_LD": "$#tool_prefix#$ld", 
+      "CK_LD_FLAGS_EXTRA": "", 
+      "CK_LIB_EXT": ".a", 
+      "CK_LINKER_FLAG_OPENMP": "-lgomp", 
+      "CK_MAKE": "make", 
+      "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
+      "CK_OBJ_EXT": ".o", 
+      "CK_OPT_SIZE": "-Os", 
+      "CK_OPT_SPEED": "-O3", 
+      "CK_OPT_SPEED_SAFE": "-O2", 
+      "CK_PLUGIN_FLAG": "-fplugin=", 
+      "CK_PROFILER": "gprof"
+    })
 
     ############################################################
     # Ask a few more questions
@@ -135,16 +364,6 @@ def setup(i):
 
     cus['platform_path']=platform_path
     cus['platform_path_configured']='yes'
-
-    ############################################################
-    platform=target_d.get('android_ndk_platform','')
-    if platform=='':
-       return {'return':1, 'error':'platform is not defined in target OS'}
-
-    ############################################################
-    arch=target_d.get('android_ndk_arch','')
-    if arch=='':
-       return {'return':1, 'error':'platform architecture is not defined in target OS'}
 
     ############################################################
     libstdcpppathi_configured=cus.get('libstdcpppath_include_configured','')
@@ -212,6 +431,9 @@ def setup(i):
     if ef not in x:
        x+=' '+ef
     env['CK_COMPILER_FLAGS_OBLIGATORY']=x
+
+    if pi!='':
+       env['CK_ANDROID_NDK_ROOT_DIR']=pi
 
 #    x=env.get('CK_LD_FLAGS_EXTRA','')
 #    if sysroot not in x:

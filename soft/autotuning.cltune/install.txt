@@ -1,0 +1,3 @@
+CLTune is an OpenCL auto-tuning framework:
+
+* https://github.com/CNugteren/CLTune

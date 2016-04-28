@@ -1,0 +1,70 @@
+{
+  "customize": {
+    "build_dir_name": "llvm", 
+    "can_strip_dynamic_lib": "yes", 
+    "env_prefix": "CK_ENV_COMPILER_LLVM", 
+    "languages": [
+      "C", 
+      "CPP"
+    ], 
+    "skip_add_to_ld_path": "no"
+  }, 
+  "customize_script": "customize", 
+  "env": {
+    "CK_AR": "$#tool_prefix#$ar", 
+    "CK_ASM_EXT": ".s", 
+    "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
+    "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+    "CK_COMPILER_FLAG_GPROF": "-pg", 
+    "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
+    "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
+    "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+    "CK_COMPILER_FLAG_MFLOAT_ABI_HARD": "-mfloat-abi=hard", 
+    "CK_CXX": "$#tool_prefix#$clang++$#tool_postfix#$", 
+    "CK_DLL_EXT": ".so", 
+    "CK_EXE_EXT": ".out", 
+    "CK_EXTRA_LIB_DL": "-ldl", 
+    "CK_EXTRA_LIB_M": "-lm", 
+    "CK_FLAGS_CREATE_ASM": "-S", 
+    "CK_FLAGS_CREATE_OBJ": "-c", 
+    "CK_FLAGS_DLL": "-shared -fPIC", 
+    "CK_FLAGS_DLL_EXTRA": "", 
+    "CK_FLAGS_OUTPUT": "-o ", 
+    "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+    "CK_FLAGS_STATIC_LIB": "-fPIC", 
+    "CK_FLAG_PREFIX_INCLUDE": "-I", 
+    "CK_FLAG_PREFIX_LIB_DIR": "-L", 
+    "CK_FLAG_PREFIX_VAR": "-D", 
+    "CK_GPROF_OUT_FILE": "gmon.out", 
+    "CK_LB": "$#tool_prefix#$ar rcs", 
+    "CK_LB_OUTPUT": "-o ", 
+    "CK_LD_FLAGS_EXTRA": "", 
+    "CK_LIB_EXT": ".a", 
+    "CK_LINKER_FLAG_OPENMP": "-lgomp -lrt", 
+    "CK_MAKE": "make", 
+    "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
+    "CK_OBJ_EXT": ".o", 
+    "CK_OPT_SIZE": "-Os", 
+    "CK_OPT_SPEED": "-O3", 
+    "CK_OPT_SPEED_SAFE": "-O2", 
+    "CK_PLUGIN_FLAG": "-fplugin=", 
+    "CK_PROFILER": "gprof"
+  }, 
+  "soft_name": "Compiler - LLVM", 
+  "tags": [
+    "compiler", 
+    "llvm", 
+    "lang-c", 
+    "lang-cpp"
+  ], 
+  "tool": "clang", 
+  "version": {
+    "cmd": "--version > $#filename#$ 2>&1", 
+    "split": ".", 
+    "string_after": "(", 
+    "string_before": "version ",
+    "tool_via_env": "CK_CC"
+  }
+}

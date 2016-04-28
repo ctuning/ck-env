@@ -1,15 +1,11 @@
 {
   "customize": {
-    "add_include_path": "yes",
-    "env_prefix": "CK_ENV_LIB_RTL_POLYBENCH",
-    "skip_add_to_bin": "yes",
-    "skip_add_to_path": "yes"
-  },
-  "customize_script": "customize",
-  "soft_name": "Library - RTL - Polybench",
+    "env_prefix": "CK_ENV_LIB_RTL_POLYBENCH" 
+  }, 
+  "soft_name": "Polybench run-time library (outdated)", 
   "tags": [
-    "lib",
-    "rtl",
+    "lib", 
+    "rtl", 
     "polybench"
   ]
 }

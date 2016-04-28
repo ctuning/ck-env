@@ -1,0 +1,35 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "add_only_with_version": "yes", 
+    "build_dir_name": "mcl", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_MICROSOFT_SDK", 
+    "languages": [
+      "C", 
+      "CPP"
+    ], 
+    "only_for_target_os_tags": [
+      "windows"
+    ], 
+    "limit_recursion_dir_search": {"win":2}, 
+    "skip_file_check": "yes", 
+    "soft_file": {
+      "win": "Microsoft SDKs"
+    }, 
+    "soft_path_example": {
+      "win": "C:\\Program Files (x86)\\Microsoft SDKs"
+    }, 
+    "soft_version_cmd": {
+      "win": "> $#filename#$ 2>&1"
+    }
+  }, 
+  "env": {}, 
+  "soft_name": "Microsoft SDK", 
+  "tags": [
+    "sdk", 
+    "microsoft", 
+    "windows"
+  ]
+}

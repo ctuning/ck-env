@@ -1,0 +1,9 @@
+You can download PLUTO (an automatic parallelizer and locality 
+optimizer for affine loop nests) here:
+
+http://pluto-compiler.sourceforge.net
+
+Possibly outdated CK package is available in reproduce-fgg-2010 CK repo:
+
+$ ck pull repo:reproduce-fgg-2010
+$ ck list package

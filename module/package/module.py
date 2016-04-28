@@ -59,6 +59,9 @@ def install(i):
 
               (param)             - string converted into CK_PARAM and passed to processing script
               (params)            - dict, keys are onverted into <KEY>=<VALUE> and passed to processing script
+
+              (extra_version)     - add extra version, when registering software 
+                                    (for example, -trunk-20160421)
             }
 
     Output: {
@@ -80,131 +83,10 @@ def install(i):
     import time
     start_time = time.time()
 
-    # Check package description
-    duoa=i.get('uoa','')
-    if duoa=='': duoa=i.get('data_uoa','')
-    duid=''
-    dname=''
-    d={}
-
-    if duoa=='' and xtags=='':
-       # Try to detect CID in current path
-       rx=ck.detect_cid_in_current_path({})
-       if rx['return']==0:
-          duoa=rx.get('data_uoa','')
-
-    if duoa!='':
-       rx=ck.access({'action':'load',
-                     'module_uoa':work['self_module_uid'],
-                     'data_uoa':duoa})
-       if rx['return']>0: return rx
-       d=rx['dict']
-       p=rx['path']
-
-       duoa=rx['data_uoa']
-       duid=rx['data_uid']
-    else:
-       # First, search by tags
-       if xtags!='':
-
-          r=ck.access({'action':'search',
-                       'module_uoa':work['self_module_uid'],
-                       'add_meta':'yes',
-                       'tags':xtags})
-          if r['return']>0: return r
-          l=r['lst']
-          if len(l)>0:
-             # Select package 
-             il=0
-             if len(l)>1:
-                ck.out('')
-                ck.out('More than one package found:')
-                ck.out('')
-
-                zz={}
-                iz=0
-                for z1 in sorted(l, key=lambda v: v['data_uoa']):
-                    z=z1['data_uid']
-                    zu=z1['data_uoa']
-
-                    zs=str(iz)
-                    zz[zs]=z
-
-                    ck.out(zs+') '+zu+' ('+z+')')
-
-                    iz+=1
-
-                ck.out('')
-                rx=ck.inp({'text':'Select package number (or Enter to select 0): '})
-                ll=rx['string'].strip()
-                if ll=='': ll='0'
-
-                if ll not in zz:
-                   return {'return':1, 'error':'package number is not recognized'}
-
-                zduid=zz[ll]
-                for il in range(0, len(l)):
-                    if l[il]['data_uid']==zduid: break
-
-                ck.out('')
-
-             duid=l[il].get('data_uid','')
-             duoa=duid
-             duoax=l[il].get('data_uoa','')
-
-             d=l[il]['meta']
-             p=l[il]['path']
-
-             if o=='con':
-                ck.out('Package found: '+duoax+' ('+duid+')')
-                ck.out('')
-
-       if duoa=='' and xtags=='':
-          found=False
-
-          # Attempt to load configuration from the current directory
-          p=os.getcwd()
-          pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
-
-          if os.path.isfile(pc):
-             r=ck.load_json_file({'json_file':pc})
-             if r['return']==0:
-                d=r['dict']
-                found=True
-
-          if not found:
-             return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
-
-       if duoa=='':
-          return {'return':16, 'error':'package with such tags and for this environment was not found!'}
-
-    # Check if found package
-    
-
-
-    # Get main params
-    tags=d.get('tags',[])
-    cus=d.get('customize',{})
-    env=d.get('env',{})
-
-    udeps=d.get('deps',{})
-
-    depsx=i.get('deps',{})
-    if len(depsx)>0: udeps.update(depsx)
-
-    suoa=d.get('soft_uoa','')
-
-    dname=d.get('package_name','')
-
-    ver=cus.get('version','')
-    extra_dir=cus.get('extra_dir','')
-
     # Check host/target OS/CPU
     hos=i.get('host_os','')
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
-
-    if tos=='': tos=d.get('default_target_os_uoa','')
 
     r=ck.access({'action':'detect',
                  'module_uoa':cfg['module_deps']['platform.os'],
@@ -238,9 +120,8 @@ def install(i):
 
     tbits=tosd.get('bits','')
 
-    tags.append('host-os-'+hosx)
-    tags.append('target-os-'+tosx)
-    tags.append(tbits+'bits')
+    ck_os_name=hosd['ck_name']
+    tname2=tosd['ck_name2']
 
     rem=hosd.get('rem','')
     eset=hosd.get('env_set','')
@@ -253,6 +134,184 @@ def install(i):
     eifs=hosd.get('env_quotes_if_space','')
     eifsc=hosd.get('env_quotes_if_space_in_call','')
     wb=tosd.get('windows_base','')
+
+    # Check package description
+    duoa=i.get('uoa','')
+    if duoa=='': duoa=i.get('data_uoa','')
+    duid=''
+    dname=''
+    d={}
+
+    if duoa=='' and xtags=='':
+       # Try to detect CID in current path
+       rx=ck.detect_cid_in_current_path({})
+       if rx['return']==0:
+          duoa=rx.get('data_uoa','')
+
+    if duoa!='':
+       rx=ck.access({'action':'load',
+                     'module_uoa':work['self_module_uid'],
+                     'data_uoa':duoa})
+       if rx['return']>0: return rx
+       d=rx['dict']
+       p=rx['path']
+
+       duoa=rx['data_uoa']
+       duid=rx['data_uid']
+    else:
+       # First, search by tags
+       if xtags!='':
+
+          r=ck.access({'action':'search',
+                       'module_uoa':work['self_module_uid'],
+                       'add_info':'yes',
+                       'add_meta':'yes',
+                       'tags':xtags})
+          if r['return']>0: return r
+          l=r['lst']
+          if len(l)>0:
+             # Check that support host/target OS
+             ll=[]
+
+             for q in l:
+                 # Check if restricts dependency to a given host or target OS
+                 rx=ck.access({'action':'check_target',
+                               'module_uoa':cfg['module_deps']['soft'],
+                               'dict':q.get('meta',{}),
+                               'host_os_uoa':hosx,
+                               'host_os_dict':hosd,
+                               'target_os_uoa':tosx,
+                               'target_os_dict':tosd})
+                 if rx['return']==0:
+                    # Split version
+                    ver=q.get('meta', {}).get('customize',{}).get('version','')
+                    if ver!='':
+                       rx=ck.access({'action':'split_version',
+                                     'module_uoa':cfg['module_deps']['soft'],
+                                     'version':ver})
+                       if rx['return']>0: return rx
+                       sver=rx['version_split']
+
+                       q['meta']['customize']['version_split']=sver
+
+                    ll.append(q)
+
+             # Sort by name and version
+             l=sorted(ll, key=lambda k: (internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 0, 0),
+                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 1, 0),
+                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 2, 0),
+                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 3, 0),
+                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 4, 0),
+                                         k.get('info',{}).get('data_name',''),
+                                         k['data_uoa']),
+                      reverse=True)
+
+             # Select package 
+             if len(l)>0:
+                il=0
+                if len(l)>1:
+                   ck.out('')
+                   ck.out('More than one package found:')
+                   ck.out('')
+
+                   zz={}
+                   iz=0
+                   for z1 in l:
+                       z=z1['data_uid']
+                       zu=z1['data_uoa']
+
+                       dn=z1.get('info',{}).get('data_name','')
+                       if dn=='': dn=zu
+
+                       ver=''
+                       x=z1.get('meta',{}).get('customize',{}).get('version','')
+                       if x!='': ver='  Version '+x+' '
+
+                       zs=str(iz)
+                       zz[zs]=z
+
+                       ck.out(zs+') '+dn+ver+' ('+z+')')
+
+                       iz+=1
+
+                   ck.out('')
+                   rx=ck.inp({'text':'Select package number (or Enter to select 0): '})
+                   ll=rx['string'].strip()
+                   if ll=='': ll='0'
+
+                   if ll not in zz:
+                      return {'return':1, 'error':'package number is not recognized'}
+
+                   zduid=zz[ll]
+                   for il in range(0, len(l)):
+                       if l[il]['data_uid']==zduid: break
+
+                   ck.out('')
+
+                duid=l[il].get('data_uid','')
+                duoa=duid
+                duoax=l[il].get('data_uoa','')
+
+                d=l[il]['meta']
+                p=l[il]['path']
+
+                if o=='con':
+                   ck.out('Package found: '+duoax+' ('+duid+')')
+                   ck.out('')
+
+       if duoa=='' and xtags=='':
+          found=False
+
+          # Attempt to load configuration from the current directory
+          p=os.getcwd()
+          pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
+
+          if os.path.isfile(pc):
+             r=ck.load_json_file({'json_file':pc})
+             if r['return']==0:
+                d=r['dict']
+                found=True
+
+          if not found:
+             return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
+
+       if duoa=='':
+          return {'return':16, 'error':'package with such tags and for this environment was not found!'}
+
+    # Check if restricts dependency to a given host or target OS
+    rx=ck.access({'action':'check_target',
+                  'module_uoa':cfg['module_deps']['soft'],
+                  'dict':d,
+                  'host_os_uoa':hosx,
+                  'host_os_dict':hosd,
+                  'target_os_uoa':tosx,
+                  'target_os_dict':tosd})
+    if rx['return']>0: return rx
+
+    # Get main params
+    tags=d.get('tags',[])
+    cus=d.get('customize',{})
+    env=d.get('env',{})
+
+    ev=i.get('extra_version','')
+    if ev=='':
+       ev=cus.get('extra_version','')
+
+    udeps=d.get('deps',{})
+
+    depsx=i.get('deps',{})
+    if len(depsx)>0: udeps.update(depsx)
+
+    suoa=d.get('soft_uoa','')
+
+    dname=d.get('package_name','')
+
+    ver=cus.get('version','')+ev
+    extra_dir=cus.get('extra_dir','')
+
+    tags.append('host-os-'+hosx)
+    tags.append('target-os-'+tosx)
+    tags.append(tbits+'bits')
 
     enruoa=i.get('env_repo_uoa','')
     enduoa=i.get('env_data_uoa','')
@@ -298,6 +357,7 @@ def install(i):
 
     # Check installation path
     pi=i.get('install_path','')
+    fp=i.get('full_path','')
 
     x=cus.get('input_path_example','')
     if x!='': pie=' (example: '+ye+')'
@@ -310,13 +370,12 @@ def install(i):
     if i.get('skip_setup','')=='yes': xsetup=False
 
     ps=d.get('process_script','')
-
     if pi=='':
        # Check if environment already exists to check installation path
        if enduoa=='':
           if o=='con':
              ck.out('')
-             ck.out('Searching if environment already exists using:')
+             ck.out('Searching if CK environment for this package already exists using:')
              ck.out('  * Tags: '+stags)
              if len(udeps)>0:
                 for q in udeps:
@@ -340,11 +399,11 @@ def install(i):
                 if enduid!=enduoa: x+=' ('+enduid+')'
 
                 ck.out('')
-                ck.out('Environment found: '+x)
+                ck.out('CK environment found for this package: '+x)
           else:
              if o=='con':
                 ck.out('')
-                ck.out('Environment not found ...')
+                ck.out('CK environment not found for this package ...')
 
        # Load env if exists
        if enduoa!='':
@@ -355,22 +414,23 @@ def install(i):
           if r['return']>0: return r
           de=r['dict']
           pi=de.get('customize',{}).get('path_install','')
+          fp=de.get('customize',{}).get('full_path','')
 
-          if extra_dir!='':
-             j=pi.rfind(extra_dir)
-             if j>=0:
-                pi=pi[:j]
+#          if extra_dir!='':
+#             j=pi.rfind(extra_dir)
+#             if j>=0:
+#                pi=pi[:j]
+#
+#             if pi!='':
+#                j=len(pi)
+#                if pi[j-1]==sdirs:
+#                   pi=pi[:-1]
 
-             if pi!='':
-                j=len(pi)
-                if pi[j-1]==sdirs:
-                   pi=pi[:-1]
-
-          if pi!='':
+          if fp!='':
              if o=='con':
                 if xprocess:
                    ck.out('')
-                   ck.out('Package is already installed in path: '+pi)
+                   ck.out('Seems like package is already installed! File from package found in path: '+fp)
 
                    if ps!='':
                       ck.out('')
@@ -389,7 +449,7 @@ def install(i):
              else:
                 return {'return':1, 'error':'package is already installed in path '+pi}
 
-       if pi=='' and cus.get('skip_path','')!='yes':
+       if cus.get('skip_path','')!='yes' and pi=='':
           if o=='con':
              ck.out('')
 
@@ -431,7 +491,8 @@ def install(i):
                    if pi=='': pi=pix
                 else:
                    pi=pix
-                   ck.out('*** Installation path used: '+pix)
+                   if d.get('no_install_path','')!='yes':
+                      ck.out('*** Installation path used: '+pix)
                 ck.out('')
 
              else:
@@ -568,7 +629,8 @@ def install(i):
        if p.find(' ')>=0 and eifsc!='': xs=eifsc
        sb+=scall+' '+xs+px+xs+'\n\n'
 
-       if wb=='yes': sb+='exit /b 0\n'
+       if wb=='yes' and d.get('check_exit_status','')!='yes':
+          sb+='exit /b 0\n'
 
        # Generate tmp file
        rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':sext})
@@ -592,23 +654,31 @@ def install(i):
 
        # Run script
        rx=os.system(fn)
-       if os.path.isfile(fn): os.remove(fn)
+       if os.path.isfile(fn): 
+          os.remove(fn)
 
        if rx>0: 
-          return {'return':1, 'error':'processing archive failed'}
+          return {'return':1, 'error':'package installation failed'}
 
     # Check if need to setup environment
     if xsetup:
        if suoa=='':
           return {'return':1, 'error':'Software environment UOA is not defined in this package (soft_uoa)'}
 
-       if extra_dir!='':
-          pi+=sdirs+extra_dir
+#       if extra_dir!='':
+#          pi+=sdirs+extra_dir
+
+       x=d.get('end_full_path',{}).get(tname2,'')
+       fp=pi
+       if x!='': 
+          x=x.replace('$#sep#$', sdirs)
+          fp=os.path.join(fp,x)
 
        if suoa!='':
           if o=='con':
              ck.out('')
              ck.out('Setting up environment for installed package ...')
+             ck.out('  (full path = '+fp+')')
              ck.out('')
 
           nw='no'
@@ -628,8 +698,15 @@ def install(i):
               'env_data_uoa':enduoa,
               'env':env,
               'deps':udeps,
-              'install_path':pi
+              'extra_version':ev
              }
+
+          if d.get('no_install_path','')!='yes':
+             if fp!='':
+                ii['full_path']=fp
+             elif pi!='':              # mainly for compatibility with previous CK soft manager
+                ii['install_path']=pi
+
           if duid!='': ii['package_uoa']=duid
           if o=='con': ii['out']='con'
           rx=ck.access(ii)
@@ -664,3 +741,12 @@ def setup(i):
 
     i['skip_process']='yes'
     return install(i)
+
+##############################################################################
+# internal function: get value from list without error if out of bounds
+
+def internal_get_val(lst, index, default_value):
+    v=default_value
+    if index<len(lst):
+       v=lst[index]
+    return v

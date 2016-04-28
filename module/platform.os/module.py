@@ -388,9 +388,11 @@ def detect(i):
        # Check if there are related platform.init
        tags='os-'+tp
        if remote=='yes':
-          tags+=',remote'
+          if tp=='linux': tags='os-android'
+          else: tags+=',remote'
 
        rx=ck.access({'action':'search',
+                     'add_meta':'yes',
                      'module_uoa':cfg['module_deps']['platform.init'],
                      'tags':tags})
        if rx['return']>0: return rx
@@ -405,7 +407,7 @@ def detect(i):
              ck.out('')
              zz={}
              iz=0
-             for z1 in sorted(lrx, key=lambda v: v['data_uoa']):
+             for z1 in sorted(lrx, key=lambda v: (v.get('meta',{}).get('sort',0),v['data_uoa'])):
                  z=z1['data_uid']
                  zu=z1['data_uoa']
 

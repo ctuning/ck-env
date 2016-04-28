@@ -1,28 +1,38 @@
 {
+  "auto_detect": "yes", 
   "customize": {
-    "add_include_path": "yes",
-    "env_prefix": "CK_ENV_LIB_PPL"
-  },
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_PPL",
+    "limit_recursion_dir_search": {"linux":3}, 
+    "include_file":"ppl.hh",
+    "soft_file": {
+      "linux": "libppl.so" 
+    }, 
+    "soft_path_example": {
+      "linux": "" 
+    }
+  }, 
   "deps": {
     "lib_gmp": {
-      "local": "yes",
-      "sort": 10,
+      "local": "yes", 
+      "sort": 10, 
       "tags": "lib,gmp"
-    },
+    }, 
     "lib_mpc": {
-      "local": "yes",
-      "sort": 30,
+      "local": "yes", 
+      "sort": 30, 
       "tags": "lib,mpc"
-    },
+    }, 
     "lib_mpfr": {
-      "local": "yes",
-      "sort": 20,
+      "local": "yes", 
+      "sort": 20, 
       "tags": "lib,mpfr"
     }
-  },
-  "soft_name": "Library - PPL",
+  }, 
+  "soft_name": "PPL library", 
   "tags": [
-    "lib",
+    "lib", 
     "ppl"
   ]
 }

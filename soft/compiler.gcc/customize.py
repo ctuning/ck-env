@@ -7,6 +7,71 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+import os
+
+##############################################################################
+# customize directories to automatically find and register software
+
+def dirs(i):
+    return {'return':0}
+
+##############################################################################
+# limit files/directories ...
+
+def limit(i):
+
+    hosd=i['host_os_dict']
+    tosd=i['target_os_dict']
+
+    sname=i['soft_name']
+
+    phosd=hosd.get('ck_name','')
+
+    dr=i.get('list',[])
+    drx=[]
+
+    for q in dr:
+        add=True
+
+        if phosd=='linux':
+           pq=os.path.basename(q)
+           if len(pq)>len(sname) and pq[len(sname)]!='-':
+              add=False
+
+           if add and pq.startswith(sname+'-'):
+              if len(pq)<=len(sname):
+                 add=False
+              else:
+                 if not pq[len(sname)+1].isdigit():
+                    add=False
+        if add:
+           drx.append(q)
+
+    return {'return':0, 'list':drx}
+
+##############################################################################
+# parse software version
+
+def parse_version(i):
+
+    lst=i['output']
+
+    ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q!='':
+           j=q.lower().find(') ')
+           if j>0:
+              q=q[j+2:]
+              j=q.find(' ')
+              if j>0:
+                 q=q[:j]
+              ver=q
+              break
+
+    return {'return':0, 'version':ver}
+
 ##############################################################################
 # setup environment setup
 
@@ -20,7 +85,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -55,15 +120,19 @@ def setup(i):
 
     iv=i.get('interactive','')
 
-    env=i.get('env',{})
+    env=i['env']
     cfg=i.get('cfg',{})
     deps=i.get('deps',{})
     tags=i.get('tags',[])
-    cus=i.get('customize',{})
+    cus=i['customize']
 
-    host_d=i.get('host_os_dict',{})
+    hosd=i['host_os_dict']
+    tosd=i['target_os_dict']
+
+    hplat=hosd.get('ck_name','')
+
     target_d=i.get('target_os_dict',{})
-    winh=host_d.get('windows_base','')
+    winh=hosd.get('windows_base','')
     win=target_d.get('windows_base','')
     remote=target_d.get('remote','')
     mingw=target_d.get('mingw','')
@@ -71,6 +140,85 @@ def setup(i):
 
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
+
+    fp=cus.get('full_path','')
+
+    # Check path
+    ep=cus.get('env_prefix','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
+
+       if p1!='/usr/bin':
+          cus['path_bin']=p1
+
+       if ep!='':
+          env[ep]=pi
+          if p1!='/usr/bin': 
+             env[ep+'_BIN']=p1
+
+       tp=''
+
+       if hplat=='linux':
+          sname=cus.get('soft_file',{}).get(hplat,'')
+          pname=os.path.basename(fp)
+          if pname.startswith(sname+'-'):
+             tp=pname[len(sname):]
+
+       if cus.get('tool_prefix','')=='':
+          cus['tool_prefix_configured']='yes'
+          cus['tool_prefix']=''
+       if cus.get('tool_postfix','')=='':
+          cus['tool_postfix_configured']='yes'
+          cus['tool_postfix']=tp
+       if cus.get('retarget','')=='':
+          cus['retarget']='no'
+
+    env.update({
+      "CK_AR": "$#tool_prefix#$ar", 
+      "CK_ASM_EXT": ".s", 
+      "CK_CC": "$#tool_prefix#$gcc$#tool_postfix#$", 
+      "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+      "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
+      "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+      "CK_COMPILER_FLAG_GPROF": "-pg", 
+      "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
+      "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
+      "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+      "CK_CXX": "$#tool_prefix#$g++$#tool_postfix#$", 
+      "CK_DLL_EXT": ".so", 
+      "CK_EXE_EXT": ".out", 
+      "CK_EXTRA_LIB_DL": "-ldl", 
+      "CK_EXTRA_LIB_M": "-lm", 
+      "CK_F90": "$#tool_prefix#$gfortran$#tool_postfix#$", 
+      "CK_F95": "$#tool_prefix#$gfortran$#tool_postfix#$", 
+      "CK_FC": "$#tool_prefix#$gfortran$#tool_postfix#$", 
+      "CK_FLAGS_CREATE_ASM": "-S", 
+      "CK_FLAGS_CREATE_OBJ": "-c", 
+      "CK_FLAGS_DLL": "-shared -fPIC", 
+      "CK_FLAGS_DLL_EXTRA": "", 
+      "CK_FLAGS_OUTPUT": "-o ", 
+      "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+      "CK_FLAGS_STATIC_LIB": "-fPIC", 
+      "CK_FLAG_PREFIX_INCLUDE": "-I", 
+      "CK_FLAG_PREFIX_LIB_DIR": "-L", 
+      "CK_FLAG_PREFIX_VAR": "-D", 
+      "CK_GPROF_OUT_FILE": "gmon.out", 
+      "CK_LB": "$#tool_prefix#$ar rcs", 
+      "CK_LB_OUTPUT": "-o ", 
+      "CK_LD": "$#tool_prefix#$ld", 
+      "CK_LD_FLAGS_EXTRA": "", 
+      "CK_LIB_EXT": ".a", 
+      "CK_LINKER_FLAG_OPENMP": "-lgomp -lrt", 
+      "CK_MAKE": "make", 
+      "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
+      "CK_OBJ_EXT": ".o", 
+      "CK_OPT_SIZE": "-Os", 
+      "CK_OPT_SPEED": "-O3", 
+      "CK_OPT_SPEED_SAFE": "-O2", 
+      "CK_PLUGIN_FLAG": "-fplugin=", 
+      "CK_PROFILER": "gprof"
+    })
 
     ############################################################
     # Ask a few more questions
@@ -171,7 +319,7 @@ def setup(i):
        env['CK_CXX']=x
 
     x=cus.get('bugfix1','')
-    if x=='yes' and winh!='yes':
+    if winh!='yes' and (x=='yes' or os.path.isdir('/usr/lib/x86_64-linux-gnu')):
        s+='\nexport LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH\n'
 
     x=cus.get('add_extra_path','')

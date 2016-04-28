@@ -1,18 +1,44 @@
 {
+  "auto_detect": "yes", 
   "customize": {
+    "add_only_with_version": "yes", 
+    "build_dir_name": "nvcc", 
     "can_strip_dynamic_lib": "yes", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
     "env_prefix": "CK_ENV_COMPILER_CUDA", 
     "input_path_example": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v5.5", 
     "languages": [
       "C", 
       "CPP"
     ], 
-    "skip_add_to_bin": "no", 
-    "skip_add_to_ld_path": "no", 
-    "skip_add_to_lib": "yes", 
-    "skip_add_to_path": "no"
+    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "only_for_target_os_tags": [
+      "linux", 
+      "windows"
+    ], 
+    "soft_file": {
+      "linux": "nvcc", 
+      "win": "nvcc.exe"
+    }, 
+    "soft_path_example": {
+      "linux": "", 
+      "win": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v6.5\\bin\\nvcc.exe"
+    }, 
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1", 
+      "win": "--version > $#filename#$ 2>&1"
+    }
   }, 
-  "customize_script": "customize", 
+  "deps": {
+    "mvsc": {
+      "local": "yes", 
+      "only_for_target_os_tags": [
+        "windows"
+      ], 
+      "tags": "microsoft,compiler"
+    }
+  }, 
   "env": {
     "CK_AR": "ar", 
     "CK_ASM_EXT": ".s", 
@@ -44,18 +70,11 @@
     "CK_PLUGIN_FLAG": "-fplugin=", 
     "CK_PROFILER": "gprof"
   }, 
-  "soft_name": "Compiler - NVIDIA CUDA", 
+  "soft_name": "Nvidia CUDA Compiler", 
   "tags": [
     "compiler", 
     "cuda", 
     "lang-c-cuda", 
     "lang-cpp-cuda"
-  ], 
-  "tool": "nvcc", 
-  "version": {
-    "cmd": "--version > $#filename#$ 2>&1", 
-    "split": ".", 
-    "string_after": "", 
-    "string_before": ", V"
-  }
+  ]
 }

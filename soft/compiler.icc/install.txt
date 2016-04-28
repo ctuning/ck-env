@@ -1,0 +1,4 @@
+You can download and install latest (or required) 
+Intel Compilers from:
+
+* https://software.intel.com/en-us/intel-compilers

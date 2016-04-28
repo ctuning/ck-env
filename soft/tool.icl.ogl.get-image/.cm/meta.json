@@ -1,11 +1,41 @@
 {
   "customize": {
+    "add_to_path": "yes", 
     "env_prefix": "CK_ENV_TOOL_ICL_OGL_GETIMAGE", 
-    "skip_add_to_ld_path": "yes"
+    "only_for_host_os_tags": [
+      "windows", 
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "windows", 
+      "linux"
+    ]
   }, 
-  "soft_name": "Tool - ICL OGL - Get Image", 
+  "deps": {
+    "compiler": {
+      "local": "yes", 
+      "sort": 10, 
+      "tags": "compiler,lang-c"
+    }, 
+    "lib-freeglut": {
+      "local": "yes", 
+      "sort": 30, 
+      "tags": "lib,freeglut"
+    }, 
+    "lib-glew": {
+      "local": "yes", 
+      "sort": 20, 
+      "tags": "lib,glew"
+    }, 
+    "tool-glslangvalidator": {
+      "local": "yes", 
+      "sort": 40, 
+      "tags": "tool,glslangvalidator"
+    }
+  }, 
+  "soft_name": "ICL OGL - get image tool", 
   "tags": [
     "tool", 
-    "icl-ogl-get-image" 
+    "icl-ogl-get-image"
   ]
 }

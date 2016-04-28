@@ -20,7 +20,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -69,8 +69,23 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
+    sdirs=host_d.get('dir_sep','')
+
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
+
+    fp=cus.get('full_path','')
+    p1=os.path.dirname(fp)
+    pi=os.path.dirname(p1)
+
+    pb=pi+sdirs+'bin'
+
+    cus['path_bin']=pb
+
+    ep=cus.get('env_prefix','')
+    if pi!='' and ep!='':
+       env[ep]=pi
+       env[ep+'_BIN']=pb
 
     ############################################################
     # Prepare environment

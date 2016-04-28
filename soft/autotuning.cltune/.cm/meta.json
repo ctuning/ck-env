@@ -3,9 +3,9 @@
     "env_prefix": "CK_ENV_TOOL_CLTUNE", 
     "skip_add_to_ld_path": "yes"
   }, 
-  "soft_name": "Tool - CLTune", 
+  "soft_name": "CLTune (OpenCL autotuning tool)", 
   "tags": [
     "tool", 
     "cltune"
-  ] 
+  ]
 }

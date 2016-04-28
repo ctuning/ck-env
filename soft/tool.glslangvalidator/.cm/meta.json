@@ -1,12 +1,18 @@
 {
   "customize": {
+    "add_to_path": "yes", 
     "env_prefix": "CK_ENV_TOOL_GLSLANGVALIDATOR", 
-    "skip_add_to_ld_path": "yes"
+    "only_for_host_os_tags": [
+      "windows"
+    ], 
+    "only_for_target_os_tags": [
+      "windows"
+    ]
   }, 
   "env": {}, 
-  "soft_name": "Tool - GLS Lang Validator", 
+  "soft_name": "GLS Lang Validator Tool", 
   "tags": [
     "tool", 
     "glslangvalidator"
-  ] 
+  ]
 }

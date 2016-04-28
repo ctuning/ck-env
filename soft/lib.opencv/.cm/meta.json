@@ -4,8 +4,7 @@
     "env_prefix": "CK_ENV_LIB_OPENCV", 
     "skip_add_to_ld_path": "yes"
   }, 
-  "customize_script": "customize", 
-  "soft_name": "Library - OpenCV", 
+  "soft_name": "OpenCV library", 
   "tags": [
     "lib", 
     "opencv"

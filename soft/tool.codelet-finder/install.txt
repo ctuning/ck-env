@@ -1,0 +1,7 @@
+Oudated Codelet Finder tool from CAPS Entreprise
+(used by Grigori Fursin in the MILEPOST project)
+to extract small kernels from benchmarks and realistic
+programs and enable crowd-tuning:
+
+* http://cTuning.org/project-milepost
+* http://arxiv.org/abs/1506.06256

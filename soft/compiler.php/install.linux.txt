@@ -1,0 +1,9 @@
+Download and install package from this website:
+
+* http://php.net/downloads.php
+
+Alternatively, you can use package manager for your Linux distribution.
+
+== Ubuntu ==
+
+ $ sudo apt-get install php5

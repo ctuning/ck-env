@@ -71,73 +71,138 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
-    ################################################################
-    ext='intel64'
-    if remote=='yes':
-       ext='android'
-    elif mic=='yes':
-       ext='mic'
-    elif tbits=='32': 
-       ext='ia32'
+    host_d=i.get('host_os_dict',{})
+    sdirs=host_d.get('dir_sep','')
 
-    s+='\n'
+    fp=cus.get('full_path','')
+    if fp!='':
 
-    # check visual studio extension
-    if win=='yes':
-       vsc=cus.get('visual_studio_compiler_configured','')
-       vc=cus.get('visual_studio_compiler','')
-       if vsc!='yes' or vc=='':
-          ra=ck.inp({'text':'Which Visual Studio Compiler configuration to use (Enter for vc12)? '})
-          vc=ra['string'].strip()
-          if vc=='': vc='vc12'
+       if win=='yes':
+          f1='tbb.lib'
+          f2='tbbmalloc.lib'
+          f3='tbbproxy.lib'
+          f1d='tbb.dll'
+          f2d='tbbmalloc.dll'
+          f3d='tbbproxy.dll'
+       else:
+          f1=''
+          f2=''
+          f3=''
+          f1d='libtbb.so'
+          f2d='libtbbmalloc.so'
+          f3d='libproxy.so'
 
-          cus['visual_studio_compiler']=vc
-          cus['visual_studio_compiler_configured']='yes'
+       if fp.find('lib_release')>0:
+          lib=os.path.basename(fp)
 
-       cus['path_bin']=pi+'\\bin\\'+ext+'\\'+vc
-       cus['path_lib']=pi+'\\lib\\'+ext+'\\'+vc
+          p1=os.path.dirname(fp)
+          pi=os.path.dirname(p1)
 
-       cus['static_lib']='tbb.lib'
-       cus['extra_static_libs']={'libtbbmalloc':'tbbmalloc.lib',
-                                 'libtbbproxy':'tbbproxy.lib'}
+          cus['path_lib']=p1
+          cus['path_include']=pi+sdirs+'include'
 
-       cus['dynamic_lib']='libtbb.dll'
-       cus['extra_dynamic_libs']={'libtbbmalloc':'tbb.dll',
-                                  'libtbbproxy':'tbbproxy.dll'}
+          cus['path_dynamic_lib']=p1
 
-       s+='rem Setting Intel TBB environment\n'
-       s+='call "'+pi+'\\bin\\tbbvars.bat" '+ext+' '+vc+'\n'
+          cus['dynamic_lib']=f1d
+          cus['extra_dynamic_libs']={'libtbbmalloc':f2d,
+                                     'libtbbproxy':f3d}
+
+       else:
+          lib=os.path.basename(fp)
+
+          p1=os.path.dirname(fp)
+          vc=os.path.basename(p1)
+
+          p2=os.path.dirname(p1)
+          ext=os.path.basename(p2)
+          p3=os.path.dirname(p2)
+          pi=os.path.dirname(p3)
+
+          if win=='yes':
+
+             cus['path_bin']=pi+'\\bin\\'+ext+'\\'+vc
+             cus['path_lib']=pi+'\\lib\\'+ext+'\\'+vc
+             cus['path_include']=pi+'\\include'
+
+             cus['path_dynamic_lib']=p1
+             cus['dynamic_lib']=f1d
+             cus['extra_dynamic_libs']={'libtbbmalloc':f2d,
+                                        'libtbbproxy':f3d}
+
+             cus['static_lib']=f1
+             cus['extra_static_libs']={'libtbbmalloc':f2,
+                                        'libtbbproxy':f3}
+
 
     else:
-       if cus.get('from_sources','')=='yes':
-          pix=pi+'/build/install_release'
-          cus['path_lib']=pix
+       ################################################################
+
+       ext='intel64'
+       if remote=='yes':
+          ext='android'
+       elif mic=='yes':
+          ext='mic'
+       elif tbits=='32': 
+          ext='ia32'
+
+       s+='\n'
+
+       # check visual studio extension
+       if win=='yes':
+          vsc=cus.get('visual_studio_compiler_configured','')
+          vc=cus.get('visual_studio_compiler','')
+          if vsc!='yes' or vc=='':
+             ra=ck.inp({'text':'Which Visual Studio Compiler configuration to use (Enter for vc12)? '})
+             vc=ra['string'].strip()
+             if vc=='': vc='vc12'
+
+             cus['visual_studio_compiler']=vc
+             cus['visual_studio_compiler_configured']='yes'
+
+          cus['path_bin']=pi+'\\bin\\'+ext+'\\'+vc
+          cus['path_lib']=pi+'\\lib\\'+ext+'\\'+vc
+
+          cus['static_lib']='tbb.lib'
+          cus['extra_static_libs']={'libtbbmalloc':'tbbmalloc.lib',
+                                    'libtbbproxy':'tbbproxy.lib'}
+
+          cus['dynamic_lib']='libtbb.dll'
+          cus['extra_dynamic_libs']={'libtbbmalloc':'tbb.dll',
+                                     'libtbbproxy':'tbbproxy.dll'}
+
+          s+='rem Setting Intel TBB environment\n'
+          s+='call "'+pi+'\\bin\\tbbvars.bat" '+ext+' '+vc+'\n'
+
        else:
-          cus['path_bin']=pi+'/bin'
+          if cus.get('from_sources','')=='yes':
+             pix=pi+'/build/install_release'
+             cus['path_lib']=pix
+          else:
+             cus['path_bin']=pi+'/bin'
 
-          ext1=''
-          if ext=='intel64' or ext=='ia32':
-             # check extra params
-             ext1=cus.get('extra_compiler','')
-             ext1c=cus.get('extra_compiler_configured','')
-             if ext1c!='yes' or ext1=='':
-                ra=ck.inp({'text':'Which compiler configuration to use (for example, gcc4.4)? '})
-                ext1=ra['string'].strip()
+             ext1=''
+             if ext=='intel64' or ext=='ia32':
+                # check extra params
+                ext1=cus.get('extra_compiler','')
+                ext1c=cus.get('extra_compiler_configured','')
+                if ext1c!='yes' or ext1=='':
+                   ra=ck.inp({'text':'Which compiler configuration to use (for example, gcc4.4)? '})
+                   ext1=ra['string'].strip()
 
-#                if ext1=='': ext1='gcc4.4'
+   #                if ext1=='': ext1='gcc4.4'
 
-                cus['extra_compiler']=ext1
-                cus['extra_compiler_configured']='yes'
+                   cus['extra_compiler']=ext1
+                   cus['extra_compiler_configured']='yes'
 
-          pix=pi+'/lib/'+ext
-          if ext1!='': pix+='/'+ext1
-          cus['path_lib']=pix
+             pix=pi+'/lib/'+ext
+             if ext1!='': pix+='/'+ext1
+             cus['path_lib']=pix
 
-       cus['path_dynamic_lib']=pix
-       cus['dynamic_lib']='libtbb.so'
-       cus['extra_dynamic_libs']={'libtbbmalloc':'libtbbmalloc.so'}
+          cus['path_dynamic_lib']=pix
+          cus['dynamic_lib']='libtbb.so'
+          cus['extra_dynamic_libs']={'libtbbmalloc':'libtbbmalloc.so'}
 
-       s+='# Setting Intel TBB environment\n'
-       s+='. "'+pix+'/tbbvars.sh"\n'
+          s+='# Setting Intel TBB environment\n'
+          s+='. "'+pix+'/tbbvars.sh"\n'
 
     return {'return':0, 'bat':s}

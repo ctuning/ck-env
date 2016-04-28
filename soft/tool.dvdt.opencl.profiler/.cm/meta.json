@@ -1,0 +1,14 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_PLUGIN_OPENCL_DVDT_PROFILER", 
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_path": "yes"
+  }, 
+  "soft_name": "OpenCL DVDT Profiler", 
+  "tags": [
+    "tool", 
+    "dvdt", 
+    "opencl", 
+    "profiler"
+  ]
+}

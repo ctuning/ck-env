@@ -1,0 +1,5 @@
+On UBUNTU you can install PPL via
+
+$ sudo apt-get install libppl-dev
+
+

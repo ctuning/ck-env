@@ -1,0 +1,8 @@
+You can download latest Intel TBB library from
+
+* https://www.threadingbuildingblocks.org
+
+CK packages are also available in
+
+$ ck pull repo:reproduce-carp-project
+$ ck list package:*tbb*

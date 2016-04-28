@@ -1,18 +1,21 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_COMPILER_CTUNING_CC",
+    "add_to_path":"yes",
+    "env_prefix": "CK_ENV_COMPILER_CTUNING_CC", 
     "languages": [
-      "C",
-      "CPP",
-      "F77",
-      "F90",
+      "C", 
+      "CPP", 
+      "F77", 
+      "F90", 
       "F95"
-    ],
-    "add_include_path": "yes", 
-    "skip_add_to_bin": "no",
-    "skip_add_to_ld_path": "yes",
-    "skip_add_to_path": "no"
-  },
+    ], 
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "linux"
+    ] 
+  }, 
   "deps": {
     "compiler_milepost": {
       "local": "yes", 
@@ -25,14 +28,14 @@
       "tags": "plugin,milepost,ctuning"
     }
   }, 
-  "customize_script": "customize",
   "env": {
+    "CCC_UUID": "uuidgen", 
     "CK_AR": "ar", 
     "CK_ASM_EXT": ".s", 
     "CK_CC": "ctuning-cc", 
     "CK_COMPILER_FLAGS_OBLIGATORY": "", 
-    "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
     "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+    "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
     "CK_COMPILER_FLAG_GPROF": "-pg", 
     "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
     "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
@@ -69,10 +72,9 @@
     "CK_OPT_SPEED": "-O3", 
     "CK_OPT_SPEED_SAFE": "-O2", 
     "CK_PLUGIN_FLAG": "-fplugin=", 
-    "CK_PROFILER": "gprof",
-    "CCC_UUID": "uuidgen"
-  },
-  "soft_name": "Compiler - ctuning-cc",
+    "CK_PROFILER": "gprof"
+  }, 
+  "soft_name": "cTuning CC compiler (outdated)", 
   "tags": [
     "compiler", 
     "ctuning-cc", 
@@ -81,6 +83,6 @@
     "lang-f77", 
     "lang-f90", 
     "lang-f95"
-  ],
+  ], 
   "tool": "ctuning-cc"
 }

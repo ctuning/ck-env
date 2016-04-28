@@ -1,0 +1,5 @@
+On UBUNTU you can install GMP via
+
+$ sudo apt-get install libgmp-dev
+
+

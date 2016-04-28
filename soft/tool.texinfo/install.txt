@@ -1,0 +1,10 @@
+You can download texinfo from
+
+* https://www.gnu.org/software/texinfo/
+
+Various versions of GCC may require a specific version of texinfo
+
+You can find past package in CK:
+
+$ ck pull repo:reproduce-milepost-project
+$ ck list package:*texinfo*

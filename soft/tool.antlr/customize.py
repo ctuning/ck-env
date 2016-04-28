@@ -71,13 +71,22 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    host_d=i.get('host_os_dict',{})
+    sdirs=host_d.get('dir_sep','')
+
     jn=cus.get('jar_name','')
 
-    ################################################################
-    if win=='yes':
-       env[envp+'_LIB']=pi+'\\lib\\'+jn
+    fp=cus.get('full_path','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
 
-    else:
-       return {'return':1, 'error':'Linux version is not yet supported'}
+       cus['path_lib']=pi+sdirs+'lib'
+
+    ep=cus.get('env_prefix','')
+    if ep!='':
+       if pi!='':
+          env[ep]=pi
+          env[ep+'_JAR_NAME']=jn
 
     return {'return':0, 'bat':s}

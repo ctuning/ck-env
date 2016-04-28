@@ -1,0 +1,6 @@
+This is a small support run-time library for CK-based benchmarks
+(to expose various performance statistics during crowd-tuning in the CK format).
+
+You can find related package in 
+
+$ ck pull repo:ck-autotuning

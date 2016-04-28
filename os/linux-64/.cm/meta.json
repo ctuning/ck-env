@@ -11,6 +11,7 @@
   ], 
   "change_dir": "cd", 
   "ck_name": "linux", 
+  "ck_name2": "linux", 
   "cmd_for_detached_console": "xterm -hold -e \"$#cmd#$\"", 
   "dir_sep": "/", 
   "env_call": ".", 

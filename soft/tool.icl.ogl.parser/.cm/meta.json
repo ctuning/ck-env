@@ -1,11 +1,28 @@
 {
   "customize": {
     "env_prefix": "CK_ENV_TOOL_ICL_OGL_PARSER", 
-    "skip_add_to_bin":"yes",
-    "skip_add_to_path":"yes",
-    "skip_add_to_ld_path": "yes"
+    "only_for_host_os_tags": [
+      "windows", 
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "windows", 
+      "linux"
+    ]
   }, 
-  "soft_name": "Tool - ICL OGL - Parser", 
+  "deps": {
+    "compiler": {
+      "local": "yes", 
+      "sort": 10, 
+      "tags": "compiler,java"
+    }, 
+    "tool-antlr": {
+      "local": "yes", 
+      "sort": 20, 
+      "tags": "tool,antlr"
+    }
+  }, 
+  "soft_name": "ICL OGL - parser tool", 
   "tags": [
     "tool", 
     "icl-ogl-parser"

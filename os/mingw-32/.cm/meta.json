@@ -7,6 +7,7 @@
     "32"
   ], 
   "ck_name": "win", 
+  "ck_name2": "mingw", 
   "change_dir": "cd /D", 
   "cmd_for_detached_console": "start $#cmd#$", 
   "dir_sep": "\\", 
@@ -53,7 +54,6 @@
   "suppress_output": "> nul", 
   "tags": [
     "os", 
-    "windows", 
     "mingw"
   ], 
   "use_create_new_console_flag": "yes", 

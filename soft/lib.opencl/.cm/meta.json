@@ -1,0 +1,22 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_OPENCL", 
+    "limit_recursion_dir_search": {"linux":4, "win":4}, 
+    "soft_file": {
+      "linux": "libOpenCL.so", 
+      "win": "OpenCL.lib"
+    }, 
+    "soft_path_example": {
+      "linux": "", 
+      "win": "C:\\Program Files (x86)\\Intel\\OpenCL SDK\\4.6\\lib\\x64\\OpenCL.lib"
+    }
+  }, 
+  "soft_name": "OpenCL library", 
+  "tags": [
+    "lib", 
+    "opencl"
+  ]
+}

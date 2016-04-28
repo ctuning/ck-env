@@ -1,0 +1,80 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "add_only_with_version": "yes", 
+    "build_dir_name": "mcl", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_COMPILER_MVSC", 
+    "languages": [
+      "C", 
+      "CPP"
+    ], 
+    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "only_for_target_os_tags": [
+      "windows"
+    ], 
+    "skip_soft_file_is_asked": "yes", 
+    "soft_file": {
+      "win": "vcvarsall.bat"
+    }, 
+    "soft_file_not_tool": "yes", 
+    "soft_path_example": {
+      "win": "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat"
+    }, 
+    "soft_version_cmd": {
+      "win": "> $#filename#$ 2>&1"
+    }
+  }, 
+  "deps": {
+    "msdk": {
+      "local": "yes", 
+      "only_for_target_os_tags": [
+        "windows"
+      ], 
+      "tags": "microsoft,sdk"
+    }
+  }, 
+  "env": {
+    "CK_AR": "lib", 
+    "CK_ASM_EXT": ".asm", 
+    "CK_CC": "cl", 
+    "CK_COMPILER_FLAGS_OBLIGATORY": "/DWINDOWS /GS-", 
+    "CK_COMPILER_FLAG_CPP0X": "/Qstd=c++0x", 
+    "CK_COMPILER_FLAG_CPP11": "/Qstd=c++11", 
+    "CK_COMPILER_FLAG_OPENMP": "/openmp", 
+    "CK_COMPILER_FLAG_PTHREAD_LIB": "/pthread", 
+    "CK_COMPILER_FLAG_STD90": "/Qstd=c90", 
+    "CK_COMPILER_FLAG_STD99": "/Qstd=c99", 
+    "CK_CXX": "cl", 
+    "CK_DLL_EXT": ".dll", 
+    "CK_EXE_EXT": ".exe", 
+    "CK_FLAGS_CREATE_ASM": "/Fa /c", 
+    "CK_FLAGS_CREATE_OBJ": "/c", 
+    "CK_FLAGS_DLL": "/MT /DWin /LD", 
+    "CK_FLAGS_DLL_EXTRA": "/link /dll", 
+    "CK_FLAGS_DLL_NO_LIBCMT": "/NODEFAULTLIB:LIBCMT", 
+    "CK_FLAGS_DYNAMIC_BIN": "/MD", 
+    "CK_FLAGS_OUTPUT": "/Fe", 
+    "CK_FLAGS_STATIC_BIN": "/MT", 
+    "CK_FLAGS_STATIC_LIB": "/MD", 
+    "CK_FLAG_PREFIX_INCLUDE": "/I", 
+    "CK_FLAG_PREFIX_VAR": "/D", 
+    "CK_LB": "lib", 
+    "CK_LB_OUTPUT": "/OUT:", 
+    "CK_LD_DYNAMIC_FLAGS": "/link /NODEFAULTLIB:LIBCMT", 
+    "CK_LD_FLAGS_EXTRA": "", 
+    "CK_LIB_EXT": ".lib", 
+    "CK_MAKE": "nmake", 
+    "CK_OBJDUMP": "dumpbin /disasm", 
+    "CK_OBJ_EXT": ".obj"
+  }, 
+  "soft_name": "Microsoft C compiler", 
+  "tags": [
+    "compiler", 
+    "microsoft", 
+    "mcl", 
+    "lang-c", 
+    "lang-cpp"
+  ]
+}

@@ -1,0 +1,10 @@
+This is a rather outdated MILEPOST GCC framework developed by Grigori Fursin. 
+You can find more info here:
+
+* http://cTuning.org/tools.html
+* http://fursin.net/research.html
+* http://cTuning.org/project-milepost
+
+This functionality has been moved to CK. You can obtain CK repository:
+
+$ ck pull repo:reproduce-milepost-project

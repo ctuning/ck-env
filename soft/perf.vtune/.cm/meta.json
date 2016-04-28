@@ -1,13 +1,33 @@
 {
+  "auto_detect": "yes", 
   "customize": {
-    "add_include_path": "no", 
+    "add_only_with_version": "yes", 
+    "build_dir_name": "icc", 
+    "can_strip_dynamic_lib": "yes", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
     "env_prefix": "CK_ENV_PERF_VTUNE", 
-    "skip_add_to_bin": "yes", 
-    "skip_add_to_ld_path": "yes", 
-    "skip_add_to_path": "yes"
+    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "only_for_target_os_tags": [
+      "linux", 
+      "windows"
+    ], 
+    "skip_soft_file_is_asked": "yes", 
+    "soft_file": {
+      "linux": "amplxe-vars.sh", 
+      "win": "amplxe-vars.bat"
+    }, 
+    "soft_file_not_tool": "yes", 
+    "soft_path_example": {
+      "linux": "", 
+      "win": "C:\\Program Files (x86)\\Intel\\VTune Amplifier XE 2015\\amplxe-vars.bat"
+    }, 
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1", 
+      "win": "--version > $#filename#$ 2>&1"
+    }
   }, 
-  "customize_script": "customize", 
-  "soft_name": "Perf - VTune", 
+  "soft_name": "Intel VTune", 
   "tags": [
     "perf", 
     "intel", 

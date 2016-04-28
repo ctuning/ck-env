@@ -1,0 +1,3 @@
+You can download and install CLBLAST library from GitHub:
+
+* https://github.com/CNugteren/CLBlast

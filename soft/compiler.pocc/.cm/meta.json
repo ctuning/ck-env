@@ -7,12 +7,17 @@
       "C", 
       "F77"
     ], 
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "linux"
+    ], 
     "skip_add_to_bin": "yes", 
     "skip_add_to_ld_path": "yes", 
     "skip_add_to_path": "yes", 
     "source_to_source": "yes"
   }, 
-  "customize_script": "customize", 
   "env": {
     "CK_AR": "$#tool_prefix#$ar", 
     "CK_ASM_EXT": ".s", 
@@ -38,7 +43,7 @@
     "CK_OBJ_EXT": ".o", 
     "CK_PROFILER": "gprof"
   }, 
-  "soft_name": "Compiler - POCC", 
+  "soft_name": "POCC compiler (outdated)", 
   "tags": [
     "compiler", 
     "source-to-source", 

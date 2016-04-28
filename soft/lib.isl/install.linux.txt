@@ -1,0 +1,5 @@
+On UBUNTU you can install ISL via
+
+$ sudo apt-get install libisl-dev
+
+

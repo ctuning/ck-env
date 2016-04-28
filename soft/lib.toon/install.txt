@@ -1,0 +1,8 @@
+You can download TooN library from
+
+* http://www.edwardrosten.com/cvd/toon.html
+
+CK package is also available in
+
+$ ck pull repo:reproduce-pamela-project
+$ ck list package:*toon*

@@ -1,0 +1,6 @@
+On Ubuntu:
+
+$ sudo apt-get install gcc g++
+
+Alternatively, you can download, build and install latest GCC here:
+* https://gcc.gnu.org/mirrors.html

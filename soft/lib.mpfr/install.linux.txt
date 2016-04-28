@@ -1,0 +1,5 @@
+On UBUNTU you can install MPFR via
+
+$ sudo apt-get install libmpfr-dev
+
+

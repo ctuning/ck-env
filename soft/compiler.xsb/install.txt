@@ -1,0 +1,7 @@
+This is an XSB Prolog compiler (used in MILEPOST GCC 
+to extract and process program semantic features):
+
+This functionality has been moved to CK. You can obtain CK repository:
+
+$ ck pull repo:reproduce-milepost-project
+$ ck list package

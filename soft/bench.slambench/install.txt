@@ -1,0 +1,8 @@
+This is a SLAM benchmark from PAMELA project.
+You can get it via CK:
+
+* ck pull repo:reproduce-pamela-project
+
+You can find more info about the project here:
+
+* http://apt.cs.manchester.ac.uk/projects/PAMELA/

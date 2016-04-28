@@ -6,7 +6,7 @@
     "skip_add_to_ld_path": "yes", 
     "skip_add_to_path": "yes"
   }, 
-  "soft_name": "Library - TooN", 
+  "soft_name": "TooN library", 
   "tags": [
     "lib", 
     "toon"

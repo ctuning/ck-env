@@ -1,13 +1,15 @@
 {
-  "customize_script": "customize", 
   "customize": {
+    "add_include_path": "yes", 
     "env_prefix": "CK_ENV_BENCH_PENCIL", 
-    "skip_add_to_ld_path": "yes",
-    "skip_add_to_bin":"yes",
-    "skip_add_to_path":"yes",
-    "add_include_path":"yes"
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "skip_add_to_bin": "yes", 
+    "skip_add_to_ld_path": "yes", 
+    "skip_add_to_path": "yes"
   }, 
-  "soft_name": "Benchmark - PENCIL", 
+  "soft_name": "Pencil benchmark", 
   "tags": [
     "benchmark", 
     "pencil", 

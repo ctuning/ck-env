@@ -8,6 +8,27 @@
 #
 
 ##############################################################################
+# parse software version
+
+def parse_version(i):
+
+    lst=i['output']
+
+    ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q!='' and q.startswith('Python ') and len(q)>6:
+           ver=q[7:]
+
+           j=ver.find(' ::')
+           if j>0:
+              ver=ver[:j]   
+           break
+
+    return {'return':0, 'version':ver}
+
+##############################################################################
 # setup environment setup
 
 def setup(i):
@@ -20,7 +41,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -71,6 +92,15 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    fp=cus.get('full_path','')
+
+    ep=cus.get('env_prefix','')
+    p1=os.path.dirname(fp)
+    pi=os.path.dirname(p1)
+
+    env[ep]=pi
+    env[ep+'_BIN']=p1
+
     ################################################################
     s+='\n'
 
@@ -78,6 +108,8 @@ def setup(i):
 
     # check target
     import os
+
+    print (pi)
 
     p=os.path.join(pi,'config')
     ld=os.listdir(p)

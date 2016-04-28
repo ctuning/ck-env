@@ -1,3 +1,7 @@
+* 2016.04.28 - major update to automate detection of installed software (for Windows, Linux and Android).
+               To some extent, CK now works as a customizable cmake with the ability to share 
+               software detection modules in the CK format via GitHub.
+
 * 2016.04.18 - adding compiler flag via environment -std=c++0x (CK_COMPILER_FLAG_CPP0X)
 
 * 2016.04.15 - moved platform.init entries from ck-autotuning here

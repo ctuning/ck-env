@@ -1,0 +1,9 @@
+This is a small OpenME plugin-based library for Java to open up "black-box" compilers,
+tools and programs, and enable autotuning and run-time adaptation.
+
+You can find related package in 
+$ ck pull repo:ck-autotuning
+$ ck list package:*openme*
+
+We use it on Android to crowdsource experiments (such as multiobjective autotuning):
+* https://play.google.com/store/apps/details?id=openscience.crowdsource.experiments

@@ -8,6 +8,52 @@
 #
 
 ##############################################################################
+# customize directories to automatically find and register software
+
+def dirs(i):
+    import os
+
+    dr=i.get('dirs',[])
+
+    ck_os_name=i.get('host_os_dict',{}).get('ck_name','')
+    if ck_os_name=='win':
+
+       for px in ['C:\\', 'D:\\']:
+           x=[]
+           try:
+              x=os.listdir(px)
+           except:
+              pass
+
+           for q in x:
+               qq=os.path.join(px,q)
+               if os.path.isdir(qq) and q.lower().startswith('python'):
+                  dr.append(qq)
+
+    return {'return':0}
+
+##############################################################################
+# parse software version
+
+def parse_version(i):
+
+    lst=i['output']
+
+    ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q!='' and q.startswith('Python ') and len(q)>6:
+           ver=q[7:]
+
+           j=ver.find(' ::')
+           if j>0:
+              ver=ver[:j]   
+           break
+
+    return {'return':0, 'version':ver}
+
+##############################################################################
 # setup environment setup
 
 def setup(i):
@@ -20,7 +66,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -53,30 +99,28 @@ def setup(i):
     ck=i['ck_kernel']
     s=''
 
-    iv=i.get('interactive','')
-
-    env=i.get('env',{})
-    cfg=i.get('cfg',{})
-    deps=i.get('deps',{})
-    tags=i.get('tags',[])
-    cus=i.get('customize',{})
+    cus=i['customize']
+    env=i['env']
 
     host_d=i.get('host_os_dict',{})
-    target_d=i.get('target_os_dict',{})
     winh=host_d.get('windows_base','')
-    win=target_d.get('windows_base','')
-    remote=target_d.get('remote','')
-    mingw=target_d.get('mingw','')
-    tbits=target_d.get('bits','')
 
-    envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
+    fp=cus.get('full_path','')
 
-    ############################################################
-    # Ask a few more questions
-    if winh=='yes':
-       s+='\nset PATH='+pi+';'+pi+'\\Scripts;%PATH%\n\n'
-    else:
-       s+='\nexport PATH='+pi+':'+pi+'/Scripts;$PATH\n\n'
+    ep=cus.get('env_prefix','')
+    p1=''
+    if ep!='' and fp!='':
+       p1=os.path.dirname(fp)
+       p2=os.path.dirname(p1)
 
-    return {'return':0, 'bat':s, 'env':env, 'tags':tags}
+       env[ep]=p2
+       env[ep+'_BIN']=p1
+
+    if p1!='':
+       ############################################################
+       if winh=='yes':
+          s+='\nset PATH='+p1+';'+p1+'\\Scripts;%PATH%\n\n'
+       else:
+          s+='\nexport PATH='+p1+':'+p1+'/Scripts:$PATH\n\n'
+
+    return {'return':0, 'bat':s}

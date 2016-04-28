@@ -1,7 +1,11 @@
 {
+  "auto_detect": "yes", 
   "customize": {
+    "add_only_with_version": "yes", 
     "build_dir_name": "icc", 
     "can_strip_dynamic_lib": "yes", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
     "env_prefix": "CK_ENV_COMPILER_ICC", 
     "languages": [
       "C", 
@@ -10,55 +14,37 @@
       "F90", 
       "F95"
     ], 
-    "skip_add_to_bin": "yes", 
-    "skip_add_to_ld_path": "yes", 
-    "skip_add_to_path": "yes"
+    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "only_for_target_os_tags": [
+      "linux", 
+      "windows"
+    ], 
+    "skip_soft_file_is_asked": "yes", 
+    "soft_file": {
+      "linux": "compilervars.sh", 
+      "win": "compilervars.bat"
+    }, 
+    "soft_file_not_tool": "yes", 
+    "soft_path_example": {
+      "linux": "/opt/intel/composer_xe_2015//bin//compilervars.sh", 
+      "win": "C:\\Program Files (x86)\\Intel\\Composer XE 2015\\bin\\compilervars.bat"
+    }, 
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1", 
+      "win": " > $#filename#$ 2>&1"
+    }
   }, 
-  "customize_script": "customize", 
-  "env": {
-    "CK_AR": "ar", 
-    "CK_ASM_EXT": ".s", 
-    "CK_CC": "icc", 
-    "CK_COMPILER_FLAGS_OBLIGATORY": "", 
-    "CK_COMPILER_FLAG_CPP11": "-Qstd=c++11", 
-    "CK_COMPILER_FLAG_CPP0X": "-Qstd=c++0x", 
-    "CK_COMPILER_FLAG_GPROF": "-pg", 
-    "CK_COMPILER_FLAG_OPENMP": "-openmp", 
-    "CK_COMPILER_FLAG_PTHREAD_LIB": "-pthread", 
-    "CK_COMPILER_FLAG_STD90": "-Qstd=c90", 
-    "CK_COMPILER_FLAG_STD99": "-Qstd=c99", 
-    "CK_CSTD99": "-Qstd=c99", 
-    "CK_CXX": "icc", 
-    "CK_DLL_EXT": ".so", 
-    "CK_EXE_EXT": ".out", 
-    "CK_EXTRA_LIB_DL": "-ldl", 
-    "CK_EXTRA_LIB_M": "-lm", 
-    "CK_F90": "ifort", 
-    "CK_F95": "ifort", 
-    "CK_FC": "ifort", 
-    "CK_FLAGS_CREATE_ASM": "-S", 
-    "CK_FLAGS_CREATE_OBJ": "-c", 
-    "CK_FLAGS_DLL": "-shared -fPIC", 
-    "CK_FLAGS_DLL_EXTRA": "", 
-    "CK_FLAGS_OUTPUT": "-o ", 
-    "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
-    "CK_FLAGS_STATIC_LIB": "-fPIC", 
-    "CK_FLAG_PREFIX_INCLUDE": "-I", 
-    "CK_FLAG_PREFIX_LIB_DIR": "-L", 
-    "CK_FLAG_PREFIX_VAR": "-D", 
-    "CK_GPROF_OUT_FILE": "gmon.out", 
-    "CK_LB": "ar rcs", 
-    "CK_LB_OUTPUT": "-o ", 
-    "CK_LD_FLAGS_EXTRA": "", 
-    "CK_LIB_EXT": ".a", 
-    "CK_LINKER_FLAG_OPENMP": "-lpthread -liomp5", 
-    "CK_MAKE": "make", 
-    "CK_OBJDUMP": "objdump -d", 
-    "CK_OBJ_EXT": ".o", 
-    "CK_PLUGIN_FLAG": "-fplugin=", 
-    "CK_PROFILER": "gprof"
+  "deps": {
+    "mvsc": {
+      "local": "yes", 
+      "only_for_target_os_tags": [
+        "windows"
+      ], 
+      "tags": "microsoft,compiler"
+    }
   }, 
-  "soft_name": "Compiler - Intel", 
+  "env": {}, 
+  "soft_name": "Intel compiler", 
   "tags": [
     "compiler", 
     "icc", 
@@ -67,12 +53,5 @@
     "lang-f77", 
     "lang-f90", 
     "lang-f95"
-  ], 
-  "tool": "icc", 
-  "version": {
-    "cmd": "--version > $#filename#$ 2>&1", 
-    "split": ".", 
-    "string_after": " ", 
-    "string_before": ") "
-  }
+  ]
 }

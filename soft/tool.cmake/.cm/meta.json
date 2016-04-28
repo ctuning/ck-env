@@ -1,21 +1,36 @@
 {
+  "auto_detect": "yes", 
   "customize": {
-    "env_prefix": "CK_ENV_TOOL_CMAKE",
-    "skip_add_to_ld_path": "yes"
-  },
+    "add_only_with_version": "yes", 
+    "add_to_path": "yes", 
+    "build_dir_name": "java", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_TOOL_CMAKE", 
+    "limit_recursion_dir_search": {"linux":3, "win":3}, 
+    "only_for_host_os_tags": [
+      "windows", 
+      "linux"
+    ], 
+    "soft_file": {
+      "linux": "cmake", 
+      "win": "cmake.exe"
+    }, 
+    "soft_path_example": {
+      "linux": "/usr/bin/cmake", 
+      "win": "C:\\Program Files (x86)\\CMake\\bin\\cmake.exe"
+    }, 
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1", 
+      "win": "--version > $#filename#$ 2>&1"
+    }
+  }, 
   "env": {
     "CK_CMAKE": "cmake"
-  },
-  "soft_name": "Tool - cmake",
+  }, 
+  "soft_name": "cmake", 
   "tags": [
-    "tool",
+    "tool", 
     "cmake"
-  ],
-  "tool": "cmake",
-  "version": {
-    "cmd": "--version > $#filename#$ 2>&1",
-    "split": ".",
-    "string_after": "",
-    "string_before": "version "
-  }
+  ]
 }

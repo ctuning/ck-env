@@ -3,7 +3,7 @@
     "env_prefix": "CK_ENV_BENCH_SLAMBENCH", 
     "skip_add_to_ld_path": "yes"
   }, 
-  "soft_name": "Benchmark - SlamBench", 
+  "soft_name": "SLAMBench", 
   "tags": [
     "bench", 
     "slambench"

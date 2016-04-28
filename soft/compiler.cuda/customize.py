@@ -7,6 +7,56 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+import os
+
+##############################################################################
+# customize directories to automatically find and register software
+
+def dirs(i):
+    return {'return':0}
+
+##############################################################################
+# limit directories 
+
+def limit(i):
+
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+
+    phosd=hosd.get('ck_name','')
+
+    dr=i.get('list',[])
+    drx=[]
+
+    for q in dr:
+        if q.find('.{')<0:
+           drx.append(q)
+
+    return {'return':0, 'list':drx}
+
+##############################################################################
+# parse software version
+
+def parse_version(i):
+
+    lst=i['output']
+
+    ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q!='':
+           j=q.find(' V')
+           if j>=0:
+              ver=q[j+2:]
+
+              j=ver.find(' ')
+              if j>=0:
+                 ver=ver[:j]
+                 break
+    
+    return {'return':0, 'version':ver}
+
 ##############################################################################
 # setup environment setup
 
@@ -53,35 +103,44 @@ def setup(i):
     ck=i['ck_kernel']
     s=''
 
-    iv=i.get('interactive','')
+    cus=i['customize']
+    env=i['env']
 
-    env=i.get('env',{})
-    cfg=i.get('cfg',{})
-    deps=i.get('deps',{})
-    tags=i.get('tags',[])
-    cus=i.get('customize',{})
+    host_d=i.get('host_os_dict',{})
+    target_d=i.get('host_os_dict',{})
 
-    target_d=i.get('target_os_dict',{})
-    win=target_d.get('windows_base','')
-    mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
+    winh=host_d.get('windows_base','')
 
-    ############################################################
-    env['CUDA_PATH']=pi
+    fp=cus.get('full_path','')
 
-    ############################################################
-    if win=='yes':
-       s+='\n'
-       s+='rem Setting environment\n\n'
+    ep=cus.get('env_prefix','')
+    p1=''
+    p2=''
+    if ep!='' and fp!='':
+       p1=os.path.dirname(fp)
+       p2=os.path.dirname(p1)
 
-       s+='set PATH="'+pi+'\\bin"; "'+pi+'\\libnvvp"; "'+pi+'\\nnvm\\bin"; "'+pi+'\\open64\\bin"; %PATH%\n\n'
+       env[ep]=p2
+       env[ep+'_BIN']=p1
 
-       env['CK_COMPILER_FLAGS_OBLIGATORY']='-DWINDOWS'
-       env[envp+'_LIB']=pi+'\\lib'
-       if tbits=='32':
-          env[envp+'_LIB']+='\\Win32'
+    env['CUDA_PATH']=p2
+
+    if p1!='':
+       ############################################################
+       if winh=='yes':
+          s+='\nset PATH='+p1+';'+p2+'\\libnvvp;'+p2+'\\nnvm\\bin;'+p2+'\\open64\\bin;%PATH%\n\n'
+
+          env['CK_COMPILER_FLAGS_OBLIGATORY']='-DWINDOWS'
+
+          ext='x64'
+          if tbits=='32':
+             ext='Win32'
+
+          env[ep+'_LIB']=p2+'\\lib\\'+ext
+
+       else:
+          s+='\nexport PATH='+p1+':$PATH\n\n'
 
     return {'return':0, 'bat':s}

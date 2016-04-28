@@ -1,0 +1,8 @@
+This is rather outdated PoCC compiler wrapper (polyhedral transformations):
+
+http://web.cs.ucla.edu/~pouchet/software/pocc
+
+Possibly outdated CK package is available in reproduce-fgg-2010 CK repo:
+
+$ ck pull repo:reproduce-fgg-2010
+$ ck list package

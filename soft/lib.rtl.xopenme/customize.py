@@ -70,6 +70,22 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    host_d=i.get('host_os_dict',{})
+    sdirs=host_d.get('dir_sep','')
+
+    fp=cus.get('full_path','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
+
+       cus['path_lib']=pi+sdirs+'lib'
+       cus['path_include']=pi+sdirs+'include'
+
+    ep=cus.get('env_prefix','')
+    if ep!='':
+       if pi!='':
+          env[ep]=pi
+
     ################################################################
     if win=='yes':
        if remote=='yes' or mingw=='yes': 
@@ -81,6 +97,10 @@ def setup(i):
     else:
        sext='.a'
        dext='.so'
+
+       if cus.get('path_lib','')!='':
+          s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
+          s+='export LIBRARY_PATH="'+cus['path_lib']+'":$LIBRARY_PATH\n\n'
 
     cus['include_name']='xopenme.h'
     cus['static_lib']='librtlxopenme'+sext

@@ -12,6 +12,8 @@ work={} # Will be updated by CK (temporal data)
 ck=None # Will be updated by CK (initialized CK kernel) 
 
 # Local settings
+env_install_path='CK_TOOLS'
+env_search='CK_DIRS'
 
 ##############################################################################
 # Initialize module
@@ -88,6 +90,9 @@ def detect(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
+    hplat=hosd['ck_name']
+    tplat=tosd['ck_name']
+
     env=i.get('env','')
 
     ubtr=hosd.get('use_bash_to_run','')
@@ -138,73 +143,48 @@ def detect(i):
        if duid!=duoa: x+=' ('+duid+')'
        ck.out('Software description entry found: '+x)
 
-    # Check if has version
-    ver=d.get('version',{})
+    # Check if has custom script
+    cs=None
+    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+    if rx['return']==0: 
+       cs=rx['code']
 
-    tool=ver.get('tool_via_env','')
-    if tool!='':
-       tool=svarb+svarb1+tool+svare1+svare
-    else:
-       tool=d.get('tool','')
+    # Checking name
+    cus=d.get('customize',{})
 
-    if i.get('tool','')!='':
-       tool=i['tool']
+    tool=i.get('tool','')
+    if tool=='':
+       if cus.get('soft_file_not_tool','')!='yes':
+          tool=cus.get('soft_file',{}).get(hplat,'')
 
-    cmd=tool+' '+ver.get('cmd','')
-    lst=[]
-
-    dver=''
-    lver=[]
+    # Preparing CMD
+    cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
     if o=='con':
        ck.out('')
        ck.out('Prepared cmd: '+cmd+' ...')
 
-    cmd=cmd.strip()
-    if cmd!='':
-       rx=ck.gen_tmp_file({})
-       if rx['return']>0: return rx
-       fn=rx['file_name']
+    # Check version (via customized script) ...
+    ver=''
+    lst=[]
+    ii={'full_path':tool,
+        'bat':env,
+        'host_os_dict':hosd,
+        'target_os_dict':tosd,
+        'cmd':cmd,
+        'custom_script_obj':cs}
+    rx=get_version(ii)
+    if rx['return']==0:
+       ver=rx['version']
+       lst=rx['version_lst']
 
-       cmd=cmd.replace('$#filename#$', fn)
+    if ver=='':
+       return {'return':16, 'error':'version was not detected'}
 
-       if env!='': cmd=env.strip()+'\n'+cmd
-
-       # Record to tmp batch and run
-       rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'yes'})
-       if rx['return']>0: return rx
-       fnb=rx['file_name']
-
-       rx=ck.save_text_file({'text_file':fnb, 'string':cmd})
-       if rx['return']>0: return rx
-
-       y=''
-       if sexe!='':
-          y+=sexe+' '+sbp+fnb+envsep
-       y+=' '+scall+' '+sbp+fnb
-
-       if ubtr!='': y=ubtr.replace('$#cmd#$',y)
-
-       if o=='con':
-          ck.out('')
-          ck.out('Executing "'+y+'" ...')
-
-       ry=os.system(y)
-#       if ry>0:
-#          return {'return':16, 'error':'executing command returned non-zero value ('+cmd+')'}
-
-       os.remove(fnb)
-
-       if os.path.isfile(fn): 
-          import sys
-          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'encoding':sys.stdout.encoding})
-          if rx['return']>0: return rx
-          lst=rx['lst']
-
-          os.remove(fn)
-
-    if len(lst)==0:
-       return {'return':16, 'error':'version output file is empty'}
+    # Split version
+    rx=split_version({'version':ver})
+    if rx['return']>0: return rx
+    sver=rx['version_split']
 
     if i.get('show','')=='yes':
        ck.out('Output:')
@@ -212,64 +192,12 @@ def detect(i):
        for q in lst:
            ck.out('  '+q)
 
-    dver=''
-    cl=ver.get('check_lines',-1)
+    if o=='con':
+       ck.out('')
+       ck.out('Version detected: '+ver)
 
-    jj=0
-    for s in lst:
-        jj+=1
-        if cl!=-1 and jj>cl: break
-
-        sbefore=ver.get('string_before','')
-        safter=ver.get('string_after','')
-        saftere=ver.get('string_after_end','')
-        safter1=ver.get('string_after1','')
-        safter_rel=ver.get('string_after_relaxed','')
-
-        i1=0
-        i2=len(s)
-
-        if sbefore!='':
-           i1=s.find(sbefore)
-           if i1<0: continue
-
-        if safter!='':
-           if sbefore!='': i2=s.find(safter, i1+len(sbefore)+1)
-           else: i2=s.find(safter)
-
-           if i2<0 and safter1!='':
-              if safter1=='@@@': i2=len(s)
-              else:
-                if sbefore!='': i2=s.find(safter1, i1+len(sbefore)+1)
-                else: i2=s.find(safter1)
-
-           if i2<0: 
-              if saftere=='yes':
-                 i2=len(s)-1
-              else:
-                 continue
-        elif safter_rel!='':
-           if sbefore!='': i3=s.find(safter_rel, i1+len(sbefore)+1)
-           else: i3=s.find(safter_rel)
-
-           if i3>=0: i2=i3
-
-        dver=s[i1+len(sbefore):i2].strip()
-
-        spl=ver.get('split','')
-        if spl!='':
-           lver=dver.split(spl)
-
-        break
-
-    if dver=='':
-       return {'return':16, 'error':'version was not detected'}
-    else:
-       if o=='con':
-          ck.out('Version detected: '+dver)
-
-    return {'return':0, 'version_str':dver, 
-                        'version_lst':lver, 
+    return {'return':0, 'version_str':ver, 
+                        'version_lst':sver, 
                         'version_raw':lst}
 
 ##############################################################################
@@ -310,6 +238,7 @@ def setup(i):
               (deps)              - list with dependencies (in special format, possibly resolved (from package))
 
               (install_path)      - path with soft is installed
+              (full_path)         - full path to a tool or library (install_path will be calculated automatically)
 
               (bat_file)          - if !='', record environment to this bat file, 
                                     instead of creating env entry
@@ -323,6 +252,9 @@ def setup(i):
               (package_uoa)       - if called from package, record package_uoa just in case
 
               (reset_env)         - if 'yes', do not use environment from existing entry, but use original one
+
+              (extra_version)     - add extra version, when registering software 
+                                    (for example, -trunk-20160421)
             }
 
     Output: {
@@ -332,6 +264,8 @@ def setup(i):
 
               env_data_uoa - environment entry UOA
               env_data_uid - environment entry UID
+
+              deps         - resolved dependencies (if any)
             }
 
     """
@@ -344,11 +278,7 @@ def setup(i):
     ########################################################################
     # Check host/target OS/CPU
     hos=i.get('host_os','')
-
     tos=i.get('target_os','')
-    if tos=='':
-       tos=cfg.get('default_target_os_uoa','')
-
     tdid=i.get('target_device_id','')
 
     r=ck.access({'action':'detect',
@@ -465,6 +395,10 @@ def setup(i):
 
     csp=d.get('can_skip_path','')
 
+    ev=i.get('extra_version','')
+    if ev=='':
+       ev=cus.get('extra_version','')
+
     # Add tags from the search!
     for q in tags.split(','):
         q1=q.strip()
@@ -515,6 +449,8 @@ def setup(i):
     pi1=i.get('install_path','')
     if pi1!='': pi=pi1
 
+    fp=i.get('full_path','')
+
     ########################################################################
     # Check meta
     setup={'host_os_uoa':hos,
@@ -545,37 +481,112 @@ def setup(i):
 
     for q in deps:
         v=deps[q]
-        setup['deps_'+q]=v['uoa']
+        vuoa=v.get('uoa','') # can be undefined if OS specific
+        if vuoa!='': setup['deps_'+q]=vuoa
+
+    # Check if has custom script
+    cs=None
+    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+    if rx['return']==0: 
+       cs=rx['code']
 
     ########################################################################
-    # Check version
+    ########################################################################
+    ########################################################################
+    ########################################################################
+    # Starting processing soft
+
+    # Check via full path first
+    if pi=='' and fp=='' and o=='con' and cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and not update:
+       ck.out('')
+
+       sname=cus.get('soft_file',{}).get(ck_os_name,'')
+
+       y0='installed library, tool or script'
+       if sname!='': 
+          suname=d.get('soft_name','')
+
+          if cus.get('skip_soft_file_is_asked','')=='yes':
+             if suname!='': y0=suname
+          else:  
+             y0=sname
+             if suname!='': y0=suname+' ('+sname+')'
+
+       y1='full path to '+y0
+
+       y2=''
+       y3=cus.get('soft_path_example',{}).get(ck_os_name,'')
+       if y3!='': y2=' (example: '+y3+')'
+
+       r=ck.inp({'text':'Enter '+y1+y2+': '})
+       fp=r['string'].strip()
+
+    # Check if file really exists and check version if a tool
     ver=cus.get('version','')
+    if fp!='':
+       if cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
+          return {'return':1, 'error':'software not found in a specified path ('+fp+')'}
+
+       if ver=='':
+          scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
+
+          if ver=='':
+             if o=='con':
+                ck.out('')
+                ck.out('  Attempting to detect version automatically (if supported) ...')
+
+             # Check version (via customized script) ...
+             ii={'full_path':fp,
+                 'bat':sdeps,
+                 'host_os_dict':hosd,
+                 'target_os_dict':tosd,
+                 'cmd':scmd,
+                 'custom_script_obj':cs}
+             rx=get_version(ii)
+             if rx['return']>0 and rx['return']!=16 and rx['return']!=22: return rx
+             if rx['return']==0:
+                ver=rx['version']
+                if o=='con':
+                   ck.out('')
+                   ck.out('  Detected version: '+ver)
+             else:
+                if o=='con':
+                   ck.out('')
+                   ck.out('  WARNING: didn\'t manage to automatically detect software version!')
+
+    ########################################################################
+    # Ask for version if was not detected or is not explicitly specified (for example, from a package)
     if ver==''  and cus.get('skip_version','')!='yes' and o=='con':
        ck.out('')
        r=ck.inp({'text':'Enter version of this software (for example, 3.21.6-2 or press Enter if default/unknown): '})
        ver=r['string'].strip().lower()
 
+    # Add extra, if needed (useful for changing trunks)
+    if ev!='':
+       ver=ver+ev
+
+    # Split version
+    rx=split_version({'version':ver})
+    if rx['return']>0: return rx
+    sver=rx['version_split']
+
+    # Add version to setup and separate into tags
+    setup['version']=ver
+    setup['version_split']=sver
+
+    # Prepare tags from version
     if ver!='': 
-       setup['version']=ver
-       tg='v'+ver
-       if tg!='' and tg not in ltags: ltags.append(tg)
+       x=''
+       for q in sver:
+           if x!='':x+='.'
+           x+=str(q)
 
-       # Separate version into subversions for tags
-       if tg!='':
-          ltags1=[]
-          mf=tg.rfind('.')
-          if tg.startswith('v') and mf>=0:
-             while mf>=0:
-                   t=tg[:mf]
-                   if t not in ltags:
-                      ltags1.append(t)
-                   mf=tg.rfind('.',0,mf-1)
+           tg='v'+x
 
-          if len(ltags1)>0:
-             for z in ltags1:
-                 ltags.append(z)
+           if tg not in ltags:
+              ltags.append(tg)
 
-    # Finish tags
+    # Prepare final tags string
     stags=''
     for q in ltags:
         if q!='':
@@ -583,7 +594,8 @@ def setup(i):
            stags+=q.strip()
 
     ########################################################################
-    # Search
+    # Search if environment is already registered for this version
+    # (to delete or reuse it)
     finish=False
     if enduoa=='' and i.get('env_new','')!='yes':
        if o=='con':
@@ -593,7 +605,9 @@ def setup(i):
           if len(deps)>0:
              for q in deps:
                  v=deps[q]
-                 ck.out('  * Dependency: '+q+'='+v.get('uoa',''))
+                 vuoa=v.get('uoa','')
+                 if vuoa!='':
+                    ck.out('  * Dependency: '+q+'='+v.get('uoa',''))
 
        r=ck.access({'action':'search',
                     'module_uoa':cfg['module_deps']['env'],
@@ -614,7 +628,7 @@ def setup(i):
              if enduid!=enduoa: x+=' ('+enduid+')'
 
              ck.out('')
-             ck.out('Environment already registered: '+x)
+             ck.out('Environment already registered for this version: '+x)
 
              if i.get('update','')=='yes':
                 update=True
@@ -694,7 +708,7 @@ def setup(i):
        if elp=='': elp='LIBRARY_PATH'
 
        # Check installation path
-       if cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and not update:
+       if fp=='' and cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and not update:
           if o=='con':
 #             if update:
 #                ck.out('')
@@ -726,49 +740,13 @@ def setup(i):
           if pi=='' and csp!='yes':
              return {'return':1, 'error':'installation path is not specified'}
 
-       # Split version to be able to compare/search results
-       sver=[]
-       if ver!='':
-          import re
-          sver1=re.split('\.|\-|\_', ver)
-          for q in sver1:
-              x=q
-              try:
-                 x=int(q)
-              except:
-                 pass
-              sver.append(x)
-
-#       ver_int=cus.get('version_int',0)
-#       if ver_int==0 and o=='con' and cus.get('skip_version','')!='yes':
-#          # Trying to calculate version ourselves (XX.YY.ZZZZ)
-#          if ver!='':
-#             bver=ver.split('.')
-#             bl=len(bver)
-#             for b in range(0, bl):
-#                 bb=bver[b]
-#                 try:
-#                    ib=int(bb)
-#                 except ValueError:
-#                    ib=0
-#                 bver[b]=ib
-#
-#             ver_int=0
-#             if bl>0: ver_int+=bver[0]*1000000
-#             if bl>1: ver_int+=bver[1]*10000
-#             if bl>2: ver_int+=bver[2]
-#
-#             ck.out('')
-#             ck.out('Calculated integer version for internal comparison: '+str(ver_int))
-
-#          r=ck.inp({'text':'Enter soft version as integer for comparison (for V5.2.3 use 50203): '})
-#          verx=r['string'].strip()
-#          if verx=='': verx='0'
-#          ver_int=int(verx)
+       if fp!='':
+          cus['full_path']=fp
 
        if pi!='':
           cus['path_install']=pi
 
+       ### OLD start
        if cus.get('skip_add_dirs','')!='yes' and pi!='':
           if cus.get('add_include_path','')=='yes' and cus.get('path_include','')=='':
              pii=pi+sdirs+'include'
@@ -790,21 +768,21 @@ def setup(i):
              cus['path_lib']=plib
        else:
           cus['skip_path']='yes'
+       ### OLD stop
 
        # If install path has space, add quotes for some OS ...
        xs=''
        if pi.find(' ')>=0 and eifs!='':
           xs=eifs
 
-       # Check if customization script **************************************************************************
-       customize_script=d.get('customize_script','')
-       sadd=''
-       if customize_script!='':
-          # Check individual prepare script
-          rx=ck.load_module_from_path({'path':p, 'module_code_name':customize_script, 'skip_init':'yes'})
-          if rx['return']>0: return rx
-          crx=rx['code']
+       # Check if has custom script
+       cs=None
+       rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+       if rx['return']==0: 
+          cs=rx['code']
 
+       sadd=''
+       if cs!=None and 'setup' in dir(cs):
           # Prepare info
           rx=ck.gen_tmp_file({})
           if rx['return']>0: return rx
@@ -832,7 +810,7 @@ def setup(i):
           if o=='con': ii['interactive']='yes'
           if i.get('quiet','')=='yes': ii['interactive']=''
 
-          rx=crx.setup(ii)
+          rx=cs.setup(ii)
           if rx['return']>0: return rx
 
           sadd=rx['bat']
@@ -840,24 +818,6 @@ def setup(i):
 
           if cus.get('soft_name','')!='':
              dname=cus['soft_name']
-
-       #########################################################
-       # Check if file exists ...
-       if cus.get('check_that_exists','')=='yes':
-          ctek=cus.get('check_that_exists_key','')
-          if ctek!='':
-             sname=cus.get('soft_file',{}).get(ck_os_name,'')
-             if sname!='':
-                px=cus.get(ctek,'')
-                pxx=os.path.join(px, sname)
-                if not os.path.isfile(pxx):
-                   return {'return':5, 'error':'file '+sname+' was not found in path '+px}
-
-                cus['check_file']=pxx
-
-       #########################################################
-       # Check version ...
-
 
        #########################################################
        # Finish batch
@@ -883,9 +843,6 @@ def setup(i):
        if ver!='':
           sb+=rem+' '+'Tool version       = '+ver+'\n'
           cus['version']=ver
-#       if ver_int!=0:
-#          sb+=rem+' '+'Tool int version = '+str(ver_int)+'\n'
-#          cus['version_int']=ver_int
        if len(sver)>0:
           sb+=rem+' '+'Tool split version = '+json.dumps(sver)+'\n'
           cus['version_split']=sver
@@ -906,7 +863,7 @@ def setup(i):
        envp_i=envp+'_INCLUDE'
        piib=cus.get('path_include','')
 
-       if cus.get('skip_add_dirs','')!='yes' and pi!='':
+       if cus.get('skip_add_dirs','')!='yes': # and pi!='':
           if pib!='' and cus.get('skip_add_to_bin','')!='yes': sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
           if plib!='': sb+=eset+' '+envp_l+'='+xs+plib+xs+'\n'
           if piib!='': sb+=eset+' '+envp_i+'='+xs+piib+xs+'\n'
@@ -926,10 +883,10 @@ def setup(i):
        sb+='\n'
 
        # Add to existing vars
-       if cus.get('skip_add_to_path','')!='yes' and cus.get('skip_add_to_bin','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!='':
+       if cus.get('add_to_path','')=='yes' or (cus.get('skip_add_to_path','')!='yes' and cus.get('skip_add_to_bin','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!=''):
           sb+=eset+' PATH='+svarb+envp_b+svare+evs+svarb+'PATH'+svare+'\n'
 
-       if cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes' and pi!='':
+       if pi!='' and cus.get('skip_add_to_ld_path','')!='yes' and cus.get('skip_dirs','')!='yes':
           sb+=eset+' '+elp+'='+svarb+envp_l+svare+evs+svarb+elp+svare+'\n'
           sb+=eset+' '+ellp+'='+svarb+envp_l+svare+evs+svarb+ellp+svare+'\n'
 
@@ -1005,7 +962,7 @@ def setup(i):
        rx=ck.save_text_file({'text_file':pb, 'string':sb})
        if rx['return']>0: return rx
 
-    return {'return':0, 'env_data_uoa':enduoa, 'env_data_uid':enduid}
+    return {'return':0, 'env_data_uoa':enduoa, 'env_data_uid':enduid, 'deps':deps}
 
 ##############################################################################
 # search tool in pre-defined paths
@@ -1013,29 +970,145 @@ def setup(i):
 def search_tool(i):
     """
     Input:  {
-              path_list - path list
-              file_name - name of file to find (can be with patterns)
+              path_list             - path list
+              file_name             - name of file to find (can be with patterns)
+              (recursion_level_max) - if >0, limit dir recursion
+              (can_be_dir)          - if 'yes', return directory as well
             }
 
     Output: {
-              return    - return code =  0, if successful
-                                         >  0, if error
-              (error)   - error text if return > 0
+              return       - return code =  0, if successful
+                                            >  0, if error
+              (error)      - error text if return > 0
 
-              list      - list of file (see ck.list_all_files)
+              list         - list of file (see ck.list_all_files)
+              elapsed_time - elapsed time
+
             }
     """
 
+    o=i.get('out','')
+
+    import time
+    import os
+    start_time = time.time()
+
     pl=i['path_list']
     fn=i['file_name']
+    pt=''
+
+    rlm=i.get('recursion_level_max',0)
+    cbd=i.get('can_be_dir','')
+
+    if fn.find('?')>=0 or fn.find('*')>=0:
+       pt=fn
+       fn=''
+
+    lst=[]
 
     for p in pl:
-        r=ck.list_all_files({'path':p, 'file_name':fn, 'all':'yes', 
-                             'ignore_symb_dirs':'yes', 'add_path':'yes'})
-        if r['return']>0: return r
-        lst=r['list']
+        if o=='con':
+           ck.out('    * Searching in '+p+' ...')
 
-    return {'return':0, 'list':lst}
+        r=list_all_files({'path':p, 
+                          'file_name':fn, 
+                          'pattern':pt,
+                          'recursion_level_max':rlm})
+        if r['return']>0: return r
+        for q in r['list']:
+            new=True
+            if cbd!='yes' and os.path.isdir(q):
+               new=False
+
+            if new:
+               for qq in lst:
+                   if os.path.realpath(q)==os.path.realpath(qq):
+                      new=False
+                      break
+            if new:
+               lst.append(q)
+
+    elapsed_time = time.time() - start_time
+
+    return {'return':0, 'list':lst, 'elapsed_time':elapsed_time}
+
+
+##############################################################################
+# List all files recursively in a given directory
+
+def list_all_files(i):
+    """
+    Input:  {
+              path                  - top level path
+              (file_name)           - search for a specific file name
+              (pattern)             - return only files with this pattern
+              (path_ext)            - path extension (needed for recursion)
+              (recursion_level_max) - if >0, limit dir recursion
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              list         - list of found files
+            }
+    """
+
+    import sys
+    import os
+
+    a=[]
+
+    fname=i.get('file_name','')
+
+    pattern=i.get('pattern','')
+    if pattern!='':
+       import fnmatch
+
+    pe=''
+    if i.get('path_ext','')!='': 
+       pe=i['path_ext']
+
+    po=i.get('path','')
+    if sys.version_info[0]<3: po=unicode(po)
+
+    rl=i.get('recursion_level',0)
+    rlm=i.get('recursion_level_max',0)
+
+    if rlm>0 and rl>rlm: 
+       return {'return':0, 'list':[]}
+
+    try:
+       dirList=os.listdir(po)
+    except Exception as e:
+       None
+    else:
+       for fn in dirList:
+           p=os.path.join(po, fn)
+
+           add=True
+
+           if fname!='' and fname!=fn:
+              add=False
+
+           if pattern!='' and not fnmatch.fnmatch(fn, pattern):
+              add=False
+
+           if add:
+              a.append(p)
+
+           if os.path.isdir(p): # and os.path.realpath(p)==p: # real path was useful
+                                                              # to avoid cases when directory links to itself
+                                                              # however, since we limit recursion, it doesn't matter ...
+              r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
+                                'pattern':pattern, 'file_name':fname, 
+                                'recursion_level':rl+1, 'recursion_level_max':rlm})
+              if r['return']>0: return r
+              for q in r.get('list',[]):
+                  a.append(q)
+
+    return {'return':0, 'list':a}
 
 ##############################################################################
 # check if software is installed
@@ -1053,6 +1126,13 @@ def check(i):
 
               (interactive)       - if 'yes', and has questions, ask user
               (quiet)             - if 'yes', do not ask questions but select default value
+
+              (skip_help)         - if 'yes', skip print help if not detected (when called from env setup)
+
+              (deps)              - already resolved deps (if called from env)
+
+              (extra_version)     - add extra version, when registering software 
+                                    (for example, -trunk-20160421)
             }
 
     Output: {
@@ -1067,8 +1147,11 @@ def check(i):
     """
 
     import os
+    import json
 
     o=i.get('out','')
+    oo=''
+    if o=='con': oo=o
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -1087,9 +1170,16 @@ def check(i):
     hosx=r['host_os_uoa']
     hosd=r['host_os_dict']
 
+    ck_os_name=hosd['ck_name']
+
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
+
+    tbits=tosd.get('bits','')
+
+    hplat=hosd.get('ck_name','')
+    tplat=tosd.get('ck_name','')
 
     # Check soft UOA
     duoa=i.get('uoa','')
@@ -1119,25 +1209,115 @@ def check(i):
     d=r['dict']
     p=r['path']
 
+    cus=d.get('customize',{})
+
     duoa=r['data_uoa']
     duid=r['data_uid']
 
-    if o=='con':
-       x=duoa
-       if duid!=duoa: x+=' ('+duid+')'
-       ck.out('Software description entry found: '+x)
+    ev=i.get('extra_version','')
+    if ev=='':
+       ev=cus.get('extra_version','')
+
+    # Check if restricts dependency to a given host or target OS
+    rx=check_target({'dict':cus,
+                     'host_os_uoa':hosx,
+                     'host_os_dict':hosd,
+                     'target_os_uoa':tosx,
+                     'target_os_dict':tosd})
+    if rx['return']>0: return rx
+
+    # Check if need to resolve dependencies
+    deps=i.get('deps',{})
+    sbat=''
+    if len(deps)==0:
+       deps=d.get('deps',{})
+
+       if len(deps)>0:
+          ii={'action':'resolve',
+              'module_uoa':cfg['module_deps']['env'],
+              'host_os':hos,
+              'target_os':tos,
+              'target_device_id':tdid,
+              'deps':deps,
+              'out':oo}
+          rx=ck.access(ii)
+          if rx['return']>0: return rx
+
+          sbat=rx['bat']
+
+#    if o=='con':
+#       x=duoa
+#       if duid!=duoa: x+=' ('+duid+')'
+#       ck.out('Software description entry found: '+x)
 
     rr={'return':0}
 
-    # Check if has detect script
-    ds=d.get('check_script','')
-    if ds!='':
-       # Check individual prepare script
-       rx=ck.load_module_from_path({'path':p, 'module_code_name':ds, 'skip_init':'yes'})
-       if rx['return']>0: return rx
-       crx=rx['code']
+    # Check if has custom script
+    cs=None
+    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+    if rx['return']==0: 
+       cs=rx['code']
 
-       # Call setup script
+    scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
+
+    # Check where to search depending if Windows or Linux
+    dirs=[]
+    if hplat=='win':
+       x=os.environ.get('ProgramW6432','')
+       if x!='' and os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+       x=os.environ.get('ProgramFiles(x86)','')
+       if x!='' and os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+       x=os.environ.get('ProgramFiles','')
+       if x!='' and os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+       x='C:\\Program Files'
+       if os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+       x='D:\\Program Files'
+       if os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+       x='C:\\Program Files (x86)'
+       if os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+       x='D:\\Program Files (x86)'
+       if os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+    else:
+       x='/usr'
+       if os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+       x='/opt'
+       if os.path.isdir(x) and x not in dirs:
+          dirs.append(x)
+
+    # Add from CK_TOOLS env
+    x=os.environ.get(env_install_path,'')
+    if x!='':
+       dirs.append(x)
+
+    # Add extra from CK_DIRS
+    x=os.environ.get(env_search,'')
+    if x!='':
+       if ck_os_name=='win':
+          xx=x.split(';')
+       else:
+          xx=x.split(':')
+       for x in xx:
+           dirs.append(x)
+
+    # Add user space
+    from os.path import expanduser
+    dirs.append(expanduser("~"))
+
+    # Check if interactive
+    iv='yes'
+    quiet=i.get('quiet','')
+    if quiet=='yes' or o!='con': iv=''
+
+    # If there is a function to customize dirs, call it
+    if 'dirs' in dir(cs):
        ii={"host_os_uoa":hosx,
            "host_os_uid":hos,
            "host_os_dict":hosd,
@@ -1147,17 +1327,520 @@ def check(i):
            "target_device_id":tdid,
            "cfg":d,
            "self_cfg":cfg,
-           "ck_kernel":ck
+           "ck_kernel":ck,
+           "dirs":dirs,
+           "interactive":iv
           }
+       rx=cs.dirs(ii)
+       if rx['return']>0: return rx
+       if len(rx.get('dirs',[]))>0: dirs=rx['dirs']
 
-#       if o=='con': ii['interactive']='yes'
-       ii['interactive']='yes'
-       if i.get('quiet','')=='yes': ii['interactive']=''
+    # Check which file to search for
+    sname=cus.get('soft_file',{}).get(tplat,'')
+    osname=sname
+    if sname=='':
+       return {'return':1, 'error':'software description doesn\'t have a name of file to search ...'}
 
-       rx=crx.setup(ii)
+    # Check if search for extensions gcc-4.9, clang-3.8, etc
+    if hplat=='linux' and cus.get('search_numeric_ext_on_linux','')=='yes':
+       sname+='*'
+
+    # Search tools
+    suname=d.get('soft_name','')
+    x=sname
+    if suname!='': x=suname+' ('+sname+')'
+
+    ck.out('')
+    ck.out('  Searching for '+x+' to automatically register in the CK - it may take some time, please wait ...')
+    ck.out('')
+
+    rlm=cus.get('limit_recursion_dir_search',{}).get(hplat,0)
+
+    rx=search_tool({'path_list':dirs, 'file_name':sname, 'recursion_level_max':rlm, 'out':'con'})
+    if rx['return']>0: return rx
+
+    lst=rx['list']
+    et=rx['elapsed_time']
+
+    # Limit to required ones
+    if 'limit' in dir(cs):
+       rx=cs.limit({'list':lst,
+                    'host_os_dict':hosd,
+                    'target_os_dict':tosd,
+                    'soft_name':osname,
+                    'ck_kernel':ck})
+       if rx['return']>0: return rx
+       lst=rx['list']
+
+    # Print results
+    if o=='con':
+       ck.out('')
+       ck.out('  Search completed in '+('%.1f' % et)+' secs. Found '+str(len(lst))+' installations ...')
+
+    # Select, if found
+    il=0
+    if len(lst)>1:
+       # Trying to detect version
+       if o=='con':
+          ck.out('')
+          ck.out('  Detecting and sorting versions (ignore some work output) ...')
+
+       vlst=[]
+
+       for q in lst:
+           kk={'path':q}
+
+           if o=='con':
+              ck.out('    * '+q)
+
+           # Try to detect version
+           ver=''
+           ii={'full_path':q,
+               'bat':sbat,
+               'host_os_dict':hosd,
+               'target_os_dict':tosd,
+               'cmd':scmd,
+               'custom_script_obj':cs}
+           rx=get_version(ii)
+           if rx['return']>0:
+              if o=='con':
+                 ck.out('        WARNING: '+rx['error'])
+           else:
+              ver=rx['version']
+
+              # Split version
+              rx=split_version({'version':ver})
+              if rx['return']>0: return rx
+              sver=rx['version_split']
+
+              kk['version']=ver
+              kk['version_split']=sver
+
+              ck.out('        Version: '+ver)
+              ck.out('        Split version: '+json.dumps(sver))
+
+           if cus.get('add_only_with_version','')!='yes' or ver!='':
+              vlst.append(kk)
+
+       if o=='con':
+          ck.out('')
+
+       # Sort by version
+       vlst=sorted(vlst, key=lambda k: (internal_get_val(k.get('version_split',[]), 0, 0),
+                                        internal_get_val(k.get('version_split',[]), 1, 0),
+                                        internal_get_val(k.get('version_split',[]), 2, 0),
+                                        internal_get_val(k.get('version_split',[]), 3, 0),
+                                        internal_get_val(k.get('version_split',[]), 4, 0),
+                                        k.get('path','')),
+                   reverse=True)
+
+       lst=[]
+       for q in vlst:
+           lst.append(q['path'])
+
+       if len(lst)>1:
+          if o=='con':
+             ck.out('')
+
+          if iv=='yes':
+             ck.out('  Registering software installation in the CK:')
+             ck.out('')
+
+             iq=0
+
+             for kk in vlst:
+                 q=kk['path']
+                 ver=kk.get('version','')
+
+                 x=q
+                 if ver!='':x='Version '+ver+' - '+x
+
+                 ck.out('    '+str(iq)+') '+x)
+                 iq+=1
+
+             ck.out('')
+             rx=ck.inp({'text':'    Please, select the number of any above installation or press Enter to select 0: '})
+             xx=rx['string'].strip()
+             if xx=='': xx='0'
+             il=0
+             try:
+                il=int(xx)
+             except:
+                il=-1
+
+             if il<0 or il>=len(lst):
+                return {'return':1, 'error':'selection number is not recognized'}
+
+    # If not found, quit
+    if len(lst)==0:
+       if i.get('skip_help','')!='yes':
+          r=print_help({'data_uoa':duid, 'platform':ck_os_name})
+          # Ignore output
+
+       return {'return':16, 'error':'software was not automatically found on your system! Please, install it and re-try again!'}
+
+    # Attempt to register in CK
+    pf=lst[il]
+
+    if o=='con':
+       ck.out('')
+       ck.out('  Registering in the CK ('+pf+') ...')
+       ck.out('')
+
+    ii={'data_uoa':duid,
+        'customize':cus,
+        'full_path':pf,
+        'quiet':quiet,
+        'host_os':hos,
+        'target_os':tos,
+        'target_device_id':tdid,
+        'deps':deps,
+        'extra_version':ev,
+        'out':oo}
+    rz=setup(ii)
+    if rz['return']>0: return rz
+
+    xeduoa=rz['env_data_uoa']
+    xeduid=rz['env_data_uid']
+
+    if o=='con':
+       ck.out('  Successfully registered with UID: '+xeduid)
+
+    return rz
+
+##############################################################################
+# get version of a given software (internal)
+
+def get_version(i):
+    """
+    Input:  {
+              full_path
+              bat
+              cmd
+
+              custom_script_obj
+              host_os_dict
+
+              (show)         - if 'yes', show output file
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              version      - string version
+              version_lst  - raw output (as list)
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+
+    fp=i.get('full_path','')
+    sb=i.get('bat','')
+    cmdx=i.get('cmd','')
+
+    cs=i.get('custom_script_obj','')
+    if cs=='': cs=None
+
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+
+    ubtr=hosd.get('use_bash_to_run','')
+    svarb=hosd.get('env_var_start','')
+    svarb1=hosd.get('env_var_extra1','')
+    svare=hosd.get('env_var_stop','')
+    svare1=hosd.get('env_var_extra2','')
+    sexe=hosd.get('set_executable','')
+    sbp=hosd.get('bin_prefix','')
+    envsep=hosd.get('env_separator','')
+    scall=hosd.get('env_call','')
+    sext=hosd.get('script_ext','')
+    eifsc=hosd.get('env_quotes_if_space_in_call','')
+    nout=hosd.get('no_output','')
+    # Generate tmp file
+    rx=ck.gen_tmp_file({})
+    if rx['return']>0: return rx
+    ftmp=rx['file_name']
+
+    # Preparing CMD
+    ver=''
+    lst=[]
+    if 'version_cmd' in dir(cs):
+       rx=cs.version_cmd({'full_path':fp,
+                          'host_os_dict':hosd,
+                          'target_os_dict':tosd,
+                          'cmd':cmdx,
+                          'ck_kernel':ck,
+                          'out':o})
+       if rx['return']>0: return rx
+       cmd=rx.get('cmd','')
+       ver=rx.get('version','')
+    else:    
+       if eifsc!='' and fp.find(' ')>=0 and not fp.startswith(eifsc):
+          fp=eifsc+fp+eifsc
+
+       cmd=''
+
+       if o!='con':
+          cmd+=nout
+
+       cmd+=fp+' '+cmdx
+
+    if ver=='':
+       if 'parse_version' not in dir(cs):
+          return {'return':22, 'error':'do not know how to detect version of a given software'}
+ 
+       cmd=cmd.replace('$#filename#$', ftmp)
+
+       if o=='con':
+          ck.out('')
+          ck.out('  Prepared CMD to detect version: '+cmd+' ...')
+
+       # Finalizing batch file
+       sb+='\n'+cmd+'\n'
+
+       # Record to tmp batch and run
+       rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'yes'})
+       if rx['return']>0: return rx
+       fnb=rx['file_name']
+
+       rx=ck.save_text_file({'text_file':fnb, 'string':sb})
        if rx['return']>0: return rx
 
-       rr['path_install']=rx['path_install']
-       rr['cus']=rx['cus']
+       # Executing script
+       y=''
+       if sexe!='':
+          y+=sexe+' '+sbp+fnb+envsep
+       y+=' '+scall+' '+sbp+fnb
 
-    return rr
+       if ubtr!='': y=ubtr.replace('$#cmd#$',y)
+
+       if o=='con':
+          ck.out('')
+          ck.out('Executing "'+y+'" ...')
+
+       ry=os.system(y)
+       # ignore return code (checking output file instead)
+
+       os.remove(fnb)
+
+       if os.path.isfile(ftmp): 
+          import sys
+          rx=ck.load_text_file({'text_file':ftmp, 'split_to_list':'yes', 'encoding':sys.stdout.encoding})
+          if rx['return']>0: return rx
+          lst=rx['lst']
+
+          os.remove(ftmp)
+
+       if len(lst)==0:
+          return {'return':16, 'error':'version output file is empty'}
+
+       if i.get('show','')=='yes':
+          ck.out('Output:')
+          ck.out('')
+          for q in lst:
+              ck.out('  '+q)
+
+       # Calling customized script to parse version
+       ii={'output':lst,
+           'host_os_dict':hosd,
+           'ck_kernel':ck}
+       rx=cs.parse_version(ii)
+       if rx['return']>0 and rx['return']!=16: return rx
+
+       ver=rx.get('version','')
+
+    if ver=='':
+       return {'return':16, 'error':'version was not detected'}
+
+    if o=='con':
+       ck.out('')
+       ck.out('Version detected: '+ver)
+
+    return {'return':0, 'version':ver, 'version_lst':lst} 
+
+##############################################################################
+# internal function: get value from list without error if out of bounds
+
+def internal_get_val(lst, index, default_value):
+    v=default_value
+    if index<len(lst):
+       v=lst[index]
+    return v
+
+##############################################################################
+# print help for this software entry
+
+def print_help(i):
+    """
+    Input:  {
+              data_uoa - data UOA to get help
+              platform - platform name 
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    duoa=i['data_uoa']
+    hplat=i['platform']
+
+    ti=''
+    # If only one related software entry found, try to read text notes from it 
+    rx=ck.access({'action':'find',
+                  'module_uoa':work['self_module_uid'],
+                  'data_uoa':duoa})
+    if rx['return']>0: return rx
+    pppx=rx['path']
+
+    ppx=os.path.join(pppx,'install.txt')
+    if os.path.isfile(ppx):
+       rx=ck.load_text_file({'text_file':ppx})
+       if rx['return']==0:
+          ti+=rx['string']
+
+    ppx=os.path.join(pppx,'install.'+hplat+'.txt')
+    if os.path.isfile(ppx):
+       rx=ck.load_text_file({'text_file':ppx})
+       if rx['return']==0:
+          if ti!='': ti+='\n'
+          ti+=rx['string']
+
+    if ti!='':
+       read=True
+
+       ck.out('****** Installation notes: ******')
+
+       ck.out(ti)
+
+       ck.out('*********************************')
+
+    else:
+       # Show possible Wiki page
+       rx=ck.inp({'text':'       Would you like to open wiki pages about installation and other info (if exists) (Y/n): '})
+       x=rx['string'].strip().lower()
+
+       if x!='n' and x!='no':
+          ck.out('')
+          rx=ck.access({'action':'wiki',
+                        'module_uoa':work['self_module_uid'],
+                        'data_uoa':duoa})
+          if rx['return']>0: return rx
+          ck.out('')
+
+    return {'return':0}
+
+##############################################################################
+# check that host and target OS is supported
+
+def check_target(i):
+    """
+    Input:  {
+              dict           - dictionary with info about supported host and target OS
+
+              host_os_uoa    - host OS UOA  (already resolved)
+              host_os_dict   - host OS dict (already resolved)
+
+              target_os_uoa  - target OS UOA  (already resolved)
+              target_os_dict - target OS UOA  (already resolved)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    cus=i['dict']
+
+    hosx=i['host_os_uoa']
+    hosd=i['host_os_dict']
+
+    tosx=i['target_os_uoa']
+    tosd=i['target_os_dict']
+
+    # Check if restricts dependency to a given host or target OS
+    only_hos=cus.get('only_for_host_os',[])
+    if len(only_hos)>0:
+       if hosx not in only_hos:
+          return {'return':1, 'error':'host OS is not supported by this software'}
+
+    only_hos1=cus.get('only_for_host_os_tags',[])
+    if len(only_hos1)>0:
+       x=hosd.get('tags',[])
+       found=False
+       for xx in only_hos1:
+           if xx in x:
+              found=True
+              break
+       if not found:
+          return {'return':1, 'error':'host OS family is not supported by this software'}
+
+    only_tos=cus.get('only_for_target_os',[])
+    if len(only_tos)>0:
+       if tosx not in only_tos:
+          return {'return':1, 'error':'target OS is not supported by this software'}
+
+    only_tos1=cus.get('only_for_target_os_tags',[])
+    if len(only_tos1)>0:
+       x=tosd.get('tags',[])
+       found=False
+       for xx in only_tos1:
+           if xx in x:
+              found=True
+              break
+       if not found:
+          return {'return':1, 'error':'target OS family is not supported by this software'}
+
+    return {'return':0}
+
+##############################################################################
+# split version
+
+def split_version(i):
+    """
+    Input:  {
+              version - string version
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              version_split - split version
+            }
+
+    """
+
+    import re
+
+    ver=i['version']
+
+    # Split version
+    sver=[]
+    if ver!='':
+       if ver!='':
+          sver1=re.split('\.|\-|\_', ver)
+          for q in sver1:
+              x=q
+              try:
+                 x=int(q)
+              except:
+                 #pass - causes problems when mixing strings and ints ...
+                 x=0
+              sver.append(x)
+
+    return {'return':0, 'version_split':sver}

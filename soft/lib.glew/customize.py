@@ -71,6 +71,18 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    fp=cus.get('full_path','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       p2=os.path.dirname(p1)
+       p3=os.path.dirname(p2)
+       pi=os.path.dirname(p3)
+
+    ep=cus.get('env_prefix','')
+    if ep!='':
+       if pi!='':
+          env[ep]=pi
+
     ################################################################
     if win=='yes':
        if tbits=='64': 
@@ -79,8 +91,10 @@ def setup(i):
           yy='Release\\Win32'
 
        s+='set PATH='+pi+'\\bin\\'+yy+';%PATH%\n\n'
-       env[envp+'_LIB']=pi+'\\lib\\'+yy
-       env[envp+'_BIN']=pi+'\\bin\\'+yy
+
+       cus['path_bin']=pi+'\\bin\\'+yy
+       cus['path_lib']=pi+'\\lib\\'+yy
+       cus['path_include']=pi+'\\include'
 
     else:
        return {'return':1, 'error':'Linux version is not yet supported'}

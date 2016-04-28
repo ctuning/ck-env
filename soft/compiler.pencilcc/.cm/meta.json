@@ -1,29 +1,34 @@
 {
   "customize": {
+    "add_include_path": "yes", 
     "build_dir_name": "pencilcc", 
     "env_prefix": "CK_ENV_COMPILER_PENCIL", 
     "languages": [
       "C", 
       "CPP"
     ], 
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "linux"
+    ], 
     "skip_add_to_bin": "no", 
     "skip_add_to_ld_path": "no", 
     "skip_add_to_path": "no", 
-    "add_include_path": "yes", 
     "source_to_source": "yes"
   }, 
-  "customize_script": "customize", 
   "env": {
+    "CK_PENCILCC": "pencilcc", 
     "CK_PPCG": "ppcg", 
-    "CK_PENCILCC": "pencilcc",
-    "PENCIL_COMPILER_BINARY":"ppcg"
+    "PENCIL_COMPILER_BINARY": "ppcg"
   }, 
-  "soft_name": "Compiler - PENCIL", 
+  "soft_name": "PENCIL C compiler", 
   "tags": [
     "source-to-source-compiler", 
     "pencilcc", 
-    "polyhedral",
-    "lang-c",
+    "polyhedral", 
+    "lang-c", 
     "lang-cpp"
   ], 
   "tool": "pencilcc", 

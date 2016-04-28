@@ -8,6 +8,64 @@
 #
 
 ##############################################################################
+# customize directories to automatically find and register software
+
+def dirs(i):
+    return {'return':0}
+
+##############################################################################
+# prepare env
+
+def version_cmd(i):
+
+    fp=i['full_path']
+
+    hosd=i['host_os_dict']
+    tosd=i['target_os_dict']
+    cmdx=i['cmd']
+
+    o=i.get('out','')
+
+    nout=hosd.get('no_output','')
+    xnout=''
+    if o!='con':
+       xnout=nout
+
+    eifsc=hosd.get('env_quotes_if_space_in_call','')
+
+    if eifsc!='' and fp.find(' ')>=0 and not fp.startswith(eifsc):
+       fp=eifsc+fp+eifsc
+
+    cmd=''
+    if fp!='':
+       cmd =xnout+'call '+fp+'\n'
+    cmd+=xnout+'amplxe-cl '+cmdx+'\n'
+
+    return {'return':0, 'cmd':cmd}
+
+##############################################################################
+# parse software version
+
+def parse_version(i):
+
+    lst=i['output']
+
+    ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q!='':
+           j=q.lower().find('vtune(tm) ')
+           if j>=0:
+              q=q[j+10:]
+              j=q.find(' (')
+              if j>=0:
+                 ver=q[:j]
+                 break
+    
+    return {'return':0, 'version':ver}
+
+##############################################################################
 # setup environment setup
 
 def setup(i):
@@ -71,6 +129,13 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    fp=cus.get('full_path','')
+
+    ep=cus.get('env_prefix','')
+    if fp!='' and ep!='':
+       pi=os.path.dirname(fp)
+       env[ep]=pi
+
     ################################################################
     s+='\n'
     s+=host_d.get('rem','')+' Setting Intel compiler environment\n'
@@ -78,6 +143,6 @@ def setup(i):
     x='bat'
     if winh!='yes': x='sh'
 
-    s+=host_d.get('env_call','')+' "'+pi+host_d.get('dir_sep','')+'amplxe-vars.'+x+'" '+'\n\n'
+    s+=host_d.get('env_call','')+' "'+fp+'"\n\n'
 
     return {'return':0, 'bat':s}

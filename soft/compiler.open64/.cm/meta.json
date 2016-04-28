@@ -10,16 +10,21 @@
       "F90", 
       "F95"
     ], 
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "linux"
+    ], 
     "skip_add_to_ld_path": "yes"
   }, 
-  "customize_script": "customize", 
   "env": {
     "CK_AR": "$#tool_prefix#$ar", 
     "CK_ASM_EXT": ".s", 
     "CK_CC": "$#tool_prefix#$opencc", 
     "CK_COMPILER_FLAGS_OBLIGATORY": "", 
-    "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
     "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+    "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
     "CK_COMPILER_FLAG_GPROF": "-pg", 
     "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
     "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
@@ -54,7 +59,7 @@
     "CK_PLUGIN_FLAG": "-fplugin=", 
     "CK_PROFILER": "gprof"
   }, 
-  "soft_name": "Compiler - Open64", 
+  "soft_name": "Open64 compiler", 
   "tags": [
     "compiler", 
     "open64", 

@@ -1,0 +1,4 @@
+This is an outdated FCO framework. You can find more info here:
+
+* http://cTuning.org/tools.html
+* http://fursin.net/research.html

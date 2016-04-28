@@ -1,12 +1,8 @@
 {
   "customize": {
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_CJSON", 
-    "skip_add_to_bin": "yes", 
-    "skip_add_to_path": "yes"
+    "env_prefix": "CK_ENV_LIB_CJSON"
   }, 
-  "customize_script": "customize", 
-  "soft_name": "Library - CJSON", 
+  "soft_name": "cJSON library", 
   "tags": [
     "lib", 
     "cjson"

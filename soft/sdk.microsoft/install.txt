@@ -1,0 +1,6 @@
+You can install latest (or required) Microsoft Compiler 
+for Windows by installing Microsoft Visual Studio:
+
+* https://www.visualstudio.com
+
+A free community version is also available.

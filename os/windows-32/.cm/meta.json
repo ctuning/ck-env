@@ -9,6 +9,7 @@
   ], 
   "change_dir": "cd /D", 
   "ck_name": "win", 
+  "ck_name2": "win", 
   "cmd_for_detached_console": "start $#cmd#$", 
   "dir_sep": "\\", 
   "env_call": "call", 

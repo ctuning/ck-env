@@ -1,17 +1,32 @@
 {
+  "auto_detect": "yes", 
   "customize": {
-    "ck_version":10,
-    "input_path_text":"full path to javac",
-    "input_path_remove":1,
-    "soft_file":{"win":"javac.exe", "linux":"javac"},
-    "check_that_exists":"yes",
-    "check_that_exists_key":"path_bin",
+    "add_only_with_version": "yes", 
+    "add_to_path": "yes", 
     "build_dir_name": "java", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
     "env_prefix": "CK_ENV_COMPILER_JAVA", 
     "languages": [
       "JAVA"
     ], 
-    "skip_add_to_ld_path": "yes"
+    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "only_for_target_os_tags": [
+      "windows", 
+      "linux"
+    ], 
+    "soft_file": {
+      "linux": "javac", 
+      "win": "javac.exe"
+    }, 
+    "soft_path_example": {
+      "linux": "/usr/bin/javac", 
+      "win": "C:\\Program Files\\Java\\jdk1.8.0_77\\bin\\javac.exe"
+    }, 
+    "soft_version_cmd": {
+      "linux": "-version > $#filename#$ 2>&1", 
+      "win": "-version > $#filename#$ 2>&1"
+    }
   }, 
   "env": {
     "CK_COMPILER_FLAGS_OBLIGATORY": "", 
@@ -20,17 +35,10 @@
     "CK_JAVA_RT": "java -classpath .", 
     "CK_OBJ_EXT": ".class"
   }, 
-  "soft_name": "Compiler - Java", 
+  "soft_name": "java compiler", 
   "tags": [
     "compiler", 
     "java", 
     "lang-java"
-  ], 
-  "tool": "javac", 
-  "version": {
-    "cmd": "-version > $#filename#$ 2>&1", 
-    "split": ".", 
-    "string_after": "", 
-    "string_before": "javac "
-  }
+  ]
 }

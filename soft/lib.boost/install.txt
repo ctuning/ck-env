@@ -1,0 +1,11 @@
+You can download and install latest (or required) OpenCL SDK here:
+
+For Intel GPUs:
+* https://software.intel.com/en-us/intel-opencl
+
+For Nvidia GPUs:
+* https://developer.nvidia.com/cuda-downloads
+
+For MALI-based GPUs:
+* http://malideveloper.arm.com/resources/sdks/mali-opencl-sdk
+* http://malideveloper.arm.com/resources/drivers/

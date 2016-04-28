@@ -20,7 +20,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -70,25 +70,20 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
-    ################################################################
-    #TBD
-#    if win=='yes':
-#       if remote=='yes': 
-#          sext='.a'
-#          dext='.so'
-#       else:
-#          sext='.lib'
-#          dext='.dll'
-#    else:
-#       sext='.a'
-#       dext='.so'
-#
-#    cus['include_name']='openme.h'
-#    cus['static_lib']='libopenme'+sext
-#    cus['dynamic_lib']='libopenme'+dext
-#
-#    env['CK_ENV_LIB_OPENME_INCLUDE_NAME']=cus.get('include_name','')
-#    env['CK_ENV_LIB_OPENME_STATIC_NAME']=cus.get('static_lib','')
-#    env['CK_ENV_LIB_OPENME_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+    host_d=i.get('host_os_dict',{})
+    sdirs=host_d.get('dir_sep','')
+
+    fp=cus.get('full_path','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
+
+       cus['path_lib']=pi+sdirs+'lib'
+
+    ep=cus.get('env_prefix','')
+    if ep!='':
+       if pi!='':
+          env[ep]=pi
+       env[ep+'_SRC']=pi+sdirs+'openme'+sdirs+'src'
 
     return {'return':0, 'bat':s}

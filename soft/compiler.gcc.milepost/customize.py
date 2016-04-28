@@ -20,7 +20,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -71,6 +71,22 @@ def setup(i):
 
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
+
+    fp=cus.get('full_path','')
+
+    # Check path
+    ep=cus.get('env_prefix','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
+
+       if p1!='/usr/bin':
+          cus['path_bin']=p1
+
+       if ep!='':
+          env[ep]=pi
+          if p1!='/usr/bin': 
+             env[ep+'_BIN']=p1
 
     ############################################################
     # Ask a few more questions

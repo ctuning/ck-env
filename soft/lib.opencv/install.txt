@@ -1,0 +1,4 @@
+You can download and install latest (or required) OpenCV from here:
+
+* http://opencv.org/downloads.html
+ 

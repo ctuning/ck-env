@@ -3,7 +3,7 @@
     "env_prefix": "CK_ENV_BENCH_SPEC_CPU95", 
     "skip_add_to_ld_path": "yes"
   }, 
-  "soft_name": "Benchmark - SPEC - CPU95", 
+  "soft_name": "SPEC CPU95 benchmark", 
   "tags": [
     "bench", 
     "spec", 

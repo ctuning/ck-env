@@ -7,6 +7,65 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+import os
+import sys
+
+##############################################################################
+# limit directories 
+
+def limit(i):
+
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+
+    tbits=tosd.get('bits','')
+
+    phosd=hosd.get('ck_name','')
+    ext=''
+    if tbits=='64':
+       ext='x64'
+
+    dr=i.get('list',[])
+    drx=[]
+
+    for q in dr:                                                               
+        if (tbits=='64' and q.find('x64')>0) or (tbits=='32' and q.find('x64')<0):
+           drx.append(q)
+
+    return {'return':0, 'list':drx}
+
+##############################################################################
+# get version from path
+
+def version_cmd(i):
+
+    ck=i['ck_kernel']
+
+    fp=i['full_path']
+
+    ver=''
+
+    p1=os.path.dirname(fp)
+    p2=os.path.dirname(p1)
+    p3=os.path.dirname(p2)
+
+    fv=os.path.join(p2,'Readme.txt')
+    if not os.path.isfile(fv):
+       fv=os.path.join(p3,'Readme.txt')
+    if os.path.isfile(fv):
+       rx=ck.load_text_file({'text_file':fv, 'split_to_list':'yes', 'encoding':sys.stdin.encoding})
+       if rx['return']==0:
+          lst=rx['lst']
+          for q in lst:
+              if q.lower().startswith('freeglut '):
+                 ver=q[9:]
+                 j=ver.find(' ')
+                 if j>=0:
+                    ver=ver[:j]
+                 break
+
+    return {'return':0, 'cmd':'', 'version':ver}
+
 ##############################################################################
 # setup environment setup
 
@@ -70,6 +129,22 @@ def setup(i):
 
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
+
+    host_d=i.get('host_os_dict',{})
+    sdirs=host_d.get('dir_sep','')
+
+    fp=cus.get('full_path','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
+
+       cus['path_lib']=pi+sdirs+'lib'
+       cus['path_include']=pi+sdirs+'include'
+
+    ep=cus.get('env_prefix','')
+    if ep!='':
+       if pi!='':
+          env[ep]=pi
 
     ################################################################
     if win=='yes':

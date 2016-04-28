@@ -1,11 +1,17 @@
 {
   "customize": {
-    "add_include_path": "yes",
-    "env_prefix": "CK_ENV_PERF_LIKWID"
-  },
-  "soft_name": "Perf - Likwid",
+    "add_include_path": "yes", 
+    "env_prefix": "CK_ENV_PERF_LIKWID", 
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "linux"
+    ]
+  }, 
+  "soft_name": "Likwid tool", 
   "tags": [
-    "perf",
+    "perf", 
     "likwid"
   ]
 }

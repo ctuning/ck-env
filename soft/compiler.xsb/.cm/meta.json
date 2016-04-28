@@ -1,29 +1,38 @@
 {
   "customize": {
     "build_dir_name": "xsb", 
+    "add_to_path":"yes",
+    "add_only_with_version": "yes", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
     "env_prefix": "CK_ENV_COMPILER_PROLOG", 
     "languages": [
       "PROLOG"
     ], 
-    "skip_add_to_bin": "no", 
-    "skip_add_to_ld_path": "yes"
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "linux"
+    ], 
+    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "soft_file": {
+      "linux": "xsb", 
+      "win": "xsb.exe"
+    }, 
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1", 
+      "win": "--version > $#filename#$ 2>&1"
+    }
   }, 
   "env": {
     "CK_XSBC": "xsb", 
     "CK_XSB_RT": "xsb"
   }, 
-  "soft_name": "Compiler - XSB", 
+  "soft_name": "XSB compiler", 
   "tags": [
     "compiler", 
     "xsb", 
     "lang-prolog"
-  ], 
-  "tool": "xsb", 
-  "customize_script": "customize", 
-  "version": {
-    "cmd": "--version > $#filename#$ 2>&1", 
-    "split": ".", 
-    "string_after_relaxed": " ", 
-    "string_before": "XSB "
-  }
+  ] 
 }

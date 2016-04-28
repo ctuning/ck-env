@@ -1,0 +1,1 @@
+You can install GCC for your platform as following:

@@ -1,11 +1,21 @@
 {
+  "auto_detect": "yes", 
   "customize": {
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_TBB", 
-    "skip_add_to_ld_path": "yes"
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "add_to_path": "yes", 
+    "env_prefix": "CK_ENV_LIB_TBB",
+    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "soft_file": {
+      "linux": "libtbb.so", 
+      "win": "tbb.lib"
+    }, 
+    "soft_path_example": {
+      "linux": "", 
+      "win": "C:\\Program Files (x86)\\Intel\\OpenCL SDK\\4.6\\lib\\x64\\OpenCL.lib"
+    }
   }, 
-  "customize_script": "customize", 
-  "soft_name": "Library - Intel TBB", 
+  "soft_name": "Intel TBB library", 
   "tags": [
     "lib", 
     "tbb", 

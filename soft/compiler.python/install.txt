@@ -1,0 +1,1 @@
+You can install latest (or required) Java SDK (JDK) as following: 

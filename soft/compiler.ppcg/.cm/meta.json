@@ -6,12 +6,17 @@
       "C", 
       "CPP"
     ], 
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "only_for_target_os_tags": [
+      "linux"
+    ], 
     "skip_add_to_bin": "no", 
     "skip_add_to_ld_path": "yes", 
     "skip_add_to_path": "no", 
     "source_to_source": "yes"
   }, 
-  "customize_script": "customize", 
   "env": {
     "CK_AR": "$#tool_prefix#$ar", 
     "CK_ASM_EXT": ".s", 
@@ -37,7 +42,7 @@
     "CK_OBJ_EXT": ".o", 
     "CK_PROFILER": "gprof"
   }, 
-  "soft_name": "Compiler - PPCG", 
+  "soft_name": "PPCG compiler", 
   "tags": [
     "compiler", 
     "source-to-source", 

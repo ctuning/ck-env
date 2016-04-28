@@ -1,0 +1,2 @@
+Should add customization for:
+ "CK_LD_FLAGS_EXTRA": "bufferoverflowU.lib", 
