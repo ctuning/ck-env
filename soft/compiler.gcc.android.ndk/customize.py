@@ -427,10 +427,18 @@ def setup(i):
     x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
     if sysroot not in x:
        x=sysroot+' '+x
-
-    if ef not in x:
-       x+=' '+ef
     env['CK_COMPILER_FLAGS_OBLIGATORY']=x
+
+    if ef!='':
+       x=env['CK_CC']
+       if x.find(ef)<0:
+          x='"'+x+' '+ef+'"'
+       env['CK_CC']=x
+
+       x=env['CK_CXX']
+       if x.find(ef)<0:
+          x='"'+x+' '+ef+'"'
+       env['CK_CXX']=x
 
     if pi!='':
        env['CK_ANDROID_NDK_ROOT_DIR']=pi
