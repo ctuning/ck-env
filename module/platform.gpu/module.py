@@ -272,8 +272,8 @@ def detect(i):
              rx=ck.access({'action':'find',
                            'module_uoa':cfg['module_deps']['platform.init'],
                            'data_uoa':pi_uoa})
-             if rx['return']>0: return rx
-             path_to_scripts=rx['path']
+             if rx['return']==0:
+                path_to_scripts=rx['path']
 
           if path_to_scripts=='':
              path_to_scripts=tosd.get('path_to_scripts','')

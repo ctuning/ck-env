@@ -395,8 +395,9 @@ def detect(i):
                      'add_meta':'yes',
                      'module_uoa':cfg['module_deps']['platform.init'],
                      'tags':tags})
-       if rx['return']>0: return rx
-       lrx=rx['lst']
+       lrx=[]
+       if rx['return']==0: 
+          lrx=rx['lst']
        if len(lrx)==1:
           pi_uoa=lrx[0]['data_uid']
        elif len(lrx)>1:
