@@ -1029,11 +1029,11 @@ def search_tool(i):
             if cbd!='yes' and os.path.isdir(q):
                new=False
 
-            if new:
-               for qq in lst:
-                   if os.path.realpath(q)==os.path.realpath(qq):
-                      new=False
-                      break
+#            if new:
+#               for qq in lst:
+#                   if os.path.realpath(q)==os.path.realpath(qq):
+#                      new=False
+#                      break
             if new:
                lst.append(q)
 
