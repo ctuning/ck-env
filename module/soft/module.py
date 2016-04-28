@@ -1094,6 +1094,8 @@ def list_all_files(i):
        None
     else:
        for fn in dirList:
+           if sys.version_info[0]<3: fn=unicode(fn)
+
            p=os.path.join(po, fn)
 
            add=True
