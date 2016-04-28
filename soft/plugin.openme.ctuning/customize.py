@@ -93,6 +93,8 @@ def setup(i):
     else:
        dext='.so'
 
+    hplat=host_d.get('ck_name','')
+    if hplat!='win':
        if cus.get('path_lib','')!='':
           s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
 

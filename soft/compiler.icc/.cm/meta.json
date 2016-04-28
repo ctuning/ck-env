@@ -22,6 +22,7 @@
       "linux", 
       "windows"
     ], 
+    "soft_file_as_env":"CK_CC",
     "skip_soft_file_is_asked": "yes", 
     "soft_file": {
       "linux": "compilervars.sh", 

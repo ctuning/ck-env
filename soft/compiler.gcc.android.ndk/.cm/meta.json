@@ -20,6 +20,7 @@
       "android"
     ], 
     "skip_soft_file_is_asked": "yes", 
+    "soft_file_as_env":"CK_CC",
     "soft_file": {
       "linux": "ndk-build", 
       "win": "ndk-build.cmd"

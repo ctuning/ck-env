@@ -154,6 +154,8 @@ def detect(i):
 
     tool=i.get('tool','')
     if tool=='':
+       if cus.get('soft_file_as_env','')!='':
+          tool=svarb+cus['soft_file_as_env']+svare
        if cus.get('soft_file_not_tool','')!='yes':
           if cus.get('soft_file_from_host_os','')=='yes':
              tool=cus.get('soft_file',{}).get(hplat,'')
