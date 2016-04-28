@@ -23,7 +23,7 @@
     }, 
     "soft_file_not_tool": "yes", 
     "soft_path_example": {
-      "linux": "", 
+      "linux": "/opt/android-ndk-r10d/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64//bin//aarch64-linux-android-gcc", 
       "win": "D:\\!FGG\\Installations\\android-ndk-r10d\\toolchains\\aarch64-linux-android-4.9\\prebuilt\\windows-x86_64\\bin\\aarch64-linux-android-gcc.exe"
     }, 
     "soft_version_cmd": {
