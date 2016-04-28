@@ -268,39 +268,40 @@ def setup(i):
           x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
           y='-target %CK_ANDROID_TOOLCHAIN% -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_SYS_ROOT%'
           env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+y
-       elif retarget=='yes' and lfr!='':
-          cus['linking_for_retargeting']=lfr
-          env['CK_LD_FLAGS_EXTRA']=lfr
-
+       else:
           env["CK_COMPILER_FLAGS_OBLIGATORY"]="-DWINDOWS"
 
-          add_m32=cus.get('add_m32','')
-          if add_m32=='' and iv=='yes' and tbits=='32':
-             ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})
-             x=ra['string'].strip().lower()
-             if x=='y' or x=='yes': 
-                add_m32='yes'
-                cus['add_m32']='yes'
+          if retarget=='yes' and lfr!='':
+             cus['linking_for_retargeting']=lfr
+             env['CK_LD_FLAGS_EXTRA']=lfr
 
-          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
-          if remote!='yes':
-             if x.find('-DWINDOWS')<0: 
-                x+=' -DWINDOWS' 
-          if tbits=='32' and add_m32=='yes' and x.find('-m32')<0: 
-             x+=' -m32' 
+             add_m32=cus.get('add_m32','')
+             if add_m32=='' and iv=='yes' and tbits=='32':
+                ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})
+                x=ra['string'].strip().lower()
+                if x=='y' or x=='yes': 
+                   add_m32='yes'
+                   cus['add_m32']='yes'
 
-          y=cus.get('add_to_ck_compiler_flags_obligatory','')
-          if y!='' and x.find(y)<0:
-             x+=' '+y
+             x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+             if remote!='yes':
+                if x.find('-DWINDOWS')<0: 
+                   x+=' -DWINDOWS' 
+             if tbits=='32' and add_m32=='yes' and x.find('-m32')<0: 
+                x+=' -m32' 
 
-          y='-target i686-pc-windows-msvc'
-          if tbits=='64': y='-target x86_64-pc-windows-msvc'
-          if x.find(y)<0:
-             x+=' '+y
+             y=cus.get('add_to_ck_compiler_flags_obligatory','')
+             if y!='' and x.find(y)<0:
+                x+=' '+y
 
-          if mingw=='yes': env['CK_MAKE']='mingw32-make'
+             y='-target i686-pc-windows-msvc'
+             if tbits=='64': y='-target x86_64-pc-windows-msvc'
+             if x.find(y)<0:
+                x+=' '+y
 
-          env['CK_COMPILER_FLAGS_OBLIGATORY']=x
+             if mingw=='yes': env['CK_MAKE']='mingw32-make'
+
+             env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
        x=env.get('CK_CXX','')
        if x!='' and x.find('-fpermissive')<0:
