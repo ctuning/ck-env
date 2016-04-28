@@ -26,7 +26,7 @@
     }, 
     "soft_file_from_host_os": "yes", 
     "soft_path_example": {
-      "linux": "", 
+      "linux": "/usr/local/cuda-7.5/bin/nvcc", 
       "win": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v6.5\\bin\\nvcc.exe"
     }, 
     "soft_version_cmd": {
