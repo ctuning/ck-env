@@ -3,14 +3,16 @@
   "customize": {
     "check_that_exists": "yes", 
     "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_ISL",
-    "limit_recursion_dir_search": {"linux":3}, 
-    "include_file":"isl/aff.h",
+    "env_prefix": "CK_ENV_LIB_ISL", 
+    "include_file": "isl/aff.h", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
     "soft_file": {
-      "linux": "libisl.so" 
+      "linux": "libisl.so"
     }, 
     "soft_path_example": {
-      "linux": "" 
+      "linux": ""
     }
   }, 
   "deps": {

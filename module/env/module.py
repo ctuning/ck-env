@@ -437,7 +437,8 @@ def set(i):
 
     # No registered environments found and environment UOA is not explicitly defined
     if duoa=='':
-       if o=='con' and tags!='':
+#       if o=='con' and tags!='':
+       if tags!='':
 
           if not showed_warning:
              ck.out('==========================================================================================')

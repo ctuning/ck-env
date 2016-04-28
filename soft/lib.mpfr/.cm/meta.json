@@ -1,17 +1,19 @@
 {
   "auto_detect": "yes", 
   "customize": {
+    "add_include_path": "yes", 
     "check_that_exists": "yes", 
     "ck_version": 10, 
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_MPFR",
-    "limit_recursion_dir_search": {"linux":3}, 
-    "include_file":"mpfr.h",
+    "env_prefix": "CK_ENV_LIB_MPFR", 
+    "include_file": "mpfr.h", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
     "soft_file": {
-      "linux": "libmpfr.so" 
+      "linux": "libmpfr.so"
     }, 
     "soft_path_example": {
-      "linux": "" 
+      "linux": ""
     }
   }, 
   "soft_name": "MPFR library", 

@@ -10,7 +10,10 @@
       "C", 
       "CPP"
     ], 
-    "limit_recursion_dir_search": {"linux":3, "win":4}, 
+    "limit_recursion_dir_search": {
+      "linux": 3, 
+      "win": 4
+    }, 
     "only_for_target_os_tags": [
       "windows"
     ], 
@@ -18,6 +21,7 @@
     "soft_file": {
       "win": "vcvarsall.bat"
     }, 
+    "soft_file_from_host_os": "yes", 
     "soft_file_not_tool": "yes", 
     "soft_path_example": {
       "win": "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat"

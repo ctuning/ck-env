@@ -4,7 +4,10 @@
     "check_that_exists": "yes", 
     "ck_version": 10, 
     "env_prefix": "CK_ENV_LIB_OPENCL", 
-    "limit_recursion_dir_search": {"linux":4, "win":4}, 
+    "limit_recursion_dir_search": {
+      "linux": 4, 
+      "win": 4
+    }, 
     "soft_file": {
       "linux": "libOpenCL.so", 
       "win": "OpenCL.lib"

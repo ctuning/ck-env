@@ -155,7 +155,10 @@ def detect(i):
     tool=i.get('tool','')
     if tool=='':
        if cus.get('soft_file_not_tool','')!='yes':
-          tool=cus.get('soft_file',{}).get(hplat,'')
+          if cus.get('soft_file_from_host_os','')=='yes':
+             tool=cus.get('soft_file',{}).get(hplat,'')
+          else:
+             tool=cus.get('soft_file',{}).get(tplat,'')
 
     # Preparing CMD
     cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
@@ -293,13 +296,14 @@ def setup(i):
     hosx=r['host_os_uoa']
     hosd=r['host_os_dict']
 
-    ck_os_name=hosd['ck_name']
-
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
     tbits=tosd.get('bits','')
+
+    hplat=hosd['ck_name']
+    tplat=tosd['ck_name']
 
     # Check if base is different
     x1=hosd.get('base_uid','')
@@ -500,7 +504,10 @@ def setup(i):
     if pi=='' and fp=='' and o=='con' and cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and not update:
        ck.out('')
 
-       sname=cus.get('soft_file',{}).get(ck_os_name,'')
+       if cus.get('soft_file_from_host_os','')=='yes':
+          sname=cus.get('soft_file',{}).get(hplat,'')
+       else:
+          sname=cus.get('soft_file',{}).get(tplat,'')
 
        y0='installed library, tool or script'
        if sname!='': 
@@ -515,7 +522,7 @@ def setup(i):
        y1='full path to '+y0
 
        y2=''
-       y3=cus.get('soft_path_example',{}).get(ck_os_name,'')
+       y3=cus.get('soft_path_example',{}).get(hplat,'')
        if y3!='': y2=' (example: '+y3+')'
 
        r=ck.inp({'text':'Enter '+y1+y2+': '})
@@ -528,7 +535,7 @@ def setup(i):
           return {'return':1, 'error':'software not found in a specified path ('+fp+')'}
 
        if ver=='':
-          scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
+          scmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
           if ver=='':
              if o=='con':
@@ -1170,8 +1177,6 @@ def check(i):
     hosx=r['host_os_uoa']
     hosd=r['host_os_dict']
 
-    ck_os_name=hosd['ck_name']
-
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
@@ -1258,7 +1263,7 @@ def check(i):
     if rx['return']==0: 
        cs=rx['code']
 
-    scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
+    scmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
     # Check where to search depending if Windows or Linux
     dirs=[]
@@ -1300,7 +1305,7 @@ def check(i):
     # Add extra from CK_DIRS
     x=os.environ.get(env_search,'')
     if x!='':
-       if ck_os_name=='win':
+       if hplat=='win':
           xx=x.split(';')
        else:
           xx=x.split(':')
@@ -1336,7 +1341,13 @@ def check(i):
        if len(rx.get('dirs',[]))>0: dirs=rx['dirs']
 
     # Check which file to search for
-    sname=cus.get('soft_file',{}).get(tplat,'')
+    if cus.get('soft_file_from_host_os','')=='yes':
+       sname=cus.get('soft_file',{}).get(hplat,'')
+    else:
+       sname=cus.get('soft_file',{}).get(tplat,'')
+
+    cbd=cus.get('soft_can_be_dir','')
+
     osname=sname
     if sname=='':
        return {'return':1, 'error':'software description doesn\'t have a name of file to search ...'}
@@ -1356,7 +1367,7 @@ def check(i):
 
     rlm=cus.get('limit_recursion_dir_search',{}).get(hplat,0)
 
-    rx=search_tool({'path_list':dirs, 'file_name':sname, 'recursion_level_max':rlm, 'out':'con'})
+    rx=search_tool({'path_list':dirs, 'file_name':sname, 'recursion_level_max':rlm, 'can_be_dir':cbd, 'out':'con'})
     if rx['return']>0: return rx
 
     lst=rx['list']
@@ -1373,9 +1384,9 @@ def check(i):
        lst=rx['list']
 
     # Print results
-    if o=='con':
-       ck.out('')
-       ck.out('  Search completed in '+('%.1f' % et)+' secs. Found '+str(len(lst))+' installations ...')
+#    if o=='con':
+    ck.out('')
+    ck.out('  Search completed in '+('%.1f' % et)+' secs. Found '+str(len(lst))+' installations ...')
 
     # Select, if found
     il=0
@@ -1474,7 +1485,7 @@ def check(i):
     # If not found, quit
     if len(lst)==0:
        if i.get('skip_help','')!='yes':
-          r=print_help({'data_uoa':duid, 'platform':ck_os_name})
+          r=print_help({'data_uoa':duid, 'platform':hplat})
           # Ignore output
 
        return {'return':16, 'error':'software was not automatically found on your system! Please, install it and re-try again!'}

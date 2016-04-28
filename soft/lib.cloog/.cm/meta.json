@@ -1,17 +1,19 @@
 {
   "auto_detect": "yes", 
   "customize": {
+    "add_include_path": "yes", 
     "check_that_exists": "yes", 
     "ck_version": 10, 
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_CLOOG",
-    "limit_recursion_dir_search": {"linux":3}, 
-    "include_file":"cloog/cloog.h",
+    "env_prefix": "CK_ENV_LIB_CLOOG", 
+    "include_file": "cloog/cloog.h", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
     "soft_file": {
-      "linux": "libcloog-isl.so" 
+      "linux": "libcloog-isl.so"
     }, 
     "soft_path_example": {
-      "linux": "" 
+      "linux": ""
     }
   }, 
   "soft_name": "CLOOG library", 

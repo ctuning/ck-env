@@ -1,7 +1,7 @@
 {
   "customize": {
-    "add_to_path":"yes",
-    "env_prefix": "CK_ENV_PLUGIN_MILEPOST_CTUNING" 
+    "add_to_path": "yes", 
+    "env_prefix": "CK_ENV_PLUGIN_MILEPOST_CTUNING"
   }, 
   "deps": {
     "compiler": {

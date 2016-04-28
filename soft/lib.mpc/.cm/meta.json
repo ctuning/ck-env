@@ -3,14 +3,16 @@
   "customize": {
     "check_that_exists": "yes", 
     "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_MPC",
-    "include_file":"mpc.h",
-    "limit_recursion_dir_search": {"linux":3}, 
+    "env_prefix": "CK_ENV_LIB_MPC", 
+    "include_file": "mpc.h", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
     "soft_file": {
-      "linux": "libmpc.so" 
+      "linux": "libmpc.so"
     }, 
     "soft_path_example": {
-      "linux": "" 
+      "linux": ""
     }
   }, 
   "deps": {

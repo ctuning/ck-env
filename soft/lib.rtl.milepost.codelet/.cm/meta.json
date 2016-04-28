@@ -1,6 +1,6 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_LIB_RTL_MILEPOST_CODELET" 
+    "env_prefix": "CK_ENV_LIB_RTL_MILEPOST_CODELET"
   }, 
   "soft_name": "MILEPOST codelet run-time library", 
   "tags": [

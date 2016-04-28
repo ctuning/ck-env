@@ -1,6 +1,6 @@
 {
   "customize": {
-    "add_to_path":"yes",
+    "add_to_path": "yes", 
     "env_prefix": "CK_ENV_COMPILER_CTUNING_CC", 
     "languages": [
       "C", 
@@ -14,7 +14,7 @@
     ], 
     "only_for_target_os_tags": [
       "linux"
-    ] 
+    ]
   }, 
   "deps": {
     "compiler_milepost": {

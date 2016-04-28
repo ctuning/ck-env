@@ -3,14 +3,16 @@
   "customize": {
     "check_that_exists": "yes", 
     "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_PPL",
-    "limit_recursion_dir_search": {"linux":3}, 
-    "include_file":"ppl.hh",
+    "env_prefix": "CK_ENV_LIB_PPL", 
+    "include_file": "ppl.hh", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
     "soft_file": {
-      "linux": "libppl.so" 
+      "linux": "libppl.so"
     }, 
     "soft_path_example": {
-      "linux": "" 
+      "linux": ""
     }
   }, 
   "deps": {
