@@ -1094,30 +1094,33 @@ def list_all_files(i):
        None
     else:
        for fn in dirList:
-           if sys.version_info[0]<3: fn=unicode(fn)
+           p=''
+           try:
+              p=os.path.join(po, fn)
+           except Exception as e: 
+              pass
 
-           p=os.path.join(po, fn)
+           if p!='':
+              add=True
 
-           add=True
+              if fname!='' and fname!=fn:
+                 add=False
 
-           if fname!='' and fname!=fn:
-              add=False
+              if pattern!='' and not fnmatch.fnmatch(fn, pattern):
+                 add=False
 
-           if pattern!='' and not fnmatch.fnmatch(fn, pattern):
-              add=False
+              if add:
+                 a.append(p)
 
-           if add:
-              a.append(p)
-
-           if os.path.isdir(p): # and os.path.realpath(p)==p: # real path was useful
-                                                              # to avoid cases when directory links to itself
-                                                              # however, since we limit recursion, it doesn't matter ...
-              r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
-                                'pattern':pattern, 'file_name':fname, 
-                                'recursion_level':rl+1, 'recursion_level_max':rlm})
-              if r['return']>0: return r
-              for q in r.get('list',[]):
-                  a.append(q)
+              if os.path.isdir(p): # and os.path.realpath(p)==p: # real path was useful
+                                                                 # to avoid cases when directory links to itself
+                                                                 # however, since we limit recursion, it doesn't matter ...
+                 r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
+                                   'pattern':pattern, 'file_name':fname, 
+                                   'recursion_level':rl+1, 'recursion_level_max':rlm})
+                 if r['return']>0: return r
+                 for q in r.get('list',[]):
+                     a.append(q)
 
     return {'return':0, 'list':a}
 
