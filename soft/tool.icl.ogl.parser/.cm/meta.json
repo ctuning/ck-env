@@ -13,11 +13,13 @@
   "deps": {
     "compiler": {
       "local": "yes", 
+      "name": "Java compiler", 
       "sort": 10, 
       "tags": "compiler,java"
     }, 
     "tool-antlr": {
       "local": "yes", 
+      "name": "OGL parser (ICL)", 
       "sort": 20, 
       "tags": "tool,antlr"
     }

@@ -6,11 +6,13 @@
   "deps": {
     "compiler": {
       "local": "yes", 
+      "name": "milepost GCC compiler", 
       "sort": 10, 
       "tags": "compiler,milepost,lang-c"
     }, 
     "xsb": {
       "local": "yes", 
+      "name": "xsb compiler", 
       "sort": 20, 
       "tags": "compiler,xsb,lang-prolog"
     }

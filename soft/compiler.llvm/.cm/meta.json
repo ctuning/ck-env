@@ -39,13 +39,15 @@
   "deps": {
     "mvsc": {
       "local": "yes", 
+      "name": "microsoft C compiler", 
       "only_for_target_os_tags": [
         "windows"
       ], 
       "tags": "microsoft,compiler"
     }, 
-    "ndk_gcc": {
+    "ndk-gcc": {
       "local": "yes", 
+      "name": "Android NDK GCC", 
       "only_for_target_os_tags": [
         "android"
       ], 

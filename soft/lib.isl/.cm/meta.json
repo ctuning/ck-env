@@ -16,8 +16,9 @@
     }
   }, 
   "deps": {
-    "lib_gmp": {
+    "lib-gmp": {
       "local": "yes", 
+      "name": "GMP library", 
       "sort": 10, 
       "tags": "lib,gmp"
     }

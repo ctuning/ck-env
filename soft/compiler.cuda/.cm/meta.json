@@ -37,6 +37,7 @@
   "deps": {
     "mvsc": {
       "local": "yes", 
+      "name": "microsoft C compiler", 
       "only_for_target_os_tags": [
         "windows"
       ], 

@@ -16,18 +16,21 @@
     }
   }, 
   "deps": {
-    "lib_gmp": {
+    "lib-gmp": {
       "local": "yes", 
+      "name": "GMP library", 
       "sort": 10, 
       "tags": "lib,gmp"
     }, 
-    "lib_mpc": {
+    "lib-mpc": {
       "local": "yes", 
+      "name": "MPC library", 
       "sort": 30, 
       "tags": "lib,mpc"
     }, 
-    "lib_mpfr": {
+    "lib-mpfr": {
       "local": "yes", 
+      "name": "MPFR library", 
       "sort": 20, 
       "tags": "lib,mpfr"
     }

@@ -5,8 +5,9 @@
     "skip_add_to_path": "yes"
   }, 
   "deps": {
-    "lib_openme": {
+    "lib-openme": {
       "local": "yes", 
+      "name": "OpenME library", 
       "sort": 10, 
       "tags": "lib,plugins,openme,lang-c"
     }

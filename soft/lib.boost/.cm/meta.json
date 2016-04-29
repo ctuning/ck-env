@@ -20,6 +20,7 @@
   "deps": {
     "compiler": {
       "local": "yes", 
+      "name": "c++ compiler", 
       "sort": 10, 
       "tags": "compiler,lang-cpp"
     }

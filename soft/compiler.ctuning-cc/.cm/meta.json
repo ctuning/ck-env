@@ -17,13 +17,15 @@
     ]
   }, 
   "deps": {
-    "compiler_milepost": {
+    "compiler-milepost": {
       "local": "yes", 
+      "name": "milepost GCC compiler", 
       "sort": 10, 
       "tags": "compiler,milepost,lang-c"
     }, 
-    "plugin_milepost_ctuning": {
+    "plugin-milepost-ctuning": {
       "local": "yes", 
+      "name": "milepost ctuning plugins", 
       "sort": 20, 
       "tags": "plugin,milepost,ctuning"
     }

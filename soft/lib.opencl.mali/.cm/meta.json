@@ -6,6 +6,7 @@
   "deps": {
     "compiler": {
       "local": "yes", 
+      "name": "C compiler", 
       "tags": "compiler,lang-c"
     }
   }, 

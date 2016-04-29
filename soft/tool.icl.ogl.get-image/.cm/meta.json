@@ -14,21 +14,25 @@
   "deps": {
     "compiler": {
       "local": "yes", 
+      "name": "C compiler", 
       "sort": 10, 
       "tags": "compiler,lang-c"
     }, 
     "lib-freeglut": {
       "local": "yes", 
+      "name": "FreeGLUT library", 
       "sort": 30, 
       "tags": "lib,freeglut"
     }, 
     "lib-glew": {
       "local": "yes", 
+      "name": "GLEW library", 
       "sort": 20, 
       "tags": "lib,glew"
     }, 
     "tool-glslangvalidator": {
       "local": "yes", 
+      "name": "GLS language validator", 
       "sort": 40, 
       "tags": "tool,glslangvalidator"
     }
