@@ -1,0 +1,2 @@
+You can install latest (or required) Julia from http://julialang.org
+

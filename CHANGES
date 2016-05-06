@@ -1,3 +1,5 @@
+* 2016.05.06 - adding Julia compiler (after MIT visit)
+
 * 2016.04.28 - major update to automate detection of installed software (for Windows, Linux and Android).
                To some extent, CK now works as a customizable cmake with the ability to share 
                software detection modules in the CK format via GitHub.
