@@ -218,9 +218,23 @@ def setup(i):
     ############################################################
     # Setting environment depending on the platform
     if hplat=='win':
-       pb=''
        pl=''
        pinc=''
+
+       if fp!='':
+          pl=os.path.dirname(fp)
+          cus['path_lib']=pl
+
+          pl1=os.path.dirname(pl)
+          pl2=os.path.dirname(pl1)
+
+          pi=''
+          if os.path.isfile(os.path.join(pl1,'include','CL','opencl.h')):
+             pi=pl1
+          elif os.path.isfile(os.path.join(pl2,'include','CL','opencl.h')):
+             pi=pl2
+
+       pb=''
 
        se=cus.get('skip_ext','')
 
@@ -240,8 +254,9 @@ def setup(i):
 
              pb=pi+'\\bin'
              if ext!='': pb+='\\'+ext
-          pl=pi+'\\lib'
-          if ext!='': pl+='\\'+ext
+          if pl=='':
+             pl=pi+'\\lib'
+             if ext!='': pl+='\\'+ext
 
        else:
           # if Windows + CUDA
@@ -253,11 +268,12 @@ def setup(i):
                 ext='Win32'
 
              pb=pi+'\\bin'
-             pl=pi+'\\lib\\'+ext
+             if pl=='':
+                pl=pi+'\\lib\\'+ext
 
        if pb!='': cus['path_bin']=pb
        if pl!='': cus['path_lib']=pl
-       cus['path_include']=pi+'\\include'
+       if pi!='': cus['path_include']=pi+'\\include'
 
        if remote=='yes': 
           cus['dynamic_lib']='libOpenCL.so'
@@ -312,6 +328,9 @@ def setup(i):
     ep=cus.get('env_prefix','')
     if pi!='' and ep!='':
        env[ep]=pi
+
+    if remote=='yes':
+       cus['skip_copy_to_remote']='yes'
 
     env['CK_ENV_LIB_OPENCL_INCLUDE_NAME']=cus.get('include_name','')
     env['CK_ENV_LIB_OPENCL_STATIC_NAME']=cus.get('static_lib','')

@@ -13,7 +13,7 @@
       "win": "OpenCL.lib"
     }, 
     "soft_path_example": {
-      "linux": "", 
+      "linux": "/usr/lib/libOpenCL.so", 
       "win": "C:\\Program Files (x86)\\Intel\\OpenCL SDK\\4.6\\lib\\x64\\OpenCL.lib"
     }
   }, 
