@@ -246,8 +246,8 @@ def setup(i):
 
        cus['ef_configured']='yes'
        x=''
-       if arch=='arm64': 
-          x='-fPIE -pie'
+#       if arch=='arm64': 
+       x='-fPIE -pie'
        cus['ef']=x
 
        j=p4.find(atc)
