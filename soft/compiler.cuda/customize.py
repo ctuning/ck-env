@@ -126,6 +126,7 @@ def setup(i):
        env[ep+'_BIN']=p1
 
     env['CUDA_PATH']=p2
+    env['CUDA_INSTALL_DIR']=p2
 
     if p1!='':
        ############################################################
