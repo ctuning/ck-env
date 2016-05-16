@@ -70,7 +70,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -145,10 +145,17 @@ def setup(i):
        else:
           s+='\nexport PATH='+p1+':$PATH\n\n'
 
+          lp=''
           if os.path.isdir(p2+'/lib64'):
-             env[ep+'_LIB']=p2+'/lib64'
+             lp=p2+'/lib64'
           elif os.path.isdir(p2+'/lib'):
-             env[ep+'_LIB']=p2+'/lib'
+             lp=p2+'/lib'
+
+          if lp!='':
+             env[ep+'_LIB']=lp
+
+             s+='export LD_LIBRARY_PATH="'+lp+'":$LD_LIBRARY_PATH\n'
+             s+='export LIBRARY_PATH="'+lp+'":$LIBRARY_PATH\n\n'
 
           env[ep+'_INCLUDE']=p2+'/include'
 
