@@ -140,8 +140,16 @@ def setup(i):
              ext='Win32'
 
           env[ep+'_LIB']=p2+'\\lib\\'+ext
+          env[ep+'_INCLUDE']=p2+'\\include'
 
        else:
           s+='\nexport PATH='+p1+':$PATH\n\n'
+
+          if os.path.isdir(p2+'/lib64'):
+             env[ep+'_LIB']=p2+'/lib64'
+          elif os.path.isdir(p2+'/lib'):
+             env[ep+'_LIB']=p2+'/lib'
+
+          env[ep+'_INCLUDE']=p2+'/include'
 
     return {'return':0, 'bat':s}
