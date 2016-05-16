@@ -47,9 +47,9 @@
   "env": {
     "CK_AR": "ar", 
     "CK_ASM_EXT": ".s", 
-    "CK_CC": "nvcc", 
+    "CK_NVCC": "nvcc", 
     "CK_COMPILER_FLAGS_OBLIGATORY": "", 
-    "CK_CXX": "nvcc", 
+    "CK_NVCXX": "nvcc", 
     "CK_DLL_EXT": ".so", 
     "CK_EXE_EXT": ".out", 
     "CK_EXTRA_LIB_DL": "-ldl", 

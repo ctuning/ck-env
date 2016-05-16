@@ -1,3 +1,5 @@
+* 2016.05.16 - changing CK_CC to CK_NVCC for CUDA soft description
+
 * 2016.05.15 - removing outdated remote-ck1 repository
 
 * 2016.05.13 - moving platform.gpgpu to ck-autotuning repo
