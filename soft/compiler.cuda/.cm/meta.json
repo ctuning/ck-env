@@ -58,6 +58,7 @@
     "CK_EXE_EXT": ".out", 
     "CK_EXTRA_LIB_DL": "-ldl", 
     "CK_EXTRA_LIB_M": "-lm", 
+    "CK_EXTRA_LIB_CUBLAS": "-lcublas", 
     "CK_FLAGS_CREATE_ASM": "-S", 
     "CK_FLAGS_CREATE_OBJ": "-c", 
     "CK_FLAGS_DLL": "-shared -fPIC", 
