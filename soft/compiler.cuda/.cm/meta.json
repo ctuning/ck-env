@@ -48,7 +48,11 @@
     "CK_AR": "ar", 
     "CK_ASM_EXT": ".s", 
     "CK_NVCC": "nvcc", 
+    "CK_NVCC_GPU_ARCH": "--gpu-architecture=", 
+    "CK_NVCC_GPU_CODE": "--gpu-code=", 
+    "CK_NVCC_GEN_CODE": "--generate-code=",
     "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+    "CK_COMPILER_FLAG_CPP11": "--std=c++11", 
     "CK_NVCXX": "nvcc", 
     "CK_DLL_EXT": ".so", 
     "CK_EXE_EXT": ".out", 
@@ -73,7 +77,9 @@
     "CK_OBJDUMP": "cuobjdump --dump-sass", 
     "CK_OBJ_EXT": ".o", 
     "CK_PLUGIN_FLAG": "-fplugin=", 
-    "CK_PROFILER": "gprof"
+    "CK_PROFILER": "gprof",
+    "CK_OPT_FAST_MATH": "--use_fast_math",
+    "CK_OPT_SPEED": "-O3"
   }, 
   "soft_name": "Nvidia CUDA Compiler", 
   "tags": [

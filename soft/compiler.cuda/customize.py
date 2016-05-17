@@ -103,6 +103,9 @@ def setup(i):
     ck=i['ck_kernel']
     s=''
 
+    ver=i.get('version','')
+    sver=i.get('version_split',[])
+
     cus=i['customize']
     env=i['env']
 
@@ -127,6 +130,16 @@ def setup(i):
 
     env['CUDA_PATH']=p2
     env['CUDA_INSTALL_DIR']=p2
+
+    opt1='--relaxed-constexpr'
+    if len(sver)>0 and sver[0]>6:
+       opt1='--expt-relaxed-constexpr'
+    env['CK_OPT_RELAXED_CONSTEXPR']=opt1
+
+    opt2=' '
+    if len(sver)>0 and sver[0]>6:
+       opt2='--std=c++11'
+    env['CK_COMPILER_FLAG_CPP11']=opt2
 
     if p1!='':
        ############################################################

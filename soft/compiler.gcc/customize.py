@@ -185,6 +185,7 @@ def setup(i):
       "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
       "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
       "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+      "CK_OPT_ALL_WARNINGS": "-Wall", 
       "CK_CXX": "$#tool_prefix#$g++$#tool_postfix#$", 
       "CK_DLL_EXT": ".so", 
       "CK_EXE_EXT": ".out", 

@@ -49,6 +49,7 @@ def set(i):
 
               (local)                - if 'yes', add host_os, target_os, target_device_id to search
 
+              (key)                  - key from deps (to set env with path)
               (name)                 - user-friendly name of the dependency (if needs to be resolved)
 
               (deps)                 - already resolved deps
@@ -642,7 +643,10 @@ def set(i):
 
     es=d.get('env_script','')
     if es!='':
-       sb+=env_call+' '+os.path.join(p,es)+'\n'
+       pp=os.path.join(p,es)
+       sb+=env_call+' '+pp+'\n'
+       if i.get('key','')!='':
+          sb+=eset+' CK_ENV_PATH_'+i['key'].upper()+'='+pp+'\n'
 
     # Check bat file
     if bf!='':
@@ -1026,6 +1030,7 @@ def resolve(i):
             'local':local,
             'random':ran,
             'name':name,
+            'key':k,
             'quiet':quiet
            }
         if o=='con': ii['out']='con'

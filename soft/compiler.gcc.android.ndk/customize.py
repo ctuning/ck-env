@@ -272,6 +272,7 @@ def setup(i):
       "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
       "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
       "CK_CXX": "$#tool_prefix#$g++", 
+      "CK_OPT_ALL_WARNINGS": "-Wall", 
       "CK_DLL_EXT": ".so", 
       "CK_EXE_EXT": ".out", 
       "CK_EXTRA_LIB_DL": "-ldl", 

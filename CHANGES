@@ -1,3 +1,5 @@
+* 2016.05.17 - improving different soft description
+
 * 2016.05.16 - changing CK_CC to CK_NVCC for CUDA soft description
 
 * 2016.05.15 - removing outdated remote-ck1 repository

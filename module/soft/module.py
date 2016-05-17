@@ -813,6 +813,8 @@ def setup(i):
               "deps":deps,
               "customize":cus,
               "self_cfg":cfg,
+              "version":ver,
+              "version_split":sver,
               "ck_kernel":ck
              }
 
