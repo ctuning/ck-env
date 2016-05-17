@@ -1,4 +1,5 @@
 * 2016.05.17 - improving different soft description
+             - adding soft description for cuBLAS, cuFFT and cuDNN
 
 * 2016.05.16 - changing CK_CC to CK_NVCC for CUDA soft description
 

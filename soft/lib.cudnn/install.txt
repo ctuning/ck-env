@@ -1,0 +1,2 @@
+You can download and install latest (or required) cuDNN from Nvidia website:
+* https://developer.nvidia.com/cudnn

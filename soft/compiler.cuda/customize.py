@@ -54,7 +54,7 @@ def parse_version(i):
               if j>=0:
                  ver=ver[:j]
                  break
-    
+
     return {'return':0, 'version':ver}
 
 ##############################################################################
