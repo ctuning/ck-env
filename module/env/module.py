@@ -578,7 +578,7 @@ def set(i):
               outdated=True
               err='one of sub-dependencies ('+q+') have changed (CK environment '+deuoa+' not found)'
               break
-           
+
     # Check if file exists for current dependency
     verx=''
     cus=d.get('customize',{})
@@ -644,9 +644,9 @@ def set(i):
     es=d.get('env_script','')
     if es!='':
        pp=os.path.join(p,es)
-       sb+=env_call+' '+pp+'\n'
        if i.get('key','')!='':
           sb+=eset+' CK_ENV_SCRIPT_'+i['key'].upper()+'='+pp+'\n'
+       sb+=env_call+' '+pp+'\n'
 
     # Check bat file
     if bf!='':
