@@ -646,7 +646,7 @@ def set(i):
        pp=os.path.join(p,es)
        sb+=env_call+' '+pp+'\n'
        if i.get('key','')!='':
-          sb+=eset+' CK_ENV_PATH_'+i['key'].upper()+'='+pp+'\n'
+          sb+=eset+' CK_ENV_SCRIPT_'+i['key'].upper()+'='+pp+'\n'
 
     # Check bat file
     if bf!='':
@@ -994,6 +994,8 @@ def resolve(i):
         local=q.get('local','')
         sd=q.get('skip_deafult','')
 
+        ek=q.get('env_key','')
+
         uoa=q.get('uoa','')
 
         # Check if restricts dependency to a given host or target OS
@@ -1030,7 +1032,7 @@ def resolve(i):
             'local':local,
             'random':ran,
             'name':name,
-            'key':k,
+            'key':ek,
             'quiet':quiet
            }
         if o=='con': ii['out']='con'
