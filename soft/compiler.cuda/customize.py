@@ -132,7 +132,7 @@ def setup(i):
     env['CUDA_INSTALL_DIR']=p2
 
     opt1='--relaxed-constexpr'
-    if len(sver)>0 and sver[0]>6:
+    if len(sver)>1 and sver[0]>6 and sver[1]>0:
        opt1='--expt-relaxed-constexpr'
     env['CK_OPT_RELAXED_CONSTEXPR']=opt1
 
