@@ -49,6 +49,7 @@ def detect(i):
               (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+              (exchange_locally)     - if 'yes', exchange locally
 
               (extra_info)           - extra info about author, etc (see add from CK kernel)
 
@@ -570,7 +571,8 @@ def detect(i):
 
        er=i.get('exchange_repo','')
        esr=i.get('exchange_subrepo','')
-       if er=='': 
+       el=i.get('exchange_locally','')
+       if el!='yes' and er=='': 
           er=ck.cfg['default_exchange_repo_uoa']
           esr=ck.cfg['default_exchange_subrepo_uoa']
 

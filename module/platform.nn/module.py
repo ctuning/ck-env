@@ -51,6 +51,7 @@ def detect(i):
               (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+              (exchange_locally)     - if 'yes', exchange locally
 
               (extra_info)           - extra info about author, etc (see add from CK kernel)
             }

@@ -1,3 +1,5 @@
+* 2016.05.29 - adding 'exchange_locally' mode to platform.* detection and info exchange
+
 * 2016.05.17 - improving different soft description
              - adding soft description for cuBLAS, cuFFT and cuDNN
 

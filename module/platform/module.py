@@ -50,6 +50,7 @@ def detect(i):
               (share)                - the same as 'exchange'
               (exchange_repo)        - which repo to record/update info (remote-ck by default)
               (exchange_subrepo)     - if remote, remote repo UOA
+              (exchange_locally)     - if 'yes', exchange locally
 
               (force_platform_name)  - if !='', use this for platform name
 
@@ -112,7 +113,8 @@ def detect(i):
     if einf=='': einf={}
 
     # If exchange, check that repo from this env is cached and recache if needed
-    if ex=='yes':
+    el=i.get('exchange_locally','')
+    if el!='yes' and ex=='yes':
        er=i.get('exchange_repo','')
 
        if er!='':
@@ -383,7 +385,9 @@ def detect(i):
 
        er=i.get('exchange_repo','')
        esr=i.get('exchange_subrepo','')
-       if er=='': 
+       el=i.get('exchange_locally','')
+
+       if el!='yes' and er=='': 
           er=ck.cfg['default_exchange_repo_uoa']
           esr=ck.cfg['default_exchange_subrepo_uoa']
 
