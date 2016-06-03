@@ -176,6 +176,8 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
+    eqis=hosd.get('env_quotes_if_space','')
+
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
@@ -433,12 +435,12 @@ def setup(i):
     if ef!='':
        x=env['CK_CC']
        if x.find(ef)<0:
-          x='"'+x+' '+ef+'"'
+          x=eqis+x+' '+ef+eqis
        env['CK_CC']=x
 
        x=env['CK_CXX']
        if x.find(ef)<0:
-          x='"'+x+' '+ef+'"'
+          x=eqis+x+' '+ef+eqis
        env['CK_CXX']=x
 
     if pi!='':
