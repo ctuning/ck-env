@@ -1,12 +1,11 @@
-Download and install package from the Oracle website:
-* http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-
-Alternatively, you can use package manager for your Linux distribution.
+You can use package manager for your Linux distribution.
 
 == Ubuntu ==
 
- $ sudo apt-get install openjdk-8-jdk
+ $ sudo apt-get install python
     or
- $ sudo apt-get install openjdk-7-jdk
-    or
- $ sudo apt-get install openjdk-6-jdk
+ $ sudo apt-get install python3
+
+
+You can also install Anaconda Python (scientific distribution) from the following website:
+* https://www.continuum.io/downloads
