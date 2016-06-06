@@ -33,6 +33,20 @@ def dirs(i):
     return {'return':0}
 
 ##############################################################################
+# limit directories 
+
+def limit(i):
+
+    dr=i.get('list',[])
+    drx=[]
+
+    for q in dr:
+        if q.find('X11')<0:
+           drx.append(q)
+
+    return {'return':0, 'list':drx}
+
+##############################################################################
 # parse software version
 
 def parse_version(i):
