@@ -1,3 +1,10 @@
+* 2016.06.07 * improving package manager:
+               - detecting host CPU info and passing CK_HOST_CPU_NUMBER_OF_PROCESSORS to process script
+               - passing extra env to process script
+               - running pre-processing python script
+               - running scripts from another entry (light inheritance)
+               - adding CLBLAST soft description
+
 * 2016.05.30 * support for new CK web server
 
 * 2016.05.29 - adding 'exchange_locally' mode to platform.* detection and info exchange

@@ -1,4 +1,2 @@
-You can download and install latest (or required) cmake 
-for your platform here:
-
+Download and install package from the following website:
 * https://cmake.org/download

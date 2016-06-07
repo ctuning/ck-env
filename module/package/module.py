@@ -317,6 +317,29 @@ def install(i):
     enduoa=i.get('env_data_uoa','')
     enduid=i.get('env_data_uid','')
 
+    # This environment will be passed to process scripts (if any)
+    pr_env={}
+
+    # Update this env from CK kernel (for example, to decide what to use, git or https)
+    pr_env.update(ck.cfg.get('install_env',{}))
+
+    # Update this env from customize meta (for example to pass URL to download package)
+    pr_env.update(cus.get('install_env',{}))
+
+    # Check if need host CPU params
+    if d.get('need_cpu_info','')=='yes':
+       r=ck.access({'action':'detect',
+                    'module_uoa':cfg['module_deps']['platform.cpu'],
+                    'host_os':hos,
+                    'target_os':hos})
+       if r['return']>0: return r
+
+       cpu_ft=r.get('features',{}).get('cpu',{})
+
+       pr_env['CK_HOST_CPU_NUMBER_OF_PROCESSORS']=cpu_ft.get('num_proc','1')
+
+       # We may want to pass more info (including target CPU) ...
+
     # Search by exact terms
     setup={'host_os_uoa':hos,
            'target_os_uoa':tos,
@@ -493,7 +516,7 @@ def install(i):
                 pi=pix
                 if d.get('no_install_path','')!='yes':
                    ck.out('*** Installation path used: '+pix)
-             
+
              if o=='con':
                 ck.out('')
 
@@ -548,7 +571,7 @@ def install(i):
        if host_add_path_string!='':
           sb+=host_add_path_string+'\n\n'
 
-       # Check if params
+       # Check if extra params to pass as environment
        param=i.get('param',None)
        params=d.get('params',{})
        params.update(i.get('params',{}))
@@ -601,9 +624,54 @@ def install(i):
           if pi=='':
              return {'return':1, 'error':'installation path is not specified'}
 
+       # Check if need to use scripts from another entry
+       ppp=p
+       x=d.get('use_scripts_from_another_entry',{})
+       if len(x)>0:
+          xam=x.get('module_uoa','')
+          if xam=='': xam=work['self_module_uid']
+          xad=x.get('data_uoa','')
+          r=ck.access({'action':'find',
+                       'module_uoa':xam,
+                       'data_uoa':xad})
+          if r['return']>0: return r
+          ppp=r['path']
+
+       # Check if has custom script
+       cs=None
+       csn=cfg.get('custom_script_name','custom.py')
+       rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
+       if rx['return']==0: 
+          cs=rx['code']
+
+       if cs!=None:
+          # Call customize script
+          ii={"host_os_uoa":hosx,
+              "host_os_uid":hos,
+              "host_os_dict":hosd,
+              "target_os_uoa":tosx,
+              "target_os_uid":tos,
+              "target_os_dict":tosd,
+              "target_device_id":tdid,
+              "cfg":d,
+              "tags":tags,
+              "env":env,
+              "deps":deps,
+              "customize":cus,
+              "self_cfg":cfg,
+              "version":ver,
+              "ck_kernel":ck
+             }
+
+          if o=='con': ii['interactive']='yes'
+          if i.get('quiet','')=='yes': ii['interactive']=''
+
+          rx=cs.setup(ii)
+          if rx['return']>0: return rx
+
        # Prepare process script
        ps+=sext
-       px=os.path.join(p,ps)
+       px=os.path.join(ppp,ps)
 
        if not os.path.isfile(px):
           return {'return':1, 'error':'processing script '+ps+' is not found'}
@@ -616,6 +684,13 @@ def install(i):
        x=udeps.get('compiler',{}).get('bat','')
        if x!='' and not sb.endswith(x):
           sb+='\n'+x+'\n'
+
+       # Add misc environment (prepared above)
+       for q in pr_env:
+           qq=str(pr_env[q])
+           if qq.find(' ')>0:
+              qq=eifs+qq+eifs
+           sb+=eset+' '+q+'='+qq+'\n'
 
        # If install path has space, add quotes for some OS ...
        xs=''

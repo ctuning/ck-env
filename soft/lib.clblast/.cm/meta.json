@@ -1,9 +1,21 @@
 {
+  "auto_detect": "yes", 
   "customize": {
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_CLBLAST"
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_CLBLAST", 
+    "include_file": "clblast.h", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
+    "soft_file": {
+      "linux": "libclblast.so"
+    }, 
+    "soft_path_example": {
+      "linux": ""
+    }
   }, 
-  "soft_name": "CLBlast library", 
+  "soft_name": "CLBLAST library", 
   "tags": [
     "lib", 
     "clblast"
