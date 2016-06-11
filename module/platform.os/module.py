@@ -54,6 +54,8 @@ def detect(i):
               (extra_info)           - extra info about author, etc (see add from CK kernel)
 
               (return_multi_devices) - if 'yes' and multiple devices detected, return error=32 and devices
+
+              (platform_init_uoa)    - if !='', use these platform.init scripts
             }
 
     Output: {
@@ -99,6 +101,8 @@ def detect(i):
     sic=i.get('skip_info_collection','')
     sdi=i.get('skip_device_init','')
     pdv=i.get('print_device_info','')
+
+    piuoa=i.get('platform_init_uoa','')
 
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
@@ -402,7 +406,9 @@ def detect(i):
        if len(lrx)==1:
           pi_uoa=lrx[0]['data_uid']
        elif len(lrx)>1:
-          if o=='con':
+          if piuoa!='':
+             pi_uoa=piuoa
+          elif o=='con':
              # Select platform.init
              ck.out('')
              ck.out('Some support tools and scripts may be available for your target platform in CK:')

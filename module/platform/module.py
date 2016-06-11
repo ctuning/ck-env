@@ -55,6 +55,11 @@ def detect(i):
               (force_platform_name)  - if !='', use this for platform name
 
               (extra_info)           - extra info about author, etc (see add from CK kernel)
+
+              (quiet)                - do not ask questions whenever possible
+              (skip_gpu_info)        - if 'yes', do not collect GPU info
+              (platform_init_uoa)    - if !='', use these platform.init scripts
+
             }
 
     Output: {
@@ -108,6 +113,10 @@ def detect(i):
     pdv=i.get('print_device_info','')
     ex=i.get('exchange','')
     if ex=='': ex=i.get('share','')
+
+    quiet=i.get('quiet','')
+    sgi=i.get('skip_gpu_info','')
+    piuoa=i.get('platform_init_uoa','')
 
     einf=i.get('extra_info','')
     if einf=='': einf={}
@@ -178,23 +187,24 @@ def detect(i):
     ro=os_dict.get('redirect_stdout','')
 
     # Get GPU info ####################################################
-    if oo=='con': 
-       ck.out(sep)
-       ck.out('Detecting GPU features ...')
+    if sgi!='yes':
+       if oo=='con': 
+          ck.out(sep)
+          ck.out('Detecting GPU features ...')
 
-    import copy
-    ii=copy.deepcopy(i)
-    ii['out']=oo
-    ii['skip_print_os_info']='yes'
-    ii['action']='detect'
-    ii['module_uoa']=cfg['module_deps']['platform.gpu']
-    rx=ck.access(ii) # DO NOT USE rr further - will be reused as return !
-    if rx['return']>0: return rx
+       import copy
+       ii=copy.deepcopy(i)
+       ii['out']=oo
+       ii['skip_print_os_info']='yes'
+       ii['action']='detect'
+       ii['module_uoa']=cfg['module_deps']['platform.gpu']
+       rx=ck.access(ii) # DO NOT USE rr further - will be reused as return !
+       if rx['return']>0: return rx
 
-    # Merge with other features
-    ry=ck.merge_dicts({'dict1':rr, 'dict2':rx})
-    if ry['return']>0: return ry
-    rr=ry['dict1']
+       # Merge with other features
+       ry=ck.merge_dicts({'dict1':rr, 'dict2':rx})
+       if ry['return']>0: return ry
+       rr=ry['dict1']
 
     # Get info about system ######################################################
     if oo=='con': 

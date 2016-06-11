@@ -1,3 +1,7 @@
+* 2016.06.11 * added support to skip GPU detection (for example, not needed 
+               during compiler flag crowd-tuning but may cause problems),
+               and to force platform.init UOA
+
 * 2016.06.07 * improving package manager:
                - detecting host CPU info and passing CK_HOST_CPU_NUMBER_OF_PROCESSORS to process script
                - passing extra env to process script

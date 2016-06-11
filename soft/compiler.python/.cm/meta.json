@@ -19,6 +19,7 @@
     ], 
     "only_for_target_os_tags": [
       "windows", 
+      "android", 
       "linux"
     ], 
     "soft_file": {
