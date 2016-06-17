@@ -1,0 +1,14 @@
+{
+  "auto_detect": "no",
+  "customize": {
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_VIENNACL"
+  },
+  "soft_name": "ViennaCL library",
+  "tags": [
+    "lib",
+    "viennacl",
+    "blas",
+    "opencl"
+  ]
+}
