@@ -9,21 +9,15 @@
       "win": 3
     }, 
     "soft_file": {
-      "linux": "libOpenCL.so", 
-      "win": "OpenCL.lib"
+      "linux": "libboost_chrono.so", 
+      "win": "libboost_chrono.lib"
     }, 
     "soft_path_example": {
-      "linux": "", 
+      "linux": "/usr/lib/x86_64-linux-gnu/libboost_chrono.so", 
       "win": ""
     }
   }, 
   "deps": {
-    "compiler": {
-      "local": "yes", 
-      "name": "c++ compiler", 
-      "sort": 10, 
-      "tags": "compiler,lang-cpp"
-    }
   }, 
   "soft_name": "Boost library", 
   "tags": [

@@ -1,3 +1,5 @@
+* 2016.06.19 * fixing Boost description for Linux
+
 * 2016.06.11 * added support to skip GPU detection (for example, not needed 
                during compiler flag crowd-tuning but may cause problems),
                and to force platform.init UOA
