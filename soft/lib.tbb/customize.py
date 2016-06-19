@@ -68,11 +68,13 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    envp=cus.get('env_prefix','')
+    ep=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
     host_d=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
     sdirs=host_d.get('dir_sep','')
+    tsep=tosd.get('dir_sep','')
 
     fp=cus.get('full_path','')
     if fp!='':
@@ -108,29 +110,46 @@ def setup(i):
 
        else:
           lib=os.path.basename(fp)
+          pl=os.path.dirname(fp)
 
-          p1=os.path.dirname(fp)
-          vc=os.path.basename(p1)
+          pi=pl
+          found=False
+          while True:
+             if os.path.isdir(os.path.join(pi,'include')):
+                found=True
 
-          p2=os.path.dirname(p1)
-          ext=os.path.basename(p2)
-          p3=os.path.dirname(p2)
-          pi=os.path.dirname(p3)
+                break
+             pix=os.path.dirname(pi)
+             if pix==pi:
+                break
+             pi=pix
 
-          if win=='yes':
+          if not found:
+             return {'return':1, 'error':'can\'t find root dir of the TBB installation'}
 
-             cus['path_bin']=pi+'\\bin\\'+ext+'\\'+vc
-             cus['path_lib']=pi+'\\lib\\'+ext+'\\'+vc
-             cus['path_include']=pi+'\\include'
+          cus['path_bin']=pl
+          cus['path_lib']=pl
+          cus['path_include']=pi+tsep+'include'
 
-             cus['path_dynamic_lib']=p1
-             cus['dynamic_lib']=f1d
-             cus['extra_dynamic_libs']={'libtbbmalloc':f2d,
-                                        'libtbbproxy':f3d}
+          cus['path_dynamic_lib']=pl
+          cus['dynamic_lib']=f1d
+          cus['extra_dynamic_libs']={'libtbbmalloc':f2d,
+                                     'libtbbproxy':f3d}
 
-             cus['static_lib']=f1
-             cus['extra_static_libs']={'libtbbmalloc':f2,
-                                        'libtbbproxy':f3}
+          cus['static_lib']=f1
+          cus['extra_static_libs']={'libtbbmalloc':f2,
+                                    'libtbbproxy':f3}
+
+
+
+          env[ep+'_STATIC_NAME']=f1
+          env[ep+'_DYNAMIC_NAME']=f1d
+
+          env[ep+'_MALLOC_STATIC_NAME']=f2
+          env[ep+'_MALLOC_DYNAMIC_NAME']=f2d
+
+          env[ep+'_PROXY_STATIC_NAME']=f3
+          env[ep+'_PROXY_DYNAMIC_NAME']=f3d
 
     else:
        ################################################################

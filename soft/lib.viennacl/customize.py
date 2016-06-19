@@ -74,11 +74,41 @@ def setup(i):
     sdirs=host_d.get('dir_sep','')
 
     fp=cus.get('full_path','')
-    pi=os.path.join(fp,'src')
-    cus['path_include']=pi # +sdirs+'src'
+
+    p1=os.path.dirname(fp)
+    pi=os.path.dirname(p1)
+
+    cus['path_lib']=pi+sdirs+'lib'
+    cus['path_include']=pi+sdirs+'include'
 
     ep=cus.get('env_prefix','')
     if pi!='' and ep!='':
        env[ep]=pi
+
+    ################################################################
+    if win=='yes':
+       if remote=='yes' or mingw=='yes': 
+          sext='.a'
+          dext='.so'
+       else:
+          sext='.lib'
+          dext='.dll'
+    else:
+       sext='.a'
+       dext='.so'
+
+    hplat=host_d.get('ck_name','')
+    if hplat!='win':
+       if cus.get('path_lib','')!='':
+          s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
+          s+='export LIBRARY_PATH="'+cus['path_lib']+'":$LIBRARY_PATH\n\n'
+
+    cus['include_name']='viennacl.h'
+    cus['static_lib']='libviennacl'+sext
+    cus['dynamic_lib']='libviennacl'+dext
+
+    env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
+    env[ep+'_STATIC_NAME']=cus.get('static_lib','')
+    env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
     return {'return':0, 'bat':s}

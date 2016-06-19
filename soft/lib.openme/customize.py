@@ -107,8 +107,8 @@ def setup(i):
     cus['static_lib']='libopenme'+sext
     cus['dynamic_lib']='libopenme'+dext
 
-    env['CK_ENV_LIB_OPENME_INCLUDE_NAME']=cus.get('include_name','')
-    env['CK_ENV_LIB_OPENME_STATIC_NAME']=cus.get('static_lib','')
-    env['CK_ENV_LIB_OPENME_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+    env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
+    env[ep+'_STATIC_NAME']=cus.get('static_lib','')
+    env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
     return {'return':0, 'bat':s}
