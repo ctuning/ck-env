@@ -1,4 +1,6 @@
 * 2016.06.19 * fixing Boost description for Linux
+             * fixing openBLAS description for Linux and Android
+             * fixing PENCIL benchmark description
 
 * 2016.06.11 * added support to skip GPU detection (for example, not needed 
                during compiler flag crowd-tuning but may cause problems),

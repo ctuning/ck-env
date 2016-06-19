@@ -1,8 +1,9 @@
-You can download latest Intel TBB library from
+You can manually download latest (or needed) Intel TBB library from
+ * https://www.threadingbuildingblocks.org
 
-* https://www.threadingbuildingblocks.org
+CK packages are also available:
+ $ ck pull repo:reproduce-carp-project
+ $ ck list package:*tbb*
 
-CK packages are also available in
-
-$ ck pull repo:reproduce-carp-project
-$ ck list package:*tbb*
+On UBUNTU you can also install TBB as following:
+ $ sudo apt-get install libtbb-dev

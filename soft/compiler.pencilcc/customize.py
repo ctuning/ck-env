@@ -70,7 +70,11 @@ def setup(i):
     tbits=target_d.get('bits','')
 
     envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
+#    pi=cus.get('path_install','')
+
+    fp=cus.get('full_path','')
+    p1=os.path.dirname(fp)
+    pi=os.path.dirname(p1)
 
     ############################################################
     # Ask a few more questions

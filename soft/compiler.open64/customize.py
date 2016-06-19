@@ -72,6 +72,11 @@ def setup(i):
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
+    if pi=='':
+       fp=cus.get('full_path','')
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
+
     ############################################################
     # Ask a few more questions
     prefix_configured=cus.get('tool_prefix_configured','')

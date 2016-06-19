@@ -20,7 +20,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -68,16 +68,28 @@ def setup(i):
     tbits=target_d.get('bits','')
 
     envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
+
+    ep=cus.get('env_prefix','')
+
+    fp=cus.get('full_path','')
+    p1=os.path.dirname(fp)
+    pi=os.path.dirname(p1)
+
+    env[ep]=pi
 
     ############################################################
     if win=='yes':
-       return {'return':1, 'error':'Pencil is not supporting Windows!'}
+       s+='\n'
+       s+='rem Setting environment\n'
+
+       env['BENCHMARK_ROOT_DIRECTORY']=pi
+
+       s+='set PATH='+pi+'\\scripts;%PATH%\n'
     else:
        s+='\n'
        s+='# Setting environment\n'
 
-       env['BENCHMARK_ROOT_DIRECTORY']='${CK_ENV_BENCH_PENCIL}'
+       env['BENCHMARK_ROOT_DIRECTORY']=pi
 
        s+='export PATH='+pi+'/scripts:$PATH\n'
 

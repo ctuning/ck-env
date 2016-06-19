@@ -4,7 +4,7 @@
     "check_that_exists": "yes", 
     "ck_version": 10, 
     "env_prefix": "CK_ENV_LIB_OPENBLAS", 
-    "include_file": "openblas.h", 
+    "include_file": "cblas.h", 
     "limit_recursion_dir_search": {
       "linux": 3
     }, 
@@ -12,7 +12,7 @@
       "linux": "libopenblas.so"
     }, 
     "soft_path_example": {
-      "linux": ""
+      "linux": "/usr/lib/libopenblas.so"
     }
   }, 
   "soft_name": "OpenBLAS library", 
