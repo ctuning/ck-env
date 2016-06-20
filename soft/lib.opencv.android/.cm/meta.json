@@ -5,22 +5,18 @@
     "ck_version": 10, 
     "env_prefix": "CK_ENV_LIB_OPENCV", 
     "limit_recursion_dir_search": {
-      "linux": 4, 
-      "win": 5
+      "linux": 4 
     }, 
     "soft_file": {
-      "linux": "libopencv_core.so",
-      "win": "opencv_annotation.exe"
+      "linux": "libopencv_core.a" 
     }, 
     "only_for_target_os_tags": [
-      "windows", 
-      "linux"
+      "android"
     ], 
     "soft_path_example": {
-      "linux": "/usr/lib/x86_64-linux-gnu/libopencv_core.so"
     }
   }, 
-  "soft_name": "OpenCV library", 
+  "soft_name": "OpenCV library for Android", 
   "tags": [
     "lib", 
     "opencv"

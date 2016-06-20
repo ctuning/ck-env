@@ -7,6 +7,29 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+import os
+
+##############################################################################
+# limit directories 
+
+def limit(i):
+
+    ck=i['ck_kernel']
+
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+
+    dr=i.get('list',[])
+    drx=[]
+
+    abi=tosd.get('abi','')
+    if abi!='':
+       for q in dr:
+           if abi in q:
+              drx.append(q)
+
+    return {'return':0, 'list':drx}
+
 ##############################################################################
 # setup environment setup
 
@@ -68,95 +91,45 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    ep=cus.get('env_prefix','')
+    envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
-    host_d=i.get('host_os_dict',{})
-    tosd=i.get('target_os_dict',{})
-    sdirs=host_d.get('dir_sep','')
-    tsep=tosd.get('dir_sep','')
+    hosd=i.get('host_os_dict',{})
+
+    ellp=hosd.get('env_ld_library_path','')
+    if ellp=='': ellp='LD_LIBRARY_PATH'
+    elp=hosd.get('env_library_path','')
+    if elp=='': elp='LIBRARY_PATH'
 
     fp=cus.get('full_path','')
+    pl=os.path.dirname(fp)
+    p1=os.path.dirname(pl)
+    p2=os.path.dirname(p1)
+    pinc=os.path.join(p2,'jni','include')
+
+    abi=target_d.get('abi','')
+    if abi=='':
+       abi='armeabi'
+
+    cus['path_lib']=pl
+
+    plx=os.path.join(p1,'3rdparty','libs',abi)
+
+    cus['path_include']=pinc
+
+    cus['path_static_lib']=cus['path_lib']
+
+    cus['static_lib']='libopencv_core.a'
+
+    cus['extra_static_libs']={'opencv_imgproc':'libopencv_imgproc.a',
+                              'opencv_ocl':'libopencv_ocl.a',
+                              'opencv_highgui':'libopencv_highgui.a'}
+
+    env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
+
     if win=='yes':
-       f1='tbb.lib'
-       f2='tbbmalloc.lib'
-       f3='tbbproxy.lib'
-       f1d='tbb.dll'
-       f2d='tbbmalloc.dll'
-       f3d='tbbproxy.dll'
+       s+='\nset '+ellp+'=%CK_ENV_LIB_OPENCV_LIB%;%'+ellp+'%\n'
     else:
-       f1=''
-       f2=''
-       f3=''
-       f1d='libtbb.so'
-       f2d='libtbbmalloc.so'
-       f3d='libproxy.so'
-
-    if fp.find('lib_release')>0:
-       lib=os.path.basename(fp)
-
-       p1=os.path.dirname(fp)
-       pi=os.path.dirname(p1)
-
-       cus['path_lib']=p1
-       cus['path_include']=pi+sdirs+'include'
-
-       cus['path_dynamic_lib']=p1
-
-       cus['dynamic_lib']=f1d
-       cus['extra_dynamic_libs']={'libtbbmalloc':f2d,
-                                  'libtbbproxy':f3d}
-
-    else:
-       lib=os.path.basename(fp)
-       pl=os.path.dirname(fp)
-
-       pi=pl
-       found=False
-       sd=[]
-       while True:
-          if os.path.isdir(os.path.join(pi,'include')):
-             found=True
-
-             break
-          pix=os.path.dirname(pi)
-          if pix==pi:
-             break
-          sd.append(os.path.basename(pi))
-          pi=pix
-
-       if not found:
-          return {'return':1, 'error':'can\'t find root dir of the TBB installation'}
-
-       if win=='yes':
-          px=os.path.join(pi,'bin')
-          if len(sd)>1:
-             px=os.path.join(px,sd[1],sd[0])
-          cus['path_bin']=px
-       else:
-          cus['path_bin']=pl
-
-       cus['path_lib']=pl
-       cus['path_include']=pi+tsep+'include'
-
-       cus['path_dynamic_lib']=pl
-       cus['dynamic_lib']=f1d
-       cus['extra_dynamic_libs']={'libtbbmalloc':f2d,
-                                  'libtbbproxy':f3d}
-
-       cus['static_lib']=f1
-       cus['extra_static_libs']={'libtbbmalloc':f2,
-                                 'libtbbproxy':f3}
-
-
-
-       env[ep+'_STATIC_NAME']=f1
-       env[ep+'_DYNAMIC_NAME']=f1d
-
-       env[ep+'_MALLOC_STATIC_NAME']=f2
-       env[ep+'_MALLOC_DYNAMIC_NAME']=f2d
-
-       env[ep+'_PROXY_STATIC_NAME']=f3
-       env[ep+'_PROXY_DYNAMIC_NAME']=f3d
+       s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:$'+ellp+'\n'
 
     return {'return':0, 'bat':s}

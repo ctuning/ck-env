@@ -14,11 +14,6 @@ import os
 
 def version_cmd(i):
 
-    hosd=i['host_os_dict']
-    tosd=i['target_os_dict']
-
-    win=hosd.get('windows_base','')
-
     ck=i['ck_kernel']
 
     fp=i['full_path']
@@ -28,25 +23,9 @@ def version_cmd(i):
     p0=os.path.basename(fp)
     p1=os.path.dirname(fp)
 
-    px=p1
-    if win=='yes':
-       px=os.path.join(os.path.dirname(p1),'lib')
-    
-    lst=os.listdir(px)
+    lst=os.listdir(p1)
     for fn in lst:
-        if win=='yes':
-           if fn.startswith('opencv_core'):
-              j=fn.find('.')
-              if j>0:
-                 ver=fn[11:j]
-                 break
-           elif fn.startswith('opencv_world'):
-              j=fn.find('.')
-              if j>0:
-                 ver=fn[12:j]
-                 break
-
-        elif fn.startswith(p0):
+        if fn.startswith(p0):
            x=fn[len(p0):]
            if x.startswith('.'):
               ver=x[1:]
@@ -125,24 +104,6 @@ def setup(i):
     elp=hosd.get('env_library_path','')
     if elp=='': elp='LIBRARY_PATH'
 
-    fp=cus.get('full_path','')
-    pl=os.path.dirname(fp)
-    px=os.path.dirname(pl)
-
-    pi=fp
-    found=False
-    while True:
-       if os.path.isdir(os.path.join(pi,'include')):
-          found=True
-          break
-       pix=os.path.dirname(pi)
-       if pix==pi:
-          break
-       pi=pix
-
-    if not found:
-       return {'return':1, 'error':'can\'t find root dir of the OpenCL installation'}
-
     ################################################################
     if remote=='yes':
        cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
@@ -156,8 +117,8 @@ def setup(i):
        cus['static_lib']='libopencv_core.a'
 
        cus['extra_static_libs']={'opencv_imgproc':'libopencv_imgproc.a',
-                                 'opencv_ocl':'libopencv_ocl.a',
-                                 'opencv_highgui':'libopencv_highgui.a'}
+                                  'opencv_ocl':'libopencv_ocl.a',
+                                  'opencv_highgui':'libopencv_highgui.a'}
 
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
 
@@ -170,26 +131,37 @@ def setup(i):
        ext='x64'
        if tbits=='32': ext='ia32'
 
+       # Check where bin/libs are installed
+       pc=cus.get('path_extension_configured','')
+       pp=cus.get('path_extension','')
+
+       if pc!='yes' and pp=='':
+          ra=ck.inp({'text':'Enter installation path extension related to compiler (Enter for vc12): '})
+          pp=ra['string'].strip()
+          if pp=='': pp='vc12'
+
+          cus['path_extension']=pp
+          cus['path_extension_configured']='yes'
+
+       cus['path_bin']=pi+ext+'\\'+pp+'\\bin'
+       cus['path_lib']=pi+ext+'\\'+pp+'\\lib'
+
        # Check libs version extensions
-       cus['path_bin']=px+'\\bin'
-       cus['path_lib']=px+'\\lib'
+       lec=cus.get('lib_extension_configured','')
+       le=cus.get('lib_extension','')
 
-       cus['path_include']=pi+'/include'
+       if lec!='yes' and le=='':
+          ra=ck.inp({'text':'Enter lib extension (for example, 2411d for 2.4.11d): '})
+          le=ra['string'].strip()
 
-       # Check version
-       lst=os.listdir(cus['path_lib'])
-       le=''
-       for fn in lst:
-           if fn.startswith('opencv_core'):
-              j=fn.find('.')
-              if j>0:
-                 le=fn[11:j]
-                 break
+          cus['lib_extension']=le
+          cus['lib_extension_configured']='yes'
 
-       cus['path_include']=pi+'/include'
+       cus['path_bin']=pi+'\\'+ext+'\\'+pp+'\\bin'
+       cus['path_lib']=pi+'\\'+ext+'\\'+pp+'\\lib'
 
-       cus['path_static_lib']=cus['path_lib']
-       cus['path_dynamic_lib']=cus['path_bin']
+       cus['path_static_lib']=pi+'\\'+ext+'\\'+pp+'\\lib'
+       cus['path_dynamic_lib']=pi+'\\'+ext+'\\'+pp+'\\bin'
 
        cus['static_lib']='opencv_core'+le+'.lib'
        cus['dynamic_lib']='opencv_core'+le+'.dll'
@@ -205,10 +177,9 @@ def setup(i):
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
        env['CK_ENV_LIB_OPENCV_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
 
-       s+='\nset PATH='+cus['path_bin']+';%PATH%\n'
-
     else:
-       cus['path_lib']=pl
+       cus['path_bin']=pi+'/bin'
+       cus['path_lib']=pi+'/lib'
 
        cus['path_include']=pi+'/include'
 
