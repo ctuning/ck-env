@@ -1,8 +1,19 @@
 {
+  "auto_detect": "yes", 
   "customize": {
-    "add_include_path": "no", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
     "env_prefix": "CK_ENV_LIB_OPENCV", 
-    "skip_add_to_ld_path": "yes"
+    "limit_recursion_dir_search": {
+      "linux": 4, 
+      "win": 4
+    }, 
+    "soft_file": {
+      "linux": "libopencv_core.so"
+    }, 
+    "soft_path_example": {
+      "linux": "/usr/lib/x86_64-linux-gnu/libopencv_core.so"
+    }
   }, 
   "soft_name": "OpenCV library", 
   "tags": [

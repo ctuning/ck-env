@@ -9,3 +9,9 @@ For Nvidia GPUs:
 For MALI-based GPUs:
 * http://malideveloper.arm.com/resources/sdks/mali-opencl-sdk
 * http://malideveloper.arm.com/resources/drivers/
+
+NOTE that C++ headers are often not included by default.
+You may hence need to manually download them here:
+ * https://www.khronos.org/registry/cl/api/
+
+For example, https://www.khronos.org/registry/cl/api/1.2/cl.hpp
