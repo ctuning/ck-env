@@ -33,7 +33,10 @@ def limit(i):
     for q in dr:
         add=True
 
-        if phosd=='linux':
+        if q.find('X11')>0 or q.find('/lib/')>0:
+           add=False
+
+        if add and phosd=='linux':
            pq=os.path.basename(q)
            if len(pq)>len(sname) and pq[len(sname)]!='-':
               add=False
@@ -44,6 +47,7 @@ def limit(i):
               else:
                  if not pq[len(sname)+1].isdigit():
                     add=False
+
         if add:
            drx.append(q)
 

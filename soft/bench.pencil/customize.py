@@ -67,8 +67,6 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    envp=cus.get('env_prefix','')
-
     ep=cus.get('env_prefix','')
 
     fp=cus.get('full_path','')

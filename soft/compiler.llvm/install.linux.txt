@@ -1,0 +1,2 @@
+On UBUNTU you can install latest clang via
+ $ sudo apt install clang

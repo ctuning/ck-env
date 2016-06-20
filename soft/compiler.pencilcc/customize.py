@@ -69,12 +69,13 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    envp=cus.get('env_prefix','')
-#    pi=cus.get('path_install','')
+    ep=cus.get('env_prefix','')
 
     fp=cus.get('full_path','')
     p1=os.path.dirname(fp)
     pi=os.path.dirname(p1)
+
+    env[ep]=pi
 
     ############################################################
     # Ask a few more questions
