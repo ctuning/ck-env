@@ -1,6 +1,5 @@
 {
   "customize": {
-    "add_include_path": "yes", 
     "build_dir_name": "pencilcc", 
     "env_prefix": "CK_ENV_COMPILER_PENCIL", 
     "languages": [
@@ -13,9 +12,6 @@
     "only_for_target_os_tags": [
       "linux"
     ], 
-    "skip_add_to_bin": "no", 
-    "skip_add_to_ld_path": "no", 
-    "skip_add_to_path": "no", 
     "source_to_source": "yes"
   }, 
   "env": {

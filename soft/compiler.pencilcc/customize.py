@@ -77,14 +77,21 @@ def setup(i):
 
     env[ep]=pi
 
+    cus['path_bin']=os.path.join(pi,'bin')
+    cus['path_lib']=os.path.join(pi,'lib')
+    cus['path_include']=os.path.join(pi,'include')
+
     ############################################################
     # Ask a few more questions
     prefix=''
 
-    env['PENCIL_COMPILER_EXTRA_OPTIONS']='--target=prl -D__PENCIL__ --opencl-include-file=$CK_ENV_COMPILER_PENCIL_INCLUDE/pencil_opencl.h'
-    env['PENCIL_INCLUDE_DIR']='$CK_ENV_COMPILER_PENCIL_INCLUDE'
+    env['PENCIL_COMPILER_EXTRA_OPTIONS']='--target=prl -D__PENCIL__ --opencl-include-file='+cus['path_include']+'/pencil_opencl.h'
+    env['PENCIL_INCLUDE_DIR']=cus['path_include']
 
-    env['PRL_LIB_DIR']='$CK_ENV_COMPILER_PENCIL_LIB'
-    env['PRL_INCLUDE_DIR']='$CK_ENV_COMPILER_PENCIL_INCLUDE'
+    env['PRL_LIB_DIR']=cus['path_lib']
+    env['PRL_INCLUDE_DIR']=cus['path_include']
+
+    s+='export LD_LIBRARY_PATH='+cus['path_lib']+':$LD_LIBRARY_PATH\n'
+    s+='export PATH='+cus['path_bin']+':$PATH\n\n'
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}
