@@ -43,6 +43,7 @@
     "lib": ".a"
   }, 
   "generic": "yes", 
+  "interpreter":"sh",
   "lib_dir": "lib", 
   "make_dir": "mkdir ", 
   "no_script_execution": "yes", 
