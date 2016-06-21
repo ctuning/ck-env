@@ -18,6 +18,8 @@
   "soft_name": "CLBlast library",
   "tags": [
     "lib",
+    "blas",
+    "standard-blas",
     "clblast"
   ]
 }

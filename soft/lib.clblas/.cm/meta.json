@@ -6,6 +6,8 @@
   "soft_name": "CLBLAS library", 
   "tags": [
     "lib", 
+    "blas",
+    "standard-blas",
     "clblas"
   ]
 }
