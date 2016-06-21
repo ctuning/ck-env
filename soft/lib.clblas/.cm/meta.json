@@ -8,7 +8,7 @@
     "lib", 
     "clBLAS", 
     "blas",
-    "standard-blas",
+    "cblas",
     "opencl-blas"
   ]
 }

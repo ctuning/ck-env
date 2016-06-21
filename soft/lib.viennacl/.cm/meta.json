@@ -11,8 +11,8 @@
   "tags": [
     "lib",
     "viennacl",
-    "standard-blas",
     "blas",
+    "clbas",
     "opencl-blas"
   ]
 }
