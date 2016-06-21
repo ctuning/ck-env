@@ -23,6 +23,7 @@
     "lib", 
     "cuda",
     "cublas",
+    "cuda-blas",
     "blas"
   ]
 }
