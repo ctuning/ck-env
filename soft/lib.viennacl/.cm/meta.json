@@ -12,6 +12,7 @@
     "lib",
     "viennacl",
     "standard-blas",
-    "blas"
+    "blas",
+    "opencl-blas"
   ]
 }

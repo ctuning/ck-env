@@ -20,6 +20,7 @@
     "lib",
     "blas",
     "standard-blas",
-    "clblast"
+    "clblast",
+    "opencl-blas"
   ]
 }
