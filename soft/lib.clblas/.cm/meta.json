@@ -3,12 +3,11 @@
     "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_CLBLAS"
   }, 
-  "soft_name": "CLBLAS library", 
+  "soft_name": "clBLAS library",
   "tags": [
-    "lib", 
-    "clBLAS", 
+    "lib",
     "blas",
-    "cblas",
-    "opencl-blas"
+    "opencl-blas",
+    "clblas"
   ]
 }

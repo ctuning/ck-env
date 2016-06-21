@@ -15,11 +15,11 @@
       "linux": "/usr/lib/libopenblas.so"
     }
   }, 
-  "soft_name": "OpenBLAS library", 
+  "soft_name": "OpenBLAS library",
   "tags": [
-    "lib", 
-    "openblas",
+    "lib",
     "blas",
-    "cblas"
+    "cblas",
+    "openblas"
   ]
 }

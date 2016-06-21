@@ -10,9 +10,8 @@
   },
   "tags": [
     "lib",
-    "viennacl",
     "blas",
-    "clbas",
-    "opencl-blas"
+    "opencl-blas",
+    "viennacl"
   ]
 }
