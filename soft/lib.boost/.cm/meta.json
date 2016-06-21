@@ -9,11 +9,11 @@
       "win": 3
     }, 
     "soft_file": {
-      "linux": "libboost_chrono.so", 
-      "win": "libboost_chrono.lib"
+      "linux": "libboost_system.so", 
+      "win": "libboost_system.lib"
     }, 
     "soft_path_example": {
-      "linux": "/usr/lib/x86_64-linux-gnu/libboost_chrono.so", 
+      "linux": "/usr/lib/x86_64-linux-gnu/libboost_system.so", 
       "win": ""
     }
   }, 
