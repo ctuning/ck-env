@@ -680,7 +680,9 @@ def install(i):
               "customize":cus,
               "self_cfg":cfg,
               "version":ver,
-              "ck_kernel":ck
+              "ck_kernel":ck,
+              "path":ppp,
+              "install_path":pi
              }
 
           if o=='con': ii['interactive']='yes'
