@@ -546,6 +546,9 @@ def set(i):
                     'data_uoa':suoa})
        if r['return']>0: return r
 
+       salias=r['data_alias']
+       d['soft_alias']=salias
+
        # Check if has custom script
        rx=ck.load_module_from_path({'path':r['path'], 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
        if rx['return']==0: 

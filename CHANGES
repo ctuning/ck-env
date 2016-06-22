@@ -1,4 +1,6 @@
-* 2016.06.20 * adding sh to Android descrpition
+* 2016.06.22 * added support to customize installation path with any extra deps ('add_to_path')
+
+* 2016.06.20 * added sh to Android descrpition
 
 * 2016.06.19 * fixing Boost description for Linux
              * fixing openBLAS description for Linux and Android

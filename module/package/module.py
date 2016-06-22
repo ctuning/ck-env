@@ -490,8 +490,11 @@ def install(i):
                 os.makedirs(x)
 
           if x!='' and sp!='':
+             # Prepare installation path
+             # First via package + version
              nm=sp+'-'+cus.get('version','')
 
+             # Then if compiler
              bdn=udeps.get('compiler',{}).get('build_dir_name','')
              vr=udeps.get('compiler',{}).get('ver','')
              if bdn=='':
@@ -500,8 +503,26 @@ def install(i):
 
              if bdn!='':
                 nm+='-'+bdn
-                if vr!='': nm+='-'+vr
+                if vr!='':
+                   nm+='-'+vr
 
+             # Then any deps with explicitly specified 'add_to_path'
+             r=ck.save_json_to_file({'json_file':'/tmp/xyz000.json','dict':udeps})
+             for u in udeps:
+                 uu=udeps[u]
+                 if uu.get('add_to_path','')=='yes':
+                    vr=uu.get('ver','')
+
+                    softuoa=uu.get('dict',{}).get('soft_uoa','')
+                    salias=uu.get('dict',{}).get('soft_alias','')
+                    if salias=='': salias=softuoa
+
+                    if salias!='':
+                       nm+='-'+salias
+                    if vr!='':
+                       nm+='-'+vr
+
+             # Finally OS
              nm+='-'+tosx
 
              pix=os.path.join(x, nm)
