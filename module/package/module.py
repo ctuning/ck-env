@@ -676,7 +676,7 @@ def install(i):
               "cfg":d,
               "tags":tags,
               "env":env,
-              "deps":deps,
+              "deps":udeps,
               "customize":cus,
               "self_cfg":cfg,
               "version":ver,
