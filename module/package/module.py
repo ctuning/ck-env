@@ -507,7 +507,7 @@ def install(i):
                    nm+='-'+vr
 
              # Then any deps with explicitly specified 'add_to_path'
-             for u in udeps:
+             for u in sorted(udeps, key=lambda v: udeps[v].get('sort',0)):
                  uu=udeps[u]
                  if uu.get('add_to_path','')=='yes':
                     vr=uu.get('ver','')
@@ -664,7 +664,7 @@ def install(i):
        if rx['return']==0: 
           cs=rx['code']
 
-       if cs!=None and "setup" in dir(cs):
+       if cs!=None and 'setup' in dir(cs):
           # Call customized script
           ii={"host_os_uoa":hosx,
               "host_os_uid":hos,
@@ -726,7 +726,11 @@ def install(i):
 
        xs=''
        if p.find(' ')>=0 and eifs!='': xs=eifs
-       sb+=eset+' PACKAGE_DIR='+xs+p+xs+'\n'
+       sb+=eset+' PACKAGE_DIR='+xs+ppp+xs+'\n'
+
+       xs=''
+       if p.find(' ')>=0 and eifs!='': xs=eifs
+       sb+=eset+' ORIGINAL_PACKAGE_DIR='+xs+p+xs+'\n'
 
        sb+='\n'
 
