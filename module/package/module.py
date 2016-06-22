@@ -507,7 +507,6 @@ def install(i):
                    nm+='-'+vr
 
              # Then any deps with explicitly specified 'add_to_path'
-             r=ck.save_json_to_file({'json_file':'/tmp/xyz000.json','dict':udeps})
              for u in udeps:
                  uu=udeps[u]
                  if uu.get('add_to_path','')=='yes':
@@ -660,13 +659,13 @@ def install(i):
 
        # Check if has custom script
        cs=None
-       csn=cfg.get('custom_script_name','custom.py')
+       csn=cfg.get('custom_script_name','custom')
        rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
        if rx['return']==0: 
           cs=rx['code']
 
-       if cs!=None:
-          # Call customize script
+       if cs!=None and "setup" in dir(cs):
+          # Call customized script
           ii={"host_os_uoa":hosx,
               "host_os_uid":hos,
               "host_os_dict":hosd,
@@ -689,6 +688,11 @@ def install(i):
 
           rx=cs.setup(ii)
           if rx['return']>0: return rx
+
+          # Update install env from customized script (if needed)
+          new_env=rx.get('install_env',{})
+          if len(new_env)>0:
+             pr_env.update(new_env)
 
        # Prepare process script
        ps+=sext
