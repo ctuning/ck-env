@@ -211,11 +211,11 @@ def detect(i):
                     ck.out(zs+') '+devices[j])
 
                 ck.out('')
-                rx=ck.inp({'text':'Choose first number to select device: '})
+                rx=ck.inp({'text':'Select one of the options for device: '})
                 x=int(rx['string'].strip())
 
                 if x<0 or x>=len(devices):
-                   return {'return':1, 'error':'devic number is not recognized'}
+                   return {'return':1, 'error':'option is not recognized'}
 
                 tdid=devices[x]
              else:
@@ -427,14 +427,14 @@ def detect(i):
                  iz+=1
 
              ck.out('')
-             rx=ck.inp({'text':'Select number (or Enter to skip selection and do not ask this question agian for your target OS): '})
+             rx=ck.inp({'text':'Select option (or Enter to skip selection and do not ask this question again for your target OS): '})
              z=rx['string'].strip()
 
              if z=='':
                 pi_uoa='-'
              else:
                 if z not in zz:
-                   return {'return':1, 'error':'number is not recognized'}
+                   return {'return':1, 'error':'option is not recognized'}
 
                 pi_uoa=zz[z]
 

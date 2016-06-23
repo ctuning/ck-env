@@ -340,7 +340,7 @@ def set(i):
           l=nls
           lx=len(l)
 
-       # Choose sub-deps (sort by version)
+       # Select sub-deps (sort by version)
        if lx>1:
           ls=sorted(l, key=lambda k: (k.get('info',{}).get('data_name',k['data_uoa']),
                                       internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 0, 0),
@@ -415,13 +415,13 @@ def set(i):
                            ck.out(js)
 
                 ck.out('')
-                rx=ck.inp({'text':'Choose first number to resolve dependency for '+xq+' or press Enter for 0: '})
+                rx=ck.inp({'text':'Select one of the options for '+xq+' or press Enter for 0: '})
                 x=rx['string'].strip()
 
                 if x=='': x='0'
 
                 if x not in zz:
-                   return {'return':1, 'error':'dependency number is not recognized'}
+                   return {'return':1, 'error':'option is not recognized'}
 
                 ilx=int(x)
 
@@ -1260,11 +1260,11 @@ def refresh(i):
                   ck.out('     '+str(ix)+') '+q['data_uoa'])
                   ix+=1
 
-              rx=ck.inp({'text':'  Choose first number to select soft UOA: '})
+              rx=ck.inp({'text':'  Select one of the options for soft UOA: '})
               x=rx['string'].strip()
 
               if x not in num:
-                 return {'return':1, 'error':'number is not found'}
+                 return {'return':1, 'error':'option is not recognized'}
 
               soft_uoa=num[x]
 
