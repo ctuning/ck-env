@@ -1,3 +1,5 @@
+* 2016.06.26 * added support for the new CPU format in Linux/Android 
+
 * 2016.06.22 * added support to customize installation path with any extra deps ('add_to_path')
 
 * 2016.06.20 * added sh to Android descrpition

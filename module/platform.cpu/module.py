@@ -135,205 +135,10 @@ def detect(i):
     target_num_proc=''
     info_cpu={}
 
+    new_format=''
+    unique_cpus=[]
+
     if remote=='yes' or win!='yes':
-       # Read cpuinfo
-       fnx='/proc/cpuinfo'
-
-       if remote=='yes':
-
-          # Read file
-          rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-          if rx['return']>0: return rx
-          fcpuinfo=rx['file_name']
-
-          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+fcpuinfo
-
-          if o=='con' and pdv=='yes':
-             ck.out('')
-             ck.out('Receiving info: '+x)
-
-          rx=os.system(x)
-          if rx!=0: 
-             if os.path.isfile(fnx): os.remove(fcpuinfo)
-             fcpuinfo='' # Do not process further
-
-       else:
-          fcpuinfo=fnx
-
-       # Read and parse file
-       pp=0 # current logical processor
-       spp=str(pp)
-       info_cpu[spp]={}
-       target_freq[spp]=0
-       target_freq_max[spp]=0
-       first_skipped=False
-
-       if fcpuinfo!='':
-          rx=ck.load_text_file({'text_file':fcpuinfo, 'split_to_list':'yes'})
-          if rx['return']>0: return rx
-          ll=rx['lst']
-          if remote=='yes' and os.path.isfile(fcpuinfo): os.remove(fcpuinfo)
-
-          for q in ll:
-              q=q.strip()
-              if q!='':
-                 x1=q.find(':')
-                 if x1>0:
-                    k=q[0:x1-1].strip()
-                    v=q[x1+1:].strip()
-
-                    if k=='processor':
-                       if not first_skipped:
-                          first_skipped=True
-                       else:
-                          pp+=1
-                          spp=str(pp)
-                          info_cpu[spp]={}
-
-                    if k!='':
-                       info_cpu[spp][k]=v
-
-                       if k.find('MHz')>=0:
-                          target_freq[spp]=float(v)
-          target_num_proc=str(pp+1)
-
-       target_cpu=info_cpu[spp].get('Hardware','')
-       if target_cpu=='':
-          target_cpu=info_cpu[spp].get('model name','')
-       target_sub_cpu=info_cpu[spp].get('Processor','')
-       if target_sub_cpu=='':
-          target_sub_cpu=info_cpu[spp].get('model name','')
-       target_cpu_features=info_cpu[spp].get('Features','')
-       if target_cpu_features=='':
-          target_cpu_features=info_cpu[spp].get('flags','')
-
-       # Collect all frequencies
-       for px in range(0, pp+1):
-           fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/scaling_cur_freq'
-           if remote=='yes':
-              rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-              if rx['return']>0: return rx
-              ffreq=rx['file_name']
-
-              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
-
-              if o=='con' and pdv=='yes':
-                 ck.out('')
-                 ck.out('Receiving info: '+x)
-
-              rx=os.system(x)
-              if rx!=0:
-                 if o=='con':
-                    ck.out('')
-                    ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-                 return {'return':1, 'error':'access to remote device failed'}
-           else:
-              ffreq=fnx
-
-           # Read and parse file
-           rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
-           if rx['return']==0: 
-              ll=rx['lst']
-              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
-
-              if len(ll)>0:
-                 llx=ll[0].strip()
-                 if llx!='':
-                    fr=0
-                    try:
-                      fr=float(llx)/1000
-                      target_freq[str(px)]=fr
-                    except ValueError:
-                      pass
-
-           fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/cpuinfo_max_freq'
-           if remote=='yes':
-              rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-              if rx['return']>0: return rx
-              ffreq=rx['file_name']
-
-              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
-
-              if o=='con' and pdv=='yes':
-                 ck.out('')
-                 ck.out('Receiving info: '+x)
-
-              rx=os.system(x)
-              if rx!=0:
-                 if o=='con':
-                    ck.out('')
-                    ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-                 return {'return':1, 'error':'access to remote device failed'}
-           else:
-              ffreq=fnx
-
-           # Read and parse file
-           rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
-           if rx['return']==0:
-              ll=rx['lst']
-              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
-
-              if len(ll)>0:
-                 llx=ll[0].strip()
-                 if llx!='':
-                    try:
-                      fr=float(llx)/1000
-                      target_freq_max[str(px)]=fr
-                    except ValueError:
-                      pass
-
-           fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/scaling_available_frequencies'
-           if remote=='yes':
-              rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-              if rx['return']>0: return rx
-              ffreq=rx['file_name']
-
-              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
-
-              if o=='con' and pdv=='yes':
-                 ck.out('')
-                 ck.out('Receiving info: '+x)
-
-              rx=os.system(x)
-              if rx!=0:
-                 if o=='con':
-                    ck.out('')
-                    ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-                 return {'return':1, 'error':'access to remote device failed'}
-           else:
-              ffreq=fnx
-
-           # Read and parse file
-           rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
-           if rx['return']==0:
-              ll=rx['lst']
-              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
-
-              if len(ll)>0:
-                 llx=ll[0].strip()
-                 if llx!='':
-                    all=llx.split(' ')
-                    for h in all:
-                        ppx=str(px)
-                        if ppx not in target_freq_all: target_freq_all[ppx]=[]
-                        try:
-                           h=int(h)
-                           target_freq_all[ppx].append(h)
-                        except ValueError:
-                           pass
-
-
-# FGG - it is already initalized here!
-#       # Initialized device if needed
-#       if sdi!='yes':
-#          remote_init=tosd.get('remote_init','')
-#          if remote_init!='':
-#             r=ck.access({'action':'init_device',
-#                          'module_uoa':cfg['module_deps']['platform'],
-#                          'os_dict':tosd,
-#                          'device_id':tdid})
-#             if r['return']>0: return r
-
        # Get all params
        params={}
        if remote=='yes':
@@ -378,6 +183,273 @@ def detect(i):
 
                  params[k]=v
 
+       # Read cpuinfo
+       fnx='/proc/cpuinfo'
+
+       if remote=='yes':
+
+          # Read file
+          rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+          if rx['return']>0: return rx
+          fcpuinfo=rx['file_name']
+
+          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+fcpuinfo
+
+          if o=='con' and pdv=='yes':
+             ck.out('')
+             ck.out('Receiving info: '+x)
+
+          rx=os.system(x)
+          if rx!=0: 
+             if os.path.isfile(fnx): os.remove(fcpuinfo)
+             fcpuinfo='' # Do not process further
+
+       else:
+          fcpuinfo=fnx
+
+       # Read and parse file
+       pp=0 # current logical processor
+       spp=str(pp)
+       info_cpu[spp]={}
+       target_freq[spp]=0
+       target_freq_max[spp]=0
+       first_skipped=False
+
+       if fcpuinfo!='':
+          rx=ck.load_text_file({'text_file':fcpuinfo, 'split_to_list':'yes'})
+          if rx['return']>0: return rx
+          ll=rx['lst']
+          if remote=='yes' and os.path.isfile(fcpuinfo): os.remove(fcpuinfo)
+
+          for q in ll:
+              q=q.strip()
+              if q!='':
+                 x1=q.find(':')
+                 if x1>0:
+                    k=q[0:x1].strip()
+                    v=q[x1+1:].strip()
+
+                    if k=='processor':
+                       if not first_skipped:
+                          first_skipped=True
+                       else:
+                          pp+=1
+                          spp=str(pp)
+                          info_cpu[spp]={}
+
+                    if k!='':
+                       info_cpu[spp][k]=v
+
+                       if k.find('MHz')>=0:
+                          target_freq[spp]=float(v)
+          target_num_proc=str(pp+1)
+
+       # Legacy - outdated - should check name of each CPU (can be different in big-little, for example)
+       target_cpu=info_cpu[spp].get('Hardware','')
+       if target_cpu=='':
+          target_cpu=info_cpu[spp].get('model name','')
+       target_sub_cpu=info_cpu[spp].get('Processor','')
+       if target_sub_cpu=='':
+          target_sub_cpu=info_cpu[spp].get('model name','')
+       target_cpu_features=info_cpu[spp].get('Features','')
+       if target_cpu_features=='':
+          target_cpu_features=info_cpu[spp].get('flags','')
+
+       # Process each processor
+       for px in range(0, pp+1):
+           spx=str(px)
+
+           tcpu=info_cpu[spx].get('Hardware','')
+           if tcpu=='':
+              tcpu=info_cpu[spx].get('model name','')
+
+           if tcpu=='': # new format
+              ic=info_cpu[spx]
+              ic1=ic.get('CPU implementer','')
+              ic2=ic.get('CPU architecture','')
+              ic3=ic.get('CPU variant','')
+              ic4=ic.get('CPU part','')
+              ic5=ic.get('CPU revision','')
+
+              tcpu=ic1+'-'+ic2+'-'+ic3+'-'+ic4+'-'+ic5
+
+              info_cpu[spx]['cpu_abi']=params.get('ro.product.cpu.abi','') # not sure if correct for all processors
+              info_cpu[spx]['new_format']='yes'
+
+              new_format='yes'
+           else:
+              tsub_cpu=info_cpu[spp].get('Processor','')
+              if tsub_cpu=='':
+                 tsub_cpu=info_cpu[spp].get('model name','')
+              info_cpu[spx]['ck_cpu_subname']=tsub_cpu
+
+           info_cpu[spx]['ck_cpu_name']=tcpu
+
+           tcpu_features=info_cpu[spp].get('Features','')
+           if tcpu_features=='':
+              tcpu_features=info_cpu[spp].get('flags','')
+           info_cpu[spx]['cpu_features']=tcpu_features
+
+           # add unique
+           found=False
+           for uc in unique_cpus:
+               if uc.get('ck_cpu_name','')==tcpu:
+                  found=True
+                  break
+
+           if not found:
+              unique_cpus.append(info_cpu[spx])
+
+       # Collect all frequencies
+       for px in range(0, pp+1):
+           fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/scaling_cur_freq'
+           if remote=='yes':
+              rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+              if rx['return']>0: return rx
+              ffreq=rx['file_name']
+
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
+
+              if o=='con' and pdv=='yes':
+                 ck.out('')
+                 ck.out('Receiving info: '+x)
+
+              rx=os.system(x)
+              if rx!=0:
+                 if o=='con':
+                    ck.out('')
+                    ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+#                 can fail on MacOS, hence continue ...
+#                 return {'return':1, 'error':'access to remote device failed'}
+           else:
+              ffreq=fnx
+
+           # Read and parse file
+           rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
+           if rx['return']==0: 
+              ll=rx['lst']
+              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
+
+              if len(ll)>0:
+                 llx=ll[0].strip()
+                 if llx!='':
+                    fr=0
+                    try:
+                      fr=float(llx)/1000
+                      target_freq[str(px)]=fr
+                      info_cpu[str(px)]['cur_freq']=fr
+                    except ValueError:
+                      pass
+
+           fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/cpuinfo_max_freq'
+           if remote=='yes':
+              rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+              if rx['return']>0: return rx
+              ffreq=rx['file_name']
+
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
+
+              if o=='con' and pdv=='yes':
+                 ck.out('')
+                 ck.out('Receiving info: '+x)
+
+              rx=os.system(x)
+              if rx!=0:
+                 if o=='con':
+                    ck.out('')
+                    ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+#                 can fail on MacOS, hence continue ...
+#                 return {'return':1, 'error':'access to remote device failed'}
+           else:
+              ffreq=fnx
+
+           # Read and parse file
+           rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
+           if rx['return']==0:
+              ll=rx['lst']
+              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
+
+              if len(ll)>0:
+                 llx=ll[0].strip()
+                 if llx!='':
+                    try:
+                      fr=float(llx)/1000
+                      target_freq_max[str(px)]=fr
+                      info_cpu[str(px)]['max_freq']=fr
+                    except ValueError:
+                      pass
+
+           fnx='/sys/devices/system/cpu/cpu'+str(px)+'/cpufreq/scaling_available_frequencies'
+           if remote=='yes':
+              rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+              if rx['return']>0: return rx
+              ffreq=rx['file_name']
+
+              x=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat '+fnx+' '+tosd.get('remote_shell_end','')+' '+ro+ffreq
+
+              if o=='con' and pdv=='yes':
+                 ck.out('')
+                 ck.out('Receiving info: '+x)
+
+              rx=os.system(x)
+              if rx!=0:
+                 if o=='con':
+                    ck.out('')
+                    ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+#                 can fail on MacOS, hence continue ...
+#                 return {'return':1, 'error':'access to remote device failed'}
+           else:
+              ffreq=fnx
+
+           # Read and parse file
+           rx=ck.load_text_file({'text_file':ffreq, 'split_to_list':'yes'})
+           if rx['return']==0:
+              ll=rx['lst']
+              if remote=='yes' and os.path.isfile(ffreq): os.remove(ffreq)
+
+              if len(ll)>0:
+                 llx=ll[0].strip()
+                 if llx!='':
+                    all=llx.split(' ')
+                    for h in all:
+                        ppx=str(px)
+                        if ppx not in target_freq_all: target_freq_all[ppx]=[]
+                        try:
+                           h=int(h)
+                           target_freq_all[ppx].append(h)
+                           if 'all_freqs' not in cpu_info[ppx]:
+                              cpu_info[ppx]['all_freqs']=[]
+                           cpu_info[ppx]['all_freqs'].append(ppx)
+                        except ValueError:
+                           pass
+
+# FGG - it is already initalized here!
+#       # Initialized device if needed
+#       if sdi!='yes':
+#          remote_init=tosd.get('remote_init','')
+#          if remote_init!='':
+#             r=ck.access({'action':'init_device',
+#                          'module_uoa':cfg['module_deps']['platform'],
+#                          'os_dict':tosd,
+#                          'device_id':tdid})
+#             if r['return']>0: return r
+
+       if new_format=='yes':
+          for px in range(0, pp+1):
+              spx=str(px)
+
+              tcpu=info_cpu[spx].get('ck_cpu_name','')
+
+              # add unique
+              found=False
+              for uc in unique_cpus:
+                  if uc.get('ck_cpu_name','')==tcpu:
+                     found=True
+                     break
+
+              if not found:
+                 unique_cpus.append(info_cpu[spx])
+
        target['name']=target_cpu
        target['sub_name']=target_sub_cpu
        target['cpu_features']=target_cpu_features
@@ -408,14 +480,42 @@ def detect(i):
           target['current_freq']={"0":target_freq}
           target['max_freq']={"0":target_freq_max}
 
+          # To partially support new format
+          unique_cpu={'ck_cpu_name':target_cpu,
+                      'ck_cpu_subname':target_cpu}
+          unique_cpus.append(unique_cpu)
+
     if o=='con':
        ck.out('')
-       ck.out('Number of logical processors: '+str(target.get('num_proc',0)))
-       ck.out('CPU name:                     '+target.get('name',''))
-       if target.get('name','')!=target.get('sub_name',''):
-          ck.out('CPU sub name:                 '+target.get('sub_name',''))
-       ck.out('CPU ABI:                      '+target.get('cpu_abi',''))
-       ck.out('CPU features:                 '+target.get('cpu_features',''))
+       if new_format=='yes':
+          lup=len(unique_cpus)
+          ck.out('Number of logical processors: '+str(target.get('num_proc',0)))
+          ck.out('Number of unique processors:  '+str(lup))
+
+          iup=0
+          for up in unique_cpus:
+              ck.out('')
+              ck.out('  Unique processor: '+str(iup))
+
+              x1=up.get('ck_cpu_name','')
+              x1x=up.get('ck_cpu_name_real','')
+              if x1x!='': x1=x1x+' ('+x1+')'
+
+              x2=up.get('cpu_abi','')
+              x3=up.get('cpu_features','')
+
+              ck.out('    CPU name:     '+x1)
+              ck.out('    CPU ABI:      '+x2)
+              ck.out('    CPU features: '+x3)
+
+       else:
+          ck.out('Number of logical processors: '+str(target.get('num_proc',0)))
+          ck.out('CPU name:                     '+target.get('name',''))
+          if target.get('name','')!=target.get('sub_name',''):
+             ck.out('CPU sub name:                 '+target.get('sub_name',''))
+          ck.out('CPU ABI:                      '+target.get('cpu_abi',''))
+          ck.out('CPU features:                 '+target.get('cpu_features',''))
+
        ck.out('')
        ck.out('CPU frequency:')
        x=target.get('current_freq',{})
@@ -441,50 +541,6 @@ def detect(i):
 
     # Exchanging info #################################################################
     if ex=='yes':
-       if o=='con':
-          ck.out('')
-          ck.out('Exchanging information with repository ...')
-
-       xn=target.get('name','')
-       if xn=='':
-          # Check if exists in configuration
-
-          dcfg={}
-          ii={'action':'load',
-              'module_uoa':cfg['module_deps']['cfg'],
-              'data_uoa':cfg['cfg_uoa']}
-          r=ck.access(ii)
-          if r['return']>0 and r['return']!=16: return r
-          if r['return']!=16:
-             dcfg=r['dict']
-
-          dx=dcfg.get('platform_cpu_name',{}).get(tos,{})
-          x=tdid
-          if x=='': x='default'
-          xn=dx.get(x,'')
-
-          if (xn=='' and o=='con'):
-             r=ck.inp({'text':'Enter your processor name: '})
-             xxn=r['string'].strip()
-
-             if xxn!=xn:
-                xn=xxn
-
-                if 'platform_cpu_name' not in dcfg: dcfg['platform_cpu_name']={}
-                if tos not in dcfg['platform_cpu_name']: dcfg['platform_cpu_name'][tos]={}
-                dcfg['platform_cpu_name'][tos][x]=xn
-
-                ii={'action':'update',
-                    'module_uoa':cfg['module_deps']['cfg'],
-                    'data_uoa':cfg['cfg_uoa'],
-                    'dict':dcfg}
-                r=ck.access(ii)
-                if r['return']>0: return r
-
-          if xn=='':
-             return {'return':1, 'error':'can\'t exchange information where main name is empty'}
-          target['name']=xn
-
        er=i.get('exchange_repo','')
        esr=i.get('exchange_subrepo','')
        el=i.get('exchange_locally','')
@@ -492,37 +548,144 @@ def detect(i):
           er=ck.cfg['default_exchange_repo_uoa']
           esr=ck.cfg['default_exchange_subrepo_uoa']
 
-       # Copy nearly all (remove cur freq)
-       import copy
-       xtarget=copy.deepcopy(target)
-       if 'current_freq' in xtarget: del(xtarget['current_freq'])
+       if new_format=='yes':
+          for unique in unique_cpus:
+              xn=unique.get('ck_cpu_name','')
 
-       ii={'action':'exchange',
-           'module_uoa':cfg['module_deps']['platform'],
-           'sub_module_uoa':work['self_module_uid'],
-           'repo_uoa':er,
-           'data_name':target.get('name',''),
-           'extra_info':einf,
-           'all':'no',
-           'dict':{'features':xtarget}} # Later we should add more properties from prop_all,
-                                        # but should be careful to remove any user-specific info
-       if esr!='': ii['remote_repo_uoa']=esr
-       r=ck.access(ii)
-       if r['return']>0: return r
+              if o=='con':
+                 ck.out('')
+                 ck.out('Exchanging information with repository for a unique processor '+xn+' ...')
 
-       fuoa=r.get('data_uoa','')
-       fuid=r.get('data_uid','')
+              # Copy nearly all (remove cur freq)
 
-       eft=r['dict'].get('features',{})
+              mm={'features':unique}
 
-       if o=='con' and r.get('found','')=='yes':
-          ck.out('  CPU CK entry already exists ('+fuid+') - loading latest meta (features) ...')
-          target=eft
+              ii={'action':'exchange',
+                  'module_uoa':cfg['module_deps']['platform'],
+                  'sub_module_uoa':work['self_module_uid'],
+                  'repo_uoa':er,
+                  'data_name':xn,
+                  'extra_info':einf,
+                  'all':'no',
+                  'dict':mm}
+              if esr!='': ii['remote_repo_uoa']=esr
+              r=ck.access(ii)
+              if r['return']>0: return r
 
+              if r.get('found','')=='yes':
+                 fuoa=r.get('data_uoa','')
+                 fuid=r.get('data_uid','')
+
+                 ddd=r['dict'].get('features',{})
+
+                 if o=='con':
+                    ck.out('  CPU CK entry already exists ('+fuid+') - loading latest meta (features) ...')
+                    x1=ddd.get('ck_processor_real_name','')
+                    x2=ddd.get('ck_arch_real_name','')
+
+                    x=x1
+                    if x=='': x=x2
+                    else:
+                       if x2!='':
+                          x+=' ('+x2+')'
+
+                    if x!='':
+                       ck.out('    Real name: '+x)
+
+                 ddd['data_uoa']=fuoa
+                 ddd['data_uid']=fuid
+
+                 unique.update(ddd)
+
+                 # Update all processors with this name
+                 for px in range(0, pp+1):
+                     spx=str(px)
+
+                     tcpu=info_cpu[spx].get('ck_cpu_name','')
+                     if tcpu==xn:
+                        info_cpu[spx].update(ddd)
+
+       else:
+           if o=='con':
+              ck.out('')
+              ck.out('Exchanging information with repository (old format) ...')
+
+           xn=target.get('name','')
+
+           if xn=='':
+              # Check if exists in configuration
+              dcfg={}
+              ii={'action':'load',
+                  'module_uoa':cfg['module_deps']['cfg'],
+                  'data_uoa':cfg['cfg_uoa']}
+              r=ck.access(ii)
+              if r['return']>0 and r['return']!=16: return r
+              if r['return']!=16:
+                 dcfg=r['dict']
+
+              dx=dcfg.get('platform_cpu_name',{}).get(tos,{})
+              x=tdid
+              if x=='': x='default'
+              xn=dx.get(x,'')
+
+              if (xn=='' and o=='con'):
+                 r=ck.inp({'text':'Enter your processor name: '})
+                 xxn=r['string'].strip()
+
+                 if xxn!=xn:
+                    xn=xxn
+
+                    if 'platform_cpu_name' not in dcfg: dcfg['platform_cpu_name']={}
+                    if tos not in dcfg['platform_cpu_name']: dcfg['platform_cpu_name'][tos]={}
+                    dcfg['platform_cpu_name'][tos][x]=xn
+
+                    ii={'action':'update',
+                        'module_uoa':cfg['module_deps']['cfg'],
+                        'data_uoa':cfg['cfg_uoa'],
+                        'dict':dcfg}
+                    r=ck.access(ii)
+                    if r['return']>0: return r
+
+              if xn=='':
+                 return {'return':1, 'error':'can\'t exchange information where main name is empty'}
+
+              target['name']=xn
+
+           # Copy nearly all (remove cur freq)
+           import copy
+           xtarget=copy.deepcopy(target)
+           if 'current_freq' in xtarget: del(xtarget['current_freq'])
+
+           ii={'action':'exchange',
+               'module_uoa':cfg['module_deps']['platform'],
+               'sub_module_uoa':work['self_module_uid'],
+               'repo_uoa':er,
+               'data_name':target.get('name',''),
+               'extra_info':einf,
+               'all':'no',
+               'dict':{'features':xtarget}} # Later we should add more properties from prop_all,
+                                            # but should be careful to remove any user-specific info
+           if esr!='': ii['remote_repo_uoa']=esr
+           r=ck.access(ii)
+           if r['return']>0: return r
+
+           fuoa=r.get('data_uoa','')
+           fuid=r.get('data_uid','')
+
+           eft=r['dict'].get('features',{})
+
+           if o=='con' and r.get('found','')=='yes':
+              ck.out('  CPU CK entry already exists ('+fuid+') - loading latest meta (features) ...')
+              target=eft
+
+    # Finalize features
     if 'features' not in rr: rr['features']={}
 
     rr['features']['cpu']=target
+
     rr['features']['cpu_misc']=info_cpu
+    rr['features']['cpu_unique']=unique_cpus
+    rr['features']['cpu_new_format']=new_format
 
     if fuoa!='' or fuid!='':
        rr['features']['cpu_uoa']=fuoa
@@ -752,7 +915,7 @@ def show(i):
 
         meta=q['meta']
         ft=meta.get('features',{})
-        
+
         name=ft.get('name','')
         sub_name=ft.get('sub_name','')
         cores=ft.get('num_proc','')
