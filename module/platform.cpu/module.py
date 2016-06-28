@@ -926,7 +926,7 @@ def show(i):
         freq=''
         for x in range(0,1024):
             xx=str(x)
-            if xx not in frequency: break
+            if type(frequency)!=list or xx not in frequency: break
             if freq!='': freq+=', '
             freq+=str(frequency[xx])
 
