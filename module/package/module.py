@@ -60,6 +60,8 @@ def install(i):
               (param)             - string converted into CK_PARAM and passed to processing script
               (params)            - dict, keys are onverted into <KEY>=<VALUE> and passed to processing script
 
+              (Dkey)              - update params[key], i.e. ck install package:... -DENV1=val1 -DENV2=val2 (similar to CMAKE)
+
               (extra_version)     - add extra version, when registering software 
                                     (for example, -trunk-20160421)
             }
@@ -595,6 +597,11 @@ def install(i):
        param=i.get('param',None)
        params=d.get('params',{})
        params.update(i.get('params',{}))
+
+       # Parse -D ...
+       for k in i:
+           if k.startswith('D'):
+              params[k[1:]]=i[k]
 
        if param!=None:
           sb+='\n'
