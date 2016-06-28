@@ -917,7 +917,11 @@ def show(i):
         ft=meta.get('features',{})
 
         name=ft.get('name','')
+        if name=='':
+           name=ft.get('ck_arch_real_name','')
+
         sub_name=ft.get('sub_name','')
+
         cores=ft.get('num_proc','')
         abi=ft.get('cpu_abi','')
         features=ft.get('cpu_features','')
