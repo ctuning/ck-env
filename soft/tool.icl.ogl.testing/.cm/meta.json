@@ -1,0 +1,45 @@
+{
+  "customize": {
+    "add_to_path": "yes",
+    "env_prefix": "CK_ENV_TOOL_ICL_OGL_TESTING",
+    "only_for_host_os_tags": [
+      "windows",
+      "linux"
+    ],
+    "only_for_target_os_tags": [
+      "windows",
+      "linux"
+    ]
+  },
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C compiler",
+      "sort": 10,
+      "tags": "compiler,lang-c"
+    },
+    "lib-freeglut": {
+      "local": "yes",
+      "name": "FreeGLUT library",
+      "sort": 30,
+      "tags": "lib,freeglut"
+    },
+    "lib-glew": {
+      "local": "yes",
+      "name": "GLEW library",
+      "sort": 20,
+      "tags": "lib,glew"
+    },
+    "tool-glslangvalidator": {
+      "local": "yes",
+      "name": "GLS language validator",
+      "sort": 40,
+      "tags": "tool,glslangvalidator"
+    }
+  },
+  "soft_name": "ICL OGL testing tool",
+  "tags": [
+    "tool",
+    "icl-ogl-testing"
+  ]
+}
