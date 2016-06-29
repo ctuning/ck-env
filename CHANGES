@@ -1,4 +1,4 @@
-* 2016.06.29 * added more soft descriptions (Apache thrift)
+* 2016.06.29 * added more soft descriptions (Apache thrift, commons-io)
 
 * 2016.06.28 * added support to pass environment variables to installation script via -Dkey=value (similar to cMAKE)
 
