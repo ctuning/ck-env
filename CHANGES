@@ -1,3 +1,5 @@
+* 2016.06.29 * added more soft descriptions (Apache thrift)
+
 * 2016.06.28 * added support to pass environment variables to installation script via -Dkey=value (similar to cMAKE)
 
 * 2016.06.26 * added support for the new CPU format in Linux/Android 
