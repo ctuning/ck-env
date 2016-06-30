@@ -1,0 +1,19 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_TOOL_LIB_JUNIT",
+    "only_for_host_os_tags": [
+      "windows",
+      "linux"
+    ],
+    "only_for_target_os_tags": [
+      "windows",
+      "linux"
+    ]
+  },
+  "env": {},
+  "soft_name": "JUNIT library",
+  "tags": [
+    "lib",
+    "junit"
+  ]
+}
