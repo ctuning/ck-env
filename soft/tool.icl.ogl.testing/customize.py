@@ -74,16 +74,28 @@ def setup(i):
     host_d=i.get('host_os_dict',{})
     sdirs=host_d.get('dir_sep','')
 
-    fp=cus.get('full_path','')
-    if fp!='':
-       p1=os.path.dirname(fp)
-       pi=os.path.dirname(p1)
-
-       cus['path_bin']=pi+sdirs+'bin'
-
     ep=cus.get('env_prefix','')
-    if ep!='':
-       if pi!='':
-          env[ep]=pi
+
+    fp=cus.get('full_path','')
+    if fp=='':
+       return {'return':1, 'error':'full path is not specified'}
+
+    p1=os.path.dirname(fp)
+    p2=os.path.dirname(p1)
+    p3=os.path.dirname(p2)
+    p4=os.path.dirname(p3)
+    p5=os.path.dirname(p4)
+    ps=os.path.dirname(p5)
+    pi=os.path.dirname(ps)
+
+    cus['path_bin']=pi+sdirs+'bin'
+
+    ep=cus['env_prefix']
+
+    env[ep]=pi
+    env[ep+'_SRC']=ps
+    env[ep+'_UTIL']=os.path.join(ps, 'util', 'src', 'main', 'java')
+    env[ep+'_FUZZER']=os.path.join(ps, 'fuzzer', 'src', 'main', 'java')
+    env[ep+'_ANTLR4']=os.path.join(ps, 'fuzzer', 'src', 'main', 'antlr4')
 
     return {'return':0, 'bat':s}

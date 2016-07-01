@@ -12,11 +12,35 @@
     ]
   },
   "deps": {
-    "compiler": {
+    "java_compiler": {
+      "local": "yes", 
+      "name": "Java compiler", 
+      "sort": 1, 
+      "tags": "compiler,java"
+    }, 
+    "tool-antlr": {
+      "local": "yes", 
+      "name": "ANTLR tool", 
+      "sort": 5, 
+      "tags": "tool,antlr"
+    },
+    "lib-commons-io": {
       "local": "yes",
-      "name": "C compiler",
-      "sort": 10,
-      "tags": "compiler,lang-c"
+      "name": "Commons IO library",
+      "sort": 6,
+      "tags": "lib,commons-io"
+    },
+    "lib-junit": {
+      "local": "yes",
+      "name": "Junit library",
+      "sort": 7,
+      "tags": "lib,junit"
+    },
+    "tool-thrift": {
+      "local": "yes",
+      "name": "Thrift compiler",
+      "sort": 8,
+      "tags": "tool,thrift"
     },
     "lib-freeglut": {
       "local": "yes",

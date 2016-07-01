@@ -19,7 +19,7 @@
     }, 
     "tool-antlr": {
       "local": "yes", 
-      "name": "OGL parser (ICL)", 
+      "name": "ANTLR tool", 
       "sort": 20, 
       "tags": "tool,antlr"
     }

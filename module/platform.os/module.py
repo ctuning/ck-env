@@ -212,7 +212,10 @@ def detect(i):
 
                 ck.out('')
                 rx=ck.inp({'text':'Select one of the options for device: '})
-                x=int(rx['string'].strip())
+                s=rx['string']
+                x=0
+                if s!='':
+                   x=int(s.strip())
 
                 if x<0 or x>=len(devices):
                    return {'return':1, 'error':'option is not recognized'}

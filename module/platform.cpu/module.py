@@ -417,9 +417,9 @@ def detect(i):
                         try:
                            h=int(h)
                            target_freq_all[ppx].append(h)
-                           if 'all_freqs' not in cpu_info[ppx]:
-                              cpu_info[ppx]['all_freqs']=[]
-                           cpu_info[ppx]['all_freqs'].append(ppx)
+                           if 'all_freqs' not in info_cpu[ppx]:
+                              info_cpu[ppx]['all_freqs']=[]
+                           info_cpu[ppx]['all_freqs'].append(ppx)
                         except ValueError:
                            pass
 

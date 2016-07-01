@@ -35,3 +35,9 @@ E:
 O: 
 C: suggesting how to improve OpenCL lib registration on Ubuntu
 W: 
+
+N: Michael Mcgeagh
+E:
+O: ARM, UK
+C: reporting problem with yaml recording, CPU feature detection (in new format) and general feedback about ck-wa
+W:
