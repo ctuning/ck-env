@@ -128,48 +128,34 @@ def setup(i):
     tbits=target_d.get('bits','')
 
     envp=cus.get('env_prefix','')
+    pi=cus.get('path_install','')
 
     host_d=i.get('host_os_dict',{})
     sdirs=host_d.get('dir_sep','')
 
     fp=cus.get('full_path','')
+    if fp!='':
+       p1=os.path.dirname(fp)
+       pi=os.path.dirname(p1)
 
-    pl=os.path.dirname(fp)
-    ext=os.path.basename(pl)
-    if ext!='x64': ext=''
+       cus['path_lib']=pi+sdirs+'lib'
+       cus['path_include']=pi+sdirs+'include'
 
-    pi=fp
-    found=False
-    while True:
-       if os.path.isdir(os.path.join(pi,'include')):
-          found=True
-          break
-       pix=os.path.dirname(pi)
-       if pix==pi:
-          break
-       pi=pix
-
-    if tbits=='64' and os.path.isdir(os.path.join(pl,'x64')):
-       pl=os.path.join(pl,'x64')
-
-    cus['path_lib']=pl
-    cus['path_include']=pi+sdirs+'include'
-
-    ep=cus['env_prefix']
-    env[ep]=pi
-    env[ep+'_LIB']=pl
+    ep=cus.get('env_prefix','')
+    if ep!='':
+       if pi!='':
+          env[ep]=pi
 
     ################################################################
     if win=='yes':
-       pb=pi+'\\bin'
-       if ext!='':
-          pb+='\\'+ext
+       yy=''
+       if tbits=='64': 
+          yy='x64'
 
-       if tbits=='64' and os.path.isdir(os.path.join(pb,'x64')):
-          pb=os.path.join(pb,'x64')
+       s+='set PATH='+pi+'\\bin\\'+yy+';%PATH%\n\n'
+       env[envp+'_LIB']=pi+'\\lib\\'+yy
+       env[envp+'_BIN']=pi+'\\bin\\'+yy
 
-       s+='set PATH='+pb+';%PATH%\n\n'
-       env[ep+'_BIN']=pb
     else:
        return {'return':1, 'error':'Linux version is not yet supported'}
 
