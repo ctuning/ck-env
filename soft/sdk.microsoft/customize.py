@@ -24,11 +24,12 @@ def limit(i):
 
     for p in xlst:
         pp=os.path.join(p,'Windows')
-        xx=os.listdir(pp)
-        for fx in xx:
-            px=os.path.join(pp,fx)
-            if os.path.isdir(px) and fx.lower().startswith('v'):
-               lst.append(px)
+        if os.path.isdir(pp):
+           xx=os.listdir(pp)
+           for fx in xx:
+               px=os.path.join(pp,fx)
+               if os.path.isdir(px) and fx.lower().startswith('v'):
+                  lst.append(px)
 
     return {'return':0, 'list':lst}
 
