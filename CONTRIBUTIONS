@@ -41,3 +41,9 @@ E:
 O: ARM, UK
 C: reporting problem with yaml recording, CPU feature detection (in new format) and general feedback about ck-wa
 W:
+
+N: Paul Thomson
+E:
+O: Imperial College London, UK
+C: reporting a few bugs with software description on Windows (Microsoft SDK)
+W:
