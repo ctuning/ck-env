@@ -651,130 +651,149 @@ def install(i):
           if pi=='':
              return {'return':1, 'error':'installation path is not specified'}
 
+       # Check if there is already library or tool exists
+       x=d.get('end_full_path',{}).get(tname2,'')
+       fp=pi
+       cont=True
+       if x!='': 
+          x=x.replace('$#sep#$', sdirs)
+          fp=os.path.join(fp,x)
+          if os.path.isfile(fp):
+             if o=='con':
+                ck.out('')
+                ck.out('Seems like package is already installed! File from package found in path: '+fp)
+
+                ck.out('')
+                rx=ck.inp({'text':'Would you like to overwrite/process it again (y/N)? '})
+                x=rx['string'].strip().lower()
+                if x!='y' and x!='yes':
+                   cont=False
+
        # Check if need to use scripts from another entry
-       ppp=p
-       x=d.get('use_scripts_from_another_entry',{})
-       if len(x)>0:
-          xam=x.get('module_uoa','')
-          if xam=='': xam=work['self_module_uid']
-          xad=x.get('data_uoa','')
-          r=ck.access({'action':'find',
-                       'module_uoa':xam,
-                       'data_uoa':xad})
-          if r['return']>0: return r
-          ppp=r['path']
+       if cont:
+          ppp=p
+          x=d.get('use_scripts_from_another_entry',{})
+          if len(x)>0:
+             xam=x.get('module_uoa','')
+             if xam=='': xam=work['self_module_uid']
+             xad=x.get('data_uoa','')
+             r=ck.access({'action':'find',
+                          'module_uoa':xam,
+                          'data_uoa':xad})
+             if r['return']>0: return r
+             ppp=r['path']
 
-       # Check if has custom script
-       cs=None
-       csn=cfg.get('custom_script_name','custom')
-       rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
-       if rx['return']==0: 
-          cs=rx['code']
+          # Check if has custom script
+          cs=None
+          csn=cfg.get('custom_script_name','custom')
+          rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
+          if rx['return']==0: 
+             cs=rx['code']
 
-       if cs!=None and 'setup' in dir(cs):
-          # Call customized script
-          ii={"host_os_uoa":hosx,
-              "host_os_uid":hos,
-              "host_os_dict":hosd,
-              "target_os_uoa":tosx,
-              "target_os_uid":tos,
-              "target_os_dict":tosd,
-              "target_device_id":tdid,
-              "cfg":d,
-              "tags":tags,
-              "env":env,
-              "deps":udeps,
-              "customize":cus,
-              "self_cfg":cfg,
-              "version":ver,
-              "ck_kernel":ck,
-              "path":ppp,
-              "install_path":pi
-             }
+          if cs!=None and 'setup' in dir(cs):
+             # Call customized script
+             ii={"host_os_uoa":hosx,
+                 "host_os_uid":hos,
+                 "host_os_dict":hosd,
+                 "target_os_uoa":tosx,
+                 "target_os_uid":tos,
+                 "target_os_dict":tosd,
+                 "target_device_id":tdid,
+                 "cfg":d,
+                 "tags":tags,
+                 "env":env,
+                 "deps":udeps,
+                 "customize":cus,
+                 "self_cfg":cfg,
+                 "version":ver,
+                 "ck_kernel":ck,
+                 "path":ppp,
+                 "install_path":pi
+                }
 
-          if o=='con': ii['interactive']='yes'
-          if i.get('quiet','')=='yes': ii['interactive']=''
+             if o=='con': ii['interactive']='yes'
+             if i.get('quiet','')=='yes': ii['interactive']=''
 
-          rx=cs.setup(ii)
+             rx=cs.setup(ii)
+             if rx['return']>0: return rx
+
+             # Update install env from customized script (if needed)
+             new_env=rx.get('install_env',{})
+             if len(new_env)>0:
+                pr_env.update(new_env)
+
+          # Prepare process script
+          ps+=sext
+          px=os.path.join(ppp,ps)
+
+          if not os.path.isfile(px):
+             return {'return':1, 'error':'processing script '+ps+' is not found'}
+
+          # Add deps if needed before running
+          if sdeps!='':
+             sb+=sdeps
+
+          # Add compiler dep again, if there
+          x=udeps.get('compiler',{}).get('bat','')
+          if x!='' and not sb.endswith(x):
+             sb+='\n'+x+'\n'
+
+          # Add misc environment (prepared above)
+          for q in pr_env:
+              qq=str(pr_env[q])
+              if qq.find(' ')>0:
+                 qq=eifs+qq+eifs
+              sb+=eset+' '+q+'='+qq+'\n'
+
+          # If install path has space, add quotes for some OS ...
+          xs=''
+          if pi.find(' ')>=0 and eifs!='': xs=eifs
+          sb+=eset+' INSTALL_DIR='+xs+pi+xs+'\n'
+
+          xs=''
+          if p.find(' ')>=0 and eifs!='': xs=eifs
+          sb+=eset+' PACKAGE_DIR='+xs+ppp+xs+'\n'
+
+          xs=''
+          if p.find(' ')>=0 and eifs!='': xs=eifs
+          sb+=eset+' ORIGINAL_PACKAGE_DIR='+xs+p+xs+'\n'
+
+          sb+='\n'
+
+          xs=''
+          if p.find(' ')>=0 and eifsc!='': xs=eifsc
+          sb+=scall+' '+xs+px+xs+'\n\n'
+
+          if wb=='yes' and d.get('check_exit_status','')!='yes':
+             sb+='exit /b 0\n'
+
+          # Generate tmp file
+          rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':sext})
+          if rx['return']>0: return rx
+          fn=rx['file_name']
+
+          # Write to tmp file
+          rx=ck.save_text_file({'text_file':fn, 'string':sb})
           if rx['return']>0: return rx
 
-          # Update install env from customized script (if needed)
-          new_env=rx.get('install_env',{})
-          if len(new_env)>0:
-             pr_env.update(new_env)
+          # Go to installation path
+          if not os.path.isdir(pi):
+             os.makedirs(pi)
+          os.chdir(pi)
 
-       # Prepare process script
-       ps+=sext
-       px=os.path.join(ppp,ps)
+          # Check if need to set executable flags
+          se=hosd.get('set_executable','')
+          if se!='':
+             x=se+' '+fn
+             rx=os.system(x)
 
-       if not os.path.isfile(px):
-          return {'return':1, 'error':'processing script '+ps+' is not found'}
+          # Run script
+          rx=os.system(fn)
+          if os.path.isfile(fn): 
+             os.remove(fn)
 
-       # Add deps if needed before running
-       if sdeps!='':
-          sb+=sdeps
-
-       # Add compiler dep again, if there
-       x=udeps.get('compiler',{}).get('bat','')
-       if x!='' and not sb.endswith(x):
-          sb+='\n'+x+'\n'
-
-       # Add misc environment (prepared above)
-       for q in pr_env:
-           qq=str(pr_env[q])
-           if qq.find(' ')>0:
-              qq=eifs+qq+eifs
-           sb+=eset+' '+q+'='+qq+'\n'
-
-       # If install path has space, add quotes for some OS ...
-       xs=''
-       if pi.find(' ')>=0 and eifs!='': xs=eifs
-       sb+=eset+' INSTALL_DIR='+xs+pi+xs+'\n'
-
-       xs=''
-       if p.find(' ')>=0 and eifs!='': xs=eifs
-       sb+=eset+' PACKAGE_DIR='+xs+ppp+xs+'\n'
-
-       xs=''
-       if p.find(' ')>=0 and eifs!='': xs=eifs
-       sb+=eset+' ORIGINAL_PACKAGE_DIR='+xs+p+xs+'\n'
-
-       sb+='\n'
-
-       xs=''
-       if p.find(' ')>=0 and eifsc!='': xs=eifsc
-       sb+=scall+' '+xs+px+xs+'\n\n'
-
-       if wb=='yes' and d.get('check_exit_status','')!='yes':
-          sb+='exit /b 0\n'
-
-       # Generate tmp file
-       rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':sext})
-       if rx['return']>0: return rx
-       fn=rx['file_name']
-
-       # Write to tmp file
-       rx=ck.save_text_file({'text_file':fn, 'string':sb})
-       if rx['return']>0: return rx
-
-       # Go to installation path
-       if not os.path.isdir(pi):
-          os.makedirs(pi)
-       os.chdir(pi)
-
-       # Check if need to set executable flags
-       se=hosd.get('set_executable','')
-       if se!='':
-          x=se+' '+fn
-          rx=os.system(x)
-
-       # Run script
-       rx=os.system(fn)
-       if os.path.isfile(fn): 
-          os.remove(fn)
-
-       if rx>0: 
-          return {'return':1, 'error':'package installation failed'}
+          if rx>0: 
+             return {'return':1, 'error':'package installation failed'}
 
     # Check if need to setup environment
     if xsetup:
