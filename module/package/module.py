@@ -529,7 +529,7 @@ def install(i):
              pix=os.path.join(x, nm)
              if not tosx.endswith(tbits): pix+='-'+tbits
 
-             if o=='con' and i.get('ask','')=='yes':
+             if o=='con' and (i.get('ask','')=='yes' or cus.get('force_ask_path','')=='yes'):
                 ck.out('*** Suggested installation path: '+pix)
                 r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
                 pi=r['string'].strip()
