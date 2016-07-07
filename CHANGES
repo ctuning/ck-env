@@ -1,3 +1,7 @@
+* 2016.07.07 - added 'no_os_in_suggested_path' to customization of packages to avoid
+               adding OS info at the end of the suggested path. Useful when installing 
+               various OS-independent datasets
+
 * 2016.07.06 - added 'force_ask_path' to customization of packages to ask path
                in interactive mode. Useful when installing large training sets
                for DNN 
@@ -16,7 +20,7 @@
 
 * 2016.06.22 * added support to customize installation path with any extra deps ('add_to_path')
 
-* 2016.06.20 * added sh to Android descrpition
+* 2016.06.20 * added sh to Android description
 
 * 2016.06.19 * fixing Boost description for Linux
              * fixing openBLAS description for Linux and Android

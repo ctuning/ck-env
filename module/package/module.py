@@ -524,10 +524,12 @@ def install(i):
                        nm+='-'+vr
 
              # Finally OS
-             nm+='-'+tosx
+             if cus.get('no_os_in_suggested_path','')!='yes':
+                nm+='-'+tosx
 
              pix=os.path.join(x, nm)
-             if not tosx.endswith(tbits): pix+='-'+tbits
+             if cus.get('no_os_in_suggested_path','')!='yes':
+                if not tosx.endswith(tbits): pix+='-'+tbits
 
              if o=='con' and (i.get('ask','')=='yes' or cus.get('force_ask_path','')=='yes'):
                 ck.out('*** Suggested installation path: '+pix)
