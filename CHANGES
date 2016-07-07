@@ -3,7 +3,8 @@
                various OS-independent datasets;
                added 'no_ver_in_suggested_path';
                remove the same paths when automatically detecting software
-               (due to possible soft links)
+               (due to possible soft links);
+               added sha1sum.exe to windows
 
 * 2016.07.06 - added 'force_ask_path' to customization of packages to ask path
                in interactive mode. Useful when installing large training sets
