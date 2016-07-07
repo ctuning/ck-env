@@ -520,7 +520,7 @@ def install(i):
 
                     if salias!='':
                        nm+='-'+salias
-                    if vr!='':
+                    if vr!='' and cus.get('no_ver_in_suggested_path','')!='yes':
                        nm+='-'+vr
 
              # Finally OS

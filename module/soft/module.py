@@ -1407,6 +1407,14 @@ def check(i):
 
        vlst=[]
 
+       # Sometimes can be the same paths (due to soft links) - remove:
+       lst1=[]
+       for q in lst:
+           if q not in lst1:
+              lst1.append(q)
+       lst=lst1
+
+       # Process each path
        for q in lst:
            kk={'path':q}
 

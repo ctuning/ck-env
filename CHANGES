@@ -1,6 +1,9 @@
 * 2016.07.07 - added 'no_os_in_suggested_path' to customization of packages to avoid
                adding OS info at the end of the suggested path. Useful when installing 
-               various OS-independent datasets
+               various OS-independent datasets;
+               added 'no_ver_in_suggested_path';
+               remove the same paths when automatically detecting software
+               (due to possible soft links)
 
 * 2016.07.06 - added 'force_ask_path' to customization of packages to ask path
                in interactive mode. Useful when installing large training sets
