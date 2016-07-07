@@ -494,7 +494,10 @@ def install(i):
           if x!='' and sp!='':
              # Prepare installation path
              # First via package + version
-             nm=sp+'-'+cus.get('version','')
+             nm=sp
+
+             if cus.get('no_ver_in_suggested_path','')!='yes' and cus.get('version','')!='':
+                nm+='-'+cus.get('version','')
 
              # Then if compiler
              bdn=udeps.get('compiler',{}).get('build_dir_name','')
@@ -520,7 +523,7 @@ def install(i):
 
                     if salias!='':
                        nm+='-'+salias
-                    if vr!='' and cus.get('no_ver_in_suggested_path','')!='yes':
+                    if vr!='':
                        nm+='-'+vr
 
              # Finally OS
