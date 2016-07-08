@@ -843,9 +843,11 @@ def install(i):
               'env_repo_uoa':enruoa,
               'env_data_uoa':enduoa,
               'env':env,
-              'deps':udeps,
               'extra_version':ev
              }
+
+          if d.get('remove_deps','')!='yes':
+             ii['deps']=udeps
 
           if d.get('no_install_path','')!='yes':
              if fp!='':
