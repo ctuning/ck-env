@@ -307,6 +307,7 @@ def install(i):
     suoa=d.get('soft_uoa','')
 
     dname=d.get('package_name','')
+    edname=d.get('package_extra_name','')
 
     ver=cus.get('version','')+ev
     extra_dir=cus.get('extra_dir','')
@@ -557,6 +558,7 @@ def install(i):
 
     # Check dependencies
     deps={}
+    dx={}
     if suoa!='':
        rx=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['soft'],
@@ -564,6 +566,10 @@ def install(i):
        if rx['return']>0: return rx
        dx=rx['dict']
        deps=dx.get('deps',{})
+
+    # Check package names
+    if dname=='' and edname!='':
+       dname=dx.get('soft_name','')+edname
 
     # Update by package deps (more precise)
     for q in deps:
