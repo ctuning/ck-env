@@ -33,7 +33,7 @@ def limit(i):
     for q in dr:
         add=True
 
-        if q.find('X11')>0 or q.find('/lib/')>0:
+        if q.find('X11')>0 or q.find('/lib/')>0 or q.find('.bz2')>0 or q.find('.ebuild')>0:
            add=False
 
         if add and phosd=='linux':
