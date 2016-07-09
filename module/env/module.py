@@ -280,7 +280,10 @@ def set(i):
                     if len(setup)>0:
                        ii.update(setup)
                     ry=ck.access(ii)
-                    if ry['return']==0:
+                    if ry['return']>0:
+                       if o=='con':
+                          ck.out('  (warning during intermediate step: '+ry['error']+')')
+                    else:
                        found=True
 
                        hdeps=ry.get('deps',{})
