@@ -1642,8 +1642,8 @@ def get_version(i):
        # Executing script
        y=''
        if sexe!='':
-          y+=sexe+' '+sbp+fnb+envsep
-       y+=' '+scall+' '+sbp+fnb
+          y+=sexe+' '+fnb+envsep
+       y+=' '+scall+' '+fnb
 
        if ubtr!='': y=ubtr.replace('$#cmd#$',y)
 
