@@ -846,7 +846,9 @@ def install(i):
               'extra_version':ev
              }
 
-          if d.get('remove_deps','')!='yes':
+          if d.get('remove_deps','')=='yes':
+             ii['deps_copy']=udeps
+          else:
              ii['deps']=udeps
 
           if d.get('no_install_path','')!='yes':

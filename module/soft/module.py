@@ -277,7 +277,6 @@ def setup(i):
 
     import os
     import json
-    import copy
 
     o=i.get('out','')
 
@@ -465,7 +464,6 @@ def setup(i):
            'target_os_bits':tbits}
 
     # Resolve deps (if not ignored, such as when installing local version with all dependencies set)
-    deps_copy=copy.deepcopy(deps) # will be preserved even if main deps should be removed ...
     if cus.get('ignore_deps','')=='yes':
        deps={}
 
@@ -813,7 +811,7 @@ def setup(i):
               "cfg":d,
               "env":env,
               "deps":deps,
-              "deps_copy":deps_copy,
+              "deps_copy":i.get('deps_copy',{}),
               "customize":cus,
               "self_cfg":cfg,
               "version":ver,
