@@ -1632,7 +1632,7 @@ def get_version(i):
        sb+='\n'+cmd+'\n'
 
        # Record to tmp batch and run
-       rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'yes'})
+       rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'no'})
        if rx['return']>0: return rx
        fnb=rx['file_name']
 
