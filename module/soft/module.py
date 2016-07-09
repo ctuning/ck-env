@@ -478,8 +478,7 @@ def setup(i):
            'target_os':tos,
            'target_device_id':tdid,
            'repo_uoa':enruoa,
-           'deps':deps,
-           'deps_copy':deps_copy}
+           'deps':deps}
        if o=='con': ii['out']='con'
 
        rx=ck.access(ii)
@@ -814,6 +813,7 @@ def setup(i):
               "cfg":d,
               "env":env,
               "deps":deps,
+              "deps_copy":deps_copy,
               "customize":cus,
               "self_cfg":cfg,
               "version":ver,
