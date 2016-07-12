@@ -409,7 +409,7 @@ def install(i):
     if x!='': pie=' (example: '+ye+')'
     else: pie=''
 
-    if cs!=None and 'pre-path' in dir(cs):
+    if cs!=None and 'pre_path' in dir(cs):
        # Call customized script
        ii={"host_os_uoa":hosx,
            "host_os_uid":hos,
@@ -431,7 +431,7 @@ def install(i):
        if o=='con': ii['interactive']='yes'
        if i.get('quiet','')=='yes': ii['interactive']=''
 
-       rx=cs.pre-path(ii)
+       rx=cs.pre_path(ii)
        if rx['return']>0: return rx
 
     xprocess=True
