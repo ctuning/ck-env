@@ -527,6 +527,11 @@ def install(i):
                     if vr!='':
                        nm+='-'+vr
 
+             # Tnen some extra path, if needed
+             esp=cus.get('extra_suggested_path','')
+             if esp!='':
+                nm+=esp
+
              # Finally OS
              if cus.get('no_os_in_suggested_path','')!='yes':
                 nm+='-'+tosx
