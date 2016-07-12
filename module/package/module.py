@@ -329,6 +329,26 @@ def install(i):
     # Update this env from customize meta (for example to pass URL to download package)
     pr_env.update(cus.get('install_env',{}))
 
+    # Check if has customized script
+    ppp=p
+    x=d.get('use_scripts_from_another_entry',{})
+    if len(x)>0:
+       xam=x.get('module_uoa','')
+       if xam=='': xam=work['self_module_uid']
+       xad=x.get('data_uoa','')
+       r=ck.access({'action':'find',
+                    'module_uoa':xam,
+                    'data_uoa':xad})
+       if r['return']>0: return r
+       ppp=r['path']
+
+    # Check if has custom script
+    cs=None
+    csn=cfg.get('custom_script_name','custom')
+    rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
+    if rx['return']==0: 
+       cs=rx['code']
+
     # Check if need host CPU params
     if d.get('need_cpu_info','')=='yes':
        r=ck.access({'action':'detect',
@@ -388,6 +408,31 @@ def install(i):
     x=cus.get('input_path_example','')
     if x!='': pie=' (example: '+ye+')'
     else: pie=''
+
+    if cs!=None and 'pre-path' in dir(cs):
+       # Call customized script
+       ii={"host_os_uoa":hosx,
+           "host_os_uid":hos,
+           "host_os_dict":hosd,
+           "target_os_uoa":tosx,
+           "target_os_uid":tos,
+           "target_os_dict":tosd,
+           "target_device_id":tdid,
+           "cfg":d,
+           "tags":tags,
+           "env":env,
+           "deps":udeps,
+           "customize":cus,
+           "self_cfg":cfg,
+           "version":ver,
+           "ck_kernel":ck
+          }
+
+       if o=='con': ii['interactive']='yes'
+       if i.get('quiet','')=='yes': ii['interactive']=''
+
+       rx=cs.pre-path(ii)
+       if rx['return']>0: return rx
 
     xprocess=True
     xsetup=True
@@ -687,25 +732,6 @@ def install(i):
 
        # Check if need to use scripts from another entry
        if cont:
-          ppp=p
-          x=d.get('use_scripts_from_another_entry',{})
-          if len(x)>0:
-             xam=x.get('module_uoa','')
-             if xam=='': xam=work['self_module_uid']
-             xad=x.get('data_uoa','')
-             r=ck.access({'action':'find',
-                          'module_uoa':xam,
-                          'data_uoa':xad})
-             if r['return']>0: return r
-             ppp=r['path']
-
-          # Check if has custom script
-          cs=None
-          csn=cfg.get('custom_script_name','custom')
-          rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
-          if rx['return']==0: 
-             cs=rx['code']
-
           if cs!=None and 'setup' in dir(cs):
              # Call customized script
              ii={"host_os_uoa":hosx,
