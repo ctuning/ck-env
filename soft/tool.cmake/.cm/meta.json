@@ -3,7 +3,7 @@
   "customize": {
     "add_only_with_version": "yes", 
     "add_to_path": "yes", 
-    "build_dir_name": "java", 
+    "build_dir_name": "cmake", 
     "check_that_exists": "yes", 
     "ck_version": 10, 
     "env_prefix": "CK_ENV_TOOL_CMAKE", 
