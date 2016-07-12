@@ -623,8 +623,14 @@ def install(i):
        deps=dx.get('deps',{})
 
     # Check package names
-    if dname=='' and edname!='':
-       dname=dx.get('soft_name','')+edname
+    if dname=='':
+       dname=dx.get('soft_name','')
+
+       if edname!='':
+          dname+=edname
+
+       if cus.get('package_extra_name','')!='':
+          dname+=cus['package_extra_name']
 
     # Update by package deps (more precise)
     for q in deps:
