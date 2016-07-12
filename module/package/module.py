@@ -434,6 +434,11 @@ def install(i):
        rx=cs.pre_path(ii)
        if rx['return']>0: return rx
 
+       # Update install env from customized script (if needed)
+       new_env=rx.get('install_env',{})
+       if len(new_env)>0:
+          pr_env.update(new_env)
+
     xprocess=True
     xsetup=True
 
@@ -645,6 +650,38 @@ def install(i):
        rx=ck.access(ii)
        if rx['return']>0: return rx
        sdeps=rx['bat']
+
+    if cs!=None and 'post_deps' in dir(cs):
+       # Call customized script
+       ii={"host_os_uoa":hosx,
+           "host_os_uid":hos,
+           "host_os_dict":hosd,
+           "target_os_uoa":tosx,
+           "target_os_uid":tos,
+           "target_os_dict":tosd,
+           "target_device_id":tdid,
+           "cfg":d,
+           "tags":tags,
+           "env":env,
+           "deps":udeps,
+           "customize":cus,
+           "self_cfg":cfg,
+           "version":ver,
+           "ck_kernel":ck,
+           "deps":udeps
+          }
+
+       if o=='con': ii['interactive']='yes'
+       if i.get('quiet','')=='yes': ii['interactive']=''
+
+       rx=cs.post_deps(ii)
+       if rx['return']>0: return rx
+
+       # Update install env from customized script (if needed)
+       new_env=rx.get('install_env',{})
+       if len(new_env)>0:
+          pr_env.update(new_env)
+
 
     # Check if continue processing
     if ps!='' and xprocess:
