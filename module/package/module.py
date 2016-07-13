@@ -506,7 +506,7 @@ def install(i):
              if o=='con':
                 if xprocess:
                    ck.out('')
-                   ck.out('Seems like package is already installed! File from package found in path: '+fp)
+                   ck.out('It appears that package is already installed or at least file from the package is already found in path: '+fp)
 
                    if ps!='':
                       ck.out('')
@@ -765,7 +765,7 @@ def install(i):
           if os.path.isfile(fp):
              if o=='con':
                 ck.out('')
-                ck.out('Seems like package is already installed! File from package found in path: '+fp)
+                ck.out('It appears that package is already installed or at least file from the package is already found in path: '+fp)
 
                 ck.out('')
                 rx=ck.inp({'text':'Would you like to overwrite/process it again (y/N)? '})

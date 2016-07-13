@@ -591,7 +591,7 @@ def set(i):
     fp=cus.get('full_path','')
 
     if not outdated and fp!='' and cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
-       err='seems like your environment\'ve changed - software file not found in a specified path ('+fp+')'
+       err='it appears that your environment has changed - software file not found in a specified path ('+fp+')'
        outdated=True
 
     if outdated:

@@ -131,7 +131,7 @@ def detect(i):
           if rx['return']>0: 
              if o=='con':
                 ck.out('')
-                ck.out('Seems like CK remote repo ('+er+') is not in CK cache - recaching ...')
+                ck.out('It appears that CK remote repo ('+er+') is not in CK cache - recaching ...')
 
              rx=ck.access({'action':'recache',
                            'module_uoa':cfg['module_deps']['repo']})
