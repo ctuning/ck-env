@@ -613,13 +613,13 @@ def exchange(i):
        return {'return':1, 'error':'name and search meta are empty in platform information exchange'}
 
     # Search if already exists (and not only in upload)
-    ii{'action':'search',
-       'module_uoa':smuoa,
+    ii={'action':'search',
+        'module_uoa':smuoa,
 # FGG: I commented next line since we can move 
 #      well-known entries to other repositories
 #      such as ck-crowdtuning instead of upload
 #       'repo_uoa':ruoa,
-       'ignore_case':'yes'}
+        'ignore_case':'yes'}
     if dname!='':
        ii['search_by_name']=dname
     if len(sd)>0:
