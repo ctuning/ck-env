@@ -81,9 +81,10 @@ def setup(i):
 
        cus['path_bin']=pi+sdirs+'bin'
 
-    ep=cus.get('env_prefix','')
-    if ep!='':
-       if pi!='':
-          env[ep]=pi
+    ep=cus['env_prefix']
+    if pi!='':
+       env[ep]=pi
+
+    env[ep+'_EXECUTABLE']=os.path.join(pi, 'bin', 'glslangValidator.exe')
 
     return {'return':0, 'bat':s}

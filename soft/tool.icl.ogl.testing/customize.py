@@ -92,9 +92,12 @@ def setup(i):
 
     env[ep]=pi
     env[ep+'_SRC']=ps
-    env[ep+'_UTIL']=os.path.join(ps, 'util', 'src', 'main', 'java')
-    env[ep+'_FUZZER']=os.path.join(ps, 'fuzzer', 'src', 'main', 'java')
-    env[ep+'_ANTLR4']=os.path.join(ps, 'fuzzer', 'src', 'main', 'antlr4')
+    putil=os.path.join(ps, 'util', 'src', 'main', 'java')
+    env[ep+'_UTIL']=putil
+    pfuz=os.path.join(ps, 'fuzzer', 'src', 'main', 'java')
+    env[ep+'_FUZZER']=pfuz
+    pantlr4=os.path.join(ps, 'fuzzer', 'src', 'main', 'antlr4')
+    env[ep+'_ANTLR4']=pantlr4
 
     pd=os.path.join(ps, 'Python', 'Drivers')
     env[ep+'_DRIVERS']=pd
@@ -102,5 +105,6 @@ def setup(i):
     cus['path_bin']=pi+sdirs+'bin'
 
     s+='\nset PATH='+pd+';%PATH%\n'
+    s+='\nset CLASSPATH='+pantlr4+';'+putil+';'+pfuz+';%CLASSPATH%\n'
 
     return {'return':0, 'bat':s}

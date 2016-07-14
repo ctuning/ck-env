@@ -89,4 +89,9 @@ def setup(i):
           env[ep]=pi
           env[ep+'_JAR_NAME']=jn
 
+    if winh=='yes':
+       s+='\nset CLASSPATH='+pi+'\\lib\\'+jn+';%CLASSPATH%\n'
+    else:
+       s+='\nexport CLASSPATH='+pi+'/lib/'+jn+':$CLASSPATH\n'
+
     return {'return':0, 'bat':s}
