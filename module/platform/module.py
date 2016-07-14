@@ -572,6 +572,8 @@ def exchange(i):
               sub_module_uoa - module to search/exchange
               data_name      - data name to search
 
+              (search_dict)  - search entry by this meta
+
               (repo_uoa)     - where to record
 
               (dict)         - dictionary to check/record
@@ -603,55 +605,64 @@ def exchange(i):
     dd=i.get('dict',{})
     ddf=dd.get('features',{})
 
+    sd=i.get('search_dict',{})
+
     al=i.get('all','')
 
-    if dname!='':
-       # Search if already exists (and not only in upload)
-       rx=ck.access({'action':'search',
-                     'module_uoa':smuoa,
+    if dname=='' and len(sd)==0:
+       return {'return':1, 'error':'name and search meta are empty in platform information exchange'}
+
+    # Search if already exists (and not only in upload)
+    ii{'action':'search',
+       'module_uoa':smuoa,
 # FGG: I commented next line since we can move 
 #      well-known entries to other repositories
 #      such as ck-crowdtuning instead of upload
-#                     'repo_uoa':ruoa,
-                     'search_by_name':dname,
-                     'ignore_case':'yes'})
-       if rx['return']>0: return rx
-       lst=rx['lst']
+#       'repo_uoa':ruoa,
+       'ignore_case':'yes'}
+    if dname!='':
+       ii['search_by_name']=dname
+    if len(sd)>0:
+       ii['search_dict']=sd
 
-       if len(lst)==0:
-          ei=i.get('extra_info',{})
+    rx=ck.access(ii)
+    if rx['return']>0: return rx
+    lst=rx['lst']
 
-          # Add info
-          rx=ck.access({'action':'add',
-                        'module_uoa':smuoa,
-                        'repo_uoa':ruoa,
-                        'data_name':dname,
-                        'dict':dd,
-                        'extra_info':ei,
-                        'sort_keys':'yes'})
+    if len(lst)==0:
+       ei=i.get('extra_info',{})
 
-       else:
-          # Load
-          ll=lst[0]
-          duoa=ll.get('data_uid','')
-          xruoa=ll.get('repo_uoa','')
-          rx=ck.access({'action':'load',
-                        'module_uoa':smuoa,
-                        'repo_uoa':xruoa,
-                        'data_uoa':duoa})
+       # Add info
+       rx=ck.access({'action':'add',
+                     'module_uoa':smuoa,
+                     'repo_uoa':ruoa,
+                     'data_name':dname,
+                     'dict':dd,
+                     'extra_info':ei,
+                     'sort_keys':'yes'})
 
-          rx['found']='yes'
+    else:
+       # Load
+       ll=lst[0]
+       duoa=ll.get('data_uid','')
+       xruoa=ll.get('repo_uoa','')
+       rx=ck.access({'action':'load',
+                     'module_uoa':smuoa,
+                     'repo_uoa':xruoa,
+                     'data_uoa':duoa})
 
-       if rx['return']>0: return rx
+       rx['found']='yes'
 
-       if al=='yes':
-          # We also record all info only if forced to do so
-          #  by CK local kernel configuration. It is needed to aggregate
-          #  such info on experiment crowdsourcing servers
-          #  and then share this info via GitHub,
-          #  but not locally, otherwise it will be a mess...
+    if rx['return']>0: return rx
 
-          rap=ck.cfg.get('record_all_platform_info','')
+    if al=='yes':
+       # We also record all info only if forced to do so
+       #  by CK local kernel configuration. It is needed to aggregate
+       #  such info on experiment crowdsourcing servers
+       #  and then share this info via GitHub,
+       #  but not locally, otherwise it will be a mess...
+
+       rap=ck.cfg.get('record_all_platform_info','')
 #          if rap=='yes':
 #
 #             # Not parallel usage safe (on the other hand, will not loose too much at the moment) ...
@@ -691,9 +702,7 @@ def exchange(i):
 #             rz=ck.save_json_to_file({'json_file':p1, 'dict':d})
 #             if rz['return']>0: return rz
 
-       return rx
-
-    return {'return':1, 'error':'name is empty in platform information exchange'}
+    return rx
 
 ##############################################################################
 # deinitialize device (put to powersave mode)
