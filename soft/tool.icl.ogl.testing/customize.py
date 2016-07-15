@@ -106,6 +106,8 @@ def setup(i):
     pd=os.path.join(ps, 'Python', 'Drivers')
     env[ep+'_DRIVERS']=pd
 
+    env['OGLT_WORK_ROOT']=pi
+
     cus['path_bin']=pb
 
     s+='\nset PATH='+pd+';%PATH%\n'
