@@ -99,10 +99,14 @@ def setup(i):
     pantlr4=os.path.join(ps, 'fuzzer', 'src', 'main', 'antlr4')
     env[ep+'_ANTLR4']=pantlr4
 
+    pb=pi+sdirs+'bin'
+
+    env[ep+'_GET_IMAGE_EXECUTABLE']=os.path.join(pb, 'get_image.exe')
+
     pd=os.path.join(ps, 'Python', 'Drivers')
     env[ep+'_DRIVERS']=pd
 
-    cus['path_bin']=pi+sdirs+'bin'
+    cus['path_bin']=pb
 
     s+='\nset PATH='+pd+';%PATH%\n'
     s+='\nset CLASSPATH='+pantlr4+';'+putil+';'+pfuz+';%CLASSPATH%\n'
