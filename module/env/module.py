@@ -590,9 +590,30 @@ def set(i):
     cus=d.get('customize',{})
     fp=cus.get('full_path','')
 
+    tc='it appears that your environment has changed - '
     if not outdated and fp!='' and cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
-       err='it appears that your environment has changed - software file not found in a specified path ('+fp+')'
+       err=tc+'software file not found in a specified path ('+fp+')'
        outdated=True
+
+    ver_in_env=cus.get('version','') # detected version during installation
+    if not outdated and ver_in_env!='':
+       scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
+       if scmd!='' and 'parse_version' in dir(cs):
+          # Check version (via customized script) ...
+          ii={'action':'get_version',
+              'module_uoa':cfg['module_deps']['soft'],
+              'full_path':fp,
+              'bat':'',
+              'host_os_dict':hosd,
+              'target_os_dict':tosd,
+              'cmd':scmd,
+              'custom_script_obj':cs}
+          rx=ck.access(ii)
+          if rx['return']==0:
+             verx=rx['version']
+             if verx!='' and verx!=ver_in_env:
+                err=tc+'version during installation ('+ver_in_env+') is not the same as current version ('+verx+')'
+                outdated=True
 
     if outdated:
        if o=='con':
@@ -606,22 +627,6 @@ def set(i):
           if x=='n' or x=='no':
              return {'return':1, 'error':err}
           to_delete=True
-       else:
-          # Check version
-          scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
-          if scmd!='' and 'parse_version' in dir(cs):
-             # Check version (via customized script) ...
-             ii={'action':'get_version',
-                 'module_uoa':cfg['module_deps']['soft'],
-                 'full_path':fp,
-                 'bat':'',
-                 'host_os_dict':hosd,
-                 'target_os_dict':tosd,
-                 'cmd':scmd,
-                 'custom_script_obj':cs}
-             rx=ck.access(ii)
-             if rx['return']==0:
-                verx=rx['version']
 
        # Deleting outdated environment
        if to_delete:

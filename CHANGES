@@ -1,3 +1,5 @@
+* 2016.07.24 - added detection of version change (for tools) when setting environments in deps
+
 * 2016.07.12 - added 'extra_suggested_path' to customization of packages
 
 * 2016.07.07 - added 'no_os_in_suggested_path' to customization of packages to avoid
