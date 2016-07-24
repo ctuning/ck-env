@@ -35,6 +35,14 @@
     }
   }, 
   "deps": {
+    "gcc": {
+      "local": "yes", 
+      "name": "GCC", 
+      "only_for_target_os_tags": [
+        "linux"
+      ], 
+      "tags": "compiler,gcc"
+    },
     "mvsc": {
       "local": "yes", 
       "name": "microsoft C compiler", 
