@@ -116,6 +116,8 @@ def setup(i):
 
     winh=host_d.get('windows_base','')
 
+    deps=i['deps']
+
     fp=cus.get('full_path','')
 
     ep=cus.get('env_prefix','')
@@ -157,6 +159,20 @@ def setup(i):
 
        else:
           s+='\nexport PATH='+p1+':$PATH\n\n'
+
+          # Update -ccbin -> dep on GCC
+          gcc=deps['gcc']['dict']['customize']
+          y=gcc.get('full_path','')
+
+          if y!='':
+             x=env['CK_NVCC']
+             if '-ccbin' not in x:
+                env['CK_NVCC']=x+' -ccbin '+y
+
+             x=env['CK_NVCXX']
+             if '-ccbin' not in x:
+                y=y.replace('gcc','g++')
+                env['CK_NVCXX']=x+' -ccbin '+y
 
           lp=''
           if os.path.isdir(p2+'/lib64'):
