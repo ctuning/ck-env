@@ -29,7 +29,7 @@ def limit(i):
     drx=[]
 
     for q in dr:
-        if q.find('.{')<0:
+        if q.find('.{')<0 and q.find('X11')<0 and q.find('/lib/')<0:
            drx.append(q)
 
     return {'return':0, 'list':drx}
