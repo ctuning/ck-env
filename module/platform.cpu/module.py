@@ -123,6 +123,8 @@ def detect(i):
     ro=tosd.get('redirect_stdout','')
     remote=tosd.get('remote','')
     win=tosd.get('windows_base','')
+    mac=tosd.get('macos','')
+    unix=win!='yes' and mac!='yes'
 
     dv=''
     if tdid!='': dv=' -s '+tdid
@@ -138,7 +140,7 @@ def detect(i):
     new_format=''
     unique_cpus=[]
 
-    if remote=='yes' or win!='yes':
+    if remote=='yes' or unix:
        # Get all params
        params={}
        if remote=='yes':
@@ -459,31 +461,65 @@ def detect(i):
        target['max_freq']=target_freq_max
        target['all_freqs']=target_freq_all
 
-    else:
-       if win=='yes':
-          r=ck.access({'action':'get_from_wmic',
-                       'module_uoa':cfg['module_deps']['platform'],
-                       'group':'cpu'})
-          if r['return']>0: return r
-          info_cpu=r['dict']
+    elif win=='yes':
+      r=ck.access({'action':'get_from_wmic',
+                   'module_uoa':cfg['module_deps']['platform'],
+                   'group':'cpu'})
+      if r['return']>0: return r
+      info_cpu=r['dict']
 
-          target_cpu=info_cpu.get('Name','')
+      target_cpu=info_cpu.get('Name','')
 
-          target_freq=int(info_cpu.get('CurrentClockSpeed','0'))
-          target_freq_max=int(info_cpu.get('MaxClockSpeed','0'))
+      target_freq=int(info_cpu.get('CurrentClockSpeed','0'))
+      target_freq_max=int(info_cpu.get('MaxClockSpeed','0'))
 
-          target_num_proc=int(info_cpu.get('NumberOfLogicalProcessors','0'))
+      target_num_proc=int(info_cpu.get('NumberOfLogicalProcessors','0'))
 
-          target['name']=target_cpu
-          target['sub_name']=target_cpu
-          target['num_proc']=target_num_proc
-          target['current_freq']={"0":target_freq}
-          target['max_freq']={"0":target_freq_max}
+      target['name']=target_cpu
+      target['sub_name']=target_cpu
+      target['num_proc']=target_num_proc
+      target['current_freq']={"0":target_freq}
+      target['max_freq']={"0":target_freq_max}
 
-          # To partially support new format
-          unique_cpu={'ck_cpu_name':target_cpu,
-                      'ck_cpu_subname':target_cpu}
-          unique_cpus.append(unique_cpu)
+      # To partially support new format
+      unique_cpu={'ck_cpu_name':target_cpu,
+                  'ck_cpu_subname':target_cpu}
+      unique_cpus.append(unique_cpu)
+
+    elif mac=='yes':
+      r=ck.run_and_get_stdout({'cmd': ['sysctl', 'machdep.cpu', 'hw.cpufrequency']})
+      # import pprint
+      # pprint.pprint(r)
+      if r['return']>0: return r
+      
+      info_cpu={}
+      for line in r['stdout'].splitlines():
+        if ':' in line:
+          left, right = line.split(':', 1)
+          left = left.strip().lower()
+          right = right.strip()
+          info_cpu[left]=right
+
+      target_cpu = info_cpu.get('machdep.cpu.brand_string','')
+      target_num_proc = info_cpu.get('machdep.cpu.thread_count','')
+      if target_num_proc == '':
+        target_num_proc = info_cpu.get('machdep.cpu.core_count','')
+
+      target_freq = int(info_cpu.get('hw.cpufrequency','0')) / 1000000
+      target_freq_max = target_freq
+
+      target['name']=target_cpu
+      target['sub_name']=target_cpu
+      target['cpu_features']=info_cpu.get('machdep.cpu.features','').lower()
+      target['cpu_abi']=''
+      target['num_proc']=target_num_proc
+      target['current_freq']={'0':target_freq}
+      target['max_freq']={'0':target_freq_max}
+
+      # To partially support new format
+      unique_cpu={'ck_cpu_name':target_cpu,
+                  'ck_cpu_subname':target_cpu}
+      unique_cpus.append(unique_cpu)      
 
     if o=='con':
        ck.out('')
