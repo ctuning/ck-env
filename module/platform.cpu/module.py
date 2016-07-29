@@ -488,8 +488,6 @@ def detect(i):
 
     elif mac=='yes':
       r=ck.run_and_get_stdout({'cmd': ['sysctl', 'machdep.cpu', 'hw.cpufrequency']})
-      # import pprint
-      # pprint.pprint(r)
       if r['return']>0: return r
       
       info_cpu={}
