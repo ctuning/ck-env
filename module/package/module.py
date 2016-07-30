@@ -557,7 +557,7 @@ def install(i):
                 bdn=udeps.get('support_compiler',{}).get('build_dir_name','')
                 vr=udeps.get('support_compiler',{}).get('ver','')
 
-             if bdn!='':
+             if cus.get('no_compiler_in_suggested_path','')!='yes' and bdn!='':
                 nm+='-'+bdn
                 if vr!='':
                    nm+='-'+vr

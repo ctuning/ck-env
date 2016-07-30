@@ -1,3 +1,5 @@
+* 2016.07.29 - added possibility to skip compiler name from suggested path during installation (no_compiler_in_suggested_path)
+
 * 2016.07.24 - added detection of version change (for tools) when setting environments in deps
              - added dependency on GCC in NVCC (Linux)
 
