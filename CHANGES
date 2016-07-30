@@ -1,4 +1,5 @@
 * 2016.07.24 - added detection of version change (for tools) when setting environments in deps
+             - added dependency on GCC in NVCC (Linux)
 
 * 2016.07.12 - added 'extra_suggested_path' to customization of packages
 
