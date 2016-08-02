@@ -47,3 +47,9 @@ E:
 O: Imperial College London, UK
 C: reporting a few bugs with software description on Windows (Microsoft SDK)
 W:
+
+N: Dmitry Savenko 
+E:
+O: 
+C: fixed various problems with crowdtuning on MacOS
+W:
