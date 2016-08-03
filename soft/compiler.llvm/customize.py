@@ -138,6 +138,8 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
+    mac=target_d.get('macos','')
+
     hplat=hosd.get('ck_name','')
 
     envp=cus.get('env_prefix','')
@@ -346,8 +348,6 @@ def setup(i):
           "CK_FLAG_PREFIX_LIB_DIR": "-L", 
           "CK_FLAG_PREFIX_VAR": "-D", 
           "CK_GPROF_OUT_FILE": "gmon.out", 
-          "CK_LB": "$#tool_prefix#$ar rcs", 
-          "CK_LB_OUTPUT": "-o ", 
           "CK_LD_FLAGS_EXTRA": "", 
           "CK_LIB_EXT": ".a", 
           "CK_LINKER_FLAG_OPENMP": "-fopenmp", 
@@ -383,6 +383,12 @@ def setup(i):
              "CK_LD_FLAGS_EXTRA": "", 
              "CK_OBJDUMP": "${CK_ANDROID_COMPILER_PREFIX}-objdump -d",
              "CK_PROFILER": "gprof"})
+       elif mac=='yes':
+          env["CK_LB"]="$#tool_prefix#$ar -rcs"
+          env["CK_LB_OUTPUT"]=""
+       else:
+          env["CK_LB"]="$#tool_prefix#$ar rcs"
+          env["CK_LB_OUTPUT"]="-o "
 
        # Ask a few more questions
        # (tool prefix)

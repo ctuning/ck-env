@@ -1,3 +1,5 @@
+* 2016.08.03 - fixing static library compilation on MacOS using CLANG (such as OpenME)
+
 * 2016.08.02 - fixed various problems with crowdtuning on MacOS
 
 * 2016.07.29 - added possibility to skip compiler name from suggested path during installation (no_compiler_in_suggested_path)
