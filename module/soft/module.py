@@ -571,62 +571,66 @@ def setup(i):
     ss4=''
     ss5=''
 
+    ck.save_json_to_file({'json_file':'/tmp/xyz555.json','dict':i})
+
     if cus.get('use_git_revision','')=='yes':
        import datetime
 
        psrc=cus.get('git_src_dir','')
 
-       dfp=env.get(envp,'')
-       if psrc!='':
-          dfp=os.path.join(dfp, psrc)
+       dfp=i.get('full_path_install','')
 
-       pwd1=os.getcwd()
-       os.chdir(dfp)
+       if dfp!='':
+          if psrc!='':
+             dfp=os.path.join(dfp, psrc)
 
-       if getattr(ck, 'run_and_get_stdout', None)==None:
-          return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
+          pwd1=os.getcwd()
+          os.chdir(dfp)
 
-       r=ck.run_and_get_stdout({'cmd':['git','rev-parse','--short','HEAD']})
-       if r['return']==0 and r['return_code']==0: 
-          ss1=r['stdout'].strip()
+          if getattr(ck, 'run_and_get_stdout', None)==None:
+             return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
 
-       r=ck.run_and_get_stdout({'cmd':['git','log','-1','--format=%cd']})
-       if r['return']==0 and r['return_code']==0: 
-          ss2=r['stdout'].strip()
-          if ss2!='':
-             ss2x=ss2
-             j=ss2x.find('+')
-             if j>0:
-                ss2x=ss2[:j-1]
+          r=ck.run_and_get_stdout({'cmd':['git','rev-parse','--short','HEAD']})
+          if r['return']==0 and r['return_code']==0: 
+             ss1=r['stdout'].strip()
 
-             x=datetime.datetime.strptime(ss2x, '%a %b %d %H:%M:%S %Y')
+          r=ck.run_and_get_stdout({'cmd':['git','log','-1','--format=%cd']})
+          if r['return']==0 and r['return_code']==0: 
+             ss2=r['stdout'].strip()
+             if ss2!='':
+                ss2x=ss2
+                j=ss2x.find('+')
+                if j>0:
+                   ss2x=ss2[:j-1]
 
-             ss3=x.isoformat()
+                x=datetime.datetime.strptime(ss2x, '%a %b %d %H:%M:%S %Y')
 
-             ss4=ss3[:10].replace('-','')
+                ss3=x.isoformat()
 
+                ss4=ss3[:10].replace('-','')
+
+                if ss1!='':
+                   ss5=ss4+'-'+ss1
+
+          if 'git_info' not in cus:
+             cus['git_info']={}
+
+          cus['git_info']['revision']=ss1
+          cus['git_info']['datetime']=ss2
+          cus['git_info']['iso_datetime']=ss3
+          cus['git_info']['iso_datetime_cut']=ss4
+          cus['git_info']['iso_datetime_cut_revision']=ss5
+
+          if o=='con':
+             ck.out('')
              if ss1!='':
-                ss5=ss4+'-'+ss1
+                ck.out('Detected GIT revision:                 '+ss1)
+             if ss2!='':
+                ck.out('Detected GIT date time of last commit: '+ss2)
 
-       if 'git_info' not in cus:
-          cus['git_info']={}
+          os.chdir(pwd1)
 
-       cus['git_info']['revision']=ss1
-       cus['git_info']['datetime']=ss2
-       cus['git_info']['iso_datetime']=ss3
-       cus['git_info']['iso_datetime_cut']=ss4
-       cus['git_info']['iso_datetime_cut_revision']=ss5
-
-       if o=='con':
-          ck.out('')
-          if ss1!='':
-             ck.out('Detected GIT revision:                 '+ss1)
-          if ss2!='':
-             ck.out('Detected GIT date time of last commit: '+ss2)
-
-       os.chdir(pwd1)
-
-       ver+='-'+ss1
+          ver+='-'+ss1
 
     ########################################################################
     # Ask for version if was not detected or is not explicitly specified (for example, from a package)

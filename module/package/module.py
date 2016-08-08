@@ -936,6 +936,7 @@ def install(i):
           if d.get('no_install_path','')!='yes':
              if fp!='':
                 ii['full_path']=fp
+                ii['full_path_install']=pi
              elif pi!='':              # mainly for compatibility with previous CK soft manager
                 ii['install_path']=pi
 
