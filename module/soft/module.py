@@ -603,8 +603,6 @@ def setup(i):
                 if j>0:
                    ss2x=ss2[:j]
 
-                print (ss2x)
-
                 x=datetime.datetime.strptime(ss2x, '%a %b %d %H:%M:%S %Y')
 
                 ss3=x.isoformat()
