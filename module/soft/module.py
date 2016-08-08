@@ -571,8 +571,6 @@ def setup(i):
     ss4=''
     ss5=''
 
-    ck.save_json_to_file({'json_file':'/tmp/xyz555.json','dict':i})
-
     if cus.get('use_git_revision','')=='yes':
        import datetime
 
@@ -599,9 +597,13 @@ def setup(i):
              ss2=r['stdout'].strip()
              if ss2!='':
                 ss2x=ss2
-                j=ss2x.find('+')
+                j=ss2x.find(' +')
+                if j<0:
+                   j=ss2x.find(' -')
                 if j>0:
-                   ss2x=ss2[:j-1]
+                   ss2x=ss2[:j]
+
+                print (ss2x)
 
                 x=datetime.datetime.strptime(ss2x, '%a %b %d %H:%M:%S %Y')
 
