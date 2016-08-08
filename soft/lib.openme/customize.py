@@ -106,9 +106,11 @@ def setup(i):
     cus['include_name']='openme.h'
     cus['static_lib']='libopenme'+sext
     cus['dynamic_lib']='libopenme'+dext
+    cus['path_src']=os.path.join(pi, 'openme')
 
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')
     env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+    env[ep+'_SRC']=cus['path_src']
 
     return {'return':0, 'bat':s}

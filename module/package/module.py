@@ -64,6 +64,9 @@ def install(i):
 
               (extra_version)     - add extra version, when registering software 
                                     (for example, -trunk-20160421)
+
+              (extra_path)        - add extra path to the automatically prepared one
+                                    (for example, -trunk-20160421)
             }
 
     Output: {
@@ -77,12 +80,12 @@ def install(i):
 
     """
     import os
+    import time
 
     o=i.get('out','')
 
     xtags=i.get('tags','')
 
-    import time
     start_time = time.time()
 
     # Check host/target OS/CPU
@@ -403,6 +406,7 @@ def install(i):
 
     # Check installation path
     pi=i.get('install_path','')
+    ep=i.get('extra_path','')
     fp=i.get('full_path','')
 
     x=cus.get('input_path_example','')
@@ -580,6 +584,10 @@ def install(i):
              # Tnen some extra path, if needed
              esp=cus.get('extra_suggested_path','')
              if esp!='':
+                nm+=esp
+
+             # Tnen some extra path, if needed
+             if ep!='':
                 nm+=esp
 
              # Finally OS

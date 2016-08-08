@@ -1,3 +1,7 @@
+* 2016.08.08 - added flag "extra_path" to package install
+             - added detection of GIT info (revision + date time of last commit) with possibility to add to version
+               (to differentiate the same packages with different GIT revisions)
+
 * 2016.08.03 - fixing static library compilation on MacOS using CLANG (such as OpenME)
 
 * 2016.08.02 - fixed various problems with crowdtuning on MacOS
