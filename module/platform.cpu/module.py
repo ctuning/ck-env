@@ -487,6 +487,9 @@ def detect(i):
       unique_cpus.append(unique_cpu)
 
     elif mac=='yes':
+      if getattr(ck, 'run_and_get_stdout', None)==None:
+         return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
+
       r=ck.run_and_get_stdout({'cmd': ['sysctl', 'machdep.cpu', 'hw.cpufrequency']})
       if r['return']>0: return r
       

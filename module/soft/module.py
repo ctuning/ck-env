@@ -583,6 +583,9 @@ def setup(i):
        pwd1=os.getcwd()
        os.chdir(dfp)
 
+       if getattr(ck, 'run_and_get_stdout', None)==None:
+          return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
+
        r=ck.run_and_get_stdout({'cmd':['git','rev-parse','--short','HEAD']})
        if r['return']==0 and r['return_code']==0: 
           ss1=r['stdout'].strip()
