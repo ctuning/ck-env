@@ -280,6 +280,8 @@ def setup(i):
 
     o=i.get('out','')
 
+    env_new=i.get('env_new','')
+
     ########################################################################
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -532,6 +534,7 @@ def setup(i):
 
     # Check if file really exists and check version if a tool
     ver=cus.get('version','')
+    vercus=ver
     if fp!='':
        if cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
           return {'return':1, 'error':'software not found in a specified path ('+fp+')'}
@@ -539,29 +542,28 @@ def setup(i):
        if ver=='':
           scmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
-          if ver=='':
+          if o=='con':
+             ck.out('')
+             ck.out('  Attempting to detect version automatically (if supported) ...')
+
+          # Check version (via customized script) ...
+          ii={'full_path':fp,
+              'bat':sdeps,
+              'host_os_dict':hosd,
+              'target_os_dict':tosd,
+              'cmd':scmd,
+              'custom_script_obj':cs}
+          rx=get_version(ii)
+          if rx['return']>0 and rx['return']!=16 and rx['return']!=22: return rx
+          if rx['return']==0:
+             ver=rx['version']
              if o=='con':
                 ck.out('')
-                ck.out('  Attempting to detect version automatically (if supported) ...')
-
-             # Check version (via customized script) ...
-             ii={'full_path':fp,
-                 'bat':sdeps,
-                 'host_os_dict':hosd,
-                 'target_os_dict':tosd,
-                 'cmd':scmd,
-                 'custom_script_obj':cs}
-             rx=get_version(ii)
-             if rx['return']>0 and rx['return']!=16 and rx['return']!=22: return rx
-             if rx['return']==0:
-                ver=rx['version']
-                if o=='con':
-                   ck.out('')
-                   ck.out('  Detected version: '+ver)
-             else:
-                if o=='con':
-                   ck.out('')
-                   ck.out('  WARNING: didn\'t manage to automatically detect software version!')
+                ck.out('  Detected version: '+ver)
+          else:
+             if o=='con':
+                ck.out('')
+                ck.out('  WARNING: didn\'t manage to automatically detect software version!')
 
     ########################################################################
     # Get various git info ...
@@ -643,6 +645,10 @@ def setup(i):
     if ev!='':
        ver=ver+ev
 
+    # If cutomized version has changed, try to check env again ...
+    if vercus!=ver:
+       env_new='no'
+
     # Split version
     rx=split_version({'version':ver})
     if rx['return']>0: return rx
@@ -675,7 +681,7 @@ def setup(i):
     # Search if environment is already registered for this version
     # (to delete or reuse it)
     finish=False
-    if enduoa=='' and i.get('env_new','')!='yes':
+    if enduoa=='' and env_new!='yes':
        if o=='con':
           ck.out('')
           ck.out('Searching if environment already exists using:')
