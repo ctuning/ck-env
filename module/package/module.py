@@ -67,6 +67,9 @@ def install(i):
 
               (extra_path)        - add extra path to the automatically prepared one
                                     (for example, -trunk-20160421)
+
+              (record_script)     - record tmp installation script with pre-set environment
+                                    (to be able to call it to rebuild package without CK)
             }
 
     Output: {
@@ -860,10 +863,15 @@ def install(i):
           if wb=='yes' and d.get('check_exit_status','')!='yes':
              sb+='exit /b 0\n'
 
-          # Generate tmp file
-          rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':sext})
-          if rx['return']>0: return rx
-          fn=rx['file_name']
+          rs=i.get('record_script','')
+
+          # Generate tmp file (or use record script)
+          if rs!='':
+             fn=rs
+          else:
+             rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':sext})
+             if rx['return']>0: return rx
+             fn=rx['file_name']
 
           # Write to tmp file
           rx=ck.save_text_file({'text_file':fn, 'string':sb})
@@ -882,7 +890,9 @@ def install(i):
 
           # Run script
           rx=os.system(fn)
-          if os.path.isfile(fn): 
+
+          # Remove script (if tmp)
+          if rs=='' and os.path.isfile(fn): 
              os.remove(fn)
 
           if rx>0: 

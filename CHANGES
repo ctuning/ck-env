@@ -1,4 +1,5 @@
 * 2016.08.11 - fixed detection of environment if already installed when customized version've changed
+             - added record_script flag to quickly rebuild packages without CK
 
 * 2016.08.08 - added flag "extra_path" to package install
              - added detection of GIT info (revision + date time of last commit) with possibility to add to version
