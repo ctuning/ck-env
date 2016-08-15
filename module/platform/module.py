@@ -183,6 +183,7 @@ def detect(i):
 
     remote=os_dict.get('remote','')
     os_win=os_dict.get('windows_base','')
+    os_mac=os_dict.get('macos','')
 
     ro=os_dict.get('redirect_stdout','')
 
@@ -299,6 +300,26 @@ def detect(i):
           target_system_model=r['value']
 
           prop_all['cs_product']=info1
+       elif os_mac=='yes':
+          if getattr(ck, 'run_and_get_stdout', None)==None:
+             return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
+
+          r=ck.run_and_get_stdout({'cmd': ['system_profiler', 'SPHardwareDataType']})
+          if r['return']>0: return r
+
+          x1='Apple Inc.'
+
+          for line in r['stdout'].splitlines():
+            if ':' in line:
+              left, right = line.split(':', 1)
+              left = left.strip().lower()
+              if left == 'model name':
+                target_name = right.strip()
+              if left == 'model identifier':
+                target_system_model = right.strip()
+              if target_name!='' and target_system_model!='':
+                break
+
        else:
           file_with_vendor='/sys/devices/virtual/dmi/id/sys_vendor'
           if os.path.isfile(file_with_vendor):
