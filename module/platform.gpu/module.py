@@ -118,6 +118,8 @@ def detect(i):
     ro=tosd.get('redirect_stdout','')
     remote=tosd.get('remote','')
     win=tosd.get('windows_base','')
+    mac=tosd.get('macos','')
+    unix=win!='yes' and mac!='yes'
 
     stdirs=tosd.get('dir_sep','')
 
@@ -202,6 +204,30 @@ def detect(i):
           prop['vendor']=target_gpu_vendor
           prop['possibly_related_cpu_name']=target_cpu
 
+       elif mac=='yes':
+          if getattr(ck, 'run_and_get_stdout', None)==None:
+             return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
+
+          r=ck.run_and_get_stdout({'cmd': ['system_profiler', 'SPDisplaysDataType']})
+          if r['return']>0: return r
+
+          target_gpu_name=''
+          for line in r['stdout'].splitlines():
+            if ':' in line:
+              left, right = line.split(':', 1)
+              left = left.strip().lower()
+              if left == 'chipset model':
+                target_gpu_name = right.strip()
+                break
+
+          x=target_gpu_name.split(' ')
+          target_gpu_vendor=''
+          if len(x)>0:
+             target_gpu_vendor=x[0].strip()
+
+          prop['name']=target_gpu_name
+          prop['vendor']=target_gpu_vendor
+
        else:
           # Get devices
           rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
@@ -242,7 +268,7 @@ def detect(i):
        ck.out('GPU vendor: '+prop.get('vendor',''))
 
     # Check frequency via script
-    if win!='yes':
+    if unix=='yes':
        rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
        if rx['return']>0: return rx
        fn=rx['file_name']
