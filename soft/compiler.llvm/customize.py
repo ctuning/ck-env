@@ -280,7 +280,7 @@ def setup(i):
 
           x=''
           if arch=='arm64': 
-             x='-fPIE '
+             x='-fPIE -pie '
 
           env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
        else:
@@ -446,7 +446,7 @@ def setup(i):
 
           x=''
           if arch=='arm64': 
-             x='-fPIE '
+             x='-fPIE -pie '
 
           env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
        else:
