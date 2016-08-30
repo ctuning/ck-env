@@ -149,6 +149,10 @@ def setup(i):
 
     tp=''
 
+    arch=target_d.get('android_ndk_arch','')
+    if arch=='':
+       return {'return':1, 'error':'platform architecture is not defined in target OS'}
+
     # Check path
     ep=cus.get('env_prefix','')
     if ep!='' and fp!='':
@@ -271,9 +275,14 @@ def setup(i):
        if remote=='yes':
           ### Android target #########################################################
 
-          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+#          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
           y='-target %CK_ANDROID_TOOLCHAIN% -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_SYS_ROOT%'
-          env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+y
+
+          x=''
+          if arch=='arm64': 
+             x='-fPIE '
+
+          env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
        else:
           env["CK_COMPILER_FLAGS_OBLIGATORY"]="-DWINDOWS"
 
@@ -432,10 +441,14 @@ def setup(i):
        if remote=='yes':
           ### Android target #########################################################
 
-          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+#          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
           y='-target $CK_ANDROID_TOOLCHAIN -gcc-toolchain $CK_ENV_COMPILER_GCC --sysroot=$CK_SYS_ROOT'
-          env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+y
 
+          x=''
+          if arch=='arm64': 
+             x='-fPIE '
+
+          env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
        else:
           ### Linux Host  #########################################################
           add_m32=cus.get('add_m32','')

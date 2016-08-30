@@ -1,3 +1,5 @@
+* 2016.08.30 - adding -fPIE to LLVM soft desc for Android based on ARM64
+
 * 2016.08.11 - fixed detection of environment if already installed when customized version've changed
              - added record_script flag to quickly rebuild packages without CK
 
