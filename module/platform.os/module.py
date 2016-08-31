@@ -140,6 +140,7 @@ def detect(i):
 
     remote=tosd.get('remote','')
     win=tosd.get('windows_base','')
+    mac=tosd.get('macos','')
 
     # Init params
     prop={}
@@ -343,6 +344,19 @@ def detect(i):
                             prop_os_name_long='Windows-'+s0
 
              prop_os_name=prop_os_name_short
+
+          elif mac=='yes' and getattr(ck, 'run_and_get_stdout', None)!=None:
+            r=ck.run_and_get_stdout({'cmd': ['sw_vers']})
+            if r['return']==0:
+              sw_vers={}
+              for line in r['stdout'].splitlines():
+                if ':' in line:
+                  left, right = line.split(':', 1)
+                  left = left.strip()
+                  right = right.strip()
+                  sw_vers[left]=right
+
+              prop_os_name=sw_vers.get('ProductName', '') + ' ' + sw_vers.get('ProductVersion', '')
 
           else:
              # If Linux, remove extensions after - in a shorter version
