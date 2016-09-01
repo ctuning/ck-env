@@ -1190,9 +1190,38 @@ def list_all_files(i):
               if add:
                  a.append(p)
 
-              if os.path.isdir(p): # and os.path.realpath(p)==p: # real path was useful
-                                                                 # to avoid cases when directory links to itself
-                                                                 # however, since we limit recursion, it doesn't matter ...
+       
+              recursive=False
+              problem=False    # Need this complex structure to support UTF-8 file names in Python 2.7
+              try:
+                 if os.path.isdir(p): # and os.path.realpath(p)==p: # real path was useful
+                                                                    # to avoid cases when directory links to itself
+                                                                    # however, since we limit recursion, it doesn't matter ...
+                    recursive=True
+              except Exception as e: 
+                 problem=True
+                 pass
+
+              if problem:
+                 problem=False
+                 try:
+                    p=p.encode('utf-8')
+                    if os.path.isdir(p): 
+                       recursive=True
+                 except Exception as e: 
+                    problem=True
+                    pass
+
+
+                 if problem:
+                    try:
+                       p=p.encode(sys.stdin.encoding)
+                       if os.path.isdir(p):
+                          recursive=True
+                    except Exception as e: 
+                       pass
+
+              if recursive:
                  r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
                                    'pattern':pattern, 'file_name':fname, 
                                    'recursion_level':rl+1, 'recursion_level_max':rlm})
