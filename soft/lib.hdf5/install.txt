@@ -1,0 +1,4 @@
+See more info about obtaining HDF5 at 
+
+* https://www.hdfgroup.org/HDF5/release/obtainsrc.html
+
