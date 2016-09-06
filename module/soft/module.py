@@ -33,9 +33,47 @@ def init(i):
     return {'return':0}
 
 ##############################################################################
-# detect soft
+# detect is given software is already installed and register it in the CK or install it if package exists (the same as 'check')
 
 def detect(i):
+    """
+    Input:  {
+              (host_os)           - host OS (detect, if omitted)
+              (target_os)         - target OS (detect, if omitted)
+              (target_device_id)  - target device ID (detect, if omitted)
+
+              (data_uoa) or (uoa) - software UOA entry
+               or
+              (tags)              - search UOA by tags (separated by comma)
+
+              (interactive)       - if 'yes', and has questions, ask user
+              (quiet)             - if 'yes', do not ask questions but select default value
+
+              (skip_help)         - if 'yes', skip print help if not detected (when called from env setup)
+
+              (deps)              - already resolved deps (if called from env)
+
+              (extra_version)     - add extra version, when registering software 
+                                    (for example, -trunk-20160421)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              path_install - path to the detected software
+              cus          - dict with filled in info for the software
+            }
+
+    """
+
+    return check(i)
+
+##############################################################################
+# detect soft (internal function - gradually outdated)
+
+def internal_detect(i):
     """
     Input:  {
               (host_os)           - host OS (detect, if omitted)
@@ -1232,7 +1270,7 @@ def list_all_files(i):
     return {'return':0, 'list':a}
 
 ##############################################################################
-# check if software is installed
+# check is given software is already installed and register it in the CK or install it if package exists (the same as 'detect')
 
 def check(i):
     """

@@ -1,13 +1,16 @@
 {
   "actions": {
     "check": {
-      "desc": "check if software is installed"
+      "desc": "check is given software is already installed and register it in the CK or install it if package exists (the same as 'detect')"
     }, 
     "check_target": {
       "desc": "check that host and target OS is supported"
     }, 
     "detect": {
-      "desc": "detect version of a given software"
+      "desc": "detect is given software is already installed and register it in the CK or install it if package exists (the same as 'check')"
+    }, 
+    "internal_detect": {
+      "desc": "detect version of a given software (internal)"
     }, 
     "get_version": {
       "desc": "low-level function to get version (will be substituted)"
