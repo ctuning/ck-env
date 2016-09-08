@@ -150,8 +150,6 @@ def setup(i):
     tp=''
 
     arch=target_d.get('android_ndk_arch','')
-    if arch=='':
-       return {'return':1, 'error':'platform architecture is not defined in target OS'}
 
     # Check path
     ep=cus.get('env_prefix','')
