@@ -178,9 +178,6 @@ def setup(i):
        if cus.get('retarget','')=='':
           cus['retarget']='no'
 
-    # Update global
-    if remote=='yes' or os_name_long.find('-arm')>0:
-       env.update({'CK_COMPILER_FLAG_MFLOAT_ABI_HARD': '-mfloat-abi=hard'})
 
     ############################################################
     if winh=='yes':
@@ -452,6 +449,7 @@ def setup(i):
              x='-fPIE -pie '
 
           env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
+
        else:
           ### Linux Host  #########################################################
           add_m32=cus.get('add_m32','')
@@ -474,5 +472,15 @@ def setup(i):
        x=cus.get('add_extra_path','')
        if x!='':
           s+='\nexport PATH='+pi+x+':%PATH%\n\n'
+
+    # Update global
+    if remote=='yes' or os_name_long.find('-arm')>0:
+       y='-mfloat-abi=hard'
+       env.update({'CK_COMPILER_FLAG_MFLOAT_ABI_HARD': y})
+
+       x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+       if y not in x:
+          x+=' '+y
+          env["CK_COMPILER_FLAGS_OBLIGATORY"]=x
 
     return {'return':0, 'bat':s}
