@@ -122,6 +122,9 @@ def setup(i):
     ck=i['ck_kernel']
     s=''
 
+    fos=i.get('features',{}).get('os',{})
+    os_name_long=fos.get('name_long','')
+
     iv=i.get('interactive','')
 
     env=i['env']
@@ -175,6 +178,10 @@ def setup(i):
        if cus.get('retarget','')=='':
           cus['retarget']='no'
 
+    # Update global
+    if remote=='yes' or os_name_long.find('-arm')>0:
+       env.update({'CK_COMPILER_FLAG_MFLOAT_ABI_HARD': '-mfloat-abi=hard'})
+
     ############################################################
     if winh=='yes':
 
@@ -217,7 +224,6 @@ def setup(i):
        # Modify if Android
        if remote=='yes':
           env.update({
-             "CK_COMPILER_FLAG_MFLOAT_ABI_HARD": "-mfloat-abi=hard", 
              "CK_AR": "%CK_ANDROID_COMPILER_PREFIX%-ar", 
              "CK_COMPILER_FLAG_GPROF": "-pg", 
              "CK_DLL_EXT": ".so", 
@@ -371,7 +377,6 @@ def setup(i):
        # Modify if Android
        if remote=='yes':
           env.update({
-             "CK_COMPILER_FLAG_MFLOAT_ABI_HARD": "-mfloat-abi=hard", 
              "CK_AR": "${CK_ANDROID_COMPILER_PREFIX}-ar", 
              "CK_COMPILER_FLAG_GPROF": "-pg", 
              "CK_DLL_EXT": ".so", 

@@ -331,8 +331,10 @@ def setup(i):
                  'host_os':hos,
                  'target_os':tos,
                  'target_device_id':tdid,
-                 'skip_info_collection':'yes'})
+                 'skip_info_collection':'no'})
     if r['return']>0: return r
+
+    features=r.get('features',{})
 
     hos=r['host_os_uid']
     hosx=r['host_os_uoa']
@@ -929,6 +931,7 @@ def setup(i):
               "self_cfg":cfg,
               "version":ver,
               "version_split":sver,
+              "features":features,
               "ck_kernel":ck
              }
 
