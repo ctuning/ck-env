@@ -137,14 +137,14 @@ def setup(i):
     if not found:
        return {'return':1, 'error':'can\'t find include directory for HDF5'}
 
-    pi=os.path.dirname(fpinc)
+    pi=os.path.realpath(os.path.dirname(fpinc))
 
     lb=os.path.basename(fp)
     lbs=lb
     if lbs.endswith('.so'):
        lbs=lbs[:-3]+'.a'
 
-    pl=os.path.dirname(fp)
+    pl=os.path.realpath(os.path.dirname(fp))
     cus['path_lib']=pl
 
     pl1=os.path.dirname(pl)
@@ -162,7 +162,7 @@ def setup(i):
 
     ep=cus.get('env_prefix','')
     if pi!='':
-       env[ep]=pi
+       env[ep]=pl
 
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')
