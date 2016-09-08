@@ -60,6 +60,9 @@ def install(i):
               (param)             - string converted into CK_PARAM and passed to processing script
               (params)            - dict, keys are onverted into <KEY>=<VALUE> and passed to processing script
 
+              (env)               - add environment vars
+              (env.{KEY})         - set env[KEY]=value (user-friendly interface via CMD)
+
               (Dkey)              - update params[key], i.e. ck install package:... -DENV1=val1 -DENV2=val2 (similar to CMAKE)
 
               (extra_version)     - add extra version, when registering software 
@@ -368,6 +371,14 @@ def install(i):
        pr_env['CK_HOST_CPU_NUMBER_OF_PROCESSORS']=cpu_ft.get('num_proc','1')
 
        # We may want to pass more info (including target CPU) ...
+
+    # Update env from input
+    envx=i.get('env',{})
+    for q in i:
+        if q.startswith('env.'):
+           envx[q[4:]]=i[q]
+    if len(envx)>0:
+       pr_env.update(envx)
 
     # Search by exact terms
     setup={'host_os_uoa':hos,
