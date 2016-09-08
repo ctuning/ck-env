@@ -1538,7 +1538,7 @@ def check(i):
     # Print results
 #    if o=='con':
     ck.out('')
-    ck.out('  Search completed in '+('%.1f' % et)+' secs. Found '+str(len(lst))+' installations ...')
+    ck.out('  Search completed in '+('%.1f' % et)+' secs. Found '+str(len(lst))+' target files (may be pruned) ...')
 
     # Select, if found
     il=0
@@ -1558,11 +1558,15 @@ def check(i):
        lst=lst1
 
        # Process each path
+       if o=='con':
+          ck.out('')
+
        for q in lst:
            kk={'path':q}
 
+           pr=''
            if o=='con':
-              ck.out('    * '+q)
+              pr='    * '+q
 
            # Try to detect version
            ver=''
@@ -1575,7 +1579,7 @@ def check(i):
            rx=get_version(ii)
            if rx['return']>0:
               if o=='con':
-                 ck.out('        WARNING: '+rx['error'])
+                 pr+='\n        WARNING: '+rx['error']
            else:
               ver=rx['version']
 
@@ -1587,8 +1591,11 @@ def check(i):
               kk['version']=ver
               kk['version_split']=sver
 
-              ck.out('        Version: '+ver)
-              ck.out('        Split version: '+json.dumps(sver))
+              if o=='con':
+                 pr+='   (Version '+ver+')'
+
+           if o=='con':
+              ck.out(pr)
 
            if cus.get('add_only_with_version','')!='yes' or ver!='':
               vlst.append(kk)
