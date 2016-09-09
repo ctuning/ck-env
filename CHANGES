@@ -1,3 +1,5 @@
+* 2016.09.09 - updated DVDT OpenCL profiler soft description
+
 * 2016.09.07 - added --env and --env. keys to ck install package to be able to preset env variables
 
 * 2016.09.05 - added HDF5 library description

@@ -68,20 +68,20 @@ def setup(i):
     tbits=target_d.get('bits','')
 
     envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
+
+    fp=cus.get('full_path','')
+
+    fn=os.path.basename(fp)
+
+    pl=os.path.dirname(fp)
+    pi=os.path.dirname(pl)
 
     ################################################################
-    if win=='yes':
-      if remote=='yes':
-        dext='.so'
-      else:
-        dext='.dll'
-    else:
-      dext='.so'
-
-    cus['dynamic_plugin']='tool-dvdt-prof'+dext
+    cus['dynamic_plugin']=fn
     env[envp+'_DYNAMIC_NAME']=cus['dynamic_plugin']
-    env[envp+'_DYNAMIC_NAME_FULL']=pi+'/lib/'+cus['dynamic_plugin']
+    env[envp]=pi
+    env[envp+'_LIB']=pl
+    env[envp+'_DYNAMIC_NAME_FULL']=fp
 
     env[envp+'_CONVERT_TO_CK']='python '+pi+'/src/ck/convert_output_to_ck_format.py'
 
