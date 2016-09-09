@@ -1,8 +1,12 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_DVDT_PROF",
-    "skip_add_to_bin": "yes",
-    "skip_add_to_path": "yes"
+    "env_prefix": "CK_ENV_TOOL_DVDT_PROF",
+    "limit_recursion_dir_search": {
+      "linux": 2
+    },
+    "soft_file": {
+      "linux": "tool-dvdt-prof.so"
+    }
   },
   "soft_name": "dividiti's OpenCL API profiler",
   "tags": [
