@@ -20,7 +20,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -72,16 +72,14 @@ def setup(i):
 
     ################################################################
     if win=='yes':
-       if remote=='yes': 
-          dext='.so'
-       else:
-          dext='.dll'
+      if remote=='yes':
+        dext='.so'
+      else:
+        dext='.dll'
     else:
-       dext='.so'
+      dext='.so'
 
-    cus['dynamic_plugin']='plugin-opencl-dvdt-profiler'+dext
-
-
+    cus['dynamic_plugin']='tool-dvdt-prof'+dext
     env[envp+'_DYNAMIC_NAME']=cus['dynamic_plugin']
     env[envp+'_DYNAMIC_NAME_FULL']=pi+'/lib/'+cus['dynamic_plugin']
 
