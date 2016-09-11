@@ -1,3 +1,5 @@
+* 2016.09.10 - added 'device' module to unify description of available user devices for crowd-benchmarking/crowd-tuning
+
 * 2016.09.09 - updated DVDT OpenCL profiler soft description
 
 * 2016.09.07 - added --env and --env. keys to ck install package to be able to preset env variables
