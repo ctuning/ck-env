@@ -1,0 +1,18 @@
+{
+  "auto_detect": "no",
+  "skip_file_check":"yes",
+  "customize": {
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_VIENNACL"
+  },
+  "soft_name": "ViennaCL library",
+  "deps": {
+  },
+  "tags": [
+    "src",
+    "lib",
+    "blas",
+    "opencl-blas",
+    "viennacl"
+  ]
+}
