@@ -285,6 +285,10 @@ def detect(i):
                  tsub_cpu=info_cpu[spp].get('model name','')
               info_cpu[spx]['ck_cpu_subname']=tsub_cpu
 
+           x=params.get('ro.product.cpu.abi','') # not sure if correct for all processors
+           if info_cpu[spx].get('cpu_abi','')=='' and x!='':
+              info_cpu[spx]['cpu_abi']=x
+
            info_cpu[spx]['ck_cpu_name']=tcpu
 
            tcpu_features=info_cpu[spp].get('Features','')
@@ -299,7 +303,7 @@ def detect(i):
                   found=True
                   break
 
-           if not found:
+           if not found and tcpu!='' and tcpu!='----':
               unique_cpus.append(info_cpu[spx])
 
        # Collect all frequencies
@@ -436,21 +440,21 @@ def detect(i):
 #                          'device_id':tdid})
 #             if r['return']>0: return r
 
-       if new_format=='yes':
-          for px in range(0, pp+1):
-              spx=str(px)
-
-              tcpu=info_cpu[spx].get('ck_cpu_name','')
-
-              # add unique
-              found=False
-              for uc in unique_cpus:
-                  if uc.get('ck_cpu_name','')==tcpu:
-                     found=True
-                     break
-
-              if not found:
-                 unique_cpus.append(info_cpu[spx])
+#       if new_format=='yes':
+#          for px in range(0, pp+1):
+#              spx=str(px)
+#
+#              tcpu=info_cpu[spx].get('ck_cpu_name','')
+#
+#              # add unique
+#              found=False
+#              for uc in unique_cpus:
+#                  if uc.get('ck_cpu_name','')==tcpu:
+#                     found=True
+#                     break
+#
+#              if not found and tcpu!='' and tcpu!='----':
+#                 unique_cpus.append(info_cpu[spx])
 
        target['name']=target_cpu
        target['sub_name']=target_sub_cpu
@@ -492,7 +496,7 @@ def detect(i):
 
       r=ck.run_and_get_stdout({'cmd': ['sysctl', 'machdep.cpu', 'hw.cpufrequency']})
       if r['return']>0: return r
-      
+
       info_cpu={}
       for line in r['stdout'].splitlines():
         if ':' in line:

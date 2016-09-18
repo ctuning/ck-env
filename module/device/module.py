@@ -372,9 +372,9 @@ def show(i):
     h+='  <tr>\n'
     h+='   <td align="center"><b>CK alias</b></td>\n'
     h+='   <td align="center"><b>Real device name</b></td>\n'
-    h+='   <td align="center"><b>ID</b></td>\n'
-    h+='   <td align="center"><b>CK OS</b></td>\n'
+    h+='   <td align="center"><b>Device ID</b></td>\n'
     h+='   <td align="center"><b>Real OS name</b></td>\n'
+    h+='   <td align="center"><b>CK OS alias</b></td>\n'
     h+='   <td align="center"><b>CPUs</b></td>\n'
     h+='   <td align="center"><b>GPU</b></td>\n'
     h+='   <td align="center"><b>GPGPU</b></td>\n'
@@ -423,10 +423,10 @@ def show(i):
         # Prepare info
         if connected:
             ss=' style="background-color:#009f00;color:#ffffff"'
-            sx='Connected'
+            sx='connected'
         else:
             ss=' style="background-color:#9f0000;color:#ffffff;"'
-            sx='???'
+            sx='not found'
 
         h+='  <tr>\n'
 
@@ -456,9 +456,9 @@ def show(i):
 
         h+='   <td align="center">'+tdid+'</td>\n'
 
-        h+='   <td align="left"><a href="'+url0+'&wcid='+cfg['module_deps']['os']+':'+tos_uid+'">'+tos+'</a></td>\n'
-
         h+='   <td align="center">'+on+'</td>\n'
+
+        h+='   <td align="left"><a href="'+url0+'&wcid='+cfg['module_deps']['os']+':'+tos_uid+'">'+tos+'</a></td>\n'
 
         h+='   <td align="center">'+cpus+'</td>\n'
 
