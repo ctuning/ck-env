@@ -3,12 +3,12 @@
     "add": {
       "desc": "add new device description"
     },
+    "browse": {
+      "desc": "browse devices (open browser)"
+    },
     "show": {
       "desc": "show available target devices and their status",
       "for_web": "yes"
-    },
-    "browse": {
-      "desc": "browse devices (open browser)"
     }
   },
   "copyright": "See CK COPYRIGHT.txt for copyright details",
@@ -49,16 +49,30 @@
       "tags": ""
     },
     "wa_android": {
+      "alias_prefix": "wa-",
       "detect_platform": "yes",
+      "extra_check": {
+        "action": "configure",
+        "module_uoa": "wa",
+        "wa_device_default": "generic_android"
+      },
       "name": "ARM workload automation for Android",
       "sort": 20,
-      "tags": "android-with-arch"
+      "tags": "android-with-arch",
+      "record_tags":"wa"
     },
     "wa_linux": {
-      "detect_platform": "no",
+      "alias_prefix": "wa-",
+      "detect_platform": "yes",
+      "extra_check": {
+        "action": "configure",
+        "module_uoa": "wa",
+        "wa_device_default": "generic_linux"
+      },
       "name": "ARM workload automation for Linux",
       "sort": 30,
-      "tags": "linux"
+      "tags": "linux",
+      "record_tags":"wa"
     }
   }
 }
