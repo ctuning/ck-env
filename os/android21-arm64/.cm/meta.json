@@ -83,6 +83,7 @@
     "os", 
     "remote", 
     "android", 
+    "android-with-arch", 
     "android-21", 
     "arm64"
   ]

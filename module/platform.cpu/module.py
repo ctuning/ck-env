@@ -545,6 +545,8 @@ def detect(i):
               ck.out('    CPU ABI:      '+x2)
               ck.out('    CPU features: '+x3)
 
+              iup+=1
+
        else:
           ck.out('Number of logical processors: '+str(target.get('num_proc',0)))
           ck.out('CPU name:                     '+target.get('name',''))

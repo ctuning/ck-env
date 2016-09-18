@@ -3,7 +3,12 @@
   "data_name": "ck-env", 
   "dict": {
     "url": "https://github.com/ctuning/ck-env.git", 
-    "shared": "git"
+    "shared": "git",
+    "repo_deps": [
+      {
+        "repo_uoa": "ck-web"
+      }
+    ] 
   }, 
   "data_alias": "ck-env", 
   "data_uoa": "ck-env"

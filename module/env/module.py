@@ -499,9 +499,9 @@ def set(i):
                                  'data_uoa':auoas[0],
                                  'platform':hplat})
 
-                   rx=ck.inp({'text':'       Would you like to manually register software, i.e. if it is in an unusual path (Y/n): '})
+                   rx=ck.inp({'text':'       Would you like to manually register software, i.e. if it is in an unusual path (y/N): '})
                    x=rx['string'].strip().lower()
-                   if x!='n' and x!='no':
+                   if x=='yes' or x=='yes':
                       ck.out('')
                       rx=ck.access({'action':'setup',
                                     'module_uoa':cfg['module_deps']['soft'],
@@ -512,10 +512,10 @@ def set(i):
 
                 else:
                    # Show possible Wiki page
-                   rx=ck.inp({'text':'       Would you like to open wiki pages about related software (with possible installation info) (Y/n): '})
+                   rx=ck.inp({'text':'       Would you like to open wiki pages about related software (with possible installation info) (y/N): '})
                    x=rx['string'].strip().lower()
 
-                   if x!='n' and x!='no':
+                   if x=='yes' or x=='yes':
                       ck.out('')
                       for q in auoas:
                           rx=ck.access({'action':'wiki',

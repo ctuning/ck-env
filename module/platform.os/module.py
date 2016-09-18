@@ -190,7 +190,7 @@ def detect(i):
                  devices.append(s2)
 
        if len(devices)==0:
-          return {'return':1, 'error':'no attached remoted devices found'}
+          return {'return':16, 'error':'no attached remoted devices found'}
 
        if o=='con':
           ck.out('')
@@ -404,7 +404,7 @@ def detect(i):
        dcfg=r['dict']
 
     pi_key=tosx
-    if remote=='yes' and tdid!='': pi_key+='-'+tdid
+    if remote=='yes' and tdid!='': pi_key='remote-'+tdid
 
     first_time=False
     pi_uoa=dcfg.get('platform_init_uoa',{}).get(pi_key,'')
