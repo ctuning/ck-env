@@ -10,10 +10,7 @@
     "env_prefix": "CK_ENV_COMPILER_GCC", 
     "languages": [
       "C", 
-      "CPP", 
-      "F77", 
-      "F90", 
-      "F95"
+      "CPP" 
     ], 
     "limit_recursion_dir_search": {
       "linux": 3, 
@@ -43,9 +40,6 @@
     "compiler", 
     "gcc", 
     "lang-c", 
-    "lang-cpp", 
-    "lang-f77", 
-    "lang-f90", 
-    "lang-f95"
+    "lang-cpp"
   ]
 }

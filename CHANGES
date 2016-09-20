@@ -1,3 +1,5 @@
+* 2016.09.19 - added soft:compiler.gfortran
+
 * 2016.09.18 - added many new Android descriptions (past and new such as Android 7.0.0)
              - added 'add', 'browse' and 'show' functions to 'device'
              - improving new CPU format detection (Linux/Android/MacOS)

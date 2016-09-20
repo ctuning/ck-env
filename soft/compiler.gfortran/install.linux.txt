@@ -1,0 +1,6 @@
+On Ubuntu:
+
+$ sudo apt-get install gfortran
+
+Alternatively, you can download, build and install latest gfortran here:
+* https://gcc.gnu.org/mirrors.html
