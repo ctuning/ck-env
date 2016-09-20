@@ -26,27 +26,42 @@
   "target_access_types": {
     "android": {
       "detect_platform": "yes",
-      "name": "Android",
+      "name": "Android device accessed via adb",
       "sort": 10,
-      "tags": "android-with-arch"
+      "tags": [
+        "android-with-arch"
+      ]
     },
-    "ck_node": {
+    "ck_node_linux": {
       "detect_platform": "no",
-      "name": "CK crowd node (Windows/Linux)",
-      "sort": 50,
-      "tags": "windows"
+      "name": "Remote Linux device accessed via CK crowd node - IN DEVELOPMENT",
+      "sort": 55,
+      "tags": [
+        "linux"
+      ]
     },
-    "mingw": {
+    "ck_node_win": {
+      "detect_platform": "no",
+      "name": "Remote Windows device accessed via CK crowd node - IN DEVELOPMENT",
+      "sort": 50,
+      "tags": [
+        "windows",
+        "mingw"
+      ]
+    },
+    "host": {
       "detect_platform": "yes",
-      "name": "Windows MingW",
-      "sort": 40,
-      "tags": "mingw"
+      "name": "Use this host machine as target device",
+      "sort": 5,
+      "tags": []
     },
     "ssh": {
       "detect_platform": "no",
-      "name": "SSH + CK",
+      "name": "Remote Linux device accessed via SSH + CK (Linux) - NOT SUPPORTED YET",
       "sort": 60,
-      "tags": ""
+      "tags": [
+        "linux"
+      ]
     },
     "wa_android": {
       "alias_prefix": "wa-",
@@ -56,10 +71,10 @@
         "module_uoa": "wa",
         "wa_device_default": "generic_android"
       },
-      "name": "ARM workload automation for Android",
+      "name": "Android device accessed via ARM's workload automation framework",
+      "record_tags": "wa",
       "sort": 20,
-      "tags": "android-with-arch",
-      "record_tags":"wa"
+      "tags": ["android-with-arch"]
     },
     "wa_linux": {
       "alias_prefix": "wa-",
@@ -69,10 +84,10 @@
         "module_uoa": "wa",
         "wa_device_default": "generic_linux"
       },
-      "name": "ARM workload automation for Linux",
+      "name": "Remote Linux device accessed via ARM's workload automation",
+      "record_tags": "wa",
       "sort": 30,
-      "tags": "linux",
-      "record_tags":"wa"
+      "tags": ["linux"]
     }
   }
 }

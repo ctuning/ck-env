@@ -72,8 +72,10 @@ def add(i):
     tos=i.get('target_os', '')
     tdid=i.get('device_id', '')
 
-    host=i.get('use_host','')
     at=i.get('access_type','')
+
+    if i.get('use_host','')=='yes':
+       at='host'
 
     duoa=i.get('data_uoa','')
     if duoa=='':
@@ -88,37 +90,34 @@ def add(i):
 
     dp='' # detect platform
 
-    # Check host target
-    if tos=='' and host=='':
-        if o=='con':
-            ck.out(line)
+    # Preliminary host detect
+    os_tags=[]
 
-            r=ck.inp({'text':'Would you like use your host as a target device for experiments (y/N): '})
-            x=r['string'].strip().lower()
+    r=ck.get_os_ck({})
+    if r['return']>0: return r
 
-            if x=='y' or x=='yes':
-                host='yes'
-        else:
-            host='yes'
+    if r['platform']=='windows':
+       os_tags=["windows","mingw"]
+    else:
+       os_tags=["linux"]
 
     # If not host target
-    if host!='yes' and tos=='' and at=='':
-        if o=='con':
-            tat=cfg['target_access_types']
+    if at=='' and o=='con':
+        tat=cfg['target_access_types']
 
-            ck.out(line)
+        ck.out(line)
 
-            r=ck.select({'title':'Select access type to your target device: ',
-                         'dict':tat})
-            if r['return']>0: return r
-            at=r['string']
+        r=ck.select({'title':'Select access type for your target device: ',
+                     'dict':tat})
+        if r['return']>0: return r
+        at=r['string']
 
     # If access_type is empty, quit
-    if at=='' and host!='yes':
+    if at=='':
         return {'return':1, 'error':'access type is not specified'}
 
     # Continue processing
-    tags=''
+    tags=[]
     extra_check={}
     prefix=''
     rtags=''
@@ -132,7 +131,7 @@ def add(i):
 
     # Extra checks
     if tos=='':
-        if tags=='android-with-arch':
+        if 'android-with-arch' in tags:
             # Check preliminary Android parameters including arch + API to finalize detecton of the CK OS description
             if o=='con':
                 ck.out(line)
@@ -159,7 +158,8 @@ def add(i):
                    ck.out('')
                    ck.out('Android API: '+sdk)
 
-                tags+=',android-'+sdk
+                for q in range(0, len(tags)):
+                    tags[q]+=',android-'+sdk
 
             if abi!='':
                 if o=='con':
@@ -171,19 +171,27 @@ def add(i):
                 elif abi.startswith('arm'):
                     dos='*-arm'
 
-    # Search OS
-    if tos=='' and tags!='':
-        ii={'action':'search',
-            'module_uoa':cfg['module_deps']['os'],
-            'data_uoa':dos,
-            'tags':tags}
-        r=ck.access(ii)
-        if r['return']>0: return r
+    # Check tags and use host ones if empty
+    if len(tags)==0 and len(os_tags)>0:
+        tags=os_tags
 
-        lst=r['lst']
+    # Search target OS
+    if tos=='':
+        lst=[]
+
+        for t in tags:
+            ii={'action':'search',
+                'module_uoa':cfg['module_deps']['os'],
+                'data_uoa':dos,
+                'tags':t}
+            r=ck.access(ii)
+            if r['return']>0: return r
+
+            for q in r['lst']:
+                lst.append(q)
 
         if len(lst)==0:
-            return {'return':1, 'error':'no OS found for tags "'+tags+'" and OS wildcard "'+dos+'"'}
+            return {'return':1, 'error':'no OS found for tags "'+str(tags)+'" and OS wildcard "'+dos+'"'}
         elif len(lst)==1:
             tos=lst[0]['data_uoa']
         else:
@@ -196,8 +204,8 @@ def add(i):
             tos=r['choice']
 
     # Target OS should be finalized
-    if host!='yes' and tos=='':
-        return {'return':1, 'error':'no target os selected'}
+    if tos=='':
+        return {'return':1, 'error':'no target OS selected'}
 
     # Get user friend alias of OS
     if tos!='':
@@ -218,7 +226,7 @@ def add(i):
     # Detect various parameters of the platform (to suggest platform name as well)
     pn=''
     rp={}
-    if dp=='yes' or host=='yes':
+    if dp=='yes':
         if o=='con':
             ck.out(line)
             ck.out('Attempting to detect various parameters of your target device ...')
@@ -229,7 +237,6 @@ def add(i):
             'target_os':tos,
             'device_id':tdid,
             'module_uoa':cfg['module_deps']['platform'],
-            'use_host':host,
             'exchange':exc,
             'exchange_repo':er,
             'exchange_subrepo':esr,
@@ -250,12 +257,11 @@ def add(i):
         'target_os_uid':rp.get('os_uid',''),
         'target_os_dict':rp.get('os_dict',{}),
         'access_type':at,
-        'use_host':host,
         'features':rp.get('features',{})}
 
     # Extra checks if needed
     files={}
-    if host!='yes' and len(extra_check)>0:
+    if len(extra_check)>0:
         ii=copy.deepcopy(extra_check)
 
         ii['out']=oo
@@ -276,10 +282,10 @@ def add(i):
             ck.out('Detected target device name: '+pn)
             ck.out('')
 
-        if host=='yes':
+        if at=='host':
             duoa='host'
         elif pn!='':
-            duoa=pn.lower().replace(' ','-').replace('_','-').replace('(','-').replace(')','-')
+            duoa=pn.lower().replace(' ','-').replace('_','-').replace('(','-').replace(')','-').replace('"','-')
 
         if duoa!='' and prefix!='':
             duoa=prefix+duoa
@@ -447,10 +453,9 @@ def show(i):
         # Check if device connected
         connected=False
 
-        uh=d.get('use_host','')
         at=d.get('access_type','')
 
-        if uh=='yes' or at=='wa_linux':
+        if at=='host' or at=='wa_linux':
             connected=True
         else:
             # Check status of remote
