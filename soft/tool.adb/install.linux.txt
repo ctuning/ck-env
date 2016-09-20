@@ -1,0 +1,6 @@
+Alternatively, you can use package manager for your Linux distribution.
+
+== Ubuntu ==
+
+ $ sudo apt-get install adb
+

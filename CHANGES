@@ -1,4 +1,5 @@
 * 2016.09.19 - added soft:compiler.gfortran
+             - added soft:tool.adb (for ARM workload automation)
 
 * 2016.09.18 - added many new Android descriptions (past and new such as Android 7.0.0)
              - added 'add', 'browse' and 'show' functions to 'device'
