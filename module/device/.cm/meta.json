@@ -6,6 +6,9 @@
     "browse": {
       "desc": "browse devices (open browser)"
     },
+    "init": {
+      "desc": "init device and update input"
+    },
     "show": {
       "desc": "show available target devices and their status",
       "for_web": "yes"
@@ -74,7 +77,9 @@
       "name": "Android device accessed via ARM's workload automation framework",
       "record_tags": "wa",
       "sort": 20,
-      "tags": ["android-with-arch"]
+      "tags": [
+        "android-with-arch"
+      ]
     },
     "wa_linux": {
       "alias_prefix": "wa-",
@@ -87,7 +92,9 @@
       "name": "Remote Linux device accessed via ARM's workload automation",
       "record_tags": "wa",
       "sort": 30,
-      "tags": ["linux"]
+      "tags": [
+        "linux"
+      ]
     }
   }
 }

@@ -1,3 +1,5 @@
+* 2016.09.21 - improved "device" for ARM WA
+
 * 2016.09.19 - added soft:compiler.gfortran
              - added soft:tool.adb (for ARM workload automation)
 

@@ -271,7 +271,7 @@ def add(i):
         if r['return']>0: return r
 
         files=r.get('files',{})
-        dd['extra_cfg']=r.get('cfg',{})
+        dd['extra_cfg']={'wa_config':r.get('cfg',{})}
 
     # Suggest platform name
     if duoa=='':
@@ -562,3 +562,52 @@ def browse(i):
     i['template']=''
 
     return ck.access(i)
+
+##############################################################################
+# init device and update input
+
+def init(i):
+    """
+    Input:  {
+              (target) - target device
+              (input)  - input to update
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    ii=i.get('input',{})
+
+    target=ii.get('target','')
+    if target!='':
+        # Load device entry
+        r=ck.access({'action':'load',
+                     'module_uoa':work['self_module_uid'],
+                     'data_uoa':target})
+        if r['return']>0: return r
+
+        dd=r['dict']
+
+        # Get main parameters
+        host_os_uoa=dd.get('host_os_uoa','')
+        target_os_uoa=dd.get('target_os_uoa','')
+        target_device_id=dd.get('target_device_id','')
+
+        at=dd.get('access_type','')
+        ecfg=dd.get('extra_cfg',{})
+
+        # Update input (if undefined)
+        if ii.get('target_os','')=='':
+            ii['target_os']=target_os_uoa
+        if ii.get('device_id','')=='':
+            ii['device_id']=target_device_id
+        if len(ii.get('device_cfg',{}))==0:
+            ii['device_cfg']=ecfg
+            ii['device_cfg']['access_type']=at
+
+    return {'return':0}
