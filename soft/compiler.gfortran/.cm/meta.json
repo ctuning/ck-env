@@ -39,6 +39,7 @@
   "soft_name": "gfortran compiler",
   "tags": [
     "compiler",
+    "fortran",
     "gfortran",
     "lang-f77",
     "lang-f90",
