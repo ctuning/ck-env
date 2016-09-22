@@ -6,14 +6,20 @@
     "browse": {
       "desc": "browse devices (open browser)"
     },
+    "check": {
+      "desc": "check device status (online/offline)"
+    },
     "init": {
       "desc": "init device and update input"
     },
-    "show": {
+        "show": {
       "desc": "show available target devices and their status",
       "for_web": "yes"
     }
   },
+  "actions_redirect": {
+    "init": "device_init"
+  }, 
   "copyright": "See CK COPYRIGHT.txt for copyright details",
   "desc": "description of a given device for crowd-benchmarking and crowd-tuning",
   "developer": "Grigori Fursin",

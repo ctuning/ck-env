@@ -471,7 +471,7 @@ def detect(i):
               'dict':dcfg}
           r=ck.access(ii)
           if r['return']>0: return r
-                
+
     if pi_uoa!='' and pi_uoa!='-':
        rx=ck.access({'action':'find',
                      'module_uoa':cfg['module_deps']['platform.init'],

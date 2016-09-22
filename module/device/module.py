@@ -244,12 +244,14 @@ def add(i):
         rp=ck.access(ii)
         if rp['return']>0: return rp
 
+        tdid=rp.get('device_id','')
+
         pn=rp.get('features',{}).get('platform',{}).get('name','')
 
     # Prepare device meta
     dd={'host_os':hos,
         'target_os':tos,
-        'target_device_id':tdid,
+        'device_id':tdid,
         'host_os_uoa':rp.get('host_os_uoa',''),
         'host_os_uid':rp.get('host_os_uid',''),
         'host_os_dict':rp.get('host_os_dict',{}),
@@ -441,45 +443,25 @@ def show(i):
     for q in sorted(lst, key = lambda v: v['data_uoa']):
         duoa=q['data_uoa']
         duid=q['data_uid']
+
         d=q['meta']
 
-        hos=d.get('host_os_uoa','')
+        tdid=d.get('device_id','')
 
         tos=d.get('target_os_uoa','')
         tos_uid=d.get('target_os_uid','')
 
-        tdid=d.get('target_device_id','')
+        r=check({'data_uoa':duoa})
+        if r['return']>0: return r
 
-        # Check if device connected
-        connected=False
+        connected=r['connected']
 
         at=d.get('access_type','')
-
-        if at=='host' or at=='wa_linux':
-            connected=True
-        else:
-            # Check status of remote
-            connected=False
-
-            if at=='android' or at=='wa_android':
-                # Attempt to get Android features 
-                ii={'action':'detect',
-                    'module_uoa':cfg['module_deps']['platform.os'],
-                    'host_os':hos,
-                    'target_os':tos,
-                    'device_id':tdid}
-                r=ck.access(ii)
-
-#                import json
-#                h+='<hr><pre>'+json.dumps(r,indent=2)+'</pre>'
-
-                if r['return']==0:
-                   connected=True
 
         a.append({'data_uoa':duoa, 'data_uid':duid, 'connected':connected})
 
         # Prepare info
-        if connected:
+        if connected=='yes':
             ss=' style="background-color:#009f00;color:#ffffff"'
             sx='connected'
         else:
@@ -566,7 +548,7 @@ def browse(i):
 ##############################################################################
 # init device and update input
 
-def init(i):
+def device_init(i):
     """
     Input:  {
               (target) - target device
@@ -585,10 +567,16 @@ def init(i):
 
     target=ii.get('target','')
     if target!='':
+        # Check if connected
+        r=check({'data_uoa':target})
+        if r['return']>0: return r
+        if r['connected']!='yes':
+           return {'return':1, 'error':'target device "'+target+'" is not connected'}
+
         # Load device entry
         r=ck.access({'action':'load',
-                     'module_uoa':work['self_module_uid'],
-                     'data_uoa':target})
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':target})
         if r['return']>0: return r
 
         dd=r['dict']
@@ -611,3 +599,70 @@ def init(i):
             ii['device_cfg']['access_type']=at
 
     return {'return':0}
+
+##############################################################################
+# check device status (online/offline)
+
+def check(i):
+    """
+    Input:  {
+              data_uoa     - device UOA
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              connected    - 'yes'/'no'
+            }
+
+    """
+
+    o=i.get('out','')
+
+    duoa=i['data_uoa']
+    r=ck.access({'action':'load',
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':duoa})
+    if r['return']>0: return r
+
+    d=r['dict']
+
+    hos=d.get('host_os_uoa','')
+
+    tos=d.get('target_os_uoa','')
+    tos_uid=d.get('target_os_uid','')
+
+    tdid=d.get('target_device_id','')
+
+    # Check if device connected
+    connected='yes'
+
+    at=d.get('access_type','')
+
+    if at=='host' or at=='wa_linux':
+        connected='yes'
+    else:
+        # Check status of remote
+        connected='no'
+
+        if at=='android' or at=='wa_android':
+            # Attempt to get Android features 
+            ii={'action':'detect',
+                'module_uoa':cfg['module_deps']['platform.os'],
+                'host_os':hos,
+                'target_os':tos,
+                'device_id':tdid}
+            r=ck.access(ii)
+
+            if r['return']==0:
+               connected='yes'
+
+    if o=='con':
+       if connected=='yes':
+          ck.out('connected')
+       else:
+          ck.out('offline')
+
+    return {'return':0, 'connected':connected}

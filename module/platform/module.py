@@ -207,6 +207,7 @@ def detect(i):
        if ry['return']>0: return ry
        rr=ry['dict1']
 
+
     # Get info about system ######################################################
     if oo=='con': 
        ck.out(sep)
