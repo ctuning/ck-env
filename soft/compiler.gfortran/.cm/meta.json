@@ -36,7 +36,7 @@
       "win": " --version > $#filename#$ 2>&1"
     }
   },
-  "soft_name": "gfortran compiler",
+  "soft_name": "GNU Fortran compiler",
   "tags": [
     "compiler",
     "fortran",

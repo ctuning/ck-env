@@ -54,6 +54,7 @@
   "tags": [
     "compiler", 
     "icc", 
+    "fortran",
     "lang-c", 
     "lang-cpp", 
     "lang-f77", 

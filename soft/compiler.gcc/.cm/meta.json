@@ -35,7 +35,7 @@
       "win": " --version > $#filename#$ 2>&1"
     }
   }, 
-  "soft_name": "GCC compiler", 
+  "soft_name": "GNU C compiler", 
   "tags": [
     "compiler", 
     "gcc", 
