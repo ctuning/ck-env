@@ -96,7 +96,7 @@ def add(i):
     r=ck.get_os_ck({})
     if r['return']>0: return r
 
-    if r['platform']=='windows':
+    if r['platform']=='win':
        os_tags=["windows","mingw"]
     else:
        os_tags=["linux"]
