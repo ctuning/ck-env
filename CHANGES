@@ -1,3 +1,5 @@
+* 2016.09.23 - added optional flag --target to all platform.*
+
 * 2016.09.21 - improved "device" for ARM WA
 
 * 2016.09.19 - added soft:compiler.gfortran

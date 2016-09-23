@@ -36,6 +36,8 @@ def init(i):
 def detect(i):
     """
     Input:  {
+              (target)               - if specified, use info from 'device' module
+
               (host_os)              - host OS (detect, if omitted)
               (os) or (target_os)    - OS module to check (if omitted, analyze host)
 
@@ -75,6 +77,13 @@ def detect(i):
 
     oo=''
     if o=='con': oo=o
+
+    # Check if target
+    if i.get('target','')!='':
+       r=ck.access({'action':'init',
+                    'module_uoa':cfg['module_deps']['device'],
+                    'input':i})
+       if r['return']>0: return r
 
     # Various params
     hos=i.get('host_os','')

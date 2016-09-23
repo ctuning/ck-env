@@ -9,7 +9,7 @@
     "env_prefix": "CK_ENV_TOOL_ADB",
     "limit_recursion_dir_search": {
       "linux": 4,
-      "win": 4
+      "win": 5
     },
     "only_for_host_os_tags": [
       "windows",

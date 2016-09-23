@@ -207,7 +207,7 @@ def set(i):
     auoas=[]
 
     if lx==0 and duoa!='':
-       return {'return':33, 'error':'either missing env ('+duoa+') or it exists but something changes in its meta: dependencies or setup (target_os):'}
+       return {'return':33, 'error':'either missing env ('+duoa+') or it exists but something changes in its dependencies or setup ('+str(setup)+'):'}
 
     # If no entries, try to detect default ones and repeat
     history_deps=[]
