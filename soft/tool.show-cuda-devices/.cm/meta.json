@@ -1,0 +1,27 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "build_dir_name": "show-cuda-devices",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_TOOL_SHOW_CUDA_DEVICES",
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 3
+    },
+    "only_for_host_os_tags": [
+      "windows",
+      "linux"
+    ],
+    "soft_file": {
+      "linux": "show-cuda-devices",
+      "win": "show-cuda-devices.exe"
+    },
+    "soft_file_from_host_os": "yes"
+  },
+  "soft_name": "show-cuda-devices",
+  "tags": [
+    "tool",
+    "show-cuda-devices"
+  ]
+}

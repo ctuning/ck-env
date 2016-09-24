@@ -1,0 +1,20 @@
+{
+  "backup_data_uid": "2d23c0324a4ca3bb",
+  "backup_module_uid": "5e1100048ab875d7",
+  "backup_module_uoa": "soft",
+  "control": {
+    "author": "Grigori Fursin",
+    "author_email": "Grigori.Fursin@cTuning.org",
+    "author_webpage": "http://fursin.net",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2016-09-24T16:52:25.469125",
+    "license": "See CK LICENSE.txt for licensing details",
+    "version": [
+      "1",
+      "8",
+      "2dev"
+    ]
+  },
+  "data_name": "tool.show-cuda-devices"
+}

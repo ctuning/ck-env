@@ -1,0 +1,5 @@
+Sources are available in CK
+$ ck pull repo:ck-autotuning
+$ ck find program:tool-print-cuda-devices
+$ ck compile program:tool-print-cuda-devices
+$ ck run program:tool-print-cuda-devices
