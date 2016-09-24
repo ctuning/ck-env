@@ -553,6 +553,7 @@ def device_init(i):
     Input:  {
               (target) - target device
               (input)  - input to update
+              (check)  - if 'yes', check status and quit if not connected
             }
 
     Output: {
@@ -568,10 +569,11 @@ def device_init(i):
     target=ii.get('target','')
     if target!='':
         # Check if connected
-        r=check({'data_uoa':target})
-        if r['return']>0: return r
-        if r['connected']!='yes':
-           return {'return':1, 'error':'target device "'+target+'" is not connected'}
+        if i.get('check','')=='yes':
+            r=check({'data_uoa':target})
+            if r['return']>0: return r
+            if r['connected']!='yes':
+               return {'return':1, 'error':'target device "'+target+'" is not connected'}
 
         # Load device entry
         r=ck.access({'action':'load',
