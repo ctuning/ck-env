@@ -1,3 +1,6 @@
+* 2016.09.24 - added tool.show-cuda-devices and tool.show-opencl-devices
+               for CK widget "platform.gpgpu"
+
 * 2016.09.23 - added optional flag --target to all platform.*
 
 * 2016.09.21 - improved "device" for ARM WA
