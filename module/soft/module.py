@@ -298,6 +298,8 @@ def setup(i):
 
               (extra_version)     - add extra version, when registering software 
                                     (for example, -trunk-20160421)
+
+              (skip_device_info_collection) - if 'yes', do not collect device info
             }
 
     Output: {
@@ -326,12 +328,17 @@ def setup(i):
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
 
-    r=ck.access({'action':'detect',
-                 'module_uoa':cfg['module_deps']['platform.os'],
-                 'host_os':hos,
-                 'target_os':tos,
-                 'target_device_id':tdid,
-                 'skip_info_collection':'no'})
+    ii={'action':'detect',
+        'module_uoa':cfg['module_deps']['platform.os'],
+        'host_os':hos,
+        'target_os':tos,
+        'target_device_id':tdid,
+        'skip_info_collection':'no'}
+
+    if i.get('skip_device_info_collection','')=='yes':
+       ii['skip_info_collection']='yes'
+
+    r=ck.access(ii)
     if r['return']>0: return r
 
     features=r.get('features',{})
@@ -1278,6 +1285,8 @@ def list_all_files(i):
 def check(i):
     """
     Input:  {
+              (target)            - if specified, use info from 'device' module
+                 or
               (host_os)           - host OS (detect, if omitted)
               (target_os)         - target OS (detect, if omitted)
               (target_device_id)  - target device ID (detect, if omitted)
@@ -1314,6 +1323,13 @@ def check(i):
     o=i.get('out','')
     oo=''
     if o=='con': oo=o
+
+    # Check if target
+    if i.get('target','')!='':
+       r=ck.access({'action':'init',
+                    'module_uoa':cfg['module_deps']['device'],
+                    'input':i})
+       if r['return']>0: return r
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')

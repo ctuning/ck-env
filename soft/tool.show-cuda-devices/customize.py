@@ -34,5 +34,6 @@ def setup(i):
 
        env[ep]=p2
        env[ep+'_BIN']=p1
+       env[ep+'_FULL']=fp
 
     return {'return':0, 'bat':s}
