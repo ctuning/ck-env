@@ -223,6 +223,11 @@ def setup(i):
        p5=os.path.dirname(p4)
        pi=os.path.dirname(p5)
 
+       if winh=='yes':
+          s+='\nset PATH='+pi+';%PATH%\n\n'
+       else:
+          s+='\nexport PATH='+pi+':$PATH\n\n'
+
        if ep!='':
           env[ep]=p2
           env[ep+'_BIN']=p1
