@@ -14,7 +14,7 @@
   "developer_webpage": "http://fursin.net",
   "license": "See CK LICENSE.txt for licensing details",
   "module_deps": {
-    "device":"5add622b07468cb6",
+    "machine":"84be34883a81b2a9",
     "env": "9b9b3208ac44b891",
     "platform.cpu": "aa6b542a420b8db9",
     "platform.os": "41e31cc4496b8a8e",

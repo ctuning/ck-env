@@ -38,7 +38,7 @@ def init(i):
 def install(i):
     """
     Input:  {
-              (target)               - if specified, use info from 'device' module
+              (target)            - if specified, use info from 'machine' module
                  or
               (host_os)           - host OS (detect, if omitted)
               (target_os)         - target OS (detect, if omitted)
@@ -103,7 +103,7 @@ def install(i):
     # Check if target
     if i.get('target','')!='':
        r=ck.access({'action':'init',
-                    'module_uoa':cfg['module_deps']['device'],
+                    'module_uoa':cfg['module_deps']['machine'],
                     'input':i})
        if r['return']>0: return r
 

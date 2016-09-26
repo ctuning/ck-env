@@ -1,106 +1,10 @@
 {
-  "actions": {
-    "add": {
-      "desc": "add new device description"
-    },
-    "browse": {
-      "desc": "browse devices (open browser)"
-    },
-    "check": {
-      "desc": "check device status (online/offline)"
-    },
-    "init": {
-      "desc": "init device and update input"
-    },
-        "show": {
-      "desc": "show available target devices and their status",
-      "for_web": "yes"
-    }
-  },
-  "actions_redirect": {
-    "init": "device_init"
-  }, 
+  "actions": {},
   "copyright": "See CK COPYRIGHT.txt for copyright details",
   "desc": "description of a given device for crowd-benchmarking and crowd-tuning",
   "developer": "Grigori Fursin",
   "developer_email": "Grigori.Fursin@cTuning.org",
   "developer_webpage": "http://fursin.net",
   "license": "See CK LICENSE.txt for licensing details",
-  "module_deps": {
-    "os": "0440cb72c2bc5cc6",
-    "platform": "707ccdfe444cafac",
-    "platform.cpu": "aa6b542a420b8db9",
-    "platform.os": "41e31cc4496b8a8e"
-  },
-  "target_access_types": {
-    "android": {
-      "detect_platform": "yes",
-      "name": "Android device accessed via adb",
-      "sort": 10,
-      "tags": [
-        "android-with-arch"
-      ]
-    },
-    "ck_node_linux": {
-      "detect_platform": "no",
-      "name": "Remote Linux device accessed via CK crowd node - IN DEVELOPMENT",
-      "sort": 55,
-      "tags": [
-        "linux"
-      ]
-    },
-    "ck_node_win": {
-      "detect_platform": "no",
-      "name": "Remote Windows device accessed via CK crowd node - IN DEVELOPMENT",
-      "sort": 50,
-      "tags": [
-        "windows",
-        "mingw"
-      ]
-    },
-    "host": {
-      "detect_platform": "yes",
-      "name": "Use this host machine as target device",
-      "sort": 5,
-      "tags": []
-    },
-    "ssh": {
-      "detect_platform": "no",
-      "name": "Remote Linux device accessed via SSH + CK (Linux) - NOT SUPPORTED YET",
-      "sort": 60,
-      "tags": [
-        "linux"
-      ]
-    },
-    "wa_android": {
-      "alias_prefix": "wa-",
-      "detect_platform": "yes",
-      "extra_check": {
-        "action": "configure",
-        "module_uoa": "wa",
-        "wa_device_default": "generic_android"
-      },
-      "name": "Android device accessed via ARM's workload automation framework",
-      "record_tags": "wa",
-      "sort": 20,
-      "tags": [
-        "android-with-arch"
-      ]
-    },
-    "wa_linux": {
-      "alias_prefix": "wa-",
-      "detect_platform": "yes",
-      "extra_check": {
-        "action": "configure",
-        "module_uoa": "wa",
-        "wa_device_default": "generic_linux"
-      },
-      "name": "Remote Linux device accessed via ARM's workload automation",
-      "record_tags": "wa",
-      "sort": 30,
-      "tags": [
-        "linux"
-      ]
-    }
-  }
+  "module_deps": {}
 }

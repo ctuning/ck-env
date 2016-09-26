@@ -1,3 +1,5 @@
+* 2016.09.26 * changing 'device' to 'machine'
+
 * 2016.09.25 - various improvements in package/soft ...
 
 * 2016.09.24 - added tool.show-cuda-devices and tool.show-opencl-devices
