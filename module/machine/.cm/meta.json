@@ -35,7 +35,7 @@
   "target_access_types": {
     "android": {
       "detect_platform": "yes",
-      "name": "Android machine accessed via adb",
+      "name": "CK: Android machine accessed via adb",
       "sort": 10,
       "tags": [
         "android-with-arch"
@@ -43,7 +43,7 @@
     },
     "ck_node": {
       "detect_platform": "no",
-      "name": "Remote Linux or Windows machine accessed via CK crowd node - IN DEVELOPMENT",
+      "name": "CK: remote Linux or Windows machine accessed via CK crowd node - IN DEVELOPMENT",
       "sort": 55,
       "tags": [
         "windows",
@@ -53,13 +53,13 @@
     },
     "host": {
       "detect_platform": "yes",
-      "name": "Use this host machine as a target machine",
+      "name": "CK: this host machine as a target",
       "sort": 5,
       "tags": []
     },
     "ssh": {
       "detect_platform": "yes",
-      "name": "Remote Linux machine accessed via SSH - NOT SUPPORTED YET",
+      "name": "CK: remote Linux machine accessed via SSH",
       "sort": 60,
       "tags": [
         "linux"
@@ -73,7 +73,7 @@
         "module_uoa": "wa",
         "wa_device_default": "generic_android"
       },
-      "name": "Android machine accessed via ARM's workload automation framework",
+      "name": "WA: Android machine accessed via ARM's workload automation framework",
       "record_tags": "wa",
       "sort": 20,
       "tags": [
@@ -88,7 +88,7 @@
         "module_uoa": "wa",
         "wa_device_default": "generic_linux"
       },
-      "name": "Remote Linux machine accessed via ARM's workload automation",
+      "name": "WA: Linux machine accessed via ARM's workload automation",
       "record_tags": "wa",
       "sort": 30,
       "tags": [
