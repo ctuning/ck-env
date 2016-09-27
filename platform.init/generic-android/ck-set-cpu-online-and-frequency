@@ -29,7 +29,7 @@ if [ "$online" == "1" ] ; then
   for cpudir in /sys/devices/system/cpu/cpu*
   do
      if [ -f "$cpudir/online" ] ; then
-       echo $online | sudo tee $cpudir/online
+       echo $online | tee $cpudir/online
      fi
   done
 fi
