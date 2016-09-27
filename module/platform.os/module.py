@@ -101,11 +101,15 @@ def detect(i):
                     'input':i})
        if r['return']>0: return r
 
+    device_cfg=i.get('device_cfg',{})
+
     # Various params
     hos=i.get('host_os','')
     tos=i.get('target_os','')
     if tos=='': tos=i.get('os','')
     tdid=i.get('device_id','')
+
+    tosd=i.get('target_os_dict',{})
 
     sic=i.get('skip_info_collection','')
     sdi=i.get('skip_device_init','')
@@ -137,17 +141,20 @@ def detect(i):
     # Check/detect target OS
     r=ck.access({'action':'find_close',
                  'module_uoa':cfg['module_deps']['os'],
-                 'os_uoa':tos})
+                 'os_uoa':tos,
+                 'os_dict':tosd})
     if r['return']>0: return r
 
     tos=r['os_uid']
     tosx=r['os_uoa']
     tosd=r['os_dict']
+    tosd.update(device_cfg.get('update_target_os_dict',{}))
 
     tp=tosd.get('ck_name','')
     tbits=tosd.get('bits','')
 
     remote=tosd.get('remote','')
+    remote_ssh=tosd.get('remote_ssh','')
     win=tosd.get('windows_base','')
     mac=tosd.get('macos','')
 
@@ -170,69 +177,70 @@ def detect(i):
        fn=rx['file_name']
 
        x=tosd.get('adb_devices','')
-       x=x.replace('$#redirect_stdout#$', ro)
-       x=x.replace('$#output_file#$', fn)
+       if x!='':
+          x=x.replace('$#redirect_stdout#$', ro)
+          x=x.replace('$#output_file#$', fn)
 
-       if o=='con' and pdv=='yes':
-          ck.out('')
-          ck.out('Receiving list of devices:')
-          ck.out('  '+x)
+          if o=='con' and pdv=='yes':
+             ck.out('')
+             ck.out('Receiving list of devices:')
+             ck.out('  '+x)
 
-       rx=os.system(x)
-       if rx!=0:
-          return {'return':1, 'error':'access to remote device failed (return code='+str(rx)+')'}
+          rx=os.system(x)
+          if rx!=0:
+             return {'return':1, 'error':'access to remote device failed (return code='+str(rx)+')'}
 
-       # Read and parse file
-       rx=ck.load_text_file({'text_file':fn, 
-                             'split_to_list':'yes',
-                             'delete_after_read':'yes'})
-       if rx['return']>0: return rx
-       ll=rx['lst']
+          # Read and parse file
+          rx=ck.load_text_file({'text_file':fn, 
+                                'split_to_list':'yes',
+                                'delete_after_read':'yes'})
+          if rx['return']>0: return rx
+          ll=rx['lst']
 
-       devices=[]
-       for q in range(1, len(ll)):
-           s1=ll[q].strip()
-           if s1!='':
-              q2=s1.find('\t')
-              if q2>0:
-                 s2=s1[0:q2]
-                 devices.append(s2)
+          devices=[]
+          for q in range(1, len(ll)):
+              s1=ll[q].strip()
+              if s1!='':
+                 q2=s1.find('\t')
+                 if q2>0:
+                    s2=s1[0:q2]
+                    devices.append(s2)
 
-       if len(devices)==0:
-          return {'return':16, 'error':'no attached remoted devices found'}
+          if len(devices)==0:
+             return {'return':16, 'error':'no attached remoted devices found'}
 
-       if o=='con':
-          ck.out('')
-          ck.out('Available remote devices:')
-          for q in devices:
-              ck.out('  '+q)
-          ck.out('')
+          if o=='con':
+             ck.out('')
+             ck.out('Available remote devices:')
+             for q in devices:
+                 ck.out('  '+q)
+             ck.out('')
 
-       if tdid=='':
-          if len(devices)==1:
-             tdid=devices[0]
-          else:
-             if o=='con' and i.get('return_multi_devices','')!='yes':
-                ck.out('')
-                zz={}
-                iz=0
-                for j in range(0, len(devices)):
-                    zs=str(j)
-                    ck.out(zs+') '+devices[j])
-
-                ck.out('')
-                rx=ck.inp({'text':'Select one of the options for device: '})
-                s=rx['string']
-                x=0
-                if s!='':
-                   x=int(s.strip())
-
-                if x<0 or x>=len(devices):
-                   return {'return':1, 'error':'option is not recognized'}
-
-                tdid=devices[x]
+          if tdid=='':
+             if len(devices)==1:
+                tdid=devices[0]
              else:
-                return {'return':32, 'error':'more than one remote device - specify via device_id', 'devices':devices}
+                if o=='con' and i.get('return_multi_devices','')!='yes':
+                   ck.out('')
+                   zz={}
+                   iz=0
+                   for j in range(0, len(devices)):
+                       zs=str(j)
+                       ck.out(zs+') '+devices[j])
+
+                   ck.out('')
+                   rx=ck.inp({'text':'Select one of the options for device: '})
+                   s=rx['string']
+                   x=0
+                   if s!='':
+                      x=int(s.strip())
+
+                   if x<0 or x>=len(devices):
+                      return {'return':1, 'error':'option is not recognized'}
+
+                   tdid=devices[x]
+                else:
+                   return {'return':32, 'error':'more than one remote device - specify via device_id', 'devices':devices}
 
     # Collect additional info unless skipped
     if sic!='yes':
@@ -254,46 +262,47 @@ def detect(i):
           if rx['return']>0: return rx
           fn=rx['file_name']
 
-          x=tosd.get('adb_all_params','')
-          x=x.replace('$#redirect_stdout#$', ro)
-          x=x.replace('$#output_file#$', fn)
-
           dv=''
-          if tdid!='': dv=' -s '+tdid
-          x=x.replace('$#device#$',dv)
+          x=tosd.get('adb_all_params','')
+          if x!='':
+             x=x.replace('$#redirect_stdout#$', ro)
+             x=x.replace('$#output_file#$', fn)
 
-          if o=='con' and pdv=='yes':
-             ck.out('')
-             ck.out('Receiving all parameters:')
-             ck.out('  '+x)
+             if tdid!='': dv=' -s '+tdid
+             x=x.replace('$#device#$',dv)
 
-          rx=os.system(x)
-          if rx!=0:
-             if o=='con':
+             if o=='con' and pdv=='yes':
                 ck.out('')
-                ck.out('Non-zero return code :'+str(rx)+' - likely failed')
-             return {'return':1, 'error':'access to remote device failed'}
+                ck.out('Receiving all parameters:')
+                ck.out('  '+x)
 
-          # Read and parse file
-          rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
-          if rx['return']>0: return rx
-          ll=rx['lst']
+             rx=os.system(x)
+             if rx!=0:
+                if o=='con':
+                   ck.out('')
+                   ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+                return {'return':1, 'error':'access to remote device failed'}
 
-          for s in ll:
-              s1=s.strip()
+             # Read and parse file
+             rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
+             if rx['return']>0: return rx
+             ll=rx['lst']
 
-              q2=s1.find(']: [')
-              k=''
-              if q2>=0:
-                 k=s1[1:q2].strip()
-                 v=s1[q2+4:].strip()
-                 v=v[:-1].strip()
+             for s in ll:
+                 s1=s.strip()
 
-                 params[k]=v
+                 q2=s1.find(']: [')
+                 k=''
+                 if q2>=0:
+                    k=s1[1:q2].strip()
+                    v=s1[q2+4:].strip()
+                    v=v[:-1].strip()
 
-          prop_all['adb_params']=params
+                    params[k]=v
 
-          prop_os_name='Android '+params.get('ro.build.version.release','')
+             prop_all['adb_params']=params
+
+             prop_os_name='Android '+params.get('ro.build.version.release','')
 
           # Get proc version
           # Reuse fn as tmp name
@@ -323,7 +332,7 @@ def detect(i):
                    if ix1>=0 and ix1<ix: ix=ix1
                    prop_os_name_short=prop_os_name_long[:ix]
 
-       else:
+       if remote!='yes':
           import platform
           prop_os_name_long=platform.platform()
           prop_os_name_short=platform.system()+' '+platform.release()
@@ -354,8 +363,14 @@ def detect(i):
 
              prop_os_name=prop_os_name_short
 
-          elif mac=='yes' and getattr(ck, 'run_and_get_stdout', None)!=None:
-            r=ck.run_and_get_stdout({'cmd': ['sw_vers']})
+       if remote!='yes' or remote_ssh=='yes':
+          if mac=='yes' and getattr(ck, 'run_and_get_stdout', None)!=None:
+            cmd=['sw_vers']
+
+            if tosd.get('remote_shell','')!='':
+               cmd=tosd['remote_shell']+'sw_vers'+tosd.get('remote_shell_end','')
+
+            r=ck.run_and_get_stdout({'cmd': cmd})
             if r['return']==0:
               sw_vers={}
               for line in r['stdout'].splitlines():
@@ -380,7 +395,13 @@ def detect(i):
                 if r['return']>0: return r
                 fn=r['file_name']
 
-                cmd='cat /etc/*-release > '+fn
+                cmd='cat /etc/*-release'
+
+                if tosd.get('remote_shell','')!='':
+                   cmd=tosd['remote_shell']+cmd+tosd.get('remote_shell_end','')
+
+                cmd+=' > '+fn
+
                 rx=os.system(cmd)
                 if rx==0:
                    r=ck.load_text_file({'text_file':fn, 
@@ -414,6 +435,7 @@ def detect(i):
 
     pi_key=tosx
     if remote=='yes' and tdid!='': pi_key='remote-'+tdid
+    elif remote_ssh=='yes' and tosd.get('remote_id','')!='': pi_key='remote-'+tosd['remote_id']
 
     first_time=False
     pi_uoa=dcfg.get('platform_init_uoa',{}).get(pi_key,'')
@@ -421,7 +443,7 @@ def detect(i):
        first_time=True
        # Check if there are related platform.init
        tags='os-'+tp
-       if remote=='yes':
+       if remote=='yes' and remote_ssh!='yes':
           if tp=='linux': tags='os-android'
           else: tags+=',remote'
 
@@ -498,8 +520,9 @@ def detect(i):
              z=tosd.get('path_to_scripts','')
              if z=='':
                 z=tosd.get('remote_dir','')
-             else:
-                y=tosd.get('remote_shell','')+' '+tosd.get('make_dir','')+' '+z
+
+             if z!='':
+                y=tosd.get('remote_shell','')+' '+tosd.get('make_dir','')+' '+z+tosd.get('remote_shell_end','')
                 y=y.replace('$#device#$',dv)
 
                 if o=='con':
@@ -517,11 +540,16 @@ def detect(i):
                  if os.path.isfile(xx):
                     xr=z+xsp+q
 
+                    if len(xx)>1 and xx[1:2]==':':
+                       xx='/'+xx[0:1]+'/'+xx[2:]
+                    xx=xx.replace('\\','/')
+
                     # Push file to remote device
                     y=tosd.get('remote_push','')
                     y=y.replace('$#device#$',dv)
                     y=y.replace('$#file1#$', xx)
                     y=y.replace('$#file2#$', xr)
+                    y=y.replace('$#file1s#$', xr)
 
                     ck.out('')
                     ck.out('* Copying file to remote device:')
@@ -531,7 +559,7 @@ def detect(i):
                     # Ignore output (can be already exist)
 
                     # Set executable
-                    y=tosd.get('remote_shell','')+' '+tosd.get('set_executable','')+' '+xr
+                    y=tosd.get('remote_shell','')+' '+tosd.get('set_executable','')+' '+xr+tosd.get('remote_shell_end','')
                     y=y.replace('$#device#$',dv)
 
                     ck.out('')

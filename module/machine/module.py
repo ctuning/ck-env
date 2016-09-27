@@ -214,6 +214,7 @@ def add(i):
                     'data_uoa':tos})
        if r['return']>0: return r
        tos=r['data_uoa']
+       tosd=r['dict']
 
     if o=='con':
         if tos!='':
@@ -222,6 +223,107 @@ def add(i):
 
         if tdid!='':
             ck.out('Selected target device ID: '+tdid)
+
+    # Extra checks if needed
+    dd={}
+    files={}
+    if len(extra_check)>0:
+        ii=copy.deepcopy(extra_check)
+
+        ii['out']=oo
+        ii['device_id']=tdid
+
+        r=ck.access(ii)
+        if r['return']>0: return r
+
+        files=r.get('files',{})
+        dd['device_cfg']={'wa_config':r.get('cfg',{})}
+
+    ########################################################## Additional questions for SSH or CK
+    if at=='ssh' or at=='ck_node':
+        if 'device_cfg' not in dd:
+            dd['device_cfg']={}
+
+        dx={}
+
+        ck.out('')
+        r=ck.inp({'text':'Enter hostname (or press Enter for localhost): '})
+
+        host=r['string'].strip()
+        if host=='': host='localhost'
+        dx['host']=host
+
+        ck.out('')
+        r=ck.inp({'text':'Enter host port if needed:                     '})
+
+        port=r['string'].strip()
+        dx['port']=port
+
+        ck.out('')
+        r=ck.inp({'text':'Enter username (or press Enter for root):      '})
+
+        username=r['string'].strip()
+        if username=='': username='root'
+        dx['username']=username
+
+        ck.out('')
+        r=ck.inp({'text':'Enter full path to public keyfile:             '})
+
+        keyfile=r['string'].strip()
+        dx['keyfile']=keyfile
+
+        dd['device_cfg']['remote_params']=dx
+
+        # Prepare OS update
+        if at=='ssh':
+            port1=''
+            port2=''
+            port3=''
+
+            if port!='':
+                port1=':'+port
+                port2='-p '+port
+                port3='-P '+port
+
+            keyfile1=''
+
+            if keyfile!='':
+                keyfile1='-i '+keyfile
+
+            uod={
+                 "remote": "yes",
+                 "remote_ssh":"yes",
+                 "remote_deinit": "",
+                 "remote_dir": "tmp-ck",
+                 "remote_dir_sep": tosd.get('dir_sep',''),
+                 "remote_env_quotes_if_space": tosd.get('env_quotes_if_space',''),
+                 "remote_id": username+"@"+host+port1,
+                 "remote_init": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \"echo remote_init...\"",
+                 "remote_pull": "scp "+port3+" "+keyfile1+" "+username+"@"+host+":$#file1s#$ \"$#file1#$\"",
+                 "remote_push": "scp "+port3+" "+keyfile1+" \"$#file1#$\" "+username+"@"+host+":$#file1s#$",
+                 "remote_shell": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \"",
+                 "remote_shell_end": "\""
+                }
+
+            tosd.update(uod)
+
+            dd['device_cfg']['update_target_os_dict']=uod
+        else:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            return {'return':1,'error':'TBD'}
 
     # Detect various parameters of the platform (to suggest platform name as well)
     pn=''
@@ -235,6 +337,7 @@ def add(i):
         ii={'action':'detect',
             'host_os':hos,
             'target_os':tos,
+            'target_os_dict':tosd,
             'device_id':tdid,
             'module_uoa':cfg['module_deps']['platform'],
             'exchange':exc,
@@ -248,32 +351,18 @@ def add(i):
 
         pn=rp.get('features',{}).get('platform',{}).get('name','')
 
-    # Prepare machine meta
-    dd={'host_os':hos,
-        'target_os':tos,
-        'device_id':tdid,
-        'host_os_uoa':rp.get('host_os_uoa',''),
-        'host_os_uid':rp.get('host_os_uid',''),
-        'host_os_dict':rp.get('host_os_dict',{}),
-        'target_os_uoa':rp.get('os_uoa',''),
-        'target_os_uid':rp.get('os_uid',''),
-        'target_os_dict':rp.get('os_dict',{}),
-        'access_type':at,
-        'features':rp.get('features',{})}
-
-    # Extra checks if needed
-    files={}
-    if len(extra_check)>0:
-        ii=copy.deepcopy(extra_check)
-
-        ii['out']=oo
-        ii['device_id']=tdid
-
-        r=ck.access(ii)
-        if r['return']>0: return r
-
-        files=r.get('files',{})
-        dd['extra_cfg']={'wa_config':r.get('cfg',{})}
+    # Finalize machine meta
+    dd.update({'host_os':hos,
+               'target_os':tos,
+               'device_id':tdid,
+               'host_os_uoa':rp.get('host_os_uoa',''),
+               'host_os_uid':rp.get('host_os_uid',''),
+               'host_os_dict':rp.get('host_os_dict',{}),
+               'target_os_uoa':rp.get('os_uoa',''),
+               'target_os_uid':rp.get('os_uid',''),
+               'target_os_dict':tosd,
+               'access_type':at,
+               'features':rp.get('features',{})})
 
     # Suggest platform name
     if duoa=='':
@@ -293,7 +382,7 @@ def add(i):
             duoa=prefix+duoa
 
         if o=='con':
-            s='Enter alias for your machine to be recorded in your CK local repo'
+            s='Enter an alias for your machine to be recorded in your CK local repo'
 
             if duoa!='':
                 s+=' or press Enter for "'+duoa+'"'
@@ -430,12 +519,12 @@ def show(i):
     h+='  <tr>\n'
     h+='   <td align="center"><b>CK alias</b></td>\n'
     h+='   <td align="center"><b>Real machine name</b></td>\n'
-    h+='   <td align="center"><b>Machine ID</b></td>\n'
-    h+='   <td align="center"><b>Real OS name</b></td>\n'
-    h+='   <td align="center"><b>CK OS alias</b></td>\n'
+    h+='   <td align="center"><b>Native ID</b></td>\n'
+    h+='   <td align="center"><b>Target OS name</b></td>\n'
+    h+='   <td align="center"><b>OS UOA</b></td>\n'
     h+='   <td align="center"><b>CPUs</b></td>\n'
-    h+='   <td align="center"><b>GPU</b></td>\n'
-    h+='   <td align="center"><b>GPGPU</b></td>\n'
+    h+='   <td align="center"><b>GPUs</b></td>\n'
+    h+='   <td align="center"><b>GPGPUs</b></td>\n'
     h+='   <td align="center"><b>Status</b></td>\n'
     h+='  <tr>\n'
 
@@ -498,7 +587,7 @@ def show(i):
 
         h+='   <td align="center">'+on+'</td>\n'
 
-        h+='   <td align="left"><a href="'+url0+'&wcid='+cfg['module_deps']['os']+':'+tos_uid+'">'+tos+'</a></td>\n'
+        h+='   <td align="center"><a href="'+url0+'&wcid='+cfg['module_deps']['os']+':'+tos_uid+'">'+tos+'</a></td>\n'
 
         h+='   <td align="center">'+cpus+'</td>\n'
 
@@ -589,7 +678,7 @@ def machine_init(i):
         target_device_id=dd.get('target_device_id','')
 
         at=dd.get('access_type','')
-        ecfg=dd.get('extra_cfg',{})
+        ecfg=dd.get('device_cfg',{})
 
         # Update input (if undefined)
         if ii.get('target_os','')=='':
@@ -631,6 +720,8 @@ def check(i):
 
     d=r['dict']
 
+    device_cfg=d.get('device_cfg',{})
+
     hos=d.get('host_os_uoa','')
 
     tos=d.get('target_os_uoa','')
@@ -649,12 +740,13 @@ def check(i):
         # Check status of remote
         connected='no'
 
-        if at=='android' or at=='wa_android':
+        if at=='android' or at=='wa_android' or at=='ssh':
             # Attempt to get Android features 
             ii={'action':'detect',
                 'module_uoa':cfg['module_deps']['platform.os'],
                 'host_os':hos,
                 'target_os':tos,
+                'device_cfg':device_cfg,
                 'device_id':tdid}
             r=ck.access(ii)
 

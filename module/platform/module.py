@@ -111,6 +111,8 @@ def detect(i):
                     'input':i})
        if r['return']>0: return r
 
+    device_cfg=i.get('device_cfg',{})
+
     # Various params
     hos=i.get('host_os','')
     tos=i.get('target_os','')
@@ -167,13 +169,14 @@ def detect(i):
     tosx=rr['os_uoa']
     tosd=rr['os_dict']
 
+    tosd.update(device_cfg.get('update_target_os_dict',{}))
+
     tbits=tosd.get('bits','')
 
     tdid=rr['device_id']
 
     # Some params
     ro=tosd.get('redirect_stdout','')
-    remote=tosd.get('remote','')
     win=tosd.get('windows_base','')
 
     dv=''
@@ -191,6 +194,7 @@ def detect(i):
     os_dict=rr['os_dict']
 
     remote=os_dict.get('remote','')
+    remote_ssh=os_dict.get('remote_ssh','')
     os_win=os_dict.get('windows_base','')
     os_mac=os_dict.get('macos','')
 
@@ -216,14 +220,12 @@ def detect(i):
        if ry['return']>0: return ry
        rr=ry['dict1']
 
-
     # Get info about system ######################################################
     if oo=='con': 
        ck.out(sep)
        ck.out('Detecting system features ...')
 
-    remote=os_dict.get('remote','')
-    if remote=='yes':
+    if remote=='yes' and remote_ssh!='yes':
        params={}
 
        rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
@@ -311,10 +313,16 @@ def detect(i):
 
           prop_all['cs_product']=info1
        elif os_mac=='yes':
+          ################################################### Obtaining info on MacOS (including remote)
           if getattr(ck, 'run_and_get_stdout', None)==None:
              return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
 
-          r=ck.run_and_get_stdout({'cmd': ['system_profiler', 'SPHardwareDataType']})
+          cmd=['system_profiler', 'SPHardwareDataType']
+
+          if remote_ssh=='yes':
+             cmd=tosd.get('remote_shell','').replace('$#device#$',dv)+' system_profiler SPHardwareDataType '+tosd.get('remote_shell_end','')
+
+          r=ck.run_and_get_stdout({'cmd': cmd})
           if r['return']>0: return r
 
           x1='Apple Inc.'
@@ -331,26 +339,39 @@ def detect(i):
                 break
 
        else:
-          file_with_vendor='/sys/devices/virtual/dmi/id/sys_vendor'
-          if os.path.isfile(file_with_vendor):
-             r=ck.load_text_file({'text_file':file_with_vendor})
-             if r['return']>0: return r
-             x1=r['string'].strip()
+          ################################################### Obtaining info on Linux (including remote)
+          if getattr(ck, 'run_and_get_stdout', None)==None:
+             return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
 
-          file_with_version='/sys/devices/virtual/dmi/id/product_version'
-          if os.path.isfile(file_with_version):
-             r=ck.load_text_file({'text_file':file_with_version})
-             if r['return']>0: return r
-             x2=r['string'].strip()
+          cmd=['cat', '/sys/devices/virtual/dmi/id/sys_vendor']
+
+          if remote_ssh=='yes':
+             cmd=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat /sys/devices/virtual/dmi/id/sys_vendor '+tosd.get('remote_shell_end','')
+
+          r=ck.run_and_get_stdout({'cmd': cmd})
+          if r['return']>0: return r
+          if r['stdout'].strip()!='': x1=r['stdout'].strip()
+
+          cmd=['cat', '/sys/devices/virtual/dmi/id/product_version']
+
+          if remote_ssh=='yes':
+             cmd=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat /sys/devices/virtual/dmi/id/product_version '+tosd.get('remote_shell_end','')
+
+          r=ck.run_and_get_stdout({'cmd': cmd})
+          if r['return']>0: return r
+          if r['stdout'].strip()!='': x2=r['stdout'].strip()
 
           if x1!='' and x2!='':
              target_name=x1+' '+x2
 
-          file_with_id='/sys/devices/virtual/dmi/id/product_name'
-          if os.path.isfile(file_with_id):
-             r=ck.load_text_file({'text_file':file_with_id})
-             if r['return']>0: return r
-             target_system_model=r['string'].strip()
+          cmd=['cat', '/sys/devices/virtual/dmi/id/product_name']
+
+          if remote_ssh=='yes':
+             cmd=tosd.get('remote_shell','').replace('$#device#$',dv)+' cat /sys/devices/virtual/dmi/id/product_name '+tosd.get('remote_shell_end','')
+
+          r=ck.run_and_get_stdout({'cmd': cmd})
+          if r['return']>0: return r
+          if r['stdout'].strip()!='': target_system_model=r['stdout'].strip()
 
        prop['vendor']=x1
        if target_name=='' and x1!='': target_name=x1

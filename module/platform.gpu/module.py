@@ -85,6 +85,8 @@ def detect(i):
                     'input':i})
        if r['return']>0: return r
 
+    device_cfg=i.get('device_cfg',{})
+
     # Various params
     hos=i.get('host_os','')
     tos=i.get('target_os','')
@@ -119,6 +121,8 @@ def detect(i):
     tosx=rr['os_uoa']
     tosd=rr['os_dict']
 
+    tosd.update(device_cfg.get('update_target_os_dict',{}))
+
     tbits=tosd.get('bits','')
 
     tdid=rr['device_id']
@@ -126,6 +130,7 @@ def detect(i):
     # Some params
     ro=tosd.get('redirect_stdout','')
     remote=tosd.get('remote','')
+    remote_ssh=tosd.get('remote_ssh','')
     win=tosd.get('windows_base','')
     mac=tosd.get('macos','')
     unix=win!='yes' and mac!='yes'
@@ -143,7 +148,7 @@ def detect(i):
     target_gpu_vendor=''
 
     # Get info about GPU ######################################################
-    if remote=='yes':
+    if remote=='yes' and remote_ssh!='yes':
        # Get all params
        params={}
 
@@ -217,7 +222,12 @@ def detect(i):
           if getattr(ck, 'run_and_get_stdout', None)==None:
              return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
 
-          r=ck.run_and_get_stdout({'cmd': ['system_profiler', 'SPDisplaysDataType']})
+          cmd=['system_profiler', 'SPDisplaysDataType']
+
+          if remote_ssh=='yes':
+             cmd=tosd['remote_shell']+' system_profiler SPDisplaysDataType '+tosd.get('remote_shell_end','')
+
+          r=ck.run_and_get_stdout({'cmd': cmd})
           if r['return']>0: return r
 
           target_gpu_name=''
@@ -243,7 +253,12 @@ def detect(i):
           if rx['return']>0: return rx
           fn=rx['file_name']
 
-          x='lspci '+ro+' '+fn
+          x='lspci'
+
+          if remote_ssh=='yes':
+             x=tosd['remote_shell']+x+tosd.get('remote_shell_end','')
+
+          x+=' '+ro+' '+fn
 
           if o=='con':
              ck.out('')
@@ -318,7 +333,7 @@ def detect(i):
 
           if remote=='yes':
              # Execute script
-             cmd=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd
+             cmd=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd+tosd.get('remote_shell_end','')
 
           if o=='con':
              ck.out('')

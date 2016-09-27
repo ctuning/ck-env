@@ -41,21 +41,14 @@
         "android-with-arch"
       ]
     },
-    "ck_node_linux": {
+    "ck_node": {
       "detect_platform": "no",
-      "name": "Remote Linux machine accessed via CK crowd node - IN DEVELOPMENT",
+      "name": "Remote Linux or Windows machine accessed via CK crowd node - IN DEVELOPMENT",
       "sort": 55,
       "tags": [
-        "linux"
-      ]
-    },
-    "ck_node_win": {
-      "detect_platform": "no",
-      "name": "Remote Windows machine accessed via CK crowd node - IN DEVELOPMENT",
-      "sort": 50,
-      "tags": [
         "windows",
-        "mingw"
+        "mingw",
+        "linux"
       ]
     },
     "host": {
@@ -65,8 +58,8 @@
       "tags": []
     },
     "ssh": {
-      "detect_platform": "no",
-      "name": "Remote Linux machine accessed via SSH + CK (Linux) - NOT SUPPORTED YET",
+      "detect_platform": "yes",
+      "name": "Remote Linux machine accessed via SSH - NOT SUPPORTED YET",
       "sort": 60,
       "tags": [
         "linux"

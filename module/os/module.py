@@ -37,6 +37,7 @@ def find_close(i):
     """
     Input:  {
               (os_uoa)     - load info from a given OS
+              (os_dict)    - if non-empty, return this dict
             }
 
     Output: {
@@ -109,6 +110,9 @@ def find_close(i):
        os_uid=r['data_uid']
 
        dd=r['dict']
+
+       if len(i.get('os_dict',{}))!=0: # Substitute from 'machine' description (useful for remote access)
+           dd=i['os_dict']
 
        rr['os_uoa']=os_uoa
        rr['os_uid']=os_uid

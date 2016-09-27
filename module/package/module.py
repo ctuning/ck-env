@@ -107,6 +107,8 @@ def install(i):
                     'input':i})
        if r['return']>0: return r
 
+    device_cfg=i.get('device_cfg',{})
+
     # Check host/target OS/CPU
     hos=i.get('host_os','')
     tos=i.get('target_os','')
@@ -116,6 +118,7 @@ def install(i):
                  'module_uoa':cfg['module_deps']['platform.os'],
                  'host_os':hos,
                  'target_os':tos,
+                 'device_cfg':device_cfg,
                  'target_device_id':tdid,
                  'skip_info_collection':'yes'})
     if r['return']>0: return r

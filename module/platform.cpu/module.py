@@ -88,6 +88,8 @@ def detect(i):
                     'input':i})
        if r['return']>0: return r
 
+    device_cfg=i.get('device_cfg',{})
+
     # Various params
     hos=i.get('host_os','')
     tos=i.get('target_os','')
@@ -122,6 +124,8 @@ def detect(i):
     tosx=rr['os_uoa']
     tosd=rr['os_dict']
 
+    tosd.update(device_cfg.get('update_target_os_dict',{}))
+
     tbits=tosd.get('bits','')
 
     tdid=rr['device_id']
@@ -131,6 +135,7 @@ def detect(i):
     # Some params
     ro=tosd.get('redirect_stdout','')
     remote=tosd.get('remote','')
+    remote_ssh=tosd.get('remote_ssh','')
     win=tosd.get('windows_base','')
     mac=tosd.get('macos','')
     unix=win!='yes' and mac!='yes'
@@ -152,7 +157,7 @@ def detect(i):
     if remote=='yes' or unix:
        # Get all params
        params={}
-       if remote=='yes':
+       if remote=='yes' and remote_ssh!='yes':
           rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
           if rx['return']>0: return rx
           fn=rx['file_name']
@@ -208,7 +213,7 @@ def detect(i):
 
           if o=='con' and pdv=='yes':
              ck.out('')
-             ck.out('Receiving info: '+x)
+             ck.out('Executing: '+x)
 
           rx=os.system(x)
           if rx!=0: 
@@ -327,7 +332,7 @@ def detect(i):
 
               if o=='con' and pdv=='yes':
                  ck.out('')
-                 ck.out('Receiving info: '+x)
+                 ck.out('Executing: '+x)
 
               rx=os.system(x)
               if rx!=0:
@@ -366,7 +371,7 @@ def detect(i):
 
               if o=='con' and pdv=='yes':
                  ck.out('')
-                 ck.out('Receiving info: '+x)
+                 ck.out('Executing: '+x)
 
               rx=os.system(x)
               if rx!=0:
@@ -404,7 +409,7 @@ def detect(i):
 
               if o=='con' and pdv=='yes':
                  ck.out('')
-                 ck.out('Receiving info: '+x)
+                 ck.out('Executing: '+x)
 
               rx=os.system(x)
               if rx!=0:
@@ -535,7 +540,7 @@ def detect(i):
                   'ck_cpu_subname':target_cpu}
       unique_cpus.append(unique_cpu)      
 
-    if o=='con':
+    if o=='con' and pdv=='yes':
        ck.out('')
        if new_format=='yes':
           lup=len(unique_cpus)
