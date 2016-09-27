@@ -299,8 +299,8 @@ def add(i):
                  "remote_env_quotes_if_space": tosd.get('env_quotes_if_space',''),
                  "remote_id": username+"@"+host+port1,
                  "remote_init": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \"echo remote_init...\"",
-                 "remote_pull": "scp "+port3+" "+keyfile1+" "+username+"@"+host+":$#file1s#$ \"$#file1#$\"",
-                 "remote_push": "scp "+port3+" "+keyfile1+" \"$#file1#$\" "+username+"@"+host+":$#file1s#$",
+                 "remote_pull": "scp "+port3+" "+keyfile1+" "+username+"@"+host+":$#file1#$ \"$#file2#$\"",
+                 "remote_push": "scp "+port3+" "+keyfile1+" \"$#file1#$\" "+username+"@"+host+":$#file2#$",
                  "remote_shell": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \"",
                  "remote_shell_end": "\""
                 }
