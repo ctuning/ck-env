@@ -246,84 +246,107 @@ def add(i):
 
         dx={}
 
+        #####################
         ck.out('')
-        r=ck.inp({'text':'Enter hostname (or press Enter for localhost): '})
+        r=ck.inp({'text':'Enter hostname (Enter for localhost):          '})
 
         host=r['string'].strip()
         if host=='': host='localhost'
         dx['host']=host
 
-        ck.out('')
-        r=ck.inp({'text':'Enter host port if needed:                     '})
+        #####################
+        if at=='ssh':
+            ck.out('')
+            r=ck.inp({'text':'Enter host port if needed:                     '})
 
-        port=r['string'].strip()
-        dx['port']=port
+            port=r['string'].strip()
+            dx['port']=port
 
-        ck.out('')
-        r=ck.inp({'text':'Enter username (or press Enter for root):      '})
+            #####################
+            ck.out('')
+            r=ck.inp({'text':'Enter username (Enter for root):               '})
 
-        username=r['string'].strip()
-        if username=='': username='root'
-        dx['username']=username
+            username=r['string'].strip()
+            if username=='': username='root'
+            dx['username']=username
 
+        else:
+            ck.out('')
+            r=ck.inp({'text':'Enter host port if needed (Enter for 3333):    '})
+
+            port=r['string'].strip()
+            if port=='': port='3333'
+            dx['port']=port
+
+        #####################
         ck.out('')
         r=ck.inp({'text':'Enter full path to public keyfile:             '})
 
         keyfile=r['string'].strip()
         dx['keyfile']=keyfile
 
+        #####################
+        path_to_files="tmp-ck"
+        if at=='ck_node':
+            ck.out('')
+            r=ck.inp({'text':'Enter full path to files on a target:          '})
+
+            path_to_files=r['string'].strip()
+            dx['path_to_files']=path_to_files
+
         dd['device_cfg']['remote_params']=dx
 
         # Prepare OS update
+        port1=''
+        if port!='':
+            port1=':'+port
+
+        keyfile1=''
+
+        uod={
+             "remote": "yes",
+             "remote_ssh":"yes",
+             "remote_deinit": "",
+             "remote_dir": path_to_files,
+             "remote_dir_sep": tosd.get('dir_sep',''),
+             "remote_env_quotes_if_space": tosd.get('env_quotes_if_space',''),
+             "remote_shell_end": "\""
+            }
+
         if at=='ssh':
-            port1=''
             port2=''
             port3=''
 
             if port!='':
-                port1=':'+port
                 port2='-p '+port
                 port3='-P '+port
-
-            keyfile1=''
 
             if keyfile!='':
                 keyfile1='-i '+keyfile
 
-            uod={
-                 "remote": "yes",
-                 "remote_ssh":"yes",
-                 "remote_deinit": "",
-                 "remote_dir": "tmp-ck",
-                 "remote_dir_sep": tosd.get('dir_sep',''),
-                 "remote_env_quotes_if_space": tosd.get('env_quotes_if_space',''),
+            uod.update({
                  "remote_id": username+"@"+host+port1,
                  "remote_init": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \"echo remote_init...\"",
                  "remote_pull": "scp "+port3+" "+keyfile1+" "+username+"@"+host+":$#file1#$ \"$#file2#$\"",
                  "remote_push": "scp "+port3+" "+keyfile1+" \"$#file1#$\" "+username+"@"+host+":$#file2#$",
-                 "remote_shell": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \"",
-                 "remote_shell_end": "\""
-                }
+                 "remote_shell": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \""
+                })
 
-            tosd.update(uod)
-
-            dd['device_cfg']['update_target_os_dict']=uod
         else:
+            if keyfile!='':
+                keyfile1='--keyfile='+keyfile
 
+            uod.update({
+                 "remote_id": host+port1,
+                 "remote_init": "ck shell crowdnode --url="+host+port1+" "+keyfile1+" --cmd=\"echo remote_init...\"",
+                 "remote_pull": "ck pull crowdnode --url="+host+port1+" "+keyfile1+" --filename=$#file1#$ --filename2=\"$#file2#$\"",
+                 "remote_push": "ck push crowdnode --url="+host+port1+" "+keyfile1+" --filename=$#file1#$ --filename2=\"$#file2#$\"",
+                 "remote_shell": "ck shell crowdnode --url="+host+port1+" "+keyfile1+" --cmd=\""
+                })
 
+        tosd.update(uod)
 
-
-
-
-
-
-
-
-
-
-
-
-            return {'return':1,'error':'TBD'}
+        dd['device_cfg']['update_target_os_dict']=uod
 
     # Detect various parameters of the platform (to suggest platform name as well)
     pn=''
