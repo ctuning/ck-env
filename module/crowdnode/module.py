@@ -166,7 +166,6 @@ def shell(i):
         if type(se)==bytes:
             se=se.decode(errors='ignore')
 
-    se='xyz'
     if o=='con':
         if so!='': 
             ck.out(so)
