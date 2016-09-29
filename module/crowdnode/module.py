@@ -40,7 +40,9 @@ def push(i):
               (url)      - URL to ck-crowdnode (http://localhost:3333 by default)
               (keyfile)  - path to key
 
-              (filename) - local file to push to crowd-node
+              (filename)  - local file to push to crowd-node
+              (filename2) - file with relative path (relative path will be extracted 
+                            to 'extra_path') - needed for compatibility with ADB/SSH
 
               (extra_path)          - extra path inside entry (create if doesn't exist)
               (archive)             - if 'yes' push to entry and unzip ...
@@ -72,10 +74,16 @@ def push(i):
     if fn=='' or not os.path.isfile(fn):
         return {'return':1, 'error':'file '+fn+' not found'}
 
+    ep=i.get('extra_path','')
+    if ep=='':
+        fn2=i.get('filename2','')
+        if fn2!='':
+            ep=os.path.dirname(fn2)
+
     ii={'action':'push',
         'remote_server_url':url,
         'secretkey':key,
-        'extra_path':i.get('extra_path',''),
+        'extra_path':ep,
         'filename':fn}
     return ck.access(ii)
 
@@ -116,6 +124,8 @@ def shell(i):
 
     """
 
+    import base64
+
     o=i.get('out','')
 
     url=i.get('hostname','')
@@ -141,14 +151,23 @@ def shell(i):
     r=ck.access(ii)
     if r['return']>0: return r
 
-    if o=='con':
-        so=r.get('stdout','')
-        se=r.get('stderr','')
+    xso=r.get('stdout','')
+    xse=r.get('stderr','')
 
+    so=''
+    if xso!='':
+        so=base64.urlsafe_b64decode(xso)
         if type(so)==bytes:
-            so=so.decode()
+            so=so.decode(errors='ignore')
 
-        ck.out(so)
+    se=''
+    if xse!='':
+        se=base64.urlsafe_b64decode(xse)
+        if type(se)==bytes:
+            se=se.decode(errors='ignore')
 
+    if o=='con':
+        if so!='': ck.out(so)
+        if se!='': ck.out(se)
 
-    return r
+    return {'return':0, 'stdout':so, 'stderr':se}
