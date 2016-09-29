@@ -298,7 +298,9 @@ def detect(i):
        target_name=''
 
        if os_win=='yes':
-          r=get_from_wmic({'group':'csproduct'})
+          r=get_from_wmic({'group':'csproduct',
+                           'remote_shell':tosd.get('remote_shell','').replace('$#device#$',dv),
+                           'remote_shell_end':tosd.get('remote_shell_end','')})
           if r['return']>0: return r
           info1=r['dict']
 
@@ -307,7 +309,9 @@ def detect(i):
 
           target_name=x1+' '+x2
 
-          r=get_from_wmic({'cmd':'computersystem get model'})
+          r=get_from_wmic({'cmd':'computersystem get model',
+                           'remote_shell':tosd.get('remote_shell','').replace('$#device#$',dv),
+                           'remote_shell_end':tosd.get('remote_shell_end','')})
           if r['return']>0: return r
           target_system_model=r['value']
 
@@ -773,6 +777,8 @@ def exchange(i):
 def deinit(i):
     """
     Input:  {
+              (target)               - target machine if needed (to correctly handle remote execution)
+
               (host_os)              - host OS (detect, if omitted)
               (os) or (target_os)    - OS module to check (if omitted, analyze host)
               (device_id)            - device id if remote (such as adb)
@@ -788,6 +794,13 @@ def deinit(i):
     """
 
     o=i.get('out','')
+
+    # Check if target
+    if i.get('target','')!='':
+       r=ck.access({'action':'init',
+                    'module_uoa':cfg['module_deps']['machine'],
+                    'input':i})
+       if r['return']>0: return r
 
     # Various params
     hos=i.get('host_os','')

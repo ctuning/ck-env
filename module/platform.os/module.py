@@ -620,7 +620,7 @@ def detect(i):
        else:
           tadd_path.append(px)
 
-    if o=='con' and i.get('skip_print_os','')!='yes':
+    if o=='con' and i.get('skip_print_os','')!='yes' and i.get('skip_print_os_info','')!='yes':
        ck.out('')
        ck.out('OS CK UOA:         '+tosx+' ('+tos+')')
        ck.out('')

@@ -110,6 +110,8 @@ def detect(i):
     if i.get('skip_print_os_info','')=='yes': ii['out']=''
     ii['action']='detect'
     ii['module_uoa']=cfg['module_deps']['platform.cpu']
+    ii['print_device_info']='no'
+    ii['skip_print_os_info']='yes'
     rr=ck.access(ii) # DO NOT USE rr further - will be reused as return !
     if rr['return']>0: return rr
 
@@ -147,7 +149,7 @@ def detect(i):
     target_gpu_name=''
     target_gpu_vendor=''
 
-    # Get info about GPU ######################################################
+    # Get info about GPU on Android ######################################################
     if remote=='yes' and remote_ssh!='yes':
        # Get all params
        params={}
@@ -198,7 +200,9 @@ def detect(i):
        if win=='yes':
           r=ck.access({'action':'get_from_wmic',
                        'module_uoa':cfg['module_deps']['platform'],
-                       'group':'cpu'})
+                       'group':'cpu',
+                       'remote_shell':tosd.get('remote_shell','').replace('$#device#$',dv),
+                       'remote_shell_end':tosd.get('remote_shell_end','')})
           if r['return']>0: return r
           info_cpu=r['dict']
 
@@ -206,7 +210,9 @@ def detect(i):
 
           r=ck.access({'action':'get_from_wmic',
                        'module_uoa':cfg['module_deps']['platform'],
-                       'cmd':'path Win32_VideoController get Name'})
+                       'cmd':'path Win32_VideoController get Name',
+                       'remote_shell':tosd.get('remote_shell','').replace('$#device#$',dv),
+                       'remote_shell_end':tosd.get('remote_shell_end','')})
           if r['return']>0: return r
           target_gpu_name=r['value']
 
