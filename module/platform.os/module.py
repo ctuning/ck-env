@@ -364,6 +364,9 @@ def detect(i):
 
                  prop_os_name=prop_os_name_short
 
+                 if prop_os_name=='':
+                     return {'return':1, 'error':'can\'t obtain OS version on remote node - likely disconnected or secret key not matching'}
+
              else:
                 # If detected Windows 8, it may be Windows 10 ...
                 if prop_os_name_short.find(' 8'):

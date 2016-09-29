@@ -42,13 +42,12 @@
       ]
     },
     "ck_node": {
-      "detect_platform": "no",
-      "name": "CK: remote Linux or Windows machine accessed via CK crowd node - IN DEVELOPMENT",
+      "detect_platform": "yes",
+      "name": "CK: remote Windows machine accessed via CK crowd node - IN DEVELOPMENT",
       "sort": 55,
       "tags": [
         "windows",
-        "mingw",
-        "linux"
+        "mingw"
       ]
     },
     "host": {

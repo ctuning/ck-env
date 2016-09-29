@@ -533,7 +533,10 @@ def get_from_wmic(i):
        return {'return':1, 'error':'command returned non-zero value: '+cmd}
 
     # Read and parse file
-    rx=ck.load_text_file({'text_file':fn, 'encoding':'utf16', 'split_to_list':'yes'})
+    enc='utf16'
+    if rs!='': enc=''
+
+    rx=ck.load_text_file({'text_file':fn, 'encoding':enc, 'split_to_list':'yes'})
     if rx['return']>0: return rx
     ll=rx['lst']
 

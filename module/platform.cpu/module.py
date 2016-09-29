@@ -485,7 +485,7 @@ def detect(i):
                    'module_uoa':cfg['module_deps']['platform'],
                    'group':'cpu',
                    'remote_shell':tosd.get('remote_shell','').replace('$#device#$',dv),
-                   'remote_shell-end':tosd.get('remote_shell_end','')})
+                   'remote_shell_end':tosd.get('remote_shell_end','')})
       if r['return']>0: return r
       info_cpu=r['dict']
 
