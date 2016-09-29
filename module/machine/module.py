@@ -247,15 +247,16 @@ def add(i):
         dx={}
 
         #####################
-        ck.out('')
-        r=ck.inp({'text':'Enter hostname (Enter for localhost):          '})
-
-        host=r['string'].strip()
-        if host=='': host='localhost'
-        dx['host']=host
-
-        #####################
         if at=='ssh':
+            #####################
+            ck.out('')
+            r=ck.inp({'text':'Enter hostname (Enter for localhost):          '})
+
+            host=r['string'].strip()
+            if host=='': host='localhost'
+            dx['host']=host
+
+            #####################
             ck.out('')
             r=ck.inp({'text':'Enter host port if needed:                     '})
 
@@ -271,6 +272,16 @@ def add(i):
             dx['username']=username
 
         else:
+            #####################
+            ck.out('')
+            r=ck.inp({'text':'Enter hostname (Enter for localhost):          '})
+
+            host=r['string'].strip()
+            if host=='': host='http://localhost'
+            elif not host.startswith('http://'): host='http://'+host
+            dx['host']=host
+
+            #####################
             ck.out('')
             r=ck.inp({'text':'Enter host port if needed (Enter for 3333):    '})
 
