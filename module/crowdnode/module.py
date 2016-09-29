@@ -166,8 +166,14 @@ def shell(i):
         if type(se)==bytes:
             se=se.decode(errors='ignore')
 
+    se='xyz'
     if o=='con':
-        if so!='': ck.out(so)
-        if se!='': ck.out(se)
+        if so!='': 
+            ck.out(so)
+        if se!='': 
+            if getattr(ck, 'eout', None)==None:
+                ck.out(se)
+            else:
+                ck.eout(se)
 
     return {'return':0, 'stdout':so, 'stderr':se}
