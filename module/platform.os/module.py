@@ -410,6 +410,26 @@ def detect(i):
 
           else:
              # If Linux, remove extensions after - in a shorter version
+             if prop_os_name_long=='':
+                 if getattr(ck, 'run_and_get_stdout', None)==None:
+                    return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
+
+                 prop_os_name_long=''
+
+                 cmd=tosd['remote_shell']+'uname -s'+tosd.get('remote_shell_end','')
+
+                 r=ck.run_and_get_stdout({'cmd': cmd, 'shell':'yes'})
+                 if r['return']==0:
+                     prop_os_name_long+=r['stdout'].strip()
+
+                 cmd=tosd['remote_shell']+'uname -r'+tosd.get('remote_shell_end','')
+
+                 r=ck.run_and_get_stdout({'cmd': cmd, 'shell':'yes'})
+                 if r['return']==0:
+                     prop_os_name_long+=' '+r['stdout'].strip()
+
+                 prop_os_name_short=prop_os_name_long
+
              x=prop_os_name_short.find('-')
              if x>=0:
                 prop_os_name_short=prop_os_name_short[:x]

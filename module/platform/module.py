@@ -493,6 +493,9 @@ def get_from_wmic(i):
     Input:  {
               cmd     - cmd for wmic
               (group) - get the whole group
+
+              (remote_shell)     - remote shell prefix if needed
+              (remote_shell_end) - remote shell suffix if needed
             }
 
     Output: {
@@ -511,15 +514,20 @@ def get_from_wmic(i):
     value=''
     dd={}
 
-    rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
-    if rx['return']>0: return rx
-    fn=rx['file_name']
+    rs=i.get('remote_shell','')
+    rse=i.get('remote_shell_end','')
 
     xcmd=i.get('cmd','')
     xgroup=i.get('group','')
     if xgroup!='': xcmd=xgroup
 
-    cmd='wmic '+xcmd+' > '+fn
+    # We need to use file since it is encoded with UTF-16 so will need to load it with this encoding
+    rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+    if rx['return']>0: return rx
+    fn=rx['file_name']
+
+    cmd=rs+' wmic '+xcmd+' '+rse+' > '+fn
+
     r=os.system(cmd)
     if r!=0:
        return {'return':1, 'error':'command returned non-zero value: '+cmd}

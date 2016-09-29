@@ -154,7 +154,7 @@ def detect(i):
     new_format=''
     unique_cpus=[]
 
-    if remote=='yes' or unix:
+    if unix:
        # Get all params
        params={}
        if remote=='yes' and remote_ssh!='yes':
@@ -479,10 +479,13 @@ def detect(i):
        target['max_freq']=target_freq_max
        target['all_freqs']=target_freq_all
 
+    ########################################################################################
     elif win=='yes':
       r=ck.access({'action':'get_from_wmic',
                    'module_uoa':cfg['module_deps']['platform'],
-                   'group':'cpu'})
+                   'group':'cpu',
+                   'remote_shell':tosd.get('remote_shell','').replace('$#device#$',dv),
+                   'remote_shell-end':tosd.get('remote_shell_end','')})
       if r['return']>0: return r
       info_cpu=r['dict']
 
@@ -504,6 +507,7 @@ def detect(i):
                   'ck_cpu_subname':target_cpu}
       unique_cpus.append(unique_cpu)
 
+    ########################################################################################
     elif mac=='yes':
       if getattr(ck, 'run_and_get_stdout', None)==None:
          return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
@@ -540,7 +544,8 @@ def detect(i):
                   'ck_cpu_subname':target_cpu}
       unique_cpus.append(unique_cpu)      
 
-    if o=='con' and pdv=='yes':
+    ########################################################################################
+    if o=='con' and pdv!='no':
        ck.out('')
        if new_format=='yes':
           lup=len(unique_cpus)

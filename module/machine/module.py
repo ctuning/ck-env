@@ -763,7 +763,7 @@ def check(i):
         # Check status of remote
         connected='no'
 
-        if at=='android' or at=='wa_android' or at=='ssh':
+        if at=='android' or at=='wa_android' or at=='ssh' or at=='ck_node':
             # Attempt to get Android features 
             ii={'action':'detect',
                 'module_uoa':cfg['module_deps']['platform.os'],
