@@ -307,7 +307,6 @@ def add(i):
              "remote": "yes",
              "remote_ssh":"yes",
              "remote_deinit": "",
-             "remote_dir": path_to_files,
              "remote_dir_sep": tosd.get('dir_sep',''),
              "remote_env_quotes_if_space": tosd.get('env_quotes_if_space',''),
              "remote_shell_end": "\""
@@ -325,6 +324,7 @@ def add(i):
                 keyfile1='-i '+keyfile
 
             uod.update({
+                 "remote_dir": path_to_files,
                  "remote_id": username+"@"+host+port1,
                  "remote_init": "ssh "+port2+" -l "+username+" "+host+" "+keyfile1+" \"echo remote_init...\"",
                  "remote_pull": "scp "+port3+" "+keyfile1+" "+username+"@"+host+":$#file1#$ \"$#file2#$\"",
@@ -337,6 +337,8 @@ def add(i):
                 keyfile1='--keyfile='+keyfile
 
             uod.update({
+                 "remote_dir": "",
+                 "remote_dir_full": path_to_files,
                  "remote_id": host+port1,
                  "remote_init": "ck shell crowdnode --url="+host+port1+" "+keyfile1+" --cmd=\"echo remote_init...\"",
                  "remote_pull": "ck pull crowdnode --url="+host+port1+" "+keyfile1+" --filename=$#file1#$ --filename2=\"$#file2#$\"",

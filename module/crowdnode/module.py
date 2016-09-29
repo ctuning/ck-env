@@ -93,6 +93,15 @@ def push(i):
 def pull(i):
     """
     Input:  {
+              (url)      - URL to ck-crowdnode (http://localhost:3333 by default)
+              (keyfile)  - path to key
+
+              (filename)  - file to pull from remote crowd-node
+              (filename2) - local file to record (to current path)
+
+              (extra_path)          - extra path inside entry (create if doesn't exist)
+              (archive)             - if 'yes' push to entry and unzip ...
+              (overwrite)           - if 'yes', overwrite files
             }
 
     Output: {
@@ -103,8 +112,33 @@ def pull(i):
 
     """
 
-    exit(1)
+    o=i.get('out','')
 
+    url=i.get('hostname','')
+    if url=='': url='http://localhost:3333'
+
+    keyfile=i.get('keyfile','')
+    key=''
+    if keyfile!='':
+        # Load keyfile
+        r=ck.load_text_file({'text_file':keyfile})
+        if r['return']>0: return r
+        key=r['string'].strip()
+
+    fn=i.get('filename','')
+    if fn=='':
+        return {'return':1, 'error':'remote file not specified'}
+
+    ep=os.path.dirname(fn)
+    fn=os.path.basename(fn)
+
+    ii={'action':'pull',
+        'remote_server_url':url,
+        'secretkey':key,
+        'filename':fn,
+        'extra_path':ep}
+    r=ck.access(ii)
+    if r['return']>0: return r
 
     return {'return':0}
 
@@ -151,6 +185,10 @@ def shell(i):
     r=ck.access(ii)
     if r['return']>0: return r
 
+    rc=r.get('return_code','')
+    if rc=='': rc='0'
+    irc=int(rc)
+
     xso=r.get('stdout','')
     xse=r.get('stderr','')
 
@@ -174,5 +212,9 @@ def shell(i):
                 ck.out(se)
             else:
                 ck.eout(se)
+
+    # Check return code
+    if irc>0:
+        return {'return':irc, 'error':'remote command likely failed (return code > 0)'}
 
     return {'return':0, 'stdout':so, 'stderr':se}
