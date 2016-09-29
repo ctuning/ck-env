@@ -59,7 +59,7 @@ def push(i):
 
     o=i.get('out','')
 
-    url=i.get('hostname','')
+    url=i.get('url','')
     if url=='': url='http://localhost:3333'
 
     keyfile=i.get('keyfile','')
@@ -114,7 +114,7 @@ def pull(i):
 
     o=i.get('out','')
 
-    url=i.get('hostname','')
+    url=i.get('url','')
     if url=='': url='http://localhost:3333'
 
     keyfile=i.get('keyfile','')
@@ -148,12 +148,20 @@ def pull(i):
 def shell(i):
     """
     Input:  {
+              (url)      - URL to ck-crowdnode (http://localhost:3333 by default)
+              (keyfile)  - path to key
+
+              (cmd)      - command line
             }
 
     Output: {
               return       - return code =  0, if successful
                                          >  0, if error
               (error)      - error text if return > 0
+
+              stdout
+              stderr
+              return_code
             }
 
     """
@@ -162,7 +170,7 @@ def shell(i):
 
     o=i.get('out','')
 
-    url=i.get('hostname','')
+    url=i.get('url','')
     if url=='': url='http://localhost:3333'
 
     keyfile=i.get('keyfile','')
