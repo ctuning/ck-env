@@ -43,7 +43,7 @@
     },
     "ck_node": {
       "detect_platform": "yes",
-      "name": "CK: remote Windows machine accessed via CK crowd node - IN DEVELOPMENT",
+      "name": "CK: remote Windows machine accessed via CK crowd node",
       "sort": 55,
       "tags": [
         "windows",
