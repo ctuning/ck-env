@@ -200,17 +200,20 @@ def shell(i):
     xso=r.get('stdout_base64','')
     xse=r.get('stderr_base64','')
 
+    enc=r.get('encoding','')
+    if enc=='': enc='UTF-8'
+
     so=''
     if xso!='':
         so=base64.urlsafe_b64decode(xso)
         if type(so)==bytes:
-            so=so.decode(errors='ignore')
+            so=so.decode(encoding=enc, errors='ignore')
 
     se=''
     if xse!='':
         se=base64.urlsafe_b64decode(xse)
         if type(se)==bytes:
-            se=se.decode(errors='ignore')
+            se=se.decode(encoding=enc, errors='ignore')
 
     if o=='con':
         if so!='': 
