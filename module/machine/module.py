@@ -748,7 +748,10 @@ def check(i):
 
     o=i.get('out','')
 
-    duoa=i['data_uoa']
+    duoa=i.get('data_uoa','')
+    if duoa=='':
+       return {'return':1, 'error':'machine UOA is not specified'}
+
     r=ck.access({'action':'load',
                  'module_uoa':work['self_module_uid'],
                  'data_uoa':duoa})
