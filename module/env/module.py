@@ -1004,6 +1004,17 @@ def resolve(i):
     for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
         q=deps[k]
 
+        ytos=tos
+        ytdid=tdid
+        ytosx=tosx
+        ytosd=tosd
+
+        if q.get('force_target_as_host','')=='yes':
+            ytos=hos
+            ytdid=''
+            ytosx=hosx
+            ytosd=hosd
+
         tags=q.get('tags','')
         name=q.get('name','')
         local=q.get('local','')
@@ -1019,8 +1030,8 @@ def resolve(i):
                       'dict':q,
                       'host_os_uoa':hosx,
                       'host_os_dict':hosd,
-                      'target_os_uoa':tosx,
-                      'target_os_dict':tosd})
+                      'target_os_uoa':ytosx,
+                      'target_os_dict':ytosd})
         if rx['return']>0:
            continue
 
@@ -1035,8 +1046,8 @@ def resolve(i):
            ck.out(x)
 
         ii={'host_os':hos,
-            'target_os':tos,
-            'target_device_id':tdid,
+            'target_os':ytos,
+            'target_device_id':ytdid,
             'tags':tags,
             'repo_uoa':enruoa,
             'env':env,
