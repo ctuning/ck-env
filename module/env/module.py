@@ -111,6 +111,7 @@ def set(i):
     hos=i.get('host_os','')
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
+    if tdid=='': tdid=i.get('device_id','')
 
     user_env=False
     if hos!='' or tos!='' or tdid!='': user_env=True
@@ -895,6 +896,8 @@ def resolve(i):
               (host_os)              - host OS (detect, if ommitted)
               (target_os)            - target OS (detect, if ommitted)
               (target_device_id)     - target device ID (detect, if omitted)
+                  or
+              (device_id)
 
               (repo_uoa)             - repo where to limit search
 
@@ -949,6 +952,7 @@ def resolve(i):
     hos=i.get('host_os','')
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
+    if tdid=='': tdid=i.get('device_id','')
 
     user_env=False
     if hos!='' or tos!='' or tdid!='': user_env=True
