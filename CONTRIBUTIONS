@@ -28,28 +28,40 @@ N: Cedric Nugteren
 E: web@cedricnugteren.nl
 O: 
 C: testing CK on MacOS, reporting bugs
-W: 
+W: 2015
 
 N: Michael Kruse
 E: 
 O: 
 C: suggesting how to improve OpenCL lib registration on Ubuntu
-W: 
+W: 2015
 
 N: Michael Mcgeagh
 E:
 O: ARM, UK
 C: reporting problem with yaml recording, CPU feature detection (in new format) and general feedback about ck-wa
-W:
+W: 2016
 
 N: Paul Thomson
 E:
 O: Imperial College London, UK
 C: reporting a few bugs with software description on Windows (Microsoft SDK)
-W:
+W: 2016
 
 N: Dmitry Savenko 
 E:
 O: 
 C: fixed various problems with crowdtuning on MacOS
-W:
+W: 2016
+
+N: Milos Puzovic 
+E:
+O: The Hartree Centre, UK (http://www.hartree.stfc.ac.uk/hartree)
+C: discussing farms of CK-powered machines
+W: 2016
+
+N: Harry Plumley 
+E:
+O: The Hartree Centre, UK (http://www.hartree.stfc.ac.uk/hartree)
+C: discussing farms of CK-powered machines
+W: 2016
