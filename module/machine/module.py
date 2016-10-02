@@ -560,7 +560,7 @@ def show(i):
     h+='   <td align="center"><b>OS UOA</b></td>\n'
     h+='   <td align="center"><b>CPUs</b></td>\n'
     h+='   <td align="center"><b>GPUs</b></td>\n'
-    h+='   <td align="center"><b>GPGPUs</b></td>\n'
+#    h+='   <td align="center"><b>GPGPUs</b></td>\n'
     h+='   <td align="center"><b>Status</b></td>\n'
     h+='  <tr>\n'
 
@@ -571,7 +571,7 @@ def show(i):
 
         d=q['meta']
 
-        tdid=d.get('machine_id','')
+        tdid=d.get('device_id','')
 
         tos=d.get('target_os_uoa','')
         tos_uid=d.get('target_os_uid','')
@@ -629,7 +629,7 @@ def show(i):
 
         h+='   <td align="center">'+gpu+'</td>\n'
 
-        h+='   <td align="center">'+gpgpus+'</td>\n'
+#        h+='   <td align="center">'+gpgpus+'</td>\n'
 
         c+=sx
         h+='   <td align="center"'+ss+'>'+sx+'</td>\n'
@@ -711,7 +711,7 @@ def machine_init(i):
         # Get main parameters
         host_os_uoa=dd.get('host_os_uoa','')
         target_os_uoa=dd.get('target_os_uoa','')
-        target_device_id=dd.get('target_device_id','')
+        target_device_id=dd.get('device_id','')
 
         at=dd.get('access_type','')
         ecfg=dd.get('device_cfg',{})
@@ -766,7 +766,7 @@ def check(i):
     tos=d.get('target_os_uoa','')
     tos_uid=d.get('target_os_uid','')
 
-    tdid=d.get('target_device_id','')
+    tdid=d.get('device_id','')
 
     # Check if machine connected
     connected='yes'
