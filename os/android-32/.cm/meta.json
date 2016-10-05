@@ -2,6 +2,7 @@
   "adb_all_params": "adb $#device#$ shell getprop $#redirect_stdout#$ $#output_file#$", 
   "adb_devices": "adb devices $#redirect_stdout#$ $#output_file#$", 
   "adb_dumpsys": "adb $#device#$ shell dumpsys $#category#$ $#redirect_stdout#$ $#output_file#$", 
+  "adb_serial_no": "adb $#device#$ get-serialno $#redirect_stdout#$ $#output_file#$", 
   "batch_prefix": "#! /bin/sh\n# CK generated script\n", 
   "bin_prefix": "./", 
   "bits": "32", 

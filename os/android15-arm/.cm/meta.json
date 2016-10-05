@@ -3,6 +3,7 @@
   "adb_all_params": "adb $#device#$ shell getprop $#redirect_stdout#$ $#output_file#$",
   "adb_devices": "adb devices $#redirect_stdout#$ $#output_file#$",
   "adb_dumpsys": "adb $#device#$ shell dumpsys $#category#$ $#redirect_stdout#$ $#output_file#$",
+  "adb_serial_no": "adb $#device#$ get-serialno $#redirect_stdout#$ $#output_file#$", 
   "android_compiler_prefix": "arm-linux-androideabi",
   "android_ndk_arch": "arm",
   "android_ndk_platform": "android-15",

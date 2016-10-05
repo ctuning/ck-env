@@ -19,6 +19,7 @@
   "module_deps": {
     "machine":"84be34883a81b2a9",
     "os": "0440cb72c2bc5cc6", 
+    "env": "9b9b3208ac44b891",
     "platform": "707ccdfe444cafac",
     "platform.init": "38a2f5438d8555b6",
     "cfg":"b34231a3467566f8"

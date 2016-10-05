@@ -2,6 +2,7 @@
   "adb_all_params": "adb $#device#$ shell getprop $#redirect_stdout#$ $#output_file#$", 
   "adb_devices": "adb devices $#redirect_stdout#$ $#output_file#$", 
   "adb_dumpsys": "adb $#device#$ shell dumpsys $#category#$ $#redirect_stdout#$ $#output_file#$", 
+  "adb_serial_no": "adb $#device#$ get-serialno $#redirect_stdout#$ $#output_file#$", 
   "abi": "mips", 
   "android_toolchain": "mipsel-linux-android", 
   "android_compiler_prefix": "mipsel-linux-android", 

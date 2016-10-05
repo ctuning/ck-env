@@ -58,6 +58,8 @@ def detect(i):
               (return_multi_devices) - if 'yes' and multiple devices detected, return error=32 and devices
 
               (platform_init_uoa)    - if !='', use these platform.init scripts
+
+              (quiet)                - if 'yes', do not ask questions (TBD: need to check that fully works)
             }
 
     Output: {
@@ -92,7 +94,12 @@ def detect(i):
 
     import os
 
+    quiet=i.get('quiet','')
+
     o=i.get('out','')
+    oo=''
+    if o=='con': oo=o
+    else: quiet='yes'
 
     # Check if target
     if i.get('target','')!='':
@@ -167,6 +174,8 @@ def detect(i):
     prop_os_name_long=''
     prop_os_name_short=''
 
+    prop_serial_no=''
+
     ro=hosd.get('redirect_stdout','')
 
     # Check devices, if remote
@@ -178,6 +187,28 @@ def detect(i):
 
        x=tosd.get('adb_devices','')
        if x!='':
+          # Check that adb is installed (but should actually later use path)
+          ii={'action':'resolve',
+              'module_uoa':cfg['module_deps']['env'],
+              'host_os':hos,
+              'target_os':tos,
+              'device_id':tdid,
+              'deps':{
+                'adb':{
+                       "force_target_as_host": "yes",
+                       "local": "yes", 
+                       "name": "adb tool", 
+                       "sort": -10, 
+                       "tags": "tool,adb"
+                      }
+              },
+              'add_customize':'yes',
+              'quiet':quiet,
+              'out':oo}
+          rx=ck.access(ii)
+          if rx['return']>0: return rx
+
+          # Continue obtaining params
           x=x.replace('$#redirect_stdout#$', ro)
           x=x.replace('$#output_file#$', fn)
 
@@ -240,7 +271,7 @@ def detect(i):
 
                    tdid=devices[x]
                 else:
-                   return {'return':32, 'error':'more than one remote device - specify via device_id', 'devices':devices}
+                   return {'return':32, 'error':'more than one remote device - specify via --device_id', 'devices':devices}
 
     # Collect additional info unless skipped
     if sic!='yes':
@@ -255,20 +286,45 @@ def detect(i):
                              'device_id':tdid})
                 if r['return']>0: return r
 
-          # Get all params
-          params={}
+          # Prepare ADB target device ID
+          dv=''
+          if tdid!='': dv=' -s '+tdid
 
           rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
           if rx['return']>0: return rx
           fn=rx['file_name']
 
-          dv=''
+          # Check serial number if needed
+          x=tosd.get('adb_serial_no','')
+          if x!='':
+             x=x.replace('$#redirect_stdout#$', ro)
+             x=x.replace('$#output_file#$', fn)
+             x=x.replace('$#device#$',dv)
+
+             if o=='con' and pdv=='yes':
+                ck.out('')
+                ck.out('Obtaining serial number:')
+                ck.out('  '+x)
+
+             rx=os.system(x)
+             if rx!=0:
+                if o=='con':
+                   ck.out('')
+                   ck.out('Non-zero return code :'+str(rx)+' - likely failed')
+                return {'return':1, 'error':'access to remote device failed'}
+
+             # Read and parse file
+             rx=ck.load_text_file({'text_file':fn, 'split_to_list':'no', 'delete_after_read':'yes'})
+             if rx['return']>0: return rx
+             prop_serial_no=rx['string'].strip()
+
+          # Get all params
+          params={}
+
           x=tosd.get('adb_all_params','')
           if x!='':
              x=x.replace('$#redirect_stdout#$', ro)
              x=x.replace('$#output_file#$', fn)
-
-             if tdid!='': dv=' -s '+tdid
              x=x.replace('$#device#$',dv)
 
              if o=='con' and pdv=='yes':
@@ -470,6 +526,7 @@ def detect(i):
     prop['name']=prop_os_name
     prop['name_long']=prop_os_name_long
     prop['name_short']=prop_os_name_short
+    prop['serial_number']=prop_serial_no
     prop['bits']=tbits
 
     # Check if platform.init is defined for this target (to add target-specific scripts to PATH)
@@ -622,15 +679,19 @@ def detect(i):
 
     if o=='con' and i.get('skip_print_os','')!='yes' and i.get('skip_print_os_info','')!='yes':
        ck.out('')
-       ck.out('OS CK UOA:         '+tosx+' ('+tos+')')
+       ck.out('OS CK UOA:            '+tosx+' ('+tos+')')
        ck.out('')
-       ck.out('OS name:           '+prop.get('name',''))
-       ck.out('Short OS name:     '+prop.get('name_short',''))
-       ck.out('Long OS name:      '+prop.get('name_long',''))
-       ck.out('OS bits:           '+prop.get('bits',''))
+       ck.out('OS name:              '+prop.get('name',''))
+       ck.out('Short OS name:        '+prop.get('name_short',''))
+       ck.out('Long OS name:         '+prop.get('name_long',''))
+       ck.out('OS bits:              '+prop.get('bits',''))
+       if prop_serial_no!='':
+          ck.out('')
+          ck.out('Device serial number: '+prop_serial_no)
+
        if pi_uoa!='' and pi_uoa!='':
           ck.out('')
-          ck.out('Platform init UOA: '+pi_uoa)
+          ck.out('Platform init UOA:    '+pi_uoa)
 
     fuoa=''
     fuid=''

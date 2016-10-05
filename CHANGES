@@ -1,6 +1,8 @@
-* 2016.09.27 * adding support for remote execution unified across all platforms
+* 2016.10.05 - obtaining real serial number of ADB devices (if via network) + adding dep on ADB tool for remote devices
 
-* 2016.09.26 * changing 'device' to 'machine'
+* 2016.09.27 - added support for remote execution unified across all platforms
+
+* 2016.09.26 - changed 'device' to 'machine'
 
 * 2016.09.25 - various improvements in package/soft ...
 
