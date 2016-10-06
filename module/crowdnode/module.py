@@ -198,7 +198,7 @@ def shell(i):
     irc=int(rc)
 
     xso=str(r.get('stdout_base64',''))
-    xse=r.get('stderr_base64','')
+    xse=str(r.get('stderr_base64',''))
 
     enc=r.get('encoding','')
     if enc=='': enc='UTF-8'
