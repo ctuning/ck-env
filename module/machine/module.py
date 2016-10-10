@@ -387,6 +387,20 @@ def add(i):
 
         pn=rp.get('features',{}).get('platform',{}).get('name','')
 
+    # Check if has CPU features for device config
+    features=rp.get('features',{})
+
+    xwa=features.get('cpu',{}).get('workload_automation',{}).get('device_config',{})
+    if len(xwa)>0:
+        if 'device_cfg' not in dd:
+            dd['device_cfg']={}
+        if 'wa_config' not in dd['device_cfg']:
+            dd['device_cfg']['wa_config']={}
+        if 'device_config' not in dd['device_cfg']['wa_config']:
+            dd['device_cfg']['wa_config']['device_config']={}
+
+        dd['device_cfg']['wa_config']['device_config'].update(xwa)
+
     # Finalize machine meta
     dd.update({'host_os':hos,
                'target_os':tos,
@@ -398,7 +412,7 @@ def add(i):
                'target_os_uid':rp.get('os_uid',''),
                'target_os_dict':tosd,
                'access_type':at,
-               'features':rp.get('features',{})})
+               'features':features})
 
     # Suggest platform name
     if duoa=='':
