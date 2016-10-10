@@ -274,6 +274,7 @@ def detect(i):
        wa={'device_config':{'core_clusters':[], 'core_names':[]}}
        wa_id=0
        wa_unique={}
+       xtcpu=''
 
        # Process each processor
        for px in range(0, pp+1):
@@ -322,18 +323,29 @@ def detect(i):
                   break
 
            if not found and tcpu!='' and tcpu!='----':
-              unique_cpus.append(info_cpu[spx])
+               unique_cpus.append(info_cpu[spx])
+
+           if xtcpu=='' and tcpu!='' and tcpu!='----':
+               xtcpu=tcpu
 
            # add unique in Workload Automation format
            if tcpu!='':
                if tcpu not in wa_unique:
                    wa_unique[tcpu]=wa_id
-                   wa_id+=1
+                   if tcpu!='----':
+                       wa_id+=1
 
                wa_idx=wa_unique[tcpu]
-               
+
                wa['device_config']['core_names'].append(tcpu)
                wa['device_config']['core_clusters'].append(wa_idx)
+
+       # Clean up CPU names for workload automation
+       wa_cn=wa['device_config']['core_names']
+       for q in range(0, len(wa_cn)):
+           tcpu=wa_cn[q]
+           if tcpu=='----' and xtcpu!='':
+               wa_cn[q]=xtcpu
 
        # Collect all frequencies
        for px in range(0, pp+1):
