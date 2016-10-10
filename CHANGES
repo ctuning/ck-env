@@ -1,4 +1,4 @@
-* 2016.10.10 - adding detection of CPU clusters for Workload automation
+* 2016.10.10 - added detection of CPU clusters for Workload automation
 
 * 2016.10.05 - obtaining real serial number of ADB devices (if via network) + adding dep on ADB tool for remote devices
 
