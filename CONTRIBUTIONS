@@ -39,7 +39,9 @@ W: 2015
 N: Michael Mcgeagh
 E:
 O: ARM, UK
-C: reporting problem with yaml recording, CPU feature detection (in new format) and general feedback about ck-wa
+C: reporting problem with yaml recording, 
+   CPU feature detection (in new format) and general feedback about ck-wa, 
+   other features related to Workload Automation
 W: 2016
 
 N: Paul Thomson
