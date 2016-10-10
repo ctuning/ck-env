@@ -271,6 +271,10 @@ def detect(i):
        if target_cpu_features=='':
           target_cpu_features=info_cpu[spp].get('flags','')
 
+       wa={'device_config':{'core_clusters':[], 'core_names':[]}}
+       wa_id=0
+       wa_unique={}
+
        # Process each processor
        for px in range(0, pp+1):
            spx=str(px)
@@ -319,6 +323,17 @@ def detect(i):
 
            if not found and tcpu!='' and tcpu!='----':
               unique_cpus.append(info_cpu[spx])
+
+           # add unique in Workload Automation format
+           if tcpu!='':
+               if tcpu not in wa_unique:
+                   wa_unique[tcpu]=wa_id
+                   wa_id+=1
+
+               wa_idx=wa_unique[tcpu]
+               
+               wa['device_config']['core_names'].append(tcpu)
+               wa['device_config']['core_clusters'].append(wa_idx)
 
        # Collect all frequencies
        for px in range(0, pp+1):
@@ -478,6 +493,7 @@ def detect(i):
        target['current_freq']=target_freq
        target['max_freq']=target_freq_max
        target['all_freqs']=target_freq_all
+       target['workload_automation']=wa
 
     ########################################################################################
     elif win=='yes':
