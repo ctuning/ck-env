@@ -185,7 +185,9 @@ def install(i):
     target=i.get('target','')
 
     if target=='' and tos=='':
-        return {'return':1, 'error':'"target_os" or "target" is not specified'}
+        tos='android19-arm'
+        i['target_os']=tos
+#        return {'return':1, 'error':'"target_os" or "target" is not specified'}
 
     xtdid=''
     if tdid!='': xtdid=' -s '+tdid
@@ -279,6 +281,7 @@ def add(i):
               (repo_uoa)  - repo where to add APK
 
               (abi)       - list of ABI separated by comma (default=armeabi,armeabi-v7a,arm64-v8a)
+              (version)   - version
 
               (path)      - path to APK on local host (apk_name will be automatically detected)
               (apk_name)  - force APK name
@@ -319,9 +322,20 @@ def add(i):
             abi='armeabi,armeabi-v7a,arm64-v8a'
 
     if abi=='':
-        return {'return':1, 'error':'ABI is not specified'}
+        return {'return':1, 'error':'"abi" is not specified'}
 
     abis=abi.split(',')
+
+    # Version
+    version=i.get('version','')
+
+    if version=='':
+        r=ck.inp({'text':'Enter APK version: '})
+        if r['return']>0: return r
+        version=r['string'].strip()
+
+    if version=='':
+        return {'return':1, 'error':'"version" is not specified'}
 
     # Check CK entry name
     duoa=i.get('data_uoa','')
@@ -360,7 +374,8 @@ def add(i):
     # Update dict
     if 'apks' not in dd: dd['apks']=[]
     dd['apks'].append({'abis':abis,
-                       'apk_name':apk_name})
+                       'apk_name':apk_name,
+                       'version':version})
 
     r=ck.access({'action':'update',
                  'module_uoa':work['self_module_uid'],
