@@ -37,6 +37,7 @@ def init(i):
 def detect(i):
     """
     Input:  {
+              (name) - get params only for this APK
             }
 
     Output: {
@@ -84,16 +85,30 @@ def detect(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
+    # Check remote shell
+    rs=tosd.get('remote_shell','')
+    if rs=='':
+        return {'return':1, 'error':'APK are not supported for this target'}
+
     tdid=i.get('device_id','')
 
     xtdid=''
     if tdid!='': xtdid=' -s '+tdid
 
-    env_sep=hosd.get('env_separator','')
+    envsep=hosd.get('env_separator','')
+    sext=hosd.get('script_ext','')
+    sexe=hosd.get('set_executable','')
+    sbp=hosd.get('bin_prefix','')
+    scall=hosd.get('env_call','')
 
     x='"'
 
-    adb=tosd['remote_shell'].replace('$#device#$',xtdid)+' '+x+'pm list packages -f'+x
+    # Record to tmp batch and run
+    rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':'.tmp', 'remove_dir':'no'})
+    if rx['return']>0: return rx
+    fnx=rx['file_name']
+
+    adb=rs.replace('$#device#$',xtdid)+' '+x+'pm list packages'+x+' > '+fnx
 
     # ADB dependency
     deps={'adb':{
@@ -115,13 +130,109 @@ def detect(i):
         'out':oo}
     rx=ck.access(ii)
     if rx['return']>0: return rx
+    sbb=rx['cut_bat']
 
-    s=rx['cut_bat'].strip()+' '+env_sep+' '+adb
+    sb=sbb+'\n'+adb
 
-    print (s)
-    os.system(s)
+    # Record to tmp batch and run
+    rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'no'})
+    if rx['return']>0: return rx
+    fn=rx['file_name']
 
+    rx=ck.save_text_file({'text_file':fn, 'string':sb})
+    if rx['return']>0: return rx
 
+    y=''
+    if sexe!='':
+       y+=sexe+' '+sbp+fn+envsep
+    y+=' '+scall+' '+sbp+fn
 
+    os.system(y)
 
-    return {'return':0}
+    if os.path.isfile(fn):
+        os.remove(fn)
+
+    # Reading file
+    rx=ck.load_text_file({'text_file':fnx, 'split_to_list':'yes', 'delete_after_read':'yes'})
+    if rx['return']>0: return rx
+    lst=rx['lst']
+
+    params={}
+
+    name=i.get('name','')
+
+    iapk=0
+    for package in lst:
+        if package.startswith('package:'):
+            package=package[8:]
+
+        if name!='' and package!=name:
+            continue
+
+        iapk+=1
+        ck.out(package)
+
+        params[package]={}
+
+        # Get parameters
+        sb=sbb+'\n'+rs.replace('$#device#$',xtdid)+' '+x+'dumpsys package '+package+x+' > '+fnx
+
+        rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'no'})
+        if rx['return']>0: return rx
+        fn=rx['file_name']
+
+        rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'no'})
+        if rx['return']>0: return rx
+        fny=rx['file_name']
+
+        rx=ck.save_text_file({'text_file':fn, 'string':sb})
+        if rx['return']>0: return rx
+
+        y=''
+        if sexe!='':
+           y+=sexe+' '+sbp+fn+envsep
+        y+=' '+scall+' '+sbp+fn+' > '+fny
+
+        os.system(y)
+
+        if os.path.isfile(fn):
+            os.remove(fn)
+
+        if os.path.isfile(fny):
+            os.remove(fny)
+
+        # Reading file
+        rx=ck.load_text_file({'text_file':fnx, 'split_to_list':'yes', 'delete_after_read':'yes'})
+        if rx['return']>0: return rx
+        ll=rx['lst']
+        
+        for q in ll:
+            j=q.find('=')
+            if j>0:
+                j1=q.rfind(' ', 0, j)
+                k=q[j1+1:j]
+                v=q[j+1:]
+
+                j2=v.find(' targetSdk=')
+                if j2>0:
+                    vv=v[j2+11:]
+                    v=v[:j2]
+                    kk='targetSdk'
+
+                    params[package][kk]=vv
+
+                params[package][k]=v
+
+    if name!='':
+        if iapk==0:
+            return {'return':1, 'error':'APK was not found on the target device'}
+
+        if o=='con':
+            ck.out('')
+            ck.out('Parameters:')
+            ck.out('')
+
+            for k in sorted(params[name]):
+                v=params[name][k]
+                ck.out('  '+k+' = '+v)
+    return {'return':0, 'params':params}
