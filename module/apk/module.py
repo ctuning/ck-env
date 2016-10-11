@@ -169,6 +169,8 @@ def install(i):
     import os
 
     o=i.get('out','')
+    oo=''
+    if o=='con': oo=o
 
     name=i.get('name','')
     if name=='':
@@ -217,12 +219,14 @@ def install(i):
             p=r['path']
             d=r['dict']
 
-            dabi=d.get(abi,{})
-
-            aname=dabi.get('apk_name','')
+            aname=''
+            for apk in d.get('apks',[]):
+                if abi in apk.get('abis',[]):
+                    aname=apk.get('apk_name','')
+                    break
 
             if aname!='':
-                pp=os.path.join(p, abi, aname)
+                pp=os.path.join(p, aname)
 
                 if os.path.isfile(pp):
                     # Trying to install
@@ -233,18 +237,12 @@ def install(i):
                         'module_uoa':cfg['module_deps']['os'],
                         'host_os':hos,
                         'target_os':hos,
-                        'cmd':'adb '+xtdid+' install -r -d '+pp}
+                        'cmd':'adb '+xtdid+' install -r -d '+pp,
+                        'out':oo}
                     r=ck.access(ii)
                     if r['return']>0: return r
 
                     rc=r['return_code']
-
-                    stdout=r['stdout']
-                    stderr=r['stderr']
-
-                    if o=='con':
-                        if stdout!='': ck.out(stdout)
-                        if stderr!='': ck.out(stderr)
 
                     if rc>0:
                         return {'return':1, 'error':'command may have failed (return code='+str(rc)+')'}
@@ -280,7 +278,7 @@ def add(i):
               (data_uoa)  - CK entry to add APK (should be official APK name, i.e. openscience.crowdsource.experiments)
               (repo_uoa)  - repo where to add APK
 
-              (abi)       - ABI of APK (armeabi, arm64-v8a, mips, mips64, x86, x86_64)
+              (abi)       - list of ABI separated by comma (default=armeabi,armeabi-v7a,arm64-v8a)
 
               (path)      - path to APK on local host (apk_name will be automatically detected)
               (apk_name)  - force APK name
@@ -313,12 +311,17 @@ def add(i):
     abi=i.get('abi','')
 
     if abi=='':
-        r=ck.inp({'text':'Enter ABI (armeabi, arm64-v8a, mips, mips64, x86, x86_64): '})
+        r=ck.inp({'text':'Enter list of ABI separated by comma or Enter for "armeabi,armeabi-v7a,arm64-v8a"): '})
         if r['return']>0: return r
         abi=r['string'].strip()
 
+        if abi=='':
+            abi='armeabi,armeabi-v7a,arm64-v8a'
+
     if abi=='':
         return {'return':1, 'error':'ABI is not specified'}
+
+    abis=abi.split(',')
 
     # Check CK entry name
     duoa=i.get('data_uoa','')
@@ -350,18 +353,14 @@ def add(i):
         dd={}
 
     # Create dirs and copy files
-    p1=os.path.join(pp,abi)
-    if not os.path.isdir(p1):
-        os.makedirs(p1)
-
-    p2=os.path.join(p1,apk_name)
+    p2=os.path.join(pp,apk_name)
 
     shutil.copyfile(path, p2)
 
     # Update dict
-    if abi not in dd:
-        dd[abi]={}
-    dd[abi]['apk_name']=apk_name
+    if 'apks' not in dd: dd['apks']=[]
+    dd['apks'].append({'abis':abis,
+                       'apk_name':apk_name})
 
     r=ck.access({'action':'update',
                  'module_uoa':work['self_module_uid'],
@@ -400,9 +399,11 @@ def uninstall(i):
 
     # First check if exists
     o=i.get('out','')
-
+    oo=''
     if o=='con':
         i['out']=''
+        oo=o
+
     r=detect(i)
     if r['return']>0: return r
 
@@ -425,6 +426,7 @@ def uninstall(i):
         'module_uoa':cfg['module_deps']['os'],
         'host_os':hos,
         'target_os':hos,
+        'out':oo,
         'cmd':'adb '+xtdid+' uninstall '+name}
     r=ck.access(ii)
     if r['return']>0: return r
@@ -432,12 +434,5 @@ def uninstall(i):
     rc=r['return_code']
     if rc>0:
         return {'return':1, 'error':'command may have failed (return code='+str(rc)+')'}
-
-    stdout=r['stdout']
-    stderr=r['stderr']
-
-    if o=='con':
-        if stdout!='': ck.out(stdout)
-        if stderr!='': ck.out(stderr)
 
     return r

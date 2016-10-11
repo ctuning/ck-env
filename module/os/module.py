@@ -290,16 +290,33 @@ def shell(i):
     if rx['return']>0: return rx
 
     if stl=='yes':
+        stdout=''
+
         rr['stdout_lst']=rx['lst']
+
+        for q in rx['lst']:
+            stdout+=q+'\n'
     else:
-        rr['stdout']=rx['string']
+        stdout=rx['string']
+        rr['stdout']=stdout
 
     # Reading stderr file
     rx=ck.load_text_file({'text_file':fne, 'delete_after_read':'yes', 'split_to_list':stl})
     if rx['return']>0: return rx
     if stl=='yes':
+        stderr=''
+
         rr['stderr_lst']=rx['lst']
+
+        for q in rx['lst']:
+            stderr+=q+'\n'
     else:
-        rr['stderr']=rx['string']
+        stderr=rx['string']
+        rr['stderr']=stderr
+
+    # Print if needed
+    if o=='con':
+       if stdout!='': ck.out(stdout)
+       if stderr!='': ck.eout(stderr)
 
     return rr
