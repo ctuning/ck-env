@@ -100,6 +100,7 @@ def detect(i):
     sexe=hosd.get('set_executable','')
     sbp=hosd.get('bin_prefix','')
     scall=hosd.get('env_call','')
+    ubtr=hosd.get('use_bash_to_run','')
 
     x='"'
 
@@ -144,9 +145,10 @@ def detect(i):
 
     y=''
     if sexe!='':
-       y+=sexe+' '+sbp+fn+envsep
-    y+=' '+scall+' '+sbp+fn
+       y+=sexe+' '+fn+envsep
+    y+=' '+scall+' '+fn
 
+    if ubtr!='': y=ubtr.replace('$#cmd#$',y)
     os.system(y)
 
     if os.path.isfile(fn):
@@ -190,9 +192,10 @@ def detect(i):
 
         y=''
         if sexe!='':
-           y+=sexe+' '+sbp+fn+envsep
-        y+=' '+scall+' '+sbp+fn+' > '+fny
+           y+=sexe+' '+fn+envsep
+        y+=' '+scall+' '+fn+' > '+fny
 
+        if ubtr!='': y=ubtr.replace('$#cmd#$',y)
         os.system(y)
 
         if os.path.isfile(fn):
@@ -205,7 +208,7 @@ def detect(i):
         rx=ck.load_text_file({'text_file':fnx, 'split_to_list':'yes', 'delete_after_read':'yes'})
         if rx['return']>0: return rx
         ll=rx['lst']
-        
+
         for q in ll:
             j=q.find('=')
             if j>0:
