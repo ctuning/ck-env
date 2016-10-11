@@ -267,7 +267,7 @@ def install(i):
                 ck.out(' $ ck add apk:{APK name} --path={full path to downloaded APK}')
                 ck.out('')
 
-            return {'return':1, 'error':'APK is not installed on target device and was not found in CK'}
+            return {'return':16, 'error':'APK is not installed on target device and was not found in CK'}
 
     return rr
 
