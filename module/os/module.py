@@ -142,9 +142,11 @@ def shell(i):
               (target_os)
               (device_id)
 
-              (cmd) -           cmd string (can have \n)
+              (cmd) -              cmd string (can have \n)
 
-              (split_to_list) - if 'yes', split stdout and stderr to list
+              (split_to_list) -    if 'yes', split stdout and stderr to list
+
+              (should_be_remote) - if 'yes', can run only on remote target
             }
 
     Output: {
@@ -167,6 +169,7 @@ def shell(i):
     if o=='con': oo='con'
 
     stl=i.get('split_to_list','')
+    sbr=i.get('should_be_remote','')
 
     # Check if need to initialize device and directly update input i !
     ii={'action':'init',
@@ -229,6 +232,9 @@ def shell(i):
 
     # Check remote shell
     rs=tosd.get('remote_shell','')
+    if sbr=='yes' and rs=='':
+        return {'return':1, 'error':'target mush be remote'}
+
     if rs!='':
         # ADB dependency
         deps={'adb':{

@@ -1,10 +1,16 @@
 {
   "actions": {
-    "check": {
-      "desc": "check APK"
+    "add": {
+      "desc": "add apk"
+    },
+    "install": {
+      "desc": "install APK"
     },
     "detect": {
       "desc": "detect installed APKs"
+    },
+    "uninstall": {
+      "desc": "uninstall APK"
     }
   },
   "copyright": "See CK COPYRIGHT.txt for copyright details",

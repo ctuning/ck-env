@@ -37,8 +37,8 @@ def init(i):
 def detect(i):
     """
     Input:  {
-              (name)      - get params only for this APK
-              (target_os) - target Android OS (ck search os --tags=android)
+              (data_uoa) or (name) - get params only for this APK
+              (target_os)          - target Android OS (ck search os --tags=android) (default = android-32)
             }
 
     Output: {
@@ -58,6 +58,9 @@ def detect(i):
     tdid=i.get('device_id','')
     target=i.get('target','')
 
+    if target=='' and tos=='':
+        tos='android-32'
+
     ii={'action':'shell',
         'module_uoa':cfg['module_deps']['os'],
         'host_os':hos,
@@ -65,8 +68,8 @@ def detect(i):
         'device_id':tdid,
         'target':target,
         'split_to_list':'yes',
+        'should_be_remote':'yes',
         'cmd':'pm list packages'}
-
     r=ck.access(ii)
     if r['return']>0: return r
 
@@ -77,17 +80,20 @@ def detect(i):
     params={}
 
     name=i.get('name','')
+    if name=='':
+        name=i.get('data_uoa','')
 
     iapk=0
-    for package in lst:
+    for package in sorted(lst):
         if package.startswith('package:'):
             package=package[8:]
 
-        if name!='' and package!=name:
+        if (name!='' and package!=name) or package=='':
             continue
 
         iapk+=1
-        ck.out(package)
+        if o=='con':
+            ck.out(package)
 
         params[package]={}
 
@@ -99,6 +105,7 @@ def detect(i):
             'device_id':tdid,
             'target':target,
             'split_to_list':'yes',
+            'should_be_remote':'yes',
             'cmd':'dumpsys package '+package}
 
         r=ck.access(ii)
@@ -125,7 +132,7 @@ def detect(i):
 
     if name!='':
         if iapk==0:
-            return {'return':16, 'error':'APK was not found on the target device'}
+            return {'return':16, 'error':'APK was not found on the target device', 'target_os_dict':tosd}
 
         if o=='con':
             ck.out('')
@@ -135,19 +142,20 @@ def detect(i):
             for k in sorted(params[name]):
                 v=params[name][k]
                 ck.out('  '+k+' = '+v)
+
     return {'return':0, 'params':params, 'target_os_dict':tosd}
 
 ##############################################################################
 # check APK
 
-def check(i):
+def install(i):
     """
     Input:  {
               (host_os)
               (target_os)
               (device_id)
 
-              name        - APK name
+              name or data_uoa   - APK name
             }
 
     Output: {
@@ -160,9 +168,25 @@ def check(i):
 
     import os
 
+    o=i.get('out','')
+
     name=i.get('name','')
     if name=='':
+        name=i.get('data_uoa','')
+
+    if name=='':
         return {'return':1, 'error':'APK "name" is not defined'}
+
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('device_id','')
+    target=i.get('target','')
+
+    if target=='' and tos=='':
+        return {'return':1, 'error':'"target_os" or "target" is not specified'}
+
+    xtdid=''
+    if tdid!='': xtdid=' -s '+tdid
 
     rr={'return':0}
 
@@ -170,11 +194,17 @@ def check(i):
     r=detect(i)
     if r['return']>0 and r['return']!=16: return r
 
+    if r['return']==0:
+        rr['params']=r['params']
+
     if r['return']==16:
         # APK is not installed
         tosd=r['target_os_dict']
 
         abi=tosd.get('abi','')
+
+        if o=='con':
+            ck.out('Searching APK for "'+name+'" and ABI="'+abi+'" ...')
 
         # Check if available in the CK
         r=ck.access({'action':'load',
@@ -196,12 +226,218 @@ def check(i):
 
                 if os.path.isfile(pp):
                     # Trying to install
-                    print ('abc')
+                    if o=='con':
+                        ck.out('  APK found ('+aname+') - trying to install ...')
+
+                    ii={'action':'shell',
+                        'module_uoa':cfg['module_deps']['os'],
+                        'host_os':hos,
+                        'target_os':hos,
+                        'cmd':'adb '+xtdid+' install -r -d '+pp}
+                    r=ck.access(ii)
+                    if r['return']>0: return r
+
+                    rc=r['return_code']
+
+                    stdout=r['stdout']
+                    stderr=r['stderr']
+
+                    if o=='con':
+                        if stdout!='': ck.out(stdout)
+                        if stderr!='': ck.out(stderr)
+
+                    if rc>0:
+                        return {'return':1, 'error':'command may have failed (return code='+str(rc)+')'}
+
+                    # Detecting params
+                    r=detect(i)
+                    if r['return']>0 and r['return']!=16: return r
+
+                    if r['return']==0:
+                        rr['params']=r['params']
+
+                    found=True
 
         # If not found
+        if not found:
+            if o=='con':
+                ck.out('')
+                ck.out('APK "'+name+'" was not found in CK.')
+                ck.out('You can download it and then register in the CK via')
+                ck.out(' $ ck add apk:{APK name} --path={full path to downloaded APK}')
+                ck.out('')
 
-        print ('xyz')
-
-    rr['params']=r['params']
+            return {'return':1, 'error':'APK is not installed on target device and was not found in CK'}
 
     return rr
+
+##############################################################################
+# add apk
+
+def add(i):
+    """
+    Input:  {
+              (data_uoa)  - CK entry to add APK (should be official APK name, i.e. openscience.crowdsource.experiments)
+              (repo_uoa)  - repo where to add APK
+
+              (abi)       - ABI of APK (armeabi, arm64-v8a, mips, mips64, x86, x86_64)
+
+              (path)      - path to APK on local host (apk_name will be automatically detected)
+              (apk_name)  - force APK name
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+    import shutil
+
+    o=i.get('out','')
+
+    # Check APK name
+    apk_name=i.get('apk_name','')
+    path=i.get('path','')
+    if path!='':
+        if not os.path.isfile(path):
+            return {'return':1, 'error':'APK is not found ('+path+')'}
+
+        if apk_name=='':
+            apk_name=os.path.basename(path)
+
+    # Check ABI
+    abi=i.get('abi','')
+
+    if abi=='':
+        r=ck.inp({'text':'Enter ABI (armeabi, arm64-v8a, mips, mips64, x86, x86_64): '})
+        if r['return']>0: return r
+        abi=r['string'].strip()
+
+    if abi=='':
+        return {'return':1, 'error':'ABI is not specified'}
+
+    # Check CK entry name
+    duoa=i.get('data_uoa','')
+    ruoa=i.get('repo_uoa','')
+
+    if duoa=='':
+        r=ck.inp({'text':'Enter CK entry name (must be official APK name): '})
+        if r['return']>0: return r
+        duoa=r['string'].strip()
+
+    # Check if already exists
+    r=ck.access({'action':'load',
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':duoa})
+    if r['return']>0 and r['return']!=16: return r
+
+    if r['return']==0:
+        ruoa=r['repo_uid']
+        pp=r['path']
+        dd=r['dict']
+    else:
+        r=ck.access({'action':'add',
+                     'module_uoa':work['self_module_uid'],
+                     'common_func':'yes',
+                     'data_uoa':duoa,
+                     'repo_uoa':ruoa})
+        if r['return']>0: return r
+        pp=r['path']
+        dd={}
+
+    # Create dirs and copy files
+    p1=os.path.join(pp,abi)
+    if not os.path.isdir(p1):
+        os.makedirs(p1)
+
+    p2=os.path.join(p1,apk_name)
+
+    shutil.copyfile(path, p2)
+
+    # Update dict
+    if abi not in dd:
+        dd[abi]={}
+    dd[abi]['apk_name']=apk_name
+
+    r=ck.access({'action':'update',
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':duoa,
+                 'repo_uoa':ruoa,
+                 'dict':dd,
+                 'sort_keys':'yes',
+                 'substitute':'yes',
+                 'ignore_update':'yes'})
+    if r['return']>0: return r
+    p=r['path']
+
+    if o=='con':
+        ck.out('')
+        ck.out('APK successfully registered in the CK ('+p+')')
+
+    return r
+
+##############################################################################
+# uninstall APK
+
+def uninstall(i):
+    """
+    Input:  {
+              (data_uoa) or (name) - get params only for this APK
+              (target_os)          - target Android OS (ck search os --tags=android) (default = android-32)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    # First check if exists
+    o=i.get('out','')
+
+    if o=='con':
+        i['out']=''
+    r=detect(i)
+    if r['return']>0: return r
+
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('device_id','')
+    target=i.get('target','')
+
+    xtdid=''
+    if tdid!='': xtdid=' -s '+tdid
+
+    if target=='' and tos=='':
+        tos='android-32'
+
+    name=i.get('name','')
+    if name=='':
+        name=i.get('data_uoa','')
+
+    ii={'action':'shell',
+        'module_uoa':cfg['module_deps']['os'],
+        'host_os':hos,
+        'target_os':hos,
+        'cmd':'adb '+xtdid+' uninstall '+name}
+    r=ck.access(ii)
+    if r['return']>0: return r
+
+    rc=r['return_code']
+    if rc>0:
+        return {'return':1, 'error':'command may have failed (return code='+str(rc)+')'}
+
+    stdout=r['stdout']
+    stderr=r['stderr']
+
+    if o=='con':
+        if stdout!='': ck.out(stdout)
+        if stderr!='': ck.out(stderr)
+
+    return r
