@@ -1,5 +1,8 @@
 {
   "actions": {
+    "check": {
+      "desc": "check APK"
+    },
     "detect": {
       "desc": "detect installed APKs"
     }
@@ -9,10 +12,11 @@
   "developer": "cTuning foundation",
   "developer_email": "admin@cTuning.org",
   "developer_webpage": "http://cTuning.org",
+  "license": "See CK LICENSE.txt for licensing details",
   "module_deps": {
-    "machine":"84be34883a81b2a9",
-    "env": "9b9b3208ac44b891", 
-    "platform.os": "41e31cc4496b8a8e" 
-  },
-  "license": "See CK LICENSE.txt for licensing details"
+    "env": "9b9b3208ac44b891",
+    "machine": "84be34883a81b2a9",
+    "os": "0440cb72c2bc5cc6",
+    "platform.os": "41e31cc4496b8a8e"
+  }
 }

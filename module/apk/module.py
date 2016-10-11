@@ -37,7 +37,8 @@ def init(i):
 def detect(i):
     """
     Input:  {
-              (name) - get params only for this APK
+              (name)      - get params only for this APK
+              (target_os) - target Android OS (ck search os --tags=android)
             }
 
     Output: {
@@ -52,112 +53,26 @@ def detect(i):
     oo=''
     if o=='con': oo='con'
 
-    # Check if need to initialize device and directly update input i !
-    ii={'action':'init',
-        'module_uoa':cfg['module_deps']['machine'],
-        'input':i}
-    r=ck.access(ii)
-    if r['return']>0: return r
-
-    device_cfg=i.get('device_cfg',{})
-
-    # Check host/target OS/CPU
     hos=i.get('host_os','')
     tos=i.get('target_os','')
     tdid=i.get('device_id','')
+    target=i.get('target','')
 
-    # Get some info about platforms
-    ii={'action':'detect',
-        'module_uoa':cfg['module_deps']['platform.os'],
+    ii={'action':'shell',
+        'module_uoa':cfg['module_deps']['os'],
         'host_os':hos,
         'target_os':tos,
-        'device_cfg':device_cfg,
         'device_id':tdid,
-        'skip_info_collection':'yes'}
+        'target':target,
+        'split_to_list':'yes',
+        'cmd':'pm list packages'}
+
     r=ck.access(ii)
     if r['return']>0: return r
 
-    hos=r['host_os_uid']
-    hosx=r['host_os_uoa']
-    hosd=r['host_os_dict']
+    tosd=r['target_os_dict']
 
-    tos=r['os_uid']
-    tosx=r['os_uoa']
-    tosd=r['os_dict']
-
-    # Check remote shell
-    rs=tosd.get('remote_shell','')
-    if rs=='':
-        return {'return':1, 'error':'APK are not supported for this target'}
-
-    tdid=i.get('device_id','')
-
-    xtdid=''
-    if tdid!='': xtdid=' -s '+tdid
-
-    envsep=hosd.get('env_separator','')
-    sext=hosd.get('script_ext','')
-    sexe=hosd.get('set_executable','')
-    sbp=hosd.get('bin_prefix','')
-    scall=hosd.get('env_call','')
-    ubtr=hosd.get('use_bash_to_run','')
-
-    x='"'
-
-    # Record to tmp batch and run
-    rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':'.tmp', 'remove_dir':'no'})
-    if rx['return']>0: return rx
-    fnx=rx['file_name']
-
-    adb=rs.replace('$#device#$',xtdid)+' '+x+'pm list packages'+x+' > '+fnx
-
-    # ADB dependency
-    deps={'adb':{
-                 "force_target_as_host": "yes",
-                 "local": "yes", 
-                 "name": "adb tool", 
-                 "sort": -10, 
-                 "tags": "tool,adb"
-                 }
-         }
-
-    ii={'action':'resolve',
-        'module_uoa':cfg['module_deps']['env'],
-        'host_os':hos,
-        'target_os':tos,
-        'device_id':tdid,
-        'deps':deps,
-        'add_customize':'yes',
-        'out':oo}
-    rx=ck.access(ii)
-    if rx['return']>0: return rx
-    sbb=rx['cut_bat']
-
-    sb=sbb+'\n'+adb
-
-    # Record to tmp batch and run
-    rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'no'})
-    if rx['return']>0: return rx
-    fn=rx['file_name']
-
-    rx=ck.save_text_file({'text_file':fn, 'string':sb})
-    if rx['return']>0: return rx
-
-    y=''
-    if sexe!='':
-       y+=sexe+' '+fn+envsep
-    y+=' '+scall+' '+fn
-
-    if ubtr!='': y=ubtr.replace('$#cmd#$',y)
-    os.system(y)
-
-    if os.path.isfile(fn):
-        os.remove(fn)
-
-    # Reading file
-    rx=ck.load_text_file({'text_file':fnx, 'split_to_list':'yes', 'delete_after_read':'yes'})
-    if rx['return']>0: return rx
-    lst=rx['lst']
+    lst=r['stdout_lst']
 
     params={}
 
@@ -177,37 +92,19 @@ def detect(i):
         params[package]={}
 
         # Get parameters
-        sb=sbb+'\n'+rs.replace('$#device#$',xtdid)+' '+x+'dumpsys package '+package+x+' > '+fnx
+        ii={'action':'shell',
+            'module_uoa':cfg['module_deps']['os'],
+            'host_os':hos,
+            'target_os':tos,
+            'device_id':tdid,
+            'target':target,
+            'split_to_list':'yes',
+            'cmd':'dumpsys package '+package}
 
-        rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'no'})
-        if rx['return']>0: return rx
-        fn=rx['file_name']
+        r=ck.access(ii)
+        if r['return']>0: return r
 
-        rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':sext, 'remove_dir':'no'})
-        if rx['return']>0: return rx
-        fny=rx['file_name']
-
-        rx=ck.save_text_file({'text_file':fn, 'string':sb})
-        if rx['return']>0: return rx
-
-        y=''
-        if sexe!='':
-           y+=sexe+' '+fn+envsep
-        y+=' '+scall+' '+fn+' > '+fny
-
-        if ubtr!='': y=ubtr.replace('$#cmd#$',y)
-        os.system(y)
-
-        if os.path.isfile(fn):
-            os.remove(fn)
-
-        if os.path.isfile(fny):
-            os.remove(fny)
-
-        # Reading file
-        rx=ck.load_text_file({'text_file':fnx, 'split_to_list':'yes', 'delete_after_read':'yes'})
-        if rx['return']>0: return rx
-        ll=rx['lst']
+        ll=r['stdout_lst']
 
         for q in ll:
             j=q.find('=')
@@ -228,7 +125,7 @@ def detect(i):
 
     if name!='':
         if iapk==0:
-            return {'return':1, 'error':'APK was not found on the target device'}
+            return {'return':16, 'error':'APK was not found on the target device'}
 
         if o=='con':
             ck.out('')
@@ -238,4 +135,73 @@ def detect(i):
             for k in sorted(params[name]):
                 v=params[name][k]
                 ck.out('  '+k+' = '+v)
-    return {'return':0, 'params':params}
+    return {'return':0, 'params':params, 'target_os_dict':tosd}
+
+##############################################################################
+# check APK
+
+def check(i):
+    """
+    Input:  {
+              (host_os)
+              (target_os)
+              (device_id)
+
+              name        - APK name
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    name=i.get('name','')
+    if name=='':
+        return {'return':1, 'error':'APK "name" is not defined'}
+
+    rr={'return':0}
+
+    # Detect if APK is installed
+    r=detect(i)
+    if r['return']>0 and r['return']!=16: return r
+
+    if r['return']==16:
+        # APK is not installed
+        tosd=r['target_os_dict']
+
+        abi=tosd.get('abi','')
+
+        # Check if available in the CK
+        r=ck.access({'action':'load',
+                     'module_uoa':work['self_module_uid'],
+                     'data_uoa':name})
+        if r['return']>0 and r['return']!=16: return r
+
+        found=False
+        if r['return']==0:
+            p=r['path']
+            d=r['dict']
+
+            dabi=d.get(abi,{})
+
+            aname=dabi.get('apk_name','')
+
+            if aname!='':
+                pp=os.path.join(p, abi, aname)
+
+                if os.path.isfile(pp):
+                    # Trying to install
+                    print ('abc')
+
+        # If not found
+
+        print ('xyz')
+
+    rr['params']=r['params']
+
+    return rr

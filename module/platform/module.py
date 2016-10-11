@@ -916,7 +916,7 @@ def show(i):
 
         meta=q['meta']
         ft=meta.get('features',{})
-        
+
         name=ft.get('name','')
         vendor=ft.get('vendor','')
         model=ft.get('model','')
