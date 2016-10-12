@@ -1,3 +1,5 @@
+* 2016.10.12 - added latest x86/x86_64 android OS descriptions (needed for ARM Workload Automation via CK)
+
 * 2016.10.11 - added 'shell' function to 'os' module to automate simple script execution
 
 * 2016.10.10 - added detection of CPU clusters for Workload automation

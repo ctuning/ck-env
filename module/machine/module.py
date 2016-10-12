@@ -163,13 +163,21 @@ def add(i):
 
             if abi!='':
                 if o=='con':
-                   ck.out('')
-                   ck.out('Android ABI: '+abi)
+                    ck.out('')
+                    ck.out('Android ABI: '+abi)
 
                 if abi.startswith('arm64'):
                     dos='*-arm64'
                 elif abi.startswith('arm'):
                     dos='*-arm'
+                elif abi.startswith('x86_64'):
+                    dos='*-x86_64'
+                elif abi.startswith('x86'):
+                    dos='*-x86'
+                elif abi.startswith('mips64'):
+                    dos='*-mips64'
+                elif abi.startswith('mips'):
+                    dos='*-mips'
 
     # Check tags and use host ones if empty
     if len(tags)==0 and len(os_tags)>0:
