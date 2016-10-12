@@ -1,5 +1,8 @@
 {
   "actions": {
+    "browse": {
+      "desc": "browse platform.cpu participated in experiment crowdsourcing (crowd-benchmarking and crowd-tuning)"
+    },
     "detect": {
       "desc": "detect various properties (features) of a given CPU"
     }, 

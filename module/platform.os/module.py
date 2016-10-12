@@ -940,3 +940,35 @@ def show(i):
     h+='</table><br><br>\n'
 
     return {'return':0, 'html':h}
+
+##############################################################################
+# browse platform.os participated in experiment crowdsourcing (crowd-benchmarking and crowd-tuning)
+
+def browse(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    # TBD: should calculate url
+    url='https://github.com/ctuning/ck-crowdtuning-platforms/tree/master/platform.os'
+
+    import webbrowser
+    webbrowser.open(url)
+
+    import time
+    time.sleep(3)
+
+    url='http://cknowledge.org/repo/web.php?action=index&module_uoa=wfe&native_action=show&native_module_uoa=platform.os'
+
+    import webbrowser
+    webbrowser.open(url)
+
+    return {'return':0}
