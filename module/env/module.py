@@ -47,6 +47,8 @@ def set(i):
                or
               (tags)                 - search UOA by tags (separated by comma)
 
+              (no_tags)              - exclude entris with these tags separated by comma
+
               (local)                - if 'yes', add host_os, target_os, target_device_id to search
 
               (key)                  - key from deps (to set env with path)
@@ -165,6 +167,7 @@ def set(i):
     # Check environment UOA
     enruoa=i.get('repo_uoa','')
     tags=i.get('tags','')
+    no_tags=i.get('no_tags','')
     duoa=i.get('uoa','')
 
     lx=0
@@ -202,6 +205,12 @@ def set(i):
     # Search for environment entries
     r=ck.access(ii)
     if r['return']>0: return r
+
+    # Prune if needed
+    if no_tags!='':
+       r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
+       if r['return']>0: return r
+
     l=r['lst']
     lx=len(l)
 
@@ -308,6 +317,12 @@ def set(i):
           else:
              r=ck.access(iii)
              if r['return']>0: return r
+
+             # Prune if needed
+             if no_tags!='':
+                r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
+                if r['return']>0: return r
+
              l=r['lst']
              lx=len(l)
 
@@ -1408,3 +1423,41 @@ def internal_get_val(lst, index, default_value):
     if index<len(lst):
        v=lst[index]
     return v
+
+##############################################################################
+# Prune search list by no_tags
+
+def prune_search_list(i):
+    """
+    Input:  {
+              lst     - list of entries after 'search'
+              no_tags - string of tags to exclude
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              lst          - pruned list
+            }
+    """
+
+    lst=i.get('lst',[])
+    ntags=i.get('no_tags','').split(',')
+
+    nlst=[]
+    for q in lst:
+        meta=q.get('meta','')
+        tags=meta.get('tags',[])
+
+        skip=False
+        for t in ntags:
+            if t in tags:
+                skip=True
+                break
+
+        if not skip:
+            nlst.append(q)
+
+    return {'return':0, 'lst':nlst}
