@@ -1031,6 +1031,7 @@ def resolve(i):
             ytosd=hosd
 
         tags=q.get('tags','')
+        no_tags=q.get('no_tags','')
         name=q.get('name','')
         local=q.get('local','')
         sd=q.get('skip_deafult','')
@@ -1064,6 +1065,7 @@ def resolve(i):
             'target_os':ytos,
             'target_device_id':ytdid,
             'tags':tags,
+            'no_tags':no_tags,
             'repo_uoa':enruoa,
             'env':env,
             'uoa':uoa,
