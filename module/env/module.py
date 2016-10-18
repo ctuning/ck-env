@@ -216,6 +216,8 @@ def set(i):
 
     auoas=[]
 
+    dname=''
+
     if lx==0 and duoa!='':
        return {'return':33, 'error':'either missing env ('+duoa+') or it exists but something changes in its dependencies or setup ('+str(setup)+'):'}
 
@@ -445,8 +447,10 @@ def set(i):
                 ilx=int(x)
 
        if ilx<len(l):
-          duid=l[ilx].get('data_uid')
+          duid=l[ilx]['data_uid']
           duoa=duid
+
+          dname=l[ilx].get('info',{}).get('data_name','')
 
           dd=l[ilx].get('meta',{})
 
@@ -556,6 +560,10 @@ def set(i):
        return r
     d=r['dict']
     p=r['path']
+
+    dname=r.get('data_name','')
+    if dname!='':
+        d['data_name']=dname
 
     suoa=d.get('soft_uoa','')
     cs=None
