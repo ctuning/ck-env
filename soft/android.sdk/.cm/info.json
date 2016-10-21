@@ -1,0 +1,20 @@
+{
+  "backup_data_uid": "fb464dbda9f7c3dc",
+  "backup_module_uid": "5e1100048ab875d7",
+  "backup_module_uoa": "soft",
+  "control": {
+    "author": "Grigori Fursin",
+    "author_email": "Grigori.Fursin@cTuning.org",
+    "author_webpage": "http://fursin.net",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2016-10-21T20:46:55.552545",
+    "license": "See CK LICENSE.txt for licensing details",
+    "version": [
+      "1",
+      "8",
+      "3dev"
+    ]
+  },
+  "data_name": "sdk.android"
+}

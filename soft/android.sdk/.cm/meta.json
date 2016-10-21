@@ -1,0 +1,38 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "add_only_with_version": "yes",
+    "add_to_path": "yes",
+    "build_dir_name": "adb",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_ANDROID_SDK",
+    "limit_recursion_dir_search": {
+      "linux": 4,
+      "win": 5
+    },
+    "only_for_host_os_tags": [
+      "windows",
+      "linux"
+    ],
+    "soft_file": {
+      "linux": "android",
+      "win": "android.exe"
+    },
+    "soft_file_from_host_os": "yes",
+    "soft_path_example": {
+      "linux": "$HOME/Android/Sdk/tools/android",
+      "win": ""
+    },
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1",
+      "win": "--version > $#filename#$ 2>&1"
+    }
+  },
+  "env": {},
+  "soft_name": "Android SDK",
+  "tags": [
+    "sdk", 
+    "android" 
+  ]
+}

@@ -1,0 +1,2 @@
+You can download Android SDK for Linux, MacOS and Windows at
+https://developer.android.com/studio
