@@ -119,12 +119,14 @@ def add(i):
     # Continue processing
     tags=[]
     extra_check={}
+    extra_deps={}
     prefix=''
     rtags=''
     if at!='':
        tags=tat[at]['tags']
        dp=tat[at]['detect_platform']
        extra_check=tat[at].get('extra_check',{})
+       extra_deps=tat[at].get('extra_deps',{})
        prefix=tat[at].get('alias_prefix','')
        rtags=tat[at].get('record_tags','')
        dos=''
@@ -214,6 +216,19 @@ def add(i):
     # Target OS should be finalized
     if tos=='':
         return {'return':1, 'error':'no target OS selected'}
+
+    # Extra deps
+    if len(extra_deps)>0:
+        ck.out(line)
+
+        r=ck.access({'action':'resolve',
+                     'module_uoa':cfg['module_deps']['env'],
+                     'deps':extra_deps,
+                     'host_os':hos,
+                     'target_os':tos,
+                     'device_id':tdid,
+                     'out':oo})
+        if r['return']>0: return r
 
     # Get user friend alias of OS
     if tos!='':
