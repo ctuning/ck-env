@@ -1,3 +1,5 @@
+* 2016.10.24 - added lib.tiny-dnn
+
 * 2016.10.21 - added dependency on ARM WA tool if adding target machine that uses WA ...
              - added soft:android.sdk description and detection
 
