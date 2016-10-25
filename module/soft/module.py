@@ -336,7 +336,7 @@ def setup(i):
         'skip_info_collection':'no'}
 
     if i.get('skip_device_info_collection','')=='yes':
-       ii['skip_info_collection']='yes'
+        ii['skip_info_collection']='yes'
 
     r=ck.access(ii)
     if r['return']>0: return r

@@ -1,4 +1,5 @@
 * 2016.10.24 - added lib.tiny-dnn
+             - fixes possible issues when installing packages for Android devices
 
 * 2016.10.21 - added dependency on ARM WA tool if adding target machine that uses WA ...
              - added soft:android.sdk description and detection

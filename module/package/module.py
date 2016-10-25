@@ -970,6 +970,9 @@ def install(i):
               'extra_version':ev
              }
 
+          if cus.get('collect_device_info','')!='yes':
+              ii['skip_device_info_collection']='yes'
+
           if d.get('remove_deps','')=='yes':
              ii['deps_copy']=udeps
           else:
