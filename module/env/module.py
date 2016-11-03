@@ -57,6 +57,7 @@ def set(i):
               (deps)                 - already resolved deps
               (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
               (skip_default)         - if 'yes', skip detection of default installed software version
+              (skip_pruning_by_other_deps) - if 'yes', do not prune available envs using other resolved deps
 
               (bat_file)             - if !='', use this filename to generate/append bat file ...
               (bat_new)              - if 'yes', start new bat file
@@ -328,10 +329,10 @@ def set(i):
              l=r['lst']
              lx=len(l)
 
-    # Re-check existing environment
+    # Re-check/prune existing environment using already resolved deps
     if lx>0:
        ilx=0
-       if lx>1 and sar!='yes':
+       if i.get('skip_pruning_by_other_deps','')!='yes' and lx>1 and sar!='yes':
           # Try auto-resolve or prune choices
           nls=[]
           for z in range(0, lx):
@@ -348,12 +349,13 @@ def set(i):
                   for a in cdeps:
                       if a==q:
                          aa=cdeps[a]
-                         auoa=aa.get('uoa','')
+                         if aa.get('skip_reuse','')!='yes':
+                             auoa=aa.get('uoa','')
 
-                         # Tricky part ...
-                         if auoa!=juoa:
-                            skip=True
-                            break
+                             # Tricky part: basically if similar and already resolved current deps are not the same is underneath ones ...
+                             if auoa!=juoa:
+                                 skip=True
+                                 break
 
                   if skip: break
               if not skip: nls.append(j)
@@ -1084,6 +1086,7 @@ def resolve(i):
             'random':ran,
             'name':name,
             'key':ek,
+            'skip_pruning_by_other_deps':q.get('skip_pruning_by_other_deps',''),
             'quiet':quiet
            }
         if o=='con': ii['out']='con'
