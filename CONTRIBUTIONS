@@ -67,3 +67,9 @@ E:
 O: The Hartree Centre, UK (http://www.hartree.stfc.ac.uk/hartree)
 C: discussing farms of CK-powered machines
 W: 2016
+
+N: Dave Butcher 
+E:
+O: ARM
+C: reporting a few bugs when intergrating ARM's workload automation to CK
+W: 2016

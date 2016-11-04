@@ -482,7 +482,11 @@ def set(i):
 #             a=rx['string'].strip().lower()
 #
 #          if a!='n' and a!='no':
-          save_cur_dir=os.getcwd()
+          try:
+              save_cur_dir=os.getcwd()
+          except OSError:
+              os.chdir('..')
+              save_cur_dir=os.getcwd()
 
           vv={'action':'install',
               'module_uoa':cfg['module_deps']['package'],

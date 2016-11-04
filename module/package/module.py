@@ -290,7 +290,12 @@ def install(i):
           found=False
 
           # Attempt to load configuration from the current directory
-          p=os.getcwd()
+          try:
+              p=os.getcwd()
+          except OSError:
+              os.chdir('..')
+              p=os.getcwd()
+
           pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
 
           if os.path.isfile(pc):

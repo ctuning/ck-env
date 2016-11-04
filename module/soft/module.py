@@ -415,7 +415,12 @@ def setup(i):
        duid=r['data_uid']
 
     if duoa=='':
-       p=os.getcwd()
+       try:
+           p=os.getcwd()
+       except OSError:
+           os.chdir('..')
+           p=os.getcwd()
+
        pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
 
        found=False
@@ -631,7 +636,12 @@ def setup(i):
           if psrc!='':
              dfp=os.path.join(dfp, psrc)
 
-          pwd1=os.getcwd()
+          try:
+              pwd1=os.getcwd()
+          except OSError:
+              os.chdir('..')
+              pwd1=os.getcwd()
+
           os.chdir(dfp)
 
           if getattr(ck, 'run_and_get_stdout', None)==None:
