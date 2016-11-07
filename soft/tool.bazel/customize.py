@@ -27,7 +27,7 @@ def parse_version(i):
         x=lst[0]
 
         if x.startswith('Build label:'):
-            ver=x[11:].strip()
+            ver=x[12:].strip()
 
     return {'return':0, 'version':ver}
 
