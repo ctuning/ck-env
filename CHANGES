@@ -1,4 +1,5 @@
 * 2016.11.08 - improved software detection (now can include sub-path in search)
+             - can add GPGPU features to installation scripts
 
 * 2016.11.07 - added soft description 'tool.bazel' (useful to recompile Google's TensorFlow)
 

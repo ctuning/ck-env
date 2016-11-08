@@ -17,6 +17,7 @@
     "machine":"84be34883a81b2a9",
     "env": "9b9b3208ac44b891",
     "platform.cpu": "aa6b542a420b8db9",
+    "platform.gpgpu": "192ed4e0bbdbe743",
     "platform.os": "41e31cc4496b8a8e",
     "soft": "5e1100048ab875d7"
   }

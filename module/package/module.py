@@ -380,6 +380,7 @@ def install(i):
        cs=rx['code']
 
     # Check if need host CPU params
+    features={}
     if d.get('need_cpu_info','')=='yes':
        r=ck.access({'action':'detect',
                     'module_uoa':cfg['module_deps']['platform.cpu'],
@@ -388,10 +389,23 @@ def install(i):
        if r['return']>0: return r
 
        cpu_ft=r.get('features',{}).get('cpu',{})
+       features.update(r.get('features',{}))
 
        pr_env['CK_HOST_CPU_NUMBER_OF_PROCESSORS']=cpu_ft.get('num_proc','1')
 
        # We may want to pass more info (including target CPU) ...
+
+    # Check if need host GPGPU params
+    if d.get('need_gpgpu_info','')=='yes':
+       r=ck.access({'action':'detect',
+                    'module_uoa':cfg['module_deps']['platform.gpgpu'],
+                    'type':d.get('need_gpgpu_type',''),
+                    'host_os':hos,
+                    'target_os':hos})
+#                    'out':oo})
+       if r['return']>0: return r
+
+       features.update(r.get('features',{}))
 
     # Update env from input
     envx=i.get('env',{})
@@ -463,6 +477,7 @@ def install(i):
            "deps":udeps,
            "customize":cus,
            "self_cfg":cfg,
+           "features":features,
            "version":ver,
            "ck_kernel":ck
           }
@@ -713,6 +728,7 @@ def install(i):
            "tags":tags,
            "env":env,
            "deps":udeps,
+           "features":features,
            "customize":cus,
            "self_cfg":cfg,
            "version":ver,
@@ -832,6 +848,7 @@ def install(i):
                  "tags":tags,
                  "env":env,
                  "deps":udeps,
+                 "features":features,
                  "customize":cus,
                  "self_cfg":cfg,
                  "version":ver,
@@ -968,6 +985,7 @@ def install(i):
               'target_device_id':tdid,
               'tags':stags,
               'customize':cus,
+              'features':features,
               'env_new':'yes',
               'env_repo_uoa':enruoa,
               'env_data_uoa':enduoa,
