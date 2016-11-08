@@ -1,4 +1,6 @@
-* 2016.11.07 - adding soft description 'tool.bazel' (useful to recompile Google's TensorFlow)
+* 2016.11.08 - improving software detection (now can include sub-path in search)
+
+* 2016.11.07 - added soft description 'tool.bazel' (useful to recompile Google's TensorFlow)
 
 * 2016.11.04 - making os.getcwd() safer
 

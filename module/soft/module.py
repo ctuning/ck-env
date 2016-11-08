@@ -1207,6 +1207,10 @@ def list_all_files(i):
 
     fname=i.get('file_name','')
 
+    fname_with_sep=False
+    if fname.find(os.sep)>=0:
+        fname_with_sep=True
+
     pattern=i.get('pattern','')
     if pattern!='':
        import fnmatch
@@ -1239,8 +1243,16 @@ def list_all_files(i):
            if p!='':
               add=True
 
-              if fname!='' and fname!=fn:
-                 add=False
+              if fname!='':
+                  if fname_with_sep and os.path.isdir(p):
+                      px=os.path.join(po,fname)
+                      add=False
+                      if os.path.isfile(px):
+                          if px not in a:
+                              a.append(px)
+
+                  elif fname!=fn:
+                      add=False
 
               if pattern!='' and not fnmatch.fnmatch(fn, pattern):
                  add=False
@@ -1248,7 +1260,6 @@ def list_all_files(i):
               if add:
                  a.append(p)
 
-       
               recursive=False
               problem=False    # Need this complex structure to support UTF-8 file names in Python 2.7
               try:
