@@ -1,4 +1,4 @@
-* 2016.11.08 - improving software detection (now can include sub-path in search)
+* 2016.11.08 - improved software detection (now can include sub-path in search)
 
 * 2016.11.07 - added soft description 'tool.bazel' (useful to recompile Google's TensorFlow)
 
