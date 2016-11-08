@@ -128,6 +128,7 @@ def setup(i):
        p2=os.path.dirname(p1)
 
        env[ep]=p2
+       env[ep+'_FILE']=fp
        env[ep+'_BIN']=p1
 
     if p1!='':
