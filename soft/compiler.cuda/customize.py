@@ -131,6 +131,7 @@ def setup(i):
        env[ep+'_BIN']=p1
 
     env['CUDA_PATH']=p2
+    env['CUDA_HOME']=p2
     env['CUDA_INSTALL_DIR']=p2
 
     opt1='--relaxed-constexpr'
