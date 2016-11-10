@@ -2,6 +2,8 @@
              - added gflags soft description
              - added glog soft description
              - added lmdb soft description
+             - removed soft:lib.opencv.android and moved Android target to lib.opencv
+             - added possibility to set ABI in the installation path (for Android)
 
 * 2016.11.08 - improved software detection (now can include sub-path in search)
              - can add GPGPU features to installation scripts

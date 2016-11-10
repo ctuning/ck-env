@@ -12,10 +12,6 @@
       "linux": "libopencv_core.so",
       "win": "opencv_annotation.exe"
     }, 
-    "only_for_target_os_tags": [
-      "windows", 
-      "linux"
-    ], 
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/libopencv_core.so"
     }

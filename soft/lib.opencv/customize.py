@@ -132,7 +132,8 @@ def setup(i):
     pi=fp
     found=False
     while True:
-       if os.path.isdir(os.path.join(pi,'include')):
+       if (remote=='yes' and os.path.isdir(os.path.join(pi,'jni','include'))) or \
+          os.path.isdir(os.path.join(pi,'include')):
           found=True
           break
        pix=os.path.dirname(pi)
@@ -145,11 +146,39 @@ def setup(i):
 
     ################################################################
     if remote=='yes':
-       cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
-       cus['path_lib']=pi+'\\OpenCV-android-sdk\\sdk\\native\\libs\\armeabi'
+#       cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
+#       cus['path_lib']=pi+'\\OpenCV-android-sdk\\sdk\\native\\libs\\armeabi'
+#
+#       cus['path_include']=pi+'\\opencv-2.4.11\\include'
+#       cus['path_includes']=[pi+'\\opencv-2.4.11\\3rdparty\\include\\opencl\\1.2']
+#
+#       cus['path_static_lib']=cus['path_lib']
+#
+#       cus['static_lib']='libopencv_core.a'
+#
+#       cus['extra_static_libs']={'opencv_imgproc':'libopencv_imgproc.a',
+#                                 'opencv_ocl':'libopencv_ocl.a',
+#                                 'opencv_highgui':'libopencv_highgui.a'}
+#
+#       env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
+#
+#       if win=='yes':
+#          s+='\nset '+ellp+'=%CK_ENV_LIB_OPENCV_LIB%;%'+ellp+'%\n'
+#       else:
+#          s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:$'+ellp+'\n'
 
-       cus['path_include']=pi+'\\opencv-2.4.11\\include'
-       cus['path_includes']=[pi+'\\opencv-2.4.11\\3rdparty\\include\\opencl\\1.2']
+       # Check libs/ABI
+       pabi=pl[len(pi)+1:]
+
+       pinc=os.path.join(pi,'jni','include')
+       if not os.path.isdir(pinc):
+           return {'return':1, 'error':'include directory is not found in '+pi}
+
+       cus['path_include']=pinc
+
+       cus['path_lib']=pl
+
+       plx=os.path.join(pi,'3rdparty',pabi)
 
        cus['path_static_lib']=cus['path_lib']
 
@@ -162,9 +191,9 @@ def setup(i):
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
 
        if win=='yes':
-          s+='\nset '+ellp+'=%CK_ENV_LIB_OPENCV_LIB%;%'+ellp+'%\n'
+          s+='\nset '+ellp+'=%CK_ENV_LIB_OPENCV_LIB%;'+plx+';%'+ellp+'%\n'
        else:
-          s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:$'+ellp+'\n'
+          s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:"'+plx+'":$'+ellp+'\n'
 
     elif win=='yes':
        ext='x64'

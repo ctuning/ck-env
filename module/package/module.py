@@ -821,6 +821,7 @@ def install(i):
        cont=True
        if x!='': 
           x=x.replace('$#sep#$', sdirs)
+          x=x.replace('$#abi#$', tosd.get('abi',''))
           fp=os.path.join(fp,x)
           if os.path.isfile(fp):
              if o=='con':
@@ -964,6 +965,7 @@ def install(i):
        fp=pi
        if x!='': 
           x=x.replace('$#sep#$', sdirs)
+          x=x.replace('$#abi#$', tosd.get('abi',''))
           fp=os.path.join(fp,x)
 
        if suoa!='':

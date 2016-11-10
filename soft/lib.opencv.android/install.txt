@@ -1,5 +1,0 @@
-You can download and install latest (or required) OpenCV from
- * http://opencv.org/downloads.html
-
-On UBUNTU you should be able to install OpenCV via
- $ sudo apt-get install libopencv-dev
