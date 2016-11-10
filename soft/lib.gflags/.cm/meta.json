@@ -1,0 +1,26 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_GFLAGS",
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 3
+    },
+    "soft_file": {
+      "linux": "libgflags.so",
+      "win": "libgflags.lib"
+    },
+    "soft_path_example": {
+      "linux": "/usr/lib/x86_64-linux-gnu/libgflags.so",
+      "win": ""
+    }
+  },
+  "deps": {},
+  "soft_name": "GFlags library",
+  "tags": [
+    "lib",
+    "gflags"
+  ]
+}
