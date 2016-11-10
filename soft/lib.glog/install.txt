@@ -1,0 +1,6 @@
+You can download and install latest (or required) package from
+* https://github.com/gflags/gflags
+
+On Ubuntu you can install it as following:
+$ sudo apt-get install libgflags-dev
+
