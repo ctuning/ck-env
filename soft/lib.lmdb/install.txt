@@ -1,6 +1,6 @@
 You can download and install latest (or required) package from
-* https://github.com/gflags/gflags
+* https://github.com/LMDB/lmdb
 
 On Ubuntu you can install it as following:
-$ sudo apt-get install libglog-dev
+$ sudo apt-get install liblmdb-dev
 

@@ -1,6 +1,7 @@
 * 2016.11.10 - skiping Android device detection during software detection (if not needed)
              - added gflags soft description
              - added glog soft description
+             - added lmdb soft description
 
 * 2016.11.08 - improved software detection (now can include sub-path in search)
              - can add GPGPU features to installation scripts

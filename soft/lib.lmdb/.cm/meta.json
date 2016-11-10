@@ -1,0 +1,26 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_LMDB",
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 3
+    },
+    "soft_file": {
+      "linux": "liblmdb.so",
+      "win": "liblmdb.lib"
+    },
+    "soft_path_example": {
+      "linux": "/usr/lib/liblmdb.so",
+      "win": ""
+    }
+  },
+  "deps": {},
+  "soft_name": "LMDB library",
+  "tags": [
+    "lib",
+    "lmdb"
+  ]
+}
