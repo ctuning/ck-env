@@ -214,6 +214,7 @@ def setup(i):
     env['CK_ANDROID_COMPILER_PREFIX']=acp
     env['CK_ANDROID_TOOLCHAIN']=atc
     env['CK_ANDROID_ABI']=abi
+    env['CK_CPU_BITS']=tbits
     env['CK_ANDROID_API_LEVEL']=api_level
     env['CK_ANDROID_NDK_ARCH']=arch
     env['CK_ANDROID_NDK_PLATFORM']=platform
