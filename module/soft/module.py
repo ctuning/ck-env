@@ -322,6 +322,7 @@ def setup(i):
 
     env_new=i.get('env_new','')
 
+
     ########################################################################
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -1719,6 +1720,10 @@ def check(i):
         'deps':deps,
         'extra_version':ev,
         'out':oo}
+
+    if cus.get('collect_device_info','')!='yes':
+        ii['skip_device_info_collection']='yes'
+
     rz=setup(ii)
     if rz['return']>0: return rz
 

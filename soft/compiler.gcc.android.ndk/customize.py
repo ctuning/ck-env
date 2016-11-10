@@ -67,7 +67,6 @@ def limit(i):
     drx=[]
 
     for q in dr:
-        print(q)
         p0=os.path.dirname(q)
         p1=os.path.join(p0,'toolchains')
         if os.path.isdir(p1):
@@ -188,6 +187,11 @@ def setup(i):
     if platform=='':
        return {'return':1, 'error':'platform is not defined in target OS'}
 
+    api_level=''
+    j=platform.rfind('-')
+    if j>0:
+        api_level=platform[j+1:].strip()
+
     ############################################################
     arch=target_d.get('android_ndk_arch','')
     if arch=='':
@@ -210,6 +214,7 @@ def setup(i):
     env['CK_ANDROID_COMPILER_PREFIX']=acp
     env['CK_ANDROID_TOOLCHAIN']=atc
     env['CK_ANDROID_ABI']=abi
+    env['CK_ANDROID_API_LEVEL']=api_level
     env['CK_ANDROID_NDK_ARCH']=arch
     env['CK_ANDROID_NDK_PLATFORM']=platform
 

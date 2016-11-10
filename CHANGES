@@ -1,3 +1,5 @@
+* 2016.11.10 - skiping Android device detection during software detection (if not needed)
+
 * 2016.11.08 - improved software detection (now can include sub-path in search)
              - can add GPGPU features to installation scripts
              - added soft:compiler.computecpp
