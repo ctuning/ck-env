@@ -288,6 +288,8 @@ def setup(i):
       "CK_OPT_ALL_WARNINGS": "-Wall", 
       "CK_DLL_EXT": ".so", 
       "CK_EXE_EXT": ".out", 
+      "CK_EXTRA_LIB_Z": "-lz", 
+      "CK_EXTRA_LIB_LOG": "-llog", 
       "CK_EXTRA_LIB_DL": "-ldl", 
       "CK_EXTRA_LIB_M": "-lm", 
       "CK_FLAGS_CREATE_ASM": "-S", 

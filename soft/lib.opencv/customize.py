@@ -204,6 +204,9 @@ def setup(i):
           env[ep+'_LFLAG_HIGHGUI']='-lopencv_highgui'
           env[ep+'_LFLAG_CORE']='-lopencv_core'
 
+          s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":"'+plx+'":$LD_LIBRARY_PATH\n'
+          s+='export LIBRARY_PATH="'+cus['path_lib']+'":"'+plx+'":$LIBRARY_PATH\n'
+
     elif win=='yes':
        ext='x64'
        if tbits=='32': ext='ia32'
