@@ -123,6 +123,9 @@ def setup(i):
        cus['path_lib']=p1
        cus['path_include']=os.path.join(pi,'include')
 
+       s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
+       s+='export LIBRARY_PATH="'+cus['path_lib']+'":$LIBRARY_PATH\n'
+
     ep=cus.get('env_prefix','')
     if pi!='' and ep!='':
        env[ep]=pi

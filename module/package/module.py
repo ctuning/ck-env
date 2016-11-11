@@ -90,6 +90,7 @@ def install(i):
     import os
     import time
 
+
     o=i.get('out','')
 
     oo=''
@@ -332,7 +333,13 @@ def install(i):
     udeps=d.get('deps',{})
 
     depsx=i.get('deps',{})
-    if len(depsx)>0: udeps.update(depsx)
+    if len(depsx)>0: 
+        # RECENT UPDATE: check that is correct
+        # Update only those keys that are in soft deps
+        for k in udeps:
+            if k in depsx:
+                udeps[k]=depsx[k]
+#        udeps.update(depsx)
 
     suoa=d.get('soft_uoa','')
 

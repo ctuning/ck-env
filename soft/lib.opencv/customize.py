@@ -115,7 +115,7 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    envp=cus.get('env_prefix','')
+    ep=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
     hosd=i.get('host_os_dict',{})
@@ -199,6 +199,10 @@ def setup(i):
           s+='\nset '+ellp+'=%CK_ENV_LIB_OPENCV_LIB%;'+plx+';%'+ellp+'%\n'
        else:
           s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:"'+plx+'":$'+ellp+'\n'
+
+          env[ep+'_LFLAG_IMGPROC']='-lopencv_imgproc'
+          env[ep+'_LFLAG_HIGHGUI']='-lopencv_highgui'
+          env[ep+'_LFLAG_CORE']='-lopencv_core'
 
     elif win=='yes':
        ext='x64'

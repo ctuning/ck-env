@@ -113,6 +113,9 @@ def setup(i):
     if not found:
        return {'return':1, 'error':'can\'t find root dir of the OpenCL installation'}
 
+    ep=cus['env_prefix']
+    env[ep]=pi
+
     ############################################################
     # Setting environment depending on the platform
     if hplat=='win':
@@ -126,8 +129,9 @@ def setup(i):
        cus['path_lib']=p1
        cus['path_include']=os.path.join(pi,'include')
 
-    ep=cus.get('env_prefix','')
-    if pi!='' and ep!='':
-       env[ep]=pi
+       s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
+       s+='export LIBRARY_PATH="'+cus['path_lib']+'":$LIBRARY_PATH\n'
+
+       env[ep+'_LFLAG_SYSTEM']='-lboost_system'
 
     return {'return':0, 'bat':s}
