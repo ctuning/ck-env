@@ -1,3 +1,6 @@
+* 2016.11.11 - fixed bug: no possible not to search for installed software
+               but install from packages (useful for Caffe for Android via CK)
+
 * 2016.11.10 - skiping Android device detection during software detection (if not needed)
              - added gflags soft description
              - added glog soft description

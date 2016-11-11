@@ -1,0 +1,22 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_PROTOBUF_HOST",
+    "limit_recursion_dir_search": {
+      "linux": 3
+    },
+    "soft_file": {
+      "linux": "libprotobuf.so"
+    },
+    "soft_path_example": {
+      "linux": ""
+    }
+  },
+  "soft_name": "ProtoBuf host library",
+  "tags": [
+    "lib",
+    "protobuf-host"
+  ]
+}

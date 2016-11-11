@@ -188,6 +188,11 @@ def setup(i):
                                  'opencv_ocl':'libopencv_ocl.a',
                                  'opencv_highgui':'libopencv_highgui.a'}
 
+
+       env['CK_ENV_LIB_OPENCV']=pi
+       env['CK_ENV_LIB_OPENCV_JNI']=os.path.join(pi,'jni')
+       env['CK_ENV_LIB_OPENCV_THIRDPARTY']=os.path.join(pi,'3rdparty')
+
        env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
 
        if win=='yes':

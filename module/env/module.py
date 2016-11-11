@@ -225,6 +225,7 @@ def set(i):
     # If no entries, try to detect default ones and repeat
     history_deps=[]
     showed_warning=False
+
     if lx==0:
        if o=='con' and tags!='':
           ck.out('')
@@ -1048,7 +1049,7 @@ def resolve(i):
         no_tags=q.get('no_tags','')
         name=q.get('name','')
         local=q.get('local','')
-        sd=q.get('skip_deafult','')
+        sd=q.get('skip_default','')
 
         ek=q.get('env_key','')
 
