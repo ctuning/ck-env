@@ -144,6 +144,11 @@ def setup(i):
     if not found:
        return {'return':1, 'error':'can\'t find root dir of the OpenCL installation'}
 
+    if win!='yes':
+       env[ep+'_LFLAG_IMGPROC']='-lopencv_imgproc'
+       env[ep+'_LFLAG_HIGHGUI']='-lopencv_highgui'
+       env[ep+'_LFLAG_CORE']='-lopencv_core'
+
     ################################################################
     if remote=='yes':
 #       cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
@@ -200,9 +205,6 @@ def setup(i):
        else:
           s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:"'+plx+'":$'+ellp+'\n'
 
-          env[ep+'_LFLAG_IMGPROC']='-lopencv_imgproc'
-          env[ep+'_LFLAG_HIGHGUI']='-lopencv_highgui'
-          env[ep+'_LFLAG_CORE']='-lopencv_core'
 
           s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":"'+plx+'":$LD_LIBRARY_PATH\n'
           s+='export LIBRARY_PATH="'+cus['path_lib']+'":"'+plx+'":$LIBRARY_PATH\n'
