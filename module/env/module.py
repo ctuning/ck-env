@@ -1115,7 +1115,7 @@ def resolve(i):
         cus=dd.get('customize',{})
 
         if ac=='yes': q['cus']=cus
-#        if sd!='yes': q['dict']=dd # CHANGE RECENTLY - seems to be useless or even wrong ...
+        if sd!='yes': q['dict']=dd
 
         ver=cus.get('version','')
         if ver!='': q['ver']=ver
