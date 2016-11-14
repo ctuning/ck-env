@@ -1078,3 +1078,110 @@ def internal_get_val(lst, index, default_value):
     if index<len(lst):
        v=lst[index]
     return v
+
+##############################################################################
+# rebuild dependencies using packages
+
+def rebuild_deps(i):
+    """
+    Input:  {
+              (target)            - if specified, use info from 'machine' module
+                 or
+              (host_os)           - host OS (detect, if omitted)
+              (target_os)         - target OS (detect, if omitted)
+              (target_device_id)  - target device ID (detect, if omitted)
+
+              (data_uoa) or (uoa) - package UOA entry
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    o=i.get('out','')
+
+    oo=''
+    if o=='con':
+       oo=o
+
+    # Check if target
+    if i.get('target','')!='':
+       r=ck.access({'action':'init',
+                    'module_uoa':cfg['module_deps']['machine'],
+                    'input':i})
+       if r['return']>0: return r
+
+    device_cfg=i.get('device_cfg',{})
+
+    # Check host/target OS/CPU
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('target_device_id','')
+
+    r=ck.access({'action':'detect',
+                 'module_uoa':cfg['module_deps']['platform.os'],
+                 'host_os':hos,
+                 'target_os':tos,
+                 'device_cfg':device_cfg,
+                 'target_device_id':tdid,
+                 'skip_info_collection':'yes'})
+    if r['return']>0: return r
+
+    hos=r['host_os_uid']
+    hosx=r['host_os_uoa']
+    hosd=r['host_os_dict']
+
+    tos=r['os_uid']
+    tosx=r['os_uoa']
+    tosd=r['os_dict']
+
+    # Get list of deps
+    duoa=i.get('data_uoa','')
+    r=ck.access({'action':'load',
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':duoa})
+    if r['return']>0: return r
+
+    d=r['dict']
+
+    deps=d.get('deps',{})
+
+    for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
+        dd=deps[k]
+        dn=dd.get('name','')
+
+        if dn=='':
+            dn=k
+        else:
+            dn+=' ('+k+')'
+
+        tags=dd.get('tags','')
+
+        if oo=='con':
+            ck.out('*******************************************************')
+            ck.out('Dependency: '+dn)
+            ck.out('Tags:       '+tags)
+            ck.out('')
+
+        ntos=tos
+        if dd.get('force_target_as_host','')=='yes':
+             ntos=hos
+
+        # Attempt to install package by tags
+        ii={'action':'install',
+            'module_uoa':work['self_module_uid'],
+            'tags':tags,
+            'host_os':hos,
+            'target_os':ntos,
+            'device_id':tdid,
+            'out':oo}
+        r=ck.access(ii)
+        if r['return']>0: 
+           ck.out('')
+           ck.out('Package installation failed: '+r['error']+'!')
+
+    return {'return':0}

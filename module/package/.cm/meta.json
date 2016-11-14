@@ -3,6 +3,9 @@
     "install": {
       "desc": "install CK package (download a tool if needed, install it, and register environment"
     },
+    "rebuild_deps": {
+      "desc": "rebuild dependencies using packages"
+    },
     "setup": {
       "desc": "setup package (only register environment but do not install it)"
     }
@@ -14,8 +17,8 @@
   "developer_webpage": "http://fursin.net",
   "license": "See CK LICENSE.txt for licensing details",
   "module_deps": {
-    "machine":"84be34883a81b2a9",
     "env": "9b9b3208ac44b891",
+    "machine": "84be34883a81b2a9",
     "platform.cpu": "aa6b542a420b8db9",
     "platform.gpgpu": "192ed4e0bbdbe743",
     "platform.os": "41e31cc4496b8a8e",

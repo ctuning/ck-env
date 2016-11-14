@@ -1,6 +1,7 @@
 * 2016.11.14 - added support to reuse preinstall scripts from other entries during package installation
              - added support for CrystaX Android NDK
              - added extra soft name customization from soft customize.py scripts
+             - added soft:process-compiler-for-cmake (to compile complex projects such as Caffe with all deps via CK)
 
 * 2016.11.11 - fixed bug: no possible not to search for installed software
                but install from packages (useful for Caffe for Android via CK)
