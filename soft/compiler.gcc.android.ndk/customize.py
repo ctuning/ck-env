@@ -261,6 +261,29 @@ def setup(i):
        x=''
 #       if arch=='arm64': 
        x='-fPIE -pie'
+
+       # Check if Crystax NDK
+       cry=os.path.join(pi,'sources','crystax','libs',abi)
+       cryf1=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.so')
+       cryf2=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.a')
+       if os.path.isdir(cry) and os.path.isfile(cryf1) and os.path.isfile(cryf2):
+           x+=' -L'+cry
+           env['CK_ENV_LIB_CRYSTAX_LIB']=cry
+           env['CK_ENV_LIB_CRYSTAX_LIB_FULL_STATIC']=cryf1
+           env['CK_ENV_LIB_CRYSTAX_LIB_FULL_DYNAMIC']=cryf2
+
+           if winh=='yes':
+               s+='\nset LD_LIBRARY_PATH='+cry+';%LD_LIBRARY_PATH%\n'
+               s+='set LIBRARY_PATH='+cry+';%LIBRARY_PATH%\n'
+           else:
+               s+='\nexport LD_LIBRARY_PATH='+cry+':$LD_LIBRARY_PATH\n'
+               s+='export LIBRARY_PATH='+cry+':$LIBRARY_PATH\n'
+
+           # Tell ck run to copy extra files via ADB...
+           aef=cus.get('adb_extra_files',[])
+           aef.append(cryf1)
+           cus['adb_extra_files']=aef
+
        cus['ef']=x
 
        j=p4.find(atc)
