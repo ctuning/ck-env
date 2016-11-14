@@ -963,7 +963,10 @@ def setup(i):
           pi=cus.get('path_install','')
 
           if cus.get('soft_name','')!='':
-             dname=cus['soft_name']
+              dname=cus['soft_name']
+
+          if cus.get('soft_extra_name','')!='':
+              dname+=cus['soft_extra_name']
 
        #########################################################
        # Finish batch
@@ -1544,6 +1547,8 @@ def check(i):
        sname=cus.get('soft_file',{}).get(tplat,'')
 
     cbd=cus.get('soft_can_be_dir','')
+
+    sen=cus.get('soft_extra_name','')
 
     osname=sname
     if sname=='':

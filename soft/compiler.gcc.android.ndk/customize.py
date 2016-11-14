@@ -284,6 +284,8 @@ def setup(i):
            aef.append(cryf1)
            cus['adb_extra_files']=aef
 
+           cus['soft_extra_name']=' (CrystaX)'
+
        cus['ef']=x
 
        j=p4.find(atc)
