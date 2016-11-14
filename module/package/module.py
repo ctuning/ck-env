@@ -368,6 +368,8 @@ def install(i):
 
     # Check if has customized script
     ppp=p
+    ppp1=ppp # Preprocess scripts
+
     x=d.get('use_scripts_from_another_entry',{})
     if len(x)>0:
        xam=x.get('module_uoa','')
@@ -379,10 +381,21 @@ def install(i):
        if r['return']>0: return r
        ppp=r['path']
 
+    x=d.get('use_preprocess_scripts_from_another_entry',{})
+    if len(x)>0:
+       xam=x.get('module_uoa','')
+       if xam=='': xam=work['self_module_uid']
+       xad=x.get('data_uoa','')
+       r=ck.access({'action':'find',
+                    'module_uoa':xam,
+                    'data_uoa':xad})
+       if r['return']>0: return r
+       ppp1=r['path']
+
     # Check if has custom script
     cs=None
     csn=cfg.get('custom_script_name','custom')
-    rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
+    rx=ck.load_module_from_path({'path':ppp1, 'module_code_name':csn, 'skip_init':'yes'})
     if rx['return']==0: 
        cs=rx['code']
 
@@ -862,6 +875,7 @@ def install(i):
                  "version":ver,
                  "ck_kernel":ck,
                  "path":ppp,
+                 "script_path":ppp1,
                  "out":oo,
                  "install_path":pi
                 }
