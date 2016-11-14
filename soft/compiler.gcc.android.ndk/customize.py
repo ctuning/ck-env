@@ -262,10 +262,21 @@ def setup(i):
 #       if arch=='arm64': 
        x='-fPIE -pie'
 
+       # Check platform libs
+       plibs=os.path.join(pi,'platforms',platform,'arch-'+arch,'usr','lib')
+       env['CK_ENV_LIB_STD']=plibs
+
        # Check if Crystax NDK
        cry=os.path.join(pi,'sources','crystax','libs',abi)
        cryf1=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.so')
        cryf2=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.a')
+
+       cus['adb_extra_files']=[]
+       cus['soft_extra_name']=''
+       env['CK_ENV_LIB_CRYSTAX_LIB']=''
+       env['CK_ENV_LIB_CRYSTAX_LIB_FULL_STATIC']=''
+       env['CK_ENV_LIB_CRYSTAX_LIB_FULL_DYNAMIC']=''
+
        if os.path.isdir(cry) and os.path.isfile(cryf1) and os.path.isfile(cryf2):
            x+=' -L'+cry
            env['CK_ENV_LIB_CRYSTAX_LIB']=cry
@@ -437,6 +448,7 @@ def setup(i):
        sep='/'
 
     cus['libstdcpppath']=libstdcpppath
+    env['CK_ENV_LIB_STDCPP']=libstdcpppath
     if libstdcpppath!='':
        env['CK_ENV_LIB_STDCPP_STATIC']=libstdcpppath+sep+'libgnustl_static.a'
        env['CK_ENV_LIB_STDCPP_DYNAMIC']=libstdcpppath+sep+'libgnustl_shared.so'

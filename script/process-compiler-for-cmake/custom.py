@@ -119,12 +119,18 @@ def setup(i):
 
     # Add other obligatory flags
     ck_cc2+=' '+svarb+svarb1+'CK_COMPILER_FLAGS_OBLIGATORY'+svare1+svare
-
     ck_cxx2+=' '+svarb+svarb1+'CK_COMPILER_FLAGS_OBLIGATORY'+svare1+svare
+
     if ce.get('CK_ENV_LIB_STDCPP_INCLUDE','')!='':
        ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+svarb+svarb1+'CK_ENV_LIB_STDCPP_INCLUDE'+svare1+svare
     if ce.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')!='':
        ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+svarb+svarb1+'CK_ENV_LIB_STDCPP_INCLUDE_EXTRA'+svare1+svare
+    if ce.get('CK_ENV_LIB_STDCPP','')!='':
+       ck_cxx2+=' '+ce['CK_FLAG_PREFIX_LIB_DIR']+ce['CK_ENV_LIB_STDCPP']
+
+#    if ce.get('CK_ENV_LIB_STD','')!='':
+#       ck_cc2+=' '+ce['CK_FLAG_PREFIX_LIB_DIR']+ce['CK_ENV_LIB_STD']
+#       ck_cxx2+=' '+ce['CK_FLAG_PREFIX_LIB_DIR']+ce['CK_ENV_LIB_STD']
 
     # Cleaning flags
     ck_cc2=ck_cc2.strip()
@@ -141,5 +147,7 @@ def setup(i):
 
     ie['CK_CXX_PATH_FOR_CMAKE']=pb_cxx
     ie['CK_CXX_FLAGS_FOR_CMAKE']=ck_cxx2
+
+    ie['CK_COMPILER_PATH_FOR_CMAKE']=os.path.join(pb,'bin')
 
     return {'return':0, 'install_env':ie}
