@@ -125,7 +125,6 @@ def setup(i):
        ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+svarb+svarb1+'CK_ENV_LIB_STDCPP_INCLUDE'+svare1+svare
     if ce.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')!='':
        ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+svarb+svarb1+'CK_ENV_LIB_STDCPP_INCLUDE_EXTRA'+svare1+svare
-    ck_cxx2+=' -L/home/fursin/fggprogs/crystax-ndk-10.3.2/sources/crystax/libs/arm64-v8a'
 
     # Cleaning flags
     ck_cc2=ck_cc2.strip()
