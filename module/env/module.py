@@ -190,6 +190,7 @@ def set(i):
               'target_os_bits':tbits}
        ii['search_dict']={'setup':setup}
 
+
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
     # Prepare possible warning
@@ -351,10 +352,11 @@ def set(i):
                       if a==q:
                          aa=cdeps[a]
                          if aa.get('skip_reuse','')!='yes':
+
                              auoa=aa.get('uoa','')
 
                              # Tricky part: basically if similar and already resolved current deps are not the same is underneath ones ...
-                             if auoa!=juoa:
+                             if auoa!='' and auoa!=juoa:
                                  skip=True
                                  break
 
