@@ -1185,3 +1185,179 @@ def rebuild_deps(i):
            ck.out('Package installation failed: '+r['error']+'!')
 
     return {'return':0}
+
+##############################################################################
+# show available packages
+
+def show(i):
+    """
+    Input:  {
+               (the same as list; can use wildcards)
+
+
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    o=i.get('out','')
+
+    html=False
+    if o=='html' or i.get('web','')=='yes':
+       html=True
+
+    h=''
+
+    unique_repo=False
+    if i.get('repo_uoa','')!='': unique_repo=True
+
+    import copy
+    ii=copy.deepcopy(i)
+
+    ii['out']=''
+    ii['action']='list'
+    ii['add_meta']='yes'
+
+    rx=ck.access(ii)
+    if rx['return']>0: return rx
+
+    ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
+
+    if html:
+       h+='<i><b>Note:</b> you can install package via <pre>$ ck install package:{package UOA} (--target_os=android21-arm64)</i><br><br>\n'
+       h+='<table cellpadding="5">\n'
+
+       h+=' <tr>\n'
+       h+='  <td><b>CK&nbsp;module&nbsp;(aka&nbsp;wrapper,&nbsp;plugin&nbsp;or&nbsp;container):</b></td>\n'
+       h+='  <td width="200"><b>CK Repository:</b></td>\n'
+       h+='  <td><b>Description:</b></td>\n'
+       h+=' </tr>\n'
+
+    repo_url={}
+    repo_private={}
+
+    private=''
+    for l in ll:
+        ln=l['data_uoa']
+        lr=l['repo_uoa']
+
+        lr_uid=l['repo_uid']
+        url=''
+        if lr=='default':
+           url='' #'http://github.com/ctuning/ck'
+        elif lr_uid in repo_url:
+           url=repo_url[lr_uid]
+        else:
+           rx=ck.load_repo_info_from_cache({'repo_uoa':lr_uid})
+           if rx['return']>0: return rx
+           url=rx.get('dict',{}).get('url','')
+           repo_private[lr_uid]=rx.get('dict',{}).get('private','')
+           repo_url[lr_uid]=url
+
+        private=repo_private.get(lr_uid,'')
+
+        if lr not in cfg.get('skip_repos',[]) and private!='yes':
+           lm=l['meta']
+           ld=lm.get('desc','')
+
+           name=lm.get('soft_name','')
+
+           cus=lm.get('customize',{})
+
+           ver=cus.get('version','')
+
+           ep=cus.get('env_prefix','')
+
+           xhos=lm.get('only_for_host_os_tags',[])
+           xtos=lm.get('only_for_target_os_tags',[])
+
+           yhos=''
+           ytos=''
+
+           for q in xhos:
+               if yhos!='': yhos+=','
+               yhos+=q
+
+           for q in xtos:
+               if ytos!='': ytos+=','
+               ytos+=q
+
+           if lr=='default':
+              to_get=''
+           elif url.find('github.com/ctuning/')>0:
+              to_get='ck pull repo:'+lr
+           else:
+              to_get='ck pull repo --url='+url
+
+           ###############################################################
+           if html:
+              h+=' <tr>\n'
+
+              h+='  <td valign="top"><b>'+ln+'</b></td>\n'
+
+              x1=''
+              x2=''
+              if url!='':
+                 x1='<a href="'+url+'">'
+                 x2='</a>'
+
+              h+='  <td valign="top"><i>'+x1+lr+x2+'</i></td>\n'
+
+              h+='  <td valign="top">'+ld+'\n'
+
+              h+='</td>\n'
+
+              h+=' </tr>\n'
+
+           ###############################################################
+           elif o=='mediawiki':
+              x=lr
+              y=''
+              if url!='':
+                 x='['+url+' '+lr+']'
+                 y='['+url+'/tree/master/package/'+ln+' link]'
+              ck.out('')
+              ck.out('=== '+ln+' ('+ver+') ===')
+              ck.out('')
+              ck.out('Host OS tags: <i>'+yhos+'</i>')
+              ck.out('<br>Target OS tags: <i>'+ytos+'</i>')
+              if y!='':
+                 ck.out('')
+                 ck.out('Package entry with meta: <i>'+y+'</i>')
+              ck.out('')
+              ck.out('Which CK repo: '+x)
+              if to_get!='':
+                 ck.out('<br>How to get: <i>'+to_get+'</i>')
+              if to_get!='':
+                 ck.out('')
+                 ck.out('How to install: <i>ck install package:'+ln+' (--target_os={CK OS UOA})</i>')
+              ck.out('')
+
+           ###############################################################
+           elif o=='con' or o=='txt':
+              if unique_repo:
+                 ck.out('')
+                 s=ln+' - '+ld
+
+              else:
+                 ss=''
+                 if len(ln)<35: ss=' '*(35-len(ln))
+
+                 ss1=''
+                 if len(lr)<30: ss1=' '*(30-len(lr))
+
+                 s=ln+ss+'  ('+lr+')'
+                 if ld!='': s+=ss1+'  '+ld
+
+              ck.out(s)
+
+
+    if html:
+       h+='</table>\n'
+
+    return {'return':0, 'html':h}

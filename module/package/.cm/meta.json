@@ -8,6 +8,10 @@
     },
     "setup": {
       "desc": "setup package (only register environment but do not install it)"
+    },
+    "show": {
+      "desc": "show packages",
+      "for_web": "yes"
     }
   },
   "copyright": "See CK COPYRIGHT.txt for copyright details",

@@ -2080,9 +2080,6 @@ def split_version(i):
 ##############################################################################
 # show available software descriptions
 
-##############################################################################
-# show info about modules
-
 def show(i):
     """
     Input:  {
@@ -2129,7 +2126,7 @@ def show(i):
        h+=' <tr>\n'
        h+='  <td><b>CK&nbsp;module&nbsp;(aka&nbsp;wrapper,&nbsp;plugin&nbsp;or&nbsp;container):</b></td>\n'
        h+='  <td width="200"><b>CK Repository:</b></td>\n'
-       h+='  <td><b>Description and actions:</b></td>\n'
+       h+='  <td><b>Description:</b></td>\n'
        h+=' </tr>\n'
 
     repo_url={}
@@ -2219,7 +2216,7 @@ def show(i):
               ck.out('')
               ck.out('=== '+ln+' ('+name+') ===')
               ck.out('')
-              ck.out('<br>Auto-detect?: '+ad)
+              ck.out('Auto-detect?: '+ad)
               ck.out('<br>Environment variable: <b>'+ep+'</b>')
               ck.out('')
               ck.out('Host OS tags: <i>'+yhos+'</i>')
@@ -2233,7 +2230,7 @@ def show(i):
                  ck.out('<br>How to get: <i>'+to_get+'</i>')
               if to_get!='':
                  ck.out('')
-                 ck.out('How to detect: <i>ck detect soft:'+ln+' (--target_os={CK OS UOA})</i>')
+                 ck.out('How to detect: <b>ck detect soft:'+ln+' (--target_os={CK OS UOA})</b>')
               ck.out('')
 
            ###############################################################
