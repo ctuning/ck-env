@@ -1,3 +1,5 @@
+* 2016.11.16 - added LLVM lib and include to be able to compile plugins
+
 * 2016.11.14 - added support to reuse preinstall scripts from other entries during package installation
              - added support for CrystaX Android NDK
              - added extra soft name customization from soft customize.py scripts

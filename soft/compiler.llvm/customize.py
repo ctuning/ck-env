@@ -141,6 +141,8 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
+    sdirs=hosd.get('dir_sep','')
+
     mac=target_d.get('macos','')
 
     hplat=hosd.get('ck_name','')
@@ -162,6 +164,9 @@ def setup(i):
 
        env[ep]=pi
        env[ep+'_BIN']=p1
+
+       cus['path_lib']=pi+sdirs+'lib'
+       cus['path_include']=pi+sdirs+'include'
 
        if hplat=='linux':
           sname=cus.get('soft_file',{}).get(hplat,'')
