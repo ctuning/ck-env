@@ -433,6 +433,13 @@ def setup(i):
 
        for k in env:
            v=env[k]
+
+           # Hack to check that sometimes clang++-3.x is not available
+           if k=='CK_CXX':
+               pxx=os.path.join(env.get(ep+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
+               if not os.path.isfile(pxx):
+                   v=v.replace('$#tool_postfix#$','')
+
            v=v.replace('$#tool_postfix#$',postfix)
            env[k]=v
 
