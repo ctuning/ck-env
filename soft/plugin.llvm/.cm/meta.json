@@ -1,0 +1,12 @@
+{
+  "customize": {
+    "add_to_path": "yes",
+    "env_prefix": "CK_ENV_PLUGIN_LLVM"
+  },
+  "soft_name": "LLVM plugin",
+  "tags": [
+    "plugin",
+    "compiler-plugin",
+    "llvm"
+  ]
+}
