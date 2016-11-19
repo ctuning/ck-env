@@ -70,6 +70,8 @@ def set(i):
                                        (useful for quiet experiment crowdsourcing such as sw/hw crowdtuning)
 
               (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
+
+              (force_env_init)       - if 'yes', add '1' when calling env script (useful for LLVM plugins for example to force reinit)
             }
 
     Output: {
@@ -686,11 +688,15 @@ def set(i):
     sb=''
 
     es=d.get('env_script','')
+    ppu=''
+    if i.get('force_env_init','')=='yes':
+       ppu=' 1'
+
     if es!='':
        pp=os.path.join(p,es)
        if i.get('key','')!='':
           sb+=eset+' CK_ENV_SCRIPT_'+i['key'].upper()+'='+pp+'\n'
-       sb+=env_call+' '+pp+'\n'
+       sb+=env_call+' '+pp+ppu+'\n'
 
     # Check bat file
     if bf!='':
@@ -1094,7 +1100,8 @@ def resolve(i):
             'name':name,
             'key':ek,
             'skip_pruning_by_other_deps':q.get('skip_pruning_by_other_deps',''),
-            'quiet':quiet
+            'quiet':quiet,
+            'force_env_init':q.get('force_env_init','')
            }
         if o=='con': ii['out']='con'
         rx=set(ii)

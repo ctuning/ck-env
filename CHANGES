@@ -1,6 +1,8 @@
 * 2016.11.19 - added possibility to skip setup during package installation
                (for example for root installation)
              - added soft:lib.ncurses
+             - added "force_env_init" to dependency description to force env script execution
+               (useful for LLVM plugins)
 
 * 2016.11.18 - added LLVM plugin soft description
 
