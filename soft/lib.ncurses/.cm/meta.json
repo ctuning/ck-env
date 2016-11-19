@@ -1,0 +1,23 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_NCURSES", 
+    "include_file": "curses.h", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
+    "soft_file": {
+      "linux": "libncurses.a"
+    }, 
+    "soft_path_example": {
+      "linux": ""
+    }
+  }, 
+  "soft_name": "NCurses library", 
+  "tags": [
+    "lib", 
+    "ncurses"
+  ]
+}

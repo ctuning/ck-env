@@ -517,7 +517,7 @@ def install(i):
     xsetup=True
 
     if i.get('skip_process','')=='yes': xprocess=False
-    if i.get('skip_setup','')=='yes': xsetup=False
+    if i.get('skip_setup','')=='yes' or d.get('skip_setup','')=='yes': xsetup=False
 
     ps=d.get('process_script','')
     if pi=='':
