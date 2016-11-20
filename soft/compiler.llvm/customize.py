@@ -66,13 +66,20 @@ def parse_version(i):
         q=q.strip()
         if q!='':
            j=q.lower().find(' version ')
-           if j>0:
+           if j>0 and q.lower().find('clang')>=0:
               q=q[j+9:]
               j=q.find(' ')
               if j>0:
                  q=q[:j]
               ver=q
               break
+
+    if ver=='':
+        ck.out('')
+        ck.out('  WARNING: can\'t detect clang version from the following output:')
+        for q in lst:
+            ck.out('    '+q)
+        ck.out('')
 
     return {'return':0, 'version':ver}
 
