@@ -1,3 +1,5 @@
+* 2016.11.20 - detect OS ABI using uname -m in 'detect platform.os'
+
 * 2016.11.19 - added possibility to skip setup during package installation
                (for example for root installation)
              - added soft:lib.ncurses

@@ -173,6 +173,7 @@ def detect(i):
     prop_os_name=''
     prop_os_name_long=''
     prop_os_name_short=''
+    prop_os_abi=''
 
     prop_serial_no=''
 
@@ -489,6 +490,12 @@ def detect(i):
 
                  prop_os_name_short=prop_os_name_long
 
+             cmd=tosd.get('remote_shell','')+'uname -m'+tosd.get('remote_shell_end','')
+
+             r=ck.run_and_get_stdout({'cmd': cmd, 'shell':'no'})
+             if r['return']==0:
+                 prop_os_abi=r['stdout'].strip()
+
              x=prop_os_name_short.find('-')
              if x>=0:
                 prop_os_name_short=prop_os_name_short[:x]
@@ -526,6 +533,7 @@ def detect(i):
     prop['name']=prop_os_name
     prop['name_long']=prop_os_name_long
     prop['name_short']=prop_os_name_short
+    prop['abi']=prop_os_abi
     prop['serial_number']=prop_serial_no
     prop['bits']=tbits
 
@@ -685,6 +693,10 @@ def detect(i):
        ck.out('Short OS name:        '+prop.get('name_short',''))
        ck.out('Long OS name:         '+prop.get('name_long',''))
        ck.out('OS bits:              '+prop.get('bits',''))
+
+       if prop_os_abi!='':
+          ck.out('OS ABI:               '+prop.get('abi',''))
+
        if prop_serial_no!='':
           ck.out('')
           ck.out('Device serial number: '+prop_serial_no)
