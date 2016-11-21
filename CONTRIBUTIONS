@@ -73,3 +73,9 @@ E:
 O: ARM
 C: reporting a few bugs when intergrating ARM's workload automation to CK
 W: 2016
+
+N: Sam Ainsworth
+E:
+O: University of Cambridge, UK
+C: reporting a few issues when converting his CGO 2017 artifacts to CK format (https://github.com/SamAinsworth/reproduce-cgo2017-paper)
+W:
