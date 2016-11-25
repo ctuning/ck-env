@@ -1,3 +1,5 @@
+* 2016.11.24 - fixing version detection of texinfo
+
 * 2016.11.20 - detect OS ABI using uname -m in 'detect platform.os'
              - added container for any result
 

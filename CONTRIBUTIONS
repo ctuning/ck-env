@@ -79,3 +79,9 @@ E:
 O: University of Cambridge, UK
 C: reporting a few issues when converting his CGO 2017 artifacts to CK format (https://github.com/SamAinsworth/reproduce-cgo2017-paper)
 W:
+
+N: C ANIL Reddy
+E:
+O:
+C: reporting problem with textino verison detection (while reproducing MILEPOST project)
+W:

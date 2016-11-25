@@ -27,9 +27,13 @@ def parse_version(i):
     for q in lst:
         q=q.strip()
         if q!='':
+           j=q.lower().find('texinfo) ')
+           if j>0:
+              ver=q[j+9:].strip()
+              break
            j=q.lower().find('version ')
            if j>0:
-              ver=q[j+8:]
+              ver=q[j+8:].strip()
               break
 
     return {'return':0, 'version':ver}
