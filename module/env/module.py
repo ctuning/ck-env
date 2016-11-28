@@ -1370,6 +1370,7 @@ def refresh(i):
             'deps':deps,
             'tags':sftags,
             'package_uoa':package_uoa,
+            'skip_device_info_collection':'yes',
             'env':penv,
             'env_data_uoa':duid}
         if i.get('reset_env','')!='': ii['reset_env']=i['reset_env']

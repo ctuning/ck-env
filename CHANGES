@@ -1,3 +1,5 @@
+* 2016.11.28 - do not look for connected Android device, when just refreshing existing env for it
+
 * 2016.11.20 - detect OS ABI using uname -m in 'detect platform.os'
              - added container for any result
 
