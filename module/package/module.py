@@ -380,6 +380,7 @@ def install(i):
                     'data_uoa':xad})
        if r['return']>0: return r
        ppp=r['path']
+       ppp1=ppp # can be changed later via use_preprocess_scripts_from_another_entry
 
     x=d.get('use_preprocess_scripts_from_another_entry',{})
     if len(x)>0:

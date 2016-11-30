@@ -1,4 +1,5 @@
 * 2016.11.30 - do not show empty dependencies which are not for a used target
+             - fixed using of preprocess scripts from another entry
 
 * 2016.11.28 - do not look for connected Android device, when just refreshing existing env for it
 
