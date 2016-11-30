@@ -435,12 +435,14 @@ def set(i):
                        for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
                            jj=zdeps[j]
                            juoa=jj.get('uoa','')
-                           jtags=jj.get('tags','')
-                           jver=jj.get('ver','')
+                           if juoa!='': # if empty, it most likely means that this unresolved dependency
+                                        # is for a different target
+                              jtags=jj.get('tags','')
+                              jver=jj.get('ver','')
 
-                           js='                                  '
-                           js+='Dependency '+j+' (UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
-                           ck.out(js)
+                              js='                                  '
+                              js+='- Depends on "'+j+'" (env UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
+                              ck.out(js)
 
                 ck.out('')
                 rx=ck.inp({'text':'Select one of the options for '+xq+' or press Enter for 0: '})

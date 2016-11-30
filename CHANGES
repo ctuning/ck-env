@@ -1,3 +1,5 @@
+* 2016.11.30 - do not show empty dependencies which are not for a used target
+
 * 2016.11.28 - do not look for connected Android device, when just refreshing existing env for it
 
 * 2016.11.24 - fixing version detection of texinfo
