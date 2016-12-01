@@ -443,7 +443,7 @@ def setup(i):
           if duid!=duoa: x+=' ('+duid+')'
        else:
           x=' in local directory'
-       ck.out('Software entry found'+x)
+       ck.out('  Software entry found'+x)
 
     # Check deps, customize, install path
     ltags=d.get('tags',[])
@@ -1781,6 +1781,7 @@ def get_version(i):
     hosd=i.get('host_os_dict',{})
     tosd=i.get('target_os_dict',{})
 
+    bprefix=hosd.get('batch_prefix','')
     ubtr=hosd.get('use_bash_to_run','')
     svarb=hosd.get('env_var_start','')
     svarb1=hosd.get('env_var_extra1','')
@@ -1793,6 +1794,9 @@ def get_version(i):
     sext=hosd.get('script_ext','')
     eifsc=hosd.get('env_quotes_if_space_in_call','')
     nout=hosd.get('no_output','')
+
+    sb=bprefix+sb
+
     # Generate tmp file
     rx=ck.gen_tmp_file({})
     if rx['return']>0: return rx
@@ -1855,7 +1859,7 @@ def get_version(i):
           ck.out('')
           ck.out('Executing "'+y+'" ...')
 
-       ry=os.system(y)
+       ry=os.system(nout+y)
        # ignore return code (checking output file instead)
 
        os.remove(fnb)

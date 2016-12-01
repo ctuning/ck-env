@@ -1,3 +1,6 @@
+* 2016.12.01 - added soft:compiler.llvm.android.ndk (and started preparing paths without GCC)
+             - a few cosmetic changes
+
 * 2016.11.30 - do not show empty dependencies which are not for a used target
              - fixed using of preprocess scripts from another entry
 

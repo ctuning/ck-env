@@ -1,0 +1,591 @@
+#
+# Collective Knowledge (individual environment - setup)
+#
+# See CK LICENSE.txt for licensing details
+# See CK COPYRIGHT.txt for copyright details
+#
+# Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
+#
+
+import os
+
+##############################################################################
+# customize directories to automatically find and register software
+
+def dirs(i):
+    return {'return':0}
+
+##############################################################################
+# prepare env
+
+def version_cmd(i):
+
+    fp=i['full_path']
+    cmdx=i['cmd']
+
+    cmd=fp+' '+cmdx
+
+    return {'return':0, 'cmd':cmd}
+
+##############################################################################
+# limit directories 
+
+def limit(i):
+
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+
+    phosd=hosd.get('ck_name','')
+    hbits=hosd.get('bits','')
+    tbits=tosd.get('bits','')
+
+    prebuilt=''
+    if phosd=='win':
+       if hbits=='64':
+          prebuilt='windows-x86_64'
+       else:
+          prebuilt='windows-x86'
+    else:
+       if hbits=='64':
+          prebuilt='linux-x86_64'
+       else:
+          prebuilt='linux-x86'
+
+    acp=tosd.get('android_compiler_prefix','')
+    if acp=='':
+       return {'return':1, 'error':'android_compiler_prefix is not specified in target OS meta'}
+
+    atc=tosd.get('android_toolchain','')
+    if atc=='':
+       return {'return':1, 'error':'android_toolchain is not specified in target OS meta'}
+
+    fn='clang'
+    if phosd=='win':
+       fn+='.exe'
+
+    dr=i.get('list',[])
+    drx=[]
+
+    for q in dr:
+        p0=os.path.dirname(q)
+        p1=os.path.join(p0,'toolchains','llvm','prebuilt',prebuilt,'bin',fn)
+        if os.path.isfile(p1):
+           drx.append(p1)
+
+    return {'return':0, 'list':drx}
+
+##############################################################################
+# parse software version
+
+def parse_version(i):
+
+    lst=i['output']
+
+    ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q!='':
+           j=q.lower().find(' version ')
+           if j>0 and (q.lower().startswith('clang') or q.lower().startswith('android clang')):
+              q=q[j+9:]
+              j=q.find(' ')
+              if j>0:
+                 q=q[:j]
+              ver=q
+              break
+
+    if ver=='':
+        ck.out('')
+        ck.out('  WARNING: can\'t detect clang version from the following output:')
+        for q in lst:
+            ck.out('    '+q)
+        ck.out('')
+
+    return {'return':0, 'version':ver}
+
+##############################################################################
+# setup environment setup
+
+def setup(i):
+    """
+    Input:  {
+              cfg              - meta of this soft entry
+              self_cfg         - meta of module soft
+              ck_kernel        - import CK kernel module (to reuse functions)
+
+              host_os_uoa      - host OS UOA
+              host_os_uid      - host OS UID
+              host_os_dict     - host OS meta
+
+              target_os_uoa    - target OS UOA
+              target_os_uid    - target OS UID
+              target_os_dict   - target OS meta
+
+              target_device_id - target device ID (if via ADB)
+
+              tags             - list of tags used to search this entry
+
+              env              - updated environment vars from meta
+              customize        - updated customize vars from meta
+
+              deps             - resolved dependencies for this soft
+
+              interactive      - if 'yes', can ask questions, otherwise quiet
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              bat          - prepared string for bat file
+            }
+
+    """
+
+    import os
+
+    # Get variables
+    ck=i['ck_kernel']
+    s=''
+
+    fos=i.get('features',{}).get('os',{})
+    os_name_long=fos.get('name_long','')
+
+    iv=i.get('interactive','')
+
+    env=i['env']
+    cfg=i.get('cfg',{})
+    deps=i.get('deps',{})
+    tags=i['tags']
+    cus=i['customize']
+
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+    winh=hosd.get('windows_base','')
+    win=tosd.get('windows_base','')
+    remote=tosd.get('remote','')
+    mingw=tosd.get('mingw','')
+    hbits=hosd.get('bits','')
+    tbits=tosd.get('bits','')
+
+    phosd=hosd.get('ck_name','')
+
+    sdirs=hosd.get('dir_sep','')
+
+    mac=tosd.get('macos','')
+
+    hplat=hosd.get('ck_name','')
+
+    envp=cus.get('env_prefix','')
+    pi=cus.get('path_install','')
+
+    fp=cus.get('full_path','')
+
+    tp=''
+
+    prebuilt=''
+    if phosd=='win':
+       if hbits=='64':
+          prebuilt='windows-x86_64'
+       else:
+          prebuilt='windows-x86'
+    else:
+       if hbits=='64':
+          prebuilt='linux-x86_64'
+       else:
+          prebuilt='linux-x86'
+
+    ############################################################
+    platform=tosd.get('android_ndk_platform','')
+    if platform=='':
+       return {'return':1, 'error':'platform is not defined in target OS'}
+
+    api_level=''
+    j=platform.rfind('-')
+    if j>0:
+        api_level=platform[j+1:].strip()
+
+    ############################################################
+    arch=tosd.get('android_ndk_arch','')
+    if arch=='':
+       return {'return':1, 'error':'platform architecture is not defined in target OS'}
+
+    ############################################################
+    abi=tosd.get('abi','')
+    if arch=='':
+       return {'return':1, 'error':'abi is not defined in target OS'}
+
+    ############################################################
+    atc=tosd.get('android_toolchain','')
+    if atc=='':
+       return {'return':1, 'error':'android_toolchain is not specified in target OS meta'}
+
+    acp=tosd.get('android_compiler_prefix','')
+    if acp=='':
+       return {'return':1, 'error':'android_compiler_prefix is not specified in target OS meta'}
+
+    env['CK_ANDROID_COMPILER_PREFIX']=acp
+    env['CK_ANDROID_TOOLCHAIN']=atc
+    env['CK_ANDROID_ABI']=abi
+    env['CK_CPU_BITS']=tbits
+    env['CK_ANDROID_API_LEVEL']=api_level
+    env['CK_ANDROID_NDK_ARCH']=arch
+    env['CK_ANDROID_NDK_PLATFORM']=platform
+
+    # Check path
+    ep=cus['env_prefix']
+
+    p1=os.path.dirname(fp)
+    p2=os.path.dirname(p1)
+    p3=os.path.dirname(p2)
+    p4=os.path.dirname(p3)
+    p5=os.path.dirname(p4)
+    pi=os.path.dirname(p5)
+
+    env[ep]=pi
+    env[ep+'_BIN']=p1
+
+    cus['path_lib']=pi+sdirs+'lib'
+    cus['path_include']=pi+sdirs+'include'
+
+    if hplat=='linux':
+       sname=cus.get('soft_file',{}).get(hplat,'')
+       pname=os.path.basename(fp)
+       if pname.startswith(sname+'-'):
+          tp=pname[len(sname):]
+
+    if cus.get('tool_prefix','')=='':
+       cus['tool_prefix_configured']='yes'
+       cus['tool_prefix']=''
+    if cus.get('tool_postfix','')=='':
+       cus['tool_postfix_configured']='yes'
+       cus['tool_postfix']=tp
+    if cus.get('retarget','')=='':
+       cus['retarget']='no'
+    cus['platform_path_configured']='yes'
+    cus['platform_path']=os.path.join(pi,'platforms')
+    cus['add_extra_path_configured']='yes'
+    cus['add_extra_path']=os.path.join(pi,'prebuilt',prebuilt,'bin')
+
+    # Check platform libs
+    plibs=os.path.join(pi,'platforms',platform,'arch-'+arch,'usr','lib')
+    env['CK_ENV_LIB_STD']=plibs
+
+    # Check if Crystax NDK
+    cry=os.path.join(pi,'sources','crystax','libs',abi)
+    cryf1=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.so')
+    cryf2=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.a')
+
+    cus['adb_extra_files']=[]
+    cus['soft_extra_name']=''
+    env['CK_ENV_LIB_CRYSTAX_LIB']=''
+    env['CK_ENV_LIB_CRYSTAX_LIB_FULL_STATIC']=''
+    env['CK_ENV_LIB_CRYSTAX_LIB_FULL_DYNAMIC']=''
+
+    cus['libstdcpppath_include_configured']='yes'
+    cus['libstdcpppath_include']=os.path.join(pi,'sources','cxx-stl','llvm-libc++','include')
+
+    cus['libstdcpppath_configured']='yes'
+    cus['libstdcpppath']=os.path.join(pi,'sources','cxx-stl','llvm-libc++','libs',abi)
+
+    ############################################################
+    if winh=='yes':
+       env.update({
+             "CK_AFTER_COMPILE_TO_BC": "ren *.o *", 
+             "CK_ASM_EXT": ".s", 
+             "CK_BC_EXT": ".bc", 
+             "CK_COMPILER_ENABLE_EXCEPTIONS": "-fcxx-exceptions",
+             "CK_CC": "$#tool_prefix#$clang", 
+             "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
+             "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+             "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
+             "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+             "CK_COMPILER_FLAG_STD90": "-std=c90", 
+             "CK_COMPILER_FLAG_STD99": "-std=c99", 
+             "CK_CXX": "$#tool_prefix#$clang++", 
+             "CK_F90": "", 
+             "CK_F95": "", 
+             "CK_FC": "", 
+             "CK_FLAGS_CREATE_ASM": "-S", 
+             "CK_FLAGS_CREATE_BC": "-c -emit-llvm", 
+             "CK_FLAGS_CREATE_OBJ": "-c", 
+             "CK_FLAGS_DYNAMIC_BIN": "", 
+             "CK_FLAGS_OUTPUT": "-o", 
+             "CK_FLAG_PREFIX_INCLUDE": "-I", 
+             "CK_FLAG_PREFIX_LIB_DIR": "-L", 
+             "CK_FLAG_PREFIX_VAR": "-D", 
+             "CK_LINKER_FLAG_OPENMP": "-fopenmp", 
+             "CK_MAKE": "nmake", 
+             "CK_OBJ_EXT": ".o", 
+             "CK_OPT_SIZE": "-Os", 
+             "CK_OPT_SPEED": "-O3", 
+             "CK_OPT_SPEED_SAFE": "-O2", 
+             "CK_PLUGIN_FLAG": "-fplugin=", 
+             "CM_INTERMEDIATE_OPT_TOOL": "opt", 
+             "CM_INTERMEDIATE_OPT_TOOL_OUT": "-o",
+             "CK_FLAGS_DLL_NO_LIBCMT": " ", 
+           }) 
+
+       env.update({
+          "CK_AR": "%CK_ANDROID_COMPILER_PREFIX%-ar", 
+          "CK_COMPILER_FLAG_GPROF": "-pg", 
+          "CK_DLL_EXT": ".so", 
+          "CK_EXE_EXT": ".out", 
+          "CK_EXTRA_LIB_DL": "-ldl", 
+          "CK_EXTRA_LIB_M": "-lm", 
+          "CK_FLAGS_DLL": "-shared -fPIC", 
+          "CK_FLAGS_DLL_EXTRA": "", 
+          "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+          "CK_FLAGS_STATIC_LIB": "-fPIC", 
+          "CK_LB": "%CK_ANDROID_COMPILER_PREFIX%-ar rcs", 
+          "CK_LB_OUTPUT": "-o ", 
+          "CK_LD_FLAGS_EXTRA": "", 
+          "CK_LIB_EXT": ".a", 
+          "CK_LD_DYNAMIC_FLAGS": "", 
+          "CK_LD_FLAGS_EXTRA": "", 
+          "CK_OBJDUMP": "%CK_ANDROID_COMPILER_PREFIX%-objdump -d",
+          "CK_PROFILER": "gprof"})
+
+       prefix_configured=cus.get('tool_prefix_configured','')
+       prefix=cus.get('tool_prefix','')
+
+       if prefix!='':
+          env['CK_COMPILER_PREFIX']=prefix
+          cus['tool_prefix']=prefix
+          cus['tool_prefix_configured']='yes'
+
+       for k in env:
+           v=env[k]
+           v=v.replace('$#tool_prefix#$',prefix)
+           env[k]=v
+
+       retarget=cus.get('retarget','')
+       lfr=cus.get('linking_for_retargeting','')
+
+       x=env.get('CK_CXX','')
+       if x!='' and x.find('-fpermissive')<0:
+          x+=' -fpermissive'
+       env['CK_CXX']=x
+
+    else:
+       ### Linux Host  #########################################################
+       env.update({
+          "CK_AR": "$#tool_prefix#$ar", 
+          "CK_ASM_EXT": ".s", 
+          "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$", 
+          "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+          "CK_COMPILER_ENABLE_EXCEPTIONS": "-fcxx-exceptions",
+          "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
+          "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+          "CK_COMPILER_FLAG_GPROF": "-pg", 
+          "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
+          "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
+          "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+          "CK_CXX": "$#tool_prefix#$clang++$#tool_postfix#$", 
+          "CK_DLL_EXT": ".so", 
+          "CK_EXE_EXT": ".out", 
+          "CK_EXTRA_LIB_DL": "-ldl", 
+          "CK_EXTRA_LIB_M": "-lm", 
+          "CK_FLAGS_CREATE_ASM": "-S", 
+          "CK_FLAGS_CREATE_OBJ": "-c", 
+          "CK_FLAGS_DLL": "-shared -fPIC", 
+          "CK_FLAGS_DLL_EXTRA": "", 
+          "CK_FLAGS_OUTPUT": "-o ", 
+          "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+          "CK_FLAGS_STATIC_LIB": "-fPIC", 
+          "CK_FLAG_PREFIX_INCLUDE": "-I", 
+          "CK_FLAG_PREFIX_LIB_DIR": "-L", 
+          "CK_FLAG_PREFIX_VAR": "-D", 
+          "CK_GPROF_OUT_FILE": "gmon.out", 
+          "CK_LD_FLAGS_EXTRA": "", 
+          "CK_LIB_EXT": ".a", 
+          "CK_LINKER_FLAG_OPENMP": "-fopenmp", 
+          "CK_MAKE": "make", 
+          "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
+          "CK_OBJ_EXT": ".o", 
+          "CK_OPT_SIZE": "-Os", 
+          "CK_OPT_SPEED": "-O3", 
+          "CK_OPT_SPEED_SAFE": "-O2", 
+          "CK_PLUGIN_FLAG": "-fplugin=", 
+          "CK_PROFILER": "gprof"
+        })
+
+       env.update({
+          "CK_AR": "${CK_ANDROID_COMPILER_PREFIX}-ar", 
+          "CK_COMPILER_FLAG_GPROF": "-pg", 
+          "CK_DLL_EXT": ".so", 
+          "CK_EXE_EXT": ".out", 
+          "CK_EXTRA_LIB_DL": "-ldl", 
+          "CK_EXTRA_LIB_M": "-lm", 
+          "CK_FLAGS_DLL": "-shared -fPIC", 
+          "CK_FLAGS_DLL_EXTRA": "", 
+          "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
+          "CK_FLAGS_STATIC_LIB": "-fPIC", 
+          "CK_LB": "${CK_ANDROID_COMPILER_PREFIX}-ar rcs", 
+          "CK_LB_OUTPUT": "-o ", 
+          "CK_LD_FLAGS_EXTRA": "", 
+          "CK_LIB_EXT": ".a", 
+          "CK_LD_DYNAMIC_FLAGS": "", 
+          "CK_LD_FLAGS_EXTRA": "", 
+          "CK_OBJDUMP": "${CK_ANDROID_COMPILER_PREFIX}-objdump -d",
+          "CK_PROFILER": "gprof"})
+
+       # Ask a few more questions
+       # (tool prefix)
+       prefix_configured=cus.get('tool_prefix_configured','')
+       prefix=cus.get('tool_prefix','')
+
+       env['CK_COMPILER_PREFIX']=prefix
+       cus['tool_prefix']=prefix
+       cus['tool_prefix_configured']='yes'
+
+       for k in env:
+           v=env[k]
+           v=v.replace('$#tool_prefix#$',prefix)
+           env[k]=v
+
+       # (tool postfix such as -3.6)
+       postfix_configured=cus.get('tool_postfix_configured','')
+       postfix=cus.get('tool_postfix','')
+
+       if postfix_configured!='yes':
+          ck.out('')
+          ra=ck.inp({'text':'Input clang postfix if needed (for example, -3.6 for clang-3.6) or Enter to skip: '})
+          postfix=ra['string'].strip()
+
+       env['CK_COMPILER_POSTFIX']=postfix
+       cus['tool_postfix']=postfix
+       cus['tool_postfix_configured']='yes'
+
+       for k in env:
+           v=env[k]
+
+           # Hack to check that sometimes clang++-3.x is not available
+           if k=='CK_CXX':
+               pxx=os.path.join(env.get(ep+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
+               if not os.path.isfile(pxx):
+                   v=v.replace('$#tool_postfix#$','')
+
+           v=v.replace('$#tool_postfix#$',postfix)
+           env[k]=v
+
+       retarget=cus.get('retarget','')
+       lfr=cus.get('linking_for_retargeting','')
+
+       if retarget=='yes' and lfr!='':
+          cus['linking_for_retargeting']=lfr
+          env['CK_LD_FLAGS_EXTRA']=lfr
+
+#    x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+
+    ##############
+    ############################################################
+    platform_path_configured=cus.get('platform_path_configured','')
+    platform_path=cus.get('platform_path','')
+    if platform_path_configured!='yes' and iv=='yes':
+       if platform_path!='':
+          ck.out('Full path to directory with Android NDK platforms: '+platform_path)
+       else:
+          ra=ck.inp({'text':'Enter full path to directory with Android NDK platforms : '})
+          platform_path=ra['string']
+          cus['platform_path_configured']='yes'
+
+    if platform_path=='':
+       return {'return':1, 'error':'path to Android platforms is not defined'}
+
+    cus['platform_path']=platform_path
+    cus['platform_path_configured']='yes'
+
+    ############################################################
+    libstdcpppathi_configured=cus.get('libstdcpppath_include_configured','')
+    libstdcpppathi=cus.get('libstdcpppath_include','')
+    if libstdcpppathi_configured!='yes' and iv=='yes':
+       if libstdcpppathi!='':
+          ck.out('Full path to include directory with libstdc++: '+libstdcpppathi)
+       else:
+          ra=ck.inp({'text':'* If needed, enter full path to include directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/include: '})
+          libstdcpppathi=ra['string']
+          cus['libstdcpppath_include_configured']='yes'
+
+    cus['libstdcpppath_include']=libstdcpppathi
+    env['CK_ENV_LIB_STDCPP_INCLUDE']=libstdcpppathi
+    cus['libstdcpppath_include_configured']='yes'
+
+    libstdcpppath_configured=cus.get('libstdcpppath_configured','')
+    libstdcpppath=cus.get('libstdcpppath','')
+    if libstdcpppath_configured!='yes' and iv=='yes':
+       if libstdcpppath!='':
+          ck.out('Full path to include directory with libstdc++: '+libstdcpppath)
+       else:
+          ra=ck.inp({'text':'* If needed, enter full path to lib directory with libstdc++ (such as ...sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a: '})
+          libstdcpppath=ra['string']
+          cus['libstdcpppath_configured']='yes'
+
+    if winh=='yes':
+       psysroot=platform_path+'\\'+platform+'\\arch-'+arch
+    else:
+       psysroot=platform_path+'/'+platform+'/arch-'+arch
+
+    env['CK_SYS_ROOT']=psysroot
+
+    y='-target '+atc+' --sysroot='+psysroot
+
+    x=''
+    if arch=='arm64': 
+       x='-fPIE -pie '
+
+    if os.path.isdir(cry) and os.path.isfile(cryf1) and os.path.isfile(cryf2):
+        x+=' -L'+cry
+        env['CK_ENV_LIB_CRYSTAX_LIB']=cry
+        env['CK_ENV_LIB_CRYSTAX_LIB_FULL_STATIC']=cryf1
+        env['CK_ENV_LIB_CRYSTAX_LIB_FULL_DYNAMIC']=cryf2
+
+        if winh=='yes':
+            s+='\nset LD_LIBRARY_PATH='+cry+';%LD_LIBRARY_PATH%\n'
+            s+='set LIBRARY_PATH='+cry+';%LIBRARY_PATH%\n'
+        else:
+            s+='\nexport LD_LIBRARY_PATH='+cry+':$LD_LIBRARY_PATH\n'
+            s+='export LIBRARY_PATH='+cry+':$LIBRARY_PATH\n'
+
+        # Tell ck run to copy extra files via ADB...
+        aef=cus.get('adb_extra_files',[])
+        aef.append(cryf1)
+        cus['adb_extra_files']=aef
+
+        cus['soft_extra_name']=' (CrystaX)'
+
+    env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
+
+    x=cus.get('add_extra_path','')
+    if x!='':
+       s+='\nexport PATH='+pi+x+':%PATH%\n\n'
+
+    # Update global
+    y='-mfloat-abi=hard'
+    env.update({'CK_COMPILER_FLAG_MFLOAT_ABI_HARD': y})
+
+    x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+    if y not in x:
+       x+=' '+y
+       env["CK_COMPILER_FLAGS_OBLIGATORY"]=x
+
+    if winh=='yes':
+       sep='\\'
+    else:
+       sep='/'
+
+    cus['libstdcpppath']=libstdcpppath
+    env['CK_ENV_LIB_STDCPP']=libstdcpppath
+    if libstdcpppath!='':
+       env['CK_ENV_LIB_STDCPP_STATIC']=libstdcpppath+sep+'libgnustl_static.a'
+       env['CK_ENV_LIB_STDCPP_DYNAMIC']=libstdcpppath+sep+'libgnustl_shared.so'
+       env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=libstdcpppath+sep+'include'
+    else:
+       env['CK_ENV_LIB_STDCPP_STATIC']=''
+       env['CK_ENV_LIB_STDCPP_DYNAMIC']=''
+       env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=''
+    cus['libstdcpppath_configured']='yes'
+
+    return {'return':0, 'bat':s}

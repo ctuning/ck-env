@@ -1,0 +1,51 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "add_only_with_version": "yes",
+    "add_to_path": "yes",
+    "build_dir_name": "llvm-android-ndk",
+    "can_strip_dynamic_lib": "yes",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_COMPILER_LLVM",
+    "languages": [
+      "C",
+      "CPP"
+    ],
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 4
+    },
+    "only_for_target_os_tags": [
+      "android"
+    ],
+    "skip_soft_file_is_asked": "yes", 
+    "soft_file": {
+      "linux": "ndk-build", 
+      "win": "ndk-build.cmd"
+    }, 
+    "soft_file_as_env": "CK_CC", 
+    "soft_file_from_host_os": "yes",
+    "soft_file_not_tool": "yes", 
+    "soft_path_example": {
+      "linux": "/opt/android-ndk-r13b//ndk-build", 
+      "win": "C:\\android-ndk-r13b\\ndk-build.cmd"
+    },
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1",
+      "win": " --version > $#filename#$ 2>&1"
+    }
+  },
+  "deps": {
+  },
+  "env": {},
+  "soft_name": "Android NDK LLVM compiler",
+  "tags": [
+    "compiler",
+    "llvm",
+    "android", 
+    "ndk", 
+    "lang-c", 
+    "lang-cpp"
+  ]
+}

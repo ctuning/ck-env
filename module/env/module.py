@@ -975,7 +975,7 @@ def resolve(i):
     o=i.get('out','')
 
     if o=='con':
-       ck.out('')
+       ck.out('-----------------------------------')
        ck.out('Resolving software dependencies ...')
 
     sb=''
@@ -1157,7 +1157,7 @@ def resolve(i):
            sb1+=bt
 
     if o=='con':
-       ck.out('')
+       ck.out('-----------------------------------')
 
     return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'cut_bat':sb1, 'res_deps':res}
 
