@@ -466,7 +466,8 @@ def install(i):
 
     for q in udeps:
         v=udeps[q]
-        setup['deps_'+q]=v['uoa']
+        if v.get('uoa','')!='':
+           setup['deps_'+q]=v['uoa']
 
     # Convert tags to string
     stags=''
