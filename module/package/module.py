@@ -284,7 +284,8 @@ def install(i):
                 p=l[il]['path']
 
                 if o=='con':
-                   ck.out('Package found: '+duoax+' ('+duid+')')
+                   ck.out('')
+                   ck.out('  Package found: '+duoax+' ('+duid+')')
                    ck.out('')
 
        if duoa=='' and xtags=='':

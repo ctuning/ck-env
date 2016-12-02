@@ -1,3 +1,6 @@
+* 2016.12.02 - added user-friendly print of OS alias
+             - added better error reporting when host/target OS is not matching env entries
+
 * 2016.12.01 - added soft:compiler.llvm.android.ndk (and started preparing paths without GCC)
              - a few cosmetic changes
 
