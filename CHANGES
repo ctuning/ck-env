@@ -1,3 +1,5 @@
+* 2016.12.07 - fixing Bazel soft desc
+
 * 2016.12.05 - added os:*arm-v7a (mainly for Caffe for Android)
 
 * 2016.12.02 - added user-friendly print of OS alias
