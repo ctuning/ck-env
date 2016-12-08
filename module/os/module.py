@@ -353,3 +353,45 @@ def convert_uid_to_alias(i):
        s=da+' ('+r['data_uid']+')'
 
     return {'return':0, 'string':s}
+
+##############################################################################
+# generates shell script for exporting library path variables for the given platform
+
+def lib_path_export_script(i):
+    """
+    Input:  {
+              host_os_dict          - host OS meta
+              (dynamic_lib_path)    - dynamic (shared) library path
+              (static_lib_path)     - dynamic (shared) library path
+              (lib_path)            - if set, and dynamic_path/static_lib_path is not set, 
+                                      uses this value as dynamic_lib_path and/or static_lib_path
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              script       - script to execute to add the given path to the dynamic and/or static library path env vars
+            }
+
+    """
+
+    host_d = i.get('host_os_dict', {})
+    dynamic_path = i.get('dynamic_lib_path', i.get('lib_path', ''))
+    static_path = i.get('static_lib_path', i.get('lib_path', ''))
+
+    dynamic_var_name = host_d.get('env_ld_library_path', 'LD_LIBRARY_PATH')
+    static_var_name = host_d.get('env_library_path', 'LIBRARY_PATH')
+
+    hplat=host_d.get('ck_name','')
+    s = ''
+    if hplat != 'win' and (dynamic_path != '' or static_path != ''):
+      s += '\n'
+      if dynamic_path != '':
+        s += 'export {name}="{value}":${name}\n'.format(name=dynamic_var_name, value=dynamic_path)
+      if static_path != '':
+        s += 'export {name}="{value}":${name}\n'.format(name=static_var_name, value=static_path)
+      s += '\n'
+
+    return {'return': 0, 'script': s}

@@ -61,7 +61,7 @@
   "redirect_stdout_aggr": ">>",
   "rem": "#",
   "remote_env_set": [
-    "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD"
+    "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$PWD"
   ],
   "script_ext": ".sh",
   "script_get_gpu_frequency": "ck-print-gpu-freq",
