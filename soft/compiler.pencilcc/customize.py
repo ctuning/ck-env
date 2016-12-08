@@ -91,7 +91,11 @@ def setup(i):
     env['PRL_LIB_DIR']=cus['path_lib']
     env['PRL_INCLUDE_DIR']=cus['path_include']
 
-    s+='export LD_LIBRARY_PATH='+cus['path_lib']+':$LD_LIBRARY_PATH\n'
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': host_d, 
+      'dynamic_lib_path': cus['path_lib']})
+    if r['return']>0: return r
+    s += r['script']
+
     s+='export PATH='+cus['path_bin']+':$PATH\n\n'
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}

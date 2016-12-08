@@ -205,9 +205,10 @@ def setup(i):
        else:
           s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:"'+plx+'":$'+ellp+'\n'
 
-
-          s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":"'+plx+'":$LD_LIBRARY_PATH\n'
-          s+='export LIBRARY_PATH="'+cus['path_lib']+'":"'+plx+'":$LIBRARY_PATH\n'
+          r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
+            'lib_path': [ cus['path_lib'], plx ] })
+          if r['return']>0: return r
+          s += r['script']
 
     elif win=='yes':
        ext='x64'
