@@ -350,7 +350,7 @@ def convert_uid_to_alias(i):
     if da!='':
        s=da+' ('+r['data_uid']+')'
 
-return {'return':0, 'string':s}
+    return {'return':0, 'string':s}
 
 ##############################################################################
 # generates shell script for exporting library path variables for the given platform
