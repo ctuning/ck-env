@@ -329,12 +329,14 @@ def convert_uid_to_alias(i):
     Input:  {
               uoa - OS uoa
             }
+
     Output: {
               return       - return code =  0, if successful
                                          >  0, if error
               (error)      - error text if return > 0
               string - "UID" if now alias or "alias (UID)"
             }
+
     """
 
     uoa=i['uoa']
