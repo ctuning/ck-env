@@ -98,8 +98,10 @@ def setup(i):
        sext='.a'
        dext='.so'
 
-    s += ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': host_d, 
-      'lib_path': cus.get('path_lib', '')})['script']
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': host_d, 
+      'lib_path': cus.get('path_lib', '')})
+    if r['return']>0: return r
+    s += r['script']
 
     cus['static_lib']='librtlmilepostcodelet'+sext
     cus['dynamic_lib']='librtlmilepostcodelet'+dext

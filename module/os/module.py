@@ -368,7 +368,9 @@ def lib_path_export_script(i):
             }
 
     Output: {
-              return       - return code, always 0
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
 
               script       - script to execute to add the given path to the dynamic and/or static library path env vars
             }
