@@ -284,7 +284,8 @@ def install(i):
                 p=l[il]['path']
 
                 if o=='con':
-                   ck.out('Package found: '+duoax+' ('+duid+')')
+                   ck.out('')
+                   ck.out('  Package found: '+duoax+' ('+duid+')')
                    ck.out('')
 
        if duoa=='' and xtags=='':
@@ -380,6 +381,7 @@ def install(i):
                     'data_uoa':xad})
        if r['return']>0: return r
        ppp=r['path']
+       ppp1=ppp # can be changed later via use_preprocess_scripts_from_another_entry
 
     x=d.get('use_preprocess_scripts_from_another_entry',{})
     if len(x)>0:
@@ -464,7 +466,8 @@ def install(i):
 
     for q in udeps:
         v=udeps[q]
-        setup['deps_'+q]=v['uoa']
+        if v.get('uoa','')!='':
+           setup['deps_'+q]=v['uoa']
 
     # Convert tags to string
     stags=''

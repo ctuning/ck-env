@@ -322,6 +322,37 @@ def shell(i):
     return rr
 
 ##############################################################################
+# convert UID to alias (UID) for user-friendly printing
+
+def convert_uid_to_alias(i):
+    """
+    Input:  {
+              uoa - OS uoa
+            }
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+              string - "UID" if now alias or "alias (UID)"
+            }
+    """
+
+    uoa=i['uoa']
+
+    s=uoa
+
+    r=ck.access({'action':'load',
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':uoa})
+    if r['return']>0: return r
+
+    da=r['data_alias']
+    if da!='':
+       s=da+' ('+r['data_uid']+')'
+
+return {'return':0, 'string':s}
+
+##############################################################################
 # generates shell script for exporting library path variables for the given platform
 
 def lib_path_export_script(i):

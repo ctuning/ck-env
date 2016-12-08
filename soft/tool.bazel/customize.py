@@ -56,14 +56,13 @@ def setup(i):
     p2=os.path.dirname(pb)
 
     px=os.path.join(p2,'bazel-bin','scripts','bazel-complete.bash')
-    if not os.path.isfile(px):
-        return {'return':1, 'error':'can\'t find bazel-complete.bash ('+px+')'}
+    if os.path.isfile(px):
+       env[ep+'_INIT']=px
 
-    if winh!='yes':
-        s+='\nsource '+px+'\n\n'
+       if winh!='yes':
+          s+='\nsource '+px+'\n\n'
 
     env[ep]=p2
     env[ep+'_BIN']=pb
-    env[ep+'_INIT']=px
 
     return {'return':0, 'bat':s}

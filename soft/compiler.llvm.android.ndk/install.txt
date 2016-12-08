@@ -1,0 +1,6 @@
+You can download and install Native Android NDK for your platform from
+* http://developer.android.com/ndk/downloads/index.html
+
+You can also download CrystaX NDK (extra libs and improved C++ support) from
+* https://www.crystax.net/en/download
+

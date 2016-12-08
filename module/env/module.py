@@ -192,7 +192,6 @@ def set(i):
               'target_os_bits':tbits}
        ii['search_dict']={'setup':setup}
 
-
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
     # Prepare possible warning
@@ -223,7 +222,51 @@ def set(i):
     dname=''
 
     if lx==0 and duoa!='':
-       return {'return':33, 'error':'either missing env ('+duoa+') or it exists but something changes in its dependencies or setup ('+str(setup)+'):'}
+       # Check exact problem
+       rx=ck.access({'action':'load',
+                     'module_uoa':work['self_module_uid'],
+                     'data_uoa':duoa})
+       if rx['return']>0:
+          if rx['return']==16:
+             rx['error']='strange - missing environment ('+duoa+')'
+          return rx
+
+       dds=rx['dict'].get('setup',{})
+
+       # Changed setup
+       if o=='con':
+          ck.out('')
+          ck.out('WARNING: requested host or target OS info is not matching info in env '+duoa+'!')
+
+          ck.out('')
+          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':dds.get('host_os_uoa','')})
+          if rx['return']>0: return rx
+          x=rx['string']
+          ck.out(' Host OS UOA in env '+duoa+'    : '+x)
+          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':setup.get('host_os_uoa','')})
+          if rx['return']>0: return rx
+          x=rx['string']
+          ck.out(' Requested host OS UOA                  : '+x)
+
+          ck.out('')
+          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':dds.get('target_os_uoa','')})
+          if rx['return']>0: return rx
+          x=rx['string']
+          ck.out(' Target OS UOA in env '+duoa+'  : '+x)
+          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':setup.get('target_os_uoa','')})
+          if rx['return']>0: return rx
+          x=rx['string']
+          ck.out(' Requested target OS UOA                : '+x)
+
+          ck.out('')
+          ck.out(' Target OS bits in env '+duoa+' : '+dds.get('target_os_bits',''))
+          ck.out(' Requested target OS bits               : '+setup.get('target_os_bits',''))
+
+          ck.out('')
+          ck.out(' This is a possible bug - please report to the authors!')
+          ck.out('')
+
+       return {'return':33, 'error':'current host or target OS ('+str(setup)+' is not matching the one in software env '+duoa}
 
     # If no entries, try to detect default ones and repeat
     history_deps=[]
@@ -435,12 +478,14 @@ def set(i):
                        for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
                            jj=zdeps[j]
                            juoa=jj.get('uoa','')
-                           jtags=jj.get('tags','')
-                           jver=jj.get('ver','')
+                           if juoa!='': # if empty, it most likely means that this unresolved dependency
+                                        # is for a different target
+                              jtags=jj.get('tags','')
+                              jver=jj.get('ver','')
 
-                           js='                                  '
-                           js+='Dependency '+j+' (UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
-                           ck.out(js)
+                              js='                                  '
+                              js+='- Depends on "'+j+'" (env UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
+                              ck.out(js)
 
                 ck.out('')
                 rx=ck.inp({'text':'Select one of the options for '+xq+' or press Enter for 0: '})
@@ -973,7 +1018,7 @@ def resolve(i):
     o=i.get('out','')
 
     if o=='con':
-       ck.out('')
+       ck.out('-----------------------------------')
        ck.out('Resolving software dependencies ...')
 
     sb=''
@@ -1155,7 +1200,7 @@ def resolve(i):
            sb1+=bt
 
     if o=='con':
-       ck.out('')
+       ck.out('-----------------------------------')
 
     return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'cut_bat':sb1, 'res_deps':res}
 

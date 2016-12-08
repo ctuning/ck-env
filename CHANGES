@@ -1,3 +1,16 @@
+* 2016.12.07 - fixing Bazel soft desc
+
+* 2016.12.05 - added os:*arm-v7a (mainly for Caffe for Android)
+
+* 2016.12.02 - added user-friendly print of OS alias
+             - added better error reporting when host/target OS is not matching env entries
+
+* 2016.12.01 - added soft:compiler.llvm.android.ndk (and started preparing paths without GCC)
+             - a few cosmetic changes
+
+* 2016.11.30 - do not show empty dependencies which are not for a used target
+             - fixed using of preprocess scripts from another entry
+
 * 2016.11.28 - do not look for connected Android device, when just refreshing existing env for it
 
 * 2016.11.24 - fixing version detection of texinfo
