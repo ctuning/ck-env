@@ -129,9 +129,10 @@ def setup(i):
     cus['path_bin']=os.path.join(pi,'bin')
 
     s+='export PATH='+cus['path_bin']+':$PATH\n'
-    if cus.get('path_lib','')!='':
-       s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
-       s+='export LIBRARY_PATH="'+cus['path_lib']+'":$LIBRARY_PATH\n\n'
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
+      'lib_path': cus.get('path_lib','')})
+    if r['return']>0: return r
+    s += r['script']
 
     ep=cus.get('env_prefix','')
     if pi!='':

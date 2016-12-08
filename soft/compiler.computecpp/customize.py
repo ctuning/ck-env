@@ -109,6 +109,9 @@ def setup(i):
 
     env[envp]=pp
 
-    s+='export LD_LIBRARY_PATH="'+pl+'":$LD_LIBRARY_PATH\n'
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': host_d, 
+      'dynamic_lib_path': pl})
+    if r['return']>0: return r
+    s += r['script']
 
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}

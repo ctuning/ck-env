@@ -82,3 +82,12 @@ class TestOs(unittest.TestCase):
             })
         self.assertEqual(0, r['return'])
         self.assertEqual('', r['script'])
+
+        r = ck.access({
+                'action': 'lib_path_export_script',
+                'module_uoa': 'os',
+                'host_os_dict': {},
+                'lib_path': ['a', 'b']
+            })
+        self.assertEqual(0, r['return'])
+        self.assertEqual('\nexport LD_LIBRARY_PATH="a":"b":$LD_LIBRARY_PATH\nexport LIBRARY_PATH="a":"b":$LIBRARY_PATH\n\n', r['script'])

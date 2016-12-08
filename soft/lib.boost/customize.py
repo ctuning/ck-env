@@ -129,8 +129,10 @@ def setup(i):
        cus['path_lib']=p1
        cus['path_include']=os.path.join(pi,'include')
 
-       s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
-       s+='export LIBRARY_PATH="'+cus['path_lib']+'":$LIBRARY_PATH\n'
+       r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
+         'lib_path': cus['path_lib']})
+       if r['return']>0: return r
+       s += r['script']
 
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
 

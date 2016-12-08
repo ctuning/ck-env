@@ -361,8 +361,8 @@ def lib_path_export_script(i):
     """
     Input:  {
               host_os_dict          - host OS meta
-              (dynamic_lib_path)    - dynamic (shared) library path
-              (static_lib_path)     - dynamic (shared) library path
+              (dynamic_lib_path)    - dynamic (shared) library path, or a list of paths
+              (static_lib_path)     - dynamic (shared) library path, or a list of paths
               (lib_path)            - if set, and dynamic_path/static_lib_path is not set, 
                                       uses this value as dynamic_lib_path and/or static_lib_path
             }
@@ -378,8 +378,8 @@ def lib_path_export_script(i):
     """
 
     host_d = i.get('host_os_dict', {})
-    dynamic_path = i.get('dynamic_lib_path', i.get('lib_path', ''))
-    static_path = i.get('static_lib_path', i.get('lib_path', ''))
+    dynamic_path = _convert_lib_path_list_to_string(i.get('dynamic_lib_path', i.get('lib_path', '')))
+    static_path = _convert_lib_path_list_to_string(i.get('static_lib_path', i.get('lib_path', '')))
 
     dynamic_var_name = host_d.get('env_ld_library_path', 'LD_LIBRARY_PATH')
     static_var_name = host_d.get('env_library_path', 'LIBRARY_PATH')
@@ -395,3 +395,6 @@ def lib_path_export_script(i):
       s += '\n'
 
     return {'return': 0, 'script': s}
+
+def _convert_lib_path_list_to_string(lst):
+    return '":"'.join(lst) if isinstance(lst, list) else lst
