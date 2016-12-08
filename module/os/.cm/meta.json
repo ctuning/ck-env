@@ -2,20 +2,23 @@
   "actions": {
     "find_close": {
       "desc": "find the most close description for the host OS"
-    },
+    }, 
+    "lib_path_export_script": {
+      "desc": "generates shell script for exporting library path variables for the given platform"
+    }, 
     "shell": {
       "desc": "shell in OS"
     }
-  },
-  "copyright": "See CK COPYRIGHT.txt for copyright details",
-  "desc": "description of operating systems (OS)",
-  "developer": "Grigori Fursin",
-  "developer_email": "Grigori.Fursin@cTuning.org",
-  "developer_webpage": "http://fursin.net",
-  "license": "See CK LICENSE.txt for licensing details",
+  }, 
+  "copyright": "See CK COPYRIGHT.txt for copyright details", 
+  "desc": "description of operating systems (OS)", 
+  "developer": "Grigori Fursin", 
+  "developer_email": "Grigori.Fursin@cTuning.org", 
+  "developer_webpage": "http://fursin.net", 
+  "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
-    "machine":"84be34883a81b2a9",
-    "platform.os": "41e31cc4496b8a8e",
-    "env": "9b9b3208ac44b891"
+    "env": "9b9b3208ac44b891", 
+    "machine": "84be34883a81b2a9", 
+    "platform.os": "41e31cc4496b8a8e"
   }
 }
