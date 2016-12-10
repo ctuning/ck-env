@@ -16,7 +16,8 @@
     "soft_file": {
       "linux": "show-opencl-devices",
       "win": "show-opencl-devices.exe"
-    }
+    },
+    "skip_version":"yes"
   },
   "soft_name": "show-opencl-devices",
   "tags": [

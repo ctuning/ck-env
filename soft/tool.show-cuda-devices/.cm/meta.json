@@ -16,7 +16,8 @@
     "soft_file": {
       "linux": "show-cuda-devices",
       "win": "show-cuda-devices.exe"
-    }
+    },
+    "skip_version":"yes"
   },
   "soft_name": "show-cuda-devices",
   "tags": [
