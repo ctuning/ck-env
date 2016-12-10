@@ -138,15 +138,21 @@ def setup(i):
     pl2=os.path.dirname(pl1)
 
     pi=''
+    pinc=''
     if os.path.isfile(os.path.join(pl1,'include',fi)):
        pi=pl1
+       pinc=os.path.join(pl1,'include')
     elif os.path.isfile(os.path.join(pl2,'include',fi)):
        pi=pl2
+       pinc=os.path.join(pl2,'include')
+    elif os.path.isfile(os.path.join(pl2,'include','arm-linux-gnueabihf',fi)):
+       pi=pl2
+       pinc=os.path.join(pl2,'include','arm-linux-gnueabihf')
 
     if pi=='':
        return {'return':1, 'error':'can\'t find include file'}
 
-    cus['path_include']=os.path.join(pi,'include')
+    cus['path_include']=pinc
     cus['include_name']=fi
 
     cus['static_lib']=lbs
