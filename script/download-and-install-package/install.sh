@@ -64,10 +64,27 @@ if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
  rm -rf ${PACKAGE_NAME1}
 fi
 
-cd obj
+
+############################################################
+if [ "${PACKAGE_AUTOGEN}" == "YES" ] ; then
+  echo ""
+  echo "Executing autogen ..."
+
+  cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
+
+  ./autogen.sh
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: configuring failed!"
+    exit 1
+  fi
+
+fi
 
 ############################################################
 echo ""
+
+cd ${INSTALL_DIR}/obj
 
 if [ "${PACKAGE_BUILD_TYPE}" == "configure" ] ; then
   echo "Executing configure ..."
@@ -77,7 +94,7 @@ if [ "${PACKAGE_BUILD_TYPE}" == "configure" ] ; then
 else
   echo "Executing cmake ..."
 
- cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS} ../${PACKAGE_SUB_DIR}
+ cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS} ../${PACKAGE_SUB_DIR1}
 fi
 
 if [ "${?}" != "0" ] ; then
