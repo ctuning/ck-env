@@ -137,21 +137,27 @@ def setup(i):
     pl1=os.path.dirname(pl)
     pl2=os.path.dirname(pl1)
 
-    pi=''
+    pinc=''
     if os.path.isfile(os.path.join(pl1,'include',fi)):
        pi=pl1
+       pinc=os.path.join(pl1,'include')
     elif os.path.isfile(os.path.join(pl2,'include',fi)):
        pi=pl2
+       pinc=os.path.join(pl2,'include')
     elif os.path.isfile(os.path.join('/usr/include',fi)):
        pi='/usr'
+       pinc='/usr/include'
+    elif os.path.isfile(os.path.join(pl2,'include','arm-linux-gnueabihf',fi)):
+       pi=pl2
+       pinc=os.path.join(pl2,'include','arm-linux-gnueabihf')
+    elif os.path.isfile(os.path.join('/usr/include/x86_64-linux-gnu',fi)):
+       pi=pl2
+       pinc='/usr/include/x86_64-linux-gnu'
 
     if pi=='':
-       if os.path.isfile(os.path.join('/usr/include/x86_64-linux-gnu',fi)):
-          cus['path_include']='/usr/include/x86_64-linux-gnu'
-       else:
-          return {'return':1, 'error':'can\'t find include file'}
-    else:
-       cus['path_include']=os.path.join(pi,'include')
+       return {'return':1, 'error':'can\'t find include file'}
+
+    cus['path_include']=pinc
 
     cus['include_name']=fi
 
