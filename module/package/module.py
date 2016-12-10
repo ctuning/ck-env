@@ -916,6 +916,9 @@ def install(i):
              # Add misc environment (prepared above)
              for q in pr_env:
                  qq=str(pr_env[q])
+
+                 qq=qq.replace('$<<',svarb).replace('>>$',svare)
+
                  if qq.find(' ')>0:
                     qq=eifs+qq+eifs
                  sb+=eset+' '+q+'='+qq+'\n'

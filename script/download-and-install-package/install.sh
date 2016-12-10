@@ -59,16 +59,29 @@ echo "Cleaning ..."
 cd ${INSTALL_DIR}
 rm -rf obj
 mkdir obj
+
+if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
+ rm -rf ${PACKAGE_NAME1}
+fi
+
 cd obj
 
 ############################################################
 echo ""
-echo "Executing cmake ..."
 
-cmake  -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/install" \
-      ../${PACKAGE_SUB_DIR}
+if [ "${PACKAGE_BUILD_TYPE}" == "configure" ] ; then
+  echo "Executing configure ..."
+
+  ../${PACKAGE_SUB_DIR}/configure --prefix="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS}
+
+else
+  echo "Executing cmake ..."
+
+ cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS} ../${PACKAGE_SUB_DIR}
+fi
+
 if [ "${?}" != "0" ] ; then
-  echo "Error: cmake failed!"
+  echo "Error: configuring failed!"
   exit 1
 fi
 
@@ -91,6 +104,24 @@ make install
 if [ "${?}" != "0" ] ; then
   echo "Error: installation failed!"
   exit 1
+fi
+
+############################################################
+echo ""
+echo "Cleaning obj directory ..."
+
+if [ "${PACKAGE_SKIP_CLEAN_OBJ_DIR}" != "YES" ] ; then
+ cd ${INSTALL_DIR}
+ rm -rf obj
+fi
+
+############################################################
+echo ""
+echo "Cleaning src directory ..."
+
+if [ "${PACKAGE_SKIP_CLEAN_SRC_DIR}" != "YES" ] ; then
+ cd ${INSTALL_DIR}
+ rm -rf ${PACKAGE_SUB_DIR}
 fi
 
 exit 0
