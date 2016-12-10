@@ -97,11 +97,10 @@ def setup(i):
        sext='.a'
        dext='.so'
 
-    hplat=host_d.get('ck_name','')
-    if hplat!='win':
-       if cus.get('path_lib','')!='':
-          s+='export LD_LIBRARY_PATH="'+cus['path_lib']+'":$LD_LIBRARY_PATH\n'
-          s+='export LIBRARY_PATH="'+cus['path_lib']+'":$LIBRARY_PATH\n\n'
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': host_d, 
+      'lib_path': cus.get('path_lib','')})
+    if r['return']>0: return r
+    s += r['script']
 
     cus['include_name']='viennacl.h'
     cus['static_lib']='libviennacl'+sext

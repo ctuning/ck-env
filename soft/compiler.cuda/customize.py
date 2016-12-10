@@ -184,8 +184,10 @@ def setup(i):
           if lp!='':
              env[ep+'_LIB']=lp
 
-             s+='export LD_LIBRARY_PATH="'+lp+'":$LD_LIBRARY_PATH\n'
-             s+='export LIBRARY_PATH="'+lp+'":$LIBRARY_PATH\n\n'
+             r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': host_d, 
+               'lib_path': lp})
+             if r['return']>0: return r
+             s += r['script']
 
           env[ep+'_INCLUDE']=p2+'/include'
 

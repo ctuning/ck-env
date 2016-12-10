@@ -284,11 +284,14 @@ def setup(i):
            env['CK_ENV_LIB_CRYSTAX_LIB_FULL_DYNAMIC']=cryf2
 
            if winh=='yes':
+               # TODO: LD_LIBRARY_PATH doesn't work for Windows. Should we remove this if branch, or modify it?
                s+='\nset LD_LIBRARY_PATH='+cry+';%LD_LIBRARY_PATH%\n'
                s+='set LIBRARY_PATH='+cry+';%LIBRARY_PATH%\n'
            else:
-               s+='\nexport LD_LIBRARY_PATH='+cry+':$LD_LIBRARY_PATH\n'
-               s+='export LIBRARY_PATH='+cry+':$LIBRARY_PATH\n'
+               r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
+                 'lib_path': cry})
+               if r['return']>0: return r
+               s += r['script']
 
            # Tell ck run to copy extra files via ADB...
            aef=cus.get('adb_extra_files',[])
