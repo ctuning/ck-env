@@ -1,3 +1,5 @@
+* 2016.12.10 - added script:download-and-install-package-with-cmake to start unifying download + cmake + install
+
 * 2016.12.07 - fixing Bazel soft desc
 
 * 2016.12.05 - added os:*arm-v7a (mainly for Caffe for Android)
