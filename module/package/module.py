@@ -214,7 +214,7 @@ def install(i):
                                'target_os_dict':tosd})
                  if rx['return']==0:
                     # Split version
-                    ver=q.get('meta', {}).get('customize',{}).get('version','')
+                    ver=q.get('meta',{}).get('customize',{}).get('version','')
                     if ver!='':
                        rx=ck.access({'action':'split_version',
                                      'module_uoa':cfg['module_deps']['soft'],
@@ -642,8 +642,10 @@ def install(i):
              # First via package + version
              nm=sp
 
-             if cus.get('no_ver_in_suggested_path','')!='yes' and cus.get('version','')!='':
-                nm+='-'+cus.get('version','')
+#             if cus.get('no_ver_in_suggested_path','')!='yes' and cus.get('version','')!='':
+#                nm+='-'+cus.get('version','')
+             if cus.get('no_ver_in_suggested_path','')!='yes' and ver!='':
+                nm+='-'+ver
 
              # Then if compiler
              bdn=udeps.get('compiler',{}).get('build_dir_name','')
