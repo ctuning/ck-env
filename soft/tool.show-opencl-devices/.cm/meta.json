@@ -1,5 +1,13 @@
 {
   "auto_detect": "yes",
+  "deps": {
+    "lib-opencl": {
+      "local": "yes", 
+      "name": "OpenCL library", 
+      "sort": 20, 
+      "tags": "lib,opencl"
+    }
+  }, 
   "customize": {
     "build_dir_name": "show-opencl-devices",
     "check_that_exists": "yes",

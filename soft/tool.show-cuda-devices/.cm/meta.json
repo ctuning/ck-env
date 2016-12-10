@@ -1,5 +1,14 @@
 {
   "auto_detect": "yes",
+  "deps": {
+    "cuda-compiler": {
+      "env_key": "COMPILER", 
+      "local": "yes", 
+      "name": "CUDA compiler", 
+      "sort": 20, 
+      "tags": "compiler,lang-c-cuda"
+    }
+  }, 
   "customize": {
     "build_dir_name": "show-cuda-devices",
     "check_that_exists": "yes",
