@@ -102,9 +102,8 @@ def add(i):
        os_tags=["linux"]
 
     # If not host target
+    tat=cfg['target_access_types']
     if at=='' and o=='con':
-        tat=cfg['target_access_types']
-
         ck.out(line)
 
         r=ck.select({'title':'Select access type for your target machine: ',
