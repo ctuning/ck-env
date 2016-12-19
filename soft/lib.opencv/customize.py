@@ -142,7 +142,7 @@ def setup(i):
        pi=pix
 
     if not found:
-       return {'return':1, 'error':'can\'t find root dir of the OpenCL installation'}
+       return {'return':1, 'error':'can\'t find root dir of this installation'}
 
     if win!='yes':
        env[ep+'_LFLAG_IMGPROC']='-lopencv_imgproc'
