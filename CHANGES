@@ -1,3 +1,5 @@
+* 2016.12.20 - added detection of Raspberry Pi platform features
+
 * 2016.12.19 - fixing typos in soft scripts
 
 * 2016.12.13 - fixing bug in module 'machine'

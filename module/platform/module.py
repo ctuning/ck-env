@@ -377,6 +377,24 @@ def detect(i):
           if r['return']>0: return r
           if r['stdout'].strip()!='': target_system_model=r['stdout'].strip()
 
+          # If empty, try platform specific probes (for now here and later maybe in separate platform-specific scripts)
+          if target_name=='' and target_system_model=='':
+             # Check RPi
+             fail=False
+             try:
+                import RPi.GPIO as GPIO
+             except RuntimeError:
+                fail=True
+
+             if not fail:
+                try:
+                   rpi=GPIO.RPI_INFO
+                   x1=rpi.get('MANUFACTURER','')
+                   target_name='Raspberry '+rpi.get('TYPE','')
+                   target_system_model=''
+                except Exception as e: 
+                   pass
+
        prop['vendor']=x1
        if target_name=='' and x1!='': target_name=x1
        prop['name']=target_name
