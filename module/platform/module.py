@@ -377,6 +377,7 @@ def detect(i):
           if r['return']>0: return r
           if r['stdout'].strip()!='': target_system_model=r['stdout'].strip()
 
+          #############################################################################################################
           # If empty, try platform specific probes (for now here and later maybe in separate platform-specific scripts)
           if target_name=='' and target_system_model=='':
              # Check RPi
@@ -394,6 +395,12 @@ def detect(i):
                    target_system_model=''
                 except Exception as e: 
                    pass
+
+          if target_name=='' and target_system_model=='':
+             # Check via /proc/device-tree/model
+             rx=ck.load_text_file({'text_file':'/proc/device-tree/model'})
+             if rx['return']==0:
+                target_name=rx['string'].strip()
 
        prop['vendor']=x1
        if target_name=='' and x1!='': target_name=x1

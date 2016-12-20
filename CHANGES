@@ -1,4 +1,5 @@
 * 2016.12.20 - added detection of Raspberry Pi platform features
+             - added detection of Odroid platform 
 
 * 2016.12.19 - fixing typos in soft scripts
 
