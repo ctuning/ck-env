@@ -131,6 +131,7 @@ def detect(i):
 
     # Some params
     ro=tosd.get('redirect_stdout','')
+    re=tosd.get('redirect_stderr','')
     remote=tosd.get('remote','')
     remote_ssh=tosd.get('remote_ssh','')
     win=tosd.get('windows_base','')
@@ -254,23 +255,33 @@ def detect(i):
           prop['vendor']=target_gpu_vendor
 
        else:
-          # Get devices
+          # Get devices via lspci (if supported)
+          target_gpu_name=''
+
           rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
           if rx['return']>0: return rx
           fn=rx['file_name']
+
+          rx=ck.gen_tmp_file({'prefix':'tmp-ck-'})
+          if rx['return']>0: return rx
+          fn1=rx['file_name']
 
           x='lspci'
 
           if remote_ssh=='yes':
              x=tosd['remote_shell']+x+tosd.get('remote_shell_end','')
 
-          x+=' '+ro+' '+fn
+          x+=' '+ro+' '+fn+' '+re+' '+fn1
 
           if o=='con':
              ck.out('')
              ck.out('Executing: '+x)
 
           rx=os.system(x)
+
+          if os.path.isfile(fn1):
+             os.remove(fn1)
+
           if rx==0:
              # Read and parse file
              rx=ck.load_text_file({'text_file':fn, 'split_to_list':'yes', 'delete_after_read':'yes'})
