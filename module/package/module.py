@@ -12,8 +12,6 @@ work={} # Will be updated by CK (temporal data)
 ck=None # Will be updated by CK (initialized CK kernel) 
 
 # Local settings
-env_install_path='CK_TOOLS'
-install_path='CK-TOOLS'
 
 ##############################################################################
 # Initialize module
@@ -627,15 +625,9 @@ def install(i):
           pix=''
           sp=d.get('suggested_path','')
 
-          # Moved Tools to $HOME by default if CK_TOOLS is not defined
-          x=os.environ.get(env_install_path,'')
-          if x=='':
-             # Get home user directory
-             from os.path import expanduser
-             home = expanduser("~")
-             x=os.path.join(home, install_path)
-             if not os.path.isdir(x):
-                os.makedirs(x)
+          rz=prepare_install_path({})
+          if rz['return']>0: return rz
+          x=rz['path']
 
           if x!='' and sp!='':
              # Prepare installation path
@@ -834,15 +826,9 @@ def install(i):
              pix=''
              sp=d.get('suggested_path','')
 
-             # Moved Tools to $HOME by default if CK_TOOLS is not defined
-             x=os.environ.get(env_install_path,'')
-             if x=='':
-                # Get home user directory
-                from os.path import expanduser
-                home = expanduser("~")
-                x=os.path.join(home, install_path)
-                if not os.path.isdir(x):
-                   os.makedirs(x)
+             rz=prepare_install_path({})
+             if rz['return']>0: return rz
+             x=rz['path']
 
              if x!='' and sp!='':
                 pix=os.path.join(x, sp+'-'+cus.get('version','')+'-'+tosx)
@@ -1387,3 +1373,35 @@ def show(i):
        h+='</table>\n'
 
     return {'return':0, 'html':h}
+
+##############################################################################
+# prepare installation path
+
+def prepare_install_path(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              path         - prepared path where to install packages
+            }
+
+    """
+
+    import os
+
+    # Moved Tools to $HOME by default if CK_TOOLS is not defined
+    x=os.environ.get(cfg["env_install_path"],'')
+    if x=='':
+       # Get home user directory
+       from os.path import expanduser
+       home = expanduser("~")
+       x=os.path.join(home, cfg["install_path"])
+       if not os.path.isdir(x):
+          os.makedirs(x)
+
+    return {'return':0, 'path':x}

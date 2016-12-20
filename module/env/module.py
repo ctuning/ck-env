@@ -1534,3 +1534,105 @@ def prune_search_list(i):
             nlst.append(q)
 
     return {'return':0, 'lst':nlst}
+
+##############################################################################
+# remote env entry and installed package
+
+def clean(i):
+    """
+    Input:  {
+              (data_uoa) - entries to be cleaned (wildcards can be used)
+              (repo_uoa)
+              (tags)
+              (force)    - if 'yes', force delete
+              (f)        - if 'yes', force delete
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import copy
+    import os
+    import shutil
+
+    oo=''
+    o=i.get('out','')
+    if o=='con': oo=o
+
+    force=i.get('force','')
+    if force=='': force=i.get('f','')
+
+    ii=copy.deepcopy(i)
+    ii['action']='show'
+    ii['out']=''
+
+    r=ck.access(ii)
+    if r['return']>0: return r
+
+    lst=r['lst']
+
+    # Check default path
+    r=ck.access({'action':'prepare_install_path',
+                 'module_uoa':cfg['module_deps']['package']})
+    if r['return']>0: return r
+
+    path=r['path']
+
+    for q in lst:
+        ruid=q['repo_uid']
+        duid=q['data_uid']
+        duoa=q['data_uoa']
+
+        d=q['meta']
+
+        cus=d.get('customize',{})
+        fp=cus.get('full_path','')
+        fp4=''
+
+        if fp.startswith(path):
+           j=1
+           if path.endswith(os.path.sep) or path.endswith('/'):
+              j=0
+           fp1=fp[len(path)+j:]
+
+           fp2=fp1.split(os.path.sep)
+
+           if len(fp2)>0:
+              fp3=fp2[0]
+
+              if fp3!='':
+                 fp4=os.path.join(path,fp3)
+
+        x=''
+        if fp4!='' and os.path.isdir(fp4):
+           x=' package in dir "'+fp4+'" and'
+
+        s=''
+        if force=='yes':
+           s='yes'
+        elif o=='con':
+           r=ck.inp({'text':'Are you sure to delete'+x+' CK entry env:"'+duoa+'" (y/N): '})
+           if r['return']>0: return r
+           s=r['string'].strip().lower()
+           if s=='y': s='yes'
+
+        if s=='yes':
+           # Delete entry
+           r=ck.access({'action':'rm',
+                        'module_uoa':work['self_module_uid'],
+                        'data_uoa':duid,
+                        'repo_uoa':ruid,
+                        'force':s,
+                        'out':oo})
+           if r['return']>0: return r
+
+           # Delete package
+           if fp4!='' and os.path.isdir(fp4):
+              shutil.rmtree(fp4)
+
+    return {'return':0}

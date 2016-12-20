@@ -3,6 +3,9 @@
     "install": {
       "desc": "install CK package (download a tool if needed, install it, and register environment"
     },
+    "prepare_install_path": {
+      "desc": "prepare install path for packages"
+    },
     "rebuild_deps": {
       "desc": "rebuild dependencies using packages"
     },
@@ -27,5 +30,7 @@
     "platform.gpgpu": "192ed4e0bbdbe743",
     "platform.os": "41e31cc4496b8a8e",
     "soft": "5e1100048ab875d7"
-  }
+  },
+  "env_install_path":"CK_TOOLS",
+  "install_path":"CK-TOOLS"
 }
