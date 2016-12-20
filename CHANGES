@@ -1,5 +1,6 @@
 * 2016.12.20 - added detection of Raspberry Pi platform features
              - added detection of Odroid platform 
+             - added "ck clean env:*" to remove both CK entries and related packages
 
 * 2016.12.19 - fixing typos in soft scripts
 
