@@ -391,8 +391,8 @@ def detect(i):
                 try:
                    rpi=GPIO.RPI_INFO
                    x1=rpi.get('MANUFACTURER','')
-                   target_name='Raspberry '+rpi.get('TYPE','')
-                   target_system_model=''
+                   target_name='Raspberry Pi'
+                   target_system_model='Raspberry '+rpi.get('TYPE','')
                 except Exception as e: 
                    pass
 
