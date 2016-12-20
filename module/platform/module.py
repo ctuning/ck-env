@@ -383,7 +383,7 @@ def detect(i):
              fail=False
              try:
                 import RPi.GPIO as GPIO
-             except RuntimeError:
+             except Exception as e:
                 fail=True
 
              if not fail:
