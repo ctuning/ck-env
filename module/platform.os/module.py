@@ -523,7 +523,7 @@ def detect(i):
                                         'delete_after_read':'yes'})
                    if r['return']==0:
                       ver=r['dict']
-                      prop_os_name=ver.get('DISTRIB_DESCRIPTION','')
+                      prop_os_name=ver.get('DISTRIB_DESCRIPTION', ver.get('PRETTY_NAME',''))
 
              if prop_os_name=='' and prop_os_name_short!='':
                 prop_os_name=prop_os_name_short
