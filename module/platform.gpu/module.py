@@ -429,8 +429,10 @@ def detect(i):
           xn=dx.get(x,'')
 
           if (xn=='' and o=='con'):
-             r=ck.inp({'text':'Enter your GPU name (for example ARM MALI-T860, Nvidia Tesla K80): '})
+             r=ck.inp({'text':'Enter your GPU name (for example ARM MALI-T860) or leave empty if you don\'t know it: '})
              xxn=r['string'].strip()
+             if xxn=='': 
+                xxn='-'
 
              if xxn!=xn:
                 xn=xxn
