@@ -400,7 +400,10 @@ def detect(i):
              # Check via /proc/device-tree/model
              rx=ck.load_text_file({'text_file':'/proc/device-tree/model'})
              if rx['return']==0:
-                target_name=rx['string'].strip()
+                target_system_model=rx['string'].strip()
+                zz1=target_system_model.split(' ')
+                if len(zz1)>0:
+                   x1=zz1[0]
 
        prop['vendor']=x1
        if target_name=='' and x1!='': target_name=x1
