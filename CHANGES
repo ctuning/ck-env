@@ -1,3 +1,8 @@
+* 2016.12.21 - major update to record package configuration during installation
+               to be able to correctly re-register soft when env is cleaned ...
+               It also allows to pre-record information about version 
+               and other hints to CK in the CK-compatible third-party packages (bright future ;) ).
+
 * 2016.12.20 - added detection of Raspberry Pi platform features
              - added detection of Odroid platform 
              - added "ck clean env:*" to remove both CK entries and related packages

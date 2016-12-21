@@ -986,6 +986,58 @@ def install(i):
              if rx>0: 
                 return {'return':1, 'error':'package installation failed'}
 
+    # Preparing soft registration
+    ii={'action':'setup',
+        'module_uoa':cfg['module_deps']['soft'],
+        'data_uoa':suoa,
+        'soft_name':dname,
+        'host_os':hos,
+        'target_os':tos,
+        'target_device_id':tdid,
+        'tags':stags,
+        'customize':cus,
+        'features':features,
+        'env_new':'yes',
+        'env_repo_uoa':enruoa,
+        'env_data_uoa':enduoa,
+        'env':env,
+        'extra_version':ev
+       }
+
+    nw='no'
+    if enduoa=='': nw='yes'
+
+    if cus.get('collect_device_info','')!='yes':
+        ii['skip_device_info_collection']='yes'
+
+    if d.get('remove_deps','')=='yes':
+       ii['deps_copy']=udeps
+    else:
+       ii['deps']=udeps
+
+    if d.get('no_install_path','')!='yes':
+       if fp!='':
+          ii['full_path']=fp
+          ii['full_path_install']=pi
+       elif pi!='':              # mainly for compatibility with previous CK soft manager
+          ii['install_path']=pi
+
+    if duid!='': ii['package_uoa']=duid
+
+    if len(soft_cfg)>0:
+       ii.update(soft_cfg)
+
+    # Recording cus dict to install dir to be able to rebuild env later if needed 
+    if pi!='':
+       pic=os.path.join(pi, cfg['ck_install_file'])
+
+       if o=='con':
+          ck.out('')
+          ck.out('Recording CK configuration to '+pic+' ...')
+
+       rx=ck.save_json_to_file({'json_file':pic, 'dict':ii})
+       if rx['return']>0: return rx
+
     # Check if need to setup environment
     if xsetup:
        if suoa=='':
@@ -1008,46 +1060,7 @@ def install(i):
              ck.out('  (full path = '+fp+')')
              ck.out('')
 
-          nw='no'
-          if enduoa=='': nw='yes'
-
-          ii={'action':'setup',
-              'module_uoa':cfg['module_deps']['soft'],
-              'data_uoa':suoa,
-              'soft_name':dname,
-              'host_os':hos,
-              'target_os':tos,
-              'target_device_id':tdid,
-              'tags':stags,
-              'customize':cus,
-              'features':features,
-              'env_new':'yes',
-              'env_repo_uoa':enruoa,
-              'env_data_uoa':enduoa,
-              'env':env,
-              'extra_version':ev
-             }
-
-          if cus.get('collect_device_info','')!='yes':
-              ii['skip_device_info_collection']='yes'
-
-          if d.get('remove_deps','')=='yes':
-             ii['deps_copy']=udeps
-          else:
-             ii['deps']=udeps
-
-          if d.get('no_install_path','')!='yes':
-             if fp!='':
-                ii['full_path']=fp
-                ii['full_path_install']=pi
-             elif pi!='':              # mainly for compatibility with previous CK soft manager
-                ii['install_path']=pi
-
-          if duid!='': ii['package_uoa']=duid
           if o=='con': ii['out']='con'
-
-          if len(soft_cfg)>0:
-             ii.update(soft_cfg)
 
           rx=ck.access(ii)
           if rx['return']>0: return rx

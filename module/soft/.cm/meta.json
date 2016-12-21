@@ -32,6 +32,7 @@
       "desc": "split version"
     }
   },
+  "ck_install_file": "ck-install.json", 
   "copyright": "See CK COPYRIGHT.txt for copyright details",
   "custom_script_name": "customize",
   "default_bat_name": "env",

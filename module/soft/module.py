@@ -1673,6 +1673,8 @@ def check(i):
           if iv=='yes':
              ck.out('  Registering software installation in the CK:')
              ck.out('')
+             ck.out('    (HINT: enter -1 to force CK package installation)')
+             ck.out('')
 
              iq=0
 
@@ -1707,9 +1709,30 @@ def check(i):
 
        return {'return':16, 'error':'software was not automatically found on your system! Please, install it and re-try again!'}
 
-    # Attempt to register in CK
+    # Check if CK install dict already exists
     pf=lst[il]
 
+    env_data_uoa=''
+
+    rx=find_config_file({'full_path':pf})
+    if rx['return']>0: return rx
+    found=rx['found']
+    if found=='yes':
+       dx=rx['dict']
+
+       cus=rx['dict'].get('customize',{})
+       ev=rx['dict'].get('extra_version','')
+       if rx['dict'].get('env_data_uoa','')!='':
+          env_data_uoa=rx['dict']['env_data_uoa']
+
+       # FGG: should I add deps here or not - the thing is that the env 
+       # most likely changed so probably not ...
+
+       if o=='con':
+          ck.out('')
+          ck.out('  Found pre-recorded CK installation info ...')
+
+    # Attempt to register in CK
     if o=='con':
        ck.out('')
        ck.out('  Registering in the CK ('+pf+') ...')
@@ -1723,6 +1746,7 @@ def check(i):
         'target_os':tos,
         'target_device_id':tdid,
         'deps':deps,
+        'env_data_uoa':env_data_uoa,
         'extra_version':ev,
         'out':oo}
 
@@ -1797,34 +1821,43 @@ def get_version(i):
 
     sb=bprefix+sb
 
-    # Generate tmp file
-    rx=ck.gen_tmp_file({})
-    if rx['return']>0: return rx
-    ftmp=rx['file_name']
-
-    # Preparing CMD
     ver=''
     lst=[]
-    if 'version_cmd' in dir(cs):
-       rx=cs.version_cmd({'full_path':fp,
-                          'host_os_dict':hosd,
-                          'target_os_dict':tosd,
-                          'cmd':cmdx,
-                          'ck_kernel':ck,
-                          'out':o})
+
+    # Attempt to check via CK config file
+    rx=find_config_file({'full_path':fp})
+    if rx['return']>0: return rx
+    found=rx['found']
+    if found=='yes':
+       ver=rx['dict'].get('customize',{}).get('version','')
+
+    if ver=='':
+       # Generate tmp file
+       rx=ck.gen_tmp_file({})
        if rx['return']>0: return rx
-       cmd=rx.get('cmd','')
-       ver=rx.get('version','')
-    else:    
-       if eifsc!='' and fp.find(' ')>=0 and not fp.startswith(eifsc):
-          fp=eifsc+fp+eifsc
+       ftmp=rx['file_name']
 
-       cmd=''
+       # Preparing CMD
+       if 'version_cmd' in dir(cs):
+          rx=cs.version_cmd({'full_path':fp,
+                             'host_os_dict':hosd,
+                             'target_os_dict':tosd,
+                             'cmd':cmdx,
+                             'ck_kernel':ck,
+                             'out':o})
+          if rx['return']>0: return rx
+          cmd=rx.get('cmd','')
+          ver=rx.get('version','')
+       else:    
+          if eifsc!='' and fp.find(' ')>=0 and not fp.startswith(eifsc):
+             fp=eifsc+fp+eifsc
 
-       if o!='con':
-          cmd+=nout
+          cmd=''
 
-       cmd+=fp+' '+cmdx
+          if o!='con':
+             cmd+=nout
+
+          cmd+=fp+' '+cmdx
 
     if ver=='':
        if 'parse_version' not in dir(cs):
@@ -2260,3 +2293,46 @@ def show(i):
        h+='</table>\n'
 
     return {'return':0, 'html':h}
+
+##############################################################################
+# get version of a given software (internal)
+
+def find_config_file(i):
+    """
+    Input:  {
+              full_path - where to start search
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              found   - 'yes' if found
+              dict    - loaded dict with the configuration ...
+            }
+
+    """
+
+    import os
+
+    pf=i['full_path']
+
+    pf1=os.path.dirname(pf)
+
+    found='no'
+    d={}
+
+    while pf1!=pf and pf1!='':
+       pf2=os.path.join(pf1,cfg['ck_install_file'])
+       if os.path.isfile(pf2):
+          rx=ck.load_json_file({'json_file':pf2})
+          if rx['return']==0:
+             found='yes'
+             d=rx['dict']
+             break
+
+       pf=pf1
+       pf1=os.path.dirname(pf)
+
+    return {'return':0, 'found':found, 'dict':d}
