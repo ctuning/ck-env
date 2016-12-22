@@ -17,7 +17,6 @@
       "win": 4
     }, 
     "only_for_target_os_tags": [
-      "android", 
       "windows", 
       "linux"
     ], 
