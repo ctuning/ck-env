@@ -1,3 +1,5 @@
+* 2016.12.26 - updated wget for Windows (to download Caffe deps without SSL certificate)
+
 * 2016.12.21 - major update to record package configuration during installation
                to be able to correctly re-register soft when env is cleaned ...
                It also allows to pre-record information about version 
