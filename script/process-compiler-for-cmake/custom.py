@@ -70,6 +70,8 @@ def setup(i):
     sv1='$('
     sv2=')'
 
+    ie={}
+
     svarb=hosd.get('env_var_start','')
     svarb1=hosd.get('env_var_extra1','')
     svare=hosd.get('env_var_stop','')
@@ -80,7 +82,7 @@ def setup(i):
     cfg=i.get('cfg',{})
     deps=i.get('deps',{})
 
-    # Set default parameters
+    # Set default parameters from compiler deps
     cd=deps['compiler']
 
     cdd=cd['dict']
@@ -89,6 +91,9 @@ def setup(i):
 
     ck_cc=ce['CK_CC']
     ck_cxx=ce['CK_CXX']
+
+    # Check if uses sub-deps GCC NDK
+    ge=cdd.get('deps',{}).get('ndk-gcc',{}).get('dict',{}).get('env',{})
 
     # Remove flags from CK_CC
     ck_cc1=ck_cc
@@ -117,16 +122,47 @@ def setup(i):
     if not os.path.isfile(pb_cxx):
         return {'return':1, 'error':'can\'t find full path to compiler ('+pb_cxx+') - can\'t be used with this CMake-based package'}
 
+    # Check AR
+    pr=ce.get('CK_ANDROID_COMPILER_PREFIX','')
+    if pr=='': pr=ge.get('CK_ANDROID_COMPILER_PREFIX','')
+    far=ce.get('CK_AR','').replace('${CK_ANDROID_COMPILER_PREFIX}',pr).replace('%CK_ANDROID_COMPILER_PREFIX%',pr)
+
+    if far!='':
+       par=os.path.join(pb,'bin',far)
+       if not os.path.isfile(par) and ge.get('CK_ENV_COMPILER_GCC_BIN','')!='':
+          par=os.path.join(ge['CK_ENV_COMPILER_GCC_BIN'],far)
+       if os.path.isfile(par):
+          ie['CK_AR_PATH_FOR_CMAKE']=par
+
+    # Check LD
+    pr=ce.get('CK_ANDROID_COMPILER_PREFIX','')
+    if pr=='': pr=ge.get('CK_ANDROID_COMPILER_PREFIX','')
+    fld=ce.get('CK_LD','')
+    if fld=='': fld=ge.get('CK_LD','')
+
+    if fld!='':
+       fld=fld.replace('${CK_ANDROID_COMPILER_PREFIX}',pr).replace('%CK_ANDROID_COMPILER_PREFIX%',pr)
+       pld=os.path.join(pb,'bin',fld)
+       if not os.path.isfile(pld) and ge.get('CK_ENV_COMPILER_GCC_BIN','')!='':
+          pld=os.path.join(ge['CK_ENV_COMPILER_GCC_BIN'],fld)
+       if os.path.isfile(pld):
+          ie['CK_LD_PATH_FOR_CMAKE']=pld
+
     # Add other obligatory flags
     ck_cc2+=' '+svarb+svarb1+'CK_COMPILER_FLAGS_OBLIGATORY'+svare1+svare
     ck_cxx2+=' '+svarb+svarb1+'CK_COMPILER_FLAGS_OBLIGATORY'+svare1+svare
 
-    if ce.get('CK_ENV_LIB_STDCPP_INCLUDE','')!='':
-       ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+svarb+svarb1+'CK_ENV_LIB_STDCPP_INCLUDE'+svare1+svare
-    if ce.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')!='':
-       ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+svarb+svarb1+'CK_ENV_LIB_STDCPP_INCLUDE_EXTRA'+svare1+svare
-    if ce.get('CK_ENV_LIB_STDCPP','')!='':
-       ck_cxx2+=' '+ce['CK_FLAG_PREFIX_LIB_DIR']+ce['CK_ENV_LIB_STDCPP']
+    x=ce.get('CK_ENV_LIB_STDCPP_INCLUDE','')
+    if x=='': x=ge.get('CK_ENV_LIB_STDCPP_INCLUDE','')
+    if x!='': ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+x
+
+    x=ce.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')
+    if x=='': x=ge.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')
+    if x!='': ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+x
+
+    x=ce.get('CK_ENV_LIB_STDCPP','')
+    if x=='': x=ge.get('CK_ENV_LIB_STDCPP','')
+    if x!='': ck_cxx2+=' '+ce['CK_FLAG_PREFIX_LIB_DIR']+x
 
 #    if ce.get('CK_ENV_LIB_STD','')!='':
 #       ck_cc2+=' '+ce['CK_FLAG_PREFIX_LIB_DIR']+ce['CK_ENV_LIB_STD']
@@ -140,8 +176,6 @@ def setup(i):
     if ck_cxx2.find(' ')<0: ck_cxx2='"'+ck_cxx2+'"'
 
     # New env variables (full path to compiler + extra flags)
-    ie={}
-
     ie['CK_CC_PATH_FOR_CMAKE']=pb_cc
     ie['CK_CC_FLAGS_FOR_CMAKE']=ck_cc2
 
@@ -149,5 +183,19 @@ def setup(i):
     ie['CK_CXX_FLAGS_FOR_CMAKE']=ck_cxx2
 
     ie['CK_COMPILER_PATH_FOR_CMAKE']=os.path.join(pb,'bin')
+
+    ie['CK_CC_FLAGS_ANDROID_TYPICAL']='-fexceptions -frtti -DANDROID'
+    ie['CK_CXX_FLAGS_ANDROID_TYPICAL']='-fexceptions -frtti -DANDROID'
+
+    y=''
+    x=ce.get('CK_ENV_LIB_STDCPP_STATIC','')
+    if x=='': x=ge.get('CK_ENV_LIB_STDCPP_STATIC','')
+    y+=' '+x
+
+    x=ce.get('CK_EXTRA_LIB_ATOMIC','')
+    if x=='': x=ge.get('CK_EXTRA_LIB_ATOMIC','')
+    y+=' '+x
+
+    ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=y.strip()
 
     return {'return':0, 'install_env':ie}

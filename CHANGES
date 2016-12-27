@@ -1,3 +1,5 @@
+* 2016.12.27 - supporting LLVM from the new Android NDK (for Caffe)
+
 * 2016.12.26 - updated wget for Windows (to download Caffe deps without SSL certificate)
 
 * 2016.12.21 - major update to record package configuration during installation

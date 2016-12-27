@@ -314,9 +314,10 @@ def setup(i):
 
           x=''
           if arch=='arm64': 
-             x='-fPIE -pie '
+#             x='-fPIE -pie '
+             x='-fPIE '
 
-          env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
+          env["CK_COMPILER_FLAGS_OBLIGATORY"]=x+y
        else:
           env["CK_COMPILER_FLAGS_OBLIGATORY"]="-DWINDOWS"
 
@@ -486,9 +487,10 @@ def setup(i):
 
           x=''
           if arch=='arm64': 
-             x='-fPIE -pie '
+#             x='-fPIE -pie '
+             x='-fPIE '
 
-          env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
+          env["CK_COMPILER_FLAGS_OBLIGATORY"]=' '+x+y
 
        else:
           ### Linux Host  #########################################################
@@ -514,13 +516,15 @@ def setup(i):
           s+='\nexport PATH='+pi+x+':%PATH%\n\n'
 
     # Update global
+    env["CK_EXTRA_LIB_ATOMIC"]="-latomic"
+
     if remote=='yes' or os_name_long.find('-arm')>0:
        y='-mfloat-abi=hard'
        env.update({'CK_COMPILER_FLAG_MFLOAT_ABI_HARD': y})
 
-       x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
-       if y not in x:
-          x+=' '+y
-          env["CK_COMPILER_FLAGS_OBLIGATORY"]=x
+#       x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
+#       if y not in x:
+#          x+=' '+y
+#          env["CK_COMPILER_FLAGS_OBLIGATORY"]=x
 
     return {'return':0, 'bat':s}
