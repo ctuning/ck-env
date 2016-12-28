@@ -517,6 +517,7 @@ def setup(i):
 
     # Update global
     env["CK_EXTRA_LIB_ATOMIC"]="-latomic"
+    env['CK_HAS_OPENMP']='0' # for now force not to use OpenMP - later should detect via version
 
     if remote=='yes' or os_name_long.find('-arm')>0:
        y='-mfloat-abi=hard'
