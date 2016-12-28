@@ -184,7 +184,7 @@ def setup(i):
 
     ie['CK_COMPILER_PATH_FOR_CMAKE']=os.path.join(pb,'bin')
 
-    ie['CK_CC_FLAGS_ANDROID_TYPICAL']='-fexceptions -frtti -DANDROID'
+    ie['CK_CC_FLAGS_ANDROID_TYPICAL']='-fexceptions -DANDROID'
     ie['CK_CXX_FLAGS_ANDROID_TYPICAL']='-fexceptions -frtti -DANDROID'
 
     y=''

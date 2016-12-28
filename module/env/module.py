@@ -1015,6 +1015,8 @@ def resolve(i):
 
     """
 
+    import copy
+
     o=i.get('out','')
 
     if o=='con':
@@ -1084,7 +1086,10 @@ def resolve(i):
 
     res=[]
     iv=0
-    for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
+
+    sdeps=sorted(deps, key=lambda v: deps[v].get('sort',0))
+
+    for k in sdeps:
         q=deps[k]
 
         ytos=tos
@@ -1198,6 +1203,13 @@ def resolve(i):
 
         if q.get('skip_from_bat','')!='yes':
            sb1+=bt
+
+        if q.get('duplicate_at_the_end','')=='yes':
+           kk=k+'_duplicated'
+           deps[kk]=copy.deepcopy(q)
+           deps[kk]['duplicate_at_the_end']='no'
+           deps[kk]['force_env_init']='yes'
+           sdeps.append(kk)
 
     if o=='con':
        ck.out('-----------------------------------')
