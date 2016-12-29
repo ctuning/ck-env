@@ -137,9 +137,19 @@ def setup(i):
        if os.path.isfile(par):
           ie['CK_AR_PATH_FOR_CMAKE']=par
 
-    # Check LD
+    # Check Prefix
     pr=ce.get('CK_ANDROID_COMPILER_PREFIX','')
     if pr=='': pr=ge.get('CK_ANDROID_COMPILER_PREFIX','')
+
+    # Check short prefix
+    spr=pr
+    if spr!='':
+       j=spr.find('-')
+       if j>0:
+          spr=spr[:j]
+    if spr!='': ie['CK_CMAKE_SYSTEM_PROCESSOR']=spr
+
+    # Check LD
     fld=ce.get('CK_LD','')
     if fld=='': fld=ge.get('CK_LD','')
 
