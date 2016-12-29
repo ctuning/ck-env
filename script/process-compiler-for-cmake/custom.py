@@ -143,12 +143,38 @@ def setup(i):
 
     # Set extra env for CMAKE based on ABI
     abi=tosd.get('abi','')
+    cf=tosd.get('cpu_features',{})
+
+    ie['CK_ARMEABI_V7A']='OFF'
+    ie['CK_ARMEABI_V7A_HARD']='OFF'
+
     if abi=='armeabi-v7a':
        ie['CK_CMAKE_SYSTEM_PROCESSOR']='armv7-a'
-       ck_cc2+=' -march=armv7-a -mfloat-abi=softfp '
-       ck_cxx2+='  -march=armv7-a -mfloat-abi=softfp '
+       ck_cc2+=' -march=armv7-a '
+       ck_cxx2+='  -march=armv7-a '
+
+       if cf.get('arm_fp_hard','')=='yes':
+          ie['CK_ARMEABI_V7A_HARD']='ON'
+          ck_cc2+=' -mfloat-abi=hard -mhard-float '
+          ck_cxx2+=' -mfloat-abi=hard -mhard-float '
+       else:
+          ie['CK_ARMEABI_V7A']='ON'
+          ck_cc2+=' -mfloat-abi=softfp '
+          ck_cxx2+=' -mfloat-abi=softfp '
     elif abi=='arm64-v8a':
        ie['CK_CMAKE_SYSTEM_PROCESSOR']='aarch64'
+
+    # Extra CPU features
+    # Current LLVM doesn't seem to support NEON
+    if cf.get('arm_fp_neon','')=='yes' and 'clang' not in ck_cc:
+       ie['CK_CPU_ARM_NEON']='ON'
+    else:
+       ie['CK_CPU_ARM_NEON']='OFF'
+
+    if cf.get('arm_fp_vfpv3','')=='yes':
+       ie['CK_CPU_ARM_VFPV3']='ON'
+    else:
+       ie['CK_CPU_ARM_VFPV3']='OFF'
 
     # Check LD
     fld=ce.get('CK_LD','')

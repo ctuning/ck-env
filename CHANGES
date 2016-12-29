@@ -1,5 +1,6 @@
 * 2016.12.29 - automatically duplicating all deps with 'compiler' in the key
                to avoid mix ups of env by packages compiled with different compiler ...
+             - added OS android19-arm-v7a-hard-neon, android19-arm-v7a-neon, android21-arm-v7a-hard-neon, android21-arm-v7a-neon
 
 * 2016.12.28 - supporting duplication of deps (primerily to reset compiler vars to correct values at the end)
 
