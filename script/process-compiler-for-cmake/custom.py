@@ -141,13 +141,14 @@ def setup(i):
     pr=ce.get('CK_ANDROID_COMPILER_PREFIX','')
     if pr=='': pr=ge.get('CK_ANDROID_COMPILER_PREFIX','')
 
-    # Check short prefix
-    spr=pr
-    if spr!='':
-       j=spr.find('-')
-       if j>0:
-          spr=spr[:j]
-    if spr!='': ie['CK_CMAKE_SYSTEM_PROCESSOR']=spr
+    # Set extra env for CMAKE based on ABI
+    abi=tosd.get('abi','')
+    if abi=='armeabi-v7a':
+       ie['CK_CMAKE_SYSTEM_PROCESSOR']='armv7-a'
+       ck_cc2+=' -march=armv7-a -mfloat-abi=softfp '
+       ck_cxx2+='  -march=armv7-a -mfloat-abi=softfp '
+    elif abi=='arm64-v8a':
+       ie['CK_CMAKE_SYSTEM_PROCESSOR']='aarch64'
 
     # Check LD
     fld=ce.get('CK_LD','')
