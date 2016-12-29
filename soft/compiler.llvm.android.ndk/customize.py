@@ -313,9 +313,9 @@ def setup(i):
           y='-target %CK_ANDROID_TOOLCHAIN% -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_SYS_ROOT%'
 
           x=''
-          if arch=='arm64': 
+#          if arch=='arm64': 
 #             x='-fPIE -pie '
-             x='-fPIE '
+          x='-fPIE -pie '
 
           env["CK_COMPILER_FLAGS_OBLIGATORY"]=x+y
        else:
@@ -486,9 +486,9 @@ def setup(i):
           y='-target $CK_ANDROID_TOOLCHAIN -gcc-toolchain $CK_ENV_COMPILER_GCC --sysroot=$CK_SYS_ROOT'
 
           x=''
-          if arch=='arm64': 
+#          if arch=='arm64': 
 #             x='-fPIE -pie '
-             x='-fPIE '
+          x='-fPIE -pie '
 
           env["CK_COMPILER_FLAGS_OBLIGATORY"]=' '+x+y
 
