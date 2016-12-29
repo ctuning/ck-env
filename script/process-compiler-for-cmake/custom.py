@@ -155,8 +155,8 @@ def setup(i):
 
        if cf.get('arm_fp_hard','')=='yes':
           ie['CK_ARMEABI_V7A_HARD']='ON'
-          ck_cc2+=' -mfloat-abi=hard -mhard-float '
-          ck_cxx2+=' -mfloat-abi=hard -mhard-float '
+          ck_cc2+=' -mfloat-abi=hard -mhard-float -Wl,--no-warn-mismatch'
+          ck_cxx2+=' -mfloat-abi=hard -mhard-float -Wl,--no-warn-mismatch '
        else:
           ie['CK_ARMEABI_V7A']='ON'
           ck_cc2+=' -mfloat-abi=softfp '
