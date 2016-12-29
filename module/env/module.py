@@ -1204,7 +1204,8 @@ def resolve(i):
         if q.get('skip_from_bat','')!='yes':
            sb1+=bt
 
-        if q.get('duplicate_at_the_end','')=='yes':
+        # Duplicate compiler at the end!
+        if '_duplicated' not in k and (q.get('duplicate_at_the_end','')=='yes' or ('compiler' in k and k+'_duplicated' not in sdeps)):
            kk=k+'_duplicated'
            deps[kk]=copy.deepcopy(q)
            deps[kk]['duplicate_at_the_end']='no'

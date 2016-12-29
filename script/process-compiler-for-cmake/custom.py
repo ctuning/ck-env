@@ -92,6 +92,9 @@ def setup(i):
     ck_cc=ce['CK_CC']
     ck_cxx=ce['CK_CXX']
 
+    if 'clang' in ck_cc:
+       ie['CK_CLANG']='YES'
+
     # Check if uses sub-deps GCC NDK
     ge=cdd.get('deps',{}).get('ndk-gcc',{}).get('dict',{}).get('env',{})
 
@@ -184,8 +187,9 @@ def setup(i):
 
     ie['CK_COMPILER_PATH_FOR_CMAKE']=os.path.join(pb,'bin')
 
-    ie['CK_CC_FLAGS_ANDROID_TYPICAL']='-fexceptions -DANDROID'
-    ie['CK_CXX_FLAGS_ANDROID_TYPICAL']='-fexceptions -frtti -DANDROID'
+    # I had problems with -frtti and -fexceptions in Caffe
+    ie['CK_CC_FLAGS_ANDROID_TYPICAL']='-DANDROID'
+    ie['CK_CXX_FLAGS_ANDROID_TYPICAL']='-DANDROID'
 
     y=''
     x=ce.get('CK_ENV_LIB_STDCPP_STATIC','')

@@ -1,3 +1,6 @@
+* 2016.12.29 - automatically duplicating all deps with 'compiler' in the key
+               to avoid mix ups of env by packages compiled with different compiler ...
+
 * 2016.12.28 - supporting duplication of deps (primerily to reset compiler vars to correct values at the end)
 
 * 2016.12.27 - supporting LLVM from the new Android NDK (for Caffe)
