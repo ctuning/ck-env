@@ -119,8 +119,14 @@ def setup(i):
     pb_cc=os.path.join(pb,'bin',ck_cc1)
     pb_cxx=os.path.join(pb,'bin',ck_cxx1)
 
+    if not os.path.isfile(pb_cc) and not pb_cc.endswith('.exe'):
+       pb_cc+='.exe' # trying for windows
+
     if not os.path.isfile(pb_cc):
         return {'return':1, 'error':'can\'t find full path to compiler ('+pb_cc+') - can\'t be used with this CMake-based package'}
+
+    if not os.path.isfile(pb_cxx) and not pb_cxx.endswith('.exe'):
+       pb_cxx+='.exe' # trying for windows
 
     if not os.path.isfile(pb_cxx):
         return {'return':1, 'error':'can\'t find full path to compiler ('+pb_cxx+') - can\'t be used with this CMake-based package'}
