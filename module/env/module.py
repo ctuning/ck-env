@@ -1544,10 +1544,15 @@ def prune_search_list(i):
         tags=meta.get('tags',[])
 
         skip=False
-        for t in ntags:
-            if t in tags:
-                skip=True
-                break
+
+        if 'tmp' in tags:
+           skip=True
+
+        if not skip:
+           for t in ntags:
+               if t in tags:
+                   skip=True
+                   break
 
         if not skip:
             nlst.append(q)

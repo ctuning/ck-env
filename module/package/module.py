@@ -646,10 +646,14 @@ def install(i):
        if enduoa=='' and iev=='yes':
           # Create dummy env and then set path there
           # TBD - if installation fails, we still have this dummy - need to check what to do ...
+          #  can remove: ck rm env:* --tags=tmp
+          xx=stags
+          if xx!='': xx+=','
+          xx+='tmp'
           rx=ck.access({'action':'add',
                         'module_uoa':cfg['module_deps']['env'],
                         'repo_uoa':enruoa,
-                        'tags':stags,
+                        'tags':xx,
                         'dict':{'setup':setup}})
           if rx['return']>0: return rx
 
@@ -1271,8 +1275,6 @@ def show(i):
     """
     Input:  {
                (the same as list; can use wildcards)
-
-
             }
 
     Output: {
