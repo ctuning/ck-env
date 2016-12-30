@@ -458,7 +458,7 @@ def set(i):
                     zm=j.get('meta',{})
                     zu=j.get('data_uid','')
                     zdn=zi.get('data_name','')
-                    cus=zm.get('customize','')
+                    cus=zm.get('customize',{})
                     zdeps=zm.get('deps',{})
                     xsetup=zm.get('setup',{})
                     xtags=zm.get('tags','')
