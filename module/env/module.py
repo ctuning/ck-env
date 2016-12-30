@@ -526,7 +526,7 @@ def set(i):
 
           # Next, try to install via package for a given software
           ck.out('')
-          ck.out('  Searching and installing CK software packages with these tags (if exist) ...')
+          ck.out('  Searching and installing CK software packages (tags "'+tags+'", no tags "'+no_tags+'") ...')
 
 #          if quiet=='yes':
 #             ck.out('  Searching and installing package with these tags automatically ...')
@@ -546,6 +546,7 @@ def set(i):
               'module_uoa':cfg['module_deps']['package'],
               'out':oo,
               'tags':tags,
+              'no_tags':no_tags,
               'install_to_env':iev}
           vv['host_os']=hos
           vv['target_os']=tos

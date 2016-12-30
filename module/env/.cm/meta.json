@@ -3,6 +3,9 @@
     "clean": {
       "desc": "remote env entry and installed package"
     },
+    "prune_search_list": {
+      "desc": "prune search list by no_tags"
+    },
     "refresh": {
       "desc": "refresh environment setup (re-setup related software version)"
     },

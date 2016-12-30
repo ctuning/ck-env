@@ -45,6 +45,7 @@ def install(i):
               (data_uoa) or (uoa) - package UOA entry
                        or
               (tags)              - tags to search package if data_uoa=='' before searching in current path
+              (no_tags)           - exclude entris with these tags separated by comma
 
               (env_data_uoa)      - use this data UOA to record (new) env
               (env_repo_uoa)      - use this repo to record new env
@@ -100,6 +101,7 @@ def install(i):
        oo=o
 
     xtags=i.get('tags','')
+    xno_tags=i.get('no_tags','')
 
     start_time = time.time()
 
@@ -195,7 +197,6 @@ def install(i):
     else:
        # First, search by tags
        if xtags!='':
-
           r=ck.access({'action':'search',
                        'module_uoa':work['self_module_uid'],
                        'add_info':'yes',
@@ -230,18 +231,27 @@ def install(i):
 
                     ll.append(q)
 
-             # Sort by name and version
-             l=sorted(ll, key=lambda k: (internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 0, 0),
-                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 1, 0),
-                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 2, 0),
-                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 3, 0),
-                                         internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 4, 0),
-                                         k.get('info',{}).get('data_name',''),
-                                         k['data_uoa']),
-                      reverse=True)
+             # Prune by no_tags
+             if xno_tags!='':
+                rx=ck.access({'action':'prune_search_list',
+                              'module_uoa':cfg['module_deps']['env'],
+                              'lst':ll,
+                              'no_tags':xno_tags})
+                if rx['return']>0: return rx
+                ll=rx['lst']
 
              # Select package 
-             if len(l)>0:
+             if len(ll)>0:
+                # Sort by name and version
+                l=sorted(ll, key=lambda k: (internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 0, 0),
+                                            internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 1, 0),
+                                            internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 2, 0),
+                                            internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 3, 0),
+                                            internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 4, 0),
+                                            k.get('info',{}).get('data_name',''),
+                                            k['data_uoa']),
+                         reverse=True)
+
                 il=0
                 if len(l)>1:
                    ck.out('')
