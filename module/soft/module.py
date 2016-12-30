@@ -626,6 +626,8 @@ def setup(i):
     ss4=''
     ss5=''
 
+    ver_to_search=ver
+
     if cus.get('use_git_revision','')=='yes':
        import datetime
 
@@ -698,10 +700,12 @@ def setup(i):
        ck.out('')
        r=ck.inp({'text':'Enter version of this software (for example, 3.21.6-2 or press Enter if default/unknown): '})
        ver=r['string'].strip().lower()
+       ver_to_search=ver
 
     # Add extra, if needed (useful for changing trunks)
     if ev!='':
-       ver=ver+ev
+       ver+=ev
+       ver_to_search+=ev
 
     # If cutomized version has changed, try to check env again ...
     if vercus!=ver:
@@ -713,7 +717,7 @@ def setup(i):
     sver=rx['version_split']
 
     # Add version to setup and separate into tags
-    setup['version']=ver
+    setup['version']=ver_to_search
     setup['version_split']=sver
 
     # Prepare tags from version

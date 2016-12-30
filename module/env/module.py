@@ -72,6 +72,8 @@ def set(i):
               (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
 
               (force_env_init)       - if 'yes', add '1' when calling env script (useful for LLVM plugins for example to force reinit)
+
+              (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
             }
 
     Output: {
@@ -108,6 +110,8 @@ def set(i):
     cdeps=i.get('deps',{})
 
     sd=i.get('skip_default','')
+
+    iev=i.get('install_to_env','')
 
     bf=i.get('bat_file','')
     if bf!='' and os.path.isfile(bf): os.remove(bf)
@@ -541,7 +545,8 @@ def set(i):
           vv={'action':'install',
               'module_uoa':cfg['module_deps']['package'],
               'out':oo,
-              'tags':tags}
+              'tags':tags,
+              'install_to_env':iev}
           vv['host_os']=hos
           vv['target_os']=tos
           vv['target_device_id']=tdid
@@ -866,7 +871,7 @@ def show(i):
         host_os_uoa=setup.get('host_os_uoa','')
         target_os_uoa=setup.get('target_os_uoa','')
         tbits=setup.get('target_os_bits','')
-        version=setup.get('version','')
+        version=cus.get('version','')
         sversion=setup.get('version_split',[])
 
         dname=info.get('data_name','')
@@ -1000,6 +1005,8 @@ def resolve(i):
                                        (useful for quiet experiment crowdsourcing such as sw/hw crowdtuning)
 
               (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
+
+              (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
             }
 
     Output: {
@@ -1032,6 +1039,8 @@ def resolve(i):
 
     ran=i.get('random','')
     quiet=i.get('quiet','')
+
+    iev=i.get('install_to_env','')
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -1088,6 +1097,9 @@ def resolve(i):
     iv=0
 
     sdeps=sorted(deps, key=lambda v: deps[v].get('sort',0))
+
+    xsb=''  # Append to the end
+    xsb1='' # Append to the end
 
     for k in sdeps:
         q=deps[k]
@@ -1151,7 +1163,8 @@ def resolve(i):
             'key':ek,
             'skip_pruning_by_other_deps':q.get('skip_pruning_by_other_deps',''),
             'quiet':quiet,
-            'force_env_init':q.get('force_env_init','')
+            'force_env_init':q.get('force_env_init',''),
+            'install_to_env':iev
            }
         if o=='con': ii['out']='con'
         rx=set(ii)
@@ -1203,14 +1216,6 @@ def resolve(i):
 
         if q.get('skip_from_bat','')!='yes':
            sb1+=bt
-
-        # Duplicate compiler at the end!
-        if '_duplicated' not in k and (q.get('duplicate_at_the_end','')=='yes' or ('compiler' in k and k+'_duplicated' not in sdeps)):
-           kk=k+'_duplicated'
-           deps[kk]=copy.deepcopy(q)
-           deps[kk]['duplicate_at_the_end']='no'
-           deps[kk]['force_env_init']='yes'
-           sdeps.append(kk)
 
     if o=='con':
        ck.out('-----------------------------------')

@@ -75,6 +75,8 @@ def install(i):
                                     (to be able to call it to rebuild package without CK)
 
               (force_version)     - force version (useful for automatic installation of packages with multiple supported version)
+
+              (install_to_env)    - install this package and all dependencies to env instead of CK-TOOLS (to keep it clean)!
             }
 
     Output: {
@@ -162,6 +164,10 @@ def install(i):
     eifs=hosd.get('env_quotes_if_space','')
     eifsc=hosd.get('env_quotes_if_space_in_call','')
     wb=tosd.get('windows_base','')
+
+    iev=i.get('install_to_env','')
+    if iev=='':
+       iev=ck.cfg.get('install_to_env','')
 
     # Check package description
     duoa=i.get('uoa','')
@@ -472,6 +478,7 @@ def install(i):
            'target_os':tos,
            'target_device_id':tdid,
            'repo_uoa':enruoa,
+           'install_to_env':iev,
            'deps':udeps}
        if o=='con': ii['out']='con'
 
@@ -560,8 +567,12 @@ def install(i):
           if len(lst)>0:
              fe=lst[0]
 
+             enruoa=fe['repo_uid']
              enduoa=fe['data_uoa']
              enduid=fe['data_uid']
+
+             if iev=='yes':
+                pi=fe['path']
 
              if o=='con':
                 x=enduoa
@@ -582,8 +593,12 @@ def install(i):
                        'data_uoa':enduoa})
           if r['return']>0: return r
           de=r['dict']
-          pi=de.get('customize',{}).get('path_install','')
-          fp=de.get('customize',{}).get('full_path','')
+
+          x=de.get('customize',{}).get('path_install','')
+          if x!='': pi=x
+
+          x=de.get('customize',{}).get('full_path','')
+          if x!='': fp=x
 
 #          if extra_dir!='':
 #             j=pi.rfind(extra_dir)
@@ -617,6 +632,20 @@ def install(i):
 
              else:
                 return {'return':1, 'error':'package is already installed in path '+pi}
+
+       if enduoa=='' and iev=='yes':
+          # Create dummy env and then set path there
+          # TBD - if installation fails, we still have this dummy - need to check what to do ...
+          rx=ck.access({'action':'add',
+                        'module_uoa':cfg['module_deps']['env'],
+                        'repo_uoa':enruoa,
+                        'tags':stags,
+                        'dict':{'setup':setup}})
+          if rx['return']>0: return rx
+
+          enduoa=rx['data_uoa']
+          enduid=rx['data_uid']
+          pi=rx['path']
 
        if cus.get('skip_path','')!='yes' and pi=='':
           if o=='con':
@@ -743,12 +772,18 @@ def install(i):
            'target_os':tos,
            'target_device_id':tdid,
            'repo_uoa':enruoa,
+           'install_to_env':iev,
            'deps':udeps}
        if o=='con': ii['out']='con'
 
        rx=ck.access(ii)
        if rx['return']>0: return rx
        sdeps=rx['bat']
+
+    if o=='con' and pi!='':
+       ck.out('')
+       ck.out('Installation path: '+pi)
+       ck.out('')
 
     if cs!=None and 'post_deps' in dir(cs):
        # Call customized script
@@ -762,7 +797,6 @@ def install(i):
            "cfg":d,
            "tags":tags,
            "env":env,
-           "deps":udeps,
            "features":features,
            "customize":cus,
            "self_cfg":cfg,
@@ -915,9 +949,11 @@ def install(i):
                 sb+=sdeps
 
              # Add compiler dep again, if there
-             x=udeps.get('compiler',{}).get('bat','')
-             if x!='' and not sb.endswith(x):
-                sb+='\n'+x+'\n'
+             for k in sorted(udeps, key=lambda v: udeps[v].get('sort',0)):
+                 if 'compiler' in k:
+                    x=udeps[k].get('bat','').strip()
+                    if x!='' and not sb.endswith(x):
+                       sb+='\n'+x+' 1\n\n'
 
              # Add misc environment (prepared above)
              for q in pr_env:
@@ -956,6 +992,8 @@ def install(i):
              # Generate tmp file (or use record script)
              if rs!='':
                 fn=rs
+                if fn==os.path.basename(fn):
+                   fn=os.path.join(os.getcwd(),fn)
              else:
                 rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':sext})
                 if rx['return']>0: return rx
@@ -1067,6 +1105,11 @@ def install(i):
 
           enduoa=rx['env_data_uoa']
           enduid=rx['env_data_uid']
+
+    if o=='con' and pi!='':
+       ck.out('')
+       ck.out('Installation path: '+pi)
+       ck.out('')
 
     elapsed_time=time.time()-start_time
     if o=='con':
