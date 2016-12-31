@@ -171,6 +171,6 @@ def setup(i):
        s+='set PATH='+pb+';%PATH%\n\n'
        env[ep+'_BIN']=pb
     else:
-       return {'return':1, 'error':'Linux version is not yet supported'}
+       return {'return':1, 'error':'Linux version is not yet supported in customize.py'}
 
     return {'return':0, 'bat':s}

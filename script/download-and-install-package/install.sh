@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Installation script for clBLAS.
+# Universal installation script for CK
 #
 # See CK LICENSE for licensing details.
 # See CK COPYRIGHT for copyright details.

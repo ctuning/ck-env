@@ -117,7 +117,7 @@ def setup(i):
     # Setting environment depending on the platform
     if hplat=='win':
        # TBD
-       return {'return':1, 'error':'not yet supported ...'}
+       return {'return':1, 'error':'OS not yet supported in customize.py...'}
 
     else:
        cus['path_lib']=p1
