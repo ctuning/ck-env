@@ -238,9 +238,9 @@ def setup(i):
     ck_cc2=ck_cc2.strip()
     ck_cxx2=ck_cxx2.strip()
 
-    if phosd!='win':
-       if ck_cc2.find(' ')>0: ck_cc2='"'+ck_cc2+'"'
-       if ck_cxx2.find(' ')>0: ck_cxx2='"'+ck_cxx2+'"'
+#    if phosd!='win':
+#       if ck_cc2.find(' ')>0: ck_cc2='"'+ck_cc2+'"'
+#       if ck_cxx2.find(' ')>0: ck_cxx2='"'+ck_cxx2+'"'
 
     # New env variables (full path to compiler + extra flags)
     ie['CK_CC_PATH_FOR_CMAKE']=pb_cc
@@ -270,10 +270,10 @@ def setup(i):
 
     ck_libs_andr=y
 
-    if phosd!='win':
-       if ck_cc_andr.find(' ')>0: ck_cc_andr='"'+ck_cc_andr+'"'
-       if ck_cxx_andr.find(' ')>0: ck_cxx_andr='"'+ck_cxx_andr+'"'
-       if ck_libs_andr.find(' ')>0: ck_libs_andr='"'+ck_libs_andr+'"'
+#    if phosd!='win':
+#       if ck_cc_andr.find(' ')>0: ck_cc_andr='"'+ck_cc_andr+'"'
+#       if ck_cxx_andr.find(' ')>0: ck_cxx_andr='"'+ck_cxx_andr+'"'
+#       if ck_libs_andr.find(' ')>0: ck_libs_andr='"'+ck_libs_andr+'"'
 
     ie['CK_CC_FLAGS_ANDROID_TYPICAL']=ck_cc_andr
     ie['CK_CXX_FLAGS_ANDROID_TYPICAL']=ck_cxx_andr

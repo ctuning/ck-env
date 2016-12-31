@@ -36,7 +36,7 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
   echo ""
   echo "Cloning archive ..."
 
-  rm -f ${PACKAGE_SUB_DIR}
+  rm -rf ${PACKAGE_SUB_DIR}
   git clone ${PACKAGE_URL} ${PACKAGE_SUB_DIR}
 
   if [ "${?}" != "0" ] ; then
