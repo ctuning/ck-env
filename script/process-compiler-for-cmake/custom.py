@@ -56,8 +56,18 @@ def setup(i):
     ck=i['ck_kernel']
     s=''
 
+#    del(i['ck_kernel'])
+#    r=ck.save_json_to_file({'json_file':'d:\\zzz1.json','dict':i})
+#    exit(1)
+
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
+
+    osn=tosd.get('ck_name2','')
+
+    # Env vars on host
+    svb=hosd.get('env_var_start','')+hosd.get('env_var_extra1','')
+    sve=hosd.get('env_var_extra2','')+hosd.get('env_var_stop','')
 
     # Check platform
     hplat=hosd.get('ck_name','')
@@ -66,9 +76,6 @@ def setup(i):
     tproc=tosd.get('processor','')
 
     phosd=hosd.get('ck_name','')
-
-    sv1='$('
-    sv2=')'
 
     ie={}
 
@@ -115,37 +122,51 @@ def setup(i):
         ck_cxx2=ck_cxx[j+1:].strip(' "')
 
     # Check that path exists
-    pb=ce.get(cep,'')
-    pb_cc=os.path.join(pb,'bin',ck_cc1)
-    pb_cxx=os.path.join(pb,'bin',ck_cxx1)
+#    pb=ce.get(cep,'')
+#    pb_cc=os.path.join(pb,'bin',ck_cc1)
+#    pb_cxx=os.path.join(pb,'bin',ck_cxx1)
 
-    if not os.path.isfile(pb_cc) and not pb_cc.endswith('.exe'):
+    pb=ce.get(cep,'')
+    pb1=ce.get(cep+'_BIN','')
+
+    pb_cc=os.path.join(pb1,ck_cc1)
+    pb_cxx=os.path.join(pb1,ck_cxx1)
+
+    if phosd=='win' and not pb_cc.endswith('.exe'):
        pb_cc+='.exe' # trying for windows
 
     if not os.path.isfile(pb_cc):
         return {'return':1, 'error':'can\'t find full path to compiler ('+pb_cc+') - can\'t be used with this CMake-based package'}
 
-    if not os.path.isfile(pb_cxx) and not pb_cxx.endswith('.exe'):
+    if phosd=='win' and not pb_cxx.endswith('.exe'):
        pb_cxx+='.exe' # trying for windows
 
     if not os.path.isfile(pb_cxx):
         return {'return':1, 'error':'can\'t find full path to compiler ('+pb_cxx+') - can\'t be used with this CMake-based package'}
 
-    # Check AR
-    pr=ce.get('CK_ANDROID_COMPILER_PREFIX','')
-    if pr=='': pr=ge.get('CK_ANDROID_COMPILER_PREFIX','')
-    far=ce.get('CK_AR','').replace('${CK_ANDROID_COMPILER_PREFIX}',pr).replace('%CK_ANDROID_COMPILER_PREFIX%',pr)
-
-    if far!='':
-       par=os.path.join(pb,'bin',far)
-       if not os.path.isfile(par) and ge.get('CK_ENV_COMPILER_GCC_BIN','')!='':
-          par=os.path.join(ge['CK_ENV_COMPILER_GCC_BIN'],far)
-       if os.path.isfile(par):
-          ie['CK_AR_PATH_FOR_CMAKE']=par
-
     # Check Prefix
     pr=ce.get('CK_ANDROID_COMPILER_PREFIX','')
     if pr=='': pr=ge.get('CK_ANDROID_COMPILER_PREFIX','')
+
+    # Check AR
+    far=ce.get('CK_AR','')
+
+    if osn=='android':
+       far=far.replace('${CK_ANDROID_COMPILER_PREFIX}',pr).replace('%CK_ANDROID_COMPILER_PREFIX%',pr)
+
+    par=''
+    if far!='':
+       par=os.path.join(pb1,far)
+       if not os.path.isfile(par) and ge.get('CK_ENV_COMPILER_GCC_BIN','')!='':
+          par=os.path.join(ge['CK_ENV_COMPILER_GCC_BIN'],far)
+
+    if phosd=='win' and not par.endswith('.exe'):
+       par+='.exe' # trying for windows
+
+    if os.path.isfile(par):
+       ie['CK_AR_PATH_FOR_CMAKE']=par
+    else:
+       par=''
 
     # Set extra env for CMAKE based on ABI
     abi=tosd.get('abi','')
@@ -186,9 +207,10 @@ def setup(i):
     fld=ce.get('CK_LD','')
     if fld=='': fld=ge.get('CK_LD','')
 
+    pld=''
     if fld!='':
        fld=fld.replace('${CK_ANDROID_COMPILER_PREFIX}',pr).replace('%CK_ANDROID_COMPILER_PREFIX%',pr)
-       pld=os.path.join(pb,'bin',fld)
+       pld=os.path.join(pb1,fld)
        if not os.path.isfile(pld) and ge.get('CK_ENV_COMPILER_GCC_BIN','')!='':
           pld=os.path.join(ge['CK_ENV_COMPILER_GCC_BIN'],fld)
        if os.path.isfile(pld):
@@ -218,8 +240,9 @@ def setup(i):
     ck_cc2=ck_cc2.strip()
     ck_cxx2=ck_cxx2.strip()
 
-    if ck_cc2.find(' ')<0: ck_cc2='"'+ck_cc2+'"'
-    if ck_cxx2.find(' ')<0: ck_cxx2='"'+ck_cxx2+'"'
+    if phosd!='win':
+       if ck_cc2.find(' ')>0: ck_cc2='"'+ck_cc2+'"'
+       if ck_cxx2.find(' ')>0: ck_cxx2='"'+ck_cxx2+'"'
 
     # New env variables (full path to compiler + extra flags)
     ie['CK_CC_PATH_FOR_CMAKE']=pb_cc
@@ -228,12 +251,14 @@ def setup(i):
     ie['CK_CXX_PATH_FOR_CMAKE']=pb_cxx
     ie['CK_CXX_FLAGS_FOR_CMAKE']=ck_cxx2
 
-    ie['CK_COMPILER_PATH_FOR_CMAKE']=os.path.join(pb,'bin')
+    ie['CK_COMPILER_PATH_FOR_CMAKE']=pb1
 
+    # Typical Android flags
     # I had problems with -frtti and -fexceptions in Caffe
-    ie['CK_CC_FLAGS_ANDROID_TYPICAL']='-DANDROID'
-    ie['CK_CXX_FLAGS_ANDROID_TYPICAL']='-DANDROID'
+    ck_cc_andr='-DANDROID'
+    ck_cxx_andr='-DANDROID'
 
+    # Typical Android lib
     y=''
     x=ce.get('CK_ENV_LIB_STDCPP_STATIC','')
     if x=='': x=ge.get('CK_ENV_LIB_STDCPP_STATIC','')
@@ -243,6 +268,54 @@ def setup(i):
     if x=='': x=ge.get('CK_EXTRA_LIB_ATOMIC','')
     y+=' '+x
 
-    ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=y.strip()
+    y=y.strip()
+
+    ck_libs_andr=y
+
+    if phosd!='win':
+       if ck_cc_andr.find(' ')>0: ck_cc_andr='"'+ck_cc_andr+'"'
+       if ck_cxx_andr.find(' ')>0: ck_cxx_andr='"'+ck_cxx_andr+'"'
+       if ck_libs_andr.find(' ')>0: ck_libs_andr='"'+ck_libs_andr+'"'
+
+    ie['CK_CC_FLAGS_ANDROID_TYPICAL']=ck_cc_andr
+    ie['CK_CXX_FLAGS_ANDROID_TYPICAL']=ck_cxx_andr
+    ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=ck_libs_andr
+
+    # Finalizing vars 
+
+    x1=''
+    x2=''
+    x3=''
+    x4=''
+    if osn=='android':
+       x1=' '+ck_cc_andr.strip('"')
+       x2=' '+ck_cxx_andr.strip('"')
+       x3=''
+       x4=' '+ck_libs_andr.strip('"')
+
+    xx=''
+    if phosd!='win':
+       xx='\\'
+
+    extra=''
+    if osn=='win':
+       par=''
+       pld=''
+       if 'clang' in ck_cc:
+          # Hack - should detect visual studio correctly and add correct names (in ck detect soft:compiler.microsoft)
+          extra='-G"Visual Studio 14 2015" -T"LLVM-vs2014"'
+       elif 'icl' in ck_cc:
+          # Hack - should detect intel version correctly and add correct names (in ck detect soft:compiler.icc)
+          extra='-G"Visual Studio 14 2015" -T"Intel C++ Compiler XE 15.0"'
+
+    ie['CK_CMAKE_TYPICAL']='-DCMAKE_C_COMPILER='+xx+'"'+pb_cc.strip('"')+xx+'" ' \
+                           '-DCMAKE_C_FLAGS='+xx+'"'+ck_cc2.strip('"')+x1+xx+'" ' \
+                           '-DCMAKE_CXX_COMPILER='+xx+'"'+pb_cxx.strip('"')+xx+'" ' \
+                           '-DCMAKE_CXX_FLAGS='+xx+'"'+ck_cxx2.strip('"')+x2+xx+'" ' \
+                           '-DCMAKE_AR='+xx+'"'+par+xx+'" ' \
+                           '-DCMAKE_LINKER='+xx+'"'+pld+xx+'" ' \
+                           '-DCMAKE_EXE_LINKER_FLAGS='+xx+'"'+x3+xx+'" ' \
+                           '-DCMAKE_EXE_LINKER_LIBS='+xx+'"'+x4+xx+'" ' \
+                           + extra
 
     return {'return':0, 'install_env':ie}

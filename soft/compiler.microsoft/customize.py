@@ -140,6 +140,10 @@ def setup(i):
     cus=i.get('customize',{})
     fp=cus.get('full_path','')
 
+    hos=i['host_os_uid']
+    tos=i['host_os_uid']
+    tdid=i['target_device_id']
+
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
@@ -170,5 +174,32 @@ def setup(i):
     s+='call "'+fp+'" '+ext+'\n\n'
 
     env['VSINSTALLDIR']=pi
+
+    # Attempt to detect path to compiler
+    cmd=s+'where cl.exe'
+
+    r=ck.access({'action':'shell',
+                 'module_uoa':'os',
+                 'host_os':hos,
+                 'target_os':tos,
+                 'device_id':tdid,
+                 'cmd':cmd,
+                 'split_to_list':'yes'})
+    if r['return']>0: return r
+
+    pcl=''
+    for x in reversed(r['stdout_lst']):
+        x=x.strip()
+        if x!='':
+           if os.path.isfile(x):
+              pcl=x
+           break
+
+    if pcl!='':
+       # Found compiler path (useful for CMAKE)
+       env[ep+'_BIN']=os.path.dirname(pcl)
+
+       ck.out('')
+       ck.out('  * Found compiler in '+pcl)
 
     return {'return':0, 'bat':s}
