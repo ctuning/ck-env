@@ -92,6 +92,9 @@ def setup(i):
     # Check platform
     hplat=hosd.get('ck_name','')
 
+    win=tosd.get('windows_base','')
+    mingw=tosd.get('mingw','')
+
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
 
@@ -117,20 +120,33 @@ def setup(i):
     env[ep]=pi
 
     ############################################################
-    # Setting environment depending on the platform
-    if hplat=='win':
-       # TBD
-       return {'return':1, 'error':'OS not yet supported in customize.py...'}
+    cus['path_lib']=p1
+    cus['path_include']=os.path.join(pi,'include')
 
+    r = ck.access({'action': 'lib_path_export_script', 
+                   'module_uoa': 'os', 
+                   'host_os_dict': hosd, 
+                   'lib_path': cus.get('path_lib', '')})
+    if r['return']>0: return r
+    s += r['script']
+
+    if win=='yes':
+       if remote=='yes' or mingw=='yes': 
+          ls='libglog.a'
+          ld='libglog.so'
+       else:
+          ls='glog.lib'
+          ld='glog.dll'
     else:
-       cus['path_lib']=p1
-       cus['path_include']=os.path.join(pi,'include')
+       ls='libglog.a'
+       ld='libglog.so'
 
-       r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
-         'lib_path': cus.get('path_lib','')})
-       if r['return']>0: return r
-       s += r['script']
+    cus['static_lib']=ls
+    cus['dynamic_lib']=ld
 
-       env[ep+'_LFLAG']='-lglog'
+    env[ep+'_STATIC_NAME']=cus.get('static_lib','')
+    env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+
+    env[ep+'_LFLAG']='-lglog'
 
     return {'return':0, 'bat':s}

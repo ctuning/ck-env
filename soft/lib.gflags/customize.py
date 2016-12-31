@@ -147,4 +147,6 @@ def setup(i):
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')
     env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
+    env[ep+'_LFLAG']='-lgflags'
+
     return {'return':0, 'bat':s}
