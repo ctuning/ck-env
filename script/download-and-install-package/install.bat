@@ -17,7 +17,7 @@ cd /D %INSTALL_DIR%
 rem ############################################################
 set PF=%PACKAGE_URL%/%PACKAGE_NAME%
 
-if "%PACKAGE_WGET%" == "yes" (
+if "%PACKAGE_WGET%" == "YES" (
   echo.
   echo Downloading package from '%PF%' ...
 
@@ -31,12 +31,12 @@ if "%PACKAGE_WGET%" == "yes" (
    goto err
   )
 
-  if "%PACKAGE_RENAME%" == "yes" (
+  if "%PACKAGE_RENAME%" == "YES" (
     ren %PACKAGE_NAME2% %PACKAGE_NAME%
   )
 )
 
-if "%PACKAGE_GIT%" == "yes" (
+if "%PACKAGE_GIT%" == "YES" (
   echo.
   echo Cloning package from '%PF%' ...
 
@@ -53,7 +53,7 @@ if "%PACKAGE_GIT%" == "yes" (
 )
 
 rem ############################################################
-if "%PACKAGE_UNGZIP%" == "yes" (
+if "%PACKAGE_UNGZIP%" == "YES" (
   echo.
   echo Ungzipping archive ...
 
@@ -68,7 +68,7 @@ if "%PACKAGE_UNGZIP%" == "yes" (
 )
 
 rem ############################################################
-if "%PACKAGE_UNTAR%" == "yes" (
+if "%PACKAGE_UNTAR%" == "YES" (
   echo.
   echo Untarring archive ...
 
@@ -77,7 +77,7 @@ if "%PACKAGE_UNTAR%" == "yes" (
 
   tar xvf %PACKAGE_NAME1%
 
-  if NOT "%PACKAGE_UNTAR_SKIP_ERROR_WIN%" == "yes" (
+  if NOT "%PACKAGE_UNTAR_SKIP_ERROR_WIN%" == "YES" (
     if %errorlevel% neq 0 (
       echo.
       echo Error: untaring package failed!
@@ -103,7 +103,15 @@ cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
       -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
       %PACKAGE_CONFIGURE_FLAGS% ^
       %PACKAGE_CONFIGURE_FLAGS_WINDOWS% ^
-      %CK_CMAKE_TYPICAL% ^
+      -DCMAKE_C_COMPILER="%CK_CC_PATH_FOR_CMAKE%" \
+      -DCMAKE_C_FLAGS="%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%" \
+      -DCMAKE_CXX_COMPILER="%CK_CXX_PATH_FOR_CMAKE%" \
+      -DCMAKE_CXX_FLAGS="%CK_CXX_FLAGS_FOR_CMAKE% %CK_CXX_FLAGS_ANDROID_TYPICAL%" \
+      -DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%" \
+      -DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%" \
+      -DCMAKE_EXE_LINKER_FLAGS="%CK_LINKER_FLAGS_ANDROID_TYPICAL%" \
+      -DCMAKE_EXE_LINKER_LIBS="%CK_LINKER_LIBS_ANDROID_TYPICAL%" \
+      %CK_CMAKE_EXTRA% ^
       %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
 
 echo **************************************************************

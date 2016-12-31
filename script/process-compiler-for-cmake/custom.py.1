@@ -79,6 +79,11 @@ def setup(i):
 
     ie={}
 
+    svarb=hosd.get('env_var_start','')
+    svarb1=hosd.get('env_var_extra1','')
+    svare=hosd.get('env_var_stop','')
+    svare1=hosd.get('env_var_extra2','')
+
     iv=i.get('interactive','')
     cus=i.get('customize',{})
     cfg=i.get('cfg',{})
@@ -215,8 +220,8 @@ def setup(i):
           ie['CK_LD_PATH_FOR_CMAKE']=pld
 
     # Add other obligatory flags
-    ck_cc2+=' '+svb+'CK_COMPILER_FLAGS_OBLIGATORY'+sve
-    ck_cxx2+=' '+svb+'CK_COMPILER_FLAGS_OBLIGATORY'+sve
+    ck_cc2+=' '+svarb+svarb1+'CK_COMPILER_FLAGS_OBLIGATORY'+svare1+svare
+    ck_cxx2+=' '+svarb+svarb1+'CK_COMPILER_FLAGS_OBLIGATORY'+svare1+svare
 
     x=ce.get('CK_ENV_LIB_STDCPP_INCLUDE','')
     if x=='': x=ge.get('CK_ENV_LIB_STDCPP_INCLUDE','')
@@ -279,7 +284,22 @@ def setup(i):
     ie['CK_CXX_FLAGS_ANDROID_TYPICAL']=ck_cxx_andr
     ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=ck_libs_andr
 
-    # Extra
+    # Finalizing vars 
+
+    x1=''
+    x2=''
+    x3=''
+    x4=''
+    if osn=='android':
+       x1=' '+ck_cc_andr.strip('"')
+       x2=' '+ck_cxx_andr.strip('"')
+       x3=''
+       x4=' '+ck_libs_andr.strip('"')
+
+    xx=''
+    if phosd!='win':
+       xx='\\'
+
     extra=''
     if osn=='win':
        par=''
@@ -291,6 +311,14 @@ def setup(i):
           # Hack - should detect intel version correctly and add correct names (in ck detect soft:compiler.icc)
           extra='-G"Visual Studio 14 2015" -T"Intel C++ Compiler XE 15.0"'
 
-    ie['CK_CMAKE_EXTRA']=extra
+    ie['CK_CMAKE_TYPICAL']='-DCMAKE_C_COMPILER='+xx+'"'+pb_cc.strip('"')+xx+'" ' \
+                           '-DCMAKE_C_FLAGS='+xx+'"'+ck_cc2.strip('"')+x1+xx+'" ' \
+                           '-DCMAKE_CXX_COMPILER='+xx+'"'+pb_cxx.strip('"')+xx+'" ' \
+                           '-DCMAKE_CXX_FLAGS='+xx+'"'+ck_cxx2.strip('"')+x2+xx+'" ' \
+                           '-DCMAKE_AR='+xx+'"'+par+xx+'" ' \
+                           '-DCMAKE_LINKER='+xx+'"'+pld+xx+'" ' \
+                           '-DCMAKE_EXE_LINKER_FLAGS='+xx+'"'+x3+xx+'" ' \
+                           '-DCMAKE_EXE_LINKER_LIBS='+xx+'"'+x4+xx+'" ' \
+                           + extra
 
     return {'return':0, 'install_env':ie}

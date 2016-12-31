@@ -19,37 +19,56 @@ cd ${INSTALL_DIR}
 ############################################################
 PF=${PACKAGE_URL}/${PACKAGE_NAME}
 
-echo ""
-echo "Downloading package from '${PF}' ..."
+if [ "${PACKAGE_WGET}" == "YES" ] ; then
+  echo ""
+  echo "Downloading package from '${PF}' ..."
 
-rm -f $PF
+  rm -f $PF
 
-wget ${PF}
-if [ "${?}" != "0" ] ; then
-  echo "Error: downloading package failed!"
-  exit 1
+  wget ${PF}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: downloading package failed!"
+    exit 1
+  fi
+fi
+
+if [ "${PACKAGE_GIT}" == "YES" ] ; then
+  echo ""
+  echo "Cloning archive ..."
+
+  rm -f ${PACKAGE_SUB_DIR}
+  git clone ${PACKAGE_URL} ${PACKAGE_SUB_DIR}
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: cloning failed!"
+    exit 1
+  fi
 fi
 
 ############################################################
-echo ""
-echo "Ungzipping archive ..."
+if [ "${PACKAGE_UNGZIP}" == "YES" ] ; then
+  echo ""
+  echo "Ungzipping archive ..."
 
-rm -f ${PACKAGE_NAME1}
-gzip -d ${PACKAGE_NAME}
-if [ "${?}" != "0" ] ; then
-  echo "Error: ungzipping package failed!"
-  exit 1
+  rm -f ${PACKAGE_NAME1}
+  gzip -d ${PACKAGE_NAME}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: ungzipping package failed!"
+    exit 1
+  fi
 fi
 
 ############################################################
-echo ""
-echo "Untarring archive ..."
+if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
+  echo ""
+  echo "Untarring archive ..."
 
-rm -rf ${PACKAGE_SUB_DIR}
-tar xvf ${PACKAGE_NAME1}
-if [ "${?}" != "0" ] ; then
-  echo "Error: untaring package failed!"
-  exit 1
+  rm -rf ${PACKAGE_SUB_DIR}
+  tar xvf ${PACKAGE_NAME1}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: untaring package failed!"
+    exit 1
+  fi
 fi
 
 ############################################################
@@ -97,7 +116,16 @@ else
  cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/install" \
        ${PACKAGE_CONFIGURE_FLAGS} \
        ${PACKAGE_CONFIGURE_FLAGS_LINUX} \
-       ../${PACKAGE_SUB_DIR1}
+       -DCMAKE_C_COMPILER="${CK_CC_PATH_FOR_CMAKE}" \
+       -DCMAKE_C_FLAGS="${CK_CC_FLAGS_FOR_CMAKE} ${CK_CC_FLAGS_ANDROID_TYPICAL}" \
+       -DCMAKE_CXX_COMPILER="${CK_CXX_PATH_FOR_CMAKE}" \
+       -DCMAKE_CXX_FLAGS="${CK_CXX_FLAGS_FOR_CMAKE} ${CK_CXX_FLAGS_ANDROID_TYPICAL}" \
+       -DCMAKE_AR="${CK_AR_PATH_FOR_CMAKE}" \
+       -DCMAKE_LINKER="${CK_LD_PATH_FOR_CMAKE}" \
+       -DCMAKE_EXE_LINKER_FLAGS="${CK_LINKER_FLAGS_ANDROID_TYPICAL}" \
+       -DCMAKE_EXE_LINKER_LIBS="${CK_LINKER_LIBS_ANDROID_TYPICAL}" \
+        ${CK_CMAKE_EXTRA} \
+        ../${PACKAGE_SUB_DIR1}
 fi
 
 if [ "${?}" != "0" ] ; then
