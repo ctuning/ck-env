@@ -85,7 +85,11 @@ def setup(i):
     deps=i.get('deps',{})
 
     # Set default parameters from compiler deps
-    cd=deps['compiler']
+    cd=deps.get('compiler',{})
+    if len(cd)==0:
+       cd=deps.get('host-compiler',{})
+    if len(cd)==0:
+       return {'return':1, 'error':'"compiler" or "host-compiler" not found in deps'}
 
     cdd=cd['dict']
     ce=cdd['env']
