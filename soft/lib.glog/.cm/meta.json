@@ -10,7 +10,7 @@
     },
     "soft_file": {
       "linux": "libglog.so",
-      "win": "libglog.lib"
+      "win": "glog.lib"
     },
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/libglog.so",

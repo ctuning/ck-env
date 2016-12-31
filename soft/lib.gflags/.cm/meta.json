@@ -10,7 +10,7 @@
     },
     "soft_file": {
       "linux": "libgflags.so",
-      "win": "libgflags.lib"
+      "win": "gflags.lib"
     },
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/libgflags.so",

@@ -12,55 +12,86 @@ rem
 rem PACKAGE_DIR
 rem INSTALL_DIR
 
-cd %INSTALL_DIR%
+cd /D %INSTALL_DIR%
 
+rem ############################################################
 set PF=%PACKAGE_URL%/%PACKAGE_NAME%
 
-echo.
-echo Downloading package from '%PF%' ...
+if "%PACKAGE_WGET%" == "yes" (
+  echo.
+  echo Downloading package from '%PF%' ...
 
-del /Q /S %PF%
+  del /Q /S %PF%
 
-wget --no-check-certificate "%PF%"
+  wget --no-check-certificate "%PF%"
 
-if %errorlevel% neq 0 (
- echo.
- echo Error: Failed downloading package ...
- goto err
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: Failed downloading package ...
+   goto err
+  )
+
+  if "%PACKAGE_RENAME%" == "yes" (
+    ren %PACKAGE_NAME2% %PACKAGE_NAME%
+  )
 )
 
-ren %PACKAGE_NAME2% %PACKAGE_NAME%
+if "%PACKAGE_GIT%" == "yes" (
+  echo.
+  echo Cloning package from '%PF%' ...
 
-rem ############################################################
-echo.
-echo Ungzipping archive ...
+  rmdir /s /q %PACKAGE_SUB_DIR%
+  rmdir %PACKAGE_SUB_DIR%
 
-del /Q /S %PACKAGE_NAME1%
-gzip -d %PACKAGE_NAME%
+  git clone %PACKAGE_URL% %PACKAGE_SUB_DIR%
 
-if %errorlevel% neq 0 (
- echo.
- echo Error: ungzipping package failed!
- goto err
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: Failed cloning package ...
+   goto err
+  )
 )
 
 rem ############################################################
-echo.
-echo Untarring archive ...
+if "%PACKAGE_UNGZIP%" == "yes" (
+  echo.
+  echo Ungzipping archive ...
 
-rmdir /s /q %PACKAGE_SUB_DIR%
-rmdir %PACKAGE_SUB_DIR%
+  del /Q /S %PACKAGE_NAME1%
+  gzip -d %PACKAGE_NAME%
 
-tar xvf %PACKAGE_NAME1%
-if %errorlevel% neq 0 (
- echo.
- echo Error: untaring package failed!
- goto err
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: ungzipping package failed!
+   goto err
+  )
+)
+
+rem ############################################################
+if "%PACKAGE_UNTAR%" == "yes" (
+  echo.
+  echo Untarring archive ...
+
+  rmdir /s /q %PACKAGE_SUB_DIR%
+  rmdir %PACKAGE_SUB_DIR%
+
+  tar xvf %PACKAGE_NAME1%
+
+  if NOT "%PACKAGE_UNTAR_SKIP_ERROR_WIN%" == "yes" (
+    if %errorlevel% neq 0 (
+      echo.
+      echo Error: untaring package failed!
+      goto err
+    )
+  )
 )
 
 rem ############################################################
 echo.
 echo Configuring ...
+
+rmdir /s /q install
+rmdir install
 
 rmdir /s /q obj
 rmdir obj
@@ -77,7 +108,7 @@ echo **************************************************************
 echo.
 echo Building using Visual Studio ...
 
-cmake --build . --config %CMAKE_CONFIG%
+cmake --build . --config %CMAKE_CONFIG% --target install
 if %errorlevel% neq 0 (
  echo.
  echo Problem building CK package!
