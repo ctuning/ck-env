@@ -63,6 +63,7 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
+    hosn=hosd.get('ck_name2','')
     osn=tosd.get('ck_name2','')
 
     # Env vars on host
@@ -165,7 +166,7 @@ def setup(i):
     if phosd=='win' and not par.endswith('.exe'):
        par+='.exe' # trying for windows
 
-    if phosd!='win' and os.path.isfile(par):
+    if (phosd!='win' or osn=='android') and os.path.isfile(par):
        ie['CK_AR_PATH_FOR_CMAKE']=par
     else:
        par=''
@@ -210,12 +211,15 @@ def setup(i):
     if fld=='': fld=ge.get('CK_LD','')
 
     pld=''
+
     if fld!='':
        fld=fld.replace('${CK_ANDROID_COMPILER_PREFIX}',pr).replace('%CK_ANDROID_COMPILER_PREFIX%',pr)
        pld=os.path.join(pb1,fld)
        if not os.path.isfile(pld) and ge.get('CK_ENV_COMPILER_GCC_BIN','')!='':
           pld=os.path.join(ge['CK_ENV_COMPILER_GCC_BIN'],fld)
-       if phosd!='win' and os.path.isfile(pld):
+       if phosd=='win' and not pld.endswith('.exe'):
+          pld+='.exe' # trying for windows
+       if (phosd!='win' and osn=='android') and os.path.isfile(pld):
           ie['CK_LD_PATH_FOR_CMAKE']=pld
 
     # Add other obligatory flags
@@ -247,6 +251,10 @@ def setup(i):
 #       if ck_cxx2.find(' ')>0: ck_cxx2='"'+ck_cxx2+'"'
 
     # New env variables (full path to compiler + extra flags)
+    if hosn=='win' and osn=='android':
+       pb_cc=pb_cc.replace('\\','/')
+       pb_cxx=pb_cxx.replace('\\','/')
+
     ie['CK_CC_PATH_FOR_CMAKE']=pb_cc
     ie['CK_CC_FLAGS_FOR_CMAKE']=ck_cc2
 
@@ -294,6 +302,11 @@ def setup(i):
        elif 'icl' in ck_cc:
           # Hack - should detect intel version correctly and add correct names (in ck detect soft:compiler.icc)
           extra='-G"Visual Studio 14 2015" -T"Intel C++ Compiler XE 15.0"'
+       extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_WINDOWS','')
+    elif osn=='linux':
+       extra=cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_LINUX','')
+    elif osn=='android':
+       extra='-G"MinGW Makefiles" -DCMAKE_MAKE_PROGRAM=make -DCMAKE_SYSTEM_NAME=Generic '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_ANDROID','')
 
     ie['CK_CMAKE_EXTRA']=extra
 
