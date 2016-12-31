@@ -395,9 +395,12 @@ def install(i):
 
     # Update this env from CK kernel (for example, to decide what to use, git or https)
     pr_env.update(ck.cfg.get('install_env',{}))
-
+    
     # Update this env from customize meta (for example to pass URL to download package)
     pr_env.update(cus.get('install_env',{}))
+
+    for kpe in pr_env:
+        pr_env[kpe]=pr_env[kpe].replace('$#sep#$',sdirs) 
 
     # Check if has customized script
     ppp=p
