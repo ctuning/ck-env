@@ -94,7 +94,10 @@ if [ "${PACKAGE_BUILD_TYPE}" == "configure" ] ; then
 else
   echo "Executing cmake ..."
 
- cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS} ../${PACKAGE_SUB_DIR1}
+ cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}/install" \
+       ${PACKAGE_CONFIGURE_FLAGS} \
+       ${PACKAGE_CONFIGURE_FLAGS_LINUX} \
+       ../${PACKAGE_SUB_DIR1}
 fi
 
 if [ "${?}" != "0" ] ; then

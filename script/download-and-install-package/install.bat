@@ -102,6 +102,7 @@ cd /D %INSTALL_DIR%/obj
 cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
       -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
       %PACKAGE_CONFIGURE_FLAGS% ^
+      %PACKAGE_CONFIGURE_FLAGS_WINDOWS% ^
       %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
 
 echo **************************************************************
