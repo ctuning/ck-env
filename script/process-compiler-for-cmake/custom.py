@@ -165,7 +165,7 @@ def setup(i):
     if phosd=='win' and not par.endswith('.exe'):
        par+='.exe' # trying for windows
 
-    if os.path.isfile(par):
+    if phosd!='win' and os.path.isfile(par):
        ie['CK_AR_PATH_FOR_CMAKE']=par
     else:
        par=''
@@ -215,7 +215,7 @@ def setup(i):
        pld=os.path.join(pb1,fld)
        if not os.path.isfile(pld) and ge.get('CK_ENV_COMPILER_GCC_BIN','')!='':
           pld=os.path.join(ge['CK_ENV_COMPILER_GCC_BIN'],fld)
-       if os.path.isfile(pld):
+       if phosd!='win' and os.path.isfile(pld):
           ie['CK_LD_PATH_FOR_CMAKE']=pld
 
     # Add other obligatory flags
