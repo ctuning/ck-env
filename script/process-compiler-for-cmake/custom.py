@@ -293,21 +293,25 @@ def setup(i):
 
     # Extra
     extra=''
-    if osn=='win':
-       par=''
-       pld=''
-       if 'clang' in ck_cc:
-          # Hack - should detect visual studio correctly and add correct names (in ck detect soft:compiler.microsoft)
-          extra='-G"Visual Studio 14 2015" -T"LLVM-vs2014"'
-       elif 'icl' in ck_cc:
-          # Hack - should detect intel version correctly and add correct names (in ck detect soft:compiler.icc)
-          extra='-G"Visual Studio 14 2015" -T"Intel C++ Compiler XE 15.0"'
-       extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_WINDOWS','')
+    if hosn=='win':
+       if osn=='android':
+          extra+=' -G"MinGW Makefiles" -DCMAKE_MAKE_PROGRAM=make -DCMAKE_SYSTEM_NAME=Generic'
+       else:
+          par=''
+          pld=''
+          if 'clang' in ck_cc:
+             # Hack - should detect visual studio correctly and add correct names (in ck detect soft:compiler.microsoft)
+             extra='-G"Visual Studio 14 2015" -T"LLVM-vs2014"'
+          elif 'icl' in ck_cc:
+             # Hack - should detect intel version correctly and add correct names (in ck detect soft:compiler.icc)
+             extra='-G"Visual Studio 14 2015" -T"Intel C++ Compiler XE 15.0"'
+          extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_WINDOWS','')
     elif osn=='linux':
-       extra=cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_LINUX','')
-    elif osn=='android':
-       extra='-G"MinGW Makefiles" -DCMAKE_MAKE_PROGRAM=make -DCMAKE_SYSTEM_NAME=Generic '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_ANDROID','')
+       extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_LINUX','')
 
-    ie['CK_CMAKE_EXTRA']=extra
+    if osn=='android':
+       extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_ANDROID','')
+
+    ie['CK_CMAKE_EXTRA']=extra.strip()
 
     return {'return':0, 'install_env':ie}
