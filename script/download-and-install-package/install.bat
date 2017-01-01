@@ -24,7 +24,9 @@ if "%PACKAGE_WGET%" == "YES" (
   echo.
   echo Downloading package from '%PF%' ...
 
-  del /Q /S %PF%
+  if EXIST %PF (
+    del /Q /S %PF%
+  )
 
   wget --no-check-certificate "%PF%"
 
@@ -43,8 +45,10 @@ if "%PACKAGE_GIT%" == "YES" (
   echo.
   echo Cloning package from '%PF%' ...
 
-  rmdir /s /q %PACKAGE_SUB_DIR%
-  rmdir %PACKAGE_SUB_DIR%
+  if EXIST %PACKAGE_SUB_DIR% (
+    rmdir /s /q %PACKAGE_SUB_DIR%
+    rmdir %PACKAGE_SUB_DIR%
+  )
 
   git clone %PACKAGE_URL% %PACKAGE_SUB_DIR%
 
@@ -60,7 +64,10 @@ if "%PACKAGE_UNGZIP%" == "YES" (
   echo.
   echo Ungzipping archive ...
 
-  del /Q /S %PACKAGE_NAME1%
+  if EXIST %PACKAGE_NAME1% (
+    del /Q /S %PACKAGE_NAME1%
+  )
+
   gzip -d %PACKAGE_NAME%
 
   if %errorlevel% neq 0 (
@@ -75,8 +82,10 @@ if "%PACKAGE_UNTAR%" == "YES" (
   echo.
   echo Untarring archive ...
 
-  rmdir /s /q %PACKAGE_SUB_DIR%
-  rmdir %PACKAGE_SUB_DIR%
+  if EXIST %PACKAGE_SUB_DIR% (
+    rmdir /s /q %PACKAGE_SUB_DIR%
+    rmdir %PACKAGE_SUB_DIR%
+  )
 
   tar xvf %PACKAGE_NAME1%
 
@@ -91,21 +100,50 @@ if "%PACKAGE_UNTAR%" == "YES" (
 
 rem ############################################################
 if "%PACKAGE_COPY%" == "YES" (
-  echo.
-  echo Copying extra files to source dir ...
+  if EXIST %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID% (
+    echo.
+    echo Copying extra files to source dir ...
 
-  xcopy /E %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID%\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+    xcopy /E %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID%\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+  )
+)
+
+rem ############################################################
+if "%PACKAGE_PATCH%" == "YES" (
+  if EXIST %ORIGINAL_PACKAGE_DIR%\patch.%CK_TARGET_OS_ID% (
+    echo.
+    echo patching source dir ...
+
+    cd /D %INSTALL_DIR%\%PACKAGE_SUB_DIR%
+
+    for /r %ORIGINAL_PACKAGE_DIR%\patch.%CK_TARGET_OS_ID% %%i in (*) do (
+      echo %%~fi
+      patch -p1 < %%~fi
+
+rem      if %errorlevel% neq 0 (
+rem        echo.
+rem        echo Error: patching failed!
+rem        goto err
+      )
+    )
+  )
 )
 
 rem ############################################################
 echo.
 echo Configuring ...
 
-rmdir /s /q install
-rmdir install
+cd /D %INSTALL_DIR%
 
-rmdir /s /q obj
-rmdir obj
+if EXIST install (
+  rmdir /s /q install
+  rmdir install
+)
+
+if EXIST obj (
+  rmdir /s /q obj
+  rmdir obj
+)
 mkdir obj
 
 cd /D %INSTALL_DIR%/obj
