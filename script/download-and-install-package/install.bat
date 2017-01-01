@@ -14,6 +14,9 @@ rem INSTALL_DIR
 
 cd /D %INSTALL_DIR%
 
+rem set > %PACKAGE_DIR%\xyz
+rem exit /b 1
+
 rem ############################################################
 set PF=%PACKAGE_URL%/%PACKAGE_NAME%
 
@@ -84,6 +87,14 @@ if "%PACKAGE_UNTAR%" == "YES" (
       goto err
     )
   )
+)
+
+rem ############################################################
+if "%PACKAGE_COPY%" == "YES" (
+  echo.
+  echo Copying extra files to source dir ...
+
+  xcopy /E %ORIGINAL_PACKAGE_DIR%\copy\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
 )
 
 rem ############################################################
