@@ -47,6 +47,9 @@ if "%PACKAGE_GIT%" == "YES" (
 
   if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir /s /q %PACKAGE_SUB_DIR%
+  )
+
+  if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir %PACKAGE_SUB_DIR%
   )
 
@@ -85,6 +88,9 @@ if "%PACKAGE_UNTAR%" == "YES" (
 
   if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir /s /q %PACKAGE_SUB_DIR%
+  )
+
+  if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir %PACKAGE_SUB_DIR%
   )
 
@@ -101,7 +107,6 @@ if "%PACKAGE_UNTAR%" == "YES" (
 
 rem ############################################################
 if "%PACKAGE_COPY%" == "YES" (
-echo "2"
   if EXIST "%ORIGINAL_PACKAGE_DIR%\copy" (
     echo.
     echo Copying extra files to source dir ...
@@ -146,11 +151,15 @@ cd /D %INSTALL_DIR%
 
 if EXIST install (
   rmdir /s /q install
+)
+if EXIST install (
   rmdir install
 )
 
 if EXIST obj (
   rmdir /s /q obj
+)
+if EXIST obj (
   rmdir obj
 )
 mkdir obj
