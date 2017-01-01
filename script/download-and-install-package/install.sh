@@ -23,7 +23,9 @@ if [ "${PACKAGE_WGET}" == "YES" ] ; then
   echo ""
   echo "Downloading package from '${PF}' ..."
 
-  rm -f $PF
+  if [ -f $PF ] ; then
+    rm -f $PF
+  fi
 
   wget ${PF}
   if [ "${?}" != "0" ] ; then
@@ -36,7 +38,10 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
   echo ""
   echo "Cloning archive ..."
 
-  rm -rf ${PACKAGE_SUB_DIR}
+  if [ -d ${PACKAGE_SUB_DIR} ] ; then
+    rm -rf ${PACKAGE_SUB_DIR}
+  fi
+
   git clone ${PACKAGE_URL} ${PACKAGE_SUB_DIR}
 
   if [ "${?}" != "0" ] ; then
@@ -50,7 +55,10 @@ if [ "${PACKAGE_UNGZIP}" == "YES" ] ; then
   echo ""
   echo "Ungzipping archive ..."
 
-  rm -f ${PACKAGE_NAME1}
+  if [ -f ${PACKAGE_NAME1} ] ; then
+    rm -f ${PACKAGE_NAME1}
+  fi
+
   gzip -d ${PACKAGE_NAME}
   if [ "${?}" != "0" ] ; then
     echo "Error: ungzipping package failed!"
@@ -63,7 +71,10 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
   echo ""
   echo "Untarring archive ..."
 
-  rm -rf ${PACKAGE_SUB_DIR}
+  if [ -d ${PACKAGE_SUB_DIR} ] ; then
+    rm -rf ${PACKAGE_SUB_DIR}
+  fi
+
   tar xvf ${PACKAGE_NAME1}
   if [ "${?}" != "0" ] ; then
     echo "Error: untaring package failed!"
@@ -72,11 +83,40 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
 fi
 
 ############################################################
+if [ "${PACKAGE_PATCH}" == "YES" ] ; then
+  if [ -d ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID} ] ; then
+    echo ""
+    echo "patching source dir ..."
+
+    cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
+
+    for i in ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID}/*
+    do
+      echo "$i"
+      patch -p1 < $i
+
+      if [ "${?}" != "0" ] ; then
+        echo "Error: patching failed!"
+        exit 1
+      fi
+    done
+  fi
+fi
+
+############################################################
 echo ""
 echo "Cleaning ..."
 
 cd ${INSTALL_DIR}
-rm -rf obj
+
+if [ -d install ] ; then
+  rm -rf install
+fi
+
+if [ -d obj ] ; then
+  rm -rf obj
+fi
+
 mkdir obj
 
 if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
