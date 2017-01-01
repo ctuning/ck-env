@@ -24,7 +24,7 @@ if "%PACKAGE_WGET%" == "YES" (
   echo.
   echo Downloading package from '%PF%' ...
 
-  if EXIST %PF (
+  if EXIST "%PF" (
     del /Q /S %PF%
   )
 
@@ -45,7 +45,7 @@ if "%PACKAGE_GIT%" == "YES" (
   echo.
   echo Cloning package from '%PF%' ...
 
-  if EXIST %PACKAGE_SUB_DIR% (
+  if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir /s /q %PACKAGE_SUB_DIR%
     rmdir %PACKAGE_SUB_DIR%
   )
@@ -60,11 +60,12 @@ if "%PACKAGE_GIT%" == "YES" (
 )
 
 rem ############################################################
+echo "%PACKAGE_NAME1%"
 if "%PACKAGE_UNGZIP%" == "YES" (
   echo.
   echo Ungzipping archive ...
 
-  if EXIST %PACKAGE_NAME1% (
+  if EXIST "%PACKAGE_NAME1%" (
     del /Q /S %PACKAGE_NAME1%
   )
 
@@ -82,7 +83,7 @@ if "%PACKAGE_UNTAR%" == "YES" (
   echo.
   echo Untarring archive ...
 
-  if EXIST %PACKAGE_SUB_DIR% (
+  if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir /s /q %PACKAGE_SUB_DIR%
     rmdir %PACKAGE_SUB_DIR%
   )
@@ -100,14 +101,15 @@ if "%PACKAGE_UNTAR%" == "YES" (
 
 rem ############################################################
 if "%PACKAGE_COPY%" == "YES" (
-  if EXIST %ORIGINAL_PACKAGE_DIR%\copy (
+echo "2"
+  if EXIST "%ORIGINAL_PACKAGE_DIR%\copy" (
     echo.
     echo Copying extra files to source dir ...
 
     xcopy /E %ORIGINAL_PACKAGE_DIR%\copy\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
   )
 
-  if EXIST %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID% (
+  if EXIST "%ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID%" (
     echo.
     echo Copying extra files for %CK_TARGET_OS_ID% to source dir ...
 
@@ -117,7 +119,7 @@ if "%PACKAGE_COPY%" == "YES" (
 
 rem ############################################################
 if "%PACKAGE_PATCH%" == "YES" (
-  if EXIST %ORIGINAL_PACKAGE_DIR%\patch.%CK_TARGET_OS_ID% (
+  if EXIST "%ORIGINAL_PACKAGE_DIR%\patch.%CK_TARGET_OS_ID%" (
     echo.
     echo patching source dir ...
 
