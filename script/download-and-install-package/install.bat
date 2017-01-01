@@ -100,9 +100,16 @@ if "%PACKAGE_UNTAR%" == "YES" (
 
 rem ############################################################
 if "%PACKAGE_COPY%" == "YES" (
-  if EXIST %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID% (
+  if EXIST %ORIGINAL_PACKAGE_DIR%\copy (
     echo.
     echo Copying extra files to source dir ...
+
+    xcopy /E %ORIGINAL_PACKAGE_DIR%\copy\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+  )
+
+  if EXIST %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID% (
+    echo.
+    echo Copying extra files for %CK_TARGET_OS_ID% to source dir ...
 
     xcopy /E %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID%\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
   )

@@ -83,6 +83,24 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
 fi
 
 ############################################################
+if [ "${PACKAGE_COPY}" == "YES" ] ; then
+  if [ -d ${ORIGINAL_PACKAGE_DIR}/copy ] ; then
+    echo ""
+    echo "Copying extra files to source dir ..."
+
+    cp -rf ${ORIGINAL_PACKAGE_DIR}/copy/* ${INSTALL_DIR}/${PACKAGE_SUB_DIR1}
+  fi
+
+  if [ -d ${ORIGINAL_PACKAGE_DIR}/copy.${CK_TARGET_OS_ID} ] ; then
+    echo ""
+    echo "Copying extra files for ${CK_TARGET_OS_ID} to source dir ..."
+
+    cp -rf ${ORIGINAL_PACKAGE_DIR}/copy.${CK_TARGET_OS_ID}/* ${INSTALL_DIR}/${PACKAGE_SUB_DIR1}
+  fi
+fi
+
+
+############################################################
 if [ "${PACKAGE_PATCH}" == "YES" ] ; then
   if [ -d ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID} ] ; then
     echo ""
