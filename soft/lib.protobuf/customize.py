@@ -153,11 +153,15 @@ def setup(i):
        ls='libprotobuf.a'
        ld='libprotobuf.so'
 
-    cus['static_lib']=ls
-    cus['dynamic_lib']=ld
+    pls=os.path.join(p1,ls)
+    if os.path.isfile(pls):
+       cus['static_lib']=ls
+       env[ep+'_STATIC_NAME']=cus.get('static_lib','')
 
-    env[ep+'_STATIC_NAME']=cus.get('static_lib','')
-    env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+    pld=os.path.join(p1,ld)
+    if os.path.isfile(pld):
+       cus['dynamic_lib']=ld
+       env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
 
     if win!='yes':
        env[ep+'_LFLAG']='-lprotobuf'
