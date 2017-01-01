@@ -27,7 +27,7 @@ if [ "${PACKAGE_WGET}" == "YES" ] ; then
     rm -f $PF
   fi
 
-  wget ${PF}
+  wget --no-check-certificate ${PF}
   if [ "${?}" != "0" ] ; then
     echo "Error: downloading package failed!"
     exit 1
