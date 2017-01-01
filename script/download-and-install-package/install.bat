@@ -94,7 +94,7 @@ if "%PACKAGE_COPY%" == "YES" (
   echo.
   echo Copying extra files to source dir ...
 
-  xcopy /E %ORIGINAL_PACKAGE_DIR%\copy\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+  xcopy /E %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID%\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
 )
 
 rem ############################################################
