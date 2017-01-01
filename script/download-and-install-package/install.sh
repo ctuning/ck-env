@@ -7,7 +7,7 @@
 # See CK COPYRIGHT for copyright details.
 #
 # Developer(s):
-# - Grigori Fursin, 2015;
+# - Grigori Fursin, 2015-2017;
 # - Anton Lokhmotov, 2016.
 #
 
