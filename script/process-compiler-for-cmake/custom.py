@@ -87,9 +87,9 @@ def setup(i):
 
     # Set default parameters from compiler deps
     cd=deps.get('compiler',{})
-    if len(cd)==0:
+    if len(cd)==0 or 'dict' not in cd:
        cd=deps.get('host-compiler',{})
-    if len(cd)==0:
+    if len(cd)==0 or 'dict' not in cd:
        return {'return':1, 'error':'"compiler" or "host-compiler" not found in deps'}
 
     cdd=cd['dict']
@@ -311,6 +311,9 @@ def setup(i):
 
     if osn=='android':
        extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_ANDROID','')
+
+    ie['CK_HOST_OS_ID']=hosn
+    ie['CK_TARGET_OS_ID']=osn
 
     ie['CK_CMAKE_EXTRA']=extra.strip()
 

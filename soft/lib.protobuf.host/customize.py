@@ -96,11 +96,16 @@ def setup(i):
     cus=i.get('customize',{})
     fp=cus.get('full_path','')
 
+    p0=os.path.basename(fp)
+    p1=os.path.dirname(fp)
+    pi=os.path.dirname(p1)
+
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
     # Check platform
     hplat=hosd.get('ck_name','')
+    win=tosd.get('windows_base','')
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
@@ -110,33 +115,52 @@ def setup(i):
 
     env=i['env']
 
-    lb=os.path.basename(fp)
-    lbs=lb
-    if lbs.endswith('.so'):
-       lbs=lbs[:-3]+'.a'
+    found=False
+    while True:
+       if os.path.isdir(os.path.join(pi,'lib')):
+          found=True
+          break
+       pix=os.path.dirname(pi)
+       if pix==pi:
+          break
+       pi=pix
 
-    pl=os.path.dirname(fp)
-    cus['path_lib']=pl
+    if not found:
+       return {'return':1, 'error':'can\'t find root dir of this installation'}
 
-    pi=os.path.dirname(pl)
+    ep=cus['env_prefix']
+    env[ep]=pi
 
-    if pi=='':
-       return {'return':1, 'error':'can\'t find include file'}
-
+    ############################################################
+    cus['path_lib']=p1
+    cus['path_include']=os.path.join(pi,'include')
     cus['path_bin']=os.path.join(pi,'bin')
 
-    cus['path_include']=os.path.join(pi,'include')
-
-    cus['static_lib']=lbs
-    cus['dynamic_lib']=lb
-
-    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
-      'lib_path': cus.get('path_lib','')})
+    r = ck.access({'action': 'lib_path_export_script', 
+                   'module_uoa': 'os', 
+                   'host_os_dict': hosd, 
+                   'lib_path': cus.get('path_lib', '')})
     if r['return']>0: return r
     s += r['script']
 
-    ep=cus.get('env_prefix','')
-    if pi!='':
-       env[ep]=pi
+    if win=='yes':
+       if remote=='yes' or mingw=='yes': 
+          ls='libprotobuf.a'
+          ld='libprotobuf.so'
+       else:
+          ls='protobuf.lib'
+          ld='protobuf.dll'
+    else:
+       ls='libprotobuf.a'
+       ld='libprotobuf.so'
+
+    cus['static_lib']=ls
+    cus['dynamic_lib']=ld
+
+    env[ep+'_STATIC_NAME']=cus.get('static_lib','')
+    env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+
+    if win!='yes':
+       env[ep+'_LFLAG']='-lprotobuf'
 
     return {'return':0, 'bat':s}
