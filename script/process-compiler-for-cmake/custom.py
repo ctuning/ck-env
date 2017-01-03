@@ -287,9 +287,10 @@ def setup(i):
 #       if ck_cxx_andr.find(' ')>0: ck_cxx_andr='"'+ck_cxx_andr+'"'
 #       if ck_libs_andr.find(' ')>0: ck_libs_andr='"'+ck_libs_andr+'"'
 
-    ie['CK_CC_FLAGS_ANDROID_TYPICAL']=ck_cc_andr
-    ie['CK_CXX_FLAGS_ANDROID_TYPICAL']=ck_cxx_andr
-    ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=ck_libs_andr
+    if osn=='android':
+       ie['CK_CC_FLAGS_ANDROID_TYPICAL']=ck_cc_andr
+       ie['CK_CXX_FLAGS_ANDROID_TYPICAL']=ck_cxx_andr
+       ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=ck_libs_andr
 
     # Extra
     extra=''
