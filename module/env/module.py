@@ -220,9 +220,8 @@ def set(i):
     if r['return']>0: return r
 
     # Prune if needed
-    if no_tags!='':
-       r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
-       if r['return']>0: return r
+    r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
+    if r['return']>0: return r
 
     l=r['lst']
     lx=len(l)
@@ -400,9 +399,8 @@ def set(i):
              if r['return']>0: return r
 
              # Prune if needed
-             if no_tags!='':
-                r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
-                if r['return']>0: return r
+             r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
+             if r['return']>0: return r
 
              l=r['lst']
              lx=len(l)
@@ -1687,8 +1685,8 @@ def internal_install_package(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              data_uoa     - installed package data UOA (can be "" if not found)
-              data_uid     - installed package data UID (can be "" if not found)
+              env_data_uoa - installed package data UOA (can be "" if not found)
+              env_data_uid - installed package data UID (can be "" if not found)
             }
 
     """
@@ -1708,7 +1706,7 @@ def internal_install_package(i):
     quiet=i.get('quiet','')
     iev=i.get('install_to_env','')
 
-    deps=i.get('deps',{})
+    cdeps=i.get('deps',{})
 
     # Next, try to install via package for a given software
     if o=='con':
@@ -1757,4 +1755,4 @@ def internal_install_package(i):
     elif rx['return']!=16:
        return rx
 
-    return {'return':0, 'data_uoa':duoa, 'data_uid':duid}
+    return {'return':0, 'env_data_uoa':duoa, 'env_data_uid':duid}
