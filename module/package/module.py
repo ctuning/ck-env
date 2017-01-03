@@ -400,7 +400,8 @@ def install(i):
     pr_env.update(cus.get('install_env',{}))
 
     for kpe in pr_env:
-        pr_env[kpe]=pr_env[kpe].replace('$#sep#$',sdirs) 
+        if '$#sep#$' in str(pr_env):
+           pr_env[kpe]=pr_env[kpe].replace('$#sep#$',sdirs) 
 
     # Check if has customized script
     ppp=p
