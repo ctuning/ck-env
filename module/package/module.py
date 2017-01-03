@@ -81,6 +81,8 @@ def install(i):
 
               (safe)              - safe mode when searching packages first instead of detecting already installed soft
                                     (to have more deterministic build)
+
+              (add_hint)          - if 'yes', add hint that can skip package installation and detect soft instead
             }
 
     Output: {
@@ -262,6 +264,9 @@ def install(i):
                    ck.out('')
                    ck.out('More than one package found:')
                    ck.out('')
+                   if i.get('add_hint','')=='yes':
+                     ck.out('    (HINT: enter -1 to skip CK package installation and attemt to detect installed soft)')
+                     ck.out('')
 
                    zz={}
                    iz=0
@@ -287,6 +292,9 @@ def install(i):
                    rx=ck.inp({'text':'Select package number (or Enter to select 0): '})
                    ll=rx['string'].strip()
                    if ll=='': ll='0'
+
+                   if ll=='-1' and i.get('add_hint','')=='yes':
+                      return {'return':16, 'error':'skipped package installation!'}
 
                    if ll not in zz:
                       return {'return':1, 'error':'package number is not recognized'}
@@ -400,7 +408,7 @@ def install(i):
 
     # Update this env from CK kernel (for example, to decide what to use, git or https)
     pr_env.update(ck.cfg.get('install_env',{}))
-    
+
     # Update this env from customize meta (for example to pass URL to download package)
     pr_env.update(cus.get('install_env',{}))
 

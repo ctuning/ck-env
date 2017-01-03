@@ -205,7 +205,7 @@ def set(i):
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
     # Prepare possible warning
-    x='required software'
+    x='required software '
     if name!='': x='"'+name+'"'
     war='no registered CK environment was found for '+x+' dependency with tags="'+tags+'"'
     if len(setup)>0:
@@ -293,11 +293,16 @@ def set(i):
                                     'host_os':hos,
                                     'target_os':tos,
                                     'device_id':tdid,
+                                    'add_hint':'yes',
                                     'deps':cdeps})
-       if rx['return']>0: return rx
+       print ('xyz')
+       if rx['return']>0 and rx['return']!=16: return rx
 
-       duoa=rx['env_data_uoa']
-       duid=rx['env_data_uid']
+       if rx['return']==0:
+          duoa=rx['env_data_uoa']
+          duid=rx['env_data_uid']
+
+       print ('xyz1')
 
     # If no entries, try to detect default ones and repeat
     if lx==0 and duoa=='':
@@ -1678,6 +1683,8 @@ def internal_install_package(i):
               (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
+
+              (add_hint)             - if 'yes', can skip package installation
             }
 
     Output: {
@@ -1705,6 +1712,7 @@ def internal_install_package(i):
     no_tags=i.get('no_tags','')
     quiet=i.get('quiet','')
     iev=i.get('install_to_env','')
+    ah=i.get('add_hint','')
 
     cdeps=i.get('deps',{})
 
@@ -1738,13 +1746,17 @@ def internal_install_package(i):
         'install_to_env':iev,
         'host_os':hos,
         'target_os':tos,
-        'device_id':tdid}
+        'device_id':tdid,
+        'add_hint':ah}
 
     # Check if there is a compiler in resolved deps to reuse it
     xdeps={}
     if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
     if cdeps.get('compiler-mcl',{}).get('uoa','')!='': xdeps['compiler-mcl']=cdeps['compiler-mcl']
     if len(xdeps)>0: vv['deps']=xdeps
+
+    duoa=''
+    duid=''
 
     rx=ck.access(vv)
     if rx['return']==0:
