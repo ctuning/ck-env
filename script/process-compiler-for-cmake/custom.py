@@ -326,7 +326,7 @@ def setup(i):
                        for q in d2:
                            if q.startswith('V'):
                               vers[q[1:]]=os.path.join(d1,q)
-                       
+
              # Sort keys:
              if len(vers)>0:
                 ver=sorted(list(vers.keys()), reverse=True)[0]
