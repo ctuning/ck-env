@@ -290,6 +290,7 @@ def set(i):
                                     'no_tags':no_tags,
                                     'quiet':quiet,
                                     'install_to_env':iev,
+                                    'safe':safe,
                                     'host_os':hos,
                                     'target_os':tos,
                                     'device_id':tdid,
@@ -554,6 +555,7 @@ def set(i):
                                        'no_tags':no_tags,
                                        'quiet':quiet,
                                        'install_to_env':iev,
+                                       'safe':safe,
                                        'host_os':hos,
                                        'target_os':tos,
                                        'device_id':tdid,
@@ -1681,6 +1683,9 @@ def internal_install_package(i):
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
 
+              (safe)                 - safe mode when searching packages first instead of detecting already installed soft
+                                       (to have more deterministic build)
+
               (add_hint)             - if 'yes', can skip package installation
             }
 
@@ -1709,6 +1714,7 @@ def internal_install_package(i):
     no_tags=i.get('no_tags','')
     quiet=i.get('quiet','')
     iev=i.get('install_to_env','')
+    safe=i.get('safe','')
     ah=i.get('add_hint','')
 
     cdeps=i.get('deps',{})
@@ -1741,6 +1747,7 @@ def internal_install_package(i):
         'tags':tags,
         'no_tags':no_tags,
         'install_to_env':iev,
+        'safe':safe,
         'host_os':hos,
         'target_os':tos,
         'device_id':tdid,
