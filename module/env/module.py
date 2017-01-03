@@ -295,14 +295,11 @@ def set(i):
                                     'device_id':tdid,
                                     'add_hint':'yes',
                                     'deps':cdeps})
-       print ('xyz')
        if rx['return']>0 and rx['return']!=16: return rx
 
        if rx['return']==0:
           duoa=rx['env_data_uoa']
           duid=rx['env_data_uid']
-
-       print ('xyz1')
 
     # If no entries, try to detect default ones and repeat
     if lx==0 and duoa=='':
