@@ -1712,8 +1712,8 @@ def internal_install_package(i):
     if o=='con':
        ck.out('')
        ck.out('  Searching and installing CK software packages ...')
-       ck.out('    * tags:    "'+tags)
-       ck.out('    * no tags: "'+no_tags)
+       ck.out('    * tags:    '+tags)
+       ck.out('    * no tags: '+no_tags)
        ck.out('')
 
 #          if quiet=='yes':

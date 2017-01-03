@@ -807,7 +807,7 @@ def install(i):
 
     if o=='con' and pi!='':
        ck.out('')
-       ck.out('Installation path: '+pi)
+       ck.out('Installing to '+pi)
        ck.out('')
 
     if cs!=None and 'post_deps' in dir(cs):
