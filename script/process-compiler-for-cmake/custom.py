@@ -299,12 +299,60 @@ def setup(i):
        else:
           par=''
           pld=''
+
+          # Check generator by tags from Microsoft compiler
+          cgen=ce.get('CK_CMAKE_GENERATOR','')
+          if cgen=='':
+             for k in cdd.get('deps',{}):
+                 q=cdd['deps'][k]
+                 tags=q.get('tags',[])
+                 if 'compiler' in tags and 'microsoft' in tags:
+                    cgen=q.get('dict',{}).get('env',{}).get('CK_CMAKE_GENERATOR','')
+
+             if cgen=='':
+                return {'return':1, 'error':'can\'t find CK_MAKE_GENERATOR in CK description of Microsoft compiler'}
+
+          extra+='-G"'+cgen+'"'
+
           if 'clang' in ck_cc:
-             # Hack - should detect visual studio correctly and add correct names (in ck detect soft:compiler.microsoft)
-             extra='-G"Visual Studio 14 2015" -T"LLVM-vs2014"'
+             # Check toolset
+             ver=''
+             vers={}
+             for d in [os.environ.get('ProgramFiles',''), os.environ.get('ProgramFiles(x86)','')]:
+                 if d!='':
+                    d1=os.path.join(d, 'MSBuild\\Microsoft.Cpp\\v4.0')
+                    if os.path.isdir(d1):
+                       d2=os.listdir(d1)
+                       for q in d2:
+                           if q.startswith('V'):
+                              vers[q[1:]]=os.path.join(d1,q)
+                       
+             # Sort keys:
+             if len(vers)>0:
+                ver=sorted(list(vers.keys()), reverse=True)[0]
+
+             if ver=='':
+                return {'return':1, 'error':'can\'t find host MSBuild version'}
+
+             xver=''
+             if ver=='140':
+                xver='vs2014'
+             elif ver=='120':
+                xver='vs2013'
+             elif ver=='110':
+                xver='vs2012'
+             elif ver=='100':
+                xver='vs2010'
+             else:
+                return {'return':1, 'error':'unknown MSBuild version ('+ver+')'}
+
+             # Hack -  and add correct names (in ck detect soft:compiler.microsoft)
+             extra+=' -T"LLVM-'+xver+'"'
+
           elif 'icl' in ck_cc:
              # Hack - should detect intel version correctly and add correct names (in ck detect soft:compiler.icc)
-             extra='-G"Visual Studio 14 2015" -T"Intel C++ Compiler XE 15.0"'
+             extra+=' -T"Intel C++ Compiler XE 15.0"'
+
           extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_WINDOWS','')
     elif osn=='linux':
        extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_LINUX','')

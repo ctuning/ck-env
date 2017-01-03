@@ -150,8 +150,12 @@ def setup(i):
     if 'android' in tosd.get('tags',[]):
        return {'return':1, 'error':'this software is not supporting Android platform'}
 
+    ver=i.get('version','')
+    sver=i.get('version_split',[])
+
     # Check platform
     plat=tosd.get('processor','')
+    tbits=tosd.get('bits','')
 
     # Check which processor
     rx=get_ext({'processor':plat})
@@ -166,6 +170,36 @@ def setup(i):
        p1=os.path.dirname(fp)
        pi=os.path.dirname(p1)
        env[ep]=pi
+
+    # Prepare cmake generator
+    cgen=''
+    if len(sver)>0:
+       if sver[0]==20:
+          cgen='Visual Studio 15 2017'
+       elif sver[0]==19:
+          cgen='Visual Studio 14 2015'
+       elif sver[0]==18:
+          cgen='Visual Studio 12 2013'
+       elif sver[0]==17:
+          cgen='Visual Studio 11 2012'
+       elif sver[0]==16:
+          cgen='Visual Studio 10 2010'
+       elif sver[0]==15:
+          cgen='Visual Studio 9 2008'
+       elif sver[0]==14:
+          cgen='Visual Studio 8 2005'
+       elif sver[0]==13:
+          cgen='Visual Studio 7 .NET 2003'
+       elif sver[0]==12:
+          cgen='Visual Studio 7'
+       elif sver[0]==11:
+          cgen='Visual Studio 6'
+
+       if cgen!='':
+          if tbits==64:
+             cgen+=' Win64'
+
+          env['CK_CMAKE_GENERATOR']=cgen
 
     ############################################################
     s+='\n'
