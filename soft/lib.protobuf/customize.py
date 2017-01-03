@@ -106,6 +106,7 @@ def setup(i):
     # Check platform
     hplat=hosd.get('ck_name','')
     win=tosd.get('windows_base','')
+    mingw=tosd.get('mingw','')
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
