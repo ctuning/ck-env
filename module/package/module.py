@@ -78,6 +78,9 @@ def install(i):
               (force_version)     - force version (useful for automatic installation of packages with multiple supported version)
 
               (install_to_env)    - install this package and all dependencies to env instead of CK-TOOLS (to keep it clean)!
+
+              (safe)              - safe mode when searching packages first instead of detecting already installed soft
+                                    (to have more deterministic build)
             }
 
     Output: {
@@ -170,6 +173,8 @@ def install(i):
     iev=i.get('install_to_env','')
     if iev=='':
        iev=ck.cfg.get('install_to_env','')
+
+    safe=i.get('safe','')
 
     # Check package description
     duoa=i.get('uoa','')
@@ -493,6 +498,7 @@ def install(i):
            'target_device_id':tdid,
            'repo_uoa':enruoa,
            'install_to_env':iev,
+           'safe':safe,
            'deps':udeps}
        if o=='con': ii['out']='con'
 
@@ -791,6 +797,7 @@ def install(i):
            'target_device_id':tdid,
            'repo_uoa':enruoa,
            'install_to_env':iev,
+           'safe':safe,
            'deps':udeps}
        if o=='con': ii['out']='con'
 

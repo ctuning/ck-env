@@ -40,6 +40,8 @@ def set(i):
               (host_os)              - host OS (detect, if ommitted)
               (target_os)            - target OS (detect, if ommitted)
               (target_device_id)     - target device ID (detect, if omitted)
+                     or
+              (device_id)
 
               (repo_uoa)             - repo where to limit search
 
@@ -74,6 +76,9 @@ def set(i):
               (force_env_init)       - if 'yes', add '1' when calling env script (useful for LLVM plugins for example to force reinit)
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
+
+              (safe)                 - safe mode when searching packages first instead of detecting already installed soft
+                                       (to have more deterministic build)
             }
 
     Output: {
@@ -112,6 +117,7 @@ def set(i):
     sd=i.get('skip_default','')
 
     iev=i.get('install_to_env','')
+    safe=i.get('safe','')
 
     bf=i.get('bat_file','')
     if bf!='' and os.path.isfile(bf): os.remove(bf)
@@ -272,12 +278,33 @@ def set(i):
 
        return {'return':33, 'error':'current host or target OS ('+str(setup)+' is not matching the one in software env '+duoa}
 
-    # If no entries, try to detect default ones and repeat
-    history_deps=[]
+    # If no entries and safe mode, search packages first
     showed_warning=False
 
-    if lx==0:
-       if o=='con' and tags!='':
+    if lx==0 and duoa=='' and safe=='yes' and tags!='':
+       ck.out('==========================================================================================')
+       ck.out('WARNING: '+war)
+       showed_warning=True
+
+       rx=internal_install_package({'out':oo,
+                                    'tags':tags,
+                                    'no_tags':no_tags,
+                                    'quiet':quiet,
+                                    'install_to_env':iev,
+                                    'host_os':hos,
+                                    'target_os':tos,
+                                    'device_id':tdid,
+                                    'deps':cdeps})
+       if rx['return']>0: return rx
+
+       duoa=rx['env_data_uoa']
+       duid=rx['env_data_uid']
+
+    # If no entries, try to detect default ones and repeat
+    if lx==0 and duoa=='':
+       history_deps=[]
+
+       if o=='con' and tags!='' and not showed_warning:
           ck.out('')
           ck.out(' ********')
           ck.out(' WARNING: '+war)
@@ -517,57 +544,24 @@ def set(i):
 
     # No registered environments found and environment UOA is not explicitly defined
     if duoa=='':
-#       if o=='con' and tags!='':
        if tags!='':
-
           if not showed_warning:
              ck.out('==========================================================================================')
              ck.out('WARNING: '+war)
 
-          # Next, try to install via package for a given software
-          ck.out('')
-          ck.out('  Searching and installing CK software packages (tags "'+tags+'", no tags "'+no_tags+'") ...')
+          rx=internal_install_package({'out':oo,
+                                       'tags':tags,
+                                       'no_tags':no_tags,
+                                       'quiet':quiet,
+                                       'install_to_env':iev,
+                                       'host_os':hos,
+                                       'target_os':tos,
+                                       'device_id':tdid,
+                                       'deps':cdeps})
+          if rx['return']>0: return rx
 
-#          if quiet=='yes':
-#             ck.out('  Searching and installing package with these tags automatically ...')
-#             a='y'
-#          else:
-#             rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
-#             a=rx['string'].strip().lower()
-#
-#          if a!='n' and a!='no':
-          try:
-              save_cur_dir=os.getcwd()
-          except OSError:
-              os.chdir('..')
-              save_cur_dir=os.getcwd()
-
-          vv={'action':'install',
-              'module_uoa':cfg['module_deps']['package'],
-              'out':oo,
-              'tags':tags,
-              'no_tags':no_tags,
-              'install_to_env':iev}
-          vv['host_os']=hos
-          vv['target_os']=tos
-          vv['target_device_id']=tdid
-
-          # Check if there is a compiler in resolved deps to reuse it
-          xdeps={}
-#             if len(cdeps.get('compiler',{}))>0: xdeps['compiler']=cdeps['compiler']
-          if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
-#             if len(cdeps.get('compiler-mcl',{}))>0: xdeps['compiler-mcl']=cdeps['compiler-mcl']
-          if cdeps.get('compiler-mcl',{}).get('uoa','')!='': xdeps['compiler-mcl']=cdeps['compiler-mcl']
-          if len(xdeps)>0: vv['deps']=xdeps
-
-          rx=ck.access(vv)
-          if rx['return']==0:
-             duoa=rx['env_data_uoa']
-             duid=rx['env_data_uid']
-
-             os.chdir(save_cur_dir)
-          elif rx['return']!=16:
-             return rx
+          duoa=rx['env_data_uoa']
+          duid=rx['env_data_uid']
 
        if duoa=='':
           if o=='con':
@@ -1008,6 +1002,9 @@ def resolve(i):
               (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
+
+              (safe)                 - safe mode when searching packages first instead of detecting already installed soft
+                                       (to have more deterministic build)
             }
 
     Output: {
@@ -1042,6 +1039,7 @@ def resolve(i):
     quiet=i.get('quiet','')
 
     iev=i.get('install_to_env','')
+    safe=i.get('safe','')
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -1165,7 +1163,8 @@ def resolve(i):
             'skip_pruning_by_other_deps':q.get('skip_pruning_by_other_deps',''),
             'quiet':quiet,
             'force_env_init':q.get('force_env_init',''),
-            'install_to_env':iev
+            'install_to_env':iev,
+            'safe':safe
            }
         if o=='con': ii['out']='con'
         rx=set(ii)
@@ -1660,3 +1659,102 @@ def clean(i):
               shutil.rmtree(fp4)
 
     return {'return':0}
+
+##############################################################################
+# internal function to install package
+
+def internal_install_package(i):
+    """
+    Input:  {
+              (host_os)              - host OS (detect, if ommitted)
+              (target_os)            - target OS (detect, if ommitted)
+              (target_device_id)     - target device ID (detect, if omitted)
+                     or
+              (device_id)
+
+              (tags)                 - search UOA by tags (separated by comma)
+              (no_tags)              - exclude entris with these tags separated by comma
+
+              (deps)                 - already resolved deps
+
+              (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
+
+              (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              data_uoa     - installed package data UOA (can be "" if not found)
+              data_uid     - installed package data UID (can be "" if not found)
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+    oo=''
+    if o=='con': oo=o
+
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('device_id','')
+
+    tags=i.get('tags','')
+    no_tags=i.get('no_tags','')
+    quiet=i.get('quiet','')
+    iev=i.get('install_to_env','')
+
+    deps=i.get('deps',{})
+
+    # Next, try to install via package for a given software
+    if o=='con':
+       ck.out('')
+       ck.out('  Searching and installing CK software packages ...')
+       ck.out('    * tags:    "'+tags)
+       ck.out('    * no tags: "'+no_tags)
+       ck.out('')
+
+#          if quiet=='yes':
+#             ck.out('  Searching and installing package with these tags automatically ...')
+#             a='y'
+#          else:
+#             rx=ck.inp({'text':'  Would you like to search and install package with these tags automatically (Y/n)? '})
+#             a=rx['string'].strip().lower()
+#
+#          if a!='n' and a!='no':
+    try:
+         save_cur_dir=os.getcwd()
+    except OSError:
+        os.chdir('..')
+        save_cur_dir=os.getcwd()
+
+    vv={'action':'install',
+        'module_uoa':cfg['module_deps']['package'],
+        'out':oo,
+        'tags':tags,
+        'no_tags':no_tags,
+        'install_to_env':iev,
+        'host_os':hos,
+        'target_os':tos,
+        'device_id':tdid}
+
+    # Check if there is a compiler in resolved deps to reuse it
+    xdeps={}
+    if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
+    if cdeps.get('compiler-mcl',{}).get('uoa','')!='': xdeps['compiler-mcl']=cdeps['compiler-mcl']
+    if len(xdeps)>0: vv['deps']=xdeps
+
+    rx=ck.access(vv)
+    if rx['return']==0:
+       duoa=rx['env_data_uoa']
+       duid=rx['env_data_uid']
+
+       os.chdir(save_cur_dir)
+    elif rx['return']!=16:
+       return rx
+
+    return {'return':0, 'data_uoa':duoa, 'data_uid':duid}
