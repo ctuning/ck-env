@@ -196,7 +196,7 @@ def setup(i):
           cgen='Visual Studio 6'
 
        if cgen!='':
-          if tbits==64:
+          if str(tbits)=='64':
              cgen+=' Win64'
 
           env['CK_CMAKE_GENERATOR']=cgen

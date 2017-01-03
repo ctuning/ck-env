@@ -1716,7 +1716,7 @@ def check(i):
     # Check if CK install dict already exists
     pf=lst[il]
 
-    env_data_uoa=''
+    env_data_uoa=i.get('force_env_data_uoa','')
 
     rx=find_config_file({'full_path':pf})
     if rx['return']>0: return rx
@@ -1726,7 +1726,7 @@ def check(i):
 
        cus=rx['dict'].get('customize',{})
        ev=rx['dict'].get('extra_version','')
-       if rx['dict'].get('env_data_uoa','')!='':
+       if rx['dict'].get('env_data_uoa','')!='' and env_data_uoa=='':
           env_data_uoa=rx['dict']['env_data_uoa']
 
        # FGG: should I add deps here or not - the thing is that the env 
