@@ -1027,8 +1027,9 @@ def resolve(i):
     o=i.get('out','')
 
     if o=='con':
-       ck.out('-----------------------------------')
-       ck.out('Resolving software dependencies ...')
+       ck.out('')
+       ck.out('  -----------------------------------')
+       ck.out('  Resolving software dependencies ...')
 
     sb=''
     sb1=''
