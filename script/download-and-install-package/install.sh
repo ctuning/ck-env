@@ -45,8 +45,17 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
   git clone ${PACKAGE_URL} ${PACKAGE_SUB_DIR}
 
   if [ "${?}" != "0" ] ; then
-    echo "Error: cloning failed!"
+    echo "Error: git cloning failed!"
     exit 1
+  fi
+
+  if [ "${PACKAGE_GIT_CHECKOUT}" != "" ] ; then
+    git checkout ${PACKAGE_GIT_CHECKOUT}
+   
+    if [ "${?}" != "0" ] ; then
+      echo "Error: git checkout failed!"
+      exit 1
+    fi
   fi
 fi
 

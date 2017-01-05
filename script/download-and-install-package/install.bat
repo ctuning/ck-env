@@ -57,8 +57,18 @@ if "%PACKAGE_GIT%" == "YES" (
 
   if %errorlevel% neq 0 (
    echo.
-   echo Error: Failed cloning package ...
+   echo Error: git cloning failed ...
    goto err
+  )
+
+  if not "%PACKAGE_GIT_CHECKOUT%" == "" (
+    git checkout %PACKAGE_GIT_CHECKOUT%
+   
+    if %errorlevel% neq 0 (
+     echo.
+     echo Error: git checkout failed ...
+     goto err
+    )
   )
 )
 
