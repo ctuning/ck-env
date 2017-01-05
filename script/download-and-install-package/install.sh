@@ -76,6 +76,22 @@ if [ "${PACKAGE_UNGZIP}" == "YES" ] ; then
 fi
 
 ############################################################
+if [ "${PACKAGE_UNBZIP}" == "YES" ] ; then
+  echo ""
+  echo "Unbzipping archive ..."
+
+  if [ -f ${PACKAGE_NAME1} ] ; then
+    rm -f ${PACKAGE_NAME1}
+  fi
+
+  bzip2 -d ${PACKAGE_NAME}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: unbzipping package failed!"
+    exit 1
+  fi
+fi
+
+############################################################
 if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
   echo ""
   echo "Untarring archive ..."
@@ -166,7 +182,7 @@ fi
 mkdir obj
 
 if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
- rm -rf ${PACKAGE_NAME1}
+ rm -f ${PACKAGE_NAME1}
 fi
 
 
@@ -259,8 +275,8 @@ if [ "${PACKAGE_SKIP_CLEAN_OBJ_DIR}" != "YES" ] ; then
 fi
 
 ############################################################
-echo ""
-echo "Cleaning src directory ..."
+#echo ""
+#echo "Cleaning src directory ..."
 
 if [ "${PACKAGE_SKIP_CLEAN_SRC_DIR}" != "YES" ] ; then
  cd ${INSTALL_DIR}

@@ -90,6 +90,25 @@ if "%PACKAGE_UNGZIP%" == "YES" (
   )
 )
 
+
+rem ############################################################
+if "%PACKAGE_UNBZIP%" == "YES" (
+  echo.
+  echo Unbzipping archive ...
+
+  if EXIST "%PACKAGE_NAME1%" (
+    del /Q /S %PACKAGE_NAME1%
+  )
+
+  bzip2 -d %PACKAGE_NAME%
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: unbzipping package failed!
+   goto err
+  )
+)
+
 rem ############################################################
 if "%PACKAGE_UNTAR%" == "YES" (
   echo.
