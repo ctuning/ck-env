@@ -23,8 +23,8 @@ if [ "${PACKAGE_WGET}" == "YES" ] ; then
   echo ""
   echo "Downloading package from '${PF}' ..."
 
-  if [ -f {$PACKAGE_NAME} ] ; then
-    rm -f {$PACKAGE_NAME}
+  if [ -f ${PACKAGE_NAME} ] ; then
+    rm -f ${PACKAGE_NAME}
   fi
 
   wget --no-check-certificate ${PF}
