@@ -113,7 +113,7 @@ fi
 if [ "${PACKAGE_PATCH}" == "YES" ] ; then
   if [ -d ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID} ] ; then
     echo ""
-    echo "patching source dir ..."
+    echo "Patching source directory ..."
 
     cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 

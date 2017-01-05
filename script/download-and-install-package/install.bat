@@ -73,7 +73,6 @@ if "%PACKAGE_GIT%" == "YES" (
 )
 
 rem ############################################################
-echo "%PACKAGE_NAME1%"
 if "%PACKAGE_UNGZIP%" == "YES" (
   echo.
   echo Ungzipping archive ...
@@ -136,7 +135,7 @@ rem ############################################################
 if "%PACKAGE_PATCH%" == "YES" (
   if EXIST "%ORIGINAL_PACKAGE_DIR%\patch.%CK_TARGET_OS_ID%" (
     echo.
-    echo patching source dir ...
+    echo Patching source directory ...
 
     cd /D %INSTALL_DIR%\%PACKAGE_SUB_DIR%
 
@@ -150,6 +149,20 @@ rem        echo Error: patching failed!
 rem        goto err
       )
     )
+  )
+)
+
+rem ############################################################
+if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat" (
+  echo.
+  echo Executing extra script ...
+
+  call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: Failed executing extra script ...
+   goto err
   )
 )
 
@@ -176,15 +189,15 @@ mkdir obj
 
 cd /D %INSTALL_DIR%/obj
 
-  set XCMAKE_AR=
-  if not "%CK_AR_PATH_FOR_CMAKE%" == "" (
-    set XCMAKE_AR=-DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%"
-  )
+set XCMAKE_AR=
+if not "%CK_AR_PATH_FOR_CMAKE%" == "" (
+  set XCMAKE_AR=-DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%"
+)
 
-  set XCMAKE_LD=
-  if not "%CK_LD_PATH_FOR_CMAKE%" == "" (
-    set XCMAKE_LD=-DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%"
-  )
+set XCMAKE_LD=
+if not "%CK_LD_PATH_FOR_CMAKE%" == "" (
+  set XCMAKE_LD=-DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%"
+)
 
 cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
       -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
