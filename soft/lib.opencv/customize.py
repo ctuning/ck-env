@@ -115,7 +115,7 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    ep=cus.get('env_prefix','')
+    ep=cus['env_prefix']
     pi=cus.get('path_install','')
 
     hosd=i.get('host_os_dict',{})
@@ -150,6 +150,8 @@ def setup(i):
        env[ep+'_LFLAG_CORE']='-lopencv_core'
 
     ################################################################
+    env[ep]=pi
+
     if remote=='yes':
 #       cus['path_bin']=pi+'\\OpenCV-android-sdk\\sdk\\native\\bin'
 #       cus['path_lib']=pi+'\\OpenCV-android-sdk\\sdk\\native\\libs\\armeabi'
@@ -194,16 +196,15 @@ def setup(i):
                                  'opencv_highgui':'libopencv_highgui.a'}
 
 
-       env['CK_ENV_LIB_OPENCV']=pi
-       env['CK_ENV_LIB_OPENCV_JNI']=os.path.join(pi,'jni')
-       env['CK_ENV_LIB_OPENCV_THIRDPARTY']=os.path.join(pi,'3rdparty')
+       env[ep+'_JNI']=os.path.join(pi,'jni')
+       env[ep+'_THIRDPARTY']=os.path.join(pi,'3rdparty')
 
-       env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
+       env[ep+'_STATIC_LIB_PATH']=cus['path_static_lib']
 
        if win=='yes':
-          s+='\nset '+ellp+'=%CK_ENV_LIB_OPENCV_LIB%;'+plx+';%'+ellp+'%\n'
+          s+='\nset '+ellp+'=%'+ep+'_LIB%;'+plx+';%'+ellp+'%\n'
        else:
-          s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:"'+plx+'":$'+ellp+'\n'
+          s+='\nexport '+ellp+'=$'+ep+'_LIB:"'+plx+'":$'+ellp+'\n'
 
           r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
             'lib_path': [ cus['path_lib'], plx ] })
@@ -246,10 +247,10 @@ def setup(i):
                                   'opencv_ocl':'opencv_ocl'+le+'.dll',
                                   'opencv_highgui':'opencv_highgui'+le+'.dll'}
 
-       env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
-       env['CK_ENV_LIB_OPENCV_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
+       env[ep+'_STATIC_LIB_PATH']=cus['path_static_lib']
+       env[ep+'_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
 
-       s+='\nset PATH='+cus['path_bin']+';%PATH%\n'
+       s+='\nset PATH='+cus['path_bin']+';%PATH%\n\n'
 
     else:
        cus['path_lib']=pl
@@ -265,9 +266,9 @@ def setup(i):
                                   'opencv_ocl':'libopencv_ocl.so',
                                   'opencv_highgui':'libopencv_highgui.so'}
 
-       env['CK_ENV_LIB_OPENCV_STATIC_LIB_PATH']=cus['path_static_lib']
-       env['CK_ENV_LIB_OPENCV_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
+       env[ep+'_STATIC_LIB_PATH']=cus['path_static_lib']
+       env[ep+'_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']
 
-       s+='\nexport '+ellp+'=$CK_ENV_LIB_OPENCV_LIB:$'+ellp+'\n'
+       s+='\nexport '+ellp+'=$'+ep+'_LIB:$'+ellp+'\n'
 
     return {'return':0, 'bat':s}

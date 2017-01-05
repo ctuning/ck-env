@@ -918,6 +918,7 @@ def install(i):
        if x!='': 
           x=x.replace('$#sep#$', sdirs)
           x=x.replace('$#abi#$', tosd.get('abi',''))
+          x=x.replace('$#processor#$', tosd.get('processor',''))
           fp=os.path.join(fp,x)
           if os.path.isfile(fp):
              if o=='con':

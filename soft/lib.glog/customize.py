@@ -147,9 +147,15 @@ def setup(i):
        env[ep+'_STATIC_NAME']=cus.get('static_lib','')
 
     pld=os.path.join(p1,ld)
+    if not os.path.isfile(pld) and win=='yes':
+       pld=os.path.join(pi,'bin',ld)
+
     if os.path.isfile(pld):
        cus['dynamic_lib']=ld
        env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+
+       if win=='yes':
+          s+='set PATH='+os.path.dirname(pld)+';%PATH%\n'
 
     if win!='yes':
        env[ep+'_LFLAG']='-lglog'

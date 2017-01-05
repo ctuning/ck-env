@@ -166,62 +166,91 @@ if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat" (
   )
 )
 
+echo.
+echo Extra CMake flags:
+echo.
+echo %CK_CMAKE_EXTRA%
+echo.
+
 rem ############################################################
 echo.
-echo Configuring ...
+echo Cleaning ...
 
 cd /D %INSTALL_DIR%
 
-if EXIST install (
-  rmdir /s /q install
-)
-if EXIST install (
-  rmdir install
+if NOT "%PACKAGE_SKIP_CLEAN_INSTALL%" == "YES" (
+
+  if EXIST install (
+    rmdir /s /q install
+  )
+  if EXIST install (
+    rmdir install
+  )
+
 )
 
-if EXIST obj (
-  rmdir /s /q obj
+if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
+
+  if EXIST obj (
+    rmdir /s /q obj
+  )
+  if EXIST obj (
+    rmdir obj
+  )
+
+  mkdir obj
+
+  if %errorlevel% neq 0 (
+    echo.
+    echo Error: problem creating obj directory!
+    goto err
+  )
+
 )
-if EXIST obj (
-  rmdir obj
-)
-mkdir obj
 
 cd /D %INSTALL_DIR%/obj
 
-set XCMAKE_AR=
-if not "%CK_AR_PATH_FOR_CMAKE%" == "" (
-  set XCMAKE_AR=-DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%"
-)
+if "%PACKAGE_BUILD_TYPE%" == "cmake" (
 
-set XCMAKE_LD=
-if not "%CK_LD_PATH_FOR_CMAKE%" == "" (
-  set XCMAKE_LD=-DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%"
-)
+   rem ############################################################
+   echo.
+   echo Configuring ...
 
-cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
-      -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
-      %PACKAGE_CONFIGURE_FLAGS% ^
-      -DCMAKE_C_COMPILER="%CK_CC_PATH_FOR_CMAKE%" ^
-      -DCMAKE_C_FLAGS="%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%" ^
-      -DCMAKE_CXX_COMPILER="%CK_CXX_PATH_FOR_CMAKE%" ^
-      -DCMAKE_CXX_FLAGS="%CK_CXX_FLAGS_FOR_CMAKE% %CK_CXX_FLAGS_ANDROID_TYPICAL%" ^
-      -DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%" ^
-      -DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%" ^
-      %XCMAKE_AR% ^
-      %XCMAKE_LD% ^
-      %CK_CMAKE_EXTRA% ^
-      %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+   set XCMAKE_AR=
+   if not "%CK_AR_PATH_FOR_CMAKE%" == "" (
+     set XCMAKE_AR=-DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%"
+   )
 
-echo **************************************************************
-echo.
-echo Building using Visual Studio ...
+   set XCMAKE_LD=
+   if not "%CK_LD_PATH_FOR_CMAKE%" == "" (
+     set XCMAKE_LD=-DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%"
+   )
 
-cmake --build . --config %CMAKE_CONFIG% --target install
-if %errorlevel% neq 0 (
- echo.
- echo Problem building CK package!
- goto err
+   cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
+         -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
+         %PACKAGE_CONFIGURE_FLAGS% ^
+         -DCMAKE_C_COMPILER="%CK_CC_PATH_FOR_CMAKE%" ^
+         -DCMAKE_C_FLAGS="%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%" ^
+         -DCMAKE_CXX_COMPILER="%CK_CXX_PATH_FOR_CMAKE%" ^
+         -DCMAKE_CXX_FLAGS="%CK_CXX_FLAGS_FOR_CMAKE% %CK_CXX_FLAGS_ANDROID_TYPICAL%" ^
+         -DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%" ^
+         -DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%" ^
+         %XCMAKE_AR% ^
+         %XCMAKE_LD% ^
+         %CK_CMAKE_EXTRA% ^
+         %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+
+   echo **************************************************************
+   echo.
+   echo Building using Visual Studio ...
+
+   cmake --build . --config %CMAKE_CONFIG% --target install
+   if %errorlevel% neq 0 (
+    echo.
+    echo Problem building CK package!
+    goto err
+   )
+
 )
 
 exit /b 0
