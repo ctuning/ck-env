@@ -19,12 +19,13 @@ cd ${INSTALL_DIR}
 ############################################################
 PF=${PACKAGE_URL}/${PACKAGE_NAME}
 
+echo "xyz=${PACKAGE_WGET}"
 if [ "${PACKAGE_WGET}" == "YES" ] ; then
   echo ""
   echo "Downloading package from '${PF}' ..."
 
-  if [ -f $PF ] ; then
-    rm -f $PF
+  if [ -f {$PACKAGE_NAME} ] ; then
+    rm -f {$PACKAGE_NAME}
   fi
 
   wget --no-check-certificate ${PF}
@@ -83,6 +84,8 @@ if [ "${PACKAGE_UNBZIP}" == "YES" ] ; then
   if [ -f ${PACKAGE_NAME1} ] ; then
     rm -f ${PACKAGE_NAME1}
   fi
+
+  echo $PACKAGE_NAME
 
   bzip2 -d ${PACKAGE_NAME}
   if [ "${?}" != "0" ] ; then

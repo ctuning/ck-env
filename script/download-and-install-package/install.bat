@@ -24,8 +24,8 @@ if "%PACKAGE_WGET%" == "YES" (
   echo.
   echo Downloading package from '%PF%' ...
 
-  if EXIST "%PF" (
-    del /Q /S %PF%
+  if EXIST "%PACKAGE_NAME%" (
+    del /Q /S %PACKAGE_NAME%
   )
 
   wget --no-check-certificate "%PF%"
