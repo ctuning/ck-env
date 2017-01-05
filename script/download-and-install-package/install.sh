@@ -51,7 +51,7 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
 
   if [ "${PACKAGE_GIT_CHECKOUT}" != "" ] ; then
     git checkout ${PACKAGE_GIT_CHECKOUT}
-   
+
     if [ "${?}" != "0" ] ; then
       echo "Error: git checkout failed!"
       exit 1
@@ -131,6 +131,25 @@ if [ "${PACKAGE_PATCH}" == "YES" ] ; then
 fi
 
 ############################################################
+if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh" ] ; then
+  echo ""
+  echo "Executing extra script ..."
+
+  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: Failed executing extra script ..."
+    exit 1
+  fi
+fi
+
+echo ""
+echo "CMake configure flags:"
+echo ""
+echo "${PACKAGE_CONFIGURE_FLAGS} ${CK_CMAKE_EXTRA}"
+echo ""
+
+############################################################
 echo ""
 echo "Cleaning ..."
 
@@ -177,7 +196,7 @@ if [ "${PACKAGE_BUILD_TYPE}" == "configure" ] ; then
 
   ../${PACKAGE_SUB_DIR}/configure --prefix="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS}
 
-else
+elif [ "${PACKAGE_BUILD_TYPE}" == "cmake" ] ; then
   echo "Executing cmake ..."
 
   XCMAKE_AR=""

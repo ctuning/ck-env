@@ -63,7 +63,7 @@ if "%PACKAGE_GIT%" == "YES" (
 
   if not "%PACKAGE_GIT_CHECKOUT%" == "" (
     git checkout %PACKAGE_GIT_CHECKOUT%
-   
+
     if %errorlevel% neq 0 (
      echo.
      echo Error: git checkout failed ...
@@ -167,9 +167,9 @@ if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat" (
 )
 
 echo.
-echo Extra CMake flags:
+echo CMake configure flags:
 echo.
-echo %CK_CMAKE_EXTRA%
+echo %PACKAGE_CONFIGURE_FLAGS% %CK_CMAKE_EXTRA%
 echo.
 
 rem ############################################################
