@@ -19,7 +19,6 @@ cd ${INSTALL_DIR}
 ############################################################
 PF=${PACKAGE_URL}/${PACKAGE_NAME}
 
-echo "xyz=${PACKAGE_WGET}"
 if [ "${PACKAGE_WGET}" == "YES" ] ; then
   echo ""
   echo "Downloading package from '${PF}' ..."
