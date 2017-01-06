@@ -109,6 +109,12 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
   fi
 fi
 
+if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
+ if [ -f ${PACKAGE_NAME1} ] ; then
+   rm -f ${PACKAGE_NAME1}
+ fi
+fi
+
 ############################################################
 if [ "${PACKAGE_COPY}" == "YES" ] ; then
   if [ -d ${ORIGINAL_PACKAGE_DIR}/copy ] ; then
@@ -161,11 +167,6 @@ if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh" ] ; then
   fi
 fi
 
-echo ""
-echo "CMake configure flags:"
-echo ""
-echo "${PACKAGE_CONFIGURE_FLAGS} ${CK_CMAKE_EXTRA}"
-echo ""
 
 ############################################################
 echo ""
@@ -173,20 +174,21 @@ echo "Cleaning ..."
 
 cd ${INSTALL_DIR}
 
-if [ -d install ] ; then
-  rm -rf install
+if [ "${PACKAGE_SKIP_CLEAN_INSTALL}" != "YES" ] ; then
+  if [ -d install ] ; then
+    rm -rf install
+  fi
 fi
 
-if [ -d obj ] ; then
-  rm -rf obj
+if [ "${PACKAGE_SKIP_CLEAN_OBJ}" != "YES" ] ; then
+  if [ -d obj ] ; then
+    rm -rf obj
+  fi
 fi
 
-mkdir obj
-
-if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
- rm -f ${PACKAGE_NAME1}
+if [ ! -d obj ] ; then
+  mkdir obj
 fi
-
 
 ############################################################
 if [ "${PACKAGE_AUTOGEN}" == "YES" ] ; then
@@ -201,7 +203,6 @@ if [ "${PACKAGE_AUTOGEN}" == "YES" ] ; then
     echo "Error: configuring failed!"
     exit 1
   fi
-
 fi
 
 ############################################################
@@ -215,6 +216,13 @@ if [ "${PACKAGE_BUILD_TYPE}" == "configure" ] ; then
   ../${PACKAGE_SUB_DIR}/configure --prefix="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS}
 
 elif [ "${PACKAGE_BUILD_TYPE}" == "cmake" ] ; then
+
+  echo ""
+  echo "CMake configure flags:"
+  echo ""
+  echo "${PACKAGE_CONFIGURE_FLAGS} ${CK_CMAKE_EXTRA}"
+  echo ""
+
   echo "Executing cmake ..."
 
   XCMAKE_AR=""
@@ -246,25 +254,29 @@ if [ "${?}" != "0" ] ; then
   exit 1
 fi
 
-############################################################
-echo ""
-echo "Building package ..."
-make -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
-if [ "${?}" != "0" ] ; then
-  echo "Error: build failed!"
-  exit 1
-fi
+if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then 
 
-############################################################
-echo ""
-echo "Installing package ..."
+  ############################################################
+  echo ""
+  echo "Building package ..."
+  make -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: build failed!"
+    exit 1
+  fi
 
-rm -rf install
-make install
+  ############################################################
+  echo ""
+  echo "Installing package ..."
 
-if [ "${?}" != "0" ] ; then
-  echo "Error: installation failed!"
-  exit 1
+  rm -rf install
+  make install
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: installation failed!"
+    exit 1
+  fi
+
 fi
 
 ############################################################

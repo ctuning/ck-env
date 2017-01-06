@@ -516,6 +516,8 @@ def setup(i):
           s+='\nexport PATH='+pi+x+':%PATH%\n\n'
 
     # Update global
+    env['CK_COMPILER_TOOLCHAIN_NAME']='clang'
+
     env["CK_EXTRA_LIB_ATOMIC"]="-latomic"
     env['CK_HAS_OPENMP']='0' # for now force not to use OpenMP - later should detect via version
 

@@ -147,6 +147,8 @@ def setup(i):
 
     fp=cus.get('full_path','')
 
+    env['CK_COMPILER_TOOLCHAIN_NAME']='gcc'
+
     # Check path
     ep=cus.get('env_prefix','')
     if fp!='':

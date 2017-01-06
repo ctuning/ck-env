@@ -219,6 +219,8 @@ def setup(i):
     env['CK_ANDROID_NDK_ARCH']=arch
     env['CK_ANDROID_NDK_PLATFORM']=platform
 
+    env['CK_COMPILER_TOOLCHAIN_NAME']='gcc'
+
     # Check path
     ep=cus.get('env_prefix','')
     if fp!='':

@@ -117,6 +117,8 @@ def setup(i):
 
     cus['retarget']='no'
 
+    env['CK_COMPILER_TOOLCHAIN_NAME']='gcc'
+
     add_m32=cus.get('add_m32','')
     if add_m32=='' and iv=='yes' and tbits=='32':
        ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})

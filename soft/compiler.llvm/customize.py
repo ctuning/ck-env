@@ -492,6 +492,8 @@ def setup(i):
        if x!='':
           s+='\nexport PATH='+pi+x+':%PATH%\n\n'
 
+    env['CK_COMPILER_TOOLCHAIN_NAME']='clang'
+
     # Update global
     if remote=='yes' or os_name_long.find('-arm')>0:
        y='-mfloat-abi=hard'

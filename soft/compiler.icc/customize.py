@@ -327,6 +327,8 @@ def setup(i):
                  'split_to_list':'yes'})
     if r['return']>0: return r
 
+    env['CK_COMPILER_TOOLCHAIN_NAME']='icc'
+
     pcl=''
     for x in reversed(r['stdout_lst']):
         x=x.strip()

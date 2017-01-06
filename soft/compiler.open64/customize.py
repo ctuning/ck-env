@@ -20,7 +20,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -124,6 +124,7 @@ def setup(i):
        cus['linking_for_retargeting']=lfr
        env['CK_LD_FLAGS_EXTRA']=lfr
 
+    env['CK_COMPILER_TOOLCHAIN_NAME']='open64'
 
     add_m32=cus.get('add_m32','')
     if add_m32=='' and iv=='yes' and tbits=='32':

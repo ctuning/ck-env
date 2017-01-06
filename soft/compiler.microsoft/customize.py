@@ -102,7 +102,7 @@ def setup(i):
               host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
-              
+
               target_os_uoa    - target OS UOA
               target_os_uid    - target OS UID
               target_os_dict   - target OS meta
@@ -208,6 +208,8 @@ def setup(i):
     s+='call "'+fp+'" '+ext+'\n\n'
 
     env['VSINSTALLDIR']=pi
+
+    env['CK_COMPILER_TOOLCHAIN_NAME']='msvc'
 
     # Attempt to detect path to compiler
     cmd=s+'where cl.exe'

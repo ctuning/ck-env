@@ -77,9 +77,6 @@ if "%PACKAGE_UNGZIP%" == "YES" (
   echo.
   echo Ungzipping archive ...
 
-  if EXIST "%PACKAGE_NAME1%" (
-    del /Q /S %PACKAGE_NAME1%
-  )
 
   gzip -d %PACKAGE_NAME%
 
@@ -131,6 +128,12 @@ if "%PACKAGE_UNTAR%" == "YES" (
       goto err
     )
   )
+)
+
+if NOT "%PACKAGE_SKIP_CLEAN_PACKAGE%" == "YES" (
+ if EXIST "%PACKAGE_NAME1%" (
+   del /Q /S %PACKAGE_NAME1%
+ )
 )
 
 rem ############################################################
@@ -185,11 +188,6 @@ if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat" (
   )
 )
 
-echo.
-echo CMake configure flags:
-echo.
-echo %PACKAGE_CONFIGURE_FLAGS% %CK_CMAKE_EXTRA%
-echo.
 
 rem ############################################################
 echo.
@@ -217,6 +215,10 @@ if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
     rmdir obj
   )
 
+)
+
+if NOT EXIST obj (
+
   mkdir obj
 
   if %errorlevel% neq 0 (
@@ -224,12 +226,17 @@ if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
     echo Error: problem creating obj directory!
     goto err
   )
-
 )
 
 cd /D %INSTALL_DIR%/obj
 
 if "%PACKAGE_BUILD_TYPE%" == "cmake" (
+
+  echo.
+  echo CMake configure flags:
+  echo.
+  echo %PACKAGE_CONFIGURE_FLAGS% %CK_CMAKE_EXTRA%
+  echo.
 
    rem ############################################################
    echo.

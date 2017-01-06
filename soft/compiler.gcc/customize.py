@@ -256,6 +256,8 @@ def setup(i):
     cus['tool_postfix']=postfix
     cus['tool_postfix_configured']='yes'
 
+    env['CK_COMPILER_TOOLCHAIN_NAME']='gcc'
+
     for k in env:
         v=env[k]
         v=v.replace('$#tool_postfix#$',postfix)
