@@ -50,6 +50,8 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
   fi
 
   if [ "${PACKAGE_GIT_CHECKOUT}" != "" ] ; then
+    cd ${PACKAGE_SUB_DIR}
+
     git checkout ${PACKAGE_GIT_CHECKOUT}
 
     if [ "${?}" != "0" ] ; then
@@ -110,6 +112,9 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
 fi
 
 if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
+ if [ -f ${PACKAGE_NAME} ] ; then
+   rm -f ${PACKAGE_NAME}
+ fi
  if [ -f ${PACKAGE_NAME1} ] ; then
    rm -f ${PACKAGE_NAME1}
  fi

@@ -114,6 +114,7 @@ def setup(i):
     tbits=tosd.get('bits','')
 
     env=i['env']
+    ep=cus['env_prefix']
 
     fi=cus.get('include_file','')
 
@@ -161,9 +162,12 @@ def setup(i):
     if r['return']>0: return r
     s += r['script']
 
-    ep=cus.get('env_prefix','')
-    if pi!='':
-       env[ep]=pl
+    env[ep]=pi
+
+    pb=os.path.join(pi,'bin')
+    if os.path.isdir(pb):
+       env[ep+'_BIN']=pb
+       cus['path_bin']=pb
 
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')

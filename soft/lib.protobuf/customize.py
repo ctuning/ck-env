@@ -148,8 +148,8 @@ def setup(i):
           ls='libprotobuf.a'
           ld='libprotobuf.so'
        else:
-          ls='protobuf.lib'
-          ld='protobuf.dll'
+          ls='libprotobuf.lib'
+          ld='libprotobuf.dll'
     else:
        ls='libprotobuf.a'
        ld='libprotobuf.so'

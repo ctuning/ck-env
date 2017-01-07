@@ -168,6 +168,7 @@ def setup(i):
 
     if (phosd!='win' or osn=='android') and os.path.isfile(par):
        ie['CK_AR_PATH_FOR_CMAKE']=par
+       ie['CK_AR_PATH_FOR_CMAKE_MINGW']=par.replace('\\','/')
     else:
        par=''
 
@@ -221,11 +222,13 @@ def setup(i):
           pld+='.exe' # trying for windows
        if (phosd!='win' and osn=='android') and os.path.isfile(pld):
           ie['CK_LD_PATH_FOR_CMAKE']=pld
+          ie['CK_LD_PATH_FOR_CMAKE_MINGW']=pld.replace('\\','/')
 
     # Add other obligatory flags
     ck_cc2+=' '+svb+'CK_COMPILER_FLAGS_OBLIGATORY'+sve
     ck_cxx2+=' '+svb+'CK_COMPILER_FLAGS_OBLIGATORY'+sve
 
+    # Check for MingW (mainly for boost on Windows)
     x=ce.get('CK_ENV_LIB_STDCPP_INCLUDE','')
     if x=='': x=ge.get('CK_ENV_LIB_STDCPP_INCLUDE','')
     if x!='': ck_cxx2+=' '+ce['CK_FLAG_PREFIX_INCLUDE']+x
@@ -256,12 +259,20 @@ def setup(i):
        pb_cxx=pb_cxx.replace('\\','/')
 
     ie['CK_CC_PATH_FOR_CMAKE']=pb_cc
+    ie['CK_CC_PATH_FOR_CMAKE_MINGW']=pb_cc.replace('\\','/')
     ie['CK_CC_FLAGS_FOR_CMAKE']=ck_cc2
+    ie['CK_CC_FLAGS_FOR_CMAKE_MINGW']=ck_cc2.replace('\\','/')
 
     ie['CK_CXX_PATH_FOR_CMAKE']=pb_cxx
+    ie['CK_CXX_PATH_FOR_CMAKE_MINGW']=pb_cxx.replace('\\','/')
+
     ie['CK_CXX_FLAGS_FOR_CMAKE']=ck_cxx2
+    ie['CK_CXX_FLAGS_FOR_CMAKE_MINGW']=ck_cxx2.replace('\\','/')
 
     ie['CK_COMPILER_PATH_FOR_CMAKE']=pb1
+    ie['CK_COMPILER_PATH_FOR_CMAKE_MINGW']=pb1.replace('\\','/')
+
+
 
     # Typical Android flags
     # I had problems with -frtti and -fexceptions in Caffe
@@ -289,8 +300,11 @@ def setup(i):
 
     if osn=='android':
        ie['CK_CC_FLAGS_ANDROID_TYPICAL']=ck_cc_andr
+       ie['CK_CC_FLAGS_ANDROID_TYPICAL_MINGW']=ck_cc_andr.replace('\\','/')
        ie['CK_CXX_FLAGS_ANDROID_TYPICAL']=ck_cxx_andr
+       ie['CK_CXX_FLAGS_ANDROID_TYPICAL_MINGW']=ck_cxx_andr.replace('\\','/')
        ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=ck_libs_andr
+       ie['CK_LINKER_LIBS_ANDROID_TYPICAL_MINGW']=ck_libs_andr.replace('\\','/')
 
     # Extra
     extra=''

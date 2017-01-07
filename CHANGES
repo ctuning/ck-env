@@ -1,3 +1,5 @@
+* 2017.01.07 - various fixes for Caffe deps on Windows/Android
+
 * 2017.01.03 - added '--safe' mode to check environment (will first search for CK packages and only then detecting soft)
 
 * 2017.01.01 - added patch.exe (to support compiling Caffe on Windows)

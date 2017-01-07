@@ -466,6 +466,8 @@ def install(i):
 
        # We may want to pass more info (including target CPU) ...
 
+    pr_env['CK_TARGET_CPU_BITS']=tosd.get('bits','')
+
     # Check if need host GPGPU params
     if d.get('need_gpgpu_info','')=='yes':
        r=ck.access({'action':'detect',

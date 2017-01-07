@@ -116,24 +116,19 @@ def setup(i):
     ep=cus['env_prefix']
     env[ep]=pi
 
+    cus['path_lib']=p1
+    cus['path_include']=os.path.join(pi,'include')
+
+    r = ck.access({'action': 'lib_path_export_script', 
+                   'module_uoa': 'os', 
+                   'host_os_dict': hosd, 
+                   'lib_path': cus.get('path_lib', '')})
+    if r['return']>0: return r
+    s += r['script']
+
     ############################################################
     # Setting environment depending on the platform
-    if hplat=='win':
-       # TBD
-       return {'return':1, 'error':'OS not yet supported in customize.py...'}
-
-    else:
-       x=''
-       if tbits=='64': x='64'
-
-       cus['path_lib']=p1
-       cus['path_include']=os.path.join(pi,'include')
-
-       r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
-         'lib_path': cus['path_lib']})
-       if r['return']>0: return r
-       s += r['script']
-
+    if hplat!='win':
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
 
     return {'return':0, 'bat':s}

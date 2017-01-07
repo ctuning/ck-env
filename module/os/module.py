@@ -398,3 +398,31 @@ def lib_path_export_script(i):
 
 def _convert_lib_path_list_to_string(lst):
     return '":"'.join(lst) if isinstance(lst, list) else lst
+
+##############################################################################
+# convert win path to cygwin path
+
+def convert_to_cygwin_path(i):
+    """
+    Input:  {
+              path - path to convert
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              path         - updated path
+            }
+
+    """
+
+    p=i['path']
+
+    pp=p.replace('\\','/')
+
+    if i.get('out','')=='con':
+       ck.out(pp)
+
+    return {'return':0, 'path':pp}
