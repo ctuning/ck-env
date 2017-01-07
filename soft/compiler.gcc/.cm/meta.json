@@ -18,6 +18,7 @@
     }, 
     "only_for_target_os_tags": [
       "mingw", 
+      "windows",
       "linux"
     ], 
     "search_numeric_ext_on_linux": "yes", 

@@ -143,6 +143,9 @@ def install(i):
 
     host_add_path_string=r.get('host_add_path_string','')
 
+    hosn=hosd.get('ck_name2','')
+    osn=tosd.get('ck_name2','')
+
     # Check if base is different
     x1=hosd.get('base_uid','')
     x2=hosd.get('base_uoa','')
@@ -466,7 +469,10 @@ def install(i):
 
        # We may want to pass more info (including target CPU) ...
 
+    # Set up extra vars
     pr_env['CK_TARGET_CPU_BITS']=tosd.get('bits','')
+    pr_env['CK_HOST_OS_ID']=hosn
+    pr_env['CK_TARGET_OS_ID']=osn
 
     # Check if need host GPGPU params
     if d.get('need_gpgpu_info','')=='yes':
