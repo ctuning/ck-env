@@ -89,8 +89,12 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
+    win=tosd.get('windows_base','')
+    winh=hosd.get('windows_base','')
+
     # Check platform
     hplat=hosd.get('ck_name','')
+    tplat=tosd.get('ck_name','')
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
@@ -128,7 +132,16 @@ def setup(i):
 
     ############################################################
     # Setting environment depending on the platform
-    if hplat!='win':
+    if tplat=='win':
+       # Check if has dll and then add to PATH
+       fpd=fp
+       if fp.endswith('.lib'):
+          fpd=fp[:-4]+'.dll'
+       if fpd.endswith('.dll') and os.path.isfile(fpd):
+          s+='\nset PATH='+p1+';%PATH%\n\n'
+
+       env[ep+'_LFLAG_SYSTEM']=os.path.join(p1,'boost_system-mt.lib')
+    else:
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
 
     return {'return':0, 'bat':s}

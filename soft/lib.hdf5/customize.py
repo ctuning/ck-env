@@ -104,8 +104,12 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
+    win=tosd.get('windows_base','')
+    winh=hosd.get('windows_base','')
+
     # Check platform
     hplat=hosd.get('ck_name','')
+    tplat=tosd.get('ck_name','')
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
@@ -140,10 +144,14 @@ def setup(i):
 
     pi=os.path.realpath(os.path.dirname(fpinc))
 
+    pii=os.path.dirname(pi)
+
     lb=os.path.basename(fp)
     lbs=lb
     if lbs.endswith('.so'):
        lbs=lbs[:-3]+'.a'
+    elif lbs.endswith('.lib'):
+       lbs=lbs[:-4]+'.dll'
 
     pl=os.path.realpath(os.path.dirname(fp))
     cus['path_lib']=pl
@@ -162,12 +170,14 @@ def setup(i):
     if r['return']>0: return r
     s += r['script']
 
-    env[ep]=pi
+    env[ep]=pii
 
-    pb=os.path.join(pi,'bin')
+    pb=os.path.join(pii,'bin')
     if os.path.isdir(pb):
        env[ep+'_BIN']=pb
        cus['path_bin']=pb
+       if tplat=='win':
+          s+='\nset PATH='+pb+';%PATH%\n\n'
 
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')

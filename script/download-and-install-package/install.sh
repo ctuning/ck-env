@@ -52,6 +52,10 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
   if [ "${PACKAGE_GIT_CHECKOUT}" != "" ] ; then
     cd ${PACKAGE_SUB_DIR}
 
+    echo ""
+    echo "Checking out branch ${PACKAGE_GIT_CHECKOUT} ..."
+    echo ""
+
     git checkout ${PACKAGE_GIT_CHECKOUT}
 
     if [ "${?}" != "0" ] ; then

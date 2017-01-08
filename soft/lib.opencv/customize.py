@@ -109,7 +109,11 @@ def setup(i):
     cus=i.get('customize',{})
 
     target_d=i.get('target_os_dict',{})
+    hosd=i.get('host_os_dict',{})
+
     win=target_d.get('windows_base','')
+    winh=hosd.get('windows_base','')
+
     mic=target_d.get('intel_mic','')
     remote=target_d.get('remote','')
     mingw=target_d.get('mingw','')
@@ -117,8 +121,6 @@ def setup(i):
 
     ep=cus['env_prefix']
     pi=cus.get('path_install','')
-
-    hosd=i.get('host_os_dict',{})
 
     ellp=hosd.get('env_ld_library_path','')
     if ellp=='': ellp='LD_LIBRARY_PATH'
@@ -201,7 +203,7 @@ def setup(i):
 
        env[ep+'_STATIC_LIB_PATH']=cus['path_static_lib']
 
-       if win=='yes':
+       if winh=='yes':
           s+='\nset '+ellp+'=%'+ep+'_LIB%;'+plx+';%'+ellp+'%\n'
        else:
           s+='\nexport '+ellp+'=$'+ep+'_LIB:"'+plx+'":$'+ellp+'\n'
@@ -211,7 +213,7 @@ def setup(i):
           if r['return']>0: return r
           s += r['script']
 
-    elif win=='yes':
+    elif winh=='yes':
        ext='x64'
        if tbits=='32': ext='ia32'
 
@@ -246,6 +248,11 @@ def setup(i):
        cus['extra_dynamic_libs']={'opencv_imgproc':'opencv_imgproc'+le+'.dll',
                                   'opencv_ocl':'opencv_ocl'+le+'.dll',
                                   'opencv_highgui':'opencv_highgui'+le+'.dll'}
+
+       env[ep+'_LFLAG_IMGPROC']=os.path.join(pl, 'opencv_imgproc'+le+'.lib')
+       env[ep+'_LFLAG_CORE']=os.path.join(pl, 'opencv_core'+le+'.lib')
+       env[ep+'_LFLAG_HIGHGUI']=os.path.join(pl, 'opencv_highgui'+le+'.lib')
+       env[ep+'_LFLAG_OCL']=os.path.join(pl, 'opencv_ocl'+le+'.lib')
 
        env[ep+'_STATIC_LIB_PATH']=cus['path_static_lib']
        env[ep+'_DYNAMIC_LIB_PATH']=cus['path_dynamic_lib']

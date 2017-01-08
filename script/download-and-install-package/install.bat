@@ -61,6 +61,10 @@ if "%PACKAGE_GIT%" == "YES" (
   if not "%PACKAGE_GIT_CHECKOUT%" == "" (
     cd %PACKAGE_SUB_DIR%
 
+    echo.
+    echo Checking out branch %PACKAGE_GIT_CHECKOUT% ...
+    echo.
+ 
     git checkout %PACKAGE_GIT_CHECKOUT%
 
     if %errorlevel% neq 0 (
@@ -180,21 +184,6 @@ rem        goto err
 )
 
 rem ############################################################
-if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat" (
-  echo.
-  echo Executing extra script ...
-
-  call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat
-
-  if %errorlevel% neq 0 (
-   echo.
-   echo Error: Failed executing extra script ...
-   goto err
-  )
-)
-
-
-rem ############################################################
 echo.
 echo Cleaning ...
 
@@ -233,17 +222,63 @@ if NOT EXIST obj (
   )
 )
 
+rem ############################################################
+if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat" (
+  echo.
+  echo Executing extra script ...
+
+  call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: Failed executing extra script ...
+   goto err
+  )
+)
+
+rem ############################################################
 cd /D %INSTALL_DIR%/obj
 
+rem Checking target
 set XTARGET=--target install
-set XCMAKE_AR=
-set XCMAKE_LD=
-
 if not "%PACKAGE_CMAKE_TARGET%" == "" (
   set XTARGET=--target %PACKAGE_CMAKE_TARGET%
 )
 if "%PACKAGE_SKIP_CMAKE_TARGET%" == "YES" (
   set XTARGET=
+)
+
+rem Checking AR
+set XCMAKE_AR=
+if not "%CK_AR_PATH_FOR_CMAKE%" == "" (
+ set XCMAKE_AR=-DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%"
+)
+
+rem Checking LD
+set XCMAKE_LD=
+if not "%CK_LD_PATH_FOR_CMAKE%" == "" (
+ set XCMAKE_LD=-DCMAKE_LD="%CK_LD_PATH_FOR_CMAKE%"
+)
+
+rem Checking C flags
+set XCMAKE_C_FLAGS=
+if not "%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%" == " " (
+  set XCMAKE_C_FLAGS=-DCMAKE_C_FLAGS="%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%"
+)
+
+rem Checking CXX flags
+set XCMAKE_CXX_FLAGS=
+if not "%CK_CXX_FLAGS_FOR_CMAKE% %CK_CXX_FLAGS_ANDROID_TYPICAL%" == " " (
+  set XCMAKE_CXX_FLAGS=-DCMAKE_CXX_FLAGS="%CK_CXX_FLAGS_FOR_CMAKE% %CK_CXX_FLAGS_ANDROID_TYPICAL%"
+)
+
+set XCMAKE_EXE_LINKER_FLAGS=
+if "%CK_TARGET_OS_ID%" == "android" (
+  set XCMAKE_EXE_LINKER_FLAGS=-DCMAKE_EXE_LINKER_FLAGS="%CK_LINKER_FLAGS_ANDROID_TYPICAL%"
+)
+set XCMAKE_EXE_LINKER_LIBS=
+if "%CK_TARGET_OS_ID%" == "android" (
+  set XCMAKE_EXE_LINKER_LIBS=-DCMAKE_EXE_LINKER_LIBS="%CK_LINKER_LIBS_ANDROID_TYPICAL%" \
 )
 
 if "%PACKAGE_BUILD_TYPE%" == "cmake" (
@@ -262,13 +297,15 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
         -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
         %PACKAGE_CONFIGURE_FLAGS% ^
         -DCMAKE_C_COMPILER="%CK_CC_PATH_FOR_CMAKE%" ^
-        -DCMAKE_C_FLAGS="%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%" ^
+        %XCMAKE_C_FLAGS% ^
         -DCMAKE_CXX_COMPILER="%CK_CXX_PATH_FOR_CMAKE%" ^
-        -DCMAKE_CXX_FLAGS="%CK_CXX_FLAGS_FOR_CMAKE% %CK_CXX_FLAGS_ANDROID_TYPICAL%" ^
+        %XCMAKE_CXX_FLAGS% ^
         -DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%" ^
         -DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%" ^
         %XCMAKE_AR% ^
         %XCMAKE_LD% ^
+        %XCMAKE_EXE_LINKER_FLAGS% ^
+        %XCMAKE_EXE_LINKER_LIBS% ^
         %CK_CMAKE_EXTRA% ^
         %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
 

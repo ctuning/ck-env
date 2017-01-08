@@ -87,6 +87,7 @@ def setup(i):
 
     # Check platform
     hplat=hosd.get('ck_name','')
+    tplat=hosd.get('ck_name','')
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
@@ -117,6 +118,12 @@ def setup(i):
     if lbs.endswith('.so'):
        lbs=lbs[:-3]+'.a'
 
+    if lb.endswith('.a'):
+       lb=lb[:-2]
+
+    if not lb.endswith('.dll') and not lb.endswith('.so'):
+       lb+='.so'
+
     pl=os.path.dirname(fp)
     cus['path_lib']=pl
 
@@ -146,6 +153,13 @@ def setup(i):
     ep=cus.get('env_prefix','')
     if pi!='':
        env[ep]=pi
+
+    pb=os.path.join(pi,'bin')
+    if tplat=='win' and os.path.isdir(pb):
+       env[ep+'_BIN']=pb
+       cus['path_bin']=pb
+       if tplat=='win':
+          s+='\nset PATH='+pb+';%PATH%\n\n'
 
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')
