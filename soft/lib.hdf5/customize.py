@@ -179,6 +179,9 @@ def setup(i):
        if tplat=='win':
           s+='\nset PATH='+pb+';%PATH%\n\n'
 
+          env[ep+'_LFLAG']=os.path.join(pl,'hdf5.lib')
+          env[ep+'_LFLAG_HL']=os.path.join(pl,'hdf5_hl.lib')
+
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')
     env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')

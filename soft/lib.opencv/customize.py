@@ -250,6 +250,7 @@ def setup(i):
                                   'opencv_highgui':'opencv_highgui'+le+'.dll'}
 
        env[ep+'_LFLAG_IMGPROC']=os.path.join(pl, 'opencv_imgproc'+le+'.lib')
+       env[ep+'_LFLAG_IMGCODECS']=os.path.join(pl, 'opencv_imgcodecs'+le+'.lib')
        env[ep+'_LFLAG_CORE']=os.path.join(pl, 'opencv_core'+le+'.lib')
        env[ep+'_LFLAG_HIGHGUI']=os.path.join(pl, 'opencv_highgui'+le+'.lib')
        env[ep+'_LFLAG_OCL']=os.path.join(pl, 'opencv_ocl'+le+'.lib')

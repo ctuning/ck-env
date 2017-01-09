@@ -141,6 +141,9 @@ def setup(i):
           s+='\nset PATH='+p1+';%PATH%\n\n'
 
        env[ep+'_LFLAG_SYSTEM']=os.path.join(p1,'boost_system-mt.lib')
+       env[ep+'_LFLAG_THREAD']=os.path.join(p1,'boost_thread-mt.lib')
+       env[ep+'_LFLAG_DATE_TIME']=os.path.join(p1,'boost_date_time-mt.lib')
+       env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem-mt.lib')
     else:
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
 

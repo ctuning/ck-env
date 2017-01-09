@@ -314,10 +314,13 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
   echo Building using Visual Studio ...
 
   cmake --build . --config %CMAKE_CONFIG% %XTARGET%
-  if %errorlevel% neq 0 (
-   echo.
-   echo Problem building CK package!
-   goto err
+
+  if not "%PACKAGE_SKIP_BUILD_ERROR%" == "YES" (
+    if %errorlevel% neq 0 (
+     echo.
+     echo Problem building CK package!
+     goto err
+    )
   )
 )
 
