@@ -164,20 +164,6 @@ if [ "${PACKAGE_PATCH}" == "YES" ] ; then
 fi
 
 ############################################################
-if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh" ] ; then
-  echo ""
-  echo "Executing extra script ..."
-
-  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh
-
-  if [ "${?}" != "0" ] ; then
-    echo "Error: Failed executing extra script ..."
-    exit 1
-  fi
-fi
-
-
-############################################################
 echo ""
 echo "Cleaning ..."
 
@@ -197,6 +183,19 @@ fi
 
 if [ ! -d obj ] ; then
   mkdir obj
+fi
+
+############################################################
+if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh" ] ; then
+  echo ""
+  echo "Executing extra script ..."
+
+  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: Failed executing extra script ..."
+    exit 1
+  fi
 fi
 
 ############################################################
@@ -268,7 +267,7 @@ if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then
   ############################################################
   echo ""
   echo "Building package ..."
-  make -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
+  make -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} ${CK_MAKE_EXTRA}
   if [ "${?}" != "0" ] ; then
     echo "Error: build failed!"
     exit 1
@@ -289,21 +288,22 @@ if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then
 fi
 
 ############################################################
-echo ""
-echo "Cleaning obj directory ..."
-
 if [ "${PACKAGE_SKIP_CLEAN_OBJ_DIR}" != "YES" ] ; then
+  echo ""
+  echo "Cleaning obj directory ..."
+
  cd ${INSTALL_DIR}
  rm -rf obj
 fi
 
 ############################################################
-#echo ""
-#echo "Cleaning src directory ..."
-
-if [ "${PACKAGE_SKIP_CLEAN_SRC_DIR}" != "YES" ] ; then
- cd ${INSTALL_DIR}
- rm -rf ${PACKAGE_SUB_DIR}
-fi
+# CAREFUL - when GIT, CK can't afterwards go to this dir to get revision number ...
+#if [ "${PACKAGE_SKIP_CLEAN_SRC_DIR}" != "YES" ] ; then
+# echo ""
+# echo "Cleaning src directory ..."
+#
+# cd ${INSTALL_DIR}
+# rm -rf ${PACKAGE_SUB_DIR}
+#fi
 
 exit 0

@@ -263,7 +263,7 @@ if not "%CK_LD_PATH_FOR_CMAKE%" == "" (
 rem Checking C flags
 set XCMAKE_C_FLAGS=
 if not "%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%" == " " (
-  set XCMAKE_C_FLAGS=-DCMAKE_C_FLAGS="%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%"
+ set XCMAKE_C_FLAGS=-DCMAKE_C_FLAGS="%CK_CC_FLAGS_FOR_CMAKE% %CK_CC_FLAGS_ANDROID_TYPICAL%"
 )
 
 rem Checking CXX flags
@@ -322,6 +322,34 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
      goto err
     )
   )
+)
+
+rem  ############################################################
+if NOT "%PACKAGE_SKIP_CLEAN_OBJ_DIR%" == "YES" (
+  echo.
+  echo Cleaning obj directory ...
+
+  if EXIST obj (
+    rmdir /s /q obj
+  )
+  if EXIST obj (
+    rmdir obj
+  )
+)
+
+rem  ############################################################
+rem  CAREFUL - when GIT, CK can't afterwards go to this dir to get revision number ...
+
+rem if NOT "%PACKAGE_SKIP_CLEAN_SRC_DIR%" == "YES" (
+rem  echo.
+rem  echo Cleaning src directory ...
+rem
+rem   if EXIST src (
+rem    rmdir /s /q src
+rem  )
+rem  if EXIST src (
+rem    rmdir src
+rem  )
 )
 
 exit /b 0
