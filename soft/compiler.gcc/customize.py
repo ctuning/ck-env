@@ -330,4 +330,8 @@ def setup(i):
     if x!='' and winh=='yes':
        s+='\nset PATH='+pi+x+';%PATH%\n\n'
 
+    # Otherwise may be problems on Windows during cross-compiling
+    env['CK_OPT_UNWIND']=' '
+    env['CK_FLAGS_DYNAMIC_BIN']=' '
+
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}

@@ -530,4 +530,8 @@ def setup(i):
 #          x+=' '+y
 #          env["CK_COMPILER_FLAGS_OBLIGATORY"]=x
 
+    # Otherwise may be problems on Windows during cross-compiling
+    env['CK_OPT_UNWIND']=' '
+    env['CK_FLAGS_DYNAMIC_BIN']=' '
+
     return {'return':0, 'bat':s}

@@ -213,7 +213,7 @@ def setup(i):
              "CK_FLAGS_CREATE_ASM": "-S", 
              "CK_FLAGS_CREATE_BC": "-c -emit-llvm", 
              "CK_FLAGS_CREATE_OBJ": "-c", 
-             "CK_FLAGS_DYNAMIC_BIN": "", 
+             "CK_FLAGS_DYNAMIC_BIN": " ", 
              "CK_FLAGS_OUTPUT": "-o", 
              "CK_FLAG_PREFIX_INCLUDE": "-I", 
              "CK_FLAG_PREFIX_LIB_DIR": "-L", 
@@ -503,5 +503,9 @@ def setup(i):
        if y not in x:
           x+=' '+y
           env["CK_COMPILER_FLAGS_OBLIGATORY"]=x
+
+    # Otherwise may be problems on Windows during cross-compiling
+    env['CK_OPT_UNWIND']=' '
+    env['CK_FLAGS_DYNAMIC_BIN']=' '
 
     return {'return':0, 'bat':s}

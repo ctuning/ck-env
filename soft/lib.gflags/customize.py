@@ -92,6 +92,8 @@ def setup(i):
     # Check platform
     hplat=hosd.get('ck_name','')
 
+    ttags=tosd.get('tags',[])
+
     win=tosd.get('windows_base','')
     mingw=tosd.get('mingw','')
 
@@ -159,5 +161,8 @@ def setup(i):
 
     if win!='yes':
        env[ep+'_LFLAG']='-lgflags'
+
+    if hplat=='win' and 'android' in ttags:
+       s+='\nset LD_LIBRARY_PATH='+p1+':%LD_LIBRARY_PATH%\n\n'
 
     return {'return':0, 'bat':s}

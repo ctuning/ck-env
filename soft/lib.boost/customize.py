@@ -95,6 +95,7 @@ def setup(i):
     # Check platform
     hplat=hosd.get('ck_name','')
     tplat=tosd.get('ck_name','')
+    ttags=tosd.get('tags',[])
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
@@ -146,5 +147,19 @@ def setup(i):
        env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem-mt.lib')
     else:
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
+
+    # Check if host is windows and target is android
+    # then copy libboost_thread_pthread.a to libboost_thread.a ,
+    # otherwise other soft may not understand that ...
+    if hplat=='win' and 'android' in ttags:
+       px0=os.path.join(p1,'libboost_thread_pthread.a')
+       if os.path.isfile(px0):
+          px1=os.path.join(p1,'libboost_thread.a')
+          if os.path.isfile(px1):
+             os.remove(px1)
+          import shutil
+          shutil.copyfile(px0,px1)
+
+       s+='\nset LD_LIBRARY_PATH='+p1+':%LD_LIBRARY_PATH%\n\n'
 
     return {'return':0, 'bat':s}

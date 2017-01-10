@@ -506,4 +506,8 @@ def setup(i):
 #       x=sysroot+' '+x
 #    env['CK_LD_FLAGS_EXTRA']=x
 
+    # Otherwise may be problems on Windows during cross-compiling
+    env['CK_OPT_UNWIND']=' '
+    env['CK_FLAGS_DYNAMIC_BIN']=' '
+
     return {'return':0, 'bat':s, 'env':env, 'tags':tags, 'cus':cus}

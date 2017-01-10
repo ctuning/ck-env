@@ -156,4 +156,8 @@ def setup(i):
     # Add SRC env for plugins
     s+='\nexport CK_ENV_COMPILER_GCC_SRC='+pi+'/milepost-gcc-4.4.4\n\n'
 
+    # Otherwise may be problems on Windows during cross-compiling
+    env['CK_OPT_UNWIND']=' '
+    env['CK_FLAGS_DYNAMIC_BIN']=' '
+
     return {'return':0, 'bat':s, 'env':env, 'tags':tags}
