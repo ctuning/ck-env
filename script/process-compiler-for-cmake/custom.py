@@ -96,8 +96,8 @@ def setup(i):
     ce=cdd['env']
     cep=cdd['customize']['env_prefix']
 
-    ck_cc=ce['CK_CC']
-    ck_cxx=ce['CK_CXX']
+    ck_cc=ce.get('CK_CC','')
+    ck_cxx=ce.get('CK_CXX','')
 
     if 'clang' in ck_cc:
        ie['CK_CLANG']='YES'
