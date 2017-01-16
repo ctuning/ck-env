@@ -82,6 +82,18 @@ if [ "${PACKAGE_UNGZIP}" == "YES" ] ; then
 fi
 
 ############################################################
+if [ "${PACKAGE_UNZIP}" == "YES" ] ; then
+  echo ""
+  echo "Unzipping archive ..."
+
+  unzip ${PACKAGE_NAME}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: unzipping package failed!"
+    exit 1
+  fi
+fi
+
+############################################################
 if [ "${PACKAGE_UNBZIP}" == "YES" ] ; then
   echo ""
   echo "Unbzipping archive ..."
