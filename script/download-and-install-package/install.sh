@@ -274,6 +274,19 @@ if [ "${?}" != "0" ] ; then
   exit 1
 fi
 
+############################################################
+if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install.sh" ] ; then
+  echo ""
+  echo "Executing extra script ..."
+
+  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install.sh
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: Failed executing extra script ..."
+    exit 1
+  fi
+fi
+
 if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then 
 
   ############################################################

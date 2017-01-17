@@ -93,6 +93,19 @@ if "%PACKAGE_UNGZIP%" == "YES" (
   )
 )
 
+rem ############################################################
+if "%PACKAGE_UNZIP%" == "YES" (
+  echo.
+  echo Unzipping archive ...
+
+  unzip -d %PACKAGE_NAME%
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: unzipping package failed!
+   goto err
+  )
+)
 
 rem ############################################################
 if "%PACKAGE_UNBZIP%" == "YES" (
@@ -321,6 +334,20 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
      echo Problem building CK package!
      goto err
     )
+  )
+)
+
+rem ############################################################
+if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\post-install.bat" (
+  echo.
+  echo Executing extra script ...
+
+  call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\post-install.bat
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: Failed executing extra script ...
+   goto err
   )
 )
 
