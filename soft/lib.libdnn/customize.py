@@ -108,9 +108,6 @@ def setup(i):
     if r['return']>0: return r
     s += r['script']
 
-    cus['include_name']='viennacl.h'
-    env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
-
     x=os.path.join(plib, pname+sext)
     if os.path.isfile(x):
        cus['static_lib']=pname+sext

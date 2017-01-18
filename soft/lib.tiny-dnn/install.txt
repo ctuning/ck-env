@@ -1,0 +1,2 @@
+You can clone tiny DNN library from:
+$ git clone https://github.com/tiny-dnn/tiny-dnn

@@ -1,0 +1,26 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_TINY_DNN",
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 4
+    },
+    "soft_file": {
+      "linux": "tiny_dnn.h",
+      "win": "tiny_dnn.h"
+    },
+    "soft_path_example": {
+      "linux": "",
+      "win": "$HOME/tiny_dnn_clone/tiny_dnn/tiny_dnn.h"
+    }
+  },
+  "soft_name": "Tiny DNN library",
+  "tags": [
+    "lib",
+    "dnn",
+    "tiny-dnn"
+  ]
+}
