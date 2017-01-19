@@ -313,7 +313,21 @@ if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then
 fi
 
 ############################################################
-if [ "${PACKAGE_SKIP_CLEAN_OBJ_DIR}" != "YES" ] ; then
+if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install2.sh" ] ; then
+  echo ""
+  echo "Executing extra script (2) ..."
+
+  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install2.sh
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: Failed executing extra script ..."
+    exit 1
+  fi
+fi
+
+
+############################################################
+if [ "${PACKAGE_SKIP_CLEAN_OBJ}" != "YES" ] ; then
   echo ""
   echo "Cleaning obj directory ..."
 

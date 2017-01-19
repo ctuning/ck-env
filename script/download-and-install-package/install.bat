@@ -352,7 +352,7 @@ if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\post-install.bat" (
 )
 
 rem  ############################################################
-if NOT "%PACKAGE_SKIP_CLEAN_OBJ_DIR%" == "YES" (
+if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
   echo.
   echo Cleaning obj directory ...
 
