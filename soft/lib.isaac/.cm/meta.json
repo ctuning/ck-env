@@ -1,0 +1,15 @@
+{
+  "auto_detect": "no",
+  "customize": {
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_ISAAC"
+  },
+  "deps": {},
+  "skip_file_check": "yes",
+  "soft_name": "ISAAC library",
+  "tags": [
+    "lib",
+    "partial-blas",
+    "isaac"
+  ]
+}
