@@ -645,54 +645,55 @@ def setup(i):
               os.chdir('..')
               pwd1=os.getcwd()
 
-          os.chdir(dfp)
+          if os.path.isdir(dfp):
+             os.chdir(dfp)
 
-          if getattr(ck, 'run_and_get_stdout', None)==None:
-             return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
+             if getattr(ck, 'run_and_get_stdout', None)==None:
+                return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
 
-          r=ck.run_and_get_stdout({'cmd':['git','rev-parse','--short','HEAD']})
-          if r['return']==0 and r['return_code']==0: 
-             ss1=r['stdout'].strip()
+             r=ck.run_and_get_stdout({'cmd':['git','rev-parse','--short','HEAD']})
+             if r['return']==0 and r['return_code']==0: 
+                ss1=r['stdout'].strip()
 
-          r=ck.run_and_get_stdout({'cmd':['git','log','-1','--format=%cd']})
-          if r['return']==0 and r['return_code']==0: 
-             ss2=r['stdout'].strip()
-             if ss2!='':
-                ss2x=ss2
-                j=ss2x.find(' +')
-                if j<0:
-                   j=ss2x.find(' -')
-                if j>0:
-                   ss2x=ss2[:j]
+             r=ck.run_and_get_stdout({'cmd':['git','log','-1','--format=%cd']})
+             if r['return']==0 and r['return_code']==0: 
+                ss2=r['stdout'].strip()
+                if ss2!='':
+                   ss2x=ss2
+                   j=ss2x.find(' +')
+                   if j<0:
+                      j=ss2x.find(' -')
+                   if j>0:
+                      ss2x=ss2[:j]
 
-                x=datetime.datetime.strptime(ss2x, '%a %b %d %H:%M:%S %Y')
+                   x=datetime.datetime.strptime(ss2x, '%a %b %d %H:%M:%S %Y')
 
-                ss3=x.isoformat()
+                   ss3=x.isoformat()
 
-                ss4=ss3[:10].replace('-','')
+                   ss4=ss3[:10].replace('-','')
 
+                   if ss1!='':
+                      ss5=ss4+'-'+ss1
+
+             if 'git_info' not in cus:
+                cus['git_info']={}
+
+             cus['git_info']['revision']=ss1
+             cus['git_info']['datetime']=ss2
+             cus['git_info']['iso_datetime']=ss3
+             cus['git_info']['iso_datetime_cut']=ss4
+             cus['git_info']['iso_datetime_cut_revision']=ss5
+
+             if o=='con':
+                ck.out('')
                 if ss1!='':
-                   ss5=ss4+'-'+ss1
+                   ck.out('Detected GIT revision:                 '+ss1)
+                if ss2!='':
+                   ck.out('Detected GIT date time of last commit: '+ss2)
 
-          if 'git_info' not in cus:
-             cus['git_info']={}
+             os.chdir(pwd1)
 
-          cus['git_info']['revision']=ss1
-          cus['git_info']['datetime']=ss2
-          cus['git_info']['iso_datetime']=ss3
-          cus['git_info']['iso_datetime_cut']=ss4
-          cus['git_info']['iso_datetime_cut_revision']=ss5
-
-          if o=='con':
-             ck.out('')
-             if ss1!='':
-                ck.out('Detected GIT revision:                 '+ss1)
-             if ss2!='':
-                ck.out('Detected GIT date time of last commit: '+ss2)
-
-          os.chdir(pwd1)
-
-          ver+='-'+ss1
+             ver+='-'+ss1
 
     ########################################################################
     # Ask for version if was not detected or is not explicitly specified (for example, from a package)
