@@ -306,8 +306,11 @@ def setup(i):
        ie['CK_LINKER_LIBS_ANDROID_TYPICAL']=ck_libs_andr
        ie['CK_LINKER_LIBS_ANDROID_TYPICAL_MINGW']=ck_libs_andr.replace('\\','/')
 
-    # Extra
+    # Extra checks
     extra=''
+
+    ienv=cfg.get('customize',{}).get('install_env',{})
+
     if hosn=='win':
        if osn=='android':
           extra+=' -G"MinGW Makefiles" -DCMAKE_MAKE_PROGRAM=make -DCMAKE_SYSTEM_NAME=Generic'
@@ -368,13 +371,32 @@ def setup(i):
              # Hack - should detect intel version correctly and add correct names (in ck detect soft:compiler.icc)
              extra+=' -T"Intel C++ Compiler XE 15.0"'
 
-          extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_WINDOWS','')
+          extra+=' '+ienv.get('PACKAGE_CONFIGURE_FLAGS_WINDOWS','')
+
     elif osn=='linux':
-       extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_LINUX','')
+       extra+=' '+ienv.get('PACKAGE_CONFIGURE_FLAGS_LINUX','')
 
     if osn=='android':
-       extra+=' '+cfg.get('customize',{}).get('install_env',{}).get('PACKAGE_CONFIGURE_FLAGS_ANDROID','')
+       extra+=' '+ienv.get('PACKAGE_CONFIGURE_FLAGS_ANDROID','')
 
     ie['CK_CMAKE_EXTRA']=extra.strip()
+
+    # Update PACKAGE URL and checkout if needed
+    x1=''
+    x2=''
+    if osn=='android':
+       x1='PACKAGE_URL_ANDROID'
+       x2='PACKAGE_GIT_CHECKOUT_ANDROID'
+    elif osn=='win':
+       x1='PACKAGE_URL_WINDOWS'
+       x2='PACKAGE_GIT_CHECKOUT_WINDOWS'
+    elif osn=='linux':
+       x1='PACKAGE_URL_LINUX'
+       x2='PACKAGE_GIT_CHECKOUT_LINUX'
+
+    if ienv.get(x1,'')!='':
+       ie['PACKAGE_URL']=ienv[x1]
+    if ienv.get(x2,'')!='':
+       ie['PACKAGE_GIT_CHECKOUT']=ienv[x2]
 
     return {'return':0, 'install_env':ie}
