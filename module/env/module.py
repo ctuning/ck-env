@@ -59,6 +59,7 @@ def set(i):
               (deps)                 - already resolved deps
               (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
               (skip_default)         - if 'yes', skip detection of default installed software version
+              (skip_installed)       - dict to specify on which platforms not to search already installed version
               (skip_pruning_by_other_deps) - if 'yes', do not prune available envs using other resolved deps
 
               (bat_file)             - if !='', use this filename to generate/append bat file ...
@@ -319,6 +320,7 @@ def set(i):
 
        # First, try to detect already installed software, but not registered (default)
        if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes'):
+          print ('xyz=',tplat2, skip_installed.get('tplat2',''))
           if o=='con':
              ck.out('  Trying to automatically detect required software ...')
 
@@ -1125,6 +1127,7 @@ def resolve(i):
         name=q.get('name','')
         local=q.get('local','')
         sd=q.get('skip_default','')
+        sinst=q.get('skip_installed',{})
 
         ek=q.get('env_key','')
 
@@ -1162,6 +1165,7 @@ def resolve(i):
             'deps':deps,
             'skip_auto_resolution':sar,
             'skip_default':sd,
+            'skip_installed':sinst,
             'local':local,
             'random':ran,
             'name':name,
