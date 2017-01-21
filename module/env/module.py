@@ -114,7 +114,8 @@ def set(i):
     sar=i.get('skip_auto_resolution','')
     cdeps=i.get('deps',{})
 
-    sd=i.get('skip_default','')
+    skip_default=i.get('skip_default','')
+    skip_installed=i.get('skip_installed',{})
 
     iev=i.get('install_to_env','')
     safe=i.get('safe','')
@@ -168,6 +169,8 @@ def set(i):
     tbits=tosd.get('bits','')
 
     hplat=hosd.get('ck_name','')
+
+    tplat2=hosd.get('ck_name2','')
 
     eset=hosd.get('env_set','')
     svarb=hosd.get('env_var_start','')
@@ -315,7 +318,7 @@ def set(i):
           showed_warning=True
 
        # First, try to detect already installed software, but not registered (default)
-       if sd!='yes':
+       if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes'):
           if o=='con':
              ck.out('  Trying to automatically detect required software ...')
 
