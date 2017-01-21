@@ -592,7 +592,9 @@ def install(i):
              if len(udeps)>0:
                 for q in udeps:
                     v=udeps[q]
-                    ck.out('  * Dependency: '+q+'='+v.get('uoa',''))
+                    vuoa=v.get('uoa','')
+                    if vuoa!='':
+                       ck.out('  * Dependency: '+q+'='+v.get('uoa',''))
 
           r=ck.access({'action':'search',
                        'module_uoa':cfg['module_deps']['env'],
