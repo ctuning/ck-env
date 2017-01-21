@@ -320,7 +320,6 @@ def set(i):
 
        # First, try to detect already installed software, but not registered (default)
        if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes'):
-          print ('xyz=',tplat2, skip_installed.get('tplat2',''))
           if o=='con':
              ck.out('  Trying to automatically detect required software ...')
 
