@@ -319,9 +319,6 @@ def set(i):
           showed_warning=True
 
        # First, try to detect already installed software, but not registered (default)
-       print ("XYZ=",tplat2, skip_installed.get(tplat2,''))
-       exit(1)
-
        if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes'):
           if o=='con':
              ck.out('  Trying to automatically detect required software ...')
