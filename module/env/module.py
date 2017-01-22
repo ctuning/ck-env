@@ -171,7 +171,7 @@ def set(i):
 
     hplat=hosd.get('ck_name','')
 
-    tplat2=hosd.get('ck_name2','')
+    tplat2=tosd.get('ck_name2','')
 
     eset=hosd.get('env_set','')
     svarb=hosd.get('env_var_start','')
@@ -319,6 +319,9 @@ def set(i):
           showed_warning=True
 
        # First, try to detect already installed software, but not registered (default)
+       print ("XYZ=",tplat2, skip_installed.get(tplat2,''))
+       exit(1)
+
        if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes'):
           if o=='con':
              ck.out('  Trying to automatically detect required software ...')
