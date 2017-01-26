@@ -44,10 +44,12 @@ if "%PACKAGE_GIT%" == "YES" (
 
   if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir /s /q %PACKAGE_SUB_DIR%
+    sleep 2
   )
 
   if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir %PACKAGE_SUB_DIR%
+    sleep 2
   )
 
   git clone %PACKAGE_URL% %PACKAGE_SUB_DIR%
@@ -132,10 +134,12 @@ if "%PACKAGE_UNTAR%" == "YES" (
 
   if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir /s /q %PACKAGE_SUB_DIR%
+    sleep 2
   )
 
   if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir %PACKAGE_SUB_DIR%
+    sleep 2
   )
 
   tar xvf %PACKAGE_NAME1%
@@ -206,9 +210,11 @@ if NOT "%PACKAGE_SKIP_CLEAN_INSTALL%" == "YES" (
 
   if EXIST install (
     rmdir /s /q install
+    sleep 2
   )
   if EXIST install (
     rmdir install
+    sleep 2
   )
 
 )
@@ -217,9 +223,11 @@ if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
 
   if EXIST obj (
     rmdir /s /q obj
+    sleep 2
   )
   if EXIST obj (
     rmdir obj
+    sleep 2
   )
 
 )
@@ -358,9 +366,11 @@ if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
 
   if EXIST obj (
     rmdir /s /q obj
+    sleep 2
   )
   if EXIST obj (
     rmdir obj
+    sleep 2
   )
 )
 
