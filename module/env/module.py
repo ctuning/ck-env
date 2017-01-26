@@ -171,7 +171,7 @@ def set(i):
 
     hplat=hosd.get('ck_name','')
 
-    tplat2=tosd.get('ck_name2','')
+    tplat2=i.get('original_target_os_name2','')
 
     eset=hosd.get('env_set','')
     svarb=hosd.get('env_var_start','')
@@ -1075,6 +1075,8 @@ def resolve(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
+    tplat2=tosd.get('ck_name2','')
+
     # Check if base is different
     x1=hosd.get('base_uid','')
     x2=hosd.get('base_uoa','')
@@ -1154,6 +1156,7 @@ def resolve(i):
            ck.out(x)
 
         ii={'host_os':hos,
+            'original_target_os_name2':tplat2,
             'target_os':ytos,
             'target_device_id':ytdid,
             'tags':tags,
