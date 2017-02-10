@@ -592,6 +592,11 @@ def setup(i):
        if cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
           return {'return':1, 'error':'software not found in a specified path ('+fp+')'}
 
+       skip_existing='no'
+       if cus.get('force_cmd_version_detection','')=='yes':
+          skip_existing='yes'
+          ver=''
+
        if ver=='':
           scmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
@@ -605,7 +610,9 @@ def setup(i):
               'host_os_dict':hosd,
               'target_os_dict':tosd,
               'cmd':scmd,
-              'custom_script_obj':cs}
+              'custom_script_obj':cs,
+              'skip_existing':skip_existing,
+              'skip_add_target_file':cus.get('soft_version_skip_add_target_file','')}
           rx=get_version(ii)
           if rx['return']>0 and rx['return']!=16 and rx['return']!=22: return rx
           if rx['return']==0:
@@ -1787,7 +1794,11 @@ def get_version(i):
               custom_script_obj
               host_os_dict
 
-              (show)         - if 'yes', show output file
+              (show)                 - if 'yes', show output file
+
+              (skip_existing)        - if 'yes', force detecting version again
+              (skip_add_target_file) - if 'yes', do not add target file at the beginning 
+                                       of CMD to detect version
             }
 
     Output: {
@@ -1835,11 +1846,12 @@ def get_version(i):
     lst=[]
 
     # Attempt to check via CK config file
-    rx=find_config_file({'full_path':fp})
-    if rx['return']>0: return rx
-    found=rx['found']
-    if found=='yes':
-       ver=rx['dict'].get('customize',{}).get('version','')
+    if i.get('skip_existing','')!='yes':
+       rx=find_config_file({'full_path':fp})
+       if rx['return']>0: return rx
+       found=rx['found']
+       if found=='yes':
+          ver=rx['dict'].get('customize',{}).get('version','')
 
     if ver=='':
        # Generate tmp file
@@ -1867,7 +1879,10 @@ def get_version(i):
           if o!='con':
              cmd+=nout
 
-          cmd+=fp+' '+cmdx
+          if i.get('skip_add_target_file','')=='yes':
+             cmd+=' '+cmdx
+          else:
+             cmd+=fp+' '+cmdx
 
     if ver=='':
        if 'parse_version' not in dir(cs):
