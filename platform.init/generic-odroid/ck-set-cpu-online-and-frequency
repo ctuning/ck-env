@@ -9,14 +9,38 @@
 # Developer: Grigori Fursin
 #
 
-governer=powersave
+governer=conservative
 if [ "$CK_CPU_FREQ_GOVERNER" != "" ]; then
  governer=$CK_CPU_FREQ_GOVERNER
 fi
 
-freqfile=cpuinfo_max_freq
+freqmin=cpuinfo_min_freq
+freqmax=cpuinfo_max_freq
 if [ "$CK_CPU_FREQ_FILE" != "" ]; then
- freqfile=$CK_CPU_FREQ_FILE
+ freqmin=$CK_CPU_FREQ_FILE
+ freqmax=$CK_CPU_FREQ_FILE
+fi
+
+if [ "$CK_CPU_FREQ" != "" ]; then
+ freqmin=$CK_CPU_FREQ
+ freqmax=$CK_CPU_FREQ
+fi
+
+if [ "$CK_CPU_FREQ_MIN" != "" ]; then
+ freqmin="$CK_CPU_FREQ_MIN"
+fi
+
+if [ "$CK_CPU_FREQ_MAX" != "" ]; then
+ freqmax="$CK_CPU_FREQ_MAX"
+fi
+
+if [ "$1" != "" ]; then
+ freqmin="$1"
+ freqmax="$1"
+fi
+
+if [ "$2" != "" ]; then
+ freqmax="$2"
 fi
 
 online=1
@@ -29,7 +53,7 @@ if [ "$online" == "1" ] ; then
   for cpudir in /sys/devices/system/cpu/cpu*
   do
      if [ -f "$cpudir/online" ] ; then
-       echo $online | sudo tee $cpudir/online
+       echo $online | sudo tee $cpudir/online >/dev/null
      fi
   done
 fi
@@ -40,26 +64,32 @@ do
      echo "*** Processing $cpudir ..."
 
      echo "    Setting $governer state ..."
-     echo $governer | sudo tee $cpudir/cpufreq/scaling_governor
+     echo $governer | sudo tee $cpudir/cpufreq/scaling_governor >/dev/null
 
-     frequency=$(cat $cpudir/cpufreq/$freqfile)
-     if [ "$1" != "" ]; then
-        frequency=$1
+     # change $freqmin and $freqmax in a subshell
+     (
+
+     if ! [[ $freqmin =~ [0-9]+ ]]; then
+        freqmin=$(cat $cpudir/cpufreq/$freqmin)
      fi
-     if [ "$CK_CPU_FREQ" != "" ]; then
-        frequency=$CK_CPU_FREQ
+
+     if ! [[ $freqmax =~ [0-9]+ ]]; then
+        freqmax=$(cat $cpudir/cpufreq/$freqmax)
      fi
 
-     echo "    Setting min/max frequency=$frequency ..."
-     echo $frequency | sudo tee $cpudir/cpufreq/scaling_max_freq
-     echo $frequency | sudo tee $cpudir/cpufreq/scaling_min_freq
-     echo $frequency | sudo tee $cpudir/cpufreq/scaling_max_freq
+     echo "    Setting min/max frequency=$freqmin/$freqmax ..."
+     echo $freqmin | sudo tee $cpudir/cpufreq/scaling_min_freq >/dev/null
+     echo $freqmax | sudo tee $cpudir/cpufreq/scaling_max_freq >/dev/null
+     echo $freqmin | sudo tee $cpudir/cpufreq/scaling_min_freq >/dev/null
+     echo $freqmax | sudo tee $cpudir/cpufreq/scaling_max_freq >/dev/null
 
-     echo "$(cat $cpudir/cpufreq/scaling_cur_freq)"
+     )
 
-     if [ "$online" == "0" ]; then
+     echo "    Current frequency=$(cat $cpudir/cpufreq/scaling_cur_freq)"
+
+     if [ "$online" == "0" -a "$cpudir" != "/sys/devices/system/cpu/cpu0" ]; then
         echo "    Bringing CPU offline ..."
-        echo $online | sudo tee $cpudir/online
+        echo $online | sudo tee $cpudir/online >/dev/null
      fi
    fi
 done
