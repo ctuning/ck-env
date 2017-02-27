@@ -1,3 +1,5 @@
+* 2017.02.27 - remove equal paths pointed by symbolic links when detecting installed soft
+
 * 2017.02.09 - added "force_cmd_version_detection" and "soft_version_skip_add_target_file"
                to package meta (useful for ARM WA version detection even if taken from GIT)
 

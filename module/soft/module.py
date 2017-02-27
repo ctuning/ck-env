@@ -1619,9 +1619,12 @@ def check(i):
 
        # Sometimes can be the same paths (due to soft links) - remove:
        lst1=[]
-       for q in lst:
-           if q not in lst1:
+       lst2=[]
+       for q in reversed(lst):
+           q2=os.path.realpath(q)
+           if q2 not in lst2:
               lst1.append(q)
+              lst2.append(q2)
        lst=lst1
 
        # Process each path
