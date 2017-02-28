@@ -1,0 +1,18 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_TOOL_CLTUNE", 
+    "limit_recursion_dir_search": {
+      "linux": 2
+    }, 
+    "soft_file": {
+      "linux": "libcltune.so"
+    }
+  }, 
+  "soft_name": "CLTune tool", 
+  "tags": [
+    "tool", 
+    "opencl", 
+    "clblast",
+    "cltune"
+  ]
+}
