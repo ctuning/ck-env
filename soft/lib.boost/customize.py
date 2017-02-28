@@ -147,6 +147,9 @@ def setup(i):
        env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem-mt.lib')
     else:
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
+       env[ep+'_LFLAG_THREAD']='-lboost_thread'
+       env[ep+'_LFLAG_DATE_TIME']='-lboost_date_time'
+       env[ep+'_LFLAG_FILESYSTEM']='-lboost_filesystem'
 
     # Check if host is windows and target is android
     # then copy libboost_thread_pthread.a to libboost_thread.a ,
