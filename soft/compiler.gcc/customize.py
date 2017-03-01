@@ -185,6 +185,8 @@ def setup(i):
       "CK_COMPILER_FLAGS_OBLIGATORY": "", 
       "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
       "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
+      "CK_COMPILER_FLAG_STD90": "-std=c90", 
+      "CK_COMPILER_FLAG_STD99": "-std=c99", 
       "CK_COMPILER_FLAG_GPROF": "-pg", 
       "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
       "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
