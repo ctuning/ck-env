@@ -191,6 +191,9 @@ def setup(i):
           cus['retarget']='no'
 
 
+    env.update({"CK_COMPILER_FLAG_STD90": "-std=c90", 
+                "CK_COMPILER_FLAG_STD99": "-std=c99"})
+
     ############################################################
     if winh=='yes':
 
@@ -204,8 +207,6 @@ def setup(i):
              "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
              "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
              "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
-             "CK_COMPILER_FLAG_STD90": "-std=c90", 
-             "CK_COMPILER_FLAG_STD99": "-std=c99", 
              "CK_CXX": "$#tool_prefix#$clang++", 
              "CK_F90": "", 
              "CK_F95": "", 
