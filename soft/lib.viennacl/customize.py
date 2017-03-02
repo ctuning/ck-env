@@ -111,6 +111,16 @@ def setup(i):
     cus['include_name']='viennacl.h'
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
 
+    # Cache path
+    import tempfile
+    dtmp=tempfile.gettempdir()
+
+    vcp=os.path.join(dtmp,'viennacl_cache')
+    if not os.path.isdir(vcp): os.makedirs(vcp)
+
+    # os.sep is needed at the end otherwise ViennaCL will not use it as a directory name, but as a file name ...
+    env['VIENNACL_CACHE_PATH']=vcp+os.sep
+
     x=os.path.join(plib, pname+sext)
     if os.path.isfile(x):
        cus['static_lib']=pname+sext

@@ -1,3 +1,6 @@
+* 2017.03.02 - added VIENNACL_CACHE_PATH to soft:lib.viennacl 
+               (now can cache kernels - critical to cache Caffe OpenCL init time by 5x)
+
 * 2017.02.27 - remove equal paths pointed by symbolic links when detecting installed soft
 
 * 2017.02.09 - added "force_cmd_version_detection" and "soft_version_skip_add_target_file"
