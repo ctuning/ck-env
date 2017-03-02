@@ -61,17 +61,17 @@ def setup(i):
     tags=i.get('tags',[])
     cus=i.get('customize',{})
 
-    target_d=i.get('target_os_dict',{})
-    win=target_d.get('windows_base','')
-    remote=target_d.get('remote','')
-    mingw=target_d.get('mingw','')
-    tbits=target_d.get('bits','')
+    tosd=i.get('target_os_dict',{})
+    win=tosd.get('windows_base','')
+    remote=tosd.get('remote','')
+    mingw=tosd.get('mingw','')
+    tbits=tosd.get('bits','')
 
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
-    host_d=i.get('host_os_dict',{})
-    sdirs=host_d.get('dir_sep','')
+    hosd=i.get('host_os_dict',{})
+    sdirs=hosd.get('dir_sep','')
 
     fp=cus.get('full_path','')
 
@@ -103,7 +103,7 @@ def setup(i):
        sext='.a'
        dext='.so'
 
-    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': host_d, 
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
       'lib_path': cus.get('path_lib','')})
     if r['return']>0: return r
     s += r['script']
@@ -111,15 +111,29 @@ def setup(i):
     cus['include_name']='viennacl.h'
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
 
-    # Cache path
+    # Prepare cache dir for kernels
     import tempfile
     dtmp=tempfile.gettempdir()
 
-    vcp=os.path.join(dtmp,'viennacl_cache')
+    cache_path='viennacl_cache'
+
+    vcp=os.path.join(dtmp,cache_path)
     if not os.path.isdir(vcp): os.makedirs(vcp)
 
     # os.sep is needed at the end otherwise ViennaCL will not use it as a directory name, but as a file name ...
     env['VIENNACL_CACHE_PATH']=vcp+os.sep
+
+    # If remote, also overwrite this env with remote device path
+    # However do not forget that ViennaCL does not create directory for Cache,
+    # so we need to have an existing dir ...
+    if remote=='yes':
+       dremote=tosd.get('remote_dir','')
+       if dremote!='':
+          tplat2=tosd.get('ck_name2','')
+
+          if 'env_by_os' not in cus: cus['env_by_os']={}
+          if tplat2 not in cus['env_by_os']: cus['env_by_os'][tplat2]={}
+          cus['env_by_os'][tplat2]['VIENNACL_CACHE_PATH']=dremote+tosd.get('dir_sep','')+cache_path+'_'
 
     x=os.path.join(plib, pname+sext)
     if os.path.isfile(x):
