@@ -201,6 +201,18 @@ def setup(i):
 
           env['CK_CMAKE_GENERATOR']=cgen
 
+    if env.get('CK_CMAKE_GENERATOR','')=='':
+       ck.out('**********************************')
+       ck.out('Problem: can\'t detect Visual Studio compiler version from ('+str(sver)+')')
+       ck.out('')
+       ck.out('Please report to the authors at https://github.com/ctuning/ck-env/issues')
+       ck.out('')
+       r=ck.inp({'text':'Would you like to continue installation (Y/n): '})
+       if r['return']>0: return r
+       rx=r['string'].strip().lower()
+       if rx=='n' or rx=='no': 
+          return {'return':1, 'error':'can\'t detect Visual Studio compiler version'}
+
     ############################################################
     s+='\n'
     s+='rem Setting environment\n'
