@@ -52,7 +52,7 @@ Installation
 Usage
 =====
 
-For example, you can now detect and register in the CK all the instances of GCC and LLVM as following:
+You can easily detect and register in the CK all the instances of GCC and LLVM as following:
 ```
  $ ck detect soft:compiler.gcc
  $ ck detect soft:compiler.llvm
@@ -70,7 +70,6 @@ any of the above compiler instances (GCC, LLVM, ICC ...) and their versions simp
  $ ck pull repo:ck-autotuning
  $ ck pull repo:ctuning-programs
 
-```
  $ ck compile program:cbench-automotive-susan --speed
  $ ck run program:cbench-automotive-susan
 ```
