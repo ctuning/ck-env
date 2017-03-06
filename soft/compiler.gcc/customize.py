@@ -13,7 +13,14 @@ import os
 # customize directories to automatically find and register software
 
 def dirs(i):
-    return {'return':0}
+    hosd=i['host_os_dict']
+    phosd=hosd.get('ck_name','')
+    dirs=i.get('dirs', [])
+    if phosd=='win':
+        win_dir = 'C:\\MinGW'
+        if os.path.isdir(win_dir):
+            dirs.append(win_dir)
+    return {'return':0, 'dirs':dirs}
 
 ##############################################################################
 # limit files/directories ...
