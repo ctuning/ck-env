@@ -80,8 +80,22 @@ O: University of Cambridge, UK
 C: reporting a few issues when converting his CGO 2017 artifacts to CK format (https://github.com/SamAinsworth/reproduce-cgo2017-paper)
 W:
 
+N: Nicolay Chunosov
+E:
+H:
+O: Xored
+C: Feedback about issues with Windows installation scripts
+W:
+
 N: C ANIL Reddy
 E:
 O:
 C: reporting problem with textino verison detection (while reproducing MILEPOST project)
+W:
+
+N: Anatoly Belonog
+E:
+H:
+O: Xored
+C: Fixing MingW installation scripts for Windows
 W:
