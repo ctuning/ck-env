@@ -162,8 +162,8 @@ def setup(i):
     cus['path_include']=pi
     cus['include_name']=fi
 
-    cus['static_lib']=lbs
-    cus['dynamic_lib']=lb
+    cus['static_lib']=lb
+    cus['dynamic_lib']=lbs
 
     r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
       'lib_path': cus.get('path_lib','')})
