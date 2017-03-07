@@ -87,6 +87,8 @@ You can find further details about our customizable and cross-platform package/e
 Publications
 ============
 
+The concepts have been described in the following publications:
+
 ```
 @inproceedings{ck-date16,
     title = {{Collective Knowledge}: towards {R\&D} sustainability},
@@ -97,8 +99,6 @@ Publications
     url = {https://www.researchgate.net/publication/304010295_Collective_Knowledge_Towards_RD_Sustainability}
 }
 ```
-
-The concepts have been described in the following publications:
 
 * http://tinyurl.com/zyupd5v (DATE'16)
 * http://arxiv.org/abs/1506.06256 (CPC'15)
