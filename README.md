@@ -1,6 +1,10 @@
 Fighting software and hardware chaos in research
 ================================================
 
+[![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](http://cKnowledge.org)
+[![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
 Researchers nowadays suffer from continuously changing
 software and hardware stack when sharing, customizing
 and reproducing experimental results:
@@ -108,5 +112,3 @@ The concepts have been described in the following publications:
 Feedback
 ========
 * https://groups.google.com/forum/#!forum/collective-knowledge
-
-![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)
