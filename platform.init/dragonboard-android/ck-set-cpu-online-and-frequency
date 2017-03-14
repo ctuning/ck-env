@@ -32,7 +32,7 @@ do
      echo "    Setting $governor state ..."
      echo $governor > $cpudir/cpufreq/scaling_governor
 
-     cat $cpudir/cpufreq/scaling_governor ; echo $governor 
+#     cat $cpudir/cpufreq/scaling_governor ; echo $governor 
      frequency=$(cat $cpudir/cpufreq/$freqfile)
      if [ "$1" == "" ]; then
         frequency=$1
