@@ -15,6 +15,9 @@ cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
 #echo "*** Current frequency from cpuinfo:"
 #cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq
 
+echo "*** Current governor from governor:"
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
 echo "*** Min frequency:"
 cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq
 

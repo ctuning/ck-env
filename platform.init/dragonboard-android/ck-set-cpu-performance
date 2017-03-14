@@ -11,8 +11,11 @@
 
 export PATH=/data/local/tmp/tools:$PATH
 
-export CK_CPU_FREQ_GOVERNER=performance
+export CK_CPU_FREQ_GOVERNOR=performance
+
+cpuinfo_max_freq=`cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq`
+
 export CK_CPU_FREQ_FILE=cpuinfo_max_freq
 export CK_CPU_ONLINE=1
 
-. ck-set-cpu-online-and-frequency
+./ck-set-cpu-online-and-frequency $cpuinfo_max_freq

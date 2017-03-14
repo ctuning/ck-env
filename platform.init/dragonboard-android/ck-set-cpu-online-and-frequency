@@ -1,12 +1,12 @@
 #! /system/bin/sh
 # Part of Collective Knowledge; Developer: Grigori Fursin
 
-governer=ondemand
-if [ "$CK_CPU_FREQ_GOVERNER" != "" ]; then
- governer=$CK_CPU_FREQ_GOVERNER
+governor=ondemand
+if [ "$CK_CPU_FREQ_GOVERNOR" != "" ]; then
+ governor=$CK_CPU_FREQ_GOVERNOR
 fi
 
-freqfile=cpuinfo_max_freq
+freqfile=cpuinfo_min_freq
 if [ "$CK_CPU_FREQ_FILE" != "" ]; then
  freqfile=$CK_CPU_FREQ_FILE
 fi
@@ -29,21 +29,30 @@ do
    if [ -d "$cpudir/cpufreq" ] && [ -f "$cpudir/online" ] && [ -f "$cpudir/cpufreq/scaling_governor" ]; then
      echo "*** Processing $cpudir ..."
 
-     echo "    Setting $governer state ..."
-     echo echo $governer > $cpudir/cpufreq/scaling_governor
+     echo "    Setting $governor state ..."
+     echo $governor > $cpudir/cpufreq/scaling_governor
 
+     cat $cpudir/cpufreq/scaling_governor ; echo $governor 
      frequency=$(cat $cpudir/cpufreq/$freqfile)
-     if [ "$1" != "" ]; then
+     if [ "$1" == "" ]; then
         frequency=$1
+	cpu_min_freq=`cat $cpudir/cpufreq/cpuinfo_min_freq`
+        cpu_max_freq=`cat $cpudir/cpufreq/cpuinfo_max_freq`
+     fi
+     if [ "$1" != "" ]; then
+	cpu_min_freq=$1
+        cpu_max_freq=$1
      fi
      if [ "$CK_CPU_FREQ" != "" ]; then
         frequency=$CK_CPU_FREQ
+        cpu_min_freq=$CK_CPU_FREQ
+   	cpu_max_freq=$CK_CPU_FREQ
      fi
 
      echo "    Setting min/max frequency=$frequency ..."
-     echo $frequency > $cpudir/cpufreq/scaling_max_freq
-     echo $frequency > $cpudir/cpufreq/scaling_min_freq
-     echo $frequency > $cpudir/cpufreq/scaling_max_freq
+
+     echo $cpu_max_freq > $cpudir/cpufreq/scaling_max_freq
+     echo $cpu_min_freq > $cpudir/cpufreq/scaling_min_freq
 
      echo "$(cat $cpudir/cpufreq/scaling_cur_freq)"
 

@@ -16,4 +16,4 @@ export CK_CPU_FREQ_GOVERNOR=ondemand
 export CK_CPU_ONLINE=0
 
 
-. ck-set-cpu-online-and-frequency
+./ck-set-cpu-online-and-frequency

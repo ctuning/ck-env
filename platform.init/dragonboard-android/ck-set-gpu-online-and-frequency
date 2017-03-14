@@ -8,14 +8,13 @@
 #
 # Developer: Grigori Fursin (info provided by Anton Lokhmotov)
 #
-
-governer=powersave
+governor="powersave"
 if [ "$CK_GPU_FREQ_GOVERNER" != "" ]; then
- governer=$CK_GPU_FREQ_GOVERNER
+ governor=$CK_GPU_FREQ_GOVERNER
 fi
 
-stop mpdecision
-
+#stop mpdecision
+echo "    Setting governor=$governor ..."
 echo $governor > /sys/class/kgsl/kgsl-3d0/devfreq/governor
 
 if [ "$1" != "" ]; then
@@ -26,6 +25,7 @@ if [ "$CK_GPU_FREQ" != "" ]; then
 fi
 
 echo "    Setting min/max frequency=$frequency ..."
+echo $frequency > /sys/class/kgsl/kgsl-3d0/gpuclk
 
-#TBD: check which file to record to
-# echo $frequency | sudo tee ????????
+
+
