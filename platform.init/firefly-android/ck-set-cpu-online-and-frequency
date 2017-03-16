@@ -16,13 +16,13 @@ if [ "$CK_CPU_ONLINE" != "" ]; then
  online=$CK_CPU_ONLINE
 fi
 
+echo "    Bringing all CPU online ..."
+for cpudir in /sys/devices/system/cpu/cpu*
+do
 if [ "$online" == "1" ] && [ -f "$cpudir/online" ]; then
-  echo "    Bringing all CPU online ..."
-  for cpudir in /sys/devices/system/cpu/cpu*
-  do
-    echo $online > $cpudir/online
-  done
+echo $online > $cpudir/online
 fi
+done
 
 for cpudir in /sys/devices/system/cpu/cpu*
 do
