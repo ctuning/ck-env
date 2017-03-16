@@ -56,10 +56,10 @@ do
 
      echo "$(cat $cpudir/cpufreq/scaling_cur_freq)"
 
-     if [ "$online" == "0" ] ; then
-        echo "    Bringing CPU offline ..."
-        echo $online > $cpudir/online
-     fi
+     #if [ "$online" == "0" ] ; then
+      #  echo "    Bringing CPU offline ..."
+      #  echo $online > $cpudir/online
+     #fi
 
    fi
 done
