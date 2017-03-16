@@ -15,6 +15,20 @@ rem INSTALL_DIR
 cd /D %INSTALL_DIR%
 
 rem ############################################################
+if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat" (
+  echo.
+  echo Executing pre-download script ...
+
+  call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: Failed executing pre-download script ...
+   goto err
+  )
+)
+
+rem ############################################################
 rem Detect proper names
 if "%PACKAGE_DETECT_VARS%" == "YES" (
   if "%CK_TARGET_OS_ID%" == "android" (
@@ -59,20 +73,6 @@ if "%PACKAGE_DETECT_VARS%" == "YES" (
        set PACKAGE_UNTAR=%PACKAGE_UNTAR_WINDOWS%
     )
 
-  )
-)
-
-rem ############################################################
-if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat" (
-  echo.
-  echo Executing pre-download script ...
-
-  call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat
-
-  if %errorlevel% neq 0 (
-   echo.
-   echo Error: Failed executing pre-download script ...
-   goto err
   )
 )
 
