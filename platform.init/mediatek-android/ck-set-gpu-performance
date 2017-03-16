@@ -10,7 +10,7 @@
 #
 
 export CK_GPU_FREQ_GOVERNOR=performance
-export CK_GPU_DVFS_ENEBLE=0
+export CK_GPU_DVFS_ENABLE=0
 myfreq=(`cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4`)
 gpu_max_freq=${myfreq[0]}
 echo $gpu_max_freq

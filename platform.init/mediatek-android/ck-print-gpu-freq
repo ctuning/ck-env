@@ -24,7 +24,7 @@ cat /proc/mali/dvfs_enable
 
 
 echo "*** Min frequency:"
-cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4
+#cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4
 myfreq=(`cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4`)
 echo ${myfreq[7]}
 

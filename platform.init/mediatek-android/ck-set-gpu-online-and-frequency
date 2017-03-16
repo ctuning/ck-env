@@ -12,14 +12,13 @@
 # DISABLE DVFS
 
 dvfs=1
-if [ "$CK_GPU_DVFS_ENABLE " == "0" ]; then
-   #performance mode
+if [ "$CK_GPU_DVFS_ENABLE" == "0" ]; then
+   echo Fixed freq mode
    dvfs=0   
 fi
 
 echo "    Setting DVFS=$dvfs ..."
 echo $dvfs > /proc/mali/dvfs_enable
-
 if [ "$1" != "" ]; then
    frequency=$1
 fi
@@ -31,5 +30,6 @@ fi
 echo "    Setting min/max frequency=$frequency ..."
 echo $frequency > /proc/gpufreq/gpufreq_opp_freq
 
-
-
+if [ "$CK_GPU_DVFS_ENABLE" == "1" ]; then
+     echo $dvfs > /proc/mali/dvfs_enable
+fi

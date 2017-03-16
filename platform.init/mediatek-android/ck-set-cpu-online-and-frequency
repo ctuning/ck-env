@@ -16,13 +16,15 @@ if [ "$CK_CPU_ONLINE" != "" ]; then
  online=$CK_CPU_ONLINE
 fi
 
-if [ "$online" == "1" ] && [ -f "$cpudir/online" ]; then
-  echo "    Bringing all CPU online ..."
-  for cpudir in /sys/devices/system/cpu/cpu*
-  do
-    echo $online > $cpudir/online
-  done
-fi
+
+echo "    Bringing all CPU online ..."
+for cpudir in /sys/devices/system/cpu/cpu*
+do
+    if [ "$online" == "1" ] && [ -f "$cpudir/online" ]; then
+        echo $online > $cpudir/online
+    fi
+done
+
 
 for cpudir in /sys/devices/system/cpu/cpu*
 do
@@ -30,6 +32,7 @@ do
      echo "*** Processing $cpudir ..."
 
      echo "    Setting $governor state ..."
+     
      echo $governor > $cpudir/cpufreq/scaling_governor
 
      if [ "$1" == "" ]; then
@@ -49,13 +52,12 @@ do
 
      echo $cpu_max_freq > $cpudir/cpufreq/scaling_max_freq
      echo $cpu_min_freq > $cpudir/cpufreq/scaling_min_freq
-     echo $cpu_max_freq > $cpudir/cpufreq/
      echo "$(cat $cpudir/cpufreq/scaling_cur_freq)"
 
-     if [ "$online" == "0" ] ; then
-        echo "    Bringing CPU offline ..."
-        echo $online > $cpudir/online
-     fi
+#     if [ "$online" == "0" ] ; then
+#        echo "    Bringing CPU offline ..."
+#        echo $online > $cpudir/online
+#     fi
 
    fi
 done
