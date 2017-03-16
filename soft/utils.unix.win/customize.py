@@ -18,8 +18,22 @@ def dirs(i):
 ##############################################################################
 # parse software version
 
+##############################################################################
+# parse software version
+
 def parse_version(i):
+
+    lst=i['output']
+
     ver=''
+
+    for q in lst:
+        q=q.strip()
+        if q.startswith('expr '):
+           j=q.rfind(' ')
+           if j>0:
+              ver=q[j+1:]
+
     return {'return':0, 'version':ver}
 
 ##############################################################################
