@@ -272,10 +272,11 @@ def setup(i):
              "CK_FLAGS_DLL": "", 
              "CK_FLAGS_DLL_EXTRA": "-Xlinker /dll", 
              "CK_FLAGS_STATIC_BIN": "-static -Wl,/LARGEADDRESSAWARE:NO", 
-             "CK_FLAGS_STATIC_LIB": "-fPIC", 
+             "CK_FLAGS_STATIC_LIB": " ",  #-fPIC ???
              "CK_LB": "lib", 
              "CK_LB_OUTPUT": "/OUT:", 
              "CK_LD_DYNAMIC_FLAGS": "", 
+             "CK_LD_FLAGS_MISC": "-fuse-ld=link.exe", 
              "CK_LD_FLAGS_EXTRA": "", 
              "CK_LIB_EXT": ".lib", 
              "CK_OBJDUMP": "llvm-objdump -d"})
