@@ -13,7 +13,7 @@
 
 export PATH=/data/local/tmp/tools:$PATH
 export CK_CPU_FREQ_GOVERNOR=ondemand
-export CK_CPU_ONLINE=0
+export CK_CPU_ONLINE=1
 
 
 ./ck-set-cpu-online-and-frequency

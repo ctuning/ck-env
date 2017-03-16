@@ -9,8 +9,8 @@
 # Developer: Grigori Fursin (info provided by Anton Lokhmotov)
 #
 governor="powersave"
-if [ "$CK_GPU_FREQ_GOVERNER" != "" ]; then
- governor=$CK_GPU_FREQ_GOVERNER
+if [ "$CK_GPU_FREQ_GOVERNOR" != "" ]; then
+ governor=$CK_GPU_FREQ_GOVERNOR
 fi
 
 #stop mpdecision
