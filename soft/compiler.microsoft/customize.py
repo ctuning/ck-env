@@ -181,7 +181,7 @@ def setup(i):
     # Prepare cmake generator
     cgen=''
     if len(sver)>0:
-       if sver[0]==20:
+       if sver[0]==19 and len(sver)>0 and sver[1]>0:
           cgen='Visual Studio 15 2017'
        elif sver[0]==19:
           cgen='Visual Studio 14 2015'
