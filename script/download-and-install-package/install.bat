@@ -15,6 +15,68 @@ rem INSTALL_DIR
 cd /D %INSTALL_DIR%
 
 rem ############################################################
+rem Detect proper names
+if "%PACKAGE_DETECT_VARS%" == "YES" (
+  if "%CK_TARGET_OS_ID%" == "android" (
+
+    if not "%PACKAGE_URL_WINDOWS_ANDROID%" == "" (
+       set PACKAGE_URL=%PACKAGE_URL_WINDOWS_ANDROID%
+    )
+    if not "%PACKAGE_NAME_WINDOWS_ANDROID%" == "" (
+       set PACKAGE_NAME=%PACKAGE_NAME_WINDOWS_ANDROID%
+    )
+    if not "%PACKAGE_UNGZIP_WINDOWS_ANDROID%" == "" (
+       set PACKAGE_UNGZIP=%PACKAGE_UNGZIP_WINDOWS_ANDROID%
+    )
+    if not "%PACKAGE_UNZIP_WINDOWS_ANDROID%" == "" (
+       set PACKAGE_UNZIP=%PACKAGE_UNZIP_WINDOWS_ANDROID%
+    )
+    if not "%PACKAGE_UNBZIP_WINDOWS_ANDROID%" == "" (
+       set PACKAGE_UNBZIP=%PACKAGE_UNBZIP_WINDOWS_ANDROID%
+    )
+    if not "%PACKAGE_UNTAR_WINDOWS_ANDROID%" == "" (
+       set PACKAGE_UNTAR=%PACKAGE_UNTAR_WINDOWS_ANDROID%
+    )
+
+  ) else (
+
+    if not "%PACKAGE_URL_WINDOWS%" == "" (
+       set PACKAGE_URL=%PACKAGE_URL_WINDOWS%
+    )
+    if not "%PACKAGE_NAME_WINDOWS%" == "" (
+       set PACKAGE_NAME=%PACKAGE_NAME_WINDOWS%
+    )
+    if not "%PACKAGE_UNGZIP_WINDOWS%" == "" (
+       set PACKAGE_UNGZIP=%PACKAGE_UNGZIP_WINDOWS%
+    )
+    if not "%PACKAGE_UNZIP_WINDOWS%" == "" (
+       set PACKAGE_UNZIP=%PACKAGE_UNZIP_WINDOWS%
+    )
+    if not "%PACKAGE_UNBZIP_WINDOWS%" == "" (
+       set PACKAGE_UNBZIP=%PACKAGE_UNBZIP_WINDOWS%
+    )
+    if not "%PACKAGE_UNTAR_WINDOWS%" == "" (
+       set PACKAGE_UNTAR=%PACKAGE_UNTAR_WINDOWS%
+    )
+
+  )
+)
+
+rem ############################################################
+if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat" (
+  echo.
+  echo Executing pre-download script ...
+
+  call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: Failed executing pre-download script ...
+   goto err
+  )
+)
+
+rem ############################################################
 set PF=%PACKAGE_URL%/%PACKAGE_NAME%
 
 if "%PACKAGE_WGET%" == "YES" (
@@ -100,7 +162,7 @@ if "%PACKAGE_UNZIP%" == "YES" (
   echo.
   echo Unzipping archive ...
 
-  unzip -d %PACKAGE_NAME%
+  unzip %PACKAGE_NAME%
 
   if %errorlevel% neq 0 (
    echo.

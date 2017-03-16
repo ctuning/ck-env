@@ -1,4 +1,6 @@
 * 2017.03.16 - added support for VS2017 Community eddition (cl + clang)
+             - added support for PACKAGE_URL_MACOS and PACKAGE_GIT_CHECKOUT_MACOS in universal packages
+             - improving universal scripts
 
 * 2017.03.02 - added VIENNACL_CACHE_PATH to soft:lib.viennacl 
                (now can cache kernels - critical to cache Caffe OpenCL init time by 5x)

@@ -17,6 +17,19 @@
 cd ${INSTALL_DIR}
 
 ############################################################
+if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/pre-download.sh" ] ; then
+  echo ""
+  echo "Executing pre-download script ..."
+
+  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/pre-download.sh
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: Failed executing pre-download script ..."
+    exit 1
+  fi
+fi
+
+############################################################
 PF=${PACKAGE_URL}/${PACKAGE_NAME}
 
 if [ "${PACKAGE_WGET}" == "YES" ] ; then
@@ -277,12 +290,12 @@ fi
 ############################################################
 if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install.sh" ] ; then
   echo ""
-  echo "Executing extra script ..."
+  echo "Executing post-install script ..."
 
   . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install.sh
 
   if [ "${?}" != "0" ] ; then
-    echo "Error: Failed executing extra script ..."
+    echo "Error: Failed executing post-install script ..."
     exit 1
   fi
 fi
@@ -315,12 +328,12 @@ fi
 ############################################################
 if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install2.sh" ] ; then
   echo ""
-  echo "Executing extra script (2) ..."
+  echo "Executing post-install2 script ..."
 
   . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install2.sh
 
   if [ "${?}" != "0" ] ; then
-    echo "Error: Failed executing extra script ..."
+    echo "Error: Failed executing post-install2 script ..."
     exit 1
   fi
 fi
