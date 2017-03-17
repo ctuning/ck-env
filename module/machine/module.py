@@ -293,6 +293,13 @@ def add(i):
             if username=='': username='root'
             dx['username']=username
 
+            #####################
+            ck.out('')
+            r=ck.inp({'text':'Enter full path to public keyfile:             '})
+
+            keyfile=r['string'].strip()
+            dx['keyfile']=keyfile
+
         else:
             #####################
             ck.out('')
@@ -311,12 +318,12 @@ def add(i):
             if port=='': port='3333'
             dx['port']=port
 
-        #####################
-        ck.out('')
-        r=ck.inp({'text':'Enter full path to public keyfile:             '})
+            #####################
+            ck.out('')
+            r=ck.inp({'text':'Enter full local path to file with secret key: '})
 
-        keyfile=r['string'].strip()
-        dx['keyfile']=keyfile
+            keyfile=r['string'].strip()
+            dx['keyfile']=keyfile
 
         #####################
         path_to_files="tmp-ck"
