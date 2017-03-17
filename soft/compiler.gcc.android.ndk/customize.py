@@ -316,6 +316,7 @@ def setup(i):
 
     env.update({
       "CK_AR": "$#tool_prefix#$ar", 
+      "CK_RANLIB": "$#tool_prefix#$ranlib", 
       "CK_ASM_EXT": ".s", 
       "CK_CC": "$#tool_prefix#$gcc", 
       "CK_COMPILER_FLAGS_OBLIGATORY": "", 
