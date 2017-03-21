@@ -1,0 +1,40 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin
+#
+
+echo "*** Current frequency:"
+myidx=`cat /proc/mali/frequency | cut -d " " -f4`
+#echo $myidx
+myfreq=(`cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4`)
+#echo ${myfreq[*]}
+echo ${myfreq[$myidx]}
+
+#echo "*** Current frequency from gpuinfo:"
+#cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq
+
+echo "*** Current DVFS:"
+cat /proc/mali/dvfs_enable
+
+
+echo "*** Min frequency:"
+#cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4
+myfreq=(`cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4`)
+echo ${myfreq[7]}
+
+echo "*** Max frequency:"
+myfreq=(`cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4`)
+echo ${myfreq[0]}
+
+#echo "*** Available governors:"
+#cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_governors
+
+echo "*** Available frequencies:"
+#cat /proc/gpufreq/gpufreq_opp_dump
+cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4

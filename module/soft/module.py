@@ -1691,7 +1691,7 @@ def check(i):
              ck.out('')
 
           if iv=='yes':
-             ck.out('  Registering software installation in the CK:')
+             ck.out('  Registering software installations found on your machine in the CK:')
              ck.out('')
              ck.out('    (HINT: enter -1 to force CK package installation)')
              ck.out('')

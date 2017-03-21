@@ -1,0 +1,20 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+
+export CK_GPU_FREQ_GOVERNOR=ondemand
+export CK_GPU_DVFS_ENABLE=1
+totfreq=`tail -n 1 /proc/gpufreq/gpufreq_opp_dump | cut -d " " -f10`
+myfreq=(`cat /proc/gpufreq/gpufreq_opp_dump | cut -d "," -f1 |  cut -d " " -f4`)
+gpu_min_freq=${myfreq[$totfreq]}
+echo $gpu_min_freq
+echo " warning[DEV SCRIPT]"
+./ck-set-gpu-online-and-frequency

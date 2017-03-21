@@ -65,6 +65,7 @@ def setup(i):
 
     hosn=hosd.get('ck_name2','')
     osn=tosd.get('ck_name2','')
+    osn_mac=tosd.get('macos','')
 
     # Env vars on host
     svb=hosd.get('env_var_start','')+hosd.get('env_var_extra1','')
@@ -393,10 +394,15 @@ def setup(i):
     elif osn=='linux':
        x1='PACKAGE_URL_LINUX'
        x2='PACKAGE_GIT_CHECKOUT_LINUX'
+       if osn_mac=='yes':
+          if ienv.get('PACKAGE_URL_MACOS','')!='':
+             x1='PACKAGE_URL_MACOS'
+          if ienv.get('PACKAGE_GIT_CHECKOUT_MACOS','')!='':
+             x2='PACKAGE_GIT_CHECKOUT_MACOS'
 
-    if ienv.get(x1,'')!='':
+    if x1!='' and ienv.get(x1,'')!='':
        ie['PACKAGE_URL']=ienv[x1]
-    if ienv.get(x2,'')!='':
+    if x2!='' and ienv.get(x2,'')!='':
        ie['PACKAGE_GIT_CHECKOUT']=ienv[x2]
 
     return {'return':0, 'install_env':ie}

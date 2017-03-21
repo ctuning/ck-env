@@ -7,6 +7,11 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+extra_dirs=['C:\\Program Files (x86)\\Microsoft Visual Studio\\2017',
+            'D:\\Program Files (x86)\\Microsoft Visual Studio\\2017']
+
+import os
+
 ##############################################################################
 # internal: select extension
 def get_ext(i):
@@ -29,7 +34,11 @@ def get_ext(i):
 # customize directories to automatically find and register software
 
 def dirs(i):
-    return {'return':0}
+    dirs=i.get('dirs', [])
+    for d in extra_dirs:
+        if os.path.isdir(d):
+            dirs.append(d)
+    return {'return':0, 'dirs':dirs}
 
 ##############################################################################
 # prepare env
@@ -129,8 +138,6 @@ def setup(i):
 
     """
 
-    import os
-
     # Get variables
     ck=i['ck_kernel']
     s=''
@@ -174,7 +181,7 @@ def setup(i):
     # Prepare cmake generator
     cgen=''
     if len(sver)>0:
-       if sver[0]==20:
+       if sver[0]==19 and len(sver)>0 and sver[1]>0:
           cgen='Visual Studio 15 2017'
        elif sver[0]==19:
           cgen='Visual Studio 14 2015'

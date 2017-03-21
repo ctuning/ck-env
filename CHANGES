@@ -1,3 +1,9 @@
+* 2017.03.16 - added support for VS2017 Community eddition (cl + clang)
+             - added support for PACKAGE_URL_MACOS and PACKAGE_GIT_CHECKOUT_MACOS in universal packages
+             - improved universal scripts
+             - added soft:compiler.perl (to compile OpenBLAS on Windows)
+             - added soft:utils.unix.win (set of Unix Utils on Windows useful to compile OpenBLAS on Windows)
+
 * 2017.03.02 - added VIENNACL_CACHE_PATH to soft:lib.viennacl 
                (now can cache kernels - critical to cache Caffe OpenCL init time by 5x)
 

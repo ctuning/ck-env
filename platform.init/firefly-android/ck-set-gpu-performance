@@ -1,0 +1,20 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+export CK_GPU_FREQ_GOVERNOR=performance
+
+#stop mpdecision
+
+all_freq=(`cat /sys/devices/ffa30000.gpu/misc/mali0/device/clock | grep possible |  busybox cut -d ":" -f2 | busybox cut -d "(" -f1`) 
+
+gpu_max_freq=`echo ${all_freq[*]} | busybox tr ',' '\n' | busybox tail -n 1 | busybox cut -d " " -f2
+`
+./ck-set-gpu-online-and-frequency $gpu_max_freq

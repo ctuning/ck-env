@@ -1,0 +1,19 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin
+#
+
+
+
+export PATH=/data/local/tmp/tools:$PATH
+export CK_CPU_FREQ_GOVERNOR=ondemand
+export CK_CPU_ONLINE=1
+
+
+./ck-set-cpu-online-and-frequency

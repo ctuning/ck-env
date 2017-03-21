@@ -1,0 +1,28 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+echo "*** Current GPU frequency:"
+cur_freq=`cat /sys/devices/ffa30000.gpu/misc/mali0/device/clock | grep "current"* | busybox cut -d " " -f3`
+echo $cur_freq
+
+echo "*** Min frequency:"
+all_freq=(`cat /sys/devices/ffa30000.gpu/misc/mali0/device/clock | grep possible |  busybox cut -d ":" -f2 | busybox cut -d "(" -f1`)
+echo ${all_freq[0]} | busybox cut -d "," -f1
+
+echo "*** Max frequency:"
+echo ${all_freq[*]} | busybox tr ',' '\n' | busybox tail -n 1 | busybox cut -d " " -f2
+
+
+echo "*** Available GPU frequencies:"
+list=`echo ${all_freq[*]} | busybox tr ',' ' ' `
+echo $list
+
+

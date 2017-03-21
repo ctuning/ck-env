@@ -16,6 +16,121 @@
 
 cd ${INSTALL_DIR}
 
+
+############################################################
+if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/pre-download.sh" ] ; then
+  echo ""
+  echo "Executing pre-download script ..."
+
+  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/pre-download.sh
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: Failed executing pre-download script ..."
+    exit 1
+  fi
+fi
+
+############################################################
+# Detect proper names
+if [ "$PACKAGE_DETECT_VARS" == "YES" ] ; then
+  if [ "$CK_TARGET_OS_ID" == "android" ] ; then
+     if [[ "$OSTYPE" == "darwin"* ]]; then
+        if [ "$PACKAGE_URL_MACOS_ANDROID" != "" ] ; then
+           PACKAGE_URL=$PACKAGE_URL_MACOS_ANDROID
+        fi
+        if [ "$PACKAGE_NAME_MACOS_ANDROID" != "" ] ; then
+           PACKAGE_NAME=$PACKAGE_NAME_MACOS_ANDROID
+        fi
+        if [ "$PACKAGE_NAME1_MACOS_ANDROID" != "" ] ; then
+           PACKAGE_NAME1=$PACKAGE_NAME1_MACOS_ANDROID
+        fi
+        if [ "$PACKAGE_UNGZIP_MACOS_ANDROID" != "" ] ; then
+           PACKAGE_UNGZIP=$PACKAGE_UNGZIP_MACOS_ANDROID
+        fi
+        if [ "$PACKAGE_UNZIP_MACOS_ANDROID" != "" ] ; then
+           PACKAGE_UNZIP=$PACKAGE_UNZIP_MACOS_ANDROID
+        fi
+        if [ "$PACKAGE_UNBZIP_MACOS_ANDROID" != "" ] ; then
+           PACKAGE_UNBZIP=$PACKAGE_UNBZIP_MACOS_ANDROID
+        fi
+        if [ "$PACKAGE_UNTAR_MACOS_ANDROID" != "" ] ; then
+           PACKAGE_UNTAR=$PACKAGE_UNTAR_MACOS_ANDROID
+        fi
+     else
+        if [ "$PACKAGE_URL_LINUX_ANDROID" != "" ] ; then
+           PACKAGE_URL=$PACKAGE_URL_LINUX_ANDROID
+        fi
+        if [ "$PACKAGE_NAME_LINUX_ANDROID" != "" ] ; then
+           PACKAGE_NAME=$PACKAGE_NAME_LINUX_ANDROID
+        fi
+        if [ "$PACKAGE_NAME1_LINUX_ANDROID" != "" ] ; then
+           PACKAGE_NAME1=$PACKAGE_NAME1_LINUX_ANDROID
+        fi
+        if [ "$PACKAGE_UNGZIP_LINUX_ANDROID" != "" ] ; then
+           PACKAGE_UNGZIP=$PACKAGE_UNGZIP_LINUX_ANDROID
+        fi
+        if [ "$PACKAGE_UNZIP_LINUX_ANDROID" != "" ] ; then
+           PACKAGE_UNZIP=$PACKAGE_UNZIP_LINUX_ANDROID
+        fi
+        if [ "$PACKAGE_UNBZIP_LINUX_ANDROID" != "" ] ; then
+           PACKAGE_UNBZIP=$PACKAGE_UNBZIP_LINUX_ANDROID
+        fi
+        if [ "$PACKAGE_UNTAR_LINUX_ANDROID" != "" ] ; then
+           PACKAGE_UNTAR=$PACKAGE_UNTAR_LINUX_ANDROID
+        fi
+     fi
+
+  else
+
+     if [[ "$OSTYPE" == "darwin"* ]]; then
+        if [ "$PACKAGE_URL_MACOS" != "" ] ; then
+           PACKAGE_URL=$PACKAGE_URL_MACOS
+        fi
+        if [ "$PACKAGE_NAME_MACOS" != "" ] ; then
+           PACKAGE_NAME=$PACKAGE_NAME_MACOS
+        fi
+        if [ "$PACKAGE_NAME1_MACOS" != "" ] ; then
+           PACKAGE_NAME1=$PACKAGE_NAME1_MACOS
+        fi
+        if [ "$PACKAGE_UNGZIP_MACOS" != "" ] ; then
+           PACKAGE_UNGZIP=$PACKAGE_UNGZIP_MACOS
+        fi
+        if [ "$PACKAGE_UNZIP_MACOS" != "" ] ; then
+           PACKAGE_UNZIP=$PACKAGE_UNZIP_MACOS
+        fi
+        if [ "$PACKAGE_UNBZIP_MACOS" != "" ] ; then
+           PACKAGE_UNBZIP=$PACKAGE_UNBZIP_MACOS
+        fi
+        if [ "$PACKAGE_UNTAR_MACOS" != "" ] ; then
+           PACKAGE_UNTAR=$PACKAGE_UNTAR_MACOS
+        fi
+     else
+        if [ "$PACKAGE_URL_LINUX" != "" ] ; then
+           PACKAGE_URL=$PACKAGE_URL_LINUX
+        fi
+        if [ "$PACKAGE_NAME_LINUX" != "" ] ; then
+           PACKAGE_NAME=$PACKAGE_NAME_LINUX
+        fi
+        if [ "$PACKAGE_NAME1_LINUX" != "" ] ; then
+           PACKAGE_NAME1=$PACKAGE_NAME1_LINUX
+        fi
+        if [ "$PACKAGE_UNGZIP_LINUX" != "" ] ; then
+           PACKAGE_UNGZIP=$PACKAGE_UNGZIP_LINUX
+        fi
+        if [ "$PACKAGE_UNZIP_LINUX" != "" ] ; then
+           PACKAGE_UNZIP=$PACKAGE_UNZIP_LINUX
+        fi
+        if [ "$PACKAGE_UNBZIP_LINUX" != "" ] ; then
+           PACKAGE_UNBZIP=$PACKAGE_UNBZIP_LINUX
+        fi
+        if [ "$PACKAGE_UNTAR_LINUX" != "" ] ; then
+           PACKAGE_UNTAR=$PACKAGE_UNTAR_LINUX
+        fi
+     fi
+
+  fi
+fi
+
 ############################################################
 PF=${PACKAGE_URL}/${PACKAGE_NAME}
 
@@ -277,12 +392,12 @@ fi
 ############################################################
 if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install.sh" ] ; then
   echo ""
-  echo "Executing extra script ..."
+  echo "Executing post-install script ..."
 
   . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install.sh
 
   if [ "${?}" != "0" ] ; then
-    echo "Error: Failed executing extra script ..."
+    echo "Error: Failed executing post-install script ..."
     exit 1
   fi
 fi
@@ -315,12 +430,12 @@ fi
 ############################################################
 if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install2.sh" ] ; then
   echo ""
-  echo "Executing extra script (2) ..."
+  echo "Executing post-install2 script ..."
 
   . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install2.sh
 
   if [ "${?}" != "0" ] ; then
-    echo "Error: Failed executing extra script ..."
+    echo "Error: Failed executing post-install2 script ..."
     exit 1
   fi
 fi

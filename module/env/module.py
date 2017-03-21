@@ -1117,12 +1117,6 @@ def resolve(i):
         ytosx=tosx
         ytosd=tosd
 
-        if q.get('force_target_as_host','')=='yes':
-            ytos=hos
-            ytdid=''
-            ytosx=hosx
-            ytosd=hosd
-
         tags=q.get('tags','')
         no_tags=q.get('no_tags','')
         name=q.get('name','')
@@ -1144,6 +1138,12 @@ def resolve(i):
                       'target_os_dict':ytosd})
         if rx['return']>0:
            continue
+
+        if q.get('force_target_as_host','')=='yes':
+            ytos=hos
+            ytdid=''
+            ytosx=hosx
+            ytosd=hosd
 
         # Try to set environment
         iv+=1
