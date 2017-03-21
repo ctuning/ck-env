@@ -5,16 +5,20 @@
     "ck_version": 10,
     "env_prefix": "CK_ENV_LIB_QT",
     "limit_recursion_dir_search": {
-      "linux": 4,
-      "win":4
+      "linux": 5,
+      "win": 5
     },
     "soft_file": {
-      "linux": "libqtcore.so",
-      "win": "Qt*Core.lib"
+      "linux": "qmake",
+      "win": "qmake.exe"
     },
     "soft_path_example": {
-      "linux": "/usr/lib/x86_64-linux-gnu/Qt/.so",
-      "linux": "C:\\Qt\\5.8\\msvc2015_64\\lib\\Qt5Core.lib"
+      "linux": "/usr/lib/x86_64-linux-gnu/qt5/bin/qmake",
+      "win": "C:\\Qt\\5.8\\msvc2015_64\\bin\\qmake.exe"
+    },
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1",
+      "win": " --version > $#filename#$ 2>&1"
     }
   },
   "soft_name": "Qt library",

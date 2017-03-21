@@ -42,31 +42,27 @@ def limit(i):
     return {'return':0, 'list':drx}
 
 ##############################################################################
-# get version from path
+# parse software version
 
-def version_cmd(i):
+def parse_version(i):
 
-    ck=i['ck_kernel']
-
-    fp=i['full_path']
+    lst=i['output']
 
     ver=''
-    if len(fp)>0:
-       j=fp.rfind('.')
-       if j>0:
-          fps=fp[:j]+'.settings'
-          if os.path.isfile(fps):
-             # Load file and find setting
-             r=ck.load_text_file({'text_file':fps, 'split_to_list':'yes'})
-             if r['return']>0: return r
 
-             for l in r['lst']:
-                 l=l.strip()
-                 if l.startswith('HDF5 Version:'):
-                    ver=l[14:].strip()
-                    break
+    import re
 
-    return {'return':0, 'cmd':'', 'version':ver}
+    version_rgx = re.compile('Using Qt version ([\\d.]+) in');
+
+    for q in lst:
+        q = q.strip()
+        match = version_rgx.search(q)
+        if match:
+          ver = match.group(1)
+          break
+
+    return {'return':0, 'version':ver}
+
 
 ##############################################################################
 # setup environment setup
@@ -193,9 +189,6 @@ def setup(i):
        cus['path_bin']=pb
        if tplat=='win':
           s+='\nset PATH='+pb+';%PATH%\n\n'
-
-#          env[ep+'_LFLAG']=os.path.join(pl,'hdf5.lib')
-#          env[ep+'_LFLAG_HL']=os.path.join(pl,'hdf5_hl.lib')
 
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')
     env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
