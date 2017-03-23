@@ -1,3 +1,6 @@
 You can download and install Qt from this website:
 
 * https://www.qt.io/download-open-source
+
+On Ubuntu or other Debian-like system (e.g. Raspbian), you can install it as following:
+$ sudo apt-get install qtdeclarative5-dev
