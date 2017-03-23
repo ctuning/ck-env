@@ -60,7 +60,7 @@ def setup(i):
     deps=i.get('deps',{})
     tags=i.get('tags',[])
     cus=i.get('customize',{})
-
+    hosd=i['host_os_dict']
     target_d=i.get('target_os_dict',{})
     win=target_d.get('windows_base','')
     remote=target_d.get('remote','')
@@ -68,19 +68,25 @@ def setup(i):
     tbits=target_d.get('bits','')
 
     envp=cus.get('env_prefix','')
-
     fp=cus.get('full_path','')
 
     fn=os.path.basename(fp)
-
+    
     pl=os.path.dirname(fp)
     pi=os.path.dirname(pl)
 
     ################################################################
+
     cus['dynamic_plugin']=fn
     env[envp+'_DYNAMIC_NAME']=cus['dynamic_plugin']
     env[envp]=pi
     env[envp+'_LIB']=pl
     env[envp+'_DYNAMIC_NAME_FULL']=fp
+    cus['path_lib']=pl
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
+      'lib_path': cus.get('path_lib','')})
+    if r['return']>0: return r
+    s += r['script']
 
+  
     return {'return':0, 'bat':s}
