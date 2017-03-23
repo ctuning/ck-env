@@ -11,6 +11,8 @@ import os
 
 extra_dirs=['C:\\Qt', 'D:\\Qt']
 
+qt_lib_path='' # will be filled as a side-effect of 'parse_version'. There should be a better way to do it...
+
 ##############################################################################
 # customize directories to automatically find and register software
 
@@ -48,17 +50,19 @@ def parse_version(i):
 
     lst=i['output']
 
-    ver=''
+    ver = ''
+    global qt_lib_path
 
     import re
 
-    version_rgx = re.compile('Using Qt version ([\\d.]+) in');
+    version_rgx = re.compile('Using Qt version ([\\d.]+) in (.+)');
 
     for q in lst:
         q = q.strip()
         match = version_rgx.search(q)
         if match:
           ver = match.group(1)
+          qt_lib_path = match.group(2)
           break
 
     return {'return':0, 'version':ver}
@@ -110,6 +114,8 @@ def setup(i):
     ck=i['ck_kernel']
     s=''
 
+    print(i.keys())
+
     iv=i.get('interactive','')
 
     cus=i.get('customize',{})
@@ -134,63 +140,17 @@ def setup(i):
     env=i['env']
     ep=cus['env_prefix']
 
-    pinc=fp
-    fpinc=''
-    found=False
-    while True:
-       fpinc=os.path.join(pinc,'include')
-       if os.path.isdir(fpinc):
-          found=True
-          break
+    env[ep + '_QMAKE_EXE'] = fp
 
-       pincx=os.path.dirname(pinc)
-       if pincx==pinc:
-          break
+    global qt_lib_path
+    env[ep + '_LIB'] = qt_lib_path
 
-       pinc=pincx
-
-    if not found:
-       return {'return':1, 'error':'can\'t find include directory for Qt'}
-
-    pi=os.path.realpath(os.path.dirname(fpinc))
-
-    pii=os.path.dirname(pi)
-
-    lb=os.path.basename(fp)
-    lbs=lb
-    if lbs.endswith('.so'):
-       lbs=lbs[:-3]+'.a'
-    elif lbs.endswith('.lib'):
-       lbs=lbs[:-4]+'.dll'
-
-    pl=os.path.realpath(os.path.dirname(fp))
-    cus['path_lib']=pl
-
-    pl1=os.path.dirname(pl)
-    pl2=os.path.dirname(pl1)
-
-    cus['path_include']=pi
-
-    cus['static_lib']=lb
-    cus['dynamic_lib']=lbs
-
-    r = ck.access({'action': 'lib_path_export_script', 
-                   'module_uoa': 'os', 
-                   'host_os_dict': hosd, 
-                   'lib_path': cus.get('path_lib','')})
+    bat = ''
+    r = ck.access({'action': 'lib_path_export_script',
+                   'module_uoa': 'os',
+                   'host_os_dict': hosd,
+                   'lib_path': qt_lib_path})
     if r['return']>0: return r
-    s += r['script']
+    bat += r['script']
 
-    env[ep]=pii
-
-    pb=os.path.join(pii,'bin')
-    if os.path.isdir(pb):
-       env[ep+'_BIN']=pb
-       cus['path_bin']=pb
-       if tplat=='win':
-          s+='\nset PATH='+pb+';%PATH%\n\n'
-
-    env[ep+'_STATIC_NAME']=cus.get('static_lib','')
-    env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
-
-    return {'return':0, 'bat':s}
+    return {'return':0, 'bat': bat, 'env': env}
