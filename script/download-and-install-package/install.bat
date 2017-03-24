@@ -87,7 +87,7 @@ if "%PACKAGE_WGET%" == "YES" (
     del /Q /S %PACKAGE_NAME%
   )
 
-  wget --no-check-certificate "%PF%"
+  wget --no-check-certificate %PACKAGE_WGET_EXTRA% "%PF%"
 
   if %errorlevel% neq 0 (
    echo.

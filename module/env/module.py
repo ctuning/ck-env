@@ -1075,6 +1075,9 @@ def resolve(i):
     tosx=r['os_uoa']
     tosd=r['os_dict']
 
+    hplat=hosd.get('ck_name','')
+    hplat2=hosd.get('ck_name2','')
+    tplat=tosd.get('ck_name','')
     tplat2=tosd.get('ck_name2','')
 
     # Check if base is different
@@ -1144,6 +1147,21 @@ def resolve(i):
             ytdid=''
             ytosx=hosx
             ytosd=hosd
+
+        # Updating tags if needed based on host/target
+        xtags=[]
+        tx=q.get('update_tags_by_host_platform',{}).get(hplat,'')
+        if tx!='': xtags.append(tx)
+        tx=q.get('update_tags_by_host_platform2',{}).get(hplat2,'')
+        if tx!='': xtags.append(tx)
+        tx=q.get('update_tags_by_target_platform',{}).get(tplat,'')
+        if tx!='': xtags.append(tx)
+        tx=q.get('update_tags_by_target_platform2',{}).get(tplat2,'')
+        if tx!='': xtags.append(tx)
+
+        for tx in xtags:
+            if tags!='': tags+=','
+            tags+=tx.strip()
 
         # Try to set environment
         iv+=1

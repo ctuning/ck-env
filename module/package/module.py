@@ -98,7 +98,6 @@ def install(i):
     import os
     import time
 
-
     o=i.get('out','')
 
     oo=''
@@ -420,8 +419,18 @@ def install(i):
            pr_env[kpe]=pr_env[kpe].replace('$#sep#$',sdirs) 
 
     # Check if has customized script
-    ppp=p
+    cs=None
+    cso=None # original - always in the current directory of a package!
+
+    csn=cfg.get('custom_script_name','custom')
+
+    ppp=p    # Main scripts
     ppp1=ppp # Preprocess scripts
+
+    # Check if has original custom script
+    rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
+    if rx['return']==0: 
+       cso=rx['code']
 
     x=d.get('use_scripts_from_another_entry',{})
     if len(x)>0:
@@ -447,11 +456,13 @@ def install(i):
        ppp1=r['path']
 
     # Check if has custom script
-    cs=None
-    csn=cfg.get('custom_script_name','custom')
-    rx=ck.load_module_from_path({'path':ppp1, 'module_code_name':csn, 'skip_init':'yes'})
-    if rx['return']==0: 
-       cs=rx['code']
+    if ppp1==ppp:
+       cs=cso
+       cso=None
+    else:
+       rx=ck.load_module_from_path({'path':ppp1, 'module_code_name':csn, 'skip_init':'yes'})
+       if rx['return']==0: 
+          cs=rx['code']
 
     # Check if need host CPU params
     features={}
@@ -544,36 +555,43 @@ def install(i):
     if x!='': pie=' (example: '+ye+')'
     else: pie=''
 
+    # Customize installation before installation path is finalized ******************************************************
+    ii={"host_os_uoa":hosx,
+        "host_os_uid":hos,
+        "host_os_dict":hosd,
+        "target_os_uoa":tosx,
+        "target_os_uid":tos,
+        "target_os_dict":tosd,
+        "target_device_id":tdid,
+        "cfg":d,
+        "tags":tags,
+        "env":env,
+        "deps":udeps,
+        "customize":cus,
+        "self_cfg":cfg,
+        "features":features,
+        "version":ver,
+        "ck_kernel":ck
+       }
+
+    if o=='con': ii['interactive']='yes'
+    if i.get('quiet','')=='yes': ii['interactive']=''
+
     if cs!=None and 'pre_path' in dir(cs):
-       # Call customized script
-       ii={"host_os_uoa":hosx,
-           "host_os_uid":hos,
-           "host_os_dict":hosd,
-           "target_os_uoa":tosx,
-           "target_os_uid":tos,
-           "target_os_dict":tosd,
-           "target_device_id":tdid,
-           "cfg":d,
-           "tags":tags,
-           "env":env,
-           "deps":udeps,
-           "customize":cus,
-           "self_cfg":cfg,
-           "features":features,
-           "version":ver,
-           "ck_kernel":ck
-          }
-
-       if o=='con': ii['interactive']='yes'
-       if i.get('quiet','')=='yes': ii['interactive']=''
-
+       # In the new directory
        rx=cs.pre_path(ii)
        if rx['return']>0: return rx
 
-       # Update install env from customized script (if needed)
        new_env=rx.get('install_env',{})
-       if len(new_env)>0:
-          pr_env.update(new_env)
+       if len(new_env)>0: pr_env.update(new_env)
+
+    if cso!=None and 'pre_path' in dir(cso):
+       # In the new directory
+       rx=cs.pre_path(ii)
+       if rx['return']>0: return rx
+
+       new_env=rx.get('install_env',{})
+       if len(new_env)>0: pr_env.update(new_env)
 
     xprocess=True
     xsetup=True
@@ -828,36 +846,41 @@ def install(i):
        ck.out('Installing to '+pi)
        ck.out('')
 
+    # Customize installation based on resolved dependencies *************************************************************
+    ii={"host_os_uoa":hosx,
+        "host_os_uid":hos,
+        "host_os_dict":hosd,
+        "target_os_uoa":tosx,
+        "target_os_uid":tos,
+        "target_os_dict":tosd,
+        "target_device_id":tdid,
+        "cfg":d,
+        "tags":tags,
+        "env":env,
+        "features":features,
+        "customize":cus,
+        "self_cfg":cfg,
+        "version":ver,
+        "ck_kernel":ck,
+        "deps":udeps
+       }
+
+    if o=='con': ii['interactive']='yes'
+    if i.get('quiet','')=='yes': ii['interactive']=''
+
     if cs!=None and 'post_deps' in dir(cs):
-       # Call customized script
-       ii={"host_os_uoa":hosx,
-           "host_os_uid":hos,
-           "host_os_dict":hosd,
-           "target_os_uoa":tosx,
-           "target_os_uid":tos,
-           "target_os_dict":tosd,
-           "target_device_id":tdid,
-           "cfg":d,
-           "tags":tags,
-           "env":env,
-           "features":features,
-           "customize":cus,
-           "self_cfg":cfg,
-           "version":ver,
-           "ck_kernel":ck,
-           "deps":udeps
-          }
-
-       if o=='con': ii['interactive']='yes'
-       if i.get('quiet','')=='yes': ii['interactive']=''
-
        rx=cs.post_deps(ii)
        if rx['return']>0: return rx
 
-       # Update install env from customized script (if needed)
        new_env=rx.get('install_env',{})
-       if len(new_env)>0:
-          pr_env.update(new_env)
+       if len(new_env)>0: pr_env.update(new_env)
+
+    if cso!=None and 'post_deps' in dir(cso):
+       rx=cso.post_deps(ii)
+       if rx['return']>0: return rx
+
+       new_env=rx.get('install_env',{})
+       if len(new_env)>0: pr_env.update(new_env)
 
     soft_cfg={}
 
@@ -943,37 +966,46 @@ def install(i):
 
        # Check if need to use scripts from another entry
        if cont:
+          # Customize main installation
+          ii={"host_os_uoa":hosx,
+              "host_os_uid":hos,
+              "host_os_dict":hosd,
+              "target_os_uoa":tosx,
+              "target_os_uid":tos,
+              "target_os_dict":tosd,
+              "target_device_id":tdid,
+              "cfg":d,
+              "tags":tags,
+              "env":env,
+              "deps":udeps,
+              "features":features,
+              "customize":cus,
+              "self_cfg":cfg,
+              "version":ver,
+              "ck_kernel":ck,
+              "path":ppp,
+              "script_path":ppp1,
+              "out":oo,
+              "install_path":pi
+             }
+
+          if o=='con': ii['interactive']='yes'
+          if i.get('quiet','')=='yes': ii['interactive']=''
+
           if cs!=None and 'setup' in dir(cs):
-             # Call customized script
-             ii={"host_os_uoa":hosx,
-                 "host_os_uid":hos,
-                 "host_os_dict":hosd,
-                 "target_os_uoa":tosx,
-                 "target_os_uid":tos,
-                 "target_os_dict":tosd,
-                 "target_device_id":tdid,
-                 "cfg":d,
-                 "tags":tags,
-                 "env":env,
-                 "deps":udeps,
-                 "features":features,
-                 "customize":cus,
-                 "self_cfg":cfg,
-                 "version":ver,
-                 "ck_kernel":ck,
-                 "path":ppp,
-                 "script_path":ppp1,
-                 "out":oo,
-                 "install_path":pi
-                }
-
-             if o=='con': ii['interactive']='yes'
-             if i.get('quiet','')=='yes': ii['interactive']=''
-
              rx=cs.setup(ii)
              if rx['return']>0: return rx
 
              soft_cfg=rx.get('soft_cfg',{})
+
+             # Update install env from customized script (if needed)
+             new_env=rx.get('install_env',{})
+             if len(new_env)>0:
+                pr_env.update(new_env)
+
+          if cso!=None and 'setup' in dir(cso):
+             rx=cso.setup(ii)
+             if rx['return']>0: return rx
 
              # Update install env from customized script (if needed)
              new_env=rx.get('install_env',{})
