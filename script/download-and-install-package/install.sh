@@ -142,7 +142,12 @@ if [ "${PACKAGE_WGET}" == "YES" ] ; then
     rm -f ${PACKAGE_NAME}
   fi
 
-  wget --no-check-certificate ${PF}
+  if [ "${PACKAGE_WGET_HEADER}" != "" ] ; then
+     wget --no-check-certificate ${PACKAGE_WGET_EXTRA} --header="${PACKAGE_WGET_HEADER}" ${PF}
+  else
+     wget --no-check-certificate ${PACKAGE_WGET_EXTRA} ${PF}
+  fi
+
   if [ "${?}" != "0" ] ; then
     echo "Error: downloading package failed!"
     exit 1
