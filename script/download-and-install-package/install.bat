@@ -18,6 +18,7 @@ rem ############################################################
 if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat" (
   echo.
   echo Executing pre-download script ...
+  echo.
 
   call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat
 
@@ -82,12 +83,17 @@ set PF=%PACKAGE_URL%/%PACKAGE_NAME%
 if "%PACKAGE_WGET%" == "YES" (
   echo.
   echo Downloading package from '%PF%' ...
+  echo.
 
   if EXIST "%PACKAGE_NAME%" (
     del /Q /S %PACKAGE_NAME%
   )
 
-  wget --no-check-certificate %PACKAGE_WGET_EXTRA% "%PF%"
+  if not "%PACKAGE_WGET_HEADER%" == "" (
+     wget --no-check-certificate %PACKAGE_WGET_EXTRA% --header="%PACKAGE_WGET_HEADER%" "%PF%"
+  ) else (
+     wget --no-check-certificate %PACKAGE_WGET_EXTRA% "%PF%"
+  )
 
   if %errorlevel% neq 0 (
    echo.
@@ -103,6 +109,7 @@ if "%PACKAGE_WGET%" == "YES" (
 if "%PACKAGE_GIT%" == "YES" (
   echo.
   echo Cloning package from '%PF%' ...
+  echo.
 
   if EXIST "%PACKAGE_SUB_DIR%" (
     rmdir /s /q %PACKAGE_SUB_DIR%
@@ -143,6 +150,7 @@ rem ############################################################
 if "%PACKAGE_UNGZIP%" == "YES" (
   echo.
   echo Ungzipping archive ...
+  echo.
 
   if EXIST "%PACKAGE_NAME1%" (
     del /Q /S %PACKAGE_NAME1%
@@ -161,6 +169,7 @@ rem ############################################################
 if "%PACKAGE_UNZIP%" == "YES" (
   echo.
   echo Unzipping archive ...
+  echo.
 
   unzip %PACKAGE_NAME%
 
@@ -175,6 +184,7 @@ rem ############################################################
 if "%PACKAGE_UNBZIP%" == "YES" (
   echo.
   echo Unbzipping archive ...
+  echo.
 
   if EXIST "%PACKAGE_NAME1%" (
     del /Q /S %PACKAGE_NAME1%
@@ -215,6 +225,18 @@ if "%PACKAGE_UNTAR%" == "YES" (
   )
 )
 
+cd /D %INSTALL_DIR%
+
+rem ############################################################
+if "%PACKAGE_RUN%" == "YES" (
+  echo.
+  echo Running %PACKAGE_NAME% %PACKAGE_CMD%...
+  echo.
+
+  %PACKAGE_NAME% %PACKAGE_CMD%
+)
+
+rem ############################################################
 if NOT "%PACKAGE_SKIP_CLEAN_PACKAGE%" == "YES" (
  if EXIST "%PACKAGE_NAME%" (
    del /Q /S %PACKAGE_NAME%
@@ -229,6 +251,7 @@ if "%PACKAGE_COPY%" == "YES" (
   if EXIST "%ORIGINAL_PACKAGE_DIR%\copy" (
     echo.
     echo Copying extra files to source dir ...
+    echo.
 
     xcopy /E %ORIGINAL_PACKAGE_DIR%\copy\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
   )
@@ -236,6 +259,7 @@ if "%PACKAGE_COPY%" == "YES" (
   if EXIST "%ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID%" (
     echo.
     echo Copying extra files for %CK_TARGET_OS_ID% to source dir ...
+    echo.
 
     xcopy /E %ORIGINAL_PACKAGE_DIR%\copy.%CK_TARGET_OS_ID%\* %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
   )
@@ -246,6 +270,7 @@ if "%PACKAGE_PATCH%" == "YES" (
   if EXIST "%ORIGINAL_PACKAGE_DIR%\patch.%CK_TARGET_OS_ID%" (
     echo.
     echo Patching source directory ...
+    echo.
 
     cd /D %INSTALL_DIR%\%PACKAGE_SUB_DIR%
 
@@ -262,11 +287,11 @@ rem        goto err
   )
 )
 
+cd /D %INSTALL_DIR%
+
 rem ############################################################
 echo.
 echo Cleaning ...
-
-cd /D %INSTALL_DIR%
 
 if NOT "%PACKAGE_SKIP_CLEAN_INSTALL%" == "YES" (
 
@@ -309,6 +334,7 @@ rem ############################################################
 if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat" (
   echo.
   echo Executing extra script ...
+  echo.
 
   call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\install.bat
 
@@ -375,6 +401,7 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
   rem ############################################################
   echo.
   echo Configuring ...
+  echo.
 
   cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
         -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
@@ -411,6 +438,7 @@ rem ############################################################
 if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\post-install.bat" (
   echo.
   echo Executing extra script ...
+  echo.
 
   call %ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\post-install.bat
 
@@ -425,6 +453,7 @@ rem  ############################################################
 if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
   echo.
   echo Cleaning obj directory ...
+  echo.
 
   if EXIST obj (
     rmdir /s /q obj
