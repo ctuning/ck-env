@@ -247,6 +247,28 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
   fi
 fi
 
+cd ${INSTALL_DIR}
+
+############################################################
+if [ "${PACKAGE_RUN}" == "YES" ] ; then
+  echo ""
+  echo "Running ${PACKAGE_NAME} ${PACKAGE_CMD} ..."
+  echo ""
+
+  chmod 755 ${PACKAGE_NAME}
+  ./${PACKAGE_NAME} ${PACKAGE_CMD}
+fi
+
+############################################################
+if [ "${PACKAGE_RUN_EXTRA_LINUX}" != "" ] ; then
+  echo ""
+  echo "Running ${PACKAGE_RUN_EXTRA_LINUX} ..."
+  echo ""
+
+  ${PACKAGE_RUN_EXTRA_LINUX}
+fi
+
+#############################################
 if [ "${PACKAGE_SKIP_CLEAN_PACKAGE}" != "YES" ] ; then
  if [ -f ${PACKAGE_NAME} ] ; then
    rm -f ${PACKAGE_NAME}
@@ -295,11 +317,11 @@ if [ "${PACKAGE_PATCH}" == "YES" ] ; then
   fi
 fi
 
+cd ${INSTALL_DIR}
+
 ############################################################
 echo ""
 echo "Cleaning ..."
-
-cd ${INSTALL_DIR}
 
 if [ "${PACKAGE_SKIP_CLEAN_INSTALL}" != "YES" ] ; then
   if [ -d install ] ; then
