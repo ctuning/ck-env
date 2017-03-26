@@ -230,10 +230,19 @@ cd /D %INSTALL_DIR%
 rem ############################################################
 if "%PACKAGE_RUN%" == "YES" (
   echo.
-  echo Running %PACKAGE_NAME% %PACKAGE_CMD%...
+  echo Running %PACKAGE_NAME% %PACKAGE_CMD% ...
   echo.
 
   %PACKAGE_NAME% %PACKAGE_CMD%
+)
+
+rem ############################################################
+if not "%PACKAGE_RUN_EXTRA_WINDOWS%" == "" (
+  echo.
+  echo Running %PACKAGE_RUN_EXTRA_WINDOWS% ...
+  echo.
+
+  %PACKAGE_RUN_EXTRA_WINDOWS%
 )
 
 rem ############################################################
