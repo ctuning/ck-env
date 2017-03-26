@@ -44,12 +44,17 @@ def setup(i):
 
     fp=cus.get('full_path','')
 
-    ep=cus.get('env_prefix','')
-    if ep!='' and fp!='':
-       p1=os.path.dirname(fp)
-       p2=os.path.dirname(p1)
+    ep=cus['env_prefix']
 
-       env[ep]=p2
-       env[ep+'_BIN']=p1
+    if fp=='':
+       return {'return':1, 'error':'full path to java compiler required by soft customization script is empty'}
+
+    p1=os.path.dirname(fp)
+    p2=os.path.dirname(p1)
+
+    env[ep]=p2
+    env[ep+'_BIN']=p1
+
+    env['JAVA_HOME']=p2
 
     return {'return':0, 'bat':s}
