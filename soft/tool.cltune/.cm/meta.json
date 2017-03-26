@@ -1,6 +1,5 @@
 {
   "customize": {
-    "add_to_path": "yes", 
     "env_prefix": "CK_ENV_TOOL_CLTUNE", 
     "limit_recursion_dir_search": {
       "linux": 2,

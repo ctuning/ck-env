@@ -71,7 +71,7 @@ def setup(i):
     fp=cus.get('full_path','')
 
     fn=os.path.basename(fp)
-    
+
     pl=os.path.dirname(fp)
     pi=os.path.dirname(pl)
 
@@ -80,15 +80,18 @@ def setup(i):
     slib='libcltune.a'
     dlib='libcltune.so'
 
+    xwin=False
     if win=='yes' and not (remote=='yes' or mingw=='yes'):
        slib='cltune.lib'
        dlib='cltune.dll'
+       xwin=True
 
     if os.path.isfile(os.path.join(pl,slib)): 
        cus['static_lib']=slib
     if os.path.isfile(os.path.join(pl,dlib)): 
        cus['dynamic_lib']=dlib
-       cus['path_bin']=pl
+       if xwin:
+          s+='\nset PATH='+pl+';%PATH%\n'
 
     cus['dynamic_plugin']=fn
     env[envp+'_DYNAMIC_NAME']=cus['dynamic_plugin']
