@@ -1,0 +1,32 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "add_only_with_version": "yes",
+    "add_to_path": "yes",
+    "build_dir_name": "msys2",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_MSYS2",
+    "limit_recursion_dir_search": {
+      "win": 3
+    },
+    "only_for_host_os_tags": [
+      "windows"
+    ],
+    "soft_file": {
+      "win": "bash.exe"
+    },
+    "soft_file_from_host_os": "yes",
+    "soft_path_example": {
+      "win": "C:\\msys64\\usr\\bin\\bash.exe"
+    },
+    "soft_version_cmd": {
+      "win": "--version > $#filename#$ 2>&1"
+    }
+  },
+  "soft_name": "msys2",
+  "tags": [
+    "env",
+    "msys2"
+  ]
+}

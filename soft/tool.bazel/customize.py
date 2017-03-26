@@ -65,4 +65,7 @@ def setup(i):
     env[ep]=p2
     env[ep+'_BIN']=pb
 
+    if winh=='yes':
+       env['BAZEL_SH']='%CK_ENV_MSYS2_BASH%'
+
     return {'return':0, 'bat':s}

@@ -1,3 +1,5 @@
+* 2017.03.26 - added soft:env.msys2 needed by bazel for Windows (to build TensorFlow, etc)
+
 * 2017.03.24 - added tag modification in deps for host/target OS
              - improved support for customized scripts in packages (to update URLs for ARM/Intel + Win/Linux/MacOS/Android)
 

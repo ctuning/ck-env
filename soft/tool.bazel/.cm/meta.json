@@ -33,10 +33,25 @@
       "name": "Java compiler", 
       "sort": 10, 
       "tags": "compiler,lang-java"
-    } 
-  }, 
-  "env": {
-    "CK_BAZEL": "bazel"
+    },
+    "env-msys2": {
+      "local": "yes", 
+      "name": "MSYS2 env", 
+      "only_for_target_os_tags": [
+        "windows"
+      ],
+      "sort": 20, 
+      "tags": "env,msys2"
+    },
+    "compiler-gcc": {
+      "local": "yes",
+      "name": "MingW GCC compiler",
+      "only_for_target_os_tags": [
+        "windows"
+      ],
+      "sort": 30,
+      "tags": "compiler,lang-c,gcc"
+    }
   }, 
   "soft_name": "bazel", 
   "tags": [
