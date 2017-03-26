@@ -77,16 +77,32 @@ def setup(i):
 
     ################################################################
 
+    slib='libcltune.a'
+    dlib='libcltune.so'
+
+    if win=='yes' and not (remote=='yes' or mingw=='yes'):
+       slib='cltune.lib'
+       dlib='cltune.dll'
+
+    if os.path.isfile(os.path.join(pl,slib)): 
+       cus['static_lib']=slib
+    if os.path.isfile(os.path.join(pl,dlib)): 
+       cus['dynamic_lib']=dlib
+       cus['path_bin']=pl
+
     cus['dynamic_plugin']=fn
     env[envp+'_DYNAMIC_NAME']=cus['dynamic_plugin']
+    env[envp+'_DYNAMIC_NAME_FULL']=fp
     env[envp]=pi
     env[envp+'_LIB']=pl
-    env[envp+'_DYNAMIC_NAME_FULL']=fp
     cus['path_lib']=pl
-    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
-      'lib_path': cus.get('path_lib','')})
-    if r['return']>0: return r
-    s += r['script']
 
+    r = ck.access({'action': 'lib_path_export_script', 
+                   'module_uoa': 'os', 
+                   'host_os_dict': hosd, 
+                   'lib_path': cus.get('path_lib','')})
+    if r['return']>0: return r
+
+    s+=r['script']
   
     return {'return':0, 'bat':s}
