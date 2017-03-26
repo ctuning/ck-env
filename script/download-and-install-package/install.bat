@@ -112,13 +112,13 @@ if "%PACKAGE_GIT%" == "YES" (
   echo.
 
   if EXIST "%PACKAGE_SUB_DIR%" (
-    rmdir /s /q %PACKAGE_SUB_DIR%
-    timeout /t 2 /nobreak
+    rd /s /q %PACKAGE_SUB_DIR%
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
   if EXIST "%PACKAGE_SUB_DIR%" (
-    rmdir %PACKAGE_SUB_DIR%
-    timeout /t 2 /nobreak
+    rd %PACKAGE_SUB_DIR%
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
   git clone %PACKAGE_URL% %PACKAGE_SUB_DIR%
@@ -205,13 +205,13 @@ if "%PACKAGE_UNTAR%" == "YES" (
   echo Untarring archive ...
 
   if EXIST "%PACKAGE_SUB_DIR%" (
-    rmdir /s /q %PACKAGE_SUB_DIR%
-    timeout /t 2 /nobreak
+    rd /s /q %PACKAGE_SUB_DIR%
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
   if EXIST "%PACKAGE_SUB_DIR%" (
-    rmdir %PACKAGE_SUB_DIR%
-    timeout /t 2 /nobreak
+    rd %PACKAGE_SUB_DIR%
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
   tar xvf %PACKAGE_NAME1%
@@ -305,12 +305,13 @@ echo Cleaning ...
 if NOT "%PACKAGE_SKIP_CLEAN_INSTALL%" == "YES" (
 
   if EXIST install (
-    rmdir /s /q install
-    timeout /t 2 /nobreak
+    rd /s /q install
+    ping -n 2 192.192.192.192 -w 1000 > nul
+
   )
   if EXIST install (
-    rmdir install
-    timeout /t 2 /nobreak
+    rd install
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
 )
@@ -318,25 +319,25 @@ if NOT "%PACKAGE_SKIP_CLEAN_INSTALL%" == "YES" (
 if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
 
   if EXIST obj (
-    rmdir /s /q obj
-    timeout /t 2 /nobreak
+    rd /s /q obj
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
   if EXIST obj (
-    rmdir obj
-    timeout /t 2 /nobreak
+    rd obj
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
 )
 
 if NOT EXIST obj (
 
-  mkdir obj
+  md obj
 
-  if %errorlevel% neq 0 (
-    echo.
-    echo Error: problem creating obj directory!
-    goto err
-  )
+rem  if %errorlevel% neq 0 (
+rem    echo.
+rem    echo Error: problem creating obj directory!
+rem    goto err
+rem  )
 )
 
 rem ############################################################
@@ -465,12 +466,12 @@ if NOT "%PACKAGE_SKIP_CLEAN_OBJ%" == "YES" (
   echo.
 
   if EXIST obj (
-    rmdir /s /q obj
-    timeout /t 2 /nobreak
+    rd /s /q obj
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
   if EXIST obj (
-    rmdir obj
-    timeout /t 2 /nobreak
+    rd obj
+    ping -n 2 192.192.192.192 -w 1000 > nul
   )
 )
 
@@ -482,10 +483,10 @@ rem  echo.
 rem  echo Cleaning src directory ...
 rem
 rem   if EXIST src (
-rem    rmdir /s /q src
+rem    rd /s /q src
 rem  )
 rem  if EXIST src (
-rem    rmdir src
+rem    rd src
 rem  )
 )
 
