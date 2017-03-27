@@ -456,7 +456,7 @@ def install(i):
        ppp1=r['path']
 
     # Check if has custom script
-    if ppp1==ppp:
+    if ppp1==ppp and cso!=None:
        cs=cso
        cso=None
     else:
