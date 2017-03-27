@@ -1,8 +1,8 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "no", 
   "customize": {
     "check_that_exists": "yes", 
-    "env_prefix": "CK_LIB_LIBJPEG_TENSORFLOW", 
+    "env_prefix": "CK_LIB_LIBJPEG", 
     "limit_recursion_dir_search": {
       "android": 3, 
       "linux": 3, 
@@ -11,8 +11,8 @@
   }, 
   "soft_name": "libjpeg library", 
   "tags": [
-    "tensorflow", 
-    "libjpeg", 
-    "jpeg"
+    "lib", 
+    "libjpeg",
+    "jpeg" 
   ]
 }
