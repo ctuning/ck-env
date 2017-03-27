@@ -33,6 +33,23 @@ Contributors
 * The community gradually provides description of all existing software in the CK format: [GitHub](https://github.com/ctuning/ck-env/tree/master/soft), [Wiki](https://github.com/ctuning/ck/wiki/Shared-soft-descriptions)
 * The community gradually addes various packages to automatically rebuild software: [Wiki](https://github.com/ctuning/ck/wiki/Shared-packages)
 
+Acknowledgments
+===============
+
+[![logo](http://cKnowledge.org/images/logo-gm_resize.png)](http://gm.com)
+[![logo](http://cKnowledge.org/images/logo-arm.png)](http://arm.com)
+[![logo](http://cKnowledge.org/images/stfc-logo.jpg)](http://www.hartree.stfc.ac.uk)
+[![logo](http://cKnowledge.org/images/logo-dividiti.png)](http://dividiti.com)
+[![logo](http://cKnowledge.org/images/logo-microsoft.png)](https://www.microsoft.com/en-us/research)
+[![logo](http://cKnowledge.org/images/logo-university-of-cambridge2.png)](https://www.cam.ac.uk)
+[![logo](http://cKnowledge.org/images/logo-pitt.png)](http://www.pitt.edu)
+[![logo](http://cKnowledge.org/images/logo-imperial2.png)](https://www.imperial.ac.uk)
+[![logo](http://cKnowledge.org/images/logo-university-of-edinburgh2.png)](http://www.ed.ac.uk)
+[![logo](http://cKnowledge.org/images/logo_tetracom_resized.png)](http://tetracom.eu)
+[![logo](http://cKnowledge.org/images/logo-rpi.png)](https://www.raspberrypi.org)
+[![logo](http://cKnowledge.org/images/logo-xored.jpg)](http://xored.com)
+[![logo](http://cKnowledge.org/images/CTuning_foundation_logo2.png)](http://cTuning.org)
+
 License
 =======
 * BSD, 3-clause
