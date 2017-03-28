@@ -1217,7 +1217,7 @@ def resolve(i):
         cus=dd.get('customize',{})
 
         if ac=='yes': q['cus']=cus
-        if sd!='yes': q['dict']=dd
+        if sd!='yes' or q.get('add_dict','')=='yes': q['dict']=dd
 
         ver=cus.get('version','')
         if ver!='': q['ver']=ver
