@@ -1,7 +1,8 @@
 Fighting software and hardware chaos in research
 ================================================
 
-**Feel free to provide your favorite software descriptions (see examples [here](https://github.com/ctuning/ck-env/tree/master/soft)).Do not hesitate to ask for instructions and help [here](https://groups.google.com/forum/#!forum/collective-knowledge)**
+*Feel free to provide your favorite software descriptions (see examples [here](https://github.com/ctuning/ck-env/tree/master/soft)).*
+*Do not hesitate to ask for instructions and help [here](https://groups.google.com/forum/#!forum/collective-knowledge)*
 
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](http://cKnowledge.org)
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
