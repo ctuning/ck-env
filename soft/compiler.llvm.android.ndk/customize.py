@@ -189,10 +189,20 @@ def setup(i):
     if ep!='' and fp!='':
        p1=os.path.dirname(fp)
        pi=os.path.dirname(p1)
+       p2=os.path.dirname(pi)
+       p3=os.path.dirname(p2)
+       p4=os.path.dirname(p3)
+       p5=os.path.dirname(p4)
+
+       ndk_path=p5
+       ver=deps.get('ndk-gcc', '').get('ver', '')[:-2]
+       abi=target_d.get('abi','')
 
        env[ep]=pi
        env[ep+'_BIN']=p1
-
+       env['CK_ENV_LIB_STDCPP_INCLUDE']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'include')
+       env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'include')
+       env['CK_ENV_LIB_STDCPP_STATIC']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_static.a')
        cus['path_lib']=pi+sdirs+'lib'
        cus['path_include']=pi+sdirs+'include'
 
