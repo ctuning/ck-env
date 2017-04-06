@@ -355,7 +355,7 @@ def setup(i):
     else:
        ### Linux Host  #########################################################
        env.update({
-          "CK_AR": "$#tool_prefix#$ar", 
+          "CK_AR": "llvm-ar", 
           "CK_ASM_EXT": ".s", 
           "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$", 
           "CK_COMPILER_FLAGS_OBLIGATORY": "", 
@@ -386,7 +386,7 @@ def setup(i):
           "CK_LIB_EXT": ".a", 
           "CK_LINKER_FLAG_OPENMP": "-fopenmp", 
           "CK_MAKE": "make", 
-          "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
+          "CK_OBJDUMP": "llvm-objdump -d", 
           "CK_OBJ_EXT": ".o", 
           "CK_OPT_SIZE": "-Os", 
           "CK_OPT_SPEED": "-O3", 
