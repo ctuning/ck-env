@@ -261,7 +261,7 @@ def detect(i):
                        ck.out(zs+') '+devices[j])
 
                    ck.out('')
-                   rx=ck.inp({'text':'Select one of the options for device: '})
+                   rx=ck.inp({'text':'Select one of the options for device or press Enter to select 0: '})
                    s=rx['string']
                    x=0
                    if s!='':
