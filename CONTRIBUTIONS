@@ -97,5 +97,5 @@ N: Anatoly Belonog
 E:
 H:
 O: Xored
-C: Fixing MingW installation scripts for Windows
+C: Fixing MingW installation scripts for Windows and LLVM with stdc++ lib for Android
 W:

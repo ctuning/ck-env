@@ -1,6 +1,9 @@
 Fighting software and hardware chaos in research
 ================================================
 
+*Feel free to provide your favorite software descriptions (see examples [here](https://github.com/ctuning/ck-env/tree/master/soft)).*
+*Do not hesitate to ask for instructions and help [here](https://groups.google.com/forum/#!forum/collective-knowledge)!*
+
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](http://cKnowledge.org)
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
@@ -23,7 +26,7 @@ with JSON meta and simple Python scripts to detect coexisting installations.
 See already shared [software descriptions](https://github.com/ctuning/ck/wiki/Shared-soft-descriptions)
 and [package descriptions](https://github.com/ctuning/ck/wiki/Shared-packages).
 
-Please, check [CK portable expeirmental workflows](https://github.com/ctuning/ck/wiki/Portable-workflows)
+Please, check [CK portable experimental workflows](https://github.com/ctuning/ck/wiki/Portable-workflows)
 for more details!
 
 Contributors
@@ -31,7 +34,7 @@ Contributors
 * General Motors and dividiti use CK to crowdsource benchmarking and optimization of CAFFE with different versions of compilers, libraries, models and data sets: [public CK repo](https://github.com/dividiti/ck-caffe)
 * ARM and the cTuning foundation use CK to systematize SW/HW co-design: [HiPEAC Info'45 page 17](https://www.hipeac.net/assets/public/publications/newsletter/hipeacinfo45.pdf), [ARM TechCon'16 presentation and demo](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems), [public CK repo](https://github.com/ctuning/ck-wa)
 * The community gradually provides description of all existing software in the CK format: [GitHub](https://github.com/ctuning/ck-env/tree/master/soft), [Wiki](https://github.com/ctuning/ck/wiki/Shared-soft-descriptions)
-* The community gradually addes various packages to automatically rebuild software: [Wiki](https://github.com/ctuning/ck/wiki/Shared-packages)
+* The community gradually adds various packages to automatically rebuild software: [Wiki](https://github.com/ctuning/ck/wiki/Shared-packages)
 
 Acknowledgments
 ===============
