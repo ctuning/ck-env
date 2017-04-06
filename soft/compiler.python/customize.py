@@ -17,6 +17,13 @@ def dirs(i):
 
     ck_os_name=i.get('host_os_dict',{}).get('ck_name','')
     if ck_os_name=='win':
+       local_app_data = os.getenv('LOCALAPPDATA')
+       if local_app_data is not None:
+          dr.append(local_app_data)
+
+       roaming_app_data = os.getenv('APPDATA')
+       if roaming_app_data is not None:
+          dr.append(roaming_app_data)
 
        for px in ['C:\\', 'D:\\']:
            x=[]

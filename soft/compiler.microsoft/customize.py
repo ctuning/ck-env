@@ -95,7 +95,6 @@ def parse_version(i):
               if j2>=0:
                  ver=q[:j2]
                  break
-    
     return {'return':0, 'version':ver}
 
 ##############################################################################
