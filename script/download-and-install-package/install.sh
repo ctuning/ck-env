@@ -434,7 +434,7 @@ if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then
   ############################################################
   echo ""
   echo "Building package ..."
-  make -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} ${CK_MAKE_EXTRA}
+  make ${CK_MAKE_BEFORE} -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} ${CK_MAKE_EXTRA}
   if [ "${?}" != "0" ] ; then
     echo "Error: build failed!"
     exit 1
