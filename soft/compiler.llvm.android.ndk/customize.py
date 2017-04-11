@@ -195,7 +195,9 @@ def setup(i):
        p5=os.path.dirname(p4)
 
        ndk_path=p5
-       ver=deps.get('ndk-gcc', '').get('ver', '')[:-2]
+       ndk_gcc=deps.get('ndk-gcc', {})
+       ndk_gcc_env=ndk_gcc.get('dict',{}).get('env',{})
+       ver=ndk_gcc.get('ver', '')[:-2]
        abi=target_d.get('abi','')
 
        env[ep]=pi
@@ -205,6 +207,13 @@ def setup(i):
        env['CK_ENV_LIB_STDCPP_STATIC']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_static.a')
        cus['path_lib']=pi+sdirs+'lib'
        cus['path_include']=pi+sdirs+'include'
+
+       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_STATIC','')!='':
+          env['CK_ENV_LIB_STDCPP_STATIC']=ndk_gcc_env['CK_ENV_LIB_STDCPP_STATIC']
+       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_DYNAMIC','')!='':
+          env['CK_ENV_LIB_STDCPP_DYNAMIC']=ndk_gcc_env['CK_ENV_LIB_STDCPP_DYNAMIC']
+       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')!='':
+          env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=ndk_gcc_env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']
 
        if hplat=='linux':
           sname=cus.get('soft_file',{}).get(hplat,'')
