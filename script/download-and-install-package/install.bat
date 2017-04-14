@@ -97,8 +97,6 @@ rem -O%PACKAGE_NAME%
 rem -O%PACKAGE_NAME%
   )
 
-  exit /b 1
-
   if %errorlevel% neq 0 (
    echo.
    echo Error: Failed downloading package ...
