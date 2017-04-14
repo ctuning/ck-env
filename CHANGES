@@ -1,3 +1,5 @@
+* 2017.04.14 - fixed mingw gfortran detection on Windows (for Caffe)
+
 * 2017.04.11 - improved LLVM description for Android targets
 
 * 2017.03.28 - fixed java detection
