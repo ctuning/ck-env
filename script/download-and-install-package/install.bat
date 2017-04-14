@@ -90,9 +90,9 @@ if "%PACKAGE_WGET%" == "YES" (
   )
 
   if not "%PACKAGE_WGET_HEADER%" == "" (
-     wget --no-check-certificate %PACKAGE_WGET_EXTRA% --header="%PACKAGE_WGET_HEADER%" "%PF%"
+     wget --no-check-certificate %PACKAGE_WGET_EXTRA% --header="%PACKAGE_WGET_HEADER%" "%PF%" -O%PACKAGE_NAME%
   ) else (
-     wget --no-check-certificate %PACKAGE_WGET_EXTRA% "%PF%"
+     wget --no-check-certificate %PACKAGE_WGET_EXTRA% "%PF%" -O%PACKAGE_NAME%
   )
 
   if %errorlevel% neq 0 (
