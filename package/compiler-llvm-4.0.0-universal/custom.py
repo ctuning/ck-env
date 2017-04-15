@@ -92,10 +92,9 @@ def setup(i):
           return {'return':1, 'error':'this package doesn\'t support non 64-bit MacOS'}
 
        nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-apple-darwin.tar.xz'
-       nie['PACKAGE_NAME1']='clang+llvm-4.0.0-x86_64-apple-darwin.tar'
 
-       nie['PACKAGE_UNGZIP']='YES'
-       nie['PACKAGE_UNTAR']='YES'
+       nie['PACKAGE_UNXTAR']='YES'
+       nie['PACKAGE_UNTAR_EXTRA']='--strip 1'
        nie['PACKAGE_SKIP_LINUX_MAKE']='YES'
 
     elif hname=='win':
@@ -117,25 +116,18 @@ def setup(i):
        ck.inp({'text':'Press Enter to continue!'})
 
     else:
-       return {'return':1, 'error':'under update'}
-
-       f+='linux'
-       if hbits=='64':
-          if habi.startswith('arm'):
-             f+='-arm64-vfp-hflt.tar'
+       if habi.startswith('arm'):
+          if hbits=='64':
+             nie['PACKAGE_NAME']='clang+llvm-4.0.0-aarch64-linux-gnu.tar.xz'
+             nie['PACKAGE_EXTRA_INSTALL_DIR']='clang+llvm-4.0.0-armv7a-linux-gnueabihf'
           else:
-             f+='-x64.tar'
+             nie['PACKAGE_NAME']='clang+llvm-4.0.0-armv7a-linux-gnueabihf.tar.xz'
+             nie['PACKAGE_EXTRA_INSTALL_DIR']='clang+llvm-4.0.0-armv7a-linux-gnueabihf'
        else:
-          if habi.startswith('arm'):
-             f+='-arm32-vfp-hflt.tar'
-          else:
-             f+='-i586.tar'
+          return {'return':1, 'error':'not supported yet'}
 
-       nie['PACKAGE_UNGZIP']='YES'
-       nie['PACKAGE_UNTAR']='YES'
+       nie['PACKAGE_UNXTAR']='YES'
+       nie['PACKAGE_UNTAR_EXTRA']='--strip 1'
        nie['PACKAGE_SKIP_LINUX_MAKE']='YES'
-
-       nie['PACKAGE_NAME1']=f
-       f+='.gz'
 
     return {'return':0, 'install_env':nie}

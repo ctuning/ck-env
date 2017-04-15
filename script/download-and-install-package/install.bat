@@ -216,7 +216,7 @@ if "%PACKAGE_UNTAR%" == "YES" (
     ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
-  tar xvf %PACKAGE_NAME1%
+  tar xvf %PACKAGE_NAME1% %PACKAGE_UNTAR_EXTRA%
 
   if NOT "%PACKAGE_UNTAR_SKIP_ERROR_WIN%" == "YES" (
     if %errorlevel% neq 0 (
@@ -242,7 +242,7 @@ if "%PACKAGE_UNXTAR%" == "YES" (
     ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
-  tar xvfJ %PACKAGE_NAME%
+  tar xvfJ %PACKAGE_NAME% %PACKAGE_UNTAR_EXTRA%
 
   if NOT "%PACKAGE_UNTAR_SKIP_ERROR_WIN%" == "YES" (
     if %errorlevel% neq 0 (

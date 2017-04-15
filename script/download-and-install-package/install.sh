@@ -240,7 +240,7 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
     rm -rf ${PACKAGE_SUB_DIR}
   fi
 
-  tar xvf ${PACKAGE_NAME1}
+  tar xvf ${PACKAGE_NAME1} ${PACKAGE_UNTAR_EXTRA}
   if [ "${?}" != "0" ] ; then
     echo "Error: untaring package failed!"
     exit 1
@@ -256,7 +256,7 @@ if [ "${PACKAGE_UNXTAR}" == "YES" ] ; then
     rm -rf ${PACKAGE_SUB_DIR}
   fi
 
-  tar xvfJ ${PACKAGE_NAME}
+  tar xvfJ ${PACKAGE_NAME} ${PACKAGE_UNTAR_EXTRA}
   if [ "${?}" != "0" ] ; then
     echo "Error: untaring package failed!"
     exit 1
