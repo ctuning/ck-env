@@ -13,7 +13,7 @@ extra_dirs=['C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\
             'D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools']
 
 sbin=[{"key":"CK_AR", "file":"llvm-ar", "extra":""},
-      {"key":"CK_LB", "file":"llvm-ar", "extra":"rcs", "set_extra_key":"CK_LB_OUTPUT", "extra_value":""},
+      {"key":"CK_LB", "file":"llvm-ar", "extra":"rcs", "set_extra_key":"CK_LB_OUTPUT", "extra_value":"", "ignore_win":"yes"},
       {"key":"CK_OBJDUMP", "file":"llvm-objdump", "extra":"-d"},
       {"key":"CK_RANLIB", "file":"llvm-ranlib", "extra":""}]
 
@@ -518,7 +518,10 @@ def setup(i):
         xe=x.get('extra','')
 
         xf1=x['file']
-        if winh=='yes': xf1+='.exe'
+        if winh=='yes': 
+           if x.get("ignore_win","")=="yes":
+              continue
+           xf1+='.exe'
 
         xp=os.path.join(p1,xf1)
         if os.path.isfile(xp):
