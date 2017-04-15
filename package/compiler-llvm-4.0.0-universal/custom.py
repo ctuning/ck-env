@@ -119,12 +119,35 @@ def setup(i):
        if habi.startswith('arm'):
           if hbits=='64':
              nie['PACKAGE_NAME']='clang+llvm-4.0.0-aarch64-linux-gnu.tar.xz'
-             nie['PACKAGE_EXTRA_INSTALL_DIR']='clang+llvm-4.0.0-armv7a-linux-gnueabihf'
           else:
              nie['PACKAGE_NAME']='clang+llvm-4.0.0-armv7a-linux-gnueabihf.tar.xz'
-             nie['PACKAGE_EXTRA_INSTALL_DIR']='clang+llvm-4.0.0-armv7a-linux-gnueabihf'
        else:
-          return {'return':1, 'error':'not supported yet'}
+          r=ck.access({'action':'detect','module_uoa':'platform.os', 'out':o})
+          if r['return']>0: return r
+
+          flavor=r.get('features',{}).get('os',{}).get('name','').lower()
+
+          ver=''
+          mver=''
+          x=flavor.split(' ')
+          if len(x)>1:
+             ver=x[1]
+             mver=ver
+             j=ver.find('.')
+             if j>=0:
+                j1=ver.find('.',j+1)
+                if j1>=0:
+                   mver=ver[:j1]
+
+          if 'debian' in flavor:
+             nie['PACKAGE_NAME']='clang+llvm-4.0.0-aarch64-linux-gnu.tar.xz'
+          else:
+             nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz'
+
+             if mver=='14.04':
+                nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz'
+             elif mver=='16.10':
+                nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-16.10.tar.xz'
 
        nie['PACKAGE_UNXTAR']='YES'
        nie['PACKAGE_UNTAR_EXTRA']='--strip 1'
