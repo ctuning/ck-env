@@ -12,6 +12,10 @@ import os
 extra_dirs=['C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools',
             'D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools']
 
+sbin=[{"key":"CK_AR", "file":"llvm-ar", "extra":""},
+      {"key":"CK_OBJDUMP", "file":"llvm-objdump", "extra":"-d"},
+      {"key":"CK_RANLIB", "file":"llvm-ranlib", "extra":""}]
+
 ##############################################################################
 # customize directories to automatically find and register software
 
@@ -505,6 +509,20 @@ def setup(i):
           s+='\nexport PATH='+pi+x+':%PATH%\n\n'
 
     env['CK_COMPILER_TOOLCHAIN_NAME']='clang'
+
+    # CHECK if some LLVM specific binaries exist (rather than standard)
+    for x in sbin:
+        xk=x['key']
+        xf=x['file']
+        xe=x.get('extra','')
+
+        xf1=x['file']
+        if winh=='yes': xf1+='.exe'
+
+        xp=os.path.join(p1,xf1)
+        if os.path.isfile(xp):
+           env[xk]=xf
+           if xe!='': env[xk]+=' '+xe
 
     # Update global
     if remote=='yes' or os_name_long.find('-arm')>0:
