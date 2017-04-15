@@ -1,0 +1,23 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "version": "3.8.0"
+  },
+  "env": {},
+  "no_install_path": "yes",
+  "only_for_host_os_tags": [
+    "windows"
+  ],
+  "only_for_target_os": [
+    "windows-64"
+  ],
+  "process_script": "process",
+  "soft_uoa": "1c2eb494b8ae3bc4",
+  "suggested_path": "llvm",
+  "tags": [
+    "compiler",
+    "llvm",
+    "lang-c",
+    "lang-cpp"
+  ]
+}

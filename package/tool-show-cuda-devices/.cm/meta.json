@@ -1,0 +1,18 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "version": "1.0"
+  },
+  "end_full_path": {
+    "android": "bin$#sep#$show-cuda-devices",
+    "linux": "bin/show-cuda-devices",
+    "mingw": "bin\\show-cuda-devices.exe",
+    "win": "bin\\show-cuda-devices.exe"
+  },
+  "soft_uoa": "2d23c0324a4ca3bb",
+  "suggested_path": "show-cuda-devices",
+  "tags": [
+    "tool",
+    "show-cuda-devices"
+  ]
+}

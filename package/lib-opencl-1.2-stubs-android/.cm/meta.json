@@ -1,0 +1,37 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "skip_copy_to_remote": "yes",
+    "skip_ext": "yes",
+    "version": "1.2"
+  },
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C compiler",
+      "sort": 10,
+      "tags": "compiler,lang-c"
+    }
+  },
+  "end_full_path": {
+    "android": "lib$#sep#$libOpenCL.so"
+  },
+  "only_for_host_os_tags": [
+    "windows",
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "android"
+  ],
+  "process_script": "process",
+  "soft_uoa": "6eb9a57038688ad3",
+  "suggested_path": "lib-opencl-stubs",
+  "tags": [
+    "lib",
+    "opencl",
+    "lang-c",
+    "lang-cpp",
+    "v1.2",
+    "v1"
+  ]
+}

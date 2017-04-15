@@ -1,0 +1,66 @@
+diff -ruN src/cmake/CMakeLists.txt src.fgg/cmake/CMakeLists.txt
+--- src/cmake/CMakeLists.txt	2016-12-27 17:26:09.000000000 +0100
++++ src.fgg/cmake/CMakeLists.txt	2016-12-27 17:45:56.091218666 +0100
+@@ -166,7 +166,7 @@
+ include(libprotobuf-lite.cmake)
+ include(libprotobuf.cmake)
+ include(libprotoc.cmake)
+-include(protoc.cmake)
++#include(protoc.cmake)
+ 
+ if (protobuf_BUILD_TESTS)
+   include(tests.cmake)
+diff -ruN src/cmake/install.cmake src.fgg/cmake/install.cmake
+--- src/cmake/install.cmake	2016-12-27 17:26:09.000000000 +0100
++++ src.fgg/cmake/install.cmake	2016-12-27 17:48:15.391214704 +0100
+@@ -14,8 +14,8 @@
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_library})
+ endforeach()
+ 
+-install(TARGETS protoc EXPORT protobuf-targets
+-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT protoc)
++#install(TARGETS protoc EXPORT protobuf-targets
++#  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT protoc)
+ 
+ file(STRINGS extract_includes.bat.in _extract_strings
+   REGEX "^copy")
+@@ -100,7 +100,7 @@
+   ${CMAKE_INSTALL_CMAKEDIR}/protobuf-options.cmake @ONLY)
+ 
+ # Allows the build directory to be used as a find directory.
+-export(TARGETS libprotobuf-lite libprotobuf libprotoc protoc
++export(TARGETS libprotobuf-lite libprotobuf libprotoc
+   NAMESPACE protobuf::
+   FILE ${CMAKE_INSTALL_CMAKEDIR}/protobuf-targets.cmake
+ )
+diff -ruN src/cmake/libprotoc.cmake src.fgg/cmake/libprotoc.cmake
+--- src/cmake/libprotoc.cmake	2016-12-27 17:26:09.000000000 +0100
++++ src.fgg/cmake/libprotoc.cmake	2016-12-27 17:41:58.967225409 +0100
+@@ -71,8 +71,6 @@
+   ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_message.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_message_field.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_primitive_field.cc
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/js_generator.cc
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/objectivec/objectivec_enum.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/objectivec/objectivec_enum_field.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/objectivec/objectivec_extension.cc
+@@ -94,18 +92,6 @@
+   ${protobuf_source_dir}/src/google/protobuf/compiler/zip_writer.cc
+ )
+ 
+-set(js_well_known_types_sources,
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/any.js
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/struct.js
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/timestamp.js
+-)
+-add_executable(js_embed ${protobuf_source_dir}/src/google/protobuf/compiler/js/embed.cc)
+-add_custom_command(
+-  OUTPUT ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
+-  DEPENDS js_embed ${js_well_known_types_sources}
+-  COMMAND js_embed ${js_well_known_types_sources} > ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
+-)
+-
+ add_library(libprotoc ${protobuf_SHARED_OR_STATIC}
+   ${libprotoc_files})
+ target_link_libraries(libprotoc libprotobuf)

@@ -1,0 +1,69 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "git_src_dir": "src",
+    "install_env": {
+      "CMAKE_CONFIG": "Release",
+      "PACKAGE_BUILD_TYPE": "cmake",
+      "PACKAGE_CONFIGURE_FLAGS": "",
+      "PACKAGE_CONFIGURE_FLAGS_ANDROID": "-DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF",
+      "PACKAGE_CONFIGURE_FLAGS_LINUX": "-DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON",
+      "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "-DBUILD_SHARED_LIBS=ON",
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
+      "PACKAGE_SUB_DIR": "src",
+      "PACKAGE_SUB_DIR1": "src",
+      "PACKAGE_URL": "https://github.com/gflags/gflags"
+    },
+    "use_git_revision": "yes",
+    "version": "development"
+  },
+  "deps": {
+    "cmake": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "cmake",
+      "skip_from_bat": "yes",
+      "sort": 5,
+      "tags": "tool,cmake"
+    },
+    "compiler": {
+      "local": "yes",
+      "name": "C++ compiler",
+      "skip_from_bat": "yes",
+      "sort": 10,
+      "tags": "compiler,lang-cpp"
+    }
+  },
+  "end_full_path": {
+    "android": "install$#sep#$lib$#sep#$libgflags.a",
+    "linux": "install$#sep#$lib$#sep#$libgflags.a",
+    "win": "install\\Lib\\gflags.lib"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "only_for_target_os_tags": [
+    "linux",
+    "windows",
+    "android"
+  ],
+  "process_script": "install",
+  "soft_uoa": "64abac44465943ea",
+  "suggested_path": "lib-gflags",
+  "tags": [
+    "lib",
+    "gflags",
+    "vtrunk"
+  ],
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "fd44428fbc77f77f",
+    "module_uoa": "84e27ad9dd12e734"
+  },
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "version": "1.0"
+  },
+  "end_full_path": {
+    "android": "bin$#sep#$show-opencl-devices",
+    "linux": "bin/show-opencl-devices",
+    "mingw": "bin\\show-opencl-devices.exe",
+    "win": "bin\\show-opencl-devices.exe"
+  },
+  "soft_uoa": "9a78ab6a5c89d8b8",
+  "suggested_path": "show-opencl-devices",
+  "tags": [
+    "tool",
+    "show-opencl-devices"
+  ]
+}

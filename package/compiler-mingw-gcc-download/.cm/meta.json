@@ -1,0 +1,23 @@
+{
+  "check_exit_status": "yes",
+  "customize": {},
+  "env": {
+    "CK_MAKE": "cs-make"
+  },
+  "no_install_path": "yes",
+  "only_for_host_os_tags": [
+    "windows"
+  ],
+  "only_for_target_os_tags": [
+    "mingw"
+  ],
+  "process_script": "process",
+  "soft_uoa": "3a8a82fa40bf992d",
+  "suggested_path": "gcc",
+  "tags": [
+    "compiler",
+    "gcc",
+    "lang-c",
+    "lang-cpp"
+  ]
+}

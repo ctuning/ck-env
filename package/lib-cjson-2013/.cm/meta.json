@@ -1,0 +1,26 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "version": "2013"
+  },
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C compiler",
+      "tags": "compiler,lang-c"
+    }
+  },
+  "end_full_path": {
+    "android": "lib$#sep#$libcjson.a",
+    "linux": "lib/libcjson.a",
+    "mingw": "lib\\libcjson.a",
+    "win": "lib\\libcjson.lib"
+  },
+  "process_script": "process",
+  "soft_uoa": "59c52485faf01e9a",
+  "suggested_path": "lib-cjson",
+  "tags": [
+    "lib",
+    "cjson"
+  ]
+}

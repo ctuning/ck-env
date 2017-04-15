@@ -1,0 +1,4 @@
+Grigori Fursin downloaded and converted cl.h from Khronos website and created stubs lib
+needed for compiling OpenCL-based programs for Android mobile devices:
+
+* https://www.khronos.org/registry/cl/

@@ -1,0 +1,40 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "PACKAGE_FILE": "ncurses-6.0.tar.gz",
+      "PACKAGE_FILE1": "ncurses-6.0.tar",
+      "PACKAGE_SRC": "ncurses-6.0",
+      "PACKAGE_URL": "https://ftp.gnu.org/pub/gnu/ncurses"
+    },
+    "version": "6.0"
+  },
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "GCC compiler",
+      "sort": 10,
+      "tags": "compiler,lang-c,gcc"
+    }
+  },
+  "end_full_path": {
+    "lib": "install$#sep#$lib$#sep#$libncurses.a"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "process_script": "build",
+  "skip_setup": "yes",
+  "soft_uoa": "4406ad35b182eba4",
+  "suggested_path": "lib-ncurses",
+  "tags": [
+    "lib",
+    "ncurses",
+    "v6.0",
+    "v6"
+  ]
+}

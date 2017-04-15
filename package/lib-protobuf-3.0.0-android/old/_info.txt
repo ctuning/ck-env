@@ -1,0 +1,93 @@
+* Compiling sources (working flags for G++)
+
+/home/fursin/fggprogs/android-ndk-r13b/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-g++
+ -DANDROID
+ -DGOOGLE_PROTOBUF_CMAKE_BUILD
+ -DHAVE_PTHREAD
+ -DHAVE_ZLIB
+ -isystem /home/fursin/fggprogs/android-ndk-r13b/platforms/android-21/arch-arm64/usr/include
+ -isystem /home/fursin/fggprogs/android-ndk-r13b/sources/cxx-stl/gnu-libstdc++/4.9/include
+ -isystem /home/fursin/fggprogs/android-ndk-r13b/sources/cxx-stl/gnu-libstdc++/4.9/libs/arm64-v8a/include
+ -isystem /home/fursin/fggprogs/android-ndk-r13b/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
+ -I/home/fursin/CK-TOOLS/lib-protobuf-3.0.0-android-ndk-4.9.x-android21-arm64/obj
+ -I/home/fursin/CK-TOOLS/lib-protobuf-3.0.0-android-ndk-4.9.x-android21-arm64/protobuf-3.0.0/src
+ -fexceptions
+ -frtti
+ -Wno-psabi
+ --sysroot=/home/fursin/fggprogs/android-ndk-r13b/platforms/android-21/arch-arm64
+ -funwind-tables
+ -fsigned-char
+ -no-canonical-prefixes
+ -fdata-sections
+ -ffunction-sections
+ -Wa,--noexecstack
+ -fomit-frame-pointer
+ -fstrict-aliasing
+ -funswitch-loops
+ -finline-limit=300
+ -O3
+ -DNDEBUG
+ -fPIC
+ -o CMakeFiles/libprotobuf-lite.dir/home/fursin/CK-TOOLS/lib-protobuf-3.0.0-android-ndk-4.9.x-android21-arm64/protobuf-3.0.0/src/google/protobuf/arena.cc.o
+ -c /home/fursin/CK-TOOLS/lib-protobuf-3.0.0-android-ndk-4.9.x-android21-arm64/protobuf-3.0.0/src/google/protobuf/arena.cc
+
+* Linking bin (working flags for G++)
+
+/home/fursin/fggprogs/android-ndk-r13b/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-gcc
+ -fexceptions
+ -frtti
+ -Wno-psabi
+ --sysroot=/home/fursin/fggprogs/android-ndk-r13b/platforms/android-21/arch-arm64
+ -funwind-tables
+ -fsigned-char
+ -no-canonical-prefixes
+ -fdata-sections
+ -ffunction-sections
+ -Wa,--noexecstack
+ -fomit-frame-pointer
+ -fstrict-aliasing
+ -funswitch-loops
+ -finline-limit=300
+ -O3
+ -DNDEBUG
+ -Wl,--no-undefined
+ -Wl,-allow-shlib-undefined
+ -Wl,--gc-sections
+ -Wl,-z,noexecstack
+ -Wl,-z,relro
+ -Wl,-z,now
+ -Wl,-z,nocopyreloc
+ -fPIE -pie
+ CMakeFiles/protoc.dir/home/fursin/CK-TOOLS/lib-protobuf-3.0.0-android-ndk-4.9.x-android21-arm64/protobuf-3.0.0/src/google/protobuf/compiler/main.cc.o
+ -o protoc  
+ -L/home/fursin/CK-TOOLS/lib-protobuf-3.0.0-android-ndk-4.9.x-android21-arm64/install/libs/arm64-v8a
+  libprotobuf.a libprotoc.a libprotobuf.a 
+ /home/fursin/fggprogs/android-ndk-r13b/platforms/android-21/arch-arm64/usr/lib/libz.so
+ "/home/fursin/fggprogs/android-ndk-r13b/sources/cxx-stl/gnu-libstdc++/4.9/libs/arm64-v8a/libgnustl_static.a"
+ "/home/fursin/fggprogs/android-ndk-r13b/sources/cxx-stl/gnu-libstdc++/4.9/libs/arm64-v8a/libsupc++.a"
+ -lm
+
+Minimal compile flags:
+ -DANDROID
+ -fexceptions
+ -frtti
+ -Wno-psabi
+ -funwind-tables
+ -fsigned-char
+ -no-canonical-prefixes
+ -fdata-sections
+ -ffunction-sections
+ -Wa,--noexecstack
+ -fomit-frame-pointer
+ -fstrict-aliasing
+ -funswitch-loops
+ -finline-limit=300
+
+Minimal linking flags:
+ -Wl,--no-undefined
+ -Wl,-allow-shlib-undefined
+ -Wl,--gc-sections
+ -Wl,-z,noexecstack
+ -Wl,-z,relro
+ -Wl,-z,now
+ -Wl,-z,nocopyreloc
