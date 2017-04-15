@@ -227,6 +227,32 @@ if "%PACKAGE_UNTAR%" == "YES" (
   )
 )
 
+rem ############################################################
+if "%PACKAGE_UNXTAR%" == "YES" (
+  echo.
+  echo UnXtarring archive ...
+
+  if EXIST "%PACKAGE_SUB_DIR%" (
+    rd /s /q %PACKAGE_SUB_DIR%
+    ping -n 2 192.192.192.192 -w 1000 > nul
+  )
+
+  if EXIST "%PACKAGE_SUB_DIR%" (
+    rd %PACKAGE_SUB_DIR%
+    ping -n 2 192.192.192.192 -w 1000 > nul
+  )
+
+  tar xvfJ %PACKAGE_NAME%
+
+  if NOT "%PACKAGE_UNTAR_SKIP_ERROR_WIN%" == "YES" (
+    if %errorlevel% neq 0 (
+      echo.
+      echo Error: untaring package failed!
+      goto err
+    )
+  )
+)
+
 cd /D %INSTALL_DIR%
 
 rem ############################################################

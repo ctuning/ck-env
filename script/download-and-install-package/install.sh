@@ -247,6 +247,22 @@ if [ "${PACKAGE_UNTAR}" == "YES" ] ; then
   fi
 fi
 
+############################################################
+if [ "${PACKAGE_UNXTAR}" == "YES" ] ; then
+  echo ""
+  echo "UnXtarring archive ..."
+
+  if [ -d ${PACKAGE_SUB_DIR} ] ; then
+    rm -rf ${PACKAGE_SUB_DIR}
+  fi
+
+  tar xvfJ ${PACKAGE_NAME}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: untaring package failed!"
+    exit 1
+  fi
+fi
+
 cd ${INSTALL_DIR}
 
 ############################################################
