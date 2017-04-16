@@ -6,6 +6,9 @@ For Intel GPUs:
 For Nvidia GPUs:
 * https://developer.nvidia.com/cuda-downloads
 
+For AMD GPUs:
+* http://developer.amd.com/tools-and-sdks/opencl-zone/amd-accelerated-parallel-processing-app-sdk/
+
 For MALI-based GPUs:
 * http://malideveloper.arm.com/resources/sdks/mali-opencl-sdk
 * http://malideveloper.arm.com/resources/drivers/

@@ -30,6 +30,7 @@ def dirs(i):
        for p in lst:
            dirs.append(os.path.join(p, 'NVIDIA GPU Computing Toolkit\\CUDA'))
            dirs.append(os.path.join(p, 'Intel\\OpenCL SDK'))
+           dirs.append(os.path.join(p, 'AMD APP SDK'))
 
     return {'return':0, 'dirs':dirs}
 
@@ -61,11 +62,12 @@ def limit(i):
     drx=[]
 
     for q in dr:
+        print (q)
         if phosd=='win':
            if q.find('\\src\\')<0 and q.find('/src/')<0:
-              if tbits=='32' and q.find('x64')<0:
+              if tbits=='32' and q.find('x64')<0 and q.find('_64')<0:
                 drx.append(q)
-              elif tbits=='64' and q.find('x64')>=0:
+              elif tbits=='64' and (q.find('x64')>=0 or q.find('_64')>=0):
                  drx.append(q)
         else:
            add=True
