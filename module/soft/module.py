@@ -434,9 +434,6 @@ def setup(i):
        if not found:
           return {'return':1, 'error':'software UOA (data_uoa) is not defined'}
 
-    dname=d.get('soft_name','')
-    if i.get('soft_name','')!='': dname=i['soft_name']
-
     if o=='con':
        if duoa!='' and duid!='':
           x=': '+duoa
@@ -453,6 +450,13 @@ def setup(i):
     pi=''
     envp=cus.get('env_prefix','')
     envps=envp+'_SET'
+
+    dname=d.get('soft_name','')
+    if i.get('soft_name','')!='': 
+       dname=i['soft_name']
+    else:
+       if cus.get('package_extra_name','')!='':
+          dname+=cus['package_extra_name']
 
     csp=d.get('can_skip_path','')
 
@@ -1734,6 +1738,7 @@ def check(i):
 
     env_data_uoa=i.get('force_env_data_uoa','')
 
+    dname=''
     rx=find_config_file({'full_path':pf})
     if rx['return']>0: return rx
     found=rx['found']
@@ -1744,6 +1749,10 @@ def check(i):
        ev=rx['dict'].get('extra_version','')
        if rx['dict'].get('env_data_uoa','')!='' and env_data_uoa=='':
           env_data_uoa=rx['dict']['env_data_uoa']
+
+       dname=d.get('soft_name','')
+       if cus.get('package_extra_name','')!='':
+          dname+=cus['package_extra_name']
 
        # FGG: should I add deps here or not - the thing is that the env 
        # most likely changed so probably not ...
@@ -1767,6 +1776,7 @@ def check(i):
         'target_device_id':tdid,
         'deps':deps,
         'env_data_uoa':env_data_uoa,
+        'soft_name':dname,
         'extra_version':ev,
         'out':oo}
 

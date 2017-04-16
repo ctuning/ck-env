@@ -1432,6 +1432,7 @@ def refresh(i):
            rx=ck.access({'action':'update',
                          'module_uoa':work['self_module_uid'],
                          'data_uoa':duoa,
+                         'data_name':dname,
                          'dict':meta,
                          'sort_keys':'yes'})
            if rx['return']>0: return rx
@@ -1464,6 +1465,7 @@ def refresh(i):
             'tags':sftags,
             'package_uoa':package_uoa,
             'skip_device_info_collection':'yes',
+            'soft_name':dname,
             'env':penv,
             'env_data_uoa':duid}
         if i.get('reset_env','')!='': ii['reset_env']=i['reset_env']

@@ -1,5 +1,6 @@
 * 2017.04.15 - moved many generic packages from ck-autotuning here
              - added LLVM 4.0.0 universal package (still need to fix for Linux)
+             - fixed env refresh when extra package name is available (useful for caffe/tensorflow models)
 
 * 2017.04.14 - fixed mingw gfortran detection on Windows (for Caffe)
 

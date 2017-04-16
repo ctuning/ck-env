@@ -97,6 +97,7 @@ def install(i):
     """
     import os
     import time
+    import copy
 
     o=i.get('out','')
 
@@ -376,7 +377,6 @@ def install(i):
     suoa=d.get('soft_uoa','')
 
     dname=d.get('package_name','')
-    edname=d.get('package_extra_name','')
 
     ver=cus.get('version','')+ev
     extra_dir=cus.get('extra_dir','')
@@ -808,8 +808,8 @@ def install(i):
     if dname=='':
        dname=dx.get('soft_name','')
 
-       if edname!='':
-          dname+=edname
+       if d.get('package_extra_name','')!='':
+          cus['package_extra_name']=d['package_extra_name']
 
        if cus.get('package_extra_name','')!='':
           dname+=cus['package_extra_name']
@@ -1141,16 +1141,7 @@ def install(i):
     if len(soft_cfg)>0:
        ii.update(soft_cfg)
 
-    # Recording cus dict to install dir to be able to rebuild env later if needed 
-    if pi!='':
-       pic=os.path.join(pi, cfg['ck_install_file'])
-
-       if o=='con':
-          ck.out('')
-          ck.out('Recording CK configuration to '+pic+' ...')
-
-       rx=ck.save_json_to_file({'json_file':pic, 'dict':ii})
-       if rx['return']>0: return rx
+    iii=copy.deepcopy(ii)
 
     # Check if need to setup environment
     if xsetup:
@@ -1181,6 +1172,19 @@ def install(i):
 
           enduoa=rx['env_data_uoa']
           enduid=rx['env_data_uid']
+
+    # Recording cus dict to install dir to be able to rebuild env later if needed 
+    if pi!='':
+       pic=os.path.join(pi, cfg['ck_install_file'])
+
+       if o=='con':
+          ck.out('')
+          ck.out('Recording CK configuration to '+pic+' ...')
+
+       iii['env_data_uoa']=enduid
+
+       rx=ck.save_json_to_file({'json_file':pic, 'dict':iii, 'sort_keys':'yes'})
+       if rx['return']>0: return rx
 
     if o=='con' and pi!='':
        ck.out('')
