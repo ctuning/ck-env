@@ -616,7 +616,8 @@ def setup(i):
               'cmd':scmd,
               'custom_script_obj':cs,
               'skip_existing':skip_existing,
-              'skip_add_target_file':cus.get('soft_version_skip_add_target_file','')}
+              'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
+              'use_locale':cus.get('use_locale_for_version','')}
           rx=get_version(ii)
           if rx['return']>0 and rx['return']!=16 and rx['return']!=22: return rx
           if rx['return']==0:
@@ -1812,6 +1813,8 @@ def get_version(i):
               (skip_existing)        - if 'yes', force detecting version again
               (skip_add_target_file) - if 'yes', do not add target file at the beginning 
                                        of CMD to detect version
+
+              (use_locale)           - if 'yes', use locale to decode output
             }
 
     Output: {
@@ -1937,7 +1940,13 @@ def get_version(i):
 
        if os.path.isfile(ftmp): 
           import sys
-          rx=ck.load_text_file({'text_file':ftmp, 'split_to_list':'yes', 'encoding':sys.stdout.encoding})
+          import locale
+
+          en=sys.stdout.encoding
+          if i.get('use_locale','')=='yes':
+             en=locale.getdefaultlocale()[1]
+
+          rx=ck.load_text_file({'text_file':ftmp, 'split_to_list':'yes', 'encoding':en})
           if rx['return']>0: return rx
           lst=rx['lst']
 

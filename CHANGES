@@ -1,6 +1,8 @@
 * 2017.04.18 - added package to automatically download and install GCC 6.3.0 for Windows
                (needed for OpenBLAS + Caffe)
              - added perl-strawberry-5.24.1.1-win (also for OpenBLAS on Windows)
+             - added use_locale_for_version to detect Microsoft compiler version on non-English Windows
+               (tested on French one)
 
 * 2017.04.17 - added support for AMD OpenCL lib
 
