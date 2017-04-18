@@ -1,0 +1,43 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PACKAGE_WGET": "YES",
+      "PACKAGE_WGET_EXTRA": "--no-cookies"
+    },
+    "version": ""
+  },
+  "end_full_path": {
+    "win": "mingw64\\bin\\gcc.exe",
+    "mingw": "mingw64\\bin\\gcc.exe"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "windows"
+  ],
+  "only_for_target_os_tags": [
+    "windows",
+    "mingw"
+  ],
+  "process_script": "install",
+  "soft_uoa": "3a8a82fa40bf992d",
+  "suggested_path": "mingw-gcc-6.3.0",
+  "tags": [
+    "compiler",
+    "fortran",
+    "gfortran",
+    "gcc",
+    "lang-c",
+    "lang-cpp",
+    "lang-f77",
+    "lang-f90",
+    "lang-f95",
+    "v6.3.0",
+    "v6.3",
+    "v6"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}
