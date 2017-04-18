@@ -91,7 +91,6 @@ def parse_version(i):
            j1=q.lower().find(' version')
            if j1>0:
               q=q[j1+9:]
-              print (q)
               j2=q.lower().find(' ')
               if j2>=0:
                  ver=q[:j2]
