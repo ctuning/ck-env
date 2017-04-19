@@ -11,4 +11,5 @@
 export CK_GPU_FREQ_GOVERNOR=performance
 
 #stop mpdecision
-./ck-set-gpu-online-and-frequency
+cd "$(dirname "${BASH_SOURCE[0]}")"
+. ck-set-gpu-online-and-frequency
