@@ -13,7 +13,14 @@ import os
 # customize directories to automatically find and register software
 
 def dirs(i):
-    return {'return':0}
+    xdirs=i.get('dirs', [])
+
+    x=ck.work['dir_repos']
+    if x!='': 
+       x=os.path.join(x,'ck-env')
+       xdirs.append(x)
+
+    return {'return':0, 'dirs':xdirs}
 
 ##############################################################################
 # limit directories 
