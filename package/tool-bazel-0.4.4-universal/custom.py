@@ -110,7 +110,7 @@ def setup(i):
 
     else:
        if hbits!='64':
-          return {'return':1, 'error':'this package doesn\'t support non 64-bit MacOS'}
+          return {'return':1, 'error':'this package doesn\'t support non 64-bit Linux'}
 
        f+='installer-linux-x86_64.sh'
 
