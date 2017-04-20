@@ -168,6 +168,25 @@ if "%PACKAGE_UNGZIP%" == "YES" (
 )
 
 rem ############################################################
+if "%PACKAGE_UN7ZIP%" == "YES" (
+  echo.
+  echo Un7zipping archive ...
+  echo.
+
+  if EXIST "%PACKAGE_NAME1%" (
+    del /Q /S %PACKAGE_NAME1%
+  )
+
+  7z x %PACKAGE_NAME%
+
+  if %errorlevel% neq 0 (
+   echo.
+   echo Error: un7zipping package failed!
+   goto err
+  )
+)
+
+rem ############################################################
 if "%PACKAGE_UNZIP%" == "YES" (
   echo.
   echo Unzipping archive ...

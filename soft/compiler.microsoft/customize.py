@@ -88,10 +88,10 @@ def parse_version(i):
     for q in lst:
         q=q.strip()
         if q!='':
-           j1=q.lower().find('compiler version ')
+           j1=q.lower().find(' version')
            if j1>0:
-              q=q[j1+17:]
-              j2=q.lower().find(' for')
+              q=q[j1+9:]
+              j2=q.lower().find(' ')
               if j2>=0:
                  ver=q[:j2]
                  break
