@@ -814,6 +814,10 @@ def install(i):
        if cus.get('package_extra_name','')!='':
           dname+=cus['package_extra_name']
 
+    # Save package UOA to the cus
+    cus['used_package_uoa']=duoa
+    cus['used_package_uid']=duid
+
     # Update by package deps (more precise)
     for q in deps:
         v=deps[q]
