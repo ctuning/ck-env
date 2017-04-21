@@ -1740,6 +1740,8 @@ def check(i):
 
     env_data_uoa=i.get('force_env_data_uoa','')
 
+    puoa=''
+
     dname=''
     rx=find_config_file({'full_path':pf})
     if rx['return']>0: return rx
@@ -1747,17 +1749,21 @@ def check(i):
     if found=='yes':
        dx=rx['dict']
 
-       cus=rx['dict'].get('customize',{})
-       ev=rx['dict'].get('extra_version','')
-       if rx['dict'].get('env_data_uoa','')!='' and env_data_uoa=='':
-          env_data_uoa=rx['dict']['env_data_uoa']
+       cus=dx.get('customize',{})
+       ev=dx.get('extra_version','')
+       if dx.get('env_data_uoa','')!='' and env_data_uoa=='':
+          env_data_uoa=dx['env_data_uoa']
 
        dname=d.get('soft_name','')
        if cus.get('package_extra_name','')!='':
           dname+=cus['package_extra_name']
 
+       puoa=dx.get('package_uoa','')
+
        # FGG: should I add deps here or not - the thing is that the env 
        # most likely changed so probably not ...
+
+       # New update -> I can now restore UIDs with deps, so maybe it's ok ...
 
        if o=='con':
           ck.out('')
@@ -1779,6 +1785,7 @@ def check(i):
         'deps':deps,
         'env_data_uoa':env_data_uoa,
         'soft_name':dname,
+        'package_uoa':puoa,
         'extra_version':ev,
         'out':oo}
 
