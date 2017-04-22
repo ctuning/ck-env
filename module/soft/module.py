@@ -1746,6 +1746,7 @@ def check(i):
     rx=find_config_file({'full_path':pf})
     if rx['return']>0: return rx
     found=rx['found']
+    xtags=''
     if found=='yes':
        dx=rx['dict']
 
@@ -1760,6 +1761,8 @@ def check(i):
 
        puoa=dx.get('package_uoa','')
 
+       xtags=dx.get('tags','')
+        
        # FGG: should I add deps here or not - the thing is that the env 
        # most likely changed so probably not ...
 
@@ -1787,6 +1790,7 @@ def check(i):
         'soft_name':dname,
         'package_uoa':puoa,
         'extra_version':ev,
+        'tags':xtags,
         'out':oo}
 
     if cus.get('collect_device_info','')!='yes':

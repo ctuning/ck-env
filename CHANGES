@@ -1,3 +1,5 @@
+* 2017.04.22 - fixed bug when detecting already installed via CK software (restoring tags!)
+
 * 2017.04.21 - fixed recording of package UOA when automatically detecting allready installed soft (restoring env - needed for Caffe crowd-benchmarking)
 
 * 2017.04.20 - added LMDB universal package (not completely working on Windows) ...
