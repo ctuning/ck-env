@@ -50,7 +50,8 @@ def install(i):
               (env_data_uoa)      - use this data UOA to record (new) env
               (env_repo_uoa)      - use this repo to record new env
 
-              (install_path)      - path with soft is installed
+              (install_path)      - full path with soft is installed
+              (path)              - path with soft is installed (path from the package will be appended)
               (ask)               - if 'yes', ask path
 
               (skip_process)      - if 'yes', skip archive processing
@@ -547,6 +548,7 @@ def install(i):
            stags+=q.strip()
 
     # Check installation path
+    pre_path=i.get('path','')
     pi=i.get('install_path','')
     ep=i.get('extra_path','')
     fp=i.get('full_path','')
@@ -714,9 +716,12 @@ def install(i):
           pix=''
           sp=d.get('suggested_path','')
 
-          rz=prepare_install_path({})
-          if rz['return']>0: return rz
-          x=rz['path']
+          if pre_path=='':
+             rz=prepare_install_path({})
+             if rz['return']>0: return rz
+             x=rz['path']
+          else:
+             x=pre_path
 
           if x!='' and sp!='':
              # Prepare installation path
