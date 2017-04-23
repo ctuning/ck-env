@@ -1651,6 +1651,7 @@ def check(i):
                'host_os_dict':hosd,
                'target_os_dict':tosd,
                'cmd':scmd,
+               'use_locale':cus.get('use_locale_for_version',''),
                'custom_script_obj':cs}
            rx=get_version(ii)
            if rx['return']>0:
