@@ -26,7 +26,7 @@
     "version": "3.5.2"
   },
   "end_full_path": {
-    "linux": "cmake-3.5.2-Linux-x86/bin/cmake",
+    "linux": "cmake-3.5.2-Linux-x86_64/bin/cmake",
     "win": "cmake-3.5.2-win32-x86\\bin\\cmake.exe"
   },
   "only_for_host_os_tags": [
@@ -34,6 +34,7 @@
     "windows"
   ],
   "only_for_target_os_tags": [
+    "linux",
     "windows"
   ],
   "process_script": "install",
