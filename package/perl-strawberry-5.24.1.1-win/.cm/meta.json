@@ -1,0 +1,39 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PACKAGE_URL":"http://strawberryperl.com/download/5.24.1.1/",
+      "PACKAGE_WGET": "YES",
+      "PACKAGE_WGET_EXTRA": "--no-cookies"
+    },
+    "version": ""
+  },
+  "end_full_path": {
+    "mingw": "perl\\bin\\perl.exe",
+    "win": "perl\\bin\\perl.exe"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "windows"
+  ],
+  "only_for_target_os_tags": [
+    "windows",
+    "mingw"
+  ],
+  "process_script": "install",
+  "soft_uoa": "64af56ff46465488",
+  "suggested_path": "strawberry-perl-5.24.1.1",
+  "tags": [
+    "compiler",
+    "perl",
+    "lang-perl",
+    "v5.24.1.1",
+    "v5.24.1",
+    "v5.24",
+    "v5"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

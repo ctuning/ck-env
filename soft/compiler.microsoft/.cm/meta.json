@@ -29,7 +29,8 @@
     }, 
     "soft_version_cmd": {
       "win": "> $#filename#$ 2>&1"
-    }
+    },
+    "use_locale_for_version":"yes"
   }, 
   "deps": {
     "msdk": {

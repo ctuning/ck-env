@@ -1,5 +1,5 @@
-#
-# Collective Knowledge workflow framework
+#!/usr/bin/python
+
 #
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
@@ -72,6 +72,9 @@ def setup(i):
     hname2=hosd.get('ck_name2','')  # win, mingw, linux, android
     macos=hosd.get('macos','')      # yes/no
 
+    tname=tosd.get('ck_name','')    # win, linux
+    tname2=tosd.get('ck_name2','')  # win, mingw, linux, android
+
     hft=i.get('features',{}) # host platform features
     habi=hft.get('os',{}).get('abi','') # host ABI (only for ARM-based); if you want to get target ABI, use tosd ...
                                         # armv7l, etc...
@@ -87,38 +90,21 @@ def setup(i):
     nie={} # new env
 
     # Update vars
-    f=ie['PACKAGE_NAME_TEMPLATE']
+    if tname2=='win' or tname2=='mingw':
 
-    if macos=='yes':
-       if hbits!='64':
-          return {'return':1, 'error':'this package doesn\'t support non 64-bit MacOS'}
+       if hbits=='64':
+          f1='threads-posix/seh/'
+          f2='x86_64-6.3.0-release-posix-seh-rt_v5-rev1.7z'
+       else:
+          f1='threads-win32/dwarf/'
+          f2='i686-6.3.0-release-win32-dwarf-rt_v5-rev2.7z'
 
-       f+='installer-darwin-x86_64.sh'
-
-       nie['PACKAGE_SKIP_LINUX_MAKE']='YES'
-       nie['PACKAGE_RUN']='YES'
-       nie['PACKAGE_CMD']='--prefix='+pi+' --bazelrc='+pi
-
-    elif hname=='win':
-       if hbits!='64':
-          return {'return':1, 'error':'this package doesn\'t support non 64-bit Windows'}
-
-       f+='windows-x86_64.zip'
-
-       nie['PACKAGE_WGET_EXTRA']=ie['PACKAGE_WGET_EXTRA']+' -O '+f
-       nie['PACKAGE_UNZIP']='YES'
+       nie['PACKAGE_URL']='https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win64/Personal Builds/mingw-builds/6.3.0/'+f1
+       nie['PACKAGE_NAME']=f2
+       nie['PACKAGE_WGET_EXTRA']=ie['PACKAGE_WGET_EXTRA']+' -O '+f2
+       nie['PACKAGE_UN7ZIP']='YES'
 
     else:
-       if hbits!='64':
-          return {'return':1, 'error':'this package doesn\'t support non 64-bit Linux'}
-
-       f+='installer-linux-x86_64.sh'
-
-       nie['PACKAGE_SKIP_LINUX_MAKE']='YES'
-       nie['PACKAGE_RUN']='YES'
-       nie['PACKAGE_CMD']='--prefix='+pi+' --bazelrc='+pi
-
-    nie['PACKAGE_NAME']=f
-#    nie['PACKAGE_WGET_EXTRA']=ie['PACKAGE_WGET_EXTRA']+' -O '+f
+       return {'return':1, 'error':'platform is not supported'}
 
     return {'return':0, 'install_env':nie}

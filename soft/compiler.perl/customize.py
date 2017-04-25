@@ -43,6 +43,9 @@ def parse_version(i):
 
            break
 
+    if ver!='' and ver.startswith('v'):
+       ver=ver[1:]
+
     return {'return':0, 'version':ver}
 
 ##############################################################################

@@ -202,6 +202,22 @@ if [ "${PACKAGE_UNGZIP}" == "YES" ] ; then
 fi
 
 ############################################################
+if [ "${PACKAGE_UN7ZIP}" == "YES" ] ; then
+  echo ""
+  echo "Un7zipping archive ..."
+
+  if [ -f ${PACKAGE_NAME1} ] ; then
+    rm -f ${PACKAGE_NAME1}
+  fi
+
+  7z x -d ${PACKAGE_NAME}
+  if [ "${?}" != "0" ] ; then
+    echo "Error: un7zipping package failed!"
+    exit 1
+  fi
+fi
+
+############################################################
 if [ "${PACKAGE_UNZIP}" == "YES" ] ; then
   echo ""
   echo "Unzipping archive ..."

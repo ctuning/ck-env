@@ -693,7 +693,8 @@ def set(i):
               'host_os_dict':hosd,
               'target_os_dict':tosd,
               'cmd':scmd,
-              'custom_script_obj':cs}
+              'custom_script_obj':cs,
+              'use_locale':cus.get('use_locale_for_version','')}
           rx=ck.access(ii)
           if rx['return']==0:
              verx=rx['version']
