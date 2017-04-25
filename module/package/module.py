@@ -12,6 +12,11 @@ work={} # Will be updated by CK (temporal data)
 ck=None # Will be updated by CK (initialized CK kernel) 
 
 # Local settings
+fix_env_for_rebuild={"PACKAGE_GIT": "NO", 
+                     "PACKAGE_WGET": "NO",
+                     "PACKAGE_SKIP_CLEAN_INSTALL": "YES",
+                     "PACKAGE_SKIP_CLEAN_OBJ": "YES",
+                     "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES"}
 
 ##############################################################################
 # Initialize module
@@ -84,6 +89,8 @@ def install(i):
                                     (to have more deterministic build)
 
               (add_hint)          - if 'yes', add hint that can skip package installation and detect soft instead
+
+              (rebuild)           - if 'yes', attempt to set env to avoid downloading package again, just rebuild (if supported)
             }
 
     Output: {
@@ -181,6 +188,8 @@ def install(i):
        iev=ck.cfg.get('install_to_env','')
 
     safe=i.get('safe','')
+
+    rebuild=i.get('rebuild','')
 
     # Check package description
     duoa=i.get('uoa','')
@@ -556,6 +565,9 @@ def install(i):
     x=cus.get('input_path_example','')
     if x!='': pie=' (example: '+ye+')'
     else: pie=''
+
+    # If rebuild option, try to set vars to avoid download 
+    if rebuild=='yes': pr_env.update(fix_env_for_rebuild)
 
     # Customize installation before installation path is finalized ******************************************************
     ii={"host_os_uoa":hosx,
