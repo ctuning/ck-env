@@ -73,6 +73,8 @@ def setup(i):
     hosd=i.get('host_os_dict',{})
     sdirs=hosd.get('dir_sep','')
 
+    tplat=tosd.get('ck_name','')
+
     fp=cus.get('full_path','')
     pi=os.path.dirname(os.path.dirname(fp)) # ../..
 
@@ -89,7 +91,14 @@ def setup(i):
     if not os.path.isdir(vcp): os.makedirs(vcp)
 
     # os.sep is needed at the end otherwise ViennaCL will not use it as a directory name, but as a file name ...
-    env['VIENNACL_CACHE_PATH']=vcp+os.sep
+    vcp = vcp + os.sep
+    env['VIENNACL_CACHE_PATH'] = vcp
+
+    bat = ''
+    if tplat=='win':
+      bat += '\nmd "' + vcp + '"\n\n'
+    else:
+      bat += '\nmkdir -p "' + vcp + '"\n\n'
 
     # If remote, also overwrite this env with remote device path
     # However do not forget that ViennaCL does not create directory for Cache,
@@ -103,4 +112,4 @@ def setup(i):
           if tplat2 not in cus['env_by_os']: cus['env_by_os'][tplat2]={}
           cus['env_by_os'][tplat2]['VIENNACL_CACHE_PATH']=dremote+tosd.get('dir_sep','')+cache_path+'_'
 
-    return {'return':0, 'bat':''}
+    return {'return':0, 'bat': bat}
