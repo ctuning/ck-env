@@ -26,6 +26,7 @@
     }
   }, 
   "end_full_path": {
+    "android": "install$#sep#$lib$#sep#$liblmdb.a", 
     "linux": "install$#sep#$lib$#sep#$liblmdb.a", 
     "win": "lib$#sep#$lmdb.lib"
   }, 
@@ -35,6 +36,7 @@
     "windows"
   ], 
   "only_for_target_os_tags": [
+    "android", 
     "linux", 
     "windows"
   ], 
