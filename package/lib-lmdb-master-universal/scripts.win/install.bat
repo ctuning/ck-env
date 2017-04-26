@@ -9,28 +9,47 @@ rem
 rem Developer(s): Grigori Fursin, Daniil Efremov 2016-2017
 rem
 
+cd /D %INSTALL_DIR%\src\libraries\liblmdb
 
-cd /D %INSTALL_DIR%\%PACKAGE_SUB_DIR%\libraries\liblmdb
+mkdir %INSTALL_DIR%\include
+copy /B *.h %INSTALL_DIR%\include
 
+echo.
+echo Building static library ...
+echo.
 
-############################################################
-echo ""
-echo "Building package ..."
+set CK_TARGET_FILE=lmdb.lib
+set CK_TARGET_FILE_S=%CK_TARGET_FILE%
 
-mingw32-make PREFIX="%INSTALL_DIR%\install" BINARY=%CK_TARGET_CPU_BITS% MAKE=mingw32-make.exe CC=%CK_CC% %CK_COMPILER_FLAGS_OBLIGATORY% AR="%CK_AR%" XCFLAGS="-DMDB_DSYNC=O_SYNC -DMDB_USE_ROBUST=0"
+del /Q *.obj
+del /Q %CK_TARGET_FILE% 
 
+set CK_SOURCE_FILES=mdb.c midl.c
+set CK_OBJ_FILES=mdb.obj midl.obj
+
+set CK_CC_FLAGS=%CK_COMPILER_FLAGS_OBLIGATORY% %CK_COMPILER_FLAGS_MISC% %CK_COMPILER_FLAGS_CC_OPTS% %CK_COMPILER_FLAGS_ARCH% %CK_COMPILER_FLAGS_PAR%
+
+echo Executing %CK_CC% %CK_OPT_SPEED% %CK_FLAGS_STATIC_LIB% %CK_FLAGS_CREATE_OBJ% %CK_CC_FLAGS% %CK_SOURCE_FILES% %CK_LD_FLAGS_MISC% %CK_LD_FLAGS_EXTRA%
+%CK_CC% %CK_OPT_SPEED% %CK_FLAGS_STATIC_LIB% %CK_FLAGS_CREATE_OBJ% %CK_CC_FLAGS% %CK_SOURCE_FILES% %CK_LD_FLAGS_MISC% %CK_LD_FLAGS_EXTRA% 
 if %errorlevel% neq 0 (
  echo.
- echo Error: make failed!
+ echo Building failed!
  goto err
 )
 
-mingw32-make install PREFIX="%INSTALL_DIR%\install"
-
+echo Executing %CK_LB% %CK_LB_OUTPUT%%CK_TARGET_FILE% %CK_OBJ_FILES% ntdll.lib
+%CK_LB% %CK_LB_OUTPUT%%CK_TARGET_FILE% %CK_OBJ_FILES% ntdll.lib
 if %errorlevel% neq 0 (
  echo.
- echo Error: make install failed!
+ echo Building failed!
  goto err
 )
+
+echo.
+echo Installing ...
+echo.
+
+mkdir %INSTALL_DIR%\lib
+copy /B %CK_TARGET_FILE_S% %INSTALL_DIR%\lib
 
 exit /b 0

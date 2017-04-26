@@ -1,3 +1,5 @@
+* 2017.04.26 - added support for LMDB lib for Windows
+
 * 2017.04.25 - added experimental mode to rebuild package without download (ck install package:{name} --rebuild)
              - added ck xset env with default flags to quickly set env from command line (useful for caffe python)
 

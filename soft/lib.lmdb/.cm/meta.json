@@ -10,7 +10,7 @@
     },
     "soft_file": {
       "linux": "liblmdb.so",
-      "win": "liblmdb.lib"
+      "win": "lmdb.lib"
     },
     "soft_path_example": {
       "linux": "/usr/lib/liblmdb.so",
