@@ -37,8 +37,8 @@ if %errorlevel% neq 0 (
  goto err
 )
 
-echo Executing %CK_LB% %CK_LB_OUTPUT%%CK_TARGET_FILE% %CK_OBJ_FILES% ntdll.lib
-%CK_LB% %CK_LB_OUTPUT%%CK_TARGET_FILE% %CK_OBJ_FILES% ntdll.lib
+echo Executing %CK_LB% %CK_LB_OUTPUT%%CK_TARGET_FILE% %CK_OBJ_FILES% advapi32.lib ntdll.lib 
+%CK_LB% %CK_LB_OUTPUT%%CK_TARGET_FILE% %CK_OBJ_FILES% advapi32.lib ntdll.lib
 if %errorlevel% neq 0 (
  echo.
  echo Building failed!
