@@ -18,9 +18,6 @@ fix_env_for_rebuild={"PACKAGE_GIT": "NO",
                      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
                      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES"}
 
-finstall='ck-install.json'
-finstall_saved='ck-install-saved.json'
-
 ##############################################################################
 # Initialize module
 
@@ -1693,7 +1690,7 @@ def distribute(i):
         if pp1==pp:
            break
 
-        ppx=os.path.join(pp1, finstall)
+        ppx=os.path.join(pp1, cfg['ck_install_file'])
         if os.path.isfile(ppx):
            found=True
            break
@@ -1839,7 +1836,7 @@ def distribute(i):
            z.write(p1, 'install'+os.sep+fn, zip_method)
 
        # ck-install.json
-       z.write(ftmp, finstall_saved, zip_method)
+       z.write(ftmp, cfg['ck_install_file_saved'], zip_method)
 
        z.close()
        f.close()
