@@ -1560,3 +1560,354 @@ def prepare_install_path(i):
           os.makedirs(x)
 
     return {'return':0, 'path':x}
+
+##############################################################################
+# prepare distribution
+
+def distribute(i):
+    """
+    Input:  {
+              (data_uoa) - pacakge UOA
+
+              (ext)      - output package ext (ck-distro-{ext}).zip  If not specified, UID is generated.
+                or
+              (filename) - full name of output package
+
+              (path_key) - (path_bin, path_lib, path_include)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+    import shutil
+
+    # Init
+    o=i.get('out','')
+
+    oo=''
+    if o=='con':
+       oo=o
+
+    cur_dir=os.getcwd()
+
+    duoa=i.get('data_uoa','')
+    tags=i.get('tags','')
+
+    pk=i.get('path_key','')
+    if pk=='': pk='path_bin'
+
+    pinst='ck-install.json'
+
+    # Extension
+    fn=i.get('filename','')
+    if fn=='':
+       ext=i.get('ext','')
+       if ext=='':
+          rx=ck.gen_uid({})
+          if rx['return']>0: return rx
+          ext=rx['data_uid']
+
+       fn='ck-distro-'+ext+'.zip'
+
+    # Check if target
+    if i.get('target','')!='':
+       r=ck.access({'action':'init',
+                    'module_uoa':cfg['module_deps']['machine'],
+                    'input':i})
+       if r['return']>0: return r
+
+    device_cfg=i.get('device_cfg',{})
+
+    # Check host/target OS/CPU
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('target_device_id','')
+
+    r=ck.access({'action':'detect',
+                 'module_uoa':cfg['module_deps']['platform.os'],
+                 'host_os':hos,
+                 'target_os':tos,
+                 'device_cfg':device_cfg,
+                 'target_device_id':tdid,
+                 'skip_info_collection':'yes'})
+    if r['return']>0: return r
+
+    hos=r['host_os_uid']
+    hosx=r['host_os_uoa']
+    hosd=r['host_os_dict']
+
+    tos=r['os_uid']
+    tosx=r['os_uoa']
+    tosd=r['os_dict']
+
+    host_add_path_string=r.get('host_add_path_string','')
+
+    hosn=hosd.get('ck_name2','')
+    osn=tosd.get('ck_name2','')
+
+    # Load package meta
+    r=ck.access({'action':'load',
+                 'module_uoa':work['self_module_uid'],
+                 'data_uoa':duoa})
+    if r['return']>0: return r
+    d=r['dict']
+    p0=r['path']
+
+    # Get tags
+    tags=d['tags']
+    xtags=','.join(tags)
+
+    # Resolve env
+    if o=='con':
+       ck.out('Searching environment for this package ...')
+       
+    r=ck.access({'action':'set',
+                 'module_uoa':cfg['module_deps']['env'],
+                 'tags':xtags,
+                 'host_os':hos,
+                 'target_os':tos,
+                 'device_id':tdid,
+                 'out':oo})
+    if r['return']>0: return r
+
+    de=r['dict']
+
+    deps=de.get('deps',{})
+
+    # Path
+    cus=de.get('customize',{})
+    pp=cus.get(pk,'')
+    pp1=pp
+
+    found=False
+    while not found:
+        pp1=os.path.dirname(pp)
+
+        if pp1==pp:
+           break
+
+        ppx=os.path.join(pp1, pinst)
+        if os.path.isfile(ppx):
+           found=True
+           break
+
+        pp=pp1
+
+    # Read ck-install.json
+    if not found:
+       return {'return':1, 'error':px+' not found in installation paths ...'}
+
+    r=ck.load_json_file({'json_file':ppx})
+    if r['return']>0: return r
+    dx=r['dict']
+
+    # Rename deps (to avoid mix ups with local env)
+    dx['saved_deps']=dx.pop('deps')
+
+    # Save to tmp file
+    rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':'.json'})
+    if rx['return']>0: return rx
+    ftmp=rx['file_name']
+
+    r=ck.save_json_to_file({'json_file':ftmp, 'dict':dx, 'sort_keys':'yes'})
+    if r['return']>0: return r
+
+    # Check extra commands (for a given target platform)
+    ec=d.get('distribute_extra_commands',{}).get(osn,[])
+
+    for q in ec:
+        if o=='con':
+           ck.out('')
+           ck.out('Executing extra command')
+           ck.out('')
+
+        q['out']=oo
+        q['host_os']=hos
+        q['target_os']=tos
+        q['device_id']=tdid
+
+        r=ck.access(q)
+        if r['return']>0: return r
+
+    # Check extra files (for a given target platform)
+    ef=d.get('distribute_extra_file',{}).get(osn,[])
+
+    r=get_paths_from_deps({'deps':deps})
+    if r['return']>0: return r
+    paths=r['paths']
+
+    for q in ef:
+        fx=q['file']
+
+        if o=='con':
+           ck.out('')
+           ck.out('  * Searching extra file '+fx+' ...')
+
+        where=q.get('where_key','')
+        if where=='': where='path_bin'
+
+        pzz=''
+
+        muoa=q.get('module_uoa','')
+        duoa=q.get('data_uoa','')
+        if muoa!='' and duoa!='':
+           r=ck.access({'action':'load',
+                        'module_uoa':muoa,
+                        'data_uoa':duoa})
+           if r['return']>0: return r
+           py=r['path']
+
+           pi=q.get('extra_dir','')
+           if pi!='': py=os.path.join(py,pi)
+
+           pzz=os.path.join(py,fx)
+
+        else:
+           for py in paths:
+               pz=os.path.join(py,fx)
+               if os.path.isfile(pz):
+                  pzz=pz
+                  break
+
+        if pzz=='':
+           return {'return':1, 'error':'file not found'}
+
+        if o=='con':
+           ck.out('       Found ('+pzz+') - copying ...')
+
+        pz1=cus.get(pk,'')
+
+        if q.get('new_file','')!='': fx=q['new_file']
+
+        pz2=os.path.join(pz1, fx)
+
+        if os.path.isfile(pz2): os.remove(pz2)
+
+        shutil.copyfile(pzz, pz2)
+
+    # Check extra dirs (dist) in package
+    px=os.path.join(p0,'dist')
+    if os.path.isdir(px):
+       if o=='con':
+          ck.out('')
+          ck.out('Copying extra dist directory ...')
+
+       pxx=os.listdir(px)
+
+       for q in pxx:
+           q1=os.path.join(px,q)
+           q2=os.path.join(pp,q)
+
+           if o=='con':
+              ck.out('  * '+q)
+
+           if os.path.isdir(q2) or os.path.isfile(q2): 
+              shutil.rmtree(q2)
+
+           shutil.copytree(q1,q2)
+
+    # Prepare zip
+    import zipfile
+
+    zip_method=zipfile.ZIP_DEFLATED
+
+    r=ck.list_all_files({'path':pp})
+    if r['return']>0: return r
+
+    flx=r['list']
+
+    # Write archive
+    if o=='con':
+       ck.out('')
+       ck.out('Recording generated package to '+fn+' ...')
+
+    pfn=os.path.join(cur_dir,fn)
+
+    try:
+       f=open(pfn, 'wb')
+       z=zipfile.ZipFile(f, 'w', zip_method)
+
+       for fn in flx:
+           p1=os.path.join(pp, fn)
+           z.write(p1, 'install'+os.sep+fn, zip_method)
+
+       # ck-install.json
+       z.write(ftmp, pinst, zip_method)
+
+       z.close()
+       f.close()
+
+    except Exception as e:
+       return {'return':1, 'error':'failed to prepare archive ('+format(e)+')'}
+
+    if os.path.isfile(ftmp):
+       os.remove(ftmp)
+
+    return {'return':0}
+
+##############################################################################
+# get all paths from deps
+
+def get_paths_from_deps(i):
+    """
+    Input:  {
+              (deps)  - deps
+              (paths) - current list of paths
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    deps=i.get('deps',{})
+    paths=i.get('paths',[])
+
+    for k in sorted(deps, key=lambda v: deps[v].get('sort',0)):
+        dp=deps[k]
+
+        uoa=dp.get('uoa','')
+        if uoa!='':
+           r=ck.access({'action':'load',
+                        'module_uoa':cfg['module_deps']['env'],
+                        'data_uoa':uoa})
+           if r['return']>0: return r
+           dp1=r['dict']
+
+           dpx=dp1.get('customize',{})
+
+           x=dpx.get('path_bin','')
+           if x!='' and x not in paths: paths.append(x)
+
+           if x=='':
+              # Trick for some dll on Windows
+              x=dpx.get('path_lib','')
+              if x!='':
+                 x=os.path.dirname(x)
+                 x=os.path.join(x,'bin')
+                 if os.path.isdir(x) and x not in paths: paths.append(x)
+
+           x=dpx.get('path_lib','')
+           if x!='' and x not in paths: paths.append(x)
+       
+           x=dpx.get('path_include','')
+           if x!='' and x not in paths: paths.append(x)
+
+           ndpd=dp1.get('deps',{})
+           if len(ndpd)>0:
+              r=get_paths_from_deps({'deps':ndpd, 'paths':paths})
+              if r['return']>0: return r
+              paths=r['paths']
+
+    return {'return':0, 'paths':paths}

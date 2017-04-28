@@ -1,3 +1,6 @@
+* 2017.04.28 - added 'ck distribution package' to create binary distributions 
+               (useful for Caffe crowd-benchmarking and crowd-tuning)
+
 * 2017.04.26 - added support for LMDB lib for Windows
 
 * 2017.04.25 - added experimental mode to rebuild package without download (ck install package:{name} --rebuild)
