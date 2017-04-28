@@ -18,6 +18,9 @@ fix_env_for_rebuild={"PACKAGE_GIT": "NO",
                      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
                      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES"}
 
+finstall='ck-install.json'
+finstall_saved='ck-install-saved.json'
+
 ##############################################################################
 # Initialize module
 
@@ -1602,8 +1605,6 @@ def distribute(i):
     pk=i.get('path_key','')
     if pk=='': pk='path_bin'
 
-    pinst='ck-install.json'
-
     # Extension
     fn=i.get('filename','')
     if fn=='':
@@ -1692,7 +1693,7 @@ def distribute(i):
         if pp1==pp:
            break
 
-        ppx=os.path.join(pp1, pinst)
+        ppx=os.path.join(pp1, finstall)
         if os.path.isfile(ppx):
            found=True
            break
@@ -1708,7 +1709,7 @@ def distribute(i):
     dx=r['dict']
 
     # Rename deps (to avoid mix ups with local env)
-    dx['saved_deps']=dx.pop('deps')
+#    dx['saved_deps']=dx.pop('deps')
 
     # Save to tmp file
     rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':'.json'})
@@ -1838,7 +1839,7 @@ def distribute(i):
            z.write(p1, 'install'+os.sep+fn, zip_method)
 
        # ck-install.json
-       z.write(ftmp, pinst, zip_method)
+       z.write(ftmp, finstall_saved, zip_method)
 
        z.close()
        f.close()
