@@ -1803,3 +1803,27 @@ def internal_install_package(i):
        return rx
 
     return {'return':0, 'env_data_uoa':duoa, 'env_data_uid':duid}
+
+##############################################################################
+# set env for command line (pre-set various flags)
+
+def xset(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    # Generate tmp file
+    i['local']='yes'
+    i['bat_file']='tmp-ck-env.bat'
+    i['bat_new']='yes'
+    i['print']='yes'
+
+    return set(i)

@@ -1651,6 +1651,7 @@ def check(i):
                'host_os_dict':hosd,
                'target_os_dict':tosd,
                'cmd':scmd,
+               'use_locale':cus.get('use_locale_for_version',''),
                'custom_script_obj':cs}
            rx=get_version(ii)
            if rx['return']>0:
@@ -1740,24 +1741,33 @@ def check(i):
 
     env_data_uoa=i.get('force_env_data_uoa','')
 
+    puoa=''
+
     dname=''
     rx=find_config_file({'full_path':pf})
     if rx['return']>0: return rx
     found=rx['found']
+    xtags=''
     if found=='yes':
        dx=rx['dict']
 
-       cus=rx['dict'].get('customize',{})
-       ev=rx['dict'].get('extra_version','')
-       if rx['dict'].get('env_data_uoa','')!='' and env_data_uoa=='':
-          env_data_uoa=rx['dict']['env_data_uoa']
+       cus=dx.get('customize',{})
+       ev=dx.get('extra_version','')
+       if dx.get('env_data_uoa','')!='' and env_data_uoa=='':
+          env_data_uoa=dx['env_data_uoa']
 
        dname=d.get('soft_name','')
        if cus.get('package_extra_name','')!='':
           dname+=cus['package_extra_name']
 
+       puoa=dx.get('package_uoa','')
+
+       xtags=dx.get('tags','')
+        
        # FGG: should I add deps here or not - the thing is that the env 
        # most likely changed so probably not ...
+
+       # New update -> I can now restore UIDs with deps, so maybe it's ok ...
 
        if o=='con':
           ck.out('')
@@ -1779,7 +1789,9 @@ def check(i):
         'deps':deps,
         'env_data_uoa':env_data_uoa,
         'soft_name':dname,
+        'package_uoa':puoa,
         'extra_version':ev,
+        'tags':xtags,
         'out':oo}
 
     if cus.get('collect_device_info','')!='yes':

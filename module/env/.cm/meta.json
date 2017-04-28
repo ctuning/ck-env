@@ -17,6 +17,9 @@
     },
     "show": {
       "desc": "show all installed software environments"
+    },
+    "xset": {
+      "desc": "set env for command line (pre-set various flags)"
     }
   },
   "copyright": "See CK COPYRIGHT.txt for copyright details",

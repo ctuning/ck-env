@@ -305,7 +305,9 @@ def setup(i):
           cus['path_bin']=os.path.join(pb,'bin')
 
        pi=''
-       if os.path.isfile(os.path.join(pl1,'include','CL','opencl.h')):
+       if os.path.isfile(os.path.join(pl,'include','CL','opencl.h')):
+          pi=pl
+       elif os.path.isfile(os.path.join(pl1,'include','CL','opencl.h')):
           pi=pl1
        elif os.path.isfile(os.path.join(pl2,'include','CL','opencl.h')):
           pi=pl2

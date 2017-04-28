@@ -7,7 +7,7 @@
       "PACKAGE_BUILD_TYPE": "cmake",
       "PACKAGE_CONFIGURE_FLAGS": "-DGFLAGS_LIBRARY=$<<CK_ENV_LIB_GFLAGS_LIB>>$ -DGFLAGS_INCLUDE_DIR=$<<CK_ENV_LIB_GFLAGS_INCLUDE>>$ -DBUILD_TESTING=OFF",
       "PACKAGE_CONFIGURE_FLAGS_ANDROID": "-DBUILD_SHARED_LIBS=OFF",
-      "PACKAGE_CONFIGURE_FLAGS_LINUX": "-DBUILD_SHARED_LIBS=OFF",
+      "PACKAGE_CONFIGURE_FLAGS_LINUX": "-DBUILD_SHARED_LIBS=ON",
       "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "-DBUILD_SHARED_LIBS=ON",
       "PACKAGE_COPY": "YES",
       "PACKAGE_GIT": "YES",
@@ -42,7 +42,7 @@
   },
   "end_full_path": {
     "android": "install$#sep#$lib$#sep#$libglog.a",
-    "linux": "install/lib/libglog.a",
+    "linux": "install/lib/libglog.so",
     "win": "install\\lib\\glog.lib"
   },
   "need_cpu_info": "yes",

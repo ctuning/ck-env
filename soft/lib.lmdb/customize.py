@@ -91,6 +91,7 @@ def setup(i):
 
     # Check platform
     hplat=hosd.get('ck_name','')
+    tplat=tosd.get('ck_name','')
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
@@ -99,6 +100,8 @@ def setup(i):
     tbits=tosd.get('bits','')
 
     env=i['env']
+
+    ep=cus['env_prefix']
 
     found=False
     while True:
@@ -115,16 +118,27 @@ def setup(i):
 
     ############################################################
     # Setting environment depending on the platform
-    if hplat=='win':
-       # TBD
-       return {'return':1, 'error':'OS not yet supported in customize.py...'}
+    cus['path_lib']=p1
+    cus['path_include']=os.path.join(pi,'include')
+
+    
+    if tplat=='win':
+       lbs='lmdb.lib'
+
+       r=ck.access({'action':'convert_to_cygwin_path', 'module_uoa':'os', 'path':cus['path_lib']})
+       if r['return']>0: return r
+       cus['path_lib']=r['path']
+
+       r=ck.access({'action':'convert_to_cygwin_path', 'module_uoa':'os', 'path':cus['path_include']})
+       if r['return']>0: return r
+       cus['path_include']=r['path']
 
     else:
-       cus['path_lib']=p1
-       cus['path_include']=os.path.join(pi,'include')
+       lbs='liblmdb.a'
 
-    ep=cus.get('env_prefix','')
-    if pi!='' and ep!='':
-       env[ep]=pi
+    cus['static_lib']=lbs
+    env[ep+'_STATIC_NAME']=lbs
+
+    env[ep]=pi
 
     return {'return':0, 'bat':s}
