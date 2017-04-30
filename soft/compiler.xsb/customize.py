@@ -107,14 +107,13 @@ def setup(i):
     s+='export XSB_DIR='+pi+'\n\n'
 
     # check target
-    import os
-
-    print (pi)
-
     p=os.path.join(pi,'config')
     ld=os.listdir(p)
 
     if len(ld)>0:
-       s+='export XSB_DIR_ADD='+ld[0]+'\n\n'
+       if winh=='yes':
+          s+='set XSB_DIR_ADD='+ld[0]+'\n\n'
+       else:
+          s+='export XSB_DIR_ADD='+ld[0]+'\n\n'
 
     return {'return':0, 'bat':s}
