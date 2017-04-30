@@ -154,7 +154,10 @@ def setup(i):
        s+='\nset PATH='+pi+x+';%PATH%\n\n'
 
     # Add SRC env for plugins
-    s+='\nexport CK_ENV_COMPILER_GCC_SRC='+pi+'/milepost-gcc-4.4.4\n\n'
+    if winh=='yes':
+       s+='\nset CK_ENV_COMPILER_GCC_SRC='+pi+'/milepost-gcc-4.4.4\n\n'
+    else:
+       s+='\nexport CK_ENV_COMPILER_GCC_SRC='+pi+'/milepost-gcc-4.4.4\n\n'
 
     # Otherwise may be problems on Windows during cross-compiling
     env['CK_OPT_UNWIND']=' '
