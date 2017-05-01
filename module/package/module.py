@@ -1691,7 +1691,7 @@ def distribute(i):
     # Resolve env
     if o=='con':
        ck.out('Searching environment for this package ...')
-       
+
     r=ck.access({'action':'set',
                  'module_uoa':cfg['module_deps']['env'],
                  'tags':xtags,
@@ -1726,7 +1726,7 @@ def distribute(i):
 
     # Read ck-install.json
     if not found:
-       return {'return':1, 'error':px+' not found in installation paths ...'}
+       return {'return':1, 'error':pp1+' not found in installation paths ...'}
 
     r=ck.load_json_file({'json_file':ppx})
     if r['return']>0: return r
