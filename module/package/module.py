@@ -1067,13 +1067,40 @@ def install(i):
              if pi.find(' ')>=0 and eifs!='': xs=eifs
              sb+=eset+' INSTALL_DIR='+xs+pi+xs+'\n'
 
+             # If Windows, add MingW path
+             if wb=='yes':
+                rm=ck.access({'action':'convert_to_cygwin_path',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'path':pi})
+                if rm['return']>0: return rm
+                ming_pi=rm['path']
+                sb+=eset+' INSTALL_DIR_MINGW='+xs+ming_pi+xs+'\n'
+
              xs=''
              if p.find(' ')>=0 and eifs!='': xs=eifs
              sb+=eset+' PACKAGE_DIR='+xs+ppp+xs+'\n'
 
+             # If Windows, add MingW path
+             if wb=='yes':
+                rm=ck.access({'action':'convert_to_cygwin_path',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'path':ppp})
+                if rm['return']>0: return rm
+                ming_ppp=rm['path']
+                sb+=eset+' PACKAGE_DIR_MINGW='+xs+ming_ppp+xs+'\n'
+
              xs=''
              if p.find(' ')>=0 and eifs!='': xs=eifs
              sb+=eset+' ORIGINAL_PACKAGE_DIR='+xs+p+xs+'\n'
+
+             # If Windows, add MingW path
+             if wb=='yes':
+                rm=ck.access({'action':'convert_to_cygwin_path',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'path':p})
+                if rm['return']>0: return rm
+                ming_p=rm['path']
+                sb+=eset+' ORIGINAL_PACKAGE_DIR_MINGW='+xs+ming_p+xs+'\n'
 
              sb+='\n'
 

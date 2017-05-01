@@ -155,7 +155,26 @@ def setup(i):
 
     # Add SRC env for plugins
     if winh=='yes':
-       s+='\nset CK_ENV_COMPILER_GCC_SRC='+pi+'/milepost-gcc-4.4.4\n\n'
+       pii=os.path.dirname(pi)
+       pii1=os.path.dirname(pii)
+#       s+='\nset PATH='+pii1+'\\etc\\milepost-gcc-4.4.4-bin\\bin;'+pii1+'\\bin;'+pii1+'\\msys\\1.0\\bin;%PATH%\n\n'
+#       We should not add MILEPOST GCC to the path since it may interfere with the main compiler
+
+       s+='\nset PATH=%PATH%;'+pii1+'\\bin;'+pii1+'\\msys\\1.0\\bin\n\n'
+
+       r=ck.access({'action':'convert_to_cygwin_paths',
+                    'module_uoa':'os',
+                    'paths':{'pii':pii, 'pi':pi}})
+       if r['return']>0: return r
+       pp=r['paths']
+
+       s+='\nset CK_ENV_COMPILER_GCC_SRC='+pp['pii']+'/milepost-gcc-4.4.4\n\n'
+
+       s+='\nset CK_ENV_COMPILER_GCC_LIB_GCC_PLUGIN='+pp['pi']+'/lib/libcc1.a\n'
+       s+='\nset CK_ENV_COMPILER_GCC_LIB_GCC_PLUGIN_CC='+pp['pi']+'/lib/libcc1.a\n'
+       s+='\nset CK_ENV_COMPILER_GCC_LIB_GCC_PLUGIN_FC='+pp['pi']+'/lib/libf951.a\n'
+       s+='\nset CK_ENV_COMPILER_GCC_LIB_GCC_PLUGIN_CPP='+pp['pi']+'/lib/libcc1plus.a\n'
+
     else:
        s+='\nexport CK_ENV_COMPILER_GCC_SRC='+pi+'/milepost-gcc-4.4.4\n\n'
 

@@ -104,7 +104,6 @@ def setup(i):
     ################################################################
     s+='\n'
 
-    s+='export XSB_DIR='+pi+'\n\n'
 
     # check target
     p=os.path.join(pi,'config')
@@ -112,8 +111,19 @@ def setup(i):
 
     if len(ld)>0:
        if winh=='yes':
-          s+='set XSB_DIR_ADD='+ld[0]+'\n\n'
+          r=ck.access({'action':'convert_to_cygwin_paths',
+                       'module_uoa':'os',
+                       'paths':{'pi':pi, 'bin':p1, 'ld0':ld[0]}})
+          if r['return']>0: return r
+          pp=r['paths']
+
+          env[ep]=pp['pi']
+          env[ep+'_BIN']=pp['bin']
+
+          s+='set XSB_DIR='+pp['pi']+'\n\n'
+          s+='set XSB_DIR_ADD='+pp['ld0']+'\n\n'
        else:
+          s+='export XSB_DIR='+pi+'\n\n'
           s+='export XSB_DIR_ADD='+ld[0]+'\n\n'
 
     return {'return':0, 'bat':s}
