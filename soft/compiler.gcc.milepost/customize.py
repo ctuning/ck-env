@@ -182,4 +182,4 @@ def setup(i):
     env['CK_OPT_UNWIND']=' '
     env['CK_FLAGS_DYNAMIC_BIN']=' '
 
-    return {'return':0, 'bat':s, 'env':env, 'tags':tags}
+    return {'return':0, 'bat':s, 'install_env':env, 'tags':tags}

@@ -323,7 +323,6 @@ def setup(i):
 
     env_new=i.get('env_new','')
 
-
     ########################################################################
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -498,7 +497,7 @@ def setup(i):
 
           cus.update(edx.get('customize',{}))
           deps=edx.get('deps',{})
-          if i.get('reset_env','')!='yes':
+          if i.get('reset_env','')!='yes' and 'tmp' not in edx.get('tags',[]):
              env=edx.get('env',{})
           pi=cus.get('path_install','')
 
