@@ -105,11 +105,11 @@ def setup(i):
        s+='set CTUNING_COMPILER_FORTRAN=%CK_FC%\n'
 
        s+='\n'
-       s+='if "%CK_CC%" == "ctuning-cc" ('
-       s+='  set CTUNING_COMPILER_CC=gcc'
-       s+='  set CTUNING_COMPILER_CPP=g++'
-       s+='  set CTUNING_COMPILER_FORTRAN=gfortran'
-       s+=')'
+       s+='if "%CK_CC%" == "ctuning-cc" (\n'
+       s+='  set CTUNING_COMPILER_CC=gcc\n'
+       s+='  set CTUNING_COMPILER_CPP=g++\n'
+       s+='  set CTUNING_COMPILER_FORTRAN=gfortran\n'
+       s+=')\n'
 
        s+='\n'
        s+='set CK_MAKE=make\n'
@@ -201,11 +201,11 @@ def setup(i):
        s+='export CTUNING_COMPILER_FORTRAN=$CK_FC\n'
 
        s+='\n'
-       s+='if [ "${CK_CC}" == "ctuning-cc" ] ; then'
-       s+='  export CTUNING_COMPILER_CC=gcc'
-       s+='  export CTUNING_COMPILER_CPP=g++'
-       s+='  export CTUNING_COMPILER_FORTRAN=gfortran'
-       s+='fi'
+       s+='if [ "${CK_CC}" == "ctuning-cc" ] ; then\n'
+       s+='  export CTUNING_COMPILER_CC=gcc\n'
+       s+='  export CTUNING_COMPILER_CPP=g++\n'
+       s+='  export CTUNING_COMPILER_FORTRAN=gfortran\n'
+       s+='fi\n'
 
        s+='\n'
        s+='export CK_MAKE=make\n'
