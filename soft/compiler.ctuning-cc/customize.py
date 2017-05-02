@@ -105,6 +105,13 @@ def setup(i):
        s+='set CTUNING_COMPILER_FORTRAN=%CK_FC%\n'
 
        s+='\n'
+       s+='if "%CK_CC%" == "ctuning-cc" ('
+       s+='  set CTUNING_COMPILER_CC=gcc'
+       s+='  set CTUNING_COMPILER_CPP=g++'
+       s+='  set CTUNING_COMPILER_FORTRAN=gfortran'
+       s+=')'
+
+       s+='\n'
        s+='set CK_MAKE=make\n'
        s+='set CK_OBJDUMP="objdump -d"\n'
 
@@ -192,6 +199,13 @@ def setup(i):
        s+='export CTUNING_COMPILER_CC=$CK_CC\n'
        s+='export CTUNING_COMPILER_CPP=$CK_CXX\n'
        s+='export CTUNING_COMPILER_FORTRAN=$CK_FC\n'
+
+       s+='\n'
+       s+='if [ "${CK_CC}" == "ctuning-cc" ] ; then'
+       s+='  export CTUNING_COMPILER_CC=gcc'
+       s+='  export CTUNING_COMPILER_CPP=g++'
+       s+='  export CTUNING_COMPILER_FORTRAN=gfortran'
+       s+='fi'
 
        s+='\n'
        s+='export CK_MAKE=make\n'
