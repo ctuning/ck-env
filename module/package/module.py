@@ -1067,13 +1067,40 @@ def install(i):
              if pi.find(' ')>=0 and eifs!='': xs=eifs
              sb+=eset+' INSTALL_DIR='+xs+pi+xs+'\n'
 
+             # If Windows, add MingW path
+             if wb=='yes':
+                rm=ck.access({'action':'convert_to_cygwin_path',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'path':pi})
+                if rm['return']>0: return rm
+                ming_pi=rm['path']
+                sb+=eset+' INSTALL_DIR_MINGW='+xs+ming_pi+xs+'\n'
+
              xs=''
              if p.find(' ')>=0 and eifs!='': xs=eifs
              sb+=eset+' PACKAGE_DIR='+xs+ppp+xs+'\n'
 
+             # If Windows, add MingW path
+             if wb=='yes':
+                rm=ck.access({'action':'convert_to_cygwin_path',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'path':ppp})
+                if rm['return']>0: return rm
+                ming_ppp=rm['path']
+                sb+=eset+' PACKAGE_DIR_MINGW='+xs+ming_ppp+xs+'\n'
+
              xs=''
              if p.find(' ')>=0 and eifs!='': xs=eifs
              sb+=eset+' ORIGINAL_PACKAGE_DIR='+xs+p+xs+'\n'
+
+             # If Windows, add MingW path
+             if wb=='yes':
+                rm=ck.access({'action':'convert_to_cygwin_path',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'path':p})
+                if rm['return']>0: return rm
+                ming_p=rm['path']
+                sb+=eset+' ORIGINAL_PACKAGE_DIR_MINGW='+xs+ming_p+xs+'\n'
 
              sb+='\n'
 
@@ -1602,8 +1629,6 @@ def distribute(i):
     pk=i.get('path_key','')
     if pk=='': pk='path_bin'
 
-    pinst='ck-install.json'
-
     # Extension
     fn=i.get('filename','')
     if fn=='':
@@ -1666,7 +1691,7 @@ def distribute(i):
     # Resolve env
     if o=='con':
        ck.out('Searching environment for this package ...')
-       
+
     r=ck.access({'action':'set',
                  'module_uoa':cfg['module_deps']['env'],
                  'tags':xtags,
@@ -1692,7 +1717,7 @@ def distribute(i):
         if pp1==pp:
            break
 
-        ppx=os.path.join(pp1, pinst)
+        ppx=os.path.join(pp1, cfg['ck_install_file'])
         if os.path.isfile(ppx):
            found=True
            break
@@ -1701,14 +1726,14 @@ def distribute(i):
 
     # Read ck-install.json
     if not found:
-       return {'return':1, 'error':px+' not found in installation paths ...'}
+       return {'return':1, 'error':pp1+' not found in installation paths ...'}
 
     r=ck.load_json_file({'json_file':ppx})
     if r['return']>0: return r
     dx=r['dict']
 
     # Rename deps (to avoid mix ups with local env)
-    dx['saved_deps']=dx.pop('deps')
+#    dx['saved_deps']=dx.pop('deps')
 
     # Save to tmp file
     rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':'.json'})
@@ -1838,7 +1863,7 @@ def distribute(i):
            z.write(p1, 'install'+os.sep+fn, zip_method)
 
        # ck-install.json
-       z.write(ftmp, pinst, zip_method)
+       z.write(ftmp, cfg['ck_install_file_saved'], zip_method)
 
        z.close()
        f.close()

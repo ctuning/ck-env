@@ -323,7 +323,6 @@ def setup(i):
 
     env_new=i.get('env_new','')
 
-
     ########################################################################
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -498,7 +497,7 @@ def setup(i):
 
           cus.update(edx.get('customize',{}))
           deps=edx.get('deps',{})
-          if i.get('reset_env','')!='yes':
+          if i.get('reset_env','')!='yes' and 'tmp' not in edx.get('tags',[]):
              env=edx.get('env',{})
           pi=cus.get('path_install','')
 
@@ -1744,15 +1743,19 @@ def check(i):
     puoa=''
 
     dname=''
+    xtags=''
+
     rx=find_config_file({'full_path':pf})
     if rx['return']>0: return rx
     found=rx['found']
-    xtags=''
+
     if found=='yes':
        dx=rx['dict']
 
        cus=dx.get('customize',{})
+
        ev=dx.get('extra_version','')
+
        if dx.get('env_data_uoa','')!='' and env_data_uoa=='':
           env_data_uoa=dx['env_data_uoa']
 
@@ -2360,7 +2363,7 @@ def show(i):
 def find_config_file(i):
     """
     Input:  {
-              full_path - where to start search
+              full_path  - where to start search
             }
 
     Output: {
@@ -2368,8 +2371,10 @@ def find_config_file(i):
                                          >  0, if error
               (error)      - error text if return > 0
 
-              found   - 'yes' if found
-              dict    - loaded dict with the configuration ...
+              found    - 'yes' if found
+              dict     - loaded dict with the configuration ...
+              filename - filename
+              path     - path
             }
 
     """
@@ -2383,16 +2388,28 @@ def find_config_file(i):
     found='no'
     d={}
 
+    fn=''
+    pf2=''
     while pf1!=pf and pf1!='':
-       pf2=os.path.join(pf1,cfg['ck_install_file'])
+       fn=cfg['ck_install_file']
+       pf2=os.path.join(pf1,fn)
        if os.path.isfile(pf2):
           rx=ck.load_json_file({'json_file':pf2})
           if rx['return']==0:
              found='yes'
              d=rx['dict']
              break
+       else:
+          fn=cfg['ck_install_file_saved']
+          pf2=os.path.join(pf1,fn)
+          if os.path.isfile(pf2):
+             rx=ck.load_json_file({'json_file':pf2})
+             if rx['return']==0:
+                found='yes'
+                d=rx['dict']
+                break
 
        pf=pf1
        pf1=os.path.dirname(pf)
 
-    return {'return':0, 'found':found, 'dict':d}
+    return {'return':0, 'found':found, 'dict':d, 'filename':fn, 'path':pf2}

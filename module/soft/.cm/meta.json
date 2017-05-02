@@ -9,6 +9,9 @@
     "detect": {
       "desc": "detect is given software is already installed and register it in the CK or install it if package exists (the same as 'check')"
     },
+    "find_config_file": {
+      "desc": "find installation JSON file"
+    },
     "get_version": {
       "desc": "low-level function to get version (will be substituted)"
     },
@@ -32,7 +35,8 @@
       "desc": "split version"
     }
   },
-  "ck_install_file": "ck-install.json", 
+  "ck_install_file": "ck-install.json",
+  "ck_install_file_saved": "ck-install-saved.json",
   "copyright": "See CK COPYRIGHT.txt for copyright details",
   "custom_script_name": "customize",
   "default_bat_name": "env",

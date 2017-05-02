@@ -3,6 +3,9 @@
     "convert_to_cygwin_path": {
       "desc": "convert win path to cygwin path"
     },
+    "convert_to_cygwin_paths": {
+      "desc": "convert multiple paths to cygwin paths"
+    },
     "convert_uid_to_alias": {
       "desc": "convert UID to alias (UID) for user-friendly printing"
     },

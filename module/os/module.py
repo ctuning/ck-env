@@ -426,3 +426,34 @@ def convert_to_cygwin_path(i):
        ck.out(pp)
 
     return {'return':0, 'path':pp}
+
+##############################################################################
+# convert multiple paths to cygwin paths
+
+def convert_to_cygwin_paths(i):
+    """
+    Input:  {
+              paths - dict with paths to convert
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              paths - updated dict with paths
+            }
+
+    """
+
+    pp=i['paths']
+
+    for k in pp:
+        p=pp[k]
+
+        r=convert_to_cygwin_path({'path':p})
+        if r['return']>0: return r
+
+        pp[k]=r['path']
+
+    return {'return':0, 'paths':pp}
