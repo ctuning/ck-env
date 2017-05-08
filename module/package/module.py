@@ -1003,8 +1003,8 @@ def install(i):
               "customize":cus,
               "self_cfg":cfg,
               "version":ver,
-              "ck_kernel":ck,
               "path":ppp,
+              "path_original_package":p,
               "script_path":ppp1,
               "out":oo,
               "install_path":pi
@@ -1012,6 +1012,11 @@ def install(i):
 
           if o=='con': ii['interactive']='yes'
           if i.get('quiet','')=='yes': ii['interactive']=''
+
+          iic=copy.deepcopy(ii)
+
+          iic['ck_kernel']=ck
+          ii['ck_kernel']=ck
 
           if cs!=None and 'setup' in dir(cs):
              rx=cs.setup(ii)
@@ -1147,6 +1152,17 @@ def install(i):
 
              if rx>0: 
                 return {'return':1, 'error':'package installation failed'}
+
+          # Check if has post-setup Python script
+          iic['new_env']=pr_env
+
+          if cs!=None and 'post_setup' in dir(cs):
+             rx=cs.post_setup(iic)
+             if rx['return']>0: return rx
+
+          if cso!=None and 'post_setup' in dir(cso):
+             rx=cso.post_setup(iic)
+             if rx['return']>0: return rx
 
     # Preparing soft registration
     ii={'action':'setup',

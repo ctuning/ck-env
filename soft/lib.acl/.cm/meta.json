@@ -1,0 +1,25 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_ACL",
+    "limit_recursion_dir_search": {
+      "linux": 4,
+      "win": 4
+    },
+    "soft_file": {
+      "linux": "libarm_compute.a",
+      "win": "arm_compute.lib"
+    },
+    "soft_path_example": {
+    }
+  },
+  "soft_name": "ARM Compute Library",
+  "tags": [
+    "lib",
+    "arm",
+    "acl",
+    "arm-compute-lib"
+  ]
+}
