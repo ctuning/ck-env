@@ -1,4 +1,5 @@
 * 2017.05.08 - added ARM compute lib description
+             - passing updated env to all package/soft customization scripts
 
 * 2017.04.28 - added 'ck distribution package' to create binary distributions 
                (useful for Caffe crowd-benchmarking and crowd-tuning)

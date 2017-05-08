@@ -998,6 +998,7 @@ def install(i):
               "cfg":d,
               "tags":tags,
               "env":env,
+              "new_env":pr_env,
               "deps":udeps,
               "features":features,
               "customize":cus,
