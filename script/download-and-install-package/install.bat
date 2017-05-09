@@ -455,26 +455,29 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
   echo %PACKAGE_CONFIGURE_FLAGS% %CK_CMAKE_EXTRA%
   echo.
 
-  rem ############################################################
-  echo.
-  echo Configuring ...
-  echo.
+  if not "%PACKAGE_SKIP_CONFIGURE%" == "YES" (
 
-  cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
-        -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
-        %PACKAGE_CONFIGURE_FLAGS% ^
-        -DCMAKE_C_COMPILER="%CK_CC_PATH_FOR_CMAKE%" ^
-        %XCMAKE_C_FLAGS% ^
-        -DCMAKE_CXX_COMPILER="%CK_CXX_PATH_FOR_CMAKE%" ^
-        %XCMAKE_CXX_FLAGS% ^
-        -DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%" ^
-        -DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%" ^
-        %XCMAKE_AR% ^
-        %XCMAKE_LD% ^
-        %XCMAKE_EXE_LINKER_FLAGS% ^
-        %XCMAKE_EXE_LINKER_LIBS% ^
-        %CK_CMAKE_EXTRA% ^
-        %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+     rem ############################################################
+     echo.
+     echo Configuring ...
+     echo.
+
+     cmake -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\install" ^
+           -DCMAKE_BUILD_TYPE:STRING=%CMAKE_CONFIG% ^
+           %PACKAGE_CONFIGURE_FLAGS% ^
+           -DCMAKE_C_COMPILER="%CK_CC_PATH_FOR_CMAKE%" ^
+           %XCMAKE_C_FLAGS% ^
+           -DCMAKE_CXX_COMPILER="%CK_CXX_PATH_FOR_CMAKE%" ^
+           %XCMAKE_CXX_FLAGS% ^
+           -DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%" ^
+           -DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%" ^
+           %XCMAKE_AR% ^
+           %XCMAKE_LD% ^
+           %XCMAKE_EXE_LINKER_FLAGS% ^
+           %XCMAKE_EXE_LINKER_LIBS% ^
+           %CK_CMAKE_EXTRA% ^
+           %INSTALL_DIR%\%PACKAGE_SUB_DIR1%
+  )
 
   echo **************************************************************
   echo.
