@@ -1,9 +1,78 @@
-diff -ruN protobuf-3.0.0/cmake/protoc.cmake protobuf-3.0.0-fgg/cmake/protoc.cmake
---- protobuf-3.0.0/cmake/protoc.cmake	2016-07-27 23:40:30.000000000 +0200
-+++ protobuf-3.0.0-fgg/cmake/protoc.cmake	2016-12-27 16:40:08.831330922 +0100
-@@ -4,3 +4,5 @@
+diff -ruN protobuf-3.2.0\cmake\install.cmake protobuf-3.2.0-new\cmake\install.cmake
+--- protobuf-3.2.0\cmake\install.cmake	Fri Jan 27 23:03:40 2017
++++ protobuf-3.2.0-new\cmake\install.cmake	Wed May 10 10:07:15 2017
+@@ -14,8 +14,8 @@
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_library})
+ endforeach()
  
- add_executable(protoc ${protoc_files})
- target_link_libraries(protoc libprotobuf libprotoc)
+-install(TARGETS protoc EXPORT protobuf-targets
+-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT protoc)
++#install(TARGETS protoc EXPORT protobuf-targets
++#  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT protoc)
+ 
+ file(STRINGS extract_includes.bat.in _extract_strings
+   REGEX "^copy")
+@@ -100,7 +100,8 @@
+   ${CMAKE_INSTALL_CMAKEDIR}/protobuf-options.cmake @ONLY)
+ 
+ # Allows the build directory to be used as a find directory.
+-export(TARGETS libprotobuf-lite libprotobuf libprotoc protoc
++#export(TARGETS libprotobuf-lite libprotobuf libprotoc protoc
++export(TARGETS libprotobuf-lite libprotobuf libprotoc
+   NAMESPACE protobuf::
+   FILE ${CMAKE_INSTALL_CMAKEDIR}/protobuf-targets.cmake
+ )
+diff -ruN protobuf-3.2.0\cmake\libprotoc.cmake protobuf-3.2.0-new\cmake\libprotoc.cmake
+--- protobuf-3.2.0\cmake\libprotoc.cmake	Fri Jan 27 23:03:40 2017
++++ protobuf-3.2.0-new\cmake\libprotoc.cmake	Wed May 10 10:03:21 2017
+@@ -72,7 +72,7 @@
+   ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_message_field.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_primitive_field.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/js/js_generator.cc
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
++#  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/objectivec/objectivec_enum.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/objectivec/objectivec_enum_field.cc
+   ${protobuf_source_dir}/src/google/protobuf/compiler/objectivec/objectivec_extension.cc
+@@ -94,17 +94,17 @@
+   ${protobuf_source_dir}/src/google/protobuf/compiler/zip_writer.cc
+ )
+ 
+-set(js_well_known_types_sources,
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/any.js
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/struct.js
+-  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/timestamp.js
+-)
+-add_executable(js_embed ${protobuf_source_dir}/src/google/protobuf/compiler/js/embed.cc)
+-add_custom_command(
+-  OUTPUT ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
+-  DEPENDS js_embed ${js_well_known_types_sources}
+-  COMMAND js_embed ${js_well_known_types_sources} > ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
+-)
++#set(js_well_known_types_sources,
++#  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/any.js
++#  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/struct.js
++#  ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types/timestamp.js
++#)
++#add_executable(js_embed ${protobuf_source_dir}/src/google/protobuf/compiler/js/embed.cc)
++#add_custom_command(
++#  OUTPUT ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
++#  DEPENDS js_embed ${js_well_known_types_sources}
++#  COMMAND js_embed ${js_well_known_types_sources} > ${protobuf_source_dir}/src/google/protobuf/compiler/js/well_known_types_embed.cc
++#)
+ 
+ add_library(libprotoc ${protobuf_SHARED_OR_STATIC}
+   ${libprotoc_files})
+diff -ruN protobuf-3.2.0\cmake\protoc.cmake protobuf-3.2.0-new\cmake\protoc.cmake
+--- protobuf-3.2.0\cmake\protoc.cmake	Fri Jan 27 23:03:40 2017
++++ protobuf-3.2.0-new\cmake\protoc.cmake	Wed May 10 10:07:25 2017
+@@ -2,5 +2,7 @@
+   ${protobuf_source_dir}/src/google/protobuf/compiler/main.cc
+ )
+ 
+-add_executable(protoc ${protoc_files})
+-target_link_libraries(protoc libprotobuf libprotoc)
++#add_executable(protoc ${protoc_files})
++#target_link_libraries(protoc libprotobuf libprotoc)
 +
-+set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} ${CMAKE_EXE_LINKER_LIBS}")
++#set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} ${CMAKE_EXE_LINKER_LIBS}")
