@@ -1,0 +1,9 @@
+diff -ruN protobuf-3.0.0/cmake/protoc.cmake protobuf-3.0.0-fgg/cmake/protoc.cmake
+--- protobuf-3.0.0/cmake/protoc.cmake	2016-07-27 23:40:30.000000000 +0200
++++ protobuf-3.0.0-fgg/cmake/protoc.cmake	2016-12-27 16:40:08.831330922 +0100
+@@ -4,3 +4,5 @@
+ 
+ add_executable(protoc ${protoc_files})
+ target_link_libraries(protoc libprotobuf libprotoc)
++
++set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} ${CMAKE_EXE_LINKER_LIBS}")

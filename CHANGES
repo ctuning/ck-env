@@ -1,3 +1,5 @@
+* 2017.05.10 - added protobuf 3.2 & 3.3 for Linux, Windows and Android (needed for Caffe2)
+
 * 2017.05.08 - added ARM compute lib description
              - passing updated env to all package/soft customization scripts
 
