@@ -14,6 +14,11 @@ ck=None # Will be updated by CK (initialized CK kernel)
 # Local settings
 fix_env_for_rebuild={"PACKAGE_GIT": "NO", 
                      "PACKAGE_WGET": "NO",
+                     "PACKAGE_PATCH": "NO",
+                     "PACKAGE_PATCH": "NO",
+                     "PACKAGE_UNGZIP": "NO",
+                     "PACKAGE_UNTAR": "NO",
+                     "PACKAGE_UNBZIP": "NO",
                      "PACKAGE_SKIP_CLEAN_INSTALL": "YES",
                      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
                      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES"}
