@@ -99,6 +99,7 @@ def setup(i):
     p0=os.path.basename(fp)
     p1=os.path.dirname(fp)
     pi=os.path.dirname(p1)
+    pii=os.path.dirname(pi)
 
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
@@ -163,5 +164,11 @@ def setup(i):
 
     if win!='yes':
        env[ep+'_LFLAG']='-lprotobuf'
+
+    src=cus.get('install_env',{}).get('PACKAGE_SUB_DIR','')
+    psrc=os.path.join(pii,src)
+
+    if os.path.isdir(psrc):
+       env[ep+'_SRC_DIR']=psrc
 
     return {'return':0, 'bat':s}
