@@ -80,6 +80,8 @@ def install(i):
               (extra_version)     - add extra version, when registering software 
                                     (for example, -trunk-20160421)
 
+              (extra_tags)        - add extra tags to separated customized packages (string separated by comma)
+
               (extra_path)        - add extra path to the automatically prepared one
                                     (for example, -trunk-20160421)
 
@@ -371,6 +373,11 @@ def install(i):
 
     # Get main params
     tags=d.get('tags',[])
+
+    x=i.get('extra_tags','').strip()
+    if x!='':
+       tags.extend(x.split(','))
+
     cus=d.get('customize',{})
     env=d.get('env',{})
 

@@ -1,4 +1,5 @@
 * 2017.05.15 - improving detection of different versions of python and pip (useful for TensorFlow)
+             - added --extra_tags to install package
 
 * 2017.05.10 - added protobuf 3.2 & 3.3 for Linux, Windows and Android (needed for Caffe2)
 
