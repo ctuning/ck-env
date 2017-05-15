@@ -23,7 +23,7 @@
       "linux"
     ], 
     "soft_file": {
-      "linux": "python", 
+      "linux": "python*", 
       "win": "python*.exe"
     }, 
     "soft_file_from_host_os": "yes", 

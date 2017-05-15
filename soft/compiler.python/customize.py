@@ -169,23 +169,24 @@ def setup(i):
        env['CK_PYTHON_VER3']='YES'
 
     # Checking pip
-    found=False
+    lpip=[]
 
-    pip='pip'+pver
-    if winh=='yes': pip+='.exe'
-    ppip=os.path.join(p1, pip)
-    if os.path.isfile(ppip): found=True
-    else:
-       ppip=os.path.join(p1, 'Scripts', pip)
-       if os.path.isfile(ppip): found=True
-       else:
-          pip='pip'
-          if winh=='yes': pip+='.exe'
-          ppip=os.path.join(p1, pip)
-          if os.path.isfile(ppip): found=True
-          else:
-             ppip=os.path.join(p1, 'Scripts', pip)
-             if os.path.isfile(ppip): found=True
+    lpip.append(('pip'+pver,p1))
+    lpip.append(('pip'+pver,os.path.join(p2,'local','bin')))
+    lpip.append(('pip'+pver,os.path.join(p1,'Scripts')))
+
+    lpip.append(('pip',p1))
+    lpip.append(('pip',os.path.join(p2,'local','bin')))
+    lpip.append(('pip',os.path.join(p1,'Scripts')))
+
+    found=False
+    for x in lpip:
+        pip=x[0]
+        if winh=='yes': pip+='.exe'
+        ppip=os.path.join(x[1],pip)
+        if os.path.isfile(ppip): 
+           found=True
+           break
 
     if found:
        env['CK_PYTHON_PIP_BIN']=pip
