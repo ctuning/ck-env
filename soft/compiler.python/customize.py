@@ -44,12 +44,18 @@ def dirs(i):
 
 def limit(i):
 
+    import os
+
     dr=i.get('list',[])
     drx=[]
 
     for q in dr:
+        q1=os.path.basename(q)
+        if q.endswith('.exe'):
+           q1=q1[:-4]
         if q.find('X11')<0:
-           drx.append(q)
+           if q1=='python' or q1=='python2' or q1=='python3':
+              drx.append(q)
 
     return {'return':0, 'list':drx}
 
@@ -126,23 +132,69 @@ def setup(i):
     host_d=i.get('host_os_dict',{})
     winh=host_d.get('windows_base','')
 
+    ver=i.get('version','')
+    sver=i.get('version_split',[])
+
     fp=cus.get('full_path','')
 
-    ep=cus.get('env_prefix','')
-    p1=''
-    if ep!='' and fp!='':
-       p1=os.path.dirname(fp)
-       p2=os.path.dirname(p1)
+    ep=cus['env_prefix']
 
-       env[ep]=p2
-       env[ep+'_FILE']=fp
-       env[ep+'_BIN']=p1
+    p1=os.path.dirname(fp)
+    p2=os.path.dirname(p1)
 
-    if p1!='':
-       ############################################################
-       if winh=='yes':
-          s+='\nset PATH='+p1+';'+p1+'\\Scripts;%PATH%\n\n'
+    env[ep]=p2
+    env[ep+'_FILE']=fp
+    env[ep+'_BIN']=p1
+
+    # Check version
+    mf=os.path.basename(fp)
+    env['CK_PYTHON_BIN']=mf
+
+    if mf.endswith('.exe'): mf=mf[:-4]
+
+    pver=''
+    if len(sver)>0:
+       if sver[0]==2:
+          pver='2'
+       elif sver[0]==3:
+          pver='3'
+    elif mf.endswith('2'):
+       pver='2'
+    elif mf.endswith('3'):
+       pver='3'
+
+    if pver=='2':
+       env['CK_PYTHON_VER2']='YES'
+    elif pver=='3':
+       env['CK_PYTHON_VER3']='YES'
+
+    # Checking pip
+    found=False
+
+    pip='pip'+pver
+    if winh=='yes': pip+='.exe'
+    ppip=os.path.join(p1, pip)
+    if os.path.isfile(ppip): found=True
+    else:
+       ppip=os.path.join(p1, 'Scripts', pip)
+       if os.path.isfile(ppip): found=True
        else:
-          s+='\nexport PATH='+p1+':'+p1+'/Scripts:$PATH\n\n'
+          pip='pip'
+          if winh=='yes': pip+='.exe'
+          ppip=os.path.join(p1, pip)
+          if os.path.isfile(ppip): found=True
+          else:
+             ppip=os.path.join(p1, 'Scripts', pip)
+             if os.path.isfile(ppip): found=True
+
+    if found:
+       env['CK_PYTHON_PIP_BIN']=pip
+       env['CK_PYTHON_PIP_BIN_FULL']=ppip
+
+    ############################################################
+    if winh=='yes':
+       s+='\nset PATH='+p1+';'+p1+'\\Scripts;%PATH%\n\n'
+    else:
+       s+='\nexport PATH='+p1+':'+p1+'/Scripts:$PATH\n\n'
 
     return {'return':0, 'bat':s}
