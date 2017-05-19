@@ -9,6 +9,6 @@
 # Developer: Grigori Fursin (info provided by Anton Lokhmotov)
 #
 
-export CK_GPU_FREQ_GOVERNER=off
+export CK_GPU_FREQ_GOVERNOR=off
 
 . ck-set-gpu-online-and-frequency 600000000

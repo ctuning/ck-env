@@ -6,32 +6,34 @@
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
 #
-# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+# Developers:
+# - Grigori Fursin, grigori@dividiti.com
+# - Anton Lokhmotov, anton@dividiti.com
 #
 
-governer=powersave
-if [ "$CK_GPU_FREQ_GOVERNER" != "" ]; then
- governer=$CK_GPU_FREQ_GOVERNER
+governor=powersave
+if [ "$CK_GPU_FREQ_GOVERNOR" != "" ]; then
+  governor=$CK_GPU_FREQ_GOVERNOR
 fi
 
 for cpudir in /sys/class/misc/mali*
 do
-   if [ -f "$cpudir/device/clock" ]; then
-     echo "*** Processing $cpudir ..."
+  if [ -f "$cpudir/device/clock" ]; then
+    echo "*** Processing $cpudir ..."
 
-     echo "    Setting $governer state ..."
-     echo $governer | sudo tee $cpudir/device/dvfs
+    echo "    Setting $governor state ..."
+    echo $governor | sudo tee $cpudir/device/dvfs
 
-     if [ "$1" != "" ]; then
-        frequency=$1
-     fi
-     if [ "$CK_GPU_FREQ" != "" ]; then
-        frequency=$CK_GPU_FREQ
-     fi
+    if [ "$1" != "" ]; then
+      frequency=$1
+    fi
+    if [ "$CK_GPU_FREQ" != "" ]; then
+      frequency=$CK_GPU_FREQ
+    fi
 
-     echo "    Setting min/max frequency=$frequency ..."
-     echo $frequency | sudo tee $cpudir/device/clock
+    echo "    Setting min/max frequency=$frequency ..."
+    echo $frequency | sudo tee $cpudir/device/clock
 
-     echo "$(cat $cpudir/device/dvfs)"
-   fi
+    echo "$(cat $cpudir/device/dvfs)"
+  fi
 done
