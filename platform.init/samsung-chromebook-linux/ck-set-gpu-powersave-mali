@@ -11,4 +11,5 @@
 
 export CK_GPU_FREQ_GOVERNOR=off
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
 . ck-set-gpu-online-and-frequency 100000000
