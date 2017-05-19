@@ -1,7 +1,9 @@
 {
   "tags": [
     "os-linux",
+    "samsung",
+    "exynos",
     "chromebook",
-    "ubuntu" 
+    "chromebook2"
   ]
 }
