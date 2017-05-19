@@ -1,0 +1,21 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+export CK_GPU_FREQ_GOVERNOR=performance
+
+#stop mpdecision
+
+echo 1 > /sys/class/kgsl/kgsl-3d0/force_clk_on
+echo 1 > /sys/class/kgsl/kgsl-3d0/force_bus_on
+echo 1 > /sys/class/kgsl/kgsl-3d0/force_rail_on
+gpu_max_freq=`cat /sys/class/kgsl/kgsl-3d0/devfreq/max_freq`
+
+./ck-set-gpu-online-and-frequency $gpu_max_freq

@@ -1,0 +1,29 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+
+echo "*** Current GPU frequency:"
+cat /sys/class/kgsl/kgsl-3d0/gpuclk
+
+echo "*** Current GPU governor:"
+cat /sys/class/kgsl/kgsl-3d0/devfreq/governor
+
+echo "*** Min frequency:"
+cat /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
+
+echo "*** Max frequency:"
+cat /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
+
+echo "*** Available governors:"
+cat /sys/class/kgsl/kgsl-3d0/devfreq/available_governors 
+echo ""
+echo "*** Available GPU frequencies:"
+cat /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies
+

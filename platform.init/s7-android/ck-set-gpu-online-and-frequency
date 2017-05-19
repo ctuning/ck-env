@@ -1,0 +1,31 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+#
+governor="powersave"
+if [ "$CK_GPU_FREQ_GOVERNOR" != "" ]; then
+ governor=$CK_GPU_FREQ_GOVERNOR
+fi
+
+#stop mpdecision
+echo "    Setting governor=$governor ..."
+echo $governor > /sys/class/kgsl/kgsl-3d0/devfreq/governor
+
+if [ "$1" != "" ]; then
+   frequency=$1
+fi
+if [ "$CK_GPU_FREQ" != "" ]; then
+   frequency=$CK_GPU_FREQ
+fi
+
+echo "    Setting min/max frequency=$frequency ..."
+echo $frequency > /sys/class/kgsl/kgsl-3d0/gpuclk
+
+
+
