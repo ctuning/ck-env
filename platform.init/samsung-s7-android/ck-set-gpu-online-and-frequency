@@ -8,24 +8,35 @@
 #
 # Developer: Grigori Fursin (info provided by Anton Lokhmotov)
 #
-governor="powersave"
-if [ "$CK_GPU_FREQ_GOVERNOR" != "" ]; then
- governor=$CK_GPU_FREQ_GOVERNOR
+
+governer=Interactive
+if [ "$CK_GPU_FREQ_GOVERNER" != "" ]; then
+ governer=$CK_GPU_FREQ_GOVERNER
 fi
 
-#stop mpdecision
-echo "    Setting governor=$governor ..."
-echo $governor > /sys/class/kgsl/kgsl-3d0/devfreq/governor
+for cpudir in /sys/class/misc/mali*
+do
+   if [ -f "$cpudir/device/clock" ]; then
+     echo "*** Processing $cpudir ..."
 
-if [ "$1" != "" ]; then
-   frequency=$1
-fi
-if [ "$CK_GPU_FREQ" != "" ]; then
-   frequency=$CK_GPU_FREQ
-fi
+     echo "    Setting $governer governor ..."
+     echo $governer | tee $cpudir/device/dvfs_governor
 
-echo "    Setting min/max frequency=$frequency ..."
-echo $frequency > /sys/class/kgsl/kgsl-3d0/gpuclk
+     echo "    Turn off adaptive governor ..."
+     echo 0 | tee $cpudir/device/dvfs
 
+     if [ "$1" != "" ]; then
+        frequency=$1
+     fi
+     if [ "$CK_GPU_FREQ" != "" ]; then
+        frequency=$CK_GPU_FREQ
+     fi
 
+     echo "    Setting min/max frequency=$frequency ..."
+     echo $frequency | tee $cpudir/device/clock
 
+     echo ""
+     echo "    Checking current freq: $(cat $cpudir/device/clock)"
+     echo "    Checking that adaptive governor is off (should be 0): $(cat $cpudir/device/dvfs)"
+   fi
+done

@@ -9,5 +9,5 @@
 # Developer: Grigori Fursin
 #
 
-./ck-set-cpu-powersave
-./ck-set-gpu-powersave
+su -c . ck-set-cpu-powersave
+su -c . ck-set-gpu-powersave

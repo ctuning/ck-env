@@ -27,5 +27,5 @@ cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq
 echo "*** Available governors:"
 cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_governors
 
-echo "*** Available frequencies:"
-cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_frequencies
+#echo "*** Available frequencies:"
+#cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_frequencies

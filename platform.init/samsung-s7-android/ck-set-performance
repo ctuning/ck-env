@@ -9,5 +9,5 @@
 # Developer: Grigori Fursin
 #
 
-./ck-set-cpu-performance
-./ck-set-gpu-performance
+su -c . ck-set-cpu-performance
+su -c . ck-set-gpu-performance

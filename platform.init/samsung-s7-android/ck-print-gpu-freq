@@ -6,24 +6,25 @@
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
 #
-# Developer: Grigori Fursin (info provided by Anton Lokhmotov)
+# Developer: Grigori Fursin
 #
 
 echo "*** Current GPU frequency:"
-cat /sys/class/kgsl/kgsl-3d0/gpuclk
+cat /sys/class/misc/mali*/device/clock
 
-echo "*** Current GPU governor:"
-cat /sys/class/kgsl/kgsl-3d0/devfreq/governor
-
-echo "*** Min frequency:"
-cat /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
-
-echo "*** Max frequency:"
-cat /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
-
-echo "*** Available governors:"
-cat /sys/class/kgsl/kgsl-3d0/devfreq/available_governors 
 echo ""
 echo "*** Available GPU frequencies:"
-cat /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies
+cat /sys/class/misc/mali*/device/dvfs_table
+
+echo ""
+echo "*** Available GPU frequencies/voltages:"
+cat /sys/class/misc/mali*/device/asv_table
+
+echo ""
+echo "*** Current GPU DVFS state:"
+cat /sys/class/misc/mali*/device/dvfs
+
+echo ""
+echo "*** Available GPU governors:"
+cat /sys/class/misc/mali*/device/dvfs_governor
 

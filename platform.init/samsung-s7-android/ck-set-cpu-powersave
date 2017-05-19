@@ -14,9 +14,9 @@ cpuinfo_min_freq=`cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq`
 
 
 export PATH=/data/local/tmp/tools:$PATH
-export CK_CPU_FREQ_GOVERNOR=powersave
+export CK_CPU_FREQ_GOVERNOR=userspace
 export CK_CPU_FREQ_FILE=cpuinfo_min_freq
 export CK_CPU_ONLINE=0
 
 
-. ck-set-cpu-online-and-frequency $cpuinfo_min_freq
+su -c . ck-set-cpu-online-and-frequency $cpuinfo_min_freq
