@@ -9,5 +9,15 @@
 # Developer: Grigori Fursin (info provided by Anton Lokhmotov)
 #
 
-export CK_GPU_FREQ_GOVERNER=3
-su -c . ck-set-gpu-online-and-frequency 650
+# Governors:
+# 0 - Default
+# 1 - Interactive
+# 2 - Static
+# 3 - Booster
+
+# FGG notices strange thing: if setting freq to max (650),
+#   then CLBlast gives 13GFlops
+#   but if seeting freq to 0, we get 18GFlops ...
+
+export CK_GPU_FREQ_GOVERNER=1
+su -c . ck-set-gpu-online-and-frequency 0
