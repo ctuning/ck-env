@@ -19,5 +19,5 @@
 #   then CLBlast gives 13GFlops
 #   but if seeting freq to 0, we get 18GFlops ...
 
-export CK_GPU_FREQ_GOVERNER=1
+export CK_GPU_FREQ_GOVERNER=3
 su -c . ck-set-gpu-online-and-frequency 0
