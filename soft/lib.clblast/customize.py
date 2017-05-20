@@ -116,6 +116,8 @@ def setup(i):
     lbs=lb
     if lbs.endswith('.so'):
        lbs=lbs[:-3]+'.a'
+    else:
+       lbs=lbs[:-3]+'.lib'
 
     pl=os.path.dirname(fp)
     cus['path_lib']=pl
@@ -150,5 +152,8 @@ def setup(i):
     env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
     env[ep+'_STATIC_NAME']=cus.get('static_lib','')
     env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+
+    if lb.endswith('dll'):
+       s+='\n\nset PATH='+pl+';%PATH%\n\n'
 
     return {'return':0, 'bat':s}

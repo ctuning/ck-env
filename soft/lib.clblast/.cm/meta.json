@@ -9,7 +9,10 @@
       "linux": 3
     },
     "soft_file": {
-      "linux": "libclblast.so"
+      "linux": "libclblast.so",
+      "android": "libclblast.so", 
+      "mingw": "libclblast.so", 
+      "win": "clblast.dll"
     },
     "soft_path_example": {
       "linux": ""
