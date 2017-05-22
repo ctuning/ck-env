@@ -1351,6 +1351,7 @@ def check(i):
                                      useful when reinstalling broken env entry to avoid breaking
                                      all dependencies of other software ...
 
+              (search_dirs)        - extra directories where to search soft (string separated by comma)
             }
 
     Output: {
@@ -1532,7 +1533,17 @@ def check(i):
        else:
           xx=x.split(':')
        for x in xx:
-           dirs.append(x)
+           if x!='':
+              dirs.append(x)
+
+    # Check from input
+    x=i.get('search_dirs','')
+    if x!='':
+       xx=x.split(',')
+
+       for x in xx:
+           if x!='':
+              dirs.append(x)
 
     # Add user space
     from os.path import expanduser

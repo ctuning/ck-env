@@ -1,3 +1,5 @@
+* 2017.05.22 - added --search_dirs in ck detect soft to specify extra dirs where to search soft during auto-detection
+
 * 2017.05.15 - improving detection of different versions of python and pip (useful for TensorFlow)
              - added --extra_tags to install package
 
