@@ -332,6 +332,26 @@ def setup(i):
           x+=' -fpermissive'
        env['CK_CXX']=x
 
+    #  Check some unusal GCC installations on Linux
+    if winh!='yes':
+
+       x=env.get('CK_AR','')
+       x1=os.path.join(p1,x)
+       if not os.path.isfile(x1):
+          x='gcc-ar'
+          x1=os.path.join(p1,x)
+          if os.path.isfile(x1):
+             env['CK_AR']=x
+             env['CK_LB']=x+' rcs'
+
+       x=env.get('CK_RANLIB','')
+       x1=os.path.join(p1,x)
+       if not os.path.isfile(x1):
+          x='gcc-ranlib'
+          x1=os.path.join(p1,x)
+          if os.path.isfile(x1):
+             env['CK_RANLIB']=x
+
     x=cus.get('bugfix1','')
     if winh!='yes' and (x=='yes' or os.path.isdir('/usr/lib/x86_64-linux-gnu')):
        s+='\nexport LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH\n'
