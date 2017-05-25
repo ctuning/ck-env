@@ -1352,6 +1352,8 @@ def check(i):
                                      all dependencies of other software ...
 
               (search_dirs)        - extra directories where to search soft (string separated by comma)
+
+              (soft_name)          - name to search explicitly
             }
 
     Output: {
@@ -1574,10 +1576,12 @@ def check(i):
        if len(rx.get('dirs',[]))>0: dirs=rx['dirs']
 
     # Check which file to search for
-    if cus.get('soft_file_from_host_os','')=='yes':
-       sname=cus.get('soft_file',{}).get(hplat,'')
-    else:
-       sname=cus.get('soft_file',{}).get(tplat,'')
+    sname=i.get('soft_name','')
+    if sname=='':
+       if cus.get('soft_file_from_host_os','')=='yes':
+          sname=cus.get('soft_file',{}).get(hplat,'')
+       else:
+          sname=cus.get('soft_file',{}).get(tplat,'')
 
     cbd=cus.get('soft_can_be_dir','')
 

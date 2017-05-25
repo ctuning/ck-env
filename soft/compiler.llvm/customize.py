@@ -190,9 +190,14 @@ def setup(i):
        cus['path_lib']=pi+sdirs+'lib'
        cus['path_include']=pi+sdirs+'include'
 
+       pname=os.path.basename(fp)
+
+       j=pname.find('-clang')
+       if j>0:
+          cus['tool_prefix']=pname[:j+1]
+
        if hplat=='linux':
           sname=cus.get('soft_file',{}).get(hplat,'')
-          pname=os.path.basename(fp)
           if pname.startswith(sname+'-'):
              tp=pname[len(sname):]
 

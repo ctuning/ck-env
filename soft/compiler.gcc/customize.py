@@ -170,9 +170,15 @@ def setup(i):
 
        tp=''
 
+       # Trick to check that long name
+       pname=os.path.basename(fp)
+
+       j=pname.find('-gcc')
+       if j>0:
+          cus['tool_prefix']=pname[:j+1]
+
        if hplat=='linux':
           sname=cus.get('soft_file',{}).get(hplat,'')
-          pname=os.path.basename(fp)
           if pname.startswith(sname+'-'):
              tp=pname[len(sname):]
 
