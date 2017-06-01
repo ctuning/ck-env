@@ -1,0 +1,103 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a3c3882..a7b981a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,6 +39,7 @@ set(cltune_VERSION_PATCH 0)
+ option(BUILD_SHARED_LIBS "Build a shared (ON) or static library (OFF)" ON)
+ option(SAMPLES "Enable compilation of sample programs" ON)
+ option(TESTS "Enable compilation of the Google tests" OFF)
++option(ANDROID "Build for Android" OFF)
+ 
+ # Select between OpenCL and CUDA back-end
+ option(USE_OPENCL "Use OpenCL instead of CUDA" ON)
+@@ -157,6 +158,10 @@ else(BUILD_SHARED_LIBS)
+   add_library(cltune STATIC ${TUNER})
+ endif()
+ target_link_libraries(cltune ${FRAMEWORK_LIBRARIES})
++# When building for Android, also link against libgnustl.
++if(ANDROID)
++  target_link_libraries(cltune libgnustl_static.a)
++endif()
+ 
+ # Sets the proper __declspec(dllexport) keyword for Visual Studio when the library is built
+ if(MSVC)
+diff --git a/include/internal/android_patch.h b/include/internal/android_patch.h
+new file mode 100644
+index 0000000..4c1df71
+--- /dev/null
++++ b/include/internal/android_patch.h
+@@ -0,0 +1,33 @@
++//
++// Created by daniil on 1/11/17.
++//
++#ifndef CLTUNE_ANDROID_PATCH_H
++#define CLTUNE_ANDROID_PATCH_H
++
++#include <string>
++#include <sstream>
++#include <cstdio>
++#include <cstdlib>
++
++namespace std {
++    template<typename T>
++    std::string to_string(T value) {
++        //create an output string stream
++        std::ostringstream os;
++
++        //throw the value into the string stream
++        os << value;
++
++        //convert the string stream onto a string and return
++        return os.str();
++    }
++
++    inline double stod(string value) {
++        return strtod (value.c_str(), NULL);
++    }
++
++    inline int stoi(string value) {
++        return strtol (value.c_str(), NULL, 0);
++    }
++}
++#endif // CLTUNE_ANDROID_PATCH_H
+diff --git a/include/internal/clpp11.h b/include/internal/clpp11.h
+index 2a7b22f..a9a461d 100644
+--- a/include/internal/clpp11.h
++++ b/include/internal/clpp11.h
+@@ -50,6 +50,8 @@
+   #include <CL/opencl.h>
+ #endif
+ 
++#include "android_patch.h"
++
+ namespace cltune {
+ // =================================================================================================
+ 
+diff --git a/samples/conv/conv.cc b/samples/conv/conv.cc
+index aedb93a..6f087ea 100644
+--- a/samples/conv/conv.cc
++++ b/samples/conv/conv.cc
+@@ -36,6 +36,9 @@
+ // Includes the OpenCL tuner library
+ #include "cltune.h"
+ 
++// Includes the Android patch
++#include "internal/android_patch.h"
++
+ // Helper function to perform an integer division + ceiling (round-up)
+ size_t CeilDiv(size_t a, size_t b) { return (a + b - 1)/b; }
+ 
+diff --git a/samples/gemm/gemm.cc b/samples/gemm/gemm.cc
+index f2c3c82..31d8c54 100644
+--- a/samples/gemm/gemm.cc
++++ b/samples/gemm/gemm.cc
+@@ -39,6 +39,9 @@
+ // Includes the OpenCL tuner library
+ #include "cltune.h"
+ 
++// Includes the Android patch
++#include "internal/android_patch.h"
++
+ // Helper function to determine whether or not 'a' is a multiple of 'b'
+ bool IsMultiple(size_t a, size_t b) {
+   return ((a/b)*b == a) ? true : false;
