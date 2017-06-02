@@ -104,6 +104,9 @@ def setup(i):
     s += r['script']
     cus['include_name']='cJSON.h'
     cus['static_lib']='libcjson'+sext
+#FIX ME; It is just a work around. https://github.com/DaveGamble/cJSON/issues/178; 
+    cus['static_lib']='libcjson'+dext
+
     cus['dynamic_lib']='libcjson'+dext
 
     env['CK_ENV_LIB_CJSON_INCLUDE_NAME']=cus.get('include_name','')
