@@ -79,7 +79,7 @@ def setup(i):
        pi=os.path.dirname(p1)
 
        cus['path_lib']=pi+sdirs+'lib'
-       cus['path_include']=pi+sdirs+'include/cjson'
+       cus['path_include']=pi+sdirs+'include'
 
     ep=cus.get('env_prefix','')
     if ep!='':
@@ -102,6 +102,7 @@ def setup(i):
       'lib_path': cus.get('path_lib','')})
     if r['return']>0: return r
     s += r['script']
+
     cus['include_name']='cJSON.h'
     cus['static_lib']='libcjson'+sext
     cus['dynamic_lib']='libcjson'+dext

@@ -52,7 +52,7 @@
     "linux" 
   ], 
   "process_script": "install", 
-  "soft_uoa": "59c52485faf01e9a",
+  "soft_uoa": "eb8146fc8f72921a",
   "suggested_path": "lib-cjson", 
   "tags": [ 
     "lib", 

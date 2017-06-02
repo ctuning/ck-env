@@ -1,0 +1,6 @@
+This is a cJSON library used in OpenME and xopenME plugin infrastructure
+to open up "black-box" compilers and tools and enable autotuning and run-time adaptation.
+
+You can find related package in 
+$ ck pull repo:ck-autotuning
+$ ck list package:*cjson*
