@@ -52,12 +52,11 @@
     "linux" 
   ], 
   "process_script": "install", 
-  "soft_uoa": "4a0fc75eab604a79", 
+  "soft_uoa": "59c52485faf01e9a",
   "suggested_path": "lib-cjson", 
   "tags": [ 
     "lib", 
     "cjson", 
-    "dvdt-prof", 
     "vmaster", 
     "vdev"
   ], 
