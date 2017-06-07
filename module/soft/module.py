@@ -1354,6 +1354,8 @@ def check(i):
               (search_dirs)        - extra directories where to search soft (string separated by comma)
 
               (soft_name)          - name to search explicitly
+
+              (full_path)          - force full path (rather than searching in all directories)
             }
 
     Output: {
@@ -1606,26 +1608,30 @@ def check(i):
 
     rlm=cus.get('limit_recursion_dir_search',{}).get(hplat,0)
 
-    rx=search_tool({'path_list':dirs, 'file_name':sname, 'recursion_level_max':rlm, 'can_be_dir':cbd, 'out':'con'})
-    if rx['return']>0: return rx
-
-    lst=rx['list']
-    et=rx['elapsed_time']
-
-    # Limit to required ones
-    if 'limit' in dir(cs):
-       rx=cs.limit({'list':lst,
-                    'host_os_dict':hosd,
-                    'target_os_dict':tosd,
-                    'soft_name':osname,
-                    'ck_kernel':ck})
+    fp=i.get('full_path','')
+    if fp!='':
+       lst=[fp]
+    else:
+       rx=search_tool({'path_list':dirs, 'file_name':sname, 'recursion_level_max':rlm, 'can_be_dir':cbd, 'out':'con'})
        if rx['return']>0: return rx
+
        lst=rx['list']
+       et=rx['elapsed_time']
+
+       # Limit to required ones
+       if 'limit' in dir(cs):
+          rx=cs.limit({'list':lst,
+                       'host_os_dict':hosd,
+                       'target_os_dict':tosd,
+                       'soft_name':osname,
+                       'ck_kernel':ck})
+          if rx['return']>0: return rx
+          lst=rx['list']
 
     # Print results
 #    if o=='con':
-    ck.out('')
-    ck.out('  Search completed in '+('%.1f' % et)+' secs. Found '+str(len(lst))+' target files (may be pruned) ...')
+       ck.out('')
+       ck.out('  Search completed in '+('%.1f' % et)+' secs. Found '+str(len(lst))+' target files (may be pruned) ...')
 
     # Select, if found
     il=0

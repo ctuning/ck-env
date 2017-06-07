@@ -1,3 +1,5 @@
+* 2017.06.06 - added flag --full_path to specify path to the installed soft during "ck detect soft"
+
 * 2017.05.25 - added flag --soft_name to specify non-standard tool name to search
 
 * 2017.05.22 - added --search_dirs in ck detect soft to specify extra dirs where to search soft during auto-detection

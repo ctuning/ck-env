@@ -39,6 +39,7 @@ def limit(i):
 def version_cmd(i):
 
     fp=i['full_path']
+
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
     cmdx=i['cmd']
