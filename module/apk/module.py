@@ -282,6 +282,7 @@ def add(i):
 
               (abi)       - list of ABI separated by comma (default=armeabi,armeabi-v7a,arm64-v8a)
               (version)   - version
+              (versioncode) - versioncode
 
               (path)      - path to APK on local host (apk_name will be automatically detected)
               (apk_name)  - force APK name
@@ -337,6 +338,9 @@ def add(i):
     if version=='':
         return {'return':1, 'error':'"version" is not specified'}
 
+    # VersionCode
+    versioncode=i.get('versioncode','')
+
     # Check CK entry name
     duoa=i.get('data_uoa','')
     ruoa=i.get('repo_uoa','')
@@ -375,7 +379,8 @@ def add(i):
     if 'apks' not in dd: dd['apks']=[]
     dd['apks'].append({'abis':abis,
                        'apk_name':apk_name,
-                       'version':version})
+                       'version':version,
+                       'versioncode':versioncode})
 
     r=ck.access({'action':'update',
                  'module_uoa':work['self_module_uid'],
