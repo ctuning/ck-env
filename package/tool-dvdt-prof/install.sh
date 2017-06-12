@@ -8,7 +8,7 @@
 #
 # Developer(s):
 # - Grigori Fursin, grigori@dividiti.com, 2015
-# - Anton Lokhmotov, anton@dividiti.com, 2016
+# - Anton Lokhmotov, anton@dividiti.com, 2016-2017
 #
 
 # Standard env.
@@ -72,6 +72,8 @@ cmake \
   -DCJSON_LIB_DIR:PATH=${CK_ENV_LIB_CJSON_LIB} \
   -DCJSON_INCLUDE_DIR:PATH=${CK_ENV_LIB_CJSON_INCLUDE} \
   -DCJSON_LIB_NAME:STRING=${CK_ENV_LIB_CJSON_STATIC_NAME} \
+  -DBOOST_INCLUDE_DIR:PATH=${CK_ENV_LIB_BOOST_INCLUDE} \
+  -DBOOST_LIB_DIR:STRING=${CK_ENV_LIB_BOOST_LIB} \
   -DTOOL_FLAGS:STRING="${TOOL_FLAGS}" \
   >>${BLD_LOG} 2>&1
 if [ "${?}" != "0" ] ; then
