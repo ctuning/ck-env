@@ -21,15 +21,21 @@ def version_cmd(i):
     ver=''
 
     p0=os.path.basename(fp)
-    p1=os.path.dirname(fp)
-
-    lst=os.listdir(p1)
-    for fn in lst:
-        if fn.startswith(p0):
-           x=fn[len(p0):]
-           if x.startswith('.'):
-              ver=x[1:]
-              break
+    lib_prefix = '.lib'
+    if p0.endswith(lib_prefix):
+      # windows naming: libboost_system-vc140-mt-s-1_62.lib
+      last_dash_index = p0.rfind('-')
+      if -1 < last_dash_index:
+        ver = p0[last_dash_index+1:-len(lib_prefix)].replace('_', '.')
+    else:
+      p1=os.path.dirname(fp)
+      lst=os.listdir(p1)
+      for fn in lst:
+          if fn.startswith(p0):
+             x=fn[len(p0):]
+             if x.startswith('.'):
+                ver=x[1:]
+                break
 
     return {'return':0, 'cmd':'', 'version':ver}
 
@@ -72,6 +78,7 @@ def setup(i):
             }
 
     """
+    import glob
 
     # Get variables
     ck=i['ck_kernel']
@@ -104,16 +111,32 @@ def setup(i):
     tbits=tosd.get('bits','')
 
     env=i['env']
+    sver=i['version_split']
 
     found=False
-    while True:
-       if os.path.isdir(os.path.join(pi,'lib')):
-          found=True
-          break
-       pix=os.path.dirname(pi)
-       if pix==pi:
-          break
-       pi=pix
+    lib_path = pi
+    include_path = pi
+    while not found:
+       for p in glob.glob(os.path.join(pi,'lib*')):
+         if os.path.isdir(p):
+            lib_path = p
+            break
+
+       include_path = pi
+       for p in glob.glob(os.path.join(pi,'include')):
+         if os.path.isdir(p):
+            include_path = p
+            break
+
+       found = '' != lib_path and '' != include_path
+
+       if not found:
+         lib_path = ''
+         include_path = ''
+         pix=os.path.dirname(pi)
+         if pix==pi:
+            break
+         pi=pix
 
     if not found:
        return {'return':1, 'error':'can\'t find root dir of Boost installation'}
@@ -121,8 +144,8 @@ def setup(i):
     ep=cus['env_prefix']
     env[ep]=pi
 
-    cus['path_lib']=p1
-    cus['path_include']=os.path.join(pi,'include')
+    cus['path_lib']=lib_path
+    cus['path_include']=include_path
 
     r = ck.access({'action': 'lib_path_export_script', 
                    'module_uoa': 'os', 
@@ -141,10 +164,13 @@ def setup(i):
        if fpd.endswith('.dll') and os.path.isfile(fpd):
           s+='\nset PATH='+p1+';%PATH%\n\n'
 
-       env[ep+'_LFLAG_SYSTEM']=os.path.join(p1,'boost_system-mt.lib')
-       env[ep+'_LFLAG_THREAD']=os.path.join(p1,'boost_thread-mt.lib')
-       env[ep+'_LFLAG_DATE_TIME']=os.path.join(p1,'boost_date_time-mt.lib')
-       env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem-mt.lib')
+       compiler = p0[len('libboost_system'):p0.find('-mt')]
+       ver_suffix = p0[p0.find('-mt')+3:-len('.lib')]
+
+       env[ep+'_LFLAG_SYSTEM']=os.path.join(p1,'boost_system' + compiler + '-mt' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_THREAD']=os.path.join(p1,'boost_thread' + compiler + '-mt' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_DATE_TIME']=os.path.join(p1,'boost_date_time' + compiler + '-mt' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem' + compiler + '-mt' + ver_suffix + '.lib')
     else:
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
        env[ep+'_LFLAG_THREAD']='-lboost_thread'
