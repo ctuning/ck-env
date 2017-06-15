@@ -10,7 +10,7 @@
     }, 
     "soft_file": {
       "linux": "libboost_system.so", 
-      "win": "libboost_system-*-mt-s-*.lib"
+      "win": "libboost_system*-mt*.lib"
     }, 
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/libboost_system.so", 
