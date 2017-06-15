@@ -164,13 +164,13 @@ def setup(i):
        if fpd.endswith('.dll') and os.path.isfile(fpd):
           s+='\nset PATH='+p1+';%PATH%\n\n'
 
-       ver_suffix = str(sver[0]) + '_' + str(sver[1])
-       compiler = p0[len('libboost_system-'):p0.find('-mt')]
+       compiler = p0[len('libboost_system'):p0.find('-mt')]
+       ver_suffix = p0[p0.find('-mt')+3:-len('.lib')]
 
-       env[ep+'_LFLAG_SYSTEM']=os.path.join(p1,'boost_system-' + compiler + '-mt-' + ver_suffix + '.lib')
-       env[ep+'_LFLAG_THREAD']=os.path.join(p1,'boost_thread-' + compiler + '-mt-' + ver_suffix + '.lib')
-       env[ep+'_LFLAG_DATE_TIME']=os.path.join(p1,'boost_date_time-' + compiler + '-mt-' + ver_suffix + '.lib')
-       env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem-' + compiler + '-mt-' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_SYSTEM']=os.path.join(p1,'boost_system' + compiler + '-mt' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_THREAD']=os.path.join(p1,'boost_thread' + compiler + '-mt' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_DATE_TIME']=os.path.join(p1,'boost_date_time' + compiler + '-mt' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem' + compiler + '-mt' + ver_suffix + '.lib')
     else:
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
        env[ep+'_LFLAG_THREAD']='-lboost_thread'
