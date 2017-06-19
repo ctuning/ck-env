@@ -55,6 +55,16 @@ def detect(i):
 
               (extra_version)     - add extra version, when registering software 
                                     (for example, -trunk-20160421)
+
+              (force_env_data_uoa) - force which env UID to use when regstering detect software -
+                                     useful when reinstalling broken env entry to avoid breaking
+                                     all dependencies of other software ...
+
+              (search_dirs)        - extra directories where to search soft (string separated by comma)
+
+              (soft_name)          - name to search explicitly
+
+              (full_path)          - force full path (rather than searching in all directories)
             }
 
     Output: {
