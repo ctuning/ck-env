@@ -227,6 +227,19 @@ def install(i):
                     aname=apk.get('apk_name','')
                     break
 
+            # If the preferred abi didn't match but is 64-bit,
+            # look for a 32-bit binary (worst case won't install)
+            alt_abi = ''
+            if abi=='arm64-v8a':
+                alt_abi='armeabi'
+            elif abi=='x86-64':
+                alt_abi='x86'
+            if alt_abi!='':
+                for apk in d.get('apks',[]):
+                    if alt_abi in apk.get('abis',[]):
+                        aname=apk.get('apk_name','')
+                        break
+
             if aname!='':
                 pp=os.path.join(p, aname)
 
@@ -234,6 +247,8 @@ def install(i):
                     # Trying to install
                     if o=='con':
                         ck.out('  APK found ('+aname+') - trying to install ...')
+                        if alt_abi!='':
+                            ck.out('  First choice ABI "'+abi+'" not found, using "'+alt_abi+'"')
 
                     ii={'action':'shell',
                         'module_uoa':cfg['module_deps']['os'],
@@ -262,7 +277,7 @@ def install(i):
         if not found:
             if o=='con':
                 ck.out('')
-                ck.out('APK "'+name+'" was not found in CK.')
+                ck.out('APK "'+name+'" with abi "'+abi+'" was not found in CK.')
                 ck.out('You can download it and then register in the CK via')
                 ck.out(' $ ck add apk:{APK name} --path={full path to downloaded APK}')
                 ck.out('')
