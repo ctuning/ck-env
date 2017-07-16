@@ -471,3 +471,106 @@ def uninstall(i):
         return {'return':1, 'error':'command may have failed (return code='+str(rc)+')'}
 
     return r
+
+##############################################################################
+# List the apks installed on a target device
+
+def list_installed(i):
+    """
+    Input:  {
+              (device_id)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    # First check if exists
+    o=i.get('out','')
+    oo=''
+    if o=='con':
+        i['out']=''
+        oo=o
+
+    # r=detect(i)
+    # if r['return']>0: return r
+
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('device_id','')
+    target=i.get('target','')
+
+    xtdid=''
+    if tdid!='': xtdid=' -s '+tdid
+
+    if target=='' and tos=='':
+        tos='android-32'
+
+    ii={'action':'shell',
+        'module_uoa':cfg['module_deps']['os'],
+        'host_os':hos,
+        'target_os':hos,
+        'out':oo,
+        'cmd':'adb '+xtdid+' shell pm list packages -f'}
+    r=ck.access(ii)
+    if r['return']>0: return r
+
+    rc=r['return_code']
+    if rc>0:
+        return {'return':1, 'error':'command may have failed (return code='+str(rc)+')'}
+
+    output = r['stdout']
+
+    # Output format is "package:[path]=[package]"
+    packages = [ a.split('=')[1] for a in output.split('\n') if '=' in a ]
+
+    if o=='con':
+        for p in packages:
+            ck.out(p)
+    return { 'return':0, 'lst':packages}
+
+##############################################################################
+# Uninstall all applications on a target device
+
+def uninstall_all(i):
+    """
+    Input:  {
+              (device_id)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    Uninstall all applications on the device specified.
+
+    """
+
+    # First check if exists
+    o=i.get('out','')
+    oo=''
+    if o=='con':
+        i['out']=''
+        oo=o
+
+    hos=i.get('host_os','')
+    tos=i.get('target_os','')
+    tdid=i.get('device_id','')
+    target=i.get('target','')
+
+    r=list_installed({'device_id':tdid})
+    if r['return']>0: return r
+
+    for apk in r['lst']:
+        ii={'data_uoa':apk,
+            'device_id':tdid}
+        uninstall(ii)
+        if r['return']>0: return r
+
+    return {'return':0}

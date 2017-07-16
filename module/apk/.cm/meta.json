@@ -3,14 +3,22 @@
     "add": {
       "desc": "add apk"
     },
-    "install": {
-      "desc": "install APK"
-    },
     "detect": {
       "desc": "detect installed APKs"
     },
+    "install": {
+      "desc": "install APK"
+    },
+    "list_installed": {
+      "desc": "List the apks installed on a target device",
+      "for_web": "yes"
+    },
     "uninstall": {
       "desc": "uninstall APK"
+    },
+    "uninstall_all": {
+      "desc": "Uninstall all application on a target device",
+      "for_web": "yes"
     }
   },
   "copyright": "See CK COPYRIGHT.txt for copyright details",
