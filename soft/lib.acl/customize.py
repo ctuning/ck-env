@@ -80,6 +80,9 @@ def setup(i):
     p1=os.path.dirname(fp)
     pi=os.path.dirname(p1)
 
+    ep=cus['env_prefix']
+    env[ep]=pi
+
     pname=os.path.basename(fp)
     j=pname.rfind('.')
     if j>0:
@@ -87,10 +90,14 @@ def setup(i):
 
     plib=pi+sdirs+'lib'
     cus['path_lib']=plib
-    cus['path_include']=pi+sdirs+'include'
+#    cus['path_include']=pi+sdirs+'include'
 
-    ep=cus['env_prefix']
-    env[ep]=pi
+    cus['path_includes']=[pi+sdirs+'include']
+
+    x=os.path.join(pi,'..','src','tests')
+    if os.path.isdir(x):
+       cus['path_includes'].append(x)
+       env[ep+'_INCLUDE_TESTS']=x
 
     ################################################################
     if win=='yes':
