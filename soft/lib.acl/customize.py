@@ -90,18 +90,24 @@ def setup(i):
 
     plib=pi+sdirs+'lib'
     cus['path_lib']=plib
-#    cus['path_include']=pi+sdirs+'include'
 
-    cus['path_includes']=[pi+sdirs+'include']
+    pinclude=pi+sdirs+'include'
+    cus['path_include']=pinclude
+    cus['path_includes']=[pinclude]
 
-    x=os.path.join(pi,'..','src','tests')
-    if os.path.isdir(x):
-       cus['path_includes'].append(x)
-       env[ep+'_INCLUDE_TESTS']=x
+    psrc=os.path.join(os.path.dirname(pi),'src')
+    if os.path.isdir(psrc):
+       env[ep+'_SRC']=psrc
+       cus['path_includes'].append(psrc)
+
+    ptests=os.path.join(psrc,'tests')
+    if os.path.isdir(ptests):
+       env[ep+'_TESTS']=ptests
+       cus['path_includes'].append(ptests)
 
     ################################################################
     if win=='yes':
-       if remote=='yes' or mingw=='yes': 
+       if remote=='yes' or mingw=='yes':
           sext='.a'
           dext='.so'
        else:
@@ -111,9 +117,9 @@ def setup(i):
        sext='.a'
        dext='.so'
 
-    r = ck.access({'action': 'lib_path_export_script', 
-                   'module_uoa': 'os', 
-                   'host_os_dict': hosd, 
+    r = ck.access({'action': 'lib_path_export_script',
+                   'module_uoa': 'os',
+                   'host_os_dict': hosd,
                    'lib_path': cus.get('path_lib','')})
     if r['return']>0: return r
     s += r['script']
