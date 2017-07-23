@@ -494,6 +494,8 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
   )
 )
 
+%CK_MAKE_CMD2%
+
 rem ############################################################
 if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\post-install.bat" (
   echo.

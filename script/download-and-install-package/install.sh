@@ -16,7 +16,6 @@
 
 cd ${INSTALL_DIR}
 
-
 ############################################################
 if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/pre-download.sh" ] ; then
   echo ""
@@ -473,6 +472,8 @@ if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then
     echo "Error: build failed!"
     exit 1
   fi
+
+  ${CK_MAKE_CMD2}
 
   ############################################################
   echo ""
