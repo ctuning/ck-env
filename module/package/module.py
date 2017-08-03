@@ -410,7 +410,7 @@ def install(i):
     # a package downloads specific file depending on the version
     # and it is also reflected in the installed path 
     # (see GCC universal installation)
-    if d.get('ask_version','')=='yes':
+    if d.get('ask_version','')=='yes' and i.get('force_version','')=='':
        ck.out('')
        r=ck.inp({'text':'Enter version of the package you would like to install: '})
        if r['return']>0: return r
