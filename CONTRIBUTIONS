@@ -99,3 +99,10 @@ H:
 O: Xored
 C: Fixing MingW installation scripts for Windows and LLVM with stdc++ lib for Android
 W:
+
+N: Lucinda Hartfield
+E:
+H:
+O: ARM
+C: Adding new Android OS entries
+W:
