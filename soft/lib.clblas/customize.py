@@ -108,7 +108,7 @@ def setup(i):
        pi=pix
 
     if not found:
-       return {'return':1, 'error':'can\'t find root dir of the clBLAST installation'}
+       return {'return':1, 'error':'can\'t find root dir of the clBLAS installation'}
 
     lb=os.path.basename(fp)
     lbs=lb
