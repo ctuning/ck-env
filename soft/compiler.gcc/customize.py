@@ -197,6 +197,8 @@ def setup(i):
       "CK_ASM_EXT": ".s", 
       "CK_CC": "$#tool_prefix#$gcc$#tool_postfix#$", 
       "CK_COMPILER_FLAGS_OBLIGATORY": "", 
+      "CK_COMPILER_FLAG_CPP1Z": "-std=c++1z", 
+      "CK_COMPILER_FLAG_CPP14": "-std=c++14", 
       "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
       "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
       "CK_COMPILER_FLAG_STD90": "-std=c90", 
