@@ -760,6 +760,8 @@ def machine_init(i):
         ecfg=dd.get('device_cfg',{})
 
         # Update input (if undefined)
+        if ii.get('host_os','')=='':
+            ii['host_os']=host_os_uoa
         if ii.get('target_os','')=='':
             ii['target_os']=target_os_uoa
         if ii.get('device_id','')=='':
