@@ -1851,11 +1851,24 @@ def virtual(i):
 
     import platform
     import os
+
+    ck.out('')
+    ck.out('Warning: you are in a new shell with a reused environment. Enter "exit" to return to the original one!')
+
     if platform.system().lower().startswith('win'): # pragma: no cover
        ck.out('')
        ck.out('Warning: you are in a new shell (with reused environment). Enter "exit" to return to the original one!')
        import subprocess
        p = subprocess.Popen(["cmd", "/k", b], shell = True, env=os.environ)
        p.wait()
+    else:
+       rx=ck.gen_tmp_file({})
+       if rx['return']>0: return rx
+       fn=rx['file_name']
+
+       rx=ck.save_text_file({'text_file':fn, 'string':b})
+       if rx['return']>0: return rx
+
+       os.system("bash --rcfile "+fn)
 
     return {'return':0}
