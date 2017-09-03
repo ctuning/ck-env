@@ -18,6 +18,9 @@
     "show": {
       "desc": "show all installed software environments"
     },
+    "virtual": {
+      "desc": "pre-load environment for the shell"
+    },
     "xset": {
       "desc": "set env for command line (pre-set various flags)"
     }

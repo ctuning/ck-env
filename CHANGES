@@ -1,3 +1,5 @@
+* 2017.09.03 - added "ck virtual env" to pre-set environment in a given/new shell for debugging
+
 * 2017.06.06 - added flag --full_path to specify path to the installed soft during "ck detect soft"
 
 * 2017.05.25 - added flag --soft_name to specify non-standard tool name to search

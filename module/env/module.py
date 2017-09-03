@@ -1827,3 +1827,35 @@ def xset(i):
     i['print']='yes'
 
     return set(i)
+
+##############################################################################
+# pre-load environment for the shell
+
+def virtual(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    r=set(i)
+    if r['return']>0: return r
+
+    b=r['bat']
+
+    import platform
+    import os
+    if platform.system().lower().startswith('win'): # pragma: no cover
+       ck.out('')
+       ck.out('Warning: you are in a new shell (with reused environment). Enter "exit" to return to the original one!')
+       import subprocess
+       p = subprocess.Popen(["cmd", "/k", b], shell = True, env=os.environ)
+       p.wait()
+
+    return {'return':0}
