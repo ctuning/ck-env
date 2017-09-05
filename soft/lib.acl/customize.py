@@ -105,6 +105,10 @@ def setup(i):
        env[ep+'_TESTS']=ptests
        cus['path_includes'].append(ptests)
 
+    pkernels=os.path.join(os.path.dirname(pi),'src/src/core/CL/cl_kernels/')
+    if os.path.isdir(pkernels):
+       env[ep+'_CL_KERNELS']=pkernels
+
     ################################################################
     if win=='yes':
        if remote=='yes' or mingw=='yes':
