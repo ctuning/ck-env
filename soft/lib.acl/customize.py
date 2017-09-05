@@ -108,7 +108,6 @@ def setup(i):
     pkernels=os.path.join(os.path.dirname(pi),'src/src/core/CL/cl_kernels/')
     if os.path.isdir(pkernels):
        env[ep+'_CL_KERNELS']=pkernels
-       cus['path_includes'].append(pkernels)
 
     ################################################################
     if win=='yes':
