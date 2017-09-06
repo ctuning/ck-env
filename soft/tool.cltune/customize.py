@@ -74,7 +74,6 @@ def setup(i):
 
     pl=os.path.dirname(fp)
     pi=os.path.dirname(pl)
-
     ################################################################
 
     slib='libcltune.a'
@@ -99,7 +98,7 @@ def setup(i):
     env[envp]=pi
     env[envp+'_LIB']=pl
     cus['path_lib']=pl
-
+    env[envp+'_INCLUDE']=pi+'/include/'
     r = ck.access({'action': 'lib_path_export_script', 
                    'module_uoa': 'os', 
                    'host_os_dict': hosd, 
