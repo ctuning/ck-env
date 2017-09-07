@@ -859,7 +859,7 @@ def show(i):
 
     h='<h2>Operating Systems of platforms participating in crowd-tuning</h2>\n'
 
-    h+='<i>View/update meta information in <a href="http://github.com/ctuning/ck">CK format</a> via <a href="http://github.com/ctuning/ck-crowdtuning-platforms">GitHub</a> ...</i><br><br>\n'
+    h+='<i>Reuse/extend <a href="https://github.com/ctuning/ck-crowdtuning-platforms/tree/master/platform.os">CK JSON meta information</a> of these operating systems using "ck pull repo:ck-crowdtuning-platforms" ...</i><br><br>\n'
 
     h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
 
