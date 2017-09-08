@@ -217,3 +217,23 @@ def merge_dicts(i):
     if r['return']>0: return r
 
     return {'return':0}
+
+##############################################################################
+# sort JSON file
+
+def sort_json_file(i):
+    """
+    Input:  {
+              json_file     - file with json
+              (output_file) - if !='' use this file for output instead of rewriting original file
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    return refresh_json(i)
