@@ -1208,8 +1208,12 @@ def search_tool(i):
                lst.append(q)
 
     if return_symlinks != 'yes':
-      # resolving symlinks and remove duplicates
-      lst = list(set([os.path.realpath(p) for p in lst]))
+      # resolving symlinks
+      lst = [os.path.realpath(p) for p in lst]
+      #removing duplicates
+      recorded_paths = set()
+      record_path = recorded_paths.add
+      lst = [p for p in lst if not (p in recorded_paths or record_path(p))]
 
     elapsed_time = time.time() - start_time
 
