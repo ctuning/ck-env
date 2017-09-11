@@ -1150,6 +1150,7 @@ def search_tool(i):
               file_name             - name of file to find (can be with patterns)
               (recursion_level_max) - if >0, limit dir recursion
               (can_be_dir)          - if 'yes', return directory as well
+              (return_symlinks)     - if 'yes', symlinks are returned as-is. Otherwise, they're resolved
             }
 
     Output: {
@@ -1175,6 +1176,7 @@ def search_tool(i):
 
     rlm=i.get('recursion_level_max',0)
     cbd=i.get('can_be_dir','')
+    return_symlinks = i.get('return_symlinks','')
 
     if fn.find('?')>=0 or fn.find('*')>=0:
        pt=fn
@@ -1203,6 +1205,9 @@ def search_tool(i):
 #                      break
             if new:
                lst.append(q)
+
+    if return_symlinks != 'yes':
+      lst = [os.path.realpath(p) for p in lst]
 
     elapsed_time = time.time() - start_time
 
