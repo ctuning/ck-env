@@ -1203,11 +1203,13 @@ def search_tool(i):
 #                   if os.path.realpath(q)==os.path.realpath(qq):
 #                      new=False
 #                      break
+
             if new:
                lst.append(q)
 
     if return_symlinks != 'yes':
-      lst = [os.path.realpath(p) for p in lst]
+      # resolving symlinks and remove duplicates
+      lst = list(set([os.path.realpath(p) for p in lst]))
 
     elapsed_time = time.time() - start_time
 
