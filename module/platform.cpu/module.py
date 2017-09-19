@@ -644,7 +644,7 @@ def detect(i):
 
               if o=='con':
                  ck.out('')
-                 ck.out('Exchanging information with repository for a unique processor '+xn+' ...')
+                 ck.out('Exchanging information with '+er+' repository for a unique processor '+xn+' ...')
 
               # Copy nearly all (remove cur freq)
 
@@ -698,7 +698,7 @@ def detect(i):
        else:
            if o=='con':
               ck.out('')
-              ck.out('Exchanging information with repository (old format) ...')
+              ck.out('Exchanging information with '+er+' repository (old format) ...')
 
            xn=target.get('name','')
 

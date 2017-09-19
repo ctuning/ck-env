@@ -426,9 +426,17 @@ def detect(i):
 
     # Exchanging info #################################################################
     if ex=='yes':
+       er=i.get('exchange_repo','')
+       esr=i.get('exchange_subrepo','')
+       el=i.get('exchange_locally','')
+
+       if el!='yes' and er=='': 
+          er=ck.cfg['default_exchange_repo_uoa']
+          esr=ck.cfg['default_exchange_subrepo_uoa']
+
        if o=='con':
           ck.out('')
-          ck.out('Exchanging information with repository ...')
+          ck.out('Exchanging information with '+er+' repository ...')
 
        xn=prop.get('name','')
        if xn=='':
@@ -476,14 +484,6 @@ def detect(i):
              prop['model']=xn[ixn+1:].strip()
 
           prop['name']=xn
-
-       er=i.get('exchange_repo','')
-       esr=i.get('exchange_subrepo','')
-       el=i.get('exchange_locally','')
-
-       if el!='yes' and er=='': 
-          er=ck.cfg['default_exchange_repo_uoa']
-          esr=ck.cfg['default_exchange_subrepo_uoa']
 
        ii={'action':'exchange',
            'module_uoa':work['self_module_uid'],
