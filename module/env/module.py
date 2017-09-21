@@ -57,9 +57,13 @@ def set(i):
               (name)                 - user-friendly name of the dependency (if needs to be resolved)
 
               (deps)                 - already resolved deps
-              (skip_auto_resolution) - if 'yes', do not check if deps are already resolved
-              (skip_default)         - if 'yes', skip detection of default installed software version
-              (skip_installed)       - dict to specify on which platforms not to search already installed version
+
+              (reuse_deps)           - if 'yes' reuse all deps if found in cache by tags
+              (deps_cache)           - list with resolved deps
+
+              (skip_auto_resolution)       - if 'yes', do not check if deps are already resolved
+              (skip_default)               - if 'yes', skip detection of default installed software version
+              (skip_installed)             - dict to specify on which platforms not to search already installed version
               (skip_pruning_by_other_deps) - if 'yes', do not prune available envs using other resolved deps
 
               (bat_file)             - if !='', use this filename to generate/append bat file ...
@@ -114,6 +118,9 @@ def set(i):
     # Clean output file
     sar=i.get('skip_auto_resolution','')
     cdeps=i.get('deps',{})
+
+    deps_cache=i.get('deps_cache',[])
+    reuse_deps=i.get('reuse_deps','')
 
     skip_default=i.get('skip_default','')
     skip_installed=i.get('skip_installed',{})
@@ -196,7 +203,6 @@ def set(i):
         'module_uoa':work['self_module_uid'],
         'tags':tags,
         'repo_uoa':enruoa,
-        'data_uoa':duoa,
         'add_info':'yes',
         'add_meta':'yes'} # Need to sort by version, if ambiguity
 
@@ -205,6 +211,20 @@ def set(i):
               'target_os_uoa':tos,
               'target_os_bits':tbits}
        ii['search_dict']={'setup':setup}
+
+    if reuse_deps=='yes':
+       # Check in cache!
+       dmatch={'setup':setup, 'tags':tags.split(',')}
+       for q in deps_cache:
+           d1=q.get('meta',{})
+           r=ck.compare_dicts({'dict1':d1, 'dict2':dmatch})
+           if r['return']>0: return r
+           if r['equal']=='yes':
+              duoa=q.get('uoa','')
+              reuse_deps='no' # to avoid updating cache
+              break
+
+    ii['data_uoa']=duoa
 
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
@@ -648,7 +668,8 @@ def set(i):
     to_delete=False
     err=''
 
-    edeps=d.get('deps',{}) # dependencies of environment (normally resolved, but may change if software changes)
+    edeps=d.get('deps',{}) # sub-dependencies of the selected environment 
+                           # (normally already resolved, but check if software changed in the mean time)
     for q in edeps:
         qq=edeps[q]
         cqq=qq.get('dict',{}).get('customize',{})
@@ -670,6 +691,21 @@ def set(i):
               outdated=True
               err='one of sub-dependencies ('+q+') have changed (CK environment '+deuoa+' not found)'
               break
+
+        if reuse_deps=='yes':
+           # Check in cache!
+           dmatch2={'setup':setup, 'tags':qq.get('tags','').split(',')}
+           dc_found=False
+           for dc_q in deps_cache:
+               d1=dc_q.get('meta',{})
+               r=ck.compare_dicts({'dict1':d1, 'dict2':dmatch2})
+               if r['return']>0: return r
+               if r['equal']=='yes':
+                  dc_found=True
+                  break
+
+           if not dc_found:
+              deps_cache.append({'meta':dmatch2, 'uoa':deuoa})
 
     # Check if file exists for current dependency
     verx=''
@@ -727,6 +763,10 @@ def set(i):
           if rx['return']>0: return rx
 
           return {'return':1, 'error':'Outdated environment was removed - please, try again!'}
+
+    # Update cache
+    if reuse_deps=='yes':
+       deps_cache.append({'meta':dmatch, 'uoa':duoa})
 
     # Prepare environment and bat
     env=i.get('env',{})
@@ -993,6 +1033,9 @@ def resolve(i):
 
               deps                   - dependencies dict
 
+              (reuse_deps)           - if 'yes' reuse all deps if found in cache by tags
+              (deps_cache)           - list with resolved deps
+
               (env)                  - env
 
               (add_customize)        - if 'yes', add to deps customize field from the environment 
@@ -1042,6 +1085,9 @@ def resolve(i):
     sar=i.get('skip_auto_resolution','')
 
     deps=i.get('deps',{})
+
+    deps_cache=i.get('deps_cache',[])
+    reuse_deps=i.get('reuse_deps','')
 
     ran=i.get('random','')
     quiet=i.get('quiet','')
@@ -1184,6 +1230,8 @@ def resolve(i):
             'env':env,
             'uoa':uoa,
             'deps':deps,
+            'deps_cache':deps_cache,
+            'reuse_deps':reuse_deps,
             'skip_auto_resolution':sar,
             'skip_default':sd,
             'skip_installed':sinst,
@@ -1197,7 +1245,9 @@ def resolve(i):
             'install_to_env':iev,
             'safe':safe
            }
+
         if o=='con': ii['out']='con'
+
         rx=set(ii)
         if rx['return']>0: return rx
 

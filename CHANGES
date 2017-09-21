@@ -1,3 +1,6 @@
+* 2017.09.21 - added support to cache and reuse dependencies by tags (for automating crowdbenchmarking)
+             - reverted update of symlinks in soft
+
 * 2017.09.19 - minor output improvement
 
 * 2017.09.03 - added "ck virtual env" to pre-set environment in a given/new shell for debugging
