@@ -1,3 +1,5 @@
+* 2017.09.28 - added support to run Python scripts from CK entries
+
 * 2017.09.21 - added support to cache and reuse dependencies by tags (for automating crowdbenchmarking)
              - reverted update of symlinks in soft
 

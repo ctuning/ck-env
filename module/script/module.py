@@ -39,8 +39,16 @@ def run(i):
               data_uoa            - data UOA of the script entry
               (repo_uoa)          - repo UOA of the script entry
               (script_module_uoa) - module UOA of the script entry
-              name                - subscript name
+
+              name                - subscript name (from entry desc - will be called via shell)
               (params)            - pass params to CMD
+
+                or
+
+              (code)              - Python script name (without .py)
+              (func)              - Python func in this script
+              (dict)              - dict to pass to script
+
             }
 
     Output: {
@@ -61,8 +69,10 @@ def run(i):
     duoa=i.get('data_uoa','')
 
     name=i.get('name','')
-
     params=i.get('params','')
+
+    code=i.get('code','')
+    func=i.get('func','')
 
     # Loading entry
     rx=ck.access({'action':'load',
@@ -72,19 +82,43 @@ def run(i):
     d=rx['dict']
     p=rx['path']
 
-    ss=d.get('sub_scripts',{})
+    if code!='' and func!='':
+       cs=None
+       r=ck.load_module_from_path({'path':p, 'module_code_name':code, 'skip_init':'yes'})
+       if r['return']>0: return r
 
-    xs=ss.get(name,{})
+       cs=r.get('code', None)
+       if cs==None:
+          return {'return':1, 'error':'no python code found'}
 
-    if len(xs)==0:
-       return {'return':1, 'error':'subscript "'+name+'" is not found in entry "'+duoa+'"'}
+       # Call customized script
+       import copy
 
-    cmd=xs.get('cmd','')
+       ii=copy.deepcopy(i.get('dict',{}))
+       ii["ck_kernel"]=ck
 
-    p1=p+os.path.sep
+       rr=cs.func(ii)
+       if rr['return']>0:
+          return {'return':1, 'error':'script failed ('+rx['error']+')'
 
-    cmd=cmd.replace('$#ck_path#$', p1)+' '+params
+       rr['return_code']=0
 
-    rx=os.system(cmd)
+    else:
+       ss=d.get('sub_scripts',{})
 
-    return {'return':0, 'return_code':rx}
+       xs=ss.get(name,{})
+
+       if len(xs)==0:
+          return {'return':1, 'error':'subscript "'+name+'" is not found in entry "'+duoa+'"'}
+
+       cmd=xs.get('cmd','')
+
+       p1=p+os.path.sep
+
+       cmd=cmd.replace('$#ck_path#$', p1)+' '+params
+
+       rx=os.system(cmd)
+
+       rr={'return':0, 'return_code':rx}
+
+    return rr
