@@ -91,13 +91,15 @@ def run(i):
        if cs==None:
           return {'return':1, 'error':'no python code found'}
 
+       script_func=getattr(cs, func)
+       if script_func==None:
+          return {'return':1, 'error':'function '+func+' not found in python script '+code}
+
        # Call customized script
-       import copy
+       ii=i.get('dict',{})
+       ii['ck_kernel']=ck
 
-       ii=copy.deepcopy(i.get('dict',{}))
-       ii["ck_kernel"]=ck
-
-       rr=cs.func(ii)
+       rr=script_func(ii)
        if rr['return']>0:
           return {'return':1, 'error':'script failed ('+rx['error']+')'}
 
