@@ -101,7 +101,7 @@ def run(i):
 
        rr=script_func(ii)
        if rr['return']>0:
-          return {'return':1, 'error':'script failed ('+rx['error']+')'}
+          return {'return':1, 'error':'script failed ('+rr['error']+')'}
 
        rr['return_code']=0
 
