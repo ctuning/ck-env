@@ -93,7 +93,12 @@ def setup(i):
         return {'return':1, 'error':'compilation failed'}
 
     texe=misc['target_exe']
-    texe1='show-cuda-devices'
+
+    texe1=texe
+    if texe1.endswith('.out'):
+        texe1=texe1[:-4]
+    if texe1.startswith('ck-'):
+        texe1=texe1[3:]
 
     # Prepare full path to the newly created binary
     p=misc['path']
