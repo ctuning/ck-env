@@ -1922,3 +1922,30 @@ def virtual(i):
        os.system("bash --rcfile "+fn)
 
     return {'return':0}
+
+##############################################################################
+# remove tmp entries (when installation to env entry failed)
+
+def rmtmp(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    i['action']='rm'
+    i['data_uoa']='*'
+
+    tags=i.get('tags','')
+    if tags!='': tags+=','
+    tags+='tmp'
+
+    i['tags']=tags
+
+    return ck.access(i)

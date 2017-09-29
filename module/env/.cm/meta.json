@@ -12,6 +12,9 @@
     "resolve": {
       "desc": "resolve all dependencies for a given software"
     },
+    "rmtmp": {
+      "desc": "remove tmp entries (when installation to env entry failed)"
+    },
     "set": {
       "desc": "prepare and set environment for a given software"
     },
