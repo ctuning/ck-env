@@ -123,6 +123,12 @@ def install(i):
     xtags=i.get('tags','')
     xno_tags=i.get('no_tags','')
 
+    # Check if package_channel is specifies and add tag
+    pchannel=ck.cfg.get('package_channel','')
+    if pchannel!='':
+       if xtags!='': xtags+=','
+       xtags+='channel-'+pchannel
+
     start_time = time.time()
 
     # Check if target
@@ -297,14 +303,21 @@ def install(i):
                        dn=z1.get('info',{}).get('data_name','')
                        if dn=='': dn=zu
 
+                       dmeta=z1.get('meta',{})
+
                        ver=''
-                       x=z1.get('meta',{}).get('customize',{}).get('version','')
+                       x=dmeta.get('customize',{}).get('version','')
                        if x!='': ver='  Version '+x+' '
 
                        zs=str(iz)
                        zz[zs]=z
 
-                       ck.out(zs+') '+dn+ver+' ('+z+')')
+                       # If has short comment
+                       z1=dmeta.get('comment','')
+                       if z1!='':
+                          z1+=', '
+
+                       ck.out(zs+') '+dn+ver+' ('+z1+z+')')
 
                        iz+=1
 
@@ -359,7 +372,10 @@ def install(i):
              return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
 
        if duoa=='':
-          return {'return':16, 'error':'package with such tags and for this environment was not found!'}
+          x=''
+          if xno_tags!='':
+             x='and withtout tags "'+xno_tags+'" '
+          return {'return':16, 'error':'package with tags "'+xtags+'" '+x+'for your environment was not found!'}
 
     # Check if restricts dependency to a given host or target OS
     rx=ck.access({'action':'check_target',

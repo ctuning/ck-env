@@ -1,3 +1,12 @@
+* 2017.09.29 - added support for package channels and comments
+
+               When package channel is specified via "ck set kernel var.package_channel={stable}",
+               stable will be added to all package tags during installation thus stabilizing package
+
+               Moving back to development version is by "ck set kenrel ver.package_channel="
+
+             -  If package meta has key "comment", it will be printed in a package selector
+
 * 2017.09.28 - added support to run Python scripts from CK entries
 
 * 2017.09.21 - added support to cache and reuse dependencies by tags (for automating crowdbenchmarking)
