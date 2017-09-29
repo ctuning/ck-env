@@ -67,7 +67,7 @@ def make(i):
     ck.out('')
     ck.out('CK rules:')
     ck.out('')
-    ck.out('1) CK always make you happy!')
+    ck.out('1) CK always makes you happy!')
     ck.out('2) If CK doesn\'t make you happy - see rule 1')
 
     return {'return':0}
