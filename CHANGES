@@ -3,7 +3,7 @@
                When package channel is specified via "ck set kernel var.package_channel={stable}",
                "channel-stable" will be added to all package tags during installation thus stabilizing package
 
-               Moving back to development version is by "ck set kernel ver.package_channel="
+               Moving back to development version is by "ck set kernel var.package_channel="
 
              -  If package meta has key "comment", it will be printed in a package selector
 
