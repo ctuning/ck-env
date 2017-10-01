@@ -98,6 +98,9 @@ def install(i):
               (add_hint)          - if 'yes', add hint that can skip package installation and detect soft instead
 
               (rebuild)           - if 'yes', attempt to set env to avoid downloading package again, just rebuild (if supported)
+              (reinstall)         - if 'yes', also download package and then rebuild it ...
+
+              (ask)               - if 'yes', ask more questions, otherwise select default actions
             }
 
     Output: {
@@ -119,6 +122,8 @@ def install(i):
     oo=''
     if o=='con':
        oo=o
+
+    ask=i.get('ask','')
 
     xtags=i.get('tags','')
     xno_tags=i.get('no_tags','')
@@ -203,6 +208,7 @@ def install(i):
     safe=i.get('safe','')
 
     rebuild=i.get('rebuild','')
+    reinstall=i.get('reinstall','')
 
     # Check package description
     duoa=i.get('uoa','')
@@ -641,6 +647,9 @@ def install(i):
     if i.get('skip_process','')=='yes': xprocess=False
     if i.get('skip_setup','')=='yes' or d.get('skip_setup','')=='yes': xsetup=False
 
+    if rebuild=='yes' or reinstall=='yes': 
+       xprocess=True
+
     ps=d.get('process_script','')
     if pi=='':
        # Check if environment already exists to check installation path
@@ -708,25 +717,31 @@ def install(i):
 #                if pi[j-1]==sdirs:
 #                   pi=pi[:-1]
 
+
           if fp!='':
              if o=='con':
-                if xprocess:
+
+                if ask=='yes' and xprocess:
                    ck.out('')
                    ck.out('It appears that package is already installed or at least file from the package is already found in path: '+fp)
 
                    if ps!='':
                       ck.out('')
-                      rx=ck.inp({'text':'Would you like to overwrite/process it again (y/N)? '})
+                      rx=ck.inp({'text':'Would you like to overwrite and process it again (y/N)? '})
                       x=rx['string'].strip().lower()
                       if x!='y' and x!='yes':
                          xprocess=False
 
-                if xsetup:
+                if ask=='yes' and xsetup:
                    ck.out('')
                    rx=ck.inp({'text':'Would you like to setup environment for this package again (Y/n)? '})
                    x=rx['string'].strip().lower()
                    if x=='n' or x=='no':
                       xsetup=False
+
+                if ask!='yes' and xprocess:
+                   ck.out('')
+                   ck.out('  OVERWRITING AND PROCESSING AGAIN!')
 
              else:
                 return {'return':1, 'error':'package is already installed in path '+pi}
@@ -997,7 +1012,7 @@ def install(i):
        x=d.get('end_full_path',{}).get(tname2,'')
        fp=pi
        cont=True
-       if x!='': 
+       if x!='':
           x=x.replace('$#sep#$', sdirs)
           x=x.replace('$#abi#$', tosd.get('abi',''))
           x=x.replace('$#processor#$', tosd.get('processor',''))
@@ -1007,11 +1022,16 @@ def install(i):
                 ck.out('')
                 ck.out('It appears that package is already installed or at least file from the package is already found in path: '+fp)
 
-                ck.out('')
-                rx=ck.inp({'text':'Would you like to overwrite/process it again (y/N)? '})
-                x=rx['string'].strip().lower()
-                if x!='y' and x!='yes':
-                   cont=False
+                if (rebuild!='yes' and reinstall!='yes') or ask=='yes':
+                   ck.out('')
+                   rx=ck.inp({'text':'Would you like to overwrite/process it again (y/N)? '})
+                   x=rx['string'].strip().lower()
+                   if x!='y' and x!='yes':
+                      cont=False
+                else:
+                   ck.out('')
+                   ck.out('  OVERWRITING AND PROCESSING AGAIN!')
+
 
        # Check if need to use scripts from another entry
        if cont:
@@ -1981,3 +2001,22 @@ def get_paths_from_deps(i):
               paths=r['paths']
 
     return {'return':0, 'paths':paths}
+
+##############################################################################
+# reinstall package if already installed
+
+def reinstall(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    i['reinstall']='yes'
+    return install(i)
