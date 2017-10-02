@@ -426,7 +426,7 @@ def install(i):
     extra_dir=cus.get('extra_dir','')
 
     # This environment will be passed to process scripts (if any)
-    pr_env={}
+    pr_env=cus.get('install_env',{})
 
     # Check if need to ask version - this is useful when
     # a package downloads specific file depending on the version
@@ -456,7 +456,8 @@ def install(i):
     pr_env.update(ck.cfg.get('install_env',{}))
 
     # Update this env from customize meta (for example to pass URL to download package)
-    pr_env.update(cus.get('install_env',{}))
+#    pr_env.update(cus.get('install_env',{}))
+#    I moved it up to record changed env!
 
     for kpe in pr_env:
         if '$#sep#$' in str(pr_env):
