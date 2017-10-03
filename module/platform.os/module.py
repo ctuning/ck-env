@@ -88,6 +88,8 @@ def detect(i):
 
               (target_add_path)        - list of paths to add before executing target tools ...
               (target_add_path_string) - adding paths to PATH environment in a target OS format
+
+              (update_platform_init)   - update platform.init scripts (ask user)
             }
 
     """
@@ -553,7 +555,8 @@ def detect(i):
 
     first_time=False
     pi_uoa=dcfg.get('platform_init_uoa',{}).get(pi_key,'')
-    if pi_uoa=='' and sic!='yes':
+
+    if i.get('update_platform_init','')=='yes' or (pi_uoa=='' and sic!='yes'):
        first_time=True
        # Check if there are related platform.init
        tags='os-'+tp
