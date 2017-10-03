@@ -1,3 +1,5 @@
+* 2017.10.03 - added support to customize detect soft via --env.XYZ=abc
+
 * 2017.10.01 - minimized questions when installing packages
 
 * 2017.09.29 - added support for package channels and comments

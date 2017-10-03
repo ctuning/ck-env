@@ -326,12 +326,16 @@ def setup(i):
              env['CK_LD_FLAGS_EXTRA']=lfr
 
              add_m32=cus.get('add_m32','')
-             if add_m32=='' and iv=='yes' and tbits=='32':
-                ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})
-                x=ra['string'].strip().lower()
-                if x=='y' or x=='yes': 
-                   add_m32='yes'
-                   cus['add_m32']='yes'
+             if env.get('CK_COMPILER_ADD_M32','').lower()=='yes' or os.environ.get('CK_COMPILER_ADD_M32','').lower()=='yes':
+                add_m32='yes'
+                cus['add_m32']='yes'
+
+#             if add_m32=='' and iv=='yes' and tbits=='32':
+#                ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})
+#                x=ra['string'].strip().lower()
+#                if x=='y' or x=='yes': 
+#                   add_m32='yes'
+#                   cus['add_m32']='yes'
 
              x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
              if remote!='yes':
@@ -494,12 +498,16 @@ def setup(i):
        else:
           ### Linux Host  #########################################################
           add_m32=cus.get('add_m32','')
-          if add_m32=='' and iv=='yes' and tbits=='32':
-             ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})
-             x=ra['string'].strip().lower()
-             if x=='y' or x=='yes': 
-                add_m32='yes'
-                cus['add_m32']='yes'
+          if env.get('CK_COMPILER_ADD_M32','').lower()=='yes' or os.environ.get('CK_COMPILER_ADD_M32','').lower()=='yes':
+             add_m32='yes'
+             cus['add_m32']='yes'
+
+#          if add_m32=='' and iv=='yes' and tbits=='32':
+#             ra=ck.inp({'text':'Target OS is 32 bit. Add -m32 to compilation flags (y/N)? '})
+#             x=ra['string'].strip().lower()
+#             if x=='y' or x=='yes': 
+#                add_m32='yes'
+#                cus['add_m32']='yes'
 
           x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
           if tbits=='32' and add_m32=='yes' and x.find('-m32')<0: 

@@ -1145,7 +1145,6 @@ def resolve(i):
 
     # Checking deps
     env=i.get('env',{})
-
     enruoa=i.get('repo_uoa','')
 
     ac=i.get('add_customize','')

@@ -1471,6 +1471,13 @@ def check(i):
     if ev=='':
        ev=cus.get('extra_version','')
 
+    ########################################################################
+    # Check env from input
+    envx=i.get('env',{})
+    for q in i:
+        if q.startswith('env.'):
+           envx[q[4:]]=i[q]
+
     # Check if restricts dependency to a given host or target OS
     rx=check_target({'dict':cus,
                      'host_os_uoa':hosx,
@@ -1492,6 +1499,7 @@ def check(i):
               'target_os':tos,
               'target_device_id':tdid,
               'deps':deps,
+              'env':envx,
               'out':oo}
           rx=ck.access(ii)
           if rx['return']>0: return rx
@@ -1832,6 +1840,7 @@ def check(i):
         'target_os':tos,
         'target_device_id':tdid,
         'deps':deps,
+        'env':envx,
         'env_data_uoa':env_data_uoa,
         'soft_name':dname,
         'package_uoa':puoa,
