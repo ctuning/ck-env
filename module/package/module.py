@@ -195,6 +195,20 @@ def install(i):
     vfrom=i.get('version_from',[])
     vto=i.get('version_to',[])
 
+    if type(vfrom)!=list:
+       rx=ck.access({'action':'split_version',
+                     'module_uoa':cfg['module_deps']['soft'],
+                     'version':vfrom})
+       if rx['return']>0: return rx
+       vfrom=rx['version_split']
+
+    if type(vto)!=list:
+       rx=ck.access({'action':'split_version',
+                     'module_uoa':cfg['module_deps']['soft'],
+                     'version':vto})
+       if rx['return']>0: return rx
+       vto=rx['version_split']
+
     rem=hosd.get('rem','')
     eset=hosd.get('env_set','')
     svarb=hosd.get('env_var_start','')
