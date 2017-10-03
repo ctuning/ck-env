@@ -64,6 +64,9 @@ def detect(i):
 
               (soft_name)          - name to search explicitly
 
+              (version_from)       - check version starting from ... (string or list of numbers)
+              (version_to)         - check version up to ... (string list of numbers)
+
               (full_path)          - force full path (rather than searching in all directories)
             }
 
@@ -1376,6 +1379,9 @@ def check(i):
 
               (soft_name)          - name to search explicitly
 
+              (version_from)       - check version starting from ... (string or list of numbers)
+              (version_to)         - check version up to ... (string list of numbers)
+
               (full_path)          - force full path (rather than searching in all directories)
             }
 
@@ -1433,6 +1439,20 @@ def check(i):
 
     hplat=hosd.get('ck_name','')
     tplat=tosd.get('ck_name','')
+
+    # Check versions
+    vfrom=i.get('version_from',[])
+    vto=i.get('version_to',[])
+
+    if type(vfrom)!=list:
+       rx=split_version({'version':vfrom})
+       if rx['return']>0: return rx
+       vfrom=rx['version_split']
+
+    if type(vto)!=list:
+       rx=split_version({'version':vto})
+       if rx['return']>0: return rx
+       vto=rx['version_split']
 
     # Check soft UOA
     duoa=i.get('uoa','')
@@ -1664,7 +1684,7 @@ def check(i):
 
     # Select, if found
     il=0
-    if len(lst)>1:
+    if len(lst)>0:
        # Trying to detect version
        if o=='con':
           ck.out('')
@@ -1695,6 +1715,7 @@ def check(i):
 
            # Try to detect version
            ver=''
+           sver=[]
            ii={'full_path':q,
                'bat':sbat,
                'host_os_dict':hosd,
@@ -1720,10 +1741,23 @@ def check(i):
               if o=='con':
                  pr+='   (Version '+ver+')'
 
+           skip=False
+           if len(vfrom)>0:
+              r=compare_versions({'version1':vfrom, 'version2':sver})
+              if r['return']>0: return r
+              if r['result']=='>':  skip=True
+
+           if not skip and len(vto)>0:
+              r=compare_versions({'version1':sver, 'version2':vto})
+              if r['return']>0: return r
+              if r['result']=='>':  skip=True
+
+           if skip: pr+=' - skipped because of version constraints!'
+
            if o=='con':
               ck.out(pr)
 
-           if cus.get('add_only_with_version','')!='yes' or ver!='':
+           if not skip and (cus.get('add_only_with_version','')!='yes' or ver!=''):
               vlst.append(kk)
 
        if o=='con':
@@ -1816,7 +1850,7 @@ def check(i):
        puoa=dx.get('package_uoa','')
 
        xtags=dx.get('tags','')
-        
+
        # FGG: should I add deps here or not - the thing is that the env 
        # most likely changed so probably not ...
 
@@ -2464,3 +2498,69 @@ def find_config_file(i):
        pf1=os.path.dirname(pf)
 
     return {'return':0, 'found':found, 'dict':d, 'filename':fn, 'path':pf2}
+
+##############################################################################
+# compare two versions (in list)
+
+def compare_versions(i):
+    """
+    Input:  {
+              version1 - version 1 to compare against version2 (list such as [1,62])
+              version2 - (list such as [1,63])
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              result       "<" - version 1 < version 2
+                           "=" - version 1 == version 2
+                           ">" - version 1 > version 2
+            }
+
+    """
+
+    result=''
+
+    v1=i['version1']
+    v2=i['version2']
+
+    lv1=len(v1)
+    lv2=len(v2)
+
+    if lv1==lv2 and sorted(v1)==sorted(v2):
+       result='='
+    else:
+       result='<'
+       for j1 in range(0,lv1):
+           x1=v1[j1]
+           if j1>=lv2:
+              result='>'
+              break
+           else:
+              x2=v2[j1]
+              if type(x1)!=int or type(x2)!=int:
+                 if type(x1)==int:
+                    result='>'
+                    break
+                 elif type(x2)==int:
+                    result='<'
+                    break
+                 elif x1>x2:
+                    result='>'
+                    break
+                 elif x1<x2:
+                    result='<'
+                    break
+              else:
+                 if x1>x2:
+                    result='>'
+                    break
+                 elif x1<x2:
+                    break
+
+    if i.get('out','')=='con':
+       ck.out(result)
+
+    return {'return':0, 'result':result}

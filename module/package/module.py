@@ -100,6 +100,9 @@ def install(i):
               (rebuild)           - if 'yes', attempt to set env to avoid downloading package again, just rebuild (if supported)
               (reinstall)         - if 'yes', also download package and then rebuild it ...
 
+              (version_from)      - check version starting from ... (list of numbers)
+              (version_to)        - check version up to ... (list of numbers)
+
               (ask)               - if 'yes', ask more questions, otherwise select default actions
             }
 
@@ -189,6 +192,9 @@ def install(i):
     ck_os_name=hosd['ck_name']
     tname2=tosd['ck_name2']
 
+    vfrom=i.get('version_from',[])
+    vto=i.get('version_to',[])
+
     rem=hosd.get('rem','')
     eset=hosd.get('env_set','')
     svarb=hosd.get('env_var_start','')
@@ -271,10 +277,12 @@ def install(i):
                     ll.append(q)
 
              # Prune by no_tags
-             if xno_tags!='':
+             if xno_tags!='' or len(vfrom)>0 or len(vto)>0:
                 rx=ck.access({'action':'prune_search_list',
                               'module_uoa':cfg['module_deps']['env'],
                               'lst':ll,
+                              'version_from':vfrom,
+                              'version_to':vto,
                               'no_tags':xno_tags})
                 if rx['return']>0: return rx
                 ll=rx['lst']

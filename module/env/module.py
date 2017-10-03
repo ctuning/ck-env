@@ -82,6 +82,9 @@ def set(i):
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
 
+              (version_from)         - check version starting from ... (list of numbers)
+              (version_to)           - check version up to ... (list of numbers)
+
               (safe)                 - safe mode when searching packages first instead of detecting already installed soft
                                        (to have more deterministic build)
             }
@@ -130,6 +133,9 @@ def set(i):
 
     bf=i.get('bat_file','')
     if bf!='' and os.path.isfile(bf): os.remove(bf)
+
+    vfrom=i.get('version_from',[])
+    vto=i.get('version_to',[])
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -239,13 +245,20 @@ def set(i):
 
        war+=' and setup='+json.dumps(setup1)
 
+    if len(vfrom)>0 or len(vto)>0:
+       war+=' and version constraints ('+json.dumps(vfrom)+' <= v <= '+json.dumps(vto)+')'
+
     # Search for environment entries
     r=ck.access(ii)
     if r['return']>0: return r
 
     # Prune if needed
-    r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
+    r=prune_search_list({'lst':r['lst'], 
+                         'no_tags':no_tags, 
+                         'version_from':vfrom, 
+                         'version_to':vto})
     if r['return']>0: return r
+    sbov=r.get('skipped_because_of_version','')
 
     l=r['lst']
     lx=len(l)
@@ -319,6 +332,8 @@ def set(i):
                                     'target_os':tos,
                                     'device_id':tdid,
                                     'add_hint':'yes',
+                                    'version_from':vfrom,
+                                    'version_to':vto,
                                     'deps':cdeps})
        if rx['return']>0 and rx['return']!=16: return rx
 
@@ -339,7 +354,7 @@ def set(i):
           showed_warning=True
 
        # First, try to detect already installed software, but not registered (default)
-       if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes'):
+       if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes' or sbov=='yes'):
           if o=='con':
              ck.out('  Trying to automatically detect required software ...')
 
@@ -426,7 +441,10 @@ def set(i):
              if r['return']>0: return r
 
              # Prune if needed
-             r=prune_search_list({'lst':r['lst'], 'no_tags':no_tags})
+             r=prune_search_list({'lst':r['lst'], 
+                                  'no_tags':no_tags,
+                                  'version_from':vfrom, 
+                                  'version_to':vto})
              if r['return']>0: return r
 
              l=r['lst']
@@ -583,6 +601,8 @@ def set(i):
                                        'host_os':hos,
                                        'target_os':tos,
                                        'device_id':tdid,
+                                       'version_from':vfrom,
+                                       'version_to':vto,
                                        'deps':cdeps})
           if rx['return']>0: return rx
 
@@ -1173,6 +1193,9 @@ def resolve(i):
         sd=q.get('skip_default','')
         sinst=q.get('skip_installed',{})
 
+        vfrom=q.get('version_from',[])
+        vto=q.get('version_to',[])
+
         ek=q.get('env_key','')
 
         uoa=q.get('uoa','')
@@ -1242,6 +1265,8 @@ def resolve(i):
             'quiet':quiet,
             'force_env_init':q.get('force_env_init',''),
             'install_to_env':iev,
+            'version_from':vfrom,
+            'version_to':vto,
             'safe':safe
            }
 
@@ -1603,8 +1628,10 @@ def internal_get_val(lst, index, default_value):
 def prune_search_list(i):
     """
     Input:  {
-              lst     - list of entries after 'search'
-              no_tags - string of tags to exclude
+              lst                    - list of entries after 'search'
+              (no_tags)              - string of tags to exclude
+              (version_from)         - check version starting from ... (list of numbers)
+              (version_to)           - check version up to ... (list of numbers)
             }
 
     Output: {
@@ -1613,32 +1640,83 @@ def prune_search_list(i):
               (error)      - error text if return > 0
 
               lst          - pruned list
+
+              (skipped_because_of_version) - if 'yes', skip because of version check
             }
     """
 
     lst=i.get('lst',[])
     ntags=i.get('no_tags','').split(',')
 
+    vfrom=i.get('version_from',[])
+    vto=i.get('version_to',[])
+
     nlst=[]
+
+    skipped_because_of_version=''
+
     for q in lst:
         meta=q.get('meta','')
         tags=meta.get('tags',[])
 
         skip=False
 
+        # Check that not temporal entry (unfinished installation)
         if 'tmp' in tags:
            skip=True
 
+        # Check no tags
         if not skip:
            for t in ntags:
                if t in tags:
                    skip=True
                    break
 
+        # Check version
+        if not skip and (len(vfrom)>0 or len(vto)>0):
+           v=meta.get('setup',{}).get('version_split',[])
+
+           # first check from env, but if not set, check from package
+           if len(v)==0:
+              v=meta.get('customize',{}).get('version_split',[])
+              if len(v)==0:
+                 ver=meta.get('customize',{}).get('version','')
+ 
+                 if ver!='':
+                    rx=ck.access({'action':'split_version',
+                                  'module_uoa':cfg['module_deps']['soft'],
+                                  'version':ver})
+                    if rx['return']>0: return rx
+                    v=rx['version_split']
+
+           if len(vfrom)>0:
+              r=ck.access({'action':'compare_versions',
+                           'module_uoa':cfg['module_deps']['soft'],
+                           'version1':vfrom,
+                           'version2':v})
+              if r['return']>0: return r
+              result=r['result']
+
+              if result=='>':
+                 skip=True
+                 skipped_because_of_version='yes'
+
+           if not skip and len(vto)>0:
+              r=ck.access({'action':'compare_versions',
+                           'module_uoa':cfg['module_deps']['soft'],
+                           'version1':v,
+                           'version2':vto})
+              if r['return']>0: return r
+              result=r['result']
+
+              if result=='>':
+                 skip=True
+                 skipped_because_of_version='yes'
+
         if not skip:
             nlst.append(q)
 
-    return {'return':0, 'lst':nlst}
+    return {'return':0, 'lst':nlst, 'skipped_because_of_version':skipped_because_of_version}
 
 ##############################################################################
 # remote env entry and installed package
@@ -1766,6 +1844,9 @@ def internal_install_package(i):
               (safe)                 - safe mode when searching packages first instead of detecting already installed soft
                                        (to have more deterministic build)
 
+              (version_from)         - check version starting from ... (list of numbers)
+              (version_to)           - check version up to ... (list of numbers)
+
               (add_hint)             - if 'yes', can skip package installation
             }
 
@@ -1796,6 +1877,9 @@ def internal_install_package(i):
     iev=i.get('install_to_env','')
     safe=i.get('safe','')
     ah=i.get('add_hint','')
+
+    vfrom=i.get('version_from',[])
+    vto=i.get('version_to',[])
 
     cdeps=i.get('deps',{})
 
@@ -1831,6 +1915,8 @@ def internal_install_package(i):
         'host_os':hos,
         'target_os':tos,
         'device_id':tdid,
+        'version_from':vfrom,
+        'version_to':vto,
         'add_hint':ah}
 
     # Check if there is a compiler in resolved deps to reuse it
