@@ -2034,3 +2034,62 @@ def rmtmp(i):
     i['tags']=tags
 
     return ck.access(i)
+
+##############################################################################
+# get all versions from deps (recursively)
+
+def get_all_versions_in_deps(i):
+    """
+    Input:  {
+              deps        - deps dict
+              (key)       - current key
+              (only_root) - if 'yes', check only root keys
+
+              (versions)  - current versions
+              (tag_versions) - current versions by tags
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              versions     - all versions for all deps
+              tag_versions     - all versions for all deps by tags
+            }
+
+    """
+
+    deps=i['deps']
+    key=i.get('key','')
+
+    versions=i.get('versions',{})
+    tversions=i.get('tversions',[])
+
+    only_root=(i.get('only_root','')=='yes')
+
+    for k in deps:
+        xkey=key
+        if xkey!='': xkey+='#'
+        xkey+=k
+
+        d=deps[k]
+
+        dd=d.get('dict',{})
+
+        tags=dd.get('tags',[])
+        stags=','.join(tags)
+
+        ver=d.get('ver','')
+
+        versions[xkey]=ver
+
+        if stags not in tversions:
+           tversions.append(stags)
+
+        deps2=dd.get('deps',{})
+        if not only_root and len(deps2)>0:
+           r=get_all_versions_in_deps({'deps':deps2, 'key':xkey, 'versions':versions, 'tag_versions':tversions})
+           if r['return']>0: return r
+
+    return {'return':0, 'versions':versions, 'tag_versions':tversions}
