@@ -61,7 +61,7 @@ def detect(i):
               (quiet)                - do not ask questions whenever possible
               (skip_gpu_info)        - if 'yes', do not collect GPU info
               (platform_init_uoa)    - if !='', use these platform.init scripts
-
+              (update_platform_init) - update platform.init scripts (ask user)
             }
 
     Output: {
