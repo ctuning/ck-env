@@ -15,7 +15,9 @@
       "name": "Boost C++ libraries", 
       "skip_from_bat": "yes", 
       "sort": 10, 
-      "tags": "lib,boost"
+      "tags": "lib,boost",
+      "skip_default": "yes",
+      "version_from":[1,64,0]
     }, 
     "cmake": {
       "local": "yes", 
@@ -63,6 +65,7 @@
     "opencl", 
     "dvdt", 
     "prof", 
+    "dvdt-prof2", 
     "dividiti", 
     "profiler", 
     "cjson", 

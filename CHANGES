@@ -4,6 +4,7 @@
                $ ck detect soft --tags=boost --version_from=1.62.0 --version_to=1.65.0
              - added "get_all_versions_in_deps" function to module:env
                to list recursively all versions of SW deps 
+             - added dvdt-prof2 to latest dvdt prof and asking for Boost >= 1.64.0
 
 * 2017.10.01 - minimized questions when installing packages
 
