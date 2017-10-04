@@ -65,6 +65,10 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
+    hname=hosd.get('ck_name','')    # win, linux
+    hname2=hosd.get('ck_name2','')  # win, mingw, linux, android
+    macos=hosd.get('macos','')      # yes/no
+
     p=i['path']
 
     pi=i.get('install_path','')
@@ -126,6 +130,9 @@ def setup(i):
 
     # Prepare target path
     pt=os.path.join(pib, texe1)
+
+    if hname=='win':
+       pt+='.exe'
 
     # Copy file
     if o=='con':
