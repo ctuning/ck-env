@@ -1,10 +1,13 @@
+* 2017.10.04 - added dvdt-prof2 to latest dvdt prof and asking for Boost >= 1.64.0
+             - added package sorting by "sort" key besides version and name
+               (to be able to suggest recommended)
+
 * 2017.10.03 - added support to customize detect soft via --env.XYZ=abc
              - added support to set version_from and version_to in deps
                and in ck detect soft, for example
                $ ck detect soft --tags=boost --version_from=1.62.0 --version_to=1.65.0
              - added "get_all_versions_in_deps" function to module:env
                to list recursively all versions of SW deps 
-             - added dvdt-prof2 to latest dvdt prof and asking for Boost >= 1.64.0
 
 * 2017.10.01 - minimized questions when installing packages
 

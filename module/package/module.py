@@ -304,7 +304,8 @@ def install(i):
              # Select package 
              if len(ll)>0:
                 # Sort by name and version
-                l=sorted(ll, key=lambda k: (internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 0, 0),
+                l=sorted(ll, key=lambda k: (k.get('meta',{}).get('sort', 0),
+                                            internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 0, 0),
                                             internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 1, 0),
                                             internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 2, 0),
                                             internal_get_val(k.get('meta',{}).get('customize',{}).get('version_split',[]), 3, 0),
