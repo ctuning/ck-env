@@ -100,6 +100,11 @@ def setup(i):
        env[ep+'_SRC']=psrc
        cus['path_includes'].append(psrc)
 
+    psrci=os.path.join(psrc,'include')
+    if os.path.isdir(psrci):
+       env[ep+'_SRC_INCLUDE']=psrci
+       cus['path_includes'].append(psrci)
+
     ptests=os.path.join(psrc,'tests')
     if os.path.isdir(ptests):
        env[ep+'_TESTS']=ptests
