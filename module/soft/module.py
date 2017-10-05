@@ -802,9 +802,11 @@ def setup(i):
              ck.out('')
              ck.out('Environment already registered for this version: '+x)
 
+             update=False
              if i.get('update','')=='yes':
                 update=True
-             else:
+
+             if not update:
                 if o=='con':
                    ck.out('')
                    r=ck.inp({'text':'Would you like to delete this entry and re-register environment (Y/n): '})

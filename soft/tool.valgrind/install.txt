@@ -1,0 +1,6 @@
+Download and install package from the following website:
+* http://www.valgrind.org
+
+For Ubuntu:
+$ sudo apt-get install valgrind
+
