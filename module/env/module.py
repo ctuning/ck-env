@@ -60,6 +60,8 @@ def set(i):
 
               (reuse_deps)           - if 'yes' reuse all deps if found in cache by tags
               (deps_cache)           - list with resolved deps
+              (skip_cache)           - skip caching (sometimes needed to iterate over deps such as DNN libs
+                                         during autotuning, crowd-benchmarking and crowd-tuning)
 
               (skip_auto_resolution)       - if 'yes', do not check if deps are already resolved
               (skip_default)               - if 'yes', skip detection of default installed software version
@@ -117,6 +119,8 @@ def set(i):
     quiet=i.get('quiet','')
 
     name=i.get('name','')
+
+    skip_cache=i.get('skip_cache','')
 
     # Clean output file
     sar=i.get('skip_auto_resolution','')
@@ -218,7 +222,7 @@ def set(i):
               'target_os_bits':tbits}
        ii['search_dict']={'setup':setup}
 
-    if reuse_deps=='yes':
+    if reuse_deps=='yes' and skip_cache!='yes':
        # Check in cache!
        dmatch={'setup':setup, 'tags':tags.split(',')}
        for q in deps_cache:
@@ -712,7 +716,7 @@ def set(i):
               err='one of sub-dependencies ('+q+') have changed (CK environment '+deuoa+' not found)'
               break
 
-        if reuse_deps=='yes':
+        if reuse_deps=='yes' and skip_cache!='yes':
            # Check in cache!
            dmatch2={'setup':setup, 'tags':qq.get('tags','').split(',')}
            dc_found=False
@@ -785,7 +789,7 @@ def set(i):
           return {'return':1, 'error':'Outdated environment was removed - please, try again!'}
 
     # Update cache
-    if reuse_deps=='yes':
+    if reuse_deps=='yes' and skip_cache!='yes':
        deps_cache.append({'meta':dmatch, 'uoa':duoa})
 
     # Prepare environment and bat
@@ -1200,6 +1204,8 @@ def resolve(i):
 
         uoa=q.get('uoa','')
 
+        skip_cache=q.get('skip_cache','')
+
         # Check if restricts dependency to a given host or target OS
         rx=ck.access({'action':'check_target',
                       'module_uoa':cfg['module_deps']['soft'],
@@ -1254,6 +1260,7 @@ def resolve(i):
             'deps':deps,
             'deps_cache':deps_cache,
             'reuse_deps':reuse_deps,
+            'skip_cache':skip_cache,
             'skip_auto_resolution':sar,
             'skip_default':sd,
             'skip_installed':sinst,
