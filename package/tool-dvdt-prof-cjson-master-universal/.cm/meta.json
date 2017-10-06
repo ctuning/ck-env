@@ -37,7 +37,7 @@
       "local": "yes", 
       "name": "cJSON library", 
       "sort": 15, 
-      "tags": "lib,cjson"
+      "tags": "lib,cjson,vmaster"
     }, 
     "opencl": {
       "local": "yes", 
