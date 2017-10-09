@@ -1,3 +1,5 @@
+* 2017.10.09 - changed lib.acl to lib.armcl
+
 * 2017.10.05 - added soft:tool.valgrind
 
 * 2017.10.04 - added dvdt-prof2 to latest dvdt prof and asking for Boost >= 1.64.0

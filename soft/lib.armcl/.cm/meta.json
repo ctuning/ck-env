@@ -3,7 +3,7 @@
   "customize": {
     "check_that_exists": "yes",
     "ck_version": 10,
-    "env_prefix": "CK_ENV_LIB_ACL",
+    "env_prefix": "CK_ENV_LIB_ARMCL",
     "limit_recursion_dir_search": {
       "linux": 4,
       "win": 4
@@ -19,7 +19,7 @@
   "tags": [
     "lib",
     "arm",
-    "acl",
-    "arm-compute-lib"
+    "armcl"
+    "arm-compute-library"
   ]
 }
