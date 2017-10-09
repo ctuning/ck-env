@@ -19,7 +19,7 @@
   "tags": [
     "lib",
     "arm",
-    "armcl"
+    "armcl",
     "arm-compute-library"
   ]
 }
