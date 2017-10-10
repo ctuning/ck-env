@@ -34,7 +34,8 @@
     "soft_version_cmd": {
       "linux": "--version > $#filename#$ 2>&1",
       "win": " --version > $#filename#$ 2>&1"
-    }
+    },
+    "sort":50
   },
   "deps": {
     "ndk-gcc": {

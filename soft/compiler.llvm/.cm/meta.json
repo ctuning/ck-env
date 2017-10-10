@@ -51,7 +51,8 @@
         "android"
       ], 
       "tags": "compiler,gcc,ndk"
-    }
+    },
+    "sort":50
   }, 
   "env": {}, 
   "soft_name": "LLVM compiler", 

@@ -491,7 +491,8 @@ def set(i):
 
        # Select sub-deps (sort by version)
        if lx>1:
-          ls=sorted(l, key=lambda k: (k.get('info',{}).get('data_name',k['data_uoa']),
+          ls=sorted(l, key=lambda k: (k.get('meta',{}).get('customize',{}).get('sort', 0),
+                                      k.get('info',{}).get('data_name',k['data_uoa']),
                                       internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 0, 0),
                                       internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 1, 0),
                                       internal_get_val(k.get('meta',{}).get('setup',{}).get('version_split',[]), 2, 0),
