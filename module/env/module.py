@@ -89,6 +89,9 @@ def set(i):
 
               (safe)                 - safe mode when searching packages first instead of detecting already installed soft
                                        (to have more deterministic build)
+
+              (package_uoa)          - force installation package
+                                       (also useful to rebuild deps during replay)
             }
 
     Output: {
@@ -121,6 +124,8 @@ def set(i):
     name=i.get('name','')
 
     skip_cache=i.get('skip_cache','')
+
+    package_uoa=i.get('package_uoa','')
 
     # Clean output file
     sar=i.get('skip_auto_resolution','')
@@ -271,74 +276,124 @@ def set(i):
 
     dname=''
 
+    try_to_reinstall=False
     if lx==0 and duoa!='':
+
        # Check exact problem
        rx=ck.access({'action':'load',
                      'module_uoa':work['self_module_uid'],
                      'data_uoa':duoa})
        if rx['return']>0:
-          if rx['return']==16:
-             rx['error']='strange - missing environment ('+duoa+')'
-          return rx
+          if rx['return']!=16: return rx
 
-       dds=rx['dict'].get('setup',{})
+          if package_uoa=='':
+             rx['error']='strange - missing environment ('+duoa+') and package not specified'
 
-       # Changed setup
-       if o=='con':
-          ck.out('')
-          ck.out('WARNING: requested host or target OS info is not matching info in env '+duoa+'!')
+             if o=='con' and quiet!='yes':
+                ck.out('')
+                ck.out('    WARNING: '+rx['error']+'!')
+                ck.out('')
+#                ry=ck.inp({'text':'    Would you like to detect / reinstall again (Y/n)? '})
+#                x=ry['string'].strip()
+#
+#                if x=='n' or x=='no':
+#                   return rx
+          else:
+             # Otherwise can try to rebuild from provided package UOA
+             ck.out('')
+             ck.out('WARNING: environment doesn\'t exist but package provided - trying to reinstall ...')
 
-          ck.out('')
-          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':dds.get('host_os_uoa','')})
-          if rx['return']>0: return rx
-          x=rx['string']
-          ck.out(' Host OS UOA in env '+duoa+'    : '+x)
-          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':setup.get('host_os_uoa','')})
-          if rx['return']>0: return rx
-          x=rx['string']
-          ck.out(' Requested host OS UOA                  : '+x)
+          duoa=''
+          iii['data_uoa']=duoa # since will be later new search
+          l=[]
+          lx=0
 
-          ck.out('')
-          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':dds.get('target_os_uoa','')})
-          if rx['return']>0: return rx
-          x=rx['string']
-          ck.out(' Target OS UOA in env '+duoa+'  : '+x)
-          rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':setup.get('target_os_uoa','')})
-          if rx['return']>0: return rx
-          x=rx['string']
-          ck.out(' Requested target OS UOA                : '+x)
+          try_to_reinstall=True
 
-          ck.out('')
-          ck.out(' Target OS bits in env '+duoa+' : '+dds.get('target_os_bits',''))
-          ck.out(' Requested target OS bits               : '+setup.get('target_os_bits',''))
+          # Repeat search if has without data uoa
+          r=ck.access(iii)
+          if r['return']>0: return r
 
-          ck.out('')
-          ck.out(' This is a possible bug - please report to the authors!')
-          ck.out('')
+          # Prune if needed
+          r=prune_search_list({'lst':r['lst'], 
+                               'no_tags':no_tags, 
+                               'version_from':vfrom, 
+                               'version_to':vto})
+          if r['return']>0: return r
+          sbov=r.get('skipped_because_of_version','')
 
-       return {'return':33, 'error':'current host or target OS ('+str(setup)+' is not matching the one in software env '+duoa}
+          l=r['lst']
+          lx=len(l)
+
+          auoas=[]
+
+          dname=''
+
+       if not try_to_reinstall:
+          dds=rx['dict'].get('setup',{})
+
+          # Changed setup
+          if o=='con':
+             ck.out('')
+             ck.out('WARNING: requested host or target OS info is not matching info in env '+duoa+'!')
+
+             ck.out('')
+             rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':dds.get('host_os_uoa','')})
+             if rx['return']>0: return rx
+             x=rx['string']
+             ck.out(' Host OS UOA in env '+duoa+'    : '+x)
+             rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':setup.get('host_os_uoa','')})
+             if rx['return']>0: return rx
+             x=rx['string']
+             ck.out(' Requested host OS UOA                  : '+x)
+
+             ck.out('')
+             rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':dds.get('target_os_uoa','')})
+             if rx['return']>0: return rx
+             x=rx['string']
+             ck.out(' Target OS UOA in env '+duoa+'  : '+x)
+             rx=ck.access({'action':'convert_uid_to_alias', 'module_uoa':cfg['module_deps']['os'], 'uoa':setup.get('target_os_uoa','')})
+             if rx['return']>0: return rx
+             x=rx['string']
+             ck.out(' Requested target OS UOA                : '+x)
+
+             ck.out('')
+             ck.out(' Target OS bits in env '+duoa+' : '+dds.get('target_os_bits',''))
+             ck.out(' Requested target OS bits               : '+setup.get('target_os_bits',''))
+
+             ck.out('')
+             ck.out(' This is a possible bug - please report to the authors!')
+             ck.out('')
+
+          return {'return':33, 'error':'current host or target OS ('+str(setup)+' is not matching the one in software env '+duoa}
 
     # If no entries and safe mode, search packages first
     showed_warning=False
 
-    if lx==0 and duoa=='' and safe=='yes' and tags!='':
+    if lx==0 and duoa=='' and tags!='' and (safe=='yes' or package_uoa!=''):
        ck.out('==========================================================================================')
        ck.out('WARNING: '+war)
        showed_warning=True
 
-       rx=internal_install_package({'out':oo,
-                                    'tags':tags,
-                                    'no_tags':no_tags,
-                                    'quiet':quiet,
-                                    'install_to_env':iev,
-                                    'safe':safe,
-                                    'host_os':hos,
-                                    'target_os':tos,
-                                    'device_id':tdid,
-                                    'add_hint':'yes',
-                                    'version_from':vfrom,
-                                    'version_to':vto,
-                                    'deps':cdeps})
+       iii1={'out':oo,
+             'package_uoa':package_uoa,
+             'tags':tags,
+             'no_tags':no_tags,
+             'quiet':quiet,
+             'install_to_env':iev,
+             'safe':safe,
+             'host_os':hos,
+             'target_os':tos,
+             'device_id':tdid,
+             'add_hint':'yes',
+             'version_from':vfrom,
+             'version_to':vto,
+             'deps':cdeps}
+
+       if try_to_reinstall:
+          iii1['sub_deps']=i.get('current_deps',{})
+
+       rx=internal_install_package(iii1)
        if rx['return']>0 and rx['return']!=16: return rx
 
        if rx['return']==0:
@@ -1239,6 +1294,14 @@ def resolve(i):
             if tags!='': tags+=','
             tags+=tx.strip()
 
+        # Check if has associated package (in case of rebuilding deps for replay)
+        qdict=q.get('dict',{})
+        package_uoa=q.get('package_uoa','')
+        if package_uoa=='':
+           package_uoa=qdict.get('package_uoa','')
+        if package_uoa=='':
+           package_uoa=qdict.get('customize',{}).get('used_package_uid','')
+
         # Try to set environment
         iv+=1
 
@@ -1259,6 +1322,7 @@ def resolve(i):
             'env':env,
             'uoa':uoa,
             'deps':deps,
+            'current_deps':qdict.get('deps',{}),
             'deps_cache':deps_cache,
             'reuse_deps':reuse_deps,
             'skip_cache':skip_cache,
@@ -1275,6 +1339,7 @@ def resolve(i):
             'install_to_env':iev,
             'version_from':vfrom,
             'version_to':vto,
+            'package_uoa':package_uoa,
             'safe':safe
            }
 
@@ -1285,6 +1350,12 @@ def resolve(i):
 
         lst=rx['lst']
         dd=rx['dict']
+
+        package_uoa=dd.get('package_uoa','')
+        if package_uoa=='':
+           package_uoa=dd.get('customize',{}).get('used_package_uid','')
+        if package_uoa!='':
+           q['package_uoa']=package_uoa # to be able to rebuild env for replay on another machine
 
         dver=rx.get('detected_version','')
         if dver!='': q['detected_ver']=dver
@@ -1840,10 +1911,12 @@ def internal_install_package(i):
                      or
               (device_id)
 
+              (package_uoa)          - fix package (useful for replay ...)
               (tags)                 - search UOA by tags (separated by comma)
               (no_tags)              - exclude entris with these tags separated by comma
 
               (deps)                 - already resolved deps
+              (sub_deps)             - deps for the package to be installed (for replay mainly)
 
               (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
 
@@ -1879,6 +1952,8 @@ def internal_install_package(i):
     tos=i.get('target_os','')
     tdid=i.get('device_id','')
 
+    package_uoa=i.get('package_uoa','')
+
     tags=i.get('tags','')
     no_tags=i.get('no_tags','')
     quiet=i.get('quiet','')
@@ -1895,8 +1970,18 @@ def internal_install_package(i):
     if o=='con':
        ck.out('')
        ck.out('  Searching and installing CK software packages ...')
-       ck.out('    * tags:    '+tags)
-       ck.out('    * no tags: '+no_tags)
+       if package_uoa!='':
+          # Try to detect alias
+          rx=ck.access({'action':'load',
+                        'module_uoa':cfg['module_deps']['package'],
+                        'data_uoa':package_uoa})
+          if rx['return']>0: return rx
+          package_uid=rx['data_uid']
+          package_alias=rx['data_alias']
+
+          ck.out('    * package UOA: '+package_alias+' ('+package_uid+')')
+       ck.out('    * tags:        '+tags)
+       ck.out('    * no tags:     '+no_tags)
        ck.out('')
 
 #          if quiet=='yes':
@@ -1915,6 +2000,7 @@ def internal_install_package(i):
 
     vv={'action':'install',
         'module_uoa':cfg['module_deps']['package'],
+        'data_uoa':package_uoa,
         'out':oo,
         'tags':tags,
         'no_tags':no_tags,
@@ -1928,7 +2014,7 @@ def internal_install_package(i):
         'add_hint':ah}
 
     # Check if there is a compiler in resolved deps to reuse it
-    xdeps={}
+    xdeps=i.get('sub_deps',{})
     if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
     if cdeps.get('compiler-mcl',{}).get('uoa','')!='': xdeps['compiler-mcl']=cdeps['compiler-mcl']
     if len(xdeps)>0: vv['deps']=xdeps

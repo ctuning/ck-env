@@ -18,8 +18,10 @@ def limit(i):
     drx=[]
 
     for q in dr:
-        if q.find('.libs')<0:
+        if q.find('.libs')<0 and q.find('anaconda')<0:
            drx.append(q)
+
+    # Anaconda installation and libraries often conflict with existing OS installations
 
     return {'return':0, 'list':drx}
 

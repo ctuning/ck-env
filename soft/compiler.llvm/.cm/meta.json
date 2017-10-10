@@ -33,7 +33,8 @@
     "soft_version_cmd": {
       "linux": "--version > $#filename#$ 2>&1", 
       "win": " --version > $#filename#$ 2>&1"
-    }
+    },
+    "sort":50
   }, 
   "deps": {
     "mvsc": {
@@ -51,8 +52,7 @@
         "android"
       ], 
       "tags": "compiler,gcc,ndk"
-    },
-    "sort":50
+    }
   }, 
   "env": {}, 
   "soft_name": "LLVM compiler", 

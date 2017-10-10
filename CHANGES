@@ -1,3 +1,5 @@
+* 2017.10.10 - added support to rebuild deps during replay from another machine using package UOA
+
 * 2017.10.09 - changed lib.acl to lib.armcl
 
 * 2017.10.05 - added soft:tool.valgrind
