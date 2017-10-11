@@ -253,6 +253,9 @@ def setup(i):
          "CK_LIB_EXT": ".a", 
          "CK_LINKER_FLAG_OPENMP": "-lpthread -liomp5", 
          "CK_MAKE": "make", 
+         "CK_OPT_SIZE": "-Os", 
+         "CK_OPT_SPEED": "-O3", 
+         "CK_OPT_SPEED_SAFE": "-O2", 
          "CK_OBJDUMP": "objdump -d", 
          "CK_OBJ_EXT": ".o", 
          "CK_PLUGIN_FLAG": "-fplugin=", 
@@ -302,6 +305,9 @@ def setup(i):
 #         "CK_LD_FLAGS_EXTRA": "bufferoverflowU.lib", 
          "CK_LIB_EXT": ".lib", 
          "CK_MAKE": "nmake", 
+         "CK_OPT_SIZE": "-Os", 
+         "CK_OPT_SPEED": "-O3", 
+         "CK_OPT_SPEED_SAFE": "-O2", 
          "CK_OBJDUMP": "dumpbin /disasm", 
          "CK_OBJ_EXT": ".obj"
        })
