@@ -36,6 +36,9 @@ def setup(i):
     p2=os.path.dirname(p1)
     p3=os.path.dirname(p2)
 
+    env[ep]=p3
+    env[ep+'_LIB']=p2
+
     if winh=='yes':
         s+='\nset PYTHONPATH='+p2+';%PYTHONPATH%\n'
     else:
