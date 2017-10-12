@@ -55,6 +55,7 @@ def install(i):
               (data_uoa) or (uoa) - package UOA entry
                        or
               (tags)              - tags to search package if data_uoa=='' before searching in current path
+              (or_tags)           - add entries which has groups of tags separated by ;
               (no_tags)           - exclude entris with these tags separated by comma
 
               (env_data_uoa)      - use this data UOA to record (new) env
@@ -129,6 +130,7 @@ def install(i):
     ask=i.get('ask','')
 
     xtags=i.get('tags','')
+    xor_tags=i.get('or_tags','')
     xno_tags=i.get('no_tags','')
 
     # Check if package_channel is specifies and add tag
@@ -291,12 +293,13 @@ def install(i):
                     ll.append(q)
 
              # Prune by no_tags
-             if xno_tags!='' or len(vfrom)>0 or len(vto)>0:
+             if xno_tags!='' or xor_tags!='' or len(vfrom)>0 or len(vto)>0:
                 rx=ck.access({'action':'prune_search_list',
                               'module_uoa':cfg['module_deps']['env'],
                               'lst':ll,
                               'version_from':vfrom,
                               'version_to':vto,
+                              'or_tags':xor_tags,
                               'no_tags':xno_tags})
                 if rx['return']>0: return rx
                 ll=rx['lst']
@@ -402,8 +405,10 @@ def install(i):
 
        if duoa=='':
           x=''
+          if xor_tags!='':
+             x='and witht or_tags="'+xor_tags+'" '
           if xno_tags!='':
-             x='and withtout tags "'+xno_tags+'" '
+             x='and with no_tags="'+xno_tags+'" '
           return {'return':16, 'error':'package with tags "'+xtags+'" '+x+'for your environment was not found!'}
 
     # Check if restricts dependency to a given host or target OS

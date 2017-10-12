@@ -49,6 +49,7 @@ def set(i):
                or
               (tags)                 - search UOA by tags (separated by comma)
 
+              (or_tags)              - add entries which has groups of tags separated by ;
               (no_tags)              - exclude entris with these tags separated by comma
 
               (local)                - if 'yes', add host_os, target_os, target_device_id to search
@@ -206,6 +207,7 @@ def set(i):
     # Check environment UOA
     enruoa=i.get('repo_uoa','')
     tags=i.get('tags','')
+    or_tags=i.get('or_tags','')
     no_tags=i.get('no_tags','')
     duoa=i.get('uoa','')
 
@@ -263,6 +265,7 @@ def set(i):
 
     # Prune if needed
     r=prune_search_list({'lst':r['lst'], 
+                         'or_tags':or_tags, 
                          'no_tags':no_tags, 
                          'version_from':vfrom, 
                          'version_to':vto})
@@ -316,6 +319,7 @@ def set(i):
 
           # Prune if needed
           r=prune_search_list({'lst':r['lst'], 
+                               'or_tags':or_tags, 
                                'no_tags':no_tags, 
                                'version_from':vfrom, 
                                'version_to':vto})
@@ -378,6 +382,7 @@ def set(i):
        iii1={'out':oo,
              'package_uoa':package_uoa,
              'tags':tags,
+             'or_tags':or_tags, 
              'no_tags':no_tags,
              'quiet':quiet,
              'install_to_env':iev,
@@ -501,6 +506,7 @@ def set(i):
 
              # Prune if needed
              r=prune_search_list({'lst':r['lst'], 
+                                  'or_tags':or_tags, 
                                   'no_tags':no_tags,
                                   'version_from':vfrom, 
                                   'version_to':vto})
@@ -654,6 +660,7 @@ def set(i):
 
           rx=internal_install_package({'out':oo,
                                        'tags':tags,
+                                       'or_tags':or_tags, 
                                        'no_tags':no_tags,
                                        'quiet':quiet,
                                        'install_to_env':iev,
@@ -1247,6 +1254,7 @@ def resolve(i):
         ytosd=tosd
 
         tags=q.get('tags','')
+        or_tags=q.get('or_tags','')
         no_tags=q.get('no_tags','')
         name=q.get('name','')
         local=q.get('local','')
@@ -1317,6 +1325,7 @@ def resolve(i):
             'target_os':ytos,
             'target_device_id':ytdid,
             'tags':tags,
+            'or_tags':or_tags,
             'no_tags':no_tags,
             'repo_uoa':enruoa,
             'env':env,
@@ -1708,6 +1717,7 @@ def prune_search_list(i):
     """
     Input:  {
               lst                    - list of entries after 'search'
+              (or_tags)              - add entries which has groups of tags separated by ;
               (no_tags)              - string of tags to exclude
               (version_from)         - check version starting from ... (list of numbers)
               (version_to)           - check version up to ... (list of numbers)
@@ -1725,7 +1735,17 @@ def prune_search_list(i):
     """
 
     lst=i.get('lst',[])
-    ntags=i.get('no_tags','').split(',')
+
+    no_tags=i.get('no_tags','')
+    ntags=[]
+    if no_tags!='': ntags=no_tags.split(',')
+
+    or_tags=i.get('or_tags','')
+    otags=[]
+    if or_tags!='': 
+       xotags=or_tags.split(';')
+       for q in xotags:
+           otags.append(q.split(','))
 
     vfrom=i.get('version_from',[])
     vto=i.get('version_to',[])
@@ -1743,6 +1763,20 @@ def prune_search_list(i):
         # Check that not temporal entry (unfinished installation)
         if 'tmp' in tags:
            skip=True
+
+        # Check or tags
+        if not skip and len(otags)>0:
+           found=False
+           for t in otags:
+               found=True
+               for t1 in t:
+                   if t1 not in tags:
+                      found=False
+                      break
+               if found:
+                  break
+           if not found:
+              skip=True
 
         # Check no tags
         if not skip:
@@ -1913,6 +1947,7 @@ def internal_install_package(i):
 
               (package_uoa)          - fix package (useful for replay ...)
               (tags)                 - search UOA by tags (separated by comma)
+              (or_tags)              - add entries which has groups of tags separated by ;
               (no_tags)              - exclude entris with these tags separated by comma
 
               (deps)                 - already resolved deps
@@ -1955,6 +1990,7 @@ def internal_install_package(i):
     package_uoa=i.get('package_uoa','')
 
     tags=i.get('tags','')
+    or_tags=i.get('or_tags','')
     no_tags=i.get('no_tags','')
     quiet=i.get('quiet','')
     iev=i.get('install_to_env','')
@@ -1981,6 +2017,7 @@ def internal_install_package(i):
 
           ck.out('    * package UOA: '+package_alias+' ('+package_uid+')')
        ck.out('    * tags:        '+tags)
+       ck.out('    * or_tags:     '+or_tags)
        ck.out('    * no tags:     '+no_tags)
        ck.out('')
 
@@ -2003,6 +2040,7 @@ def internal_install_package(i):
         'data_uoa':package_uoa,
         'out':oo,
         'tags':tags,
+        'or_tags':or_tags,
         'no_tags':no_tags,
         'install_to_env':iev,
         'safe':safe,
