@@ -17,6 +17,13 @@
 cd ${INSTALL_DIR}
 
 ############################################################
+# Check if need to substitute ORIGINAL_PACKAGE_DIR with some other location
+if [ "${SUBSTITUTE_ORIGINAL_PACKAGE_DIR}" != "" ] ; then
+   export ORIGINAL_PACKAGE_DIR=${SUBSTITUTE_ORIGINAL_PACKAGE_DIR}
+   echo "Using scripts from ${ORIGINAL_PACKAGE_DIR}"
+fi
+
+############################################################
 if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/pre-download.sh" ] ; then
   echo ""
   echo "Executing pre-download script ..."

@@ -488,8 +488,26 @@ def install(i):
 #    I moved it up to record changed env!
 
     for kpe in pr_env:
-        if '$#sep#$' in str(pr_env):
-           pr_env[kpe]=pr_env[kpe].replace('$#sep#$',sdirs) 
+        x=pr_env[kpe]
+        if x==str(x):
+           x=str(x).replace('$#sep#$',sdirs) 
+
+           j=x.find('$#path_to_cid=')
+           if j>=0:
+              j1=x.find('#$',j+13)
+              if j1>0:
+                 xcid=x[j+14:j1]
+
+                 # Try to resolve CID
+                 rx=ck.access({'action':'find', 'cid':xcid})
+                 if rx['return']>0: 
+                    return {'return':rx['return'], 'error':'Can\'t find entry when processing install_env var "'+kpe+'" ('+rx['error']+')'}
+
+                 rxp=rx['path']
+
+                 x=x[:j]+rxp+x[j1+2:]
+ 
+           pr_env[kpe]=x
 
     # Check if has customized script
     cs=None

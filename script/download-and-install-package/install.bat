@@ -15,6 +15,13 @@ rem INSTALL_DIR
 cd /D %INSTALL_DIR%
 
 rem ############################################################
+rem Check if need to substitute ORIGINAL_PACKAGE_DIR with some other location
+if not "%SUBSTITUTE_ORIGINAL_PACKAGE_DIR%" == "" (
+   set ORIGINAL_PACKAGE_DIR=%SUBSTITUTE_ORIGINAL_PACKAGE_DIR%
+   echo Using scripts from %ORIGINAL_PACKAGE_DIR%
+)
+
+rem ############################################################
 if EXIST "%ORIGINAL_PACKAGE_DIR%\scripts.%CK_TARGET_OS_ID%\pre-download.bat" (
   echo.
   echo Executing pre-download script ...
