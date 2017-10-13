@@ -11,17 +11,18 @@
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_SUB_DIR1": "src", 
+      "PACKAGE_GIT_CHECKOUT": "LMDB_0.9.21",
       "PACKAGE_URL": "https://github.com/LMDB/lmdb", 
       "skip_file_check": "yes"
     }, 
     "use_git_revision": "yes", 
-    "version": "master"
+    "version": "0.9.21"
   }, 
   "deps": {
     "compiler": {
-      "local": "yes",
-      "name": "C compiler",
-      "sort": 10,
+      "local": "yes", 
+      "name": "C compiler", 
+      "sort": 10, 
       "tags": "compiler,lang-c"
     }
   }, 
@@ -46,9 +47,11 @@
   "tags": [
     "lib", 
     "lmdb", 
-    "vtrunk",
-    "vmaster",
-    "channel-dev"
+    "v0.9.21", 
+    "v0.9", 
+    "v0",
+    "channel-dev",
+    "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 

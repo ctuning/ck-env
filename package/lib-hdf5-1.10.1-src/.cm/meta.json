@@ -65,7 +65,9 @@
     "hdf5",
     "v1.10.1",
     "v1.10",
-    "v1"
+    "v1",
+    "channel-dev",
+    "channel-stable"
   ],
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",
