@@ -30,7 +30,8 @@
     "soft_version_cmd": {
       "win": "> $#filename#$ 2>&1"
     },
-    "use_locale_for_version":"yes"
+    "use_locale_for_version":"yes",
+    "sort":1000
   }, 
   "deps": {
     "msdk": {

@@ -24,7 +24,7 @@
       "PACKAGE_UNGZIP": "NO",
       "PACKAGE_UNTAR": "YES",
       "PACKAGE_UNTAR_SKIP_ERROR_WIN": "YES",
-      "PACKAGE_URL": "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.1/src",
+      "PACKAGE_URL": "http://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.1/src",
       "PACKAGE_WGET": "YES"
     },
     "version": "1.10.1"
