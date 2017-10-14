@@ -35,6 +35,7 @@
     "lib",
     "ncurses",
     "v6.0",
-    "v6"
+    "v6",
+    "channel-stable"
   ]
 }

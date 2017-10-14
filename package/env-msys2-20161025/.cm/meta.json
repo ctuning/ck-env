@@ -22,7 +22,8 @@
   "tags": [
     "env",
     "msys2",
-    "v20161025"
+    "v20161025",
+    "channel-stable"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",

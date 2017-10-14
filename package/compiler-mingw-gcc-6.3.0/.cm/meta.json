@@ -34,7 +34,8 @@
     "lang-f95",
     "v6.3.0",
     "v6.3",
-    "v6"
+    "v6",
+    "channel-stable"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",

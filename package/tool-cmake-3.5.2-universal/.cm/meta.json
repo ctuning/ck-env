@@ -44,7 +44,8 @@
     "cmake",
     "v3.5.2",
     "v3.5",
-    "v3"
+    "v3",
+    "channel-stable"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",

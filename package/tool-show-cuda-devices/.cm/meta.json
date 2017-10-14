@@ -13,6 +13,7 @@
   "suggested_path": "show-cuda-devices",
   "tags": [
     "tool",
-    "show-cuda-devices"
+    "show-cuda-devices",
+    "channel-stable"
   ]
 }

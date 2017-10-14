@@ -32,6 +32,7 @@
     "lang-c",
     "lang-cpp",
     "v1.2",
-    "v1"
+    "v1",
+    "channel-stable"
   ]
 }

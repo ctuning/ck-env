@@ -13,8 +13,9 @@
       "PACKAGE_SUB_DIR1": "src", 
       "PACKAGE_GIT_CHECKOUT": "LMDB_0.9.21",
       "PACKAGE_URL": "https://github.com/LMDB/lmdb", 
-      "skip_file_check": "yes"
+      "SUBSTITUTE_ORIGINAL_PACKAGE_DIR":"$#path_to_cid=package:5f41ddacc856c14d#$"
     }, 
+    "skip_file_check": "yes",
     "use_git_revision": "yes", 
     "version": "0.9.21"
   }, 
@@ -50,7 +51,6 @@
     "v0.9.21", 
     "v0.9", 
     "v0",
-    "channel-dev",
     "channel-stable"
   ], 
   "use_scripts_from_another_entry": {

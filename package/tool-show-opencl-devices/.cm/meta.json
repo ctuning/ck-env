@@ -13,6 +13,7 @@
   "suggested_path": "show-opencl-devices",
   "tags": [
     "tool",
-    "show-opencl-devices"
+    "show-opencl-devices",
+    "channel-stable"
   ]
 }

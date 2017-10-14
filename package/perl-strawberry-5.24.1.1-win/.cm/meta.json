@@ -30,7 +30,8 @@
     "v5.24.1.1",
     "v5.24.1",
     "v5.24",
-    "v5"
+    "v5",
+    "channel-stable"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",

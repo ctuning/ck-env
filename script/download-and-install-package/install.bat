@@ -98,10 +98,10 @@ if "%PACKAGE_WGET%" == "YES" (
 
   if not "%PACKAGE_WGET_HEADER%" == "" (
      wget --no-check-certificate %PACKAGE_WGET_EXTRA% --header="%PACKAGE_WGET_HEADER%" "%PF%"
-rem -O%PACKAGE_NAME%
+     rem -O%PACKAGE_NAME%
   ) else (
      wget --no-check-certificate %PACKAGE_WGET_EXTRA% "%PF%"
-rem -O%PACKAGE_NAME%
+     rem -O%PACKAGE_NAME%
   )
 
   if %errorlevel% neq 0 (
@@ -111,7 +111,11 @@ rem -O%PACKAGE_NAME%
   )
 
   if "%PACKAGE_RENAME%" == "YES" (
-    ren %PACKAGE_NAME2% %PACKAGE_NAME%
+    rem Sometimes wget on Windows downloads file without extension
+    rem though seems like last version fixes that. Hence next check
+    if EXIST "%PACKAGE_NAME2%" (
+      ren %PACKAGE_NAME2% %PACKAGE_NAME%
+    )
   )
 )
 
@@ -202,9 +206,11 @@ if "%PACKAGE_UNZIP%" == "YES" (
   unzip %PACKAGE_NAME%
 
   if %errorlevel% neq 0 (
-   echo.
-   echo Error: unzipping package failed!
-   goto err
+    if not "%PACKAGE_UNZIP_SKIP_ERROR%" == "YES" (
+      echo.
+      echo Error: unzipping package failed!
+      goto err
+    )
   )
 )
 

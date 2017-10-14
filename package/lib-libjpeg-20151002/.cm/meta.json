@@ -9,14 +9,15 @@
       "PACKAGE_CONFIGURE_FLAGS_ANDROID": "-DBUILD_STATIC=ON",
       "PACKAGE_CONFIGURE_FLAGS_LINUX": "",
       "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "-DBUILD_STATIC=ON",
+      "PACKAGE_GIT_CHECKOUT": "6c0fcb8",
       "PACKAGE_GIT": "YES",
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_SUB_DIR1": "src",
-      "PACKAGE_URL": "https://github.com/LuaDist/libjpeg"
+      "PACKAGE_URL": " https://github.com/LuaDist/libjpeg "
     },
     "use_git_revision": "yes",
-    "version": "master"
+    "version": "20151002"
   },
   "deps": {
     "cmake": {
@@ -56,7 +57,9 @@
   "tags": [
     "lib",
     "libjpeg",
-    "jpeg"
+    "jpeg",
+    "v20151002",
+    "channel-stable"
   ],
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",

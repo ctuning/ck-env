@@ -1,4 +1,6 @@
-* 2017.10.14 - added new wget.exe for Windows (to support latest SSL)
+* 2017.10.14 - added newer wget.exe for Windows (to support latest SSL)
+             - added newer unzip.exe for Windows
+             - added channel-stable to stable packages
 
 * 2017.10.13 - added possibility to specify "$#path_from_cid=" in install_env in packages
 

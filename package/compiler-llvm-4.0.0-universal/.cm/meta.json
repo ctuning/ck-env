@@ -28,7 +28,8 @@
     "v4.0.0-ck-package",
     "v4.0.0",
     "v4.0",
-    "v4"
+    "v4",
+    "channel-stable"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",

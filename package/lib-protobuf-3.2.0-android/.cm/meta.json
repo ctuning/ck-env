@@ -55,7 +55,8 @@
     "protobuf",
     "v3.2.0",
     "v3.2",
-    "v3"
+    "v3",
+    "channel-stable"
   ],
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",

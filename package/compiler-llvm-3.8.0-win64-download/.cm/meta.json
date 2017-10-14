@@ -18,6 +18,10 @@
     "compiler",
     "llvm",
     "lang-c",
-    "lang-cpp"
+    "lang-cpp",
+    "v3.8.0",
+    "v3.8",
+    "v3",
+    "channel-stable"
   ]
 }

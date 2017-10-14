@@ -31,6 +31,7 @@
     "v3.9.0-ck-package",
     "v3.9.0",
     "v3.9",
-    "v3"
+    "v3",
+    "channel-stable"
   ]
 }

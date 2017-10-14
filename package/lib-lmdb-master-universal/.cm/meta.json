@@ -11,9 +11,9 @@
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_SUB_DIR1": "src", 
-      "PACKAGE_URL": "https://github.com/LMDB/lmdb", 
-      "skip_file_check": "yes"
+      "PACKAGE_URL": "https://github.com/LMDB/lmdb"
     }, 
+    "skip_file_check": "yes",
     "use_git_revision": "yes", 
     "version": "master"
   }, 

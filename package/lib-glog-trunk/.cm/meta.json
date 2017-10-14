@@ -62,8 +62,7 @@
     "lib",
     "glog",
     "vtrunk",
-    "vmaster",
-    "channel-dev"
+    "vmaster"
   ],
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",

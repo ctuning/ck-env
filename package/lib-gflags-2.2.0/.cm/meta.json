@@ -64,7 +64,6 @@
     "v2.2.0",
     "v2.2",
     "v2",
-    "channel-dev",
     "channel-stable"
   ],
   "use_preprocess_scripts_from_another_entry": {
