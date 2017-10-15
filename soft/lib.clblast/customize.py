@@ -116,8 +116,8 @@ def setup(i):
     lbs=lb
     if lbs.endswith('.so'):
        lbs=lbs[:-3]+'.a'
-    else:
-       lbs=lbs[:-3]+'.lib'
+    else: # expecting Windows (dll/lib)
+       lbs=lbs[:-4]+'.lib'
 
     pl=os.path.dirname(fp)
     cus['path_lib']=pl
