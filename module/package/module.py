@@ -577,13 +577,14 @@ def install(i):
     pr_env['CK_TARGET_OS_ID']=osn
 
     # Check if need host GPGPU params
+    # We need a question here ('out':oo), since there can be multiple available drivers and we need to let user select the right one
     if d.get('need_gpgpu_info','')=='yes':
        r=ck.access({'action':'detect',
                     'module_uoa':cfg['module_deps']['platform.gpgpu'],
                     'type':d.get('need_gpgpu_type',''),
                     'host_os':hos,
-                    'target_os':hos})
-#                    'out':oo})
+                    'target_os':hos,
+                    'out':oo})
        if r['return']>0: return r
 
        features.update(r.get('features',{}))
