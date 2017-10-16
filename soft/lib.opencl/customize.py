@@ -97,7 +97,29 @@ def limit(i):
                      if k not in drx:
                         drx.append(k)
 
-    return {'return':0, 'list':drx}
+    skip_sort='no'
+    # Check if nvidia and x86_64 present, then move x86_64 up 
+    # (since Nvidia has only partial support for all OpenCL versions
+    # and for example Caffe often breaks)
+
+    drx1=[]
+    drx2=[]
+    drx3=[]
+    for q in drx:
+        if ('i386' in q or 'lib32' in q) and tbits=='64':
+           continue
+
+        if 'x86_64-' in q:
+           drx1.append(q)
+        elif 'cuda' in q:
+           drx2.append(q)
+           skip_sort='yes'
+        else:
+           drx3.append(q)
+
+    drx=sorted(drx1)+sorted(drx2)+sorted(drx3)
+
+    return {'return':0, 'list':drx, 'skip_sort':skip_sort}
 
 ##############################################################################
 # get version from path

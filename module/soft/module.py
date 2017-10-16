@@ -1659,6 +1659,8 @@ def check(i):
 
     rlm=cus.get('limit_recursion_dir_search',{}).get(hplat,0)
 
+    skip_sort='no'
+
     fp=i.get('full_path','')
     if fp!='':
        lst=[fp]
@@ -1678,6 +1680,7 @@ def check(i):
                        'ck_kernel':ck})
           if rx['return']>0: return rx
           lst=rx['list']
+          if rx.get('skip_sort','')!='': skip_sort=rx['skip_sort']
 
     # Print results
 #    if o=='con':
@@ -1702,7 +1705,7 @@ def check(i):
            if q2 not in lst2:
               lst1.append(q)
               lst2.append(q2)
-       lst=lst1
+       lst=reversed(lst1) # return to original order if need to avoid sorting
 
        # Process each path
        if o=='con':
@@ -1766,13 +1769,14 @@ def check(i):
           ck.out('')
 
        # Sort by version
-       vlst=sorted(vlst, key=lambda k: (internal_get_val(k.get('version_split',[]), 0, 0),
-                                        internal_get_val(k.get('version_split',[]), 1, 0),
-                                        internal_get_val(k.get('version_split',[]), 2, 0),
-                                        internal_get_val(k.get('version_split',[]), 3, 0),
-                                        internal_get_val(k.get('version_split',[]), 4, 0),
-                                        k.get('path','')),
-                   reverse=True)
+       if skip_sort!='yes':
+          vlst=sorted(vlst, key=lambda k: (internal_get_val(k.get('version_split',[]), 0, 0),
+                                           internal_get_val(k.get('version_split',[]), 1, 0),
+                                           internal_get_val(k.get('version_split',[]), 2, 0),
+                                           internal_get_val(k.get('version_split',[]), 3, 0),
+                                           internal_get_val(k.get('version_split',[]), 4, 0),
+                                           k.get('path','')),
+                     reverse=True)
 
        lst=[]
        for q in vlst:
