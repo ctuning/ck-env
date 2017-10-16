@@ -1,0 +1,12 @@
+diff -ruN scons-3.0.0/engine/SCons/Script/SConscript.py scons-3.0.0-new/engine/SCons/Script/SConscript.py
+--- scons-3.0.0/engine/SCons/Script/SConscript.py	2017-09-18 12:59:28.000000000 +0100
++++ scons-3.0.0-new/engine/SCons/Script/SConscript.py	2017-10-16 19:59:39.389841394 +0100
+@@ -5,7 +5,7 @@
+ 
+ """
+ 
+-from __future__ import print_function
++# from __future__ import print_function
+ 
+ #
+ # Copyright (c) 2001 - 2017 The SCons Foundation
