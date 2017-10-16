@@ -70,6 +70,9 @@ def install(i):
 
               (deps)              - pre-set some deps, for example for compiler
 
+              (deps.{KEY})        - set deps[KEY]["uoa']=value (user-friendly interface via CMD to set any given dependency)
+              (preset_deps)       - dict with {"KEY":"UOA"} to preset dependencies
+
               (param)             - string converted into CK_PARAM and passed to processing script
               (params)            - dict, keys are onverted into <KEY>=<VALUE> and passed to processing script
 
@@ -446,6 +449,14 @@ def install(i):
                 udeps[k]=depsx[k]
 #        udeps.update(depsx)
 
+    preset_deps=i.get('preset_deps', {})
+    for q in i:
+        if q.startswith('deps.'):
+           preset_deps[q[5:]]=i[q]
+    for q in preset_deps:
+        if q in deps:
+           deps[q]['uoa']=preset_deps[q]
+
     suoa=d.get('soft_uoa','')
 
     dname=d.get('package_name','')
@@ -591,9 +602,11 @@ def install(i):
 
     # Update env from input
     envx=i.get('env',{})
+
     for q in i:
         if q.startswith('env.'):
            envx[q[4:]]=i[q]
+
     if len(envx)>0:
        pr_env.update(envx)
 
