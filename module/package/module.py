@@ -455,7 +455,7 @@ def install(i):
            preset_deps[q[5:]]=i[q]
     for q in preset_deps:
         if q in deps:
-           deps[q]['uoa']=preset_deps[q]
+           depsx[q]['uoa']=preset_deps[q]
 
     suoa=d.get('soft_uoa','')
 
