@@ -7,11 +7,11 @@
       "BAZEL_PATCH2": "aarch64-is-64bit.patch", 
       "BAZEL_PATCH3": "javac-max-heap-500mb.patch", 
       "BAZEL_PATCH4": "non-64bit-unix-warning.patch", 
-      "BAZEL_URL": "https://github.com/bazelbuild/bazel/releases/download/0.6.1/bazel-0.6.1-dist.zip", 
-      "BAZEL_ZIP": "bazel-0.6.1-dist.zip"
+      "BAZEL_URL": "https://github.com/bazelbuild/bazel/releases/download/0.5.3/bazel-0.5.3-dist.zip", 
+      "BAZEL_ZIP": "bazel-0.5.3-dist.zip"
     }, 
     "use_git_revision": "no", 
-    "version": "0.6.1"
+    "version": "0.5.3"
   }, 
   "deps": {}, 
   "end_full_path": {
@@ -30,9 +30,11 @@
   "tags": [
     "tool", 
     "bazel", 
-    "v0.6.1", 
-    "v0.6", 
-    "v0",
-    "channel-stable"
-  ] 
+    "v0.5.3", 
+    "v0.5", 
+    "v0"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "4d6541819898c796"
+  }
 }
