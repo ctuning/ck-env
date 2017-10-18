@@ -10,7 +10,7 @@
       "BAZEL_URL": "https://github.com/bazelbuild/bazel/releases/download/0.6.1/bazel-0.6.1-dist.zip", 
       "BAZEL_ZIP": "bazel-0.6.1-dist.zip"
     }, 
-    "use_git_revision": "yes", 
+    "use_git_revision": "no", 
     "version": "0.6.1"
   }, 
   "deps": {}, 
