@@ -111,7 +111,7 @@ def setup(i):
     else:
        f+='linux'
 
-       if habi.startswith('arm'):
+       if habi.startswith('arm') or habi.starstwith('aarch64'):
           return {'return':1, 'error':'this package doesn\'t support ARM target'}
 
        if hbits=='64':

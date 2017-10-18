@@ -110,13 +110,15 @@ def setup(i):
 
     else:
        f+='linux'
+       print (habi)
+       exit(1)
        if hbits=='64':
-          if habi.startswith('arm'):
+          if habi.startswith('arm') or habi.starstwith('aarch64'):
              f+='-arm64-vfp-hflt.tar'
           else:
              f+='-x64.tar'
        else:
-          if habi.startswith('arm'):
+          if habi.startswith('arm') or habi.starstwith('aarch64'):
              f+='-arm32-vfp-hflt.tar'
           else:
              f+='-i586.tar'
