@@ -3,30 +3,30 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
-      "PACKAGE_NAME_TEMPLATE": "jdk-8u121-",
-      "PACKAGE_URL": "http://download.oracle.com/otn-pub/java/jdk/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441",
+      "PACKAGE_NAME_TEMPLATE": "jdk-8u131-",
+      "PACKAGE_URL": "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163",
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies",
       "PACKAGE_WGET_HEADER": "Cookie: oraclelicense=accept-securebackup-cookie"
     }
   },
   "end_full_path": {
-    "android": "jdk1.8.0_121/bin/javac",
-    "linux": "jdk1.8.0_121/bin/javac",
+    "android": "jdk1.8.0_131/bin/javac",
+    "linux": "jdk1.8.0_131/bin/javac",
     "win": "bin\\javac.exe"
   },
   "need_cpu_info": "yes",
   "process_script": "install",
   "soft_uoa": "0129a3b82235cbc0",
-  "suggested_path": "jdk-8u121",
+  "suggested_path": "jdk-8u131",
   "tags": [
     "compiler",
     "java",
     "lang-java",
-    "v8u121",
+    "v8u131",
     "v8",
     "v1.8",
-    "v1.8.0_121",
+    "v1.8.0_131",
     "channel-stable"
   ],
   "use_scripts_from_another_entry": {

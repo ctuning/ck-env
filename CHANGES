@@ -1,3 +1,5 @@
+* 2017.10.18 - added latest JDK 9.0.1 and stable 8u131
+
 * 2017.10.16 - added scons (soft & latest package)
 
 * 2017.10.14 - added newer wget.exe for Windows (to support latest SSL)

@@ -92,7 +92,7 @@ def setup(i):
     if macos=='yes':
        f+='macosx'
        if hbits=='64':
-          f+='-x64.dmg'
+          f+='-x64_bin.dmg'
        else:
           return {'return':1, 'error':'this package doesn\'t support non 64-bit MacOS'}
        return {'return':1, 'error':'we do not know how to install .dmg packages - please help us!'}
@@ -100,9 +100,9 @@ def setup(i):
     elif hname=='win':
        f+='windows'
        if hbits=='64':
-          f+='-x64.exe'
+          f+='-x64_bin.exe'
        else:
-          f+='-i586.exe'
+          return {'return':1, 'error':'this package doesn\'t support non 64-bit Windows'}
 
        nie['PACKAGE_WGET_EXTRA']=ie['PACKAGE_WGET_EXTRA']+' -O '+f
        nie['PACKAGE_RUN']='YES'
@@ -110,16 +110,14 @@ def setup(i):
 
     else:
        f+='linux'
+
+       if habi.startswith('arm'):
+          return {'return':1, 'error':'this package doesn\'t support ARM target'}
+
        if hbits=='64':
-          if habi.startswith('arm'):
-             f+='-arm64-vfp-hflt.tar'
-          else:
-             f+='-x64.tar'
+          f+='-x64_bin.tar'
        else:
-          if habi.startswith('arm'):
-             f+='-arm32-vfp-hflt.tar'
-          else:
-             f+='-i586.tar'
+          return {'return':1, 'error':'this package doesn\'t support non 64-bit Linux'}
 
        nie['PACKAGE_UNGZIP']='YES'
        nie['PACKAGE_UNTAR']='YES'
