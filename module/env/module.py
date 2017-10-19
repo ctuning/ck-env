@@ -2017,7 +2017,7 @@ def internal_install_package(i):
 
           ck.out('    * package UOA: '+package_alias+' ('+package_uid+')')
        ck.out('    * tags:        '+tags)
-       ck.out('    * or_tags:     '+or_tags)
+       ck.out('    * or tags:     '+or_tags)
        ck.out('    * no tags:     '+no_tags)
        ck.out('')
 

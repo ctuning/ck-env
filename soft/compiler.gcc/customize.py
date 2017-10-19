@@ -344,6 +344,8 @@ def setup(i):
           x+=' -fpermissive'
        env['CK_CXX']=x
 
+       env['CK_CMAKE_GENERATOR']='MinGW Makefiles'
+
     #  Check some unusal GCC installations on Linux
     if winh!='yes':
 
