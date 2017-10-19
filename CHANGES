@@ -1,4 +1,5 @@
 * 2017.10.18 - added latest JDK 9.0.1 and stable 8u131
+             - added LLVM 5.0.0
 
 * 2017.10.16 - added scons (soft & latest package)
 
