@@ -13,7 +13,7 @@
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_SUB_DIR1": "src",
-      "PACKAGE_URL": " https://github.com/LuaDist/libjpeg "
+      "PACKAGE_URL": "https://github.com/LuaDist/libjpeg"
     },
     "use_git_revision": "yes",
     "version": "master"
