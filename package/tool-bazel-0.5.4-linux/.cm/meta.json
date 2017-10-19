@@ -32,7 +32,8 @@
     "bazel", 
     "v0.5.4", 
     "v0.5", 
-    "v0"
+    "v0",
+    "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "4d6541819898c796"
