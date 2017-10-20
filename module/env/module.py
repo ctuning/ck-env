@@ -418,7 +418,8 @@ def set(i):
           showed_warning=True
 
        # First, try to detect already installed software, but not registered (default)
-       if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes' or sbov=='yes'):
+#       FGG changed on 2017-10-20 to be able to detect new versions of soft  !
+       if not (skip_default=='yes' or skip_installed.get(tplat2,'')=='yes'): # or sbov=='yes'):
           if o=='con':
              ck.out('  Trying to automatically detect required software ...')
 
