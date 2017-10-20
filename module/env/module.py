@@ -471,6 +471,8 @@ def set(i):
                         'host_os':hos,
                         'target_os':tos,
                         'target_device_id':tdid,
+                        'version_from':vfrom, 
+                        'version_to':vto,
 #                        'deps':cdeps,
                         'out':oo}
                     if len(setup)>0:
