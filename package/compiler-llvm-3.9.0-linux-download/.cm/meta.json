@@ -9,7 +9,7 @@
       "PACKAGE_URL": "http://llvm.org/releases",
       "PACKAGE_VERSION": "3.9.0"
     },
-    "version": ""
+    "version": "3.9.0"
   },
   "end_full_path": {
     "linux": "bin$#sep#$clang-3.9"
