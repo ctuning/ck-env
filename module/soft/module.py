@@ -202,16 +202,17 @@ def internal_detect(i):
 
     # Checking name
     cus=d.get('customize',{})
-
     tool=i.get('tool','')
     if tool=='':
-       if cus.get('soft_file_as_env','')!='':
+       if not skip and cus.get('soft_file_as_env','')!='':
           tool=svarb+cus['soft_file_as_env']+svare
+
        if cus.get('soft_file_not_tool','')!='yes':
-          if cus.get('soft_file_from_host_os','')=='yes':
-             tool=cus.get('soft_file',{}).get(hplat,'')
-          else:
-             tool=cus.get('soft_file',{}).get(tplat,'')
+          ry=prepare_target_name({'host_os_dict':hosd,
+                                  'target_os_dict':tosd,
+                                  'cus':cus})
+          if ry['return']>0: return ry
+          tool=ry['tool']
 
     # Preparing CMD
     cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
@@ -578,10 +579,11 @@ def setup(i):
     if pi=='' and fp=='' and o=='con' and cus.get('skip_path','')!='yes' and i.get('skip_path','')!='yes' and not update:
        ck.out('')
 
-       if cus.get('soft_file_from_host_os','')=='yes':
-          sname=cus.get('soft_file',{}).get(hplat,'')
-       else:
-          sname=cus.get('soft_file',{}).get(tplat,'')
+       ry=prepare_target_name({'host_os_dict':hosd,
+                               'target_os_dict':tosd,
+                               'cus':cus})
+       if ry['return']>0: return ry
+       sname=ry['tool']
 
        y0='installed library, tool or script'
        if sname!='': 
@@ -1631,10 +1633,11 @@ def check(i):
     # Check which file to search for
     sname=i.get('soft_name','')
     if sname=='':
-       if cus.get('soft_file_from_host_os','')=='yes':
-          sname=cus.get('soft_file',{}).get(hplat,'')
-       else:
-          sname=cus.get('soft_file',{}).get(tplat,'')
+       ry=prepare_target_name({'host_os_dict':hosd,
+                               'target_os_dict':tosd,
+                               'cus':cus})
+       if ry['return']>0: return ry
+       sname=ry['tool']
 
     cbd=cus.get('soft_can_be_dir','')
 
@@ -2570,3 +2573,54 @@ def compare_versions(i):
        ck.out(result)
 
     return {'return':0, 'result':result}
+
+##############################################################################
+# compare two versions (in list)
+
+def prepare_target_name(i):
+    """
+    Input:  {
+              host_os_dict   - host OS dict
+              target_os_dict - target OS dict
+              cus            - custom meta
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              tool         - tool name
+            }
+
+    """
+
+    cus=i['cus']
+
+    hosd=i['host_os_dict']
+    tosd=i['target_os_dict']
+
+    hplat=hosd['ck_name']
+    tplat=tosd['ck_name']
+
+    tool=''
+
+    plat=tplat
+    osd=tosd
+    if cus.get('soft_file_from_host_os','')=='yes':
+       plat=hplat
+       osd=hosd
+
+    tool=cus.get('soft_file_universal','')
+    if tool=='':
+       tool=cus.get('soft_file',{}).get(plat,'')
+
+    file_extensions=hosd.get('file_extensions',{})
+
+    # Check file extensions from OS (for example, to specialize .dylib vs .so for MacOS)
+    for k in file_extensions:
+        v=file_extensions[k]
+
+        tool=tool.replace('$#file_ext_'+k+'#$',v)
+
+    return {'return':0, 'tool':tool}

@@ -396,6 +396,7 @@ def lib_path_export_script(i):
 
     return {'return': 0, 'script': s}
 
+##############################################################################
 def _convert_lib_path_list_to_string(lst):
     return '":"'.join(lst) if isinstance(lst, list) else lst
 

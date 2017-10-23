@@ -9,8 +9,8 @@
       "win": 4
     }, 
     "soft_file": {
-      "linux": "libboost_system.so", 
-      "win": "libboost_system*-mt*.lib"
+      "linux": "libboost_system$#file_ext_dll#$", 
+      "win": "libboost_system*-mt*$#file_ext_lib#$"
     }, 
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/libboost_system.so", 
