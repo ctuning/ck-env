@@ -1402,6 +1402,7 @@ def check(i):
 
     import os
     import json
+    import copy
 
     o=i.get('out','')
     oo=''
@@ -1497,7 +1498,7 @@ def check(i):
 
     ########################################################################
     # Check env from input
-    envx=i.get('env',{})
+    envx=copy.deepcopy(i.get('env',{}))
     for q in i:
         if q.startswith('env.'):
            envx[q[4:]]=i[q]
@@ -1523,7 +1524,8 @@ def check(i):
               'target_os':tos,
               'target_device_id':tdid,
               'deps':deps,
-              'env':envx,
+#              'env':envx,
+              'env':copy.deepcopy(envx),
               'out':oo}
           rx=ck.access(ii)
           if rx['return']>0: return rx

@@ -65,6 +65,13 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
+    hname=hosd.get('ck_name','')    # win, linux
+    hname2=hosd.get('ck_name2','')  # win, mingw, linux, android
+    macos=hosd.get('macos','')      # yes/no
+
+    tname=tosd.get('ck_name','')    # win, linux
+    tname2=tosd.get('ck_name2','')  # win, mingw, linux, android
+
     p=i['path']
 
     pi=i.get('install_path','')
@@ -93,7 +100,10 @@ def setup(i):
         return {'return':1, 'error':'compilation failed'}
 
     texe=misc['target_exe']
+
     texe1='show-cuda-devices'
+    if tname=='win':
+       texe1+='.exe'
 
     # Prepare full path to the newly created binary
     p=misc['path']

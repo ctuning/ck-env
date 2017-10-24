@@ -1,3 +1,5 @@
+* 2017.10.24 - fixed bug with CUDA 9.0 detection on Windows
+
 * 2017.10.23 - added support for OS extensions when detecting soft (useful for .dylib on MacOS)
 
 * 2017.10.18 - added latest JDK 9.0.1 and stable 8u131
