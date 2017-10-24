@@ -170,7 +170,7 @@ def setup(i):
 
     env=i['env']
 
-    ep=cus.get('env_prefix','')
+    ep=cus['env_prefix']
     pi=''
     if fp!='' and ep!='':
        p1=os.path.dirname(fp)
@@ -226,6 +226,31 @@ def setup(i):
     s+='call "'+fp+'" '+ext+'\n\n'
 
     env['VSINSTALLDIR']=pi
+
+    pix=pi
+    if os.path.basename(pi)=='Auxiliary':
+       pix=os.path.dirname(pix)
+
+    # Try to get redistribute number VCxyz
+    r=ck.access({'action':'list_all_files',
+                 'module':'env',
+                 'path':pix, 
+                 'pattern':'Microsoft.VC*.CRT',
+                 'recursion_level_max':4})
+    if r['return']>0: return r
+    x=r['list']
+
+    vc=''
+
+    for q in x:
+       j1=q.find('Microsoft.VC')
+       if j1>=0:
+          j2=q.find('.CRT',j1+1)
+          if j2>0:
+             vc=q[j1+12:j2]
+             break
+
+    env[ep+'_VC_MSBUILD']=vc
 
     env['CK_COMPILER_TOOLCHAIN_NAME']='msvc'
 

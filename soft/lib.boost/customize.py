@@ -113,6 +113,13 @@ def setup(i):
     env=i['env']
     sver=i['version_split']
 
+    ep=cus['env_prefix']
+
+    x=''
+    if len(sver)>1:
+       x=str(sver[0])+'.'+str(sver[1])
+       env[ep+'_SHORT_VER']=x
+
     found=False
     lib_path = pi
     include_path = pi
@@ -141,7 +148,6 @@ def setup(i):
     if not found:
        return {'return':1, 'error':'can\'t find root dir of Boost installation'}
 
-    ep=cus['env_prefix']
     env[ep]=pi
 
     cus['path_lib']=lib_path
