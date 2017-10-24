@@ -23,11 +23,16 @@ def parse_version(i):
     lst=i['output']
 
     ver=''
-    if len(lst)>0:
-        x=lst[0]
+    for x in lst:
+       j=x.find('engine: v')
+       if j>=0:
+           ver=x[j+9:].strip()
 
-        if x.startswith('Build label:'):
-            ver=x[12:].strip()
+           j=ver.find('.rel')
+           if j>0:
+              ver=ver[:j]
+
+           break
 
     return {'return':0, 'version':ver}
 

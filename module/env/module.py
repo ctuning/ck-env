@@ -797,6 +797,18 @@ def set(i):
            if not dc_found:
               deps_cache.append({'meta':dmatch2, 'uoa':deuoa})
 
+    # Check if has changed but try to continue
+    if outdated and ' have changed ' in err and o=='con' and quiet!='yes':
+       ck.out('')
+       ck.out('    WARNING: '+err)
+
+       ck.out('')
+       rx=ck.inp({'text':'    Would you like to continue at your own risk (y/N): '})
+       x=rx['string'].strip().lower()
+
+       if x=='y' or x=='yes':
+          outdated=False
+
     # Check if file exists for current dependency
     verx=''
     cus=d.get('customize',{})

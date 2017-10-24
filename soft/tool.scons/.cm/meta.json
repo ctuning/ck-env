@@ -23,8 +23,8 @@
       "linux": "/usr/bin/scons"
     }, 
     "soft_version_cmd": {
-      "linux": "version > $#filename#$ 2>&1", 
-      "win": "version > $#filename#$ 2>&1"
+      "linux": "-v > $#filename#$ 2>&1", 
+      "win": "-v > $#filename#$ 2>&1"
     }
   }, 
   "deps": {
