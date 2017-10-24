@@ -38,6 +38,9 @@ def limit(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
+    hbits=hosd.get('bits','')
+    tbits=tosd.get('bits','')
+
     sname=i['soft_name']
 
     phosd=hosd.get('ck_name','')
@@ -51,17 +54,24 @@ def limit(i):
         if q.find('X11')>0 or q.find('/lib/')>0:
            add=False
 
-        if add and phosd=='linux':
-           pq=os.path.basename(q)
-           if len(pq)>len(sname) and pq[len(sname)]!='-':
-              add=False
-
-           if add and pq.startswith(sname+'-'):
-              if len(pq)<=len(sname):
+        if add:
+           if phosd=='linux':
+              pq=os.path.basename(q)
+              if len(pq)>len(sname) and pq[len(sname)]!='-':
                  add=False
-              else:
-                 if not pq[len(sname)+1].isdigit():
+
+              if add and pq.startswith(sname+'-'):
+                 if len(pq)<=len(sname):
                     add=False
+                 else:
+                    if not pq[len(sname)+1].isdigit():
+                       add=False
+
+           elif phosd=='win':
+              if hbits=='64' and 'hostx86' in q.lower():
+                 add=False
+              if hbits=='32' and 'hostx64' in q.lower():
+                 add=False
 
         if add:
            drx.append(q)
