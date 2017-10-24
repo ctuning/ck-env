@@ -13,23 +13,22 @@ import os
 # customize directories to automatically find and register software
 
 def dirs(i):
-    return {'return':0}
+    import copy
 
-#    hosd=i.get('host_os_dict',{})
-#    tosd=i.get('target_os_dict',{})
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
 
-#    phosd=hosd.get('ck_name','')
-#    hbits=hosd.get('bits','')
+    phosd=hosd.get('ck_name','')
+    hbits=hosd.get('bits','')
 
-#    ptosd=tosd.get('ck_name','')
+    ptosd=tosd.get('ck_name','')
 
-#    lst=i['dirs']
-#    dirs=lst
+    lst=i['dirs']
+    dirs=lst
 
-#    if ptosd=='win':
-#       dirs=[]
-#       for p in lst:
-#           dirs.append(os.path.join(p, 'NVIDIA GPU Computing Toolkit\\CUDA'))
+    if ptosd=='win':
+       for p in copy.deepcopy(lst):
+           dirs.append(os.path.join(p, 'NVIDIA GPU Computing Toolkit\\CUDA'))
 
     return {'return':0, 'dirs':dirs}
 

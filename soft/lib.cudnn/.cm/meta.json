@@ -7,7 +7,7 @@
     "include_file": "cudnn.h", 
     "limit_recursion_dir_search": {
       "linux": 4, 
-      "win": 4
+      "win": 3
     }, 
     "soft_file": {
       "linux": "libcudnn.so", 
