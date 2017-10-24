@@ -62,7 +62,6 @@ def limit(i):
     drx=[]
 
     for q in dr:
-        print (q)
         if phosd=='win':
            if q.find('\\src\\')<0 and q.find('/src/')<0:
               if tbits=='32' and q.find('x64')<0 and q.find('_64')<0:
