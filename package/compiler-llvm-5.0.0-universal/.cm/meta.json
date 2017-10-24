@@ -6,7 +6,7 @@
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies"
     },
-    "version": ""
+    "version": "5.0.0"
   },
   "end_full_path": {
     "linux": "bin/clang-5.0",
