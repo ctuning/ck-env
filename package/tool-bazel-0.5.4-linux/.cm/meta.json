@@ -13,7 +13,15 @@
     "use_git_revision": "no", 
     "version": "0.5.4"
   }, 
-  "deps": {}, 
+  "deps": {
+    "java-compiler": {
+      "local": "yes", 
+      "name": "Java compiler", 
+      "skip_default": "yes", 
+      "sort": 10, 
+      "tags": "compiler,lang-java,v1.8"
+    }
+  }, 
   "end_full_path": {
     "linux": "install/bin/bazel"
   }, 
