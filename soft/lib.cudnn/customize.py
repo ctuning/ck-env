@@ -39,15 +39,41 @@ def version_cmd(i):
 
     ck=i['ck_kernel']
 
-    fp=i['full_path']
-    fn=os.path.basename(fp)
-
-    rfp=os.path.realpath(fp)
-    rfn=os.path.basename(rfp)
-
     ver=''
+    fp=i['full_path']
 
-    if rfn.startswith(fn):
+    if fp!='':
+       pl=os.path.dirname(fp)
+       pl1=os.path.dirname(pl)
+       pl2=os.path.dirname(pl1)
+
+       pi=os.path.join(pl1,'include','cudnn.h')
+       print (pi)
+       if not os.path.isfile(pi):
+          pi=os.path.join(pl2,'include','cudnn.h')
+       print (pi)
+       if os.path.isfile(pi):
+          r=ck.load_text_file({'text_file':pi, 'split_to_list':'yes'})
+          if r['return']==0:
+             ll=r['lst']
+             v1=''
+             v2=''
+             v3=''
+             for l in ll:
+                 if l.startswith('#define CUDNN_MAJOR'):
+                    v1=l[19:].strip()
+                 if l.startswith('#define CUDNN_MAJOR'):
+                    v2=l[19:].strip()
+                 if l.startswith('#define CUDNN_PATCHLEVEL'):
+                    v3=l[25:].strip()
+
+    ver=v1+'.'+v2+'.'+v3
+
+    if ver=='' and rfn.startswith(fn):
+       fn=os.path.basename(fp)
+       rfp=os.path.realpath(fp)
+       rfn=os.path.basename(rfp)
+
        ver=rfn[len(fn)+1:]
        if ver!='':
           ver='api-'+ver

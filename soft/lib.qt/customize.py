@@ -34,12 +34,36 @@ def dirs(i):
 
 def limit(i):
 
+    hosd=i.get('host_os_dict',{})
+    tosd=i.get('target_os_dict',{})
+
+    phosd=hosd.get('ck_name','')
+    phosd2=hosd.get('ck_name2','')
+
+    thosd=tosd.get('ck_name','')
+    thosd2=tosd.get('ck_name2','')
+    tbits=tosd.get('bits','')
+
     dr=i.get('list',[])
     drx=[]
 
     for q in dr:
-        if q.find('.libs')<0:
-           drx.append(q)
+        if q.find('.libs')>=0:
+           continue
+        
+        if thosd2=='win' and (q.find('mingw')>0 or q.find('winrt')>0):
+           continue
+
+        if thosd2=='mingw' and (q.find('msvc')>0 or q.find('winrt')>0):
+           continue
+
+        if tbits=='64' and q.find('_32')>0:
+           continue
+
+        if tbits=='32' and q.find('_64')>0:
+           continue
+
+        drx.append(q)
 
     return {'return':0, 'list':drx}
 
@@ -113,8 +137,6 @@ def setup(i):
     # Get variables
     ck=i['ck_kernel']
     s=''
-
-    print(i.keys())
 
     iv=i.get('interactive','')
 

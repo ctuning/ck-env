@@ -1533,6 +1533,9 @@ def refresh(i):
         setup=meta.get('setup','')
         tags=meta.get('tags',[])
 
+        if 'tmp' in tags:
+           continue
+
         sftags=''
         for t in tags:
             if t!='':

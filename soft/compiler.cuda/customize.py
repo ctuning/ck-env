@@ -158,6 +158,11 @@ def setup(i):
           env[ep+'_LIB']=p2+'\\lib\\'+ext
           env[ep+'_INCLUDE']=p2+'\\include'
 
+          rx=ck.access({'action':'convert_to_cygwin_path',
+                        'module_uoa':'os',
+                        'path':p2})
+          if rx['return']>0: return rx
+          env[ep+'_WIN']=rx['path']
        else:
           s+='\nexport PATH='+p1+':$PATH\n\n'
 
