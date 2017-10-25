@@ -1070,7 +1070,9 @@ def install(i):
              return {'return':1, 'error':'installation path is not specified'}
 
        # Check if there is already library or tool exists
-       x=d.get('end_full_path',{}).get(tname2,'')
+       x=d.get('end_full_path_universal','')
+       if x=='':
+          x=d.get('end_full_path',{}).get(tname2,'')
        fp=pi
        cont=True
        if x!='':
@@ -1325,7 +1327,9 @@ def install(i):
 #       if extra_dir!='':
 #          pi+=sdirs+extra_dir
 
-       x=d.get('end_full_path',{}).get(tname2,'')
+       x=d.get('end_full_path_universal','')
+       if x=='':
+          x=d.get('end_full_path',{}).get(tname2,'')
        fp=pi
        if x!='': 
           x=x.replace('$#sep#$', sdirs)
