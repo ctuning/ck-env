@@ -152,6 +152,13 @@ def setup(i):
 
     if mf.endswith('.exe'): mf=mf[:-4]
 
+    x=os.path.join(p1,'Scripts','conda')
+    if not os.path.isfile(x):
+       x=os.path.join(p1,'Scripts','conda.exe')
+    if os.path.isfile(x):
+       env['CK_CONDA_BIN_FULL']=x
+       env['CK_CONDA_BIN']=os.path.basename(x)
+
     pver=''
     if len(sver)>0:
        if sver[0]==2:
