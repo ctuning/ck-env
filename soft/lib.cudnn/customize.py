@@ -48,10 +48,8 @@ def version_cmd(i):
        pl2=os.path.dirname(pl1)
 
        pi=os.path.join(pl1,'include','cudnn.h')
-       print (pi)
        if not os.path.isfile(pi):
           pi=os.path.join(pl2,'include','cudnn.h')
-       print (pi)
        if os.path.isfile(pi):
           r=ck.load_text_file({'text_file':pi, 'split_to_list':'yes'})
           if r['return']==0:
@@ -62,12 +60,13 @@ def version_cmd(i):
              for l in ll:
                  if l.startswith('#define CUDNN_MAJOR'):
                     v1=l[19:].strip()
-                 if l.startswith('#define CUDNN_MAJOR'):
+                 elif l.startswith('#define CUDNN_MINOR'):
                     v2=l[19:].strip()
-                 if l.startswith('#define CUDNN_PATCHLEVEL'):
+                 elif l.startswith('#define CUDNN_PATCHLEVEL'):
                     v3=l[25:].strip()
+                    break
 
-    ver=v1+'.'+v2+'.'+v3
+             ver=v1+'.'+v2+'.'+v3
 
     if ver=='' and rfn.startswith(fn):
        fn=os.path.basename(fp)
