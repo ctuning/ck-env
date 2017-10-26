@@ -199,6 +199,30 @@ def setup(i):
        env['CK_PYTHON_PIP_BIN']=pip
        env['CK_PYTHON_PIP_BIN_FULL']=ppip
 
+    # Checking ipython
+    lipython=[]
+
+    lipython.append(('ipython'+pver,p1))
+    lipython.append(('ipython'+pver,os.path.join(p2,'local','bin')))
+    lipython.append(('ipython'+pver,os.path.join(p1,'Scripts')))
+
+    lipython.append(('ipython',p1))
+    lipython.append(('ipython',os.path.join(p2,'local','bin')))
+    lipython.append(('ipython',os.path.join(p1,'Scripts')))
+
+    found=False
+    for x in lipython:
+        ipython=x[0]
+        if winh=='yes': ipython+='.exe'
+        pipython=os.path.join(x[1],ipython)
+        if os.path.isfile(pipython): 
+           found=True
+           break
+
+    if found:
+       env['CK_PYTHON_IPYTHON_BIN']=ipython
+       env['CK_PYTHON_IPYTHON_BIN_FULL']=pipython
+
     ############################################################
     if winh=='yes':
        s+='\nset PATH='+p1+';'+p1+'\\Scripts;%PATH%\n\n'
