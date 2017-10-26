@@ -281,4 +281,6 @@ def setup(i):
        ck.out('')
        ck.out('  * Found compiler in '+pcl)
 
+       env['VCINSTALLDIR']=os.path.dirname(pcl)
+
     return {'return':0, 'bat':s}
