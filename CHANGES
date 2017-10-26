@@ -1,4 +1,5 @@
 * 2017.10.26 - detect ipython (useful for interactive DNN)
+             - pass extra params to git (useful for --recursive for Caffe2)
 
 * 2017.10.24 - fixed bug with CUDA 9.0 detection on Windows
 

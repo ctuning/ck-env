@@ -134,7 +134,7 @@ if "%PACKAGE_GIT%" == "YES" (
     ping -n 2 192.192.192.192 -w 1000 > nul
   )
 
-  git clone %PACKAGE_URL% %PACKAGE_SUB_DIR%
+  git clone %PACKAGE_GIT_CLONE_FLAGS% %PACKAGE_URL% %PACKAGE_SUB_DIR%
 
   if %errorlevel% neq 0 (
    echo.
