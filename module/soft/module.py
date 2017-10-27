@@ -1056,7 +1056,7 @@ def setup(i):
 
        # Add all env
        for k in sorted(env):
-           v=env[k]
+           v=str(env[k])
 
            if eifs!='' and wb!='yes':
               if v.find(' ')>=0 and not v.startswith(eifs):
