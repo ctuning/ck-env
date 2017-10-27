@@ -233,7 +233,7 @@ def setup(i):
 
     # Try to get redistribute number VCxyz
     r=ck.access({'action':'list_all_files',
-                 'module':'env',
+                 'module_uoa':'soft',
                  'path':pix, 
                  'pattern':'Microsoft.VC*.CRT',
                  'recursion_level_max':4})
