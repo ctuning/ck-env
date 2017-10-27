@@ -1,0 +1,7 @@
+Do not change this version - all other versions either had problems with SSL, or TSL, or were stopping in the middle.
+
+See
+ ck install package:lib-hdf5-1.10.1-src
+
+ ck pull repo:ck-caffe2
+ ck install package:caffemodel2-blvc-googlenet
