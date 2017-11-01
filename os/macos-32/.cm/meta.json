@@ -37,7 +37,7 @@
   },
   "family": "linux",
   "file_extensions": {
-    "dll": ".so",
+    "dll": ".dylib",
     "exe": ".out",
     "java_class": ".class",
     "java_lib": ".jar",
