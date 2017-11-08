@@ -2129,6 +2129,9 @@ def virtual(i):
 
     """
 
+    if i.get('data_uoa','')!='' and i.get('uoa','')=='':
+       i['uoa']=i['data_uoa']
+
     r=set(i)
     if r['return']>0: return r
 
@@ -2138,11 +2141,9 @@ def virtual(i):
     import os
 
     ck.out('')
-    ck.out('Warning: you are in a new shell with a reused environment. Enter "exit" to return to the original one!')
+    ck.out('Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
 
     if platform.system().lower().startswith('win'): # pragma: no cover
-       ck.out('')
-       ck.out('Warning: you are in a new shell (with reused environment). Enter "exit" to return to the original one!')
        import subprocess
        p = subprocess.Popen(["cmd", "/k", b], shell = True, env=os.environ)
        p.wait()
