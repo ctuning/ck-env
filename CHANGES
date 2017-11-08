@@ -1,3 +1,5 @@
+* 2017.11.08 - added ninja.exe code generator for Windows
+
 * 2017.11.02 - fixing issue #16 - .dylib for MacOS (32&64 bits)
 
 * 2017.10.26 - detect ipython (useful for interactive DNN)

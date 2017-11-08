@@ -54,6 +54,7 @@ def setup(i):
 
     # Get variables
     ck=i['ck_kernel']
+    env=i.get('new_env',{})
     s=''
 
 #    del(i['ck_kernel'])
@@ -320,7 +321,9 @@ def setup(i):
           pld=''
 
           # Check generator by tags from Microsoft compiler
-          cgen=ce.get('CK_CMAKE_GENERATOR','')
+          cgen=env.get('CK_CMAKE_GENERATOR','')
+          if cgen=='':
+             cgen=ce.get('CK_CMAKE_GENERATOR','')
           if cgen=='':
              for k in cdd.get('deps',{}):
                  q=cdd['deps'][k]
