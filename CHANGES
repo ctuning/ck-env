@@ -3,6 +3,8 @@
                and "script_set_ondemand_gpu_freq": "ck-set-gpu-ondemand" 
                to all related OS entries to "calm" CPU/GPU experiments between repetitions
                to avoid system overheating
+             - added possibility to customize package tags from pre_path function:
+               currently used in ARMCL to add tags based on env such as (USE_OPENCL, USE_GRAPH, USE_NEON, etc)
 
 * 2017.11.08 - added ninja.exe code generator for Windows
 

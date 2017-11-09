@@ -409,7 +409,7 @@ def install(i):
        if duoa=='':
           x=''
           if xor_tags!='':
-             x='and witht or_tags="'+xor_tags+'" '
+             x='and with or_tags="'+xor_tags+'" '
           if xno_tags!='':
              x='and with no_tags="'+xno_tags+'" '
           return {'return':16, 'error':'package with tags "'+xtags+'" '+x+'for your environment was not found!'}
@@ -425,7 +425,7 @@ def install(i):
     if rx['return']>0: return rx
 
     # Get main params
-    tags=d.get('tags',[])
+    tags=copy.deepcopy(d.get('tags',[]))
 
     x=i.get('extra_tags','').strip()
     if x!='':
@@ -644,13 +644,6 @@ def install(i):
         if v.get('uoa','')!='':
            setup['deps_'+q]=v['uoa']
 
-    # Convert tags to string
-    stags=''
-    for q in tags:
-        if q!='':
-           if stags!='': stags+=','
-           stags+=q.strip()
-
     # Check installation path
     pre_path=i.get('path','')
     pi=i.get('install_path','')
@@ -675,6 +668,7 @@ def install(i):
         "cfg":d,
         "tags":tags,
         "env":env,
+        "install_env":pr_env,
         "deps":udeps,
         "customize":cus,
         "self_cfg":cfg,
@@ -701,6 +695,13 @@ def install(i):
 
        new_env=rx.get('install_env',{})
        if len(new_env)>0: pr_env.update(new_env)
+
+    # Convert tags to string
+    stags=''
+    for q in tags:
+        if q!='':
+           if stags!='': stags+=','
+           stags+=q.strip()
 
     xprocess=True
     xsetup=True
