@@ -1,3 +1,5 @@
+* 2017.11.09 - added possibility to skip tool version recheck (to see if environment changed during expeirments)
+
 * 2017.11.08 - added ninja.exe code generator for Windows
 
 * 2017.11.02 - fixing issue #16 - .dylib for MacOS (32&64 bits)

@@ -822,7 +822,7 @@ def set(i):
     ver_in_env=cus.get('version','') # detected version during installation
     if not outdated and ver_in_env!='':
        scmd=cus.get('soft_version_cmd',{}).get(ck_os_name,'')
-       if scmd!='' and 'parse_version' in dir(cs):
+       if cus.get('skip_version_recheck','')!='yes' and scmd!='' and 'parse_version' in dir(cs):
           # Check version (via customized script) ...
           ii={'action':'get_version',
               'module_uoa':cfg['module_deps']['soft'],

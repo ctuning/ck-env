@@ -5,7 +5,8 @@
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies"
     },
-    "version": ""
+    "sort":200,
+    "version": "6.3.0"
   },
   "end_full_path": {
     "win": "mingw64\\bin\\gcc.exe",
