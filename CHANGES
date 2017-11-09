@@ -1,4 +1,8 @@
 * 2017.11.09 - added possibility to skip tool version recheck (to see if environment changed during expeirments)
+             - added  "script_set_ondemand_cpu_freq": "ck-set-cpu-ondemand" 
+               and "script_set_ondemand_gpu_freq": "ck-set-gpu-ondemand" 
+               to all related OS entries to "calm" CPU/GPU experiments between repetitions
+               to avoid system overheating
 
 * 2017.11.08 - added ninja.exe code generator for Windows
 

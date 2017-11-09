@@ -75,6 +75,8 @@
   "script_set_max_gpu_freq": "ck-set-gpu-performance", 
   "script_set_min_cpu_freq": "ck-set-cpu-powersave", 
   "script_set_min_gpu_freq": "ck-set-gpu-powersave", 
+  "script_set_ondemand_cpu_freq": "ck-set-cpu-ondemand", 
+  "script_set_ondemand_gpu_freq": "ck-set-gpu-ondemand", 
   "script_start_power_monitor": "ck-set-power-sensors 1", 
   "script_stop_power_monitor": "ck-set-power-sensors 0", 
   "set_affinity": "taskset -c $#ck_affinity#$", 
