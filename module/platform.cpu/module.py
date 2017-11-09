@@ -796,6 +796,7 @@ def set_freq(i):
 
               (value) = "max" (default)
                         "min"
+                        "ondemand"
                         int value
             }
 
@@ -855,6 +856,8 @@ def set_freq(i):
        cmd=tosd.get('script_set_min_cpu_freq','')
     elif v=='max':
        cmd=tosd.get('script_set_max_cpu_freq','')
+    elif v=='ondemand':
+       cmd=tosd.get('script_set_ondemand_cpu_freq','')
     else:
        cmd=tosd.get('script_set_cpu_freq','').replace('$#freq#$',str(v))
 

@@ -512,6 +512,7 @@ def set_freq(i):
 
               (value) = "max" (default)
                         "min"
+                        "ondemand"
                         int value
             }
 
@@ -571,6 +572,8 @@ def set_freq(i):
        cmd=tosd.get('script_set_min_gpu_freq','')
     elif v=='max':
        cmd=tosd.get('script_set_max_gpu_freq','')
+    elif v=='ondemand':
+       cmd=tosd.get('script_set_ondemand_gpu_freq','')
     else:
        cmd=tosd.get('script_set_gpu_freq','').replace('$#freq#$',str(v))
 
