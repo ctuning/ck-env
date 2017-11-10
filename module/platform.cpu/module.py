@@ -537,10 +537,9 @@ def detect(i):
 
     ########################################################################################
     elif mac=='yes':
-      if getattr(ck, 'run_and_get_stdout', None)==None:
-         return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
-
-      r=ck.run_and_get_stdout({'cmd': ['sysctl', 'machdep.cpu', 'hw.cpufrequency']})
+      r=ck.access({'action':'run_and_get_stdout',
+                   'module_uoa':cfg['module_deps']['os'],
+                   'cmd': ['sysctl', 'machdep.cpu', 'hw.cpufrequency']})
       if r['return']>0: return r
 
       info_cpu={}

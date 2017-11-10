@@ -403,12 +403,11 @@ def detect(i):
 
           if win=='yes':
              if remote_ssh=='yes':
-                 if getattr(ck, 'run_and_get_stdout', None)==None:
-                    return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
-
                  cmd=tosd['remote_shell']+'ver'+tosd.get('remote_shell_end','')
 
-                 r=ck.run_and_get_stdout({'cmd': cmd, 'shell':'yes'})
+                 r=ck.access({'action':'run_and_get_stdout',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'cmd': cmd, 'shell':'yes'})
                  if r['return']==0:
                      s=r['stdout']
 
@@ -452,13 +451,15 @@ def detect(i):
 
                 prop_os_name=prop_os_name_short
 
-          elif mac=='yes' and getattr(ck, 'run_and_get_stdout', None)!=None:
+          elif mac=='yes':
             cmd=['sw_vers']
 
             if tosd.get('remote_shell','')!='':
                cmd=tosd['remote_shell']+'sw_vers'+tosd.get('remote_shell_end','')
 
-            r=ck.run_and_get_stdout({'cmd': cmd})
+            r=ck.access({'action':'run_and_get_stdout',
+                         'module_uoa':cfg['module_deps']['os'],
+                         'cmd': cmd})
             if r['return']==0:
               sw_vers={}
               for line in r['stdout'].splitlines():
@@ -473,20 +474,21 @@ def detect(i):
           else:
              # If Linux, remove extensions after - in a shorter version
              if prop_os_name_long=='':
-                 if getattr(ck, 'run_and_get_stdout', None)==None:
-                    return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
-
                  prop_os_name_long=''
 
                  cmd=tosd['remote_shell']+'uname -s'+tosd.get('remote_shell_end','')
 
-                 r=ck.run_and_get_stdout({'cmd': cmd, 'shell':'yes'})
+                 r=ck.access({'action':'run_and_get_stdout',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'cmd': cmd, 'shell':'yes'})
                  if r['return']==0:
                      prop_os_name_long+=r['stdout'].strip()
 
                  cmd=tosd['remote_shell']+'uname -r'+tosd.get('remote_shell_end','')
 
-                 r=ck.run_and_get_stdout({'cmd': cmd, 'shell':'yes'})
+                 r=ck.access({'action':'run_and_get_stdout',
+                              'module_uoa':cfg['module_deps']['os'],
+                              'cmd': cmd, 'shell':'yes'})
                  if r['return']==0:
                      prop_os_name_long+=' '+r['stdout'].strip()
 
@@ -494,7 +496,9 @@ def detect(i):
 
              cmd=tosd.get('remote_shell','')+'uname -m'+tosd.get('remote_shell_end','')
 
-             r=ck.run_and_get_stdout({'cmd': cmd, 'shell':'no'})
+             r=ck.access({'action':'run_and_get_stdout',
+                          'module_uoa':cfg['module_deps']['os'],
+                          'cmd': cmd, 'shell':'no'})
              if r['return']==0:
                  prop_os_abi=r['stdout'].strip()
 

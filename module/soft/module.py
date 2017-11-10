@@ -675,14 +675,15 @@ def setup(i):
           if os.path.isdir(dfp):
              os.chdir(dfp)
 
-             if getattr(ck, 'run_and_get_stdout', None)==None:
-                return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
-
-             r=ck.run_and_get_stdout({'cmd':['git','rev-parse','--short','HEAD']})
+             r=ck.access({'action':'run_and_get_stdout',
+                          'module_uoa':cfg['module_deps']['os'],
+                          'cmd':['git','rev-parse','--short','HEAD']})
              if r['return']==0 and r['return_code']==0: 
                 ss1=r['stdout'].strip()
 
-             r=ck.run_and_get_stdout({'cmd':['git','log','-1','--format=%cd']})
+             r=ck.access({'action':'run_and_get_stdout',
+                          'module_uoa':cfg['module_deps']['os'],
+                          'cmd':['git','log','-1','--format=%cd']})
              if r['return']==0 and r['return_code']==0: 
                 ss2=r['stdout'].strip()
                 if ss2!='':

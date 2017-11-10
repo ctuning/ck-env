@@ -1,3 +1,6 @@
+* 2017.11.10 - moved run_and_get_stdout from CK kernel to module OS
+               to keep compatibility with the CK now available in official Ubuntu 17.04+
+
 * 2017.11.09 - added possibility to skip tool version recheck (to see if environment changed during expeirments)
              - added  "script_set_ondemand_cpu_freq": "ck-set-cpu-ondemand" 
                and "script_set_ondemand_gpu_freq": "ck-set-gpu-ondemand" 

@@ -25,6 +25,7 @@
   "module_deps": {
     "cfg": "b34231a3467566f8", 
     "machine":"84be34883a81b2a9",
+    "os":"0440cb72c2bc5cc6",
     "platform": "707ccdfe444cafac", 
     "platform.init": "38a2f5438d8555b6", 
     "platform.cpu": "aa6b542a420b8db9", 

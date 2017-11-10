@@ -458,3 +458,48 @@ def convert_to_cygwin_paths(i):
         pp[k]=r['path']
 
     return {'return':0, 'paths':pp}
+
+##############################################################################
+# run command and get stdout
+def run_and_get_stdout(i):
+  """
+  Input:  {
+            cmd       - list of command line arguments, starting with the command itself
+            (shell)   - if 'yes', reuse shell environment
+          }
+
+  Output: {
+            return       - return code =  0, if successful
+                                       >  0, if error
+                                       =  8, if timeout
+            (error)      - error text if return > 0
+
+            return_code  - return code from app
+
+            stdout       - string, standard output of the command
+          }
+  """
+
+  import subprocess
+  import shlex
+  import platform
+  import sys
+
+  cmd=i['cmd']
+  if type(cmd)!=list:
+      # Split only on non-Windows platforms (since Windows takes a string in Popen)
+      if not platform.system().lower().startswith('win'):
+          cmd=shlex.split(cmd)
+
+  xshell=False
+  if i.get('shell','')=='yes':
+      xshell=True
+
+  p1 = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=xshell)
+  output, error = p1.communicate()
+
+  if sys.version_info[0]>2:
+      output = output.decode(encoding='UTF-8')
+      error = error.decode(encoding='UTF-8')
+
+  return {'return':0, 'return_code':p1.returncode, 'stdout':output, 'stderr':error}

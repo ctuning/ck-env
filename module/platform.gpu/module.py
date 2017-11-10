@@ -226,15 +226,14 @@ def detect(i):
           prop['possibly_related_cpu_name']=target_cpu
 
        elif mac=='yes':
-          if getattr(ck, 'run_and_get_stdout', None)==None:
-             return {'return':1, 'error':'your CK kernel is outdated (function run_and_get_stdout not found) - please, update it!'}
-
           cmd=['system_profiler', 'SPDisplaysDataType']
 
           if remote_ssh=='yes':
              cmd=tosd['remote_shell']+' system_profiler SPDisplaysDataType '+tosd.get('remote_shell_end','')
 
-          r=ck.run_and_get_stdout({'cmd': cmd})
+          r=ck.access({'action':'run_and_get_stdout',
+                       'module_uoa':cfg['module_deps']['os'],
+                       'cmd': cmd})
           if r['return']>0: return r
 
           target_gpu_name=''
