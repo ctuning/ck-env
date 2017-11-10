@@ -142,12 +142,12 @@ def setup(i):
           if 'debian' in flavor:
              nie['PACKAGE_NAME']='clang+llvm-5.0.0-aarch64-linux-gnu.tar.xz'
           else:
-             nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu-16.04.tar.xz'
+             nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu16.04.tar.xz'
 
              if mver=='14.04':
-                nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu-14.04.tar.xz'
+                nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu14.04.tar.xz'
              elif mver=='16.10':
-                nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu-16.10.tar.xz'
+                nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu16.10.tar.xz'
 
        nie['PACKAGE_UNXTAR']='YES'
        nie['PACKAGE_UNTAR_EXTRA']='--strip 1'
