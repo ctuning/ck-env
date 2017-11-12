@@ -1140,6 +1140,8 @@ def resolve(i):
 
               (env)                  - env
 
+              (install_env)          - env during installation
+
               (add_customize)        - if 'yes', add to deps customize field from the environment 
                                        (useful for program compilation)
 
@@ -1183,6 +1185,8 @@ def resolve(i):
 
     sb=''
     sb1=''
+
+    install_env=i.get('install_env',{})
 
     sar=i.get('skip_auto_resolution','')
 
@@ -1262,6 +1266,25 @@ def resolve(i):
 
     for k in sdeps:
         q=deps[k]
+
+        if q.get('skipped','')=='yes':
+           continue
+
+        if q.get('enabled','')!='yes':
+           check_env=q.get('enable_if_env',{})
+           if len(check_env)>0:
+              enable=True
+              for j in check_env:
+                  v=check_env[j]
+                  if install_env.get(j,'').lower()!=v.lower():
+                     enable=False
+                     break
+
+              if enable:
+                 q['enabled']='yes'
+              else:
+                 q['skipped']='yes'
+                 continue
 
         ytos=tos
         ytdid=tdid

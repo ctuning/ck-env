@@ -630,6 +630,7 @@ def install(i):
            'target_device_id':tdid,
            'repo_uoa':enruoa,
            'install_to_env':iev,
+           'install_env':pr_env,
            'safe':safe,
            'deps':udeps}
        if o=='con': ii['out']='con'

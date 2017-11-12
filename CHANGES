@@ -1,3 +1,6 @@
+* 2017.11.12 - added possibility to enable dependency based on env during package installation 
+               (for example, ck install package --env.OPENCL=ON)
+
 * 2017.11.11 - added detection of NN devices (Movidus)
 
 * 2017.11.10 - moved run_and_get_stdout from CK kernel to module OS
