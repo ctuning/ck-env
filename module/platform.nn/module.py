@@ -136,13 +136,108 @@ def detect(i):
     # Init
     prop={}
     prop_all={}
+    props=[]
 
     target_nn_name=''
     target_nn_vendor=''
 
     # Get info about Neural Network Accelerator ######################################################
+    if win=='yes':
+       return {'return':1, 'error':'Windows is not yet supported'}
 
-    return {'return':1, 'error':'under construction ...'}
+    r=ck.access({'action':'run_and_get_stdout',
+                 'module_uoa':cfg['module_deps']['os'],
+                 'cmd': ['lsusb', '-v']})
+    if r['return']>0: return r
+
+    s=r['stdout'].split('\n')
+
+    manufacturer=''
+    product=''
+
+    for q in s:
+        q1=q.strip()
+        if q1!='':
+           j=q1.find(' ')
+           if j>0:
+              q2=q1[:j]
+              q3=q1[j+1:].strip()
+              if q2=='iManufacturer':
+                 # Check known
+                 if q3.lower().find('movidius')>=0:
+                    manufacturer=q3[2:].strip()
+                    product=''
+              elif q2=='iProduct' and manufacturer!='':
+                 product=q3[2:].strip()
+
+                 jj={'name':product,
+                     'vendor':manufacturer}
+
+                 props.append(jj)
+
+                 product=''
+                 manufacturer=''
+
+    # Check if need to select device and platform
+    rr={'return':0, 'features':{'nn':props}}
+
+    if len(props)==0 and o=='con':
+       ck.out('')
+       ck.out('WARNING: no CK-enabled AI or neural network devices found ...')
+
+    fuoa=''
+    fuid=''
+
+    # Exchanging info #################################################################
+    if ex=='yes':
+       er=i.get('exchange_repo','')
+       esr=i.get('exchange_subrepo','')
+       el=i.get('exchange_locally','')
+       if el!='yes' and er=='': 
+          er=ck.cfg['default_exchange_repo_uoa']
+          esr=ck.cfg['default_exchange_subrepo_uoa']
+
+       for j in range(0, len(props)):
+           prop=props[j]
+           xn=prop.get('name','')
+
+           if o=='con':
+              ck.out('')
+              ck.out('Exchanging information with '+er+' repository for a unique NN device '+xn+' ...')
+
+           ii={'action':'exchange',
+               'module_uoa':cfg['module_deps']['platform'],
+               'sub_module_uoa':work['self_module_uid'],
+               'repo_uoa':er,
+               'data_name':xn,
+               'extra_info':einf,
+               'all':'no',
+               'dict':{'features':prop}}
+           if esr!='': ii['remote_repo_uoa']=esr
+           r=ck.access(ii)
+           if r['return']>0: return r
+
+           fuoa=r.get('data_uoa','')
+           fuid=r.get('data_uid','')
+
+           props[j].update(r['dict'].get('features',{}))
+
+           if o=='con' and r.get('found','')=='yes':
+              ck.out('  NN CK entry already exists ('+fuid+') - loading latest meta (features) ...')
+
+    # Printing
+    if o=='con' and len(props)>0:
+       for prop in props:
+          ck.out('')
+          ck.out('NN name:   '+prop.get('name',''))
+          ck.out('NN vendor: '+prop.get('vendor',''))
+
+    # Finalize features
+    if fuoa!='' or fuid!='':
+       rr['features']['nn_uoa']=fuoa
+       rr['features']['nn_uid']=fuid
+
+    return rr
 
 ##############################################################################
 # set frequency

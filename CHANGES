@@ -1,3 +1,5 @@
+* 2017.11.11 - added detection of NN devices (Movidus)
+
 * 2017.11.10 - moved run_and_get_stdout from CK kernel to module OS
                to keep compatibility with the CK now available in official Ubuntu 17.04+
 
