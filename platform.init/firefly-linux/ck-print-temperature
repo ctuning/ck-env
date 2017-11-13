@@ -1,0 +1,55 @@
+#! /bin/bash
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+echo "*** Thermal type - zone 0:"
+cat /sys/devices/virtual/thermal/thermal_zone0/type
+
+echo "*** Temperature - zone 0:"
+cat /sys/devices/virtual/thermal/thermal_zone0/temp
+
+echo "*** Temperature - zone 0 - trip point 0:"
+cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp
+
+echo "*** Temperature - zone 0 - trip point 1:"
+cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_1_temp
+
+echo "*** Temperature - zone 0 - trip point 2:"
+cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_2_temp
+
+echo ""
+
+echo "*** Thermal type - zone 1:"
+cat /sys/devices/virtual/thermal/thermal_zone1/type
+
+echo "*** Temperature - zone 1:"
+cat /sys/devices/virtual/thermal/thermal_zone1/temp
+
+echo ""
+
+echo "*** Policy - zone 0:"
+cat /sys/devices/virtual/thermal/thermal_zone0/policy
+
+echo "*** Available policies - zone 0:"
+cat /sys/devices/virtual/thermal/thermal_zone0/available_policies
+
+echo "*** Sustainable power - zone 0:"
+cat /sys/devices/virtual/thermal/thermal_zone0/sustainable_power
+
+echo ""
+
+echo "*** Policy - zone 1:"
+cat /sys/devices/virtual/thermal/thermal_zone1/policy
+
+echo "*** Available policies - zone 1:"
+cat /sys/devices/virtual/thermal/thermal_zone1/available_policies
+
+echo "*** Sustainable power - zone 1:"
+cat /sys/devices/virtual/thermal/thermal_zone1/sustainable_power
