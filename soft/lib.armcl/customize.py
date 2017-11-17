@@ -88,6 +88,11 @@ def setup(i):
     if j>0:
        pname=pname[:j]
 
+    # Get short name for -l
+    spname=pname
+    if pname.startswith('lib'):
+       spname=pname[3:]
+
     plib=pi+sdirs+'lib'
     cus['path_lib']=plib
 
@@ -137,10 +142,12 @@ def setup(i):
     if os.path.isfile(x):
        cus['static_lib']=pname+sext
        env[ep+'_STATIC_NAME']=pname+sext
+       env[ep+'_LFLAG']='-l'+spname
 
     x=os.path.join(plib, pname+'_core'+sext)
     if os.path.isfile(x):
        env[ep+'_STATIC_CORE_NAME']=pname+'_core'+sext
+       env[ep+'_LFLAG_CORE']='-l'+spname+'_core'
 
     x=os.path.join(plib, pname+dext)
     if os.path.isfile(x):
@@ -150,5 +157,7 @@ def setup(i):
     x=os.path.join(plib, pname+'_core'+dext)
     if os.path.isfile(x):
        env[ep+'_DYNAMIC_CORE_NAME']=pname+'_core'+dext
+
+
 
     return {'return':0, 'bat':s}
