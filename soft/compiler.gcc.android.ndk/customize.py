@@ -7,13 +7,20 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+import os
+
 ##############################################################################
 # customize directories to automatically find and register software
 
-import os
-
 def dirs(i):
-    return {'return':0}
+    hosd=i['host_os_dict']
+    phosd=hosd.get('ck_name','')
+    dirs=i.get('dirs', [])
+    if phosd=='win':
+        win_dir = 'C:\\Users\\All Users\\Microsoft'
+        if os.path.isdir(win_dir):
+            dirs.append(win_dir)
+    return {'return':0, 'dirs':dirs}
 
 ##############################################################################
 # prepare env
@@ -22,6 +29,9 @@ def version_cmd(i):
 
     fp=i['full_path']
     cmdx=i['cmd']
+
+    if ' ' in fp:
+       fp='"'+fp+'"'
 
     cmd=fp+' '+cmdx
 
@@ -95,6 +105,7 @@ def parse_version(i):
 
     for q in lst:
         q=q.strip()
+        print (q)
         if q!='':
            j=q.lower().find(') ')
            if j>0:
@@ -327,7 +338,7 @@ def setup(i):
       "CK_COMPILER_FLAG_GPROF": "-pg", 
       "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
       "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
-      "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+      "CK_COMPILER_FLAG_PTHREAD_LIB": " ",  # "-lpthread"
       "CK_CXX": "$#tool_prefix#$g++", 
       "CK_OPT_ALL_WARNINGS": "-Wall", 
       "CK_DLL_EXT": ".so", 
