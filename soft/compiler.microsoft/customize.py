@@ -221,9 +221,17 @@ def setup(i):
 
     ############################################################
     s+='\n'
+    s+='rem Saving working path since next call can change it\n'
+    s+='set CUR_DIR=%CD%\n'
+
+    s+='\n'
     s+='rem Setting environment\n'
 
     s+='call "'+fp+'" '+ext+'\n\n'
+
+    s+='rem Restoring working path\n'
+    s+='cd /D %CUR_DIR%\n'
+    s+='\n'
 
     env['VSINSTALLDIR']=pi
 
