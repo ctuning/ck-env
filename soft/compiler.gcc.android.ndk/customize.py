@@ -172,6 +172,10 @@ def setup(i):
     tags=i.get('tags',[])
     cus=i.get('customize',{})
 
+    hos=i['host_os_uid']
+    tos=i['host_os_uid']
+    tdid=i['target_device_id']
+
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
@@ -192,6 +196,36 @@ def setup(i):
     pi=cus.get('path_install','')
 
     fp=cus.get('full_path','')
+    pp4=''
+
+    # Need to check that if path has spaces on Windows, then convert to non-space format, 
+    # otherwise many issues with CMAKE ...
+    if winh=='yes' and ' ' in fp:
+       cmd='@for %%A in ("'+fp+'") do echo %%~sA'
+
+       r=ck.access({'action':'shell',
+                    'module_uoa':'os',
+                    'host_os':hos,
+                    'target_os':tos,
+                    'device_id':tdid,
+                    'cmd':cmd,
+                    'split_to_list':'yes'})
+       if r['return']>0: return r
+       x=r['stdout_lst']
+
+       if len(x)>2 and x[0]=='':
+          y=x[2]
+       if len(y)>0:
+          pp1=os.path.dirname(fp)
+          pp2=os.path.dirname(pp1)
+          pp3=os.path.dirname(pp2)
+          pp4=os.path.dirname(pp3) # since later will need real long name (to detect arch)
+
+          fp=y
+           
+          ck.out('')
+          ck.out('  Removed spaces from Windows path: '+fp)
+          ck.out('')
 
     ############################################################
     platform=target_d.get('android_ndk_platform','')
@@ -242,6 +276,8 @@ def setup(i):
        p5=os.path.dirname(p4)
        pi=os.path.dirname(p5)
 
+       if pp4=='': pp4=p4
+
        if winh=='yes':
           s+='\nset PATH='+pi+';%PATH%\n\n'
        else:
@@ -266,9 +302,9 @@ def setup(i):
        cus['tool_prefix_configured']='yes'
        cus['tool_prefix']=acp+'-'
        cus['platform_path_configured']='yes'
-       cus['platform_path']=os.path.join(pi,'platforms')
+       cus['platform_path']=pi+os.sep+'platforms' #os.path.join(pi,'platforms')
        cus['add_extra_path_configured']='yes'
-       cus['add_extra_path']=os.path.join(pi,'prebuilt',prebuilt,'bin')
+       cus['add_extra_path']=pi+os.sep+'prebuilt'+os.sep+prebuilt+os.sep+'bin' #os.path.join(pi,'prebuilt',prebuilt,'bin')
 
        cus['ef_configured']='yes'
        x=''
@@ -276,13 +312,13 @@ def setup(i):
        x='-fPIE -pie'
 
        # Check platform libs
-       plibs=os.path.join(pi,'platforms',platform,'arch-'+arch,'usr','lib')
+       plibs=pi+os.sep+'platforms'+os.sep+platform+os.sep+'arch-'+arch+os.sep+'usr'+os.sep+'lib' #os.path.join(pi,'platforms',platform,'arch-'+arch,'usr','lib')
        env['CK_ENV_LIB_STD']=plibs
 
        # Check if Crystax NDK
-       cry=os.path.join(pi,'sources','crystax','libs',abi)
-       cryf1=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.so')
-       cryf2=os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.a')
+       cry=pi+os.sep+'sources'+os.sep+'crystax'+os.sep+'libs'+os.sep+abi #os.path.join(pi,'sources','crystax','libs',abi)
+       cryf1=pi+os.sep+'sources'+os.sep+'crystax'+os.sep+'libs'+os.sep+abi+os.sep+'libcrystax.so' # os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.so')
+       cryf2=pi+os.sep+'sources'+os.sep+'crystax'+os.sep+'libs'+os.sep+abi+os.sep+'libcrystax.a' # os.path.join(pi,'sources','crystax','libs',abi,'libcrystax.a')
 
        cus['adb_extra_files']=[]
        cus['soft_extra_name']=''
@@ -315,15 +351,15 @@ def setup(i):
 
        cus['ef']=x
 
-       j=p4.find(atc)
+       j=pp4.find(atc)
        if j>0:
-          ver=p4[j+len(atc)+1:]
+          ver=pp4[j+len(atc)+1:]
 
           cus['libstdcpppath_include_configured']='yes'
-          cus['libstdcpppath_include']=os.path.join(pi,'sources','cxx-stl','gnu-libstdc++',ver,'include')
+          cus['libstdcpppath_include']=pi+os.sep+'sources'+os.sep+'cxx-stl'+os.sep+'gnu-libstdc++'+os.sep+ver+os.sep+'include' # os.path.join(pi,'sources','cxx-stl','gnu-libstdc++',ver,'include')
 
           cus['libstdcpppath_configured']='yes'
-          cus['libstdcpppath']=os.path.join(pi,'sources','cxx-stl','gnu-libstdc++',ver,'libs',abi)
+          cus['libstdcpppath']=pi+os.sep+'sources'+os.sep+'cxx-stl'+os.sep+'gnu-libstdc++'+os.sep+ver+os.sep+'libs'+os.sep+abi # os.path.join(pi,'sources','cxx-stl','gnu-libstdc++',ver,'libs',abi)
 
     env.update({
       "CK_AR": "$#tool_prefix#$ar", 
