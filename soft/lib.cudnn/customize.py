@@ -253,6 +253,12 @@ def setup(i):
     if pi!='' and ep!='':
        env[ep]=pi
 
+       rx=ck.access({'action':'convert_to_cygwin_path',
+                     'module_uoa':'os',
+                     'path':pi})
+       if rx['return']>0: return rx
+       env[ep+'_WIN']=rx['path']
+
     if remote=='yes':
        cus['skip_copy_to_remote']='yes'
 
