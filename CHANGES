@@ -1,3 +1,5 @@
+* 2017.11.20 - improved Intel OpenCL detection for 2017 SDK
+
 * 2017.11.17 - improved ArmCL detection
 
 * 2017.11.12 - added possibility to enable dependency based on env during package installation 

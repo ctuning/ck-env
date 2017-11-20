@@ -27,6 +27,10 @@ def dirs(i):
 
     if ptosd=='win':
        dirs=[]
+
+       dirs.append("C:\\Intel\\OpenCL")
+       dirs.append("D:\\Intel\\OpenCL")
+
        for p in lst:
            dirs.append(os.path.join(p, 'NVIDIA GPU Computing Toolkit\\CUDA'))
            dirs.append(os.path.join(p, 'Intel\\OpenCL SDK'))
