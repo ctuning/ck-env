@@ -797,6 +797,8 @@ def set_freq(i):
                         "min"
                         "ondemand"
                         int value
+
+              (env)                  - current env to specialize freq (CK_CPU*)...
             }
 
     Output: {
@@ -822,6 +824,8 @@ def set_freq(i):
     if tos=='': tos=i.get('os','')
     tdid=i.get('device_id','')
 
+    env=i.get('env',{})
+
     # Get OS info
     import copy
     ii=copy.deepcopy(i)
@@ -842,6 +846,9 @@ def set_freq(i):
     tosd=rr['os_dict']
 
     tbits=tosd.get('bits','')
+
+    envtsep=tosd.get('env_separator','')
+    etset=tosd.get('env_set','')
 
     tdid=rr['device_id']
 
@@ -889,8 +896,21 @@ def set_freq(i):
        if path_to_scripts=='':
           path_to_scripts=tosd.get('path_to_scripts','')
 
+
        if path_to_scripts!='':
           cmd=path_to_scripts+dir_sep+cmd
+
+       # Add env
+       xcmd=''
+       for k in sorted(env):
+           if k.startswith('CK_CPU'):
+              v=str(env[k])
+
+              if xcmd!='': xcmd+=envtsep
+              xcmd+=etset+' '+k+'='+v
+
+       if xcmd!='': 
+          cmd=xcmd+envtsep+cmd
 
        if o=='con':
           ck.out('')

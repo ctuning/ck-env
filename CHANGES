@@ -2,6 +2,7 @@
              - improved CK env for latest Visual Studio 2017 (15.4)
              - fixed detection of latest Android NDK on Windows
              - fixed detection of cuDNN on Windows
+             - added possibility to turn on/off specific cores during crowd-tuning
 
 * 2017.11.17 - improved ArmCL detection
 
