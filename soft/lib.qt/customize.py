@@ -48,7 +48,7 @@ def limit(i):
     drx=[]
 
     for q in dr:
-        if q.find('.libs')>=0:
+        if q.find('.libs')>=0 or q.find('pkgs')>=0:
            continue
         
         if thosd2=='win' and (q.find('mingw')>0 or q.find('winrt')>0):
