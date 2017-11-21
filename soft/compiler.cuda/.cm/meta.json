@@ -89,6 +89,7 @@
     "CK_PLUGIN_FLAG": "-fplugin=", 
     "CK_PROFILER": "gprof",
     "CK_OPT_FAST_MATH": "--use_fast_math",
+    "CK_OPT_UNWIND":" ",
     "CK_OPT_SPEED": "-O3"
   }, 
   "soft_name": "Nvidia CUDA Compiler", 
