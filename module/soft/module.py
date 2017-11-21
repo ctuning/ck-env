@@ -274,6 +274,7 @@ def setup(i):
               (tags)              - search UOA by tags (separated by comma)
 
               (soft_name)         - use this user friendly name for environment entry
+              (soft_add_name)     - add extra name to above name (such as anaconda)
 
               (customize)         - dict with custom parameters 
                                     (usually passed to customize script)
@@ -465,12 +466,16 @@ def setup(i):
     envp=cus.get('env_prefix','')
     envps=envp+'_SET'
 
+    san=i.get('soft_add_name','')
+
     dname=d.get('soft_name','')
     if i.get('soft_name','')!='': 
        dname=i['soft_name']
     else:
        if cus.get('package_extra_name','')!='':
           dname+=cus['package_extra_name']
+    if san!='':
+       dname+=san
 
     csp=d.get('can_skip_path','')
 
@@ -1375,6 +1380,13 @@ def check(i):
 
               (extra_version)     - add extra version, when registering software 
                                     (for example, -trunk-20160421)
+                                    Be careful - if there is auto version detection,
+                                    CK will say that version has changed and will try to remove entry!
+
+              (extra_tags)         - add extra tags to separate created entry from others 
+                                     (for example Python 2.7 vs Anaconda Python 2.7)
+
+              (extra_name)         - add extra name to soft (such as anaconda)
 
               (force_env_data_uoa) - force which env UID to use when regstering detect software -
                                      useful when reinstalling broken env entry to avoid breaking
@@ -1747,6 +1759,7 @@ def check(i):
               sver=rx['version_split']
 
               kk['version']=ver
+              kk['version_detected']=ver
               kk['version_split']=sver
 
               if o=='con':
@@ -1872,6 +1885,22 @@ def check(i):
           ck.out('')
           ck.out('  Found pre-recorded CK installation info ...')
 
+    # Check if extra tags
+    etags=i.get('extra_tags','').strip()
+    if len(etags)>0:
+       y=xtags.split(',')
+       x=etags.split(',')
+
+       for z in x:
+           if z not in y:
+              y.append(z)
+
+       xtags=','.join(y)
+
+    en=i.get('extra_name','')
+    if en!='':
+       en=' '+en
+
     # Attempt to register in CK
     if o=='con':
        ck.out('')
@@ -1889,6 +1918,7 @@ def check(i):
         'env':envx,
         'env_data_uoa':env_data_uoa,
         'soft_name':dname,
+        'soft_add_name':en,
         'package_uoa':puoa,
         'extra_version':ev,
         'tags':xtags,
