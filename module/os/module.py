@@ -142,11 +142,15 @@ def shell(i):
               (target_os)
               (device_id)
 
-              (cmd) -              cmd string (can have \n)
+              (cmd) -               cmd string (can have \n)
 
-              (split_to_list) -    if 'yes', split stdout and stderr to list
+              (split_to_list) -     if 'yes', split stdout and stderr to list
 
-              (should_be_remote) - if 'yes', can run only on remote target
+              (should_be_remote) -  if 'yes', can run only on remote target
+
+              (output_to_console) - if 'yes', output to console instead of files
+
+              (encoding)            - if !='', use this encoding
             }
 
     Output: {
@@ -170,6 +174,7 @@ def shell(i):
 
     stl=i.get('split_to_list','')
     sbr=i.get('should_be_remote','')
+    otc=i.get('output_to_console','')
 
     # Check if need to initialize device and directly update input i !
     ii={'action':'init',
@@ -179,6 +184,8 @@ def shell(i):
     if r['return']>0: return r
 
     device_cfg=i.get('device_cfg',{})
+
+    encoding=i.get('encoding','')
 
     # Check host/target OS/CPU
     hos=i.get('host_os','')
@@ -220,15 +227,16 @@ def shell(i):
 
     cmd=i.get('cmd','')
 
-    # Tmp file for stdout
-    rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':'.tmp', 'remove_dir':'no'})
-    if rx['return']>0: return rx
-    fno=rx['file_name']
+    if otc!='yes':
+       # Tmp file for stdout
+       rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':'.tmp', 'remove_dir':'no'})
+       if rx['return']>0: return rx
+       fno=rx['file_name']
 
-    # Tmp file for stderr
-    rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':'.tmp', 'remove_dir':'no'})
-    if rx['return']>0: return rx
-    fne=rx['file_name']
+       # Tmp file for stderr
+       rx=ck.gen_tmp_file({'prefix':'tmp-', 'suffix':'.tmp', 'remove_dir':'no'})
+       if rx['return']>0: return rx
+       fne=rx['file_name']
 
     # Check remote shell
     rs=tosd.get('remote_shell','')
@@ -276,7 +284,8 @@ def shell(i):
 
     if ubtr!='': y=ubtr.replace('$#cmd#$',y)
 
-    y=y+' '+stro+' '+fno+' '+stre+' '+fne
+    if otc!='yes':
+       y=y+' '+stro+' '+fno+' '+stre+' '+fne
 
     rx=os.system(y)
 
@@ -286,38 +295,39 @@ def shell(i):
     rr={'return':0, 'return_code':rx, 'target_os_dict':tosd}
 
     # Reading stdout file
-    rx=ck.load_text_file({'text_file':fno, 'delete_after_read':'yes', 'split_to_list':stl})
-    if rx['return']>0: return rx
+    if otc!='yes':
+       rx=ck.load_text_file({'text_file':fno, 'delete_after_read':'yes', 'split_to_list':stl, 'encoding':encoding})
+       if rx['return']>0: return rx
 
-    if stl=='yes':
-        stdout=''
+       if stl=='yes':
+           stdout=''
 
-        rr['stdout_lst']=rx['lst']
+           rr['stdout_lst']=rx['lst']
 
-        for q in rx['lst']:
-            stdout+=q+'\n'
-    else:
-        stdout=rx['string']
-        rr['stdout']=stdout
+           for q in rx['lst']:
+               stdout+=q+'\n'
+       else:
+           stdout=rx['string']
+           rr['stdout']=stdout
 
-    # Reading stderr file
-    rx=ck.load_text_file({'text_file':fne, 'delete_after_read':'yes', 'split_to_list':stl})
-    if rx['return']>0: return rx
-    if stl=='yes':
-        stderr=''
+       # Reading stderr file
+       rx=ck.load_text_file({'text_file':fne, 'delete_after_read':'yes', 'split_to_list':stl, 'encoding':encoding})
+       if rx['return']>0: return rx
+       if stl=='yes':
+           stderr=''
 
-        rr['stderr_lst']=rx['lst']
+           rr['stderr_lst']=rx['lst']
 
-        for q in rx['lst']:
-            stderr+=q+'\n'
-    else:
-        stderr=rx['string']
-        rr['stderr']=stderr
+           for q in rx['lst']:
+               stderr+=q+'\n'
+       else:
+           stderr=rx['string']
+           rr['stderr']=stderr
 
-    # Print if needed
-    if o=='con':
-       if stdout!='': ck.out(stdout)
-       if stderr!='': ck.eout(stderr)
+       # Print if needed
+       if o=='con':
+          if stdout!='': ck.out(stdout)
+          if stderr!='': ck.eout(stderr)
 
     return rr
 
