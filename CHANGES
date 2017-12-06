@@ -1,3 +1,5 @@
+* 2017.12.06 - added PAPI and HPCToolKit libmonitor
+
 * 2017.11.21 - added extra_name to ck detect soft to separate various installations
                such as Python 3.6 vs Anaconda Python 3.6
 
