@@ -48,4 +48,42 @@ if [ "${?}" != "0" ] ; then
   exit 1
 fi
 
+############################################################
+echo ""
+echo "Building examples ..."
+
+cd ${CK_ENV_LIB_PAPI_SRC}
+rm -rf examples.new
+mkdir examples.new
+cd examples.new
+
+cp ${ORIGINAL_PACKAGE_DIR}/papi_examples.tar.gz .
+gunzip papi_examples.tar.gz
+tar xvf papi_examples.tar
+
+make clean
+make
+
+if [ "${?}" != "0" ] ; then
+  echo "Error: build failed!"
+  exit 1
+fi
+
+############################################################
+echo ""
+echo "Creating libPapiMonitor.so ..."
+gcc -shared -g -o libPapiMonitor.so PAPI_overflow_libmonitor.o ${CK_ENV_LIB_PAPI_LIB}/libpapi.so -L${CK_ENV_LIB_PAPI_LIB} -pthread -lrt
+
+if [ "${?}" != "0" ] ; then
+  echo "Error: build failed!"
+  exit 1
+fi
+
+ldd libPapiMonitor.so
+
+############################################################
+echo ""
+echo "Copying libPapiMonitor.so ..."
+cp libPapiMonitor.so $INSTALL_DIR/install/lib
+
 return 0
