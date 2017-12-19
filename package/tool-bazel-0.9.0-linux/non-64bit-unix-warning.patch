@@ -1,0 +1,13 @@
+diff --git a/src/tools/singlejar/mapped_file.h b/src/tools/singlejar/mapped_file.h
+index b6c5e34..7c85b4d 100644
+--- a/src/tools/singlejar/mapped_file.h
++++ b/src/tools/singlejar/mapped_file.h
+@@ -37,7 +37,7 @@
+  */
+ #if !((defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__)) && \
+       __SIZEOF_POINTER__ == 8)
+-#error This code for 64 bit Unix.
++#warning This code for 64 bit Unix.
+ #endif
+ 
+ class MappedFile {
