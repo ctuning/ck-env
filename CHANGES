@@ -1,3 +1,5 @@
+* 2017.12.21 - added lib-xml2 (Linux)
+
 * 2017.12.06 - added PAPI and HPCToolKit libmonitor
 
 * 2017.11.21 - added extra_name to ck detect soft to separate various installations
