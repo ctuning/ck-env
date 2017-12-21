@@ -1,0 +1,17 @@
+{
+  "customize": {
+    "add_to_path": "yes",
+    "env_prefix": "CK_ENV_TOOL_HPCTOOLKIT", 
+    "limit_recursion_dir_search": {
+      "linux": 3
+    }, 
+    "soft_file": {
+      "linux": "hpctoolkit" 
+    }
+  }, 
+  "soft_name": "HPCToolKit",
+  "tags": [
+    "tool", 
+    "hpctoolkit"
+  ]
+}

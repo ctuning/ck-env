@@ -1,0 +1,10 @@
+{
+  "customize": {
+    "env_prefix": "CK_ENV_TOOL_HPCTOOLKIT_EXTERNALS" 
+  }, 
+  "soft_name": "HPCToolKit (externals)", 
+  "tags": [
+    "tool", 
+    "hpctoolkit-externals"
+  ]
+}

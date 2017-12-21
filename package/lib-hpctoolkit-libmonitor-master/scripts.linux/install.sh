@@ -86,4 +86,15 @@ echo ""
 echo "Copying libPapiMonitor.so ..."
 cp libPapiMonitor.so $INSTALL_DIR/install/lib
 
+############################################################
+cd ${CK_ENV_LIB_PAPI_SRC}
+cd libpfm4/perf_examples
+make
+
+if [ "${?}" != "0" ] ; then
+  echo "Error: build failed!"
+  exit 1
+fi
+
+
 return 0
