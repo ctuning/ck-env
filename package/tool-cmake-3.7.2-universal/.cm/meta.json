@@ -34,6 +34,7 @@
     "windows"
   ],
   "only_for_target_os_tags": [
+    "linux",
     "windows"
   ],
   "process_script": "install",
