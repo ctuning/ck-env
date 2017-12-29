@@ -433,6 +433,12 @@ if not "%CK_AR_PATH_FOR_CMAKE%" == "" (
  set XCMAKE_AR=-DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%"
 )
 
+rem Checking RANLIB
+set XCMAKE_RANLIB=
+if not "%CK_RANLIB_PATH_FOR_CMAKE%" == "" (
+ set XCMAKE_RANLIB=-DCMAKE_RANLIB="%CK_RANLIB_PATH_FOR_CMAKE%"
+)
+
 rem Checking LD
 set XCMAKE_LD=
 if not "%CK_LD_PATH_FOR_CMAKE%" == "" (
@@ -485,6 +491,7 @@ if "%PACKAGE_BUILD_TYPE%" == "cmake" (
            -DCMAKE_AR="%CK_AR_PATH_FOR_CMAKE%" ^
            -DCMAKE_LINKER="%CK_LD_PATH_FOR_CMAKE%" ^
            %XCMAKE_AR% ^
+           %XCMAKE_RANLIB% ^
            %XCMAKE_LD% ^
            %XCMAKE_EXE_LINKER_FLAGS% ^
            %XCMAKE_EXE_LINKER_LIBS% ^
