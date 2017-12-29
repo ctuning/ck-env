@@ -1,6 +1,6 @@
 {
   "customize": {
-    "add_to_path": "yes", 
+    "add_to_path": "yes",
     "extra_dir": "", 
     "install_env": {
       "CMAKE_CONFIG": "Release", 
@@ -33,6 +33,7 @@
       "tags": "tool,cmake"
     }, 
     "host-compiler": {
+      "add_to_path": "yes",
       "local": "yes", 
       "name": "HOST C++ compiler", 
       "sort": 10, 
