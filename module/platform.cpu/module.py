@@ -922,7 +922,7 @@ def set_freq(i):
           dv=''
           if tdid!='': dv=' -s '+tdid
 
-          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' '+cmd
+          x=tosd.get('remote_shell','').replace('$#device#$',dv)+' "'+cmd+'"'
 
           rx=os.system(x)
           if rx!=0:
