@@ -115,6 +115,11 @@ def setup(i):
        env[ep+'_TESTS']=ptests
        cus['path_includes'].append(ptests)
 
+    putils=os.path.join(psrc,'utils')
+    if os.path.isdir(putils):
+       env[ep+'_UTILS']=putils
+       cus['path_includes'].append(putils)
+
     pkernels=os.path.join(os.path.dirname(pi),'src/src/core/CL/cl_kernels/')
     if os.path.isdir(pkernels):
        env[ep+'_CL_KERNELS']=pkernels
