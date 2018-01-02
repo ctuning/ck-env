@@ -691,7 +691,7 @@ def install(i):
 
     if cso!=None and 'pre_path' in dir(cso):
        # In the new directory
-       rx=cs.pre_path(ii)
+       rx=cso.pre_path(ii)
        if rx['return']>0: return rx
 
        new_env=rx.get('install_env',{})
