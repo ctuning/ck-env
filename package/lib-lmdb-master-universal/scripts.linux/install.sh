@@ -19,7 +19,15 @@ cd ${INSTALL_DIR}/src/libraries/liblmdb
 echo ""
 echo "Building package ..."
 
-make -j${CK_HOST_CPU_NUMBER_OF_PROCESSORS} CC="${CK_CC} ${CK_COMPILER_FLAGS_OBLIGATORY}" AR="${CK_AR}" XCFLAGS="-DMDB_DSYNC=O_SYNC -DMDB_USE_ROBUST=0"
+    # on a Mac and compiling with LLVM:
+if [ "$CK_DLL_EXT" = ".dylib" ] && [ "$CK_CC" = "clang" ]
+then
+    MAKE_SOLIBS=" -install_name @rpath/liblmdb.dylib "
+else
+    MAKE_SOLIBS=""
+fi
+
+make -j${CK_HOST_CPU_NUMBER_OF_PROCESSORS} CC="${CK_CC} ${CK_COMPILER_FLAGS_OBLIGATORY}" AR="${CK_AR}" XCFLAGS="-DMDB_DSYNC=O_SYNC -DMDB_USE_ROBUST=0" SOEXT="${CK_DLL_EXT}" SOLIBS="${MAKE_SOLIBS}"
 if [ "${?}" != "0" ] ; then
   echo "Error: build failed!"
   exit 1
@@ -29,7 +37,7 @@ fi
 echo ""
 echo "Installing package ..."
 
-make prefix="${INSTALL_DIR}/install" install
+make prefix="${INSTALL_DIR}/install" SOEXT="${CK_DLL_EXT}" install
 if [ "${?}" != "0" ] ; then
   echo "Error: installation failed!"
   exit 1
