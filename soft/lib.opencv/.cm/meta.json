@@ -9,7 +9,7 @@
       "win": 5
     }, 
     "soft_file": {
-      "linux": "libopencv_core.so",
+      "linux": "libopencv_core$#file_ext_dll#$",
       "win": "opencv_annotation.exe"
     }, 
     "soft_path_example": {

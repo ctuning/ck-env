@@ -9,7 +9,7 @@
       "linux": 6
     }, 
     "soft_file": {
-      "linux": "libhdf5.so"
+      "linux": "libhdf5$#file_ext_dll#$"
     }, 
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.so"

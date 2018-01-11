@@ -9,7 +9,7 @@
       "win": 3
     },
     "soft_file": {
-      "linux": "libgflags.so",
+      "linux": "libgflags$#file_ext_dll#$",
       "win": "gflags.lib"
     },
     "soft_path_example": {

@@ -9,7 +9,7 @@
       "win": 3
     },
     "soft_file": {
-      "linux": "libglog.so",
+      "linux": "libglog$#file_ext_dll#$",
       "win": "glog.lib"
     },
     "soft_path_example": {
