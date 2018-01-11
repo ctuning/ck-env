@@ -42,7 +42,7 @@
   },
   "end_full_path": {
     "android": "install$#sep#$lib$#sep#$libglog.a",
-    "linux": "install/lib/libglog.so",
+    "linux": "install/lib/libglog$#file_ext_dll#$",
     "win": "install\\lib\\glog.lib"
   },
   "need_cpu_info": "yes",
