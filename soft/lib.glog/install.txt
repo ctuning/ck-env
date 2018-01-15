@@ -1,6 +1,6 @@
 You can download and install latest (or required) package from
-* https://github.com/gflags/gflags
+* https://github.com/google/glog
 
-On Ubuntu you can install it as following:
+On Ubuntu you can install it as follows:
 $ sudo apt-get install libglog-dev
 
