@@ -230,7 +230,7 @@ def install(i):
             # If the preferred abi didn't match but is 64-bit,
             # look for a 32-bit binary (worst case won't install)
             alt_abi = ''
-            if abi=='arm64-v8a':
+            if abi in ['arm64-v8a','arm64']:
                 alt_abi='armeabi'
             elif abi=='x86-64':
                 alt_abi='x86'
