@@ -443,6 +443,10 @@ def setup(i):
        elif mac=='yes':
           env["CK_LB"]="$#tool_prefix#$ar -rcs"
           env["CK_LB_OUTPUT"]=""
+          env["CK_AR_PATH_FOR_CMAKE"]       = pi + sdirs + 'bin' + sdirs + 'llvm-ar'
+          env["CK_RANLIB_PATH_FOR_CMAKE"]   = pi + sdirs + 'bin' + sdirs + 'llvm-ranlib'
+          env["CK_EXTRA_MISC_CXX_FLAGS"]    = '-L' + pi + sdirs + 'lib' + ' -stdlib=libstdc++'
+          env["CK_DLL_EXT"]                 = '.dylib'
        else:
           env["CK_LB"]="$#tool_prefix#$ar rcs"
           env["CK_LB_OUTPUT"]="-o "
