@@ -1081,6 +1081,17 @@ def install(i):
           x=x.replace('$#sep#$', sdirs)
           x=x.replace('$#abi#$', tosd.get('abi',''))
           x=x.replace('$#processor#$', tosd.get('processor',''))
+
+            # NOTE: adapted from module/soft/module.py/prepare_target_name()
+            #       After successful testing this function should be moved out
+            #       into a common utility space and imported from there.
+            #       Also, check whether the original function was supposed to be
+            #           sourcing the data from hosd or tosd.
+          file_extensions=tosd.get('file_extensions',{})
+          for k in file_extensions:
+              v=file_extensions[k]
+              x=x.replace('$#file_ext_'+k+'#$',v)
+
           fp=os.path.join(fp,x)
           if os.path.isfile(fp):
              if o=='con':

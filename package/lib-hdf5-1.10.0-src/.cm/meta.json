@@ -45,7 +45,7 @@
     }
   },
   "end_full_path": {
-    "linux": "install/lib/libhdf5.so",
+    "linux": "install/lib/libhdf5$#file_ext_dll#$",
     "win": "install\\lib\\libhdf5.lib"
   },
   "need_cpu_info": "yes",
