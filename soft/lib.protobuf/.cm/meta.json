@@ -8,7 +8,7 @@
       "linux": 3
     },
     "soft_file": {
-      "linux": "libprotobuf.so"
+      "linux": "libprotobuf.a"
     },
     "soft_path_example": {
       "linux": ""
