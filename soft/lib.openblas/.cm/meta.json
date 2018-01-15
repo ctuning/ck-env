@@ -9,7 +9,7 @@
       "linux": 3
     }, 
     "soft_file": {
-      "linux": "libopenblas.so"
+      "linux": "libopenblas$#file_ext_dll#$"
     }, 
     "soft_path_example": {
       "linux": "/usr/lib/libopenblas.so"
