@@ -617,7 +617,7 @@ def set_freq(i):
        # Add env
        xcmd=''
        for k in sorted(env):
-           if k.startswith('CK_CPU'):
+           if k.startswith('CK_GPU'):
               v=str(env[k])
 
               if xcmd!='': xcmd+=envtsep

@@ -114,3 +114,10 @@ O: ARM
 C: Suggestions about rebuilding deps during experiment replay from package UOA
 W:
 
+N: Szilard Papp
+E:
+H:
+O: Qualcomm
+C: Fixing error with GPU freq env
+W:
+
