@@ -1591,6 +1591,16 @@ def check(i):
        x='/opt'
        if os.path.isdir(x) and x not in dirs:
           dirs.append(x)
+       #
+       # FIXME: Currently treating OSX as a subset of Linux:
+       #
+       if hosd.get('macos'):
+          #
+          # The location of software installed by brew prior to softlinking:
+          #
+          x='/usr/local/Cellar'
+          if os.path.isdir(x) and x not in dirs:
+             dirs.append(x)
 
     # Add from CK_TOOLS env
     x=os.environ.get(env_install_path,'')
