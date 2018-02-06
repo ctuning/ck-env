@@ -38,7 +38,7 @@ W: 2015
 
 N: Michael Mcgeagh
 E:
-O: ARM, UK
+O: Arm, UK
 C: reporting problem with yaml recording, 
    CPU feature detection (in new format) and general feedback about ck-wa, 
    other features related to Workload Automation
@@ -70,8 +70,8 @@ W: 2016
 
 N: Dave Butcher 
 E:
-O: ARM
-C: reporting a few bugs when intergrating ARM's workload automation to CK
+O: Arm
+C: reporting a few bugs when intergrating Arm's workload automation to CK
 W: 2016
 
 N: Sam Ainsworth
@@ -103,21 +103,21 @@ W:
 N: Lucinda Hartfield
 E:
 H:
-O: ARM
+O: Arm
 C: Adding new Android OS entries
 W:
 
 N: Stuart Taylor
 E:
 H:
-O: ARM
+O: Arm
 C: Suggestions about rebuilding deps during experiment replay from package UOA
 W:
 
 N: Szilard Papp
 E:
 H:
-O: ARM
+O: Arm
 C: Fixing error with GPU freq env
 W:
 
