@@ -46,20 +46,12 @@ def limit(i):
     tosd=i.get('target_os_dict',{})
 
     phosd=hosd.get('ck_name','')
+    macos=hosd.get('macos', '')
     hbits=hosd.get('bits','')
     tbits=tosd.get('bits','')
 
-    prebuilt=''
-    if phosd=='win':
-       if hbits=='64':
-          prebuilt='windows-x86_64'
-       else:
-          prebuilt='windows-x86'
-    else:
-       if hbits=='64':
-          prebuilt='linux-x86_64'
-       else:
-          prebuilt='linux-x86'
+    long_os_name = 'windows' if phosd=='win' else ('darwin' if macos else 'linux')
+    prebuilt     = long_os_name + '-x86' + ('_64' if hbits=='64' else '')
 
     acp=tosd.get('android_compiler_prefix','')
     if acp=='':
@@ -179,7 +171,8 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
-    hplat=hosd.get('ck_name','')
+    phosd=hosd.get('ck_name','')
+    macos=hosd.get('macos', '')
     hbits=hosd.get('bits','')
     tbits=tosd.get('bits','')
 
@@ -287,17 +280,8 @@ def setup(i):
           env[ep]=p2
           env[ep+'_BIN']=p1
 
-       prebuilt=''
-       if hplat=='win':
-          if hbits=='64':
-             prebuilt='windows-x86_64'
-          else:
-             prebuilt='windows-x86'
-       else:
-          if hbits=='64':
-             prebuilt='linux-x86_64'
-          else:
-             prebuilt='linux-x86'
+       long_os_name = 'windows' if phosd=='win' else ('darwin' if macos else 'linux')
+       prebuilt     = long_os_name + '-x86' + ('_64' if hbits=='64' else '')
 
        cus['tool_prefix_configured']='yes'
        cus['tool_prefix']=acp+'-'
