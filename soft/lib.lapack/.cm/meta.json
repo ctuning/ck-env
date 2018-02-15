@@ -1,7 +1,17 @@
 {
   "customize": {
     "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_LAPACK"
+    "env_prefix": "CK_ENV_LIB_LAPACK",
+    "ck_version": 10,
+    "check_that_exists": "yes",
+    "limit_recursion_dir_search": {
+      "linux": 4,
+      "win": 4
+    },
+    "soft_file": {
+      "linux": "liblapack.a",
+      "win": "liblapack.lib"
+    }
   }, 
   "soft_name": "LAPACK library", 
   "tags": [
