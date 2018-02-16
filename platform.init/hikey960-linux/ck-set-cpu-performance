@@ -1,0 +1,23 @@
+#! /bin/bash
+
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developers: Grigori Fursin, Flavio Vella, Anton Lokhmotov.
+
+export governor=performance
+
+export CK_CPU_FREQ_GOVERNER=$governor
+export CK_CPU_FREQ_FILE=cpuinfo_max_freq
+export CK_CPU_ONLINE=1
+
+#cd "$(dirname "${BASH_SOURCE[0]}")"
+#. ck-set-cpu-online-and-frequency
+
+echo "    Setting CPU 0..3 governor policy to '$governor' ..."
+sudo /usr/bin/cpufreq-set --governor $governor --cpu 0
+
+echo "    Setting CPU 4..7 governor policy to '$governor' ..."
+sudo /usr/bin/cpufreq-set --governor $governor --cpu 4

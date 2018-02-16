@@ -1,0 +1,28 @@
+#! /bin/bash
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+echo "*** Temperature:"
+echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/temp`"
+
+echo "*** Temperature - trip point 0 <`cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_type`>:"
+echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp`"
+
+echo "*** Temperature - trip point 1 <`cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_1_type`>:"
+echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_1_temp`"
+
+echo "*** Policy:"
+echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/policy`"
+
+echo "*** Available policies:"
+echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/available_policies`"
+
+echo "*** Sustainable power:"
+echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/sustainable_power`"

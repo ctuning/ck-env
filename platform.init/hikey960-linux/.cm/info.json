@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "8592b6984435fbc2", 
+  "backup_module_uid": "38a2f5438d8555b6", 
+  "backup_module_uoa": "platform.init", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2017-09-06T09:12:55.786690", 
+    "version": [
+      "1", 
+      "9", 
+      "1", 
+      "1"
+    ]
+  }, 
+  "data_name": "hikey960-linux"
+}
