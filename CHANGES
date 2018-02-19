@@ -1,3 +1,5 @@
+* 2018.02.19 - added platform.dsp dummy to be improved later 
+
 * 2018.02.06 - fixed typo with CK_GPU_* env to set GPU freq for individual cores
 
 * 2017.12.21 - added lib-xml2 (Linux); HPCToolKit
