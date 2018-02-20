@@ -3,6 +3,9 @@
     "clean": {
       "desc": "remote env entry and installed package"
     }, 
+    "deps_summary": {
+      "desc": "extracting summary of all deps"
+    }, 
     "get_all_versions_in_deps": {
       "desc": "get all versions from deps (recursively)"
     }, 

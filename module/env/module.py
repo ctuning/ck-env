@@ -2267,3 +2267,57 @@ def get_all_versions_in_deps(i):
            if r['return']>0: return r
 
     return {'return':0, 'versions':versions, 'tag_versions':tversions}
+
+##############################################################################
+# extracting summary of all deps
+
+def deps_summary(i):
+    """
+    Input:  {
+              deps - resolved deps
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              deps_summary - summary of deps
+            }
+
+    """
+
+    deps=i['deps']
+    ds=i.get('deps_summary',{})
+
+    for x in deps:
+        d=deps[x]
+        dd=d.get('dict',{})
+
+        ds[x]={}
+
+        cx=dd.get('customize',{})
+
+        ds[x]['tags']=d.get('tags',[])
+        ds[x]['name']=d.get('name','')
+
+        ds[x]['package_tags']=dd.get('tags',[])
+        ds[x]['data_name']=dd.get('data_name','')
+
+        puoa=dd.get('package_uoa','')
+        if puoa=='':
+           puoa=d.get('cus',{}).get('used_package_uid','')
+        ds[x]['package_uoa']=puoa
+
+        ds[x]['version']=cx.get('version','')
+        ds[x]['git_revision']=cx.get('git_info',{}).get('revision','')
+        ds[x]['git_iso_datetime_cut_revision']=cx.get('git_info',{}).get('iso_datetime_cut_revision','')
+
+        sdeps=dd.get('deps',{})
+        if len(sdeps)>0:
+           # Recursion
+           r=deps_summary({'deps':sdeps})
+           if r['return']>0: return r
+           ds[x]['deps']=r['deps_summary']
+
+    return {'return':0, 'deps_summary':ds}

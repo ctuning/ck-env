@@ -1,3 +1,6 @@
+* 2018.02.20 - added deps_summary in env module to prepare
+               recursive summaries of all resolved deps for reproducibility
+
 * 2018.02.19 - added platform.dsp dummy to be improved later 
 
 * 2018.02.06 - fixed typo with CK_GPU_* env to set GPU freq for individual cores
