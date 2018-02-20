@@ -2301,7 +2301,7 @@ def deps_summary(i):
         ds[x]['tags']=d.get('tags',[])
         ds[x]['name']=d.get('name','')
 
-        ds[x]['package_tags']=dd.get('tags',[])
+        ds[x]['package_tags']=','.join(dd.get('tags',[]))
         ds[x]['data_name']=dd.get('data_name','')
 
         puoa=dd.get('package_uoa','')
