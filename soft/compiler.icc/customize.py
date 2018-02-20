@@ -205,6 +205,7 @@ def setup(i):
 
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
+    macos=hosd.get('macos', '')
 
     rx=get_ext({'host_processor':hproc, 'target_processor':tproc})
     if rx['return']>0: return rx
@@ -333,7 +334,8 @@ def setup(i):
                  'split_to_list':'yes'})
     if r['return']>0: return r
 
-    env['CK_COMPILER_TOOLCHAIN_NAME']='icc'
+    # FIXME: check whether Boost also agrees to compile under windows+icc and extend to windows platform if so
+    env['CK_COMPILER_TOOLCHAIN_NAME']='intel-' + ('darwin' if macos else 'linux')
 
     pcl=''
     for x in reversed(r['stdout_lst']):
