@@ -487,6 +487,10 @@ def setup(i):
                pxx=os.path.join(env.get(ep+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
                if not os.path.isfile(pxx):
                    v=v.replace('$#tool_postfix#$','')
+           elif k=='CK_LLVM_CONFIG':
+               pxx=os.path.join(env.get(ep+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
+               if not os.path.isfile(pxx):
+                   v=v.replace('$#tool_postfix#$','')
 
            v=v.replace('$#tool_postfix#$',postfix)
            env[k]=v
