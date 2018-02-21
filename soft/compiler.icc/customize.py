@@ -179,7 +179,6 @@ def setup(i):
     iv=i.get('interactive','')
 
     cus=i.get('customize',{})
-    fp=cus.get('full_path','')
 
     env=i['env']
 
@@ -192,8 +191,11 @@ def setup(i):
 
     hwin=hosd.get('windows_base','')
 
+    sdirs=hosd.get('dir_sep','')
+
     ep=cus.get('env_prefix','')
-    if fp!='' and ep!='':
+    fp=cus.get('full_path','')
+    if ep!='' and fp!='':
        pi=os.path.dirname(fp)
        env[ep]=pi
 
@@ -217,7 +219,7 @@ def setup(i):
     # Setting environment depending on the platform
     if hplat=='linux':
        env.update({
-         "CK_AR": "ar", 
+         "CK_AR": "xiar",
          "CK_ASM_EXT": ".s", 
          "CK_CC": "icc", 
          "CK_COMPILER_FLAGS_OBLIGATORY": "", 
@@ -250,6 +252,7 @@ def setup(i):
          "CK_GPROF_OUT_FILE": "gmon.out", 
          "CK_LB": "ar rcs", 
          "CK_LB_OUTPUT": "-o ", 
+         "CK_LD": "xild",
          "CK_LD_FLAGS_EXTRA": "", 
          "CK_LIB_EXT": ".a", 
          "CK_LINKER_FLAG_OPENMP": "-lpthread -liomp5", 
@@ -345,9 +348,26 @@ def setup(i):
               pcl=x
            break
 
-    if pcl!='':
+    if ep!='' and pcl!='':
        # Found compiler path (useful for CMAKE)
-       env[ep+'_BIN']=os.path.dirname(pcl)
+       bin_dir = os.path.dirname(pcl)
+       env[ep+'_BIN'] = bin_dir
+       env['CK_LD_PATH_FOR_CMAKE'] = bin_dir + sdirs + 'xild'
+
+       xiar_path = bin_dir + sdirs + 'xiar'
+       env['CK_AR_PATH_FOR_CMAKE'] = xiar_path
+
+       env['CK_RANLIB_PATH_FOR_CMAKE'] = '/usr/bin/ranlib'
+
+       ## FIXME: A more elegant and portable solution would be to create an executable ranlib wrapper around 'xiar'.
+       ##        The current problem is that we do not have access to the entry_dir at this point.
+       #
+       # path_to_wrapper  = entry_dir + sdirs + 'ranlib_wrapper'
+       # wrapper_contents = "#!/bin/bash\n\nexec " + xiar_path + " s $@\n"
+       # rx=ck.save_text_file({'text_file' : path_to_wrapper, 'string' : wrapper_contents})
+       # if rx['return']>0: return rx
+       # os.chmod(path_to_wrapper, 0o755)
+       # env['CK_RANLIB_PATH_FOR_CMAKE'] = path_to_wrapper
 
        ck.out('')
        ck.out('  * Found compiler in '+pcl)
