@@ -1,3 +1,5 @@
+* 2018.02.21 - added CK_LLVM_CONFIG var to LLVM soft desc
+
 * 2018.02.20 - added deps_summary in env module to prepare
                recursive summaries of all resolved deps for reproducibility
 

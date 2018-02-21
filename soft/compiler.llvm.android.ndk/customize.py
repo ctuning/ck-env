@@ -391,6 +391,7 @@ def setup(i):
           "CK_AR": "$#tool_prefix#$ar", 
           "CK_ASM_EXT": ".s", 
           "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$", 
+          "CK_LLVM_CONFIG": "$#tool_prefix#$llvm-config$#tool_postfix#$", 
           "CK_COMPILER_FLAGS_OBLIGATORY": "", 
           "CK_COMPILER_ENABLE_EXCEPTIONS": "-fcxx-exceptions",
           "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
