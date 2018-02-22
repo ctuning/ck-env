@@ -1,3 +1,6 @@
+* 2018.02.22 - added support to select multiple environments separated by comma 
+               for "ck vitual env", i.e. ck virtual env:UOA1,UOA2,UOA3
+
 * 2018.02.21 - added CK_LLVM_CONFIG var to LLVM soft desc
 
 * 2018.02.20 - added deps_summary in env module to prepare

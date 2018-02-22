@@ -2142,6 +2142,7 @@ def xset(i):
 def virtual(i):
     """
     Input:  {
+              data_uoa or uoa - environment UOA to pre-load (see "ck show env") - can be listed via ,
             }
 
     Output: {
@@ -2152,14 +2153,31 @@ def virtual(i):
 
     """
 
-    if i.get('data_uoa','')!='' and i.get('uoa','')=='':
-       i['uoa']=i['data_uoa']
+    # Prepare env
+    l=[] # list of UOA
 
-    r=set(i)
-    if r['return']>0: return r
+    duoa=i.get('data_uoa','')
+    if duoa=='':
+       duoa=i.get('uoa','')
 
-    b=r['bat']
+    if duoa=='':
+       l=[]
+    else:
+       l=duoa.split(',')
 
+    if len(l)==0: l=['']
+
+    b='' # string with env
+
+    for uoa in l:
+        i['uoa']=uoa
+
+        r=set(i)
+        if r['return']>0: return r
+
+        b+='\n'+r['bat']+'\n'
+
+    # Run shell
     import platform
     import os
 
