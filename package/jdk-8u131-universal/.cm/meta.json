@@ -8,7 +8,8 @@
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies",
       "PACKAGE_WGET_HEADER": "Cookie: oraclelicense=accept-securebackup-cookie"
-    }
+    },
+    "version": "1.8.0.131"
   },
   "end_full_path": {
     "android": "jdk1.8.0_131/bin/javac",
