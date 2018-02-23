@@ -8,7 +8,7 @@
 # Developers: Grigori Fursin, Flavio Vella, Anton Lokhmotov.
 
 export CK_GPU_FREQ_GOVERNOR=userspace
-export CK_GPU_FREQ_INDEX=5
+export CK_GPU_FREQ_INDEX=3
 
 #stop mpdecision
 cd "$(dirname "${BASH_SOURCE[0]}")"
