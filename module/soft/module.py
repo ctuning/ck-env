@@ -343,6 +343,7 @@ def setup(i):
     hos=i.get('host_os','')
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
+    if tdid=='': tdid=i.get('device_id','')
 
     ii={'action':'detect',
         'module_uoa':cfg['module_deps']['platform.os'],
