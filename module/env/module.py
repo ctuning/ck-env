@@ -304,7 +304,7 @@ def set(i):
           else:
              # Otherwise can try to rebuild from provided package UOA
              ck.out('')
-             ck.out('WARNING: environment doesn\'t exist but package provided - trying to reinstall ...')
+             ck.out('WARNING: environment doesn\'t exist but package provided - trying to redetect/reinstall ...')
 
           duoa=''
           iii['data_uoa']=duoa # since will be later new search
@@ -322,7 +322,8 @@ def set(i):
                                'or_tags':or_tags, 
                                'no_tags':no_tags, 
                                'version_from':vfrom, 
-                               'version_to':vto})
+                               'version_to':vto,
+                               'package_uoa':package_uoa})
           if r['return']>0: return r
           sbov=r.get('skipped_because_of_version','')
 
@@ -512,7 +513,8 @@ def set(i):
                                   'or_tags':or_tags, 
                                   'no_tags':no_tags,
                                   'version_from':vfrom, 
-                                  'version_to':vto})
+                                  'version_to':vto,
+                                  'package_uoa':package_uoa})
              if r['return']>0: return r
 
              l=r['lst']
@@ -1762,6 +1764,7 @@ def prune_search_list(i):
               (no_tags)              - string of tags to exclude
               (version_from)         - check version starting from ... (list of numbers)
               (version_to)           - check version up to ... (list of numbers)
+              (package_uoa)          - prune by specific package 
             }
 
     Output: {
@@ -1776,6 +1779,8 @@ def prune_search_list(i):
     """
 
     lst=i.get('lst',[])
+
+    package_uoa=i.get('package_uoa','')
 
     no_tags=i.get('no_tags','')
     ntags=[]
@@ -1801,8 +1806,16 @@ def prune_search_list(i):
 
         skip=False
 
+        # Check package UOA
+        if package_uoa!='':
+           xpackage_uoa=meta.get('package_uoa','')
+           if xpackage_uoa=='':
+              xpackage_uoa=meta.get('customize',{}).get('used_package_uid','')
+           if xpackage_uoa!='' and xpackage_uoa!=package_uoa:
+              skip=True
+
         # Check that not temporal entry (unfinished installation)
-        if 'tmp' in tags:
+        if not skip and 'tmp' in tags:
            skip=True
 
         # Check or tags
