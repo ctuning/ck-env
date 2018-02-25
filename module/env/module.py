@@ -85,6 +85,8 @@ def set(i):
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
 
+              (install_env)          - customize installation (useful for replay to rebuild proper package with external env)
+
               (version_from)         - check version starting from ... (list of numbers)
               (version_to)           - check version up to ... (list of numbers)
 
@@ -127,6 +129,8 @@ def set(i):
     skip_cache=i.get('skip_cache','')
 
     package_uoa=i.get('package_uoa','')
+
+    install_env=i.get('install_env',{})
 
     # Clean output file
     sar=i.get('skip_auto_resolution','')
@@ -669,6 +673,7 @@ def set(i):
                                        'no_tags':no_tags,
                                        'quiet':quiet,
                                        'install_to_env':iev,
+                                       'install_env':install_env,
                                        'safe':safe,
                                        'host_os':hos,
                                        'target_os':tos,
@@ -1350,6 +1355,10 @@ def resolve(i):
         if package_uoa=='':
            package_uoa=qdict.get('customize',{}).get('used_package_uid','')
 
+        xinstall_env=qdict.get('customize',{}).get('install_env',{})
+        xinstall_env.update(install_env)
+        install_env=copy.deepcopy(xinstall_env)
+
         # Try to set environment
         iv+=1
 
@@ -1386,6 +1395,7 @@ def resolve(i):
             'quiet':quiet,
             'force_env_init':q.get('force_env_init',''),
             'install_to_env':iev,
+            'install_env':install_env,
             'version_from':vfrom,
             'version_to':vto,
             'package_uoa':package_uoa,
@@ -2011,6 +2021,8 @@ def internal_install_package(i):
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
 
+              (install_env)          - customize installation (useful for replay to rebuild proper package with external env)
+
               (safe)                 - safe mode when searching packages first instead of detecting already installed soft
                                        (to have more deterministic build)
 
@@ -2048,6 +2060,7 @@ def internal_install_package(i):
     no_tags=i.get('no_tags','')
     quiet=i.get('quiet','')
     iev=i.get('install_to_env','')
+    install_env=i.get('install_env',{})
     safe=i.get('safe','')
     ah=i.get('add_hint','')
 
@@ -2097,6 +2110,7 @@ def internal_install_package(i):
         'or_tags':or_tags,
         'no_tags':no_tags,
         'install_to_env':iev,
+        'env':install_env,
         'safe':safe,
         'host_os':hos,
         'target_os':tos,
