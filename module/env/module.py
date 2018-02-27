@@ -1356,8 +1356,8 @@ def resolve(i):
            package_uoa=qdict.get('customize',{}).get('used_package_uid','')
 
         xinstall_env=qdict.get('customize',{}).get('install_env',{})
-        xinstall_env.update(install_env)
-        install_env=copy.deepcopy(xinstall_env)
+#        xinstall_env.update(install_env)
+#       install_env=copy.deepcopy(xinstall_env) # This is bug - install_env is a global env which is common for the first package!
 
         # Try to set environment
         iv+=1
@@ -1395,7 +1395,7 @@ def resolve(i):
             'quiet':quiet,
             'force_env_init':q.get('force_env_init',''),
             'install_to_env':iev,
-            'install_env':install_env,
+            'install_env':xinstall_env,
             'version_from':vfrom,
             'version_to':vto,
             'package_uoa':package_uoa,
