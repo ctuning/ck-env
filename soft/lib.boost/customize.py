@@ -173,15 +173,18 @@ def setup(i):
        compiler = p0[len('libboost_system'):p0.find('-mt')]
        ver_suffix = p0[p0.find('-mt')+3:-len('.lib')]
 
+       # TBD: we should actually go through existing libs and create vars automatically 
        env[ep+'_LFLAG_SYSTEM']=os.path.join(p1,'boost_system' + compiler + '-mt' + ver_suffix + '.lib')
        env[ep+'_LFLAG_THREAD']=os.path.join(p1,'boost_thread' + compiler + '-mt' + ver_suffix + '.lib')
        env[ep+'_LFLAG_DATE_TIME']=os.path.join(p1,'boost_date_time' + compiler + '-mt' + ver_suffix + '.lib')
        env[ep+'_LFLAG_FILESYSTEM']=os.path.join(p1,'boost_filesystem' + compiler + '-mt' + ver_suffix + '.lib')
+       env[ep+'_LFLAG_REGEX']=os.path.join(p1,'boost_regex' + compiler + '-mt' + ver_suffix + '.lib')
     else:
        env[ep+'_LFLAG_SYSTEM']='-lboost_system'
        env[ep+'_LFLAG_THREAD']='-lboost_thread'
        env[ep+'_LFLAG_DATE_TIME']='-lboost_date_time'
        env[ep+'_LFLAG_FILESYSTEM']='-lboost_filesystem'
+       env[ep+'_LFLAG_REGEX']='-lboost_regex'
 
     # Check if host is windows and target is android
     # then copy libboost_thread_pthread.a to libboost_thread.a ,

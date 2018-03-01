@@ -1,3 +1,5 @@
+* 2018.03.01 - added CK_ENV_LIB_BOOST_LFLAG_REGEX to boost ...
+
 * 2018.02.27 - fixing bug in the latest ck-env commit
 
 * 2018.02.25 - fixing replay with --deps to prune envs by specific package, not just tags
