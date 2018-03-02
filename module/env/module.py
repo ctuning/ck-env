@@ -294,7 +294,7 @@ def set(i):
           if rx['return']!=16: return rx
 
           if package_uoa=='':
-             rx['error']='strange - missing environment ('+duoa+') and package not specified'
+             rx['error']='strange - missing environment ('+duoa+') and package not specified (may happen during replay from another machine)'
 
              if o=='con' and quiet!='yes':
                 ck.out('')
@@ -384,6 +384,17 @@ def set(i):
        ck.out('WARNING: '+war)
        showed_warning=True
 
+       if len(install_env)>0:
+          if o=='con':
+             ck.out('')
+             ck.out('Reusing original and slightly pruned environment ...')
+             ck.out('')
+
+          for k in list(install_env.keys()):
+              # TBD: quite ugly - maybe should record external env explicitly ...
+              if k in ['LFLAGS', 'CXXFLAGS', 'CK_HOST_CPU_NUMBER_OF_PROCESSORS', 'LCORE_FLAGS']:
+                 del(install_env[k])
+
        iii1={'out':oo,
              'package_uoa':package_uoa,
              'tags':tags,
@@ -391,6 +402,7 @@ def set(i):
              'no_tags':no_tags,
              'quiet':quiet,
              'install_to_env':iev,
+             'install_env':install_env,
              'safe':safe,
              'host_os':hos,
              'target_os':tos,

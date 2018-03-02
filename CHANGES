@@ -1,3 +1,5 @@
+* 2018.03.02 - added possibility to reuse env from installed packages during reply
+
 * 2018.03.01 - added CK_ENV_LIB_BOOST_LFLAG_REGEX to boost ...
 
 * 2018.02.27 - fixing bug in the latest ck-env commit
