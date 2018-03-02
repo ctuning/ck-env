@@ -226,8 +226,13 @@ fi
 ############################################################
 if [ "${PACKAGE_UNZIP}" == "YES" ] ; then
   echo ""
-  echo "Unzipping archive ..."
 
+  if [ -d ${PACKAGE_SUB_DIR} ] ; then
+    echo "Deleting previously unzipped archive ${PACKAGE_SUB_DIR} ..."
+    rm -rf ${PACKAGE_SUB_DIR}
+  fi
+
+  echo "Unzipping archive ${PACKAGE_NAME} ..."
   unzip ${PACKAGE_NAME}
   if [ "${?}" != "0" ] ; then
     echo "Error: unzipping package failed!"
