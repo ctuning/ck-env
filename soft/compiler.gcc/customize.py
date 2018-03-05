@@ -149,6 +149,8 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
+    file_extensions = target_d.get('file_extensions',{})
+
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
 
@@ -209,8 +211,8 @@ def setup(i):
       "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
       "CK_OPT_ALL_WARNINGS": "-Wall", 
       "CK_CXX": "$#tool_prefix#$g++$#tool_postfix#$", 
-      "CK_DLL_EXT": ".so", 
-      "CK_EXE_EXT": ".out", 
+      "CK_DLL_EXT": file_extensions.get('dll',''),
+      "CK_EXE_EXT": file_extensions.get('exe',''),
       "CK_EXTRA_LIB_DL": "-ldl", 
       "CK_EXTRA_LIB_M": "-lm", 
       "CK_FLAGS_CREATE_ASM": "-S", 
@@ -228,7 +230,7 @@ def setup(i):
       "CK_LB_OUTPUT": "-o ", 
       "CK_LD": "$#tool_prefix#$ld", 
       "CK_LD_FLAGS_EXTRA": "", 
-      "CK_LIB_EXT": ".a", 
+      "CK_LIB_EXT": file_extensions.get('lib',''),
       "CK_LINKER_FLAG_OPENMP": "-lgomp -lrt", 
       "CK_MAKE": "make", 
       "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 

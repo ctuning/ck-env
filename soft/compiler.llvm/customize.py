@@ -176,6 +176,7 @@ def setup(i):
     sdirs=hosd.get('dir_sep','')
 
     mac=target_d.get('macos','')
+    file_extensions = target_d.get('file_extensions',{})
 
     hplat=hosd.get('ck_name','')
 
@@ -285,8 +286,8 @@ def setup(i):
        else:
           env.update({
              "CK_AR": "lib", 
-             "CK_DLL_EXT": ".dll", 
-             "CK_EXE_EXT": ".exe", 
+             "CK_DLL_EXT": file_extensions.get('dll',''),
+             "CK_EXE_EXT": file_extensions.get('exe',''),
              "CK_EXTRA_LIB_DL": "", 
              "CK_EXTRA_LIB_M": "", 
              "CK_FLAGS_DLL": "", 
@@ -298,7 +299,7 @@ def setup(i):
              "CK_LD_DYNAMIC_FLAGS": "", 
              "CK_LD_FLAGS_MISC": "-fuse-ld=link.exe", 
              "CK_LD_FLAGS_EXTRA": "", 
-             "CK_LIB_EXT": ".lib", 
+             "CK_LIB_EXT": file_extensions.get('lib',''),
              "CK_OBJDUMP": "llvm-objdump -d"})
 
        prefix_configured=cus.get('tool_prefix_configured','')
@@ -392,8 +393,8 @@ def setup(i):
           "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
           "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
           "CK_CXX": "$#tool_prefix#$clang++$#tool_postfix#$", 
-          "CK_DLL_EXT": ".so", 
-          "CK_EXE_EXT": ".out", 
+          "CK_DLL_EXT": file_extensions.get('dll',''),
+          "CK_EXE_EXT": file_extensions.get('exe',''),
           "CK_EXTRA_LIB_DL": "-ldl", 
           "CK_EXTRA_LIB_M": "-lm", 
           "CK_FLAGS_CREATE_ASM": "-S", 
@@ -408,7 +409,7 @@ def setup(i):
           "CK_FLAG_PREFIX_VAR": "-D", 
           "CK_GPROF_OUT_FILE": "gmon.out", 
           "CK_LD_FLAGS_EXTRA": "", 
-          "CK_LIB_EXT": ".a", 
+          "CK_LIB_EXT": file_extensions.get('lib',''),
           "CK_LINKER_FLAG_OPENMP": "-fopenmp", 
           "CK_MAKE": "make", 
           "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
@@ -447,7 +448,6 @@ def setup(i):
           env["CK_AR_PATH_FOR_CMAKE"]       = pi + sdirs + 'bin' + sdirs + 'llvm-ar'
           env["CK_RANLIB_PATH_FOR_CMAKE"]   = pi + sdirs + 'bin' + sdirs + 'llvm-ranlib'
           env["CK_EXTRA_MISC_CXX_FLAGS"]    = '-L' + pi + sdirs + 'lib' + ' -stdlib=libstdc++'
-          env["CK_DLL_EXT"]                 = '.dylib'
        else:
           env["CK_LB"]="$#tool_prefix#$ar rcs"
           env["CK_LB_OUTPUT"]="-o "

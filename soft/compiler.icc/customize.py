@@ -208,6 +208,7 @@ def setup(i):
     hproc=hosd.get('processor','')
     tproc=tosd.get('processor','')
     macos=hosd.get('macos', '')
+    file_extensions = tosd.get('file_extensions',{})
 
     rx=get_ext({'host_processor':hproc, 'target_processor':tproc})
     if rx['return']>0: return rx
@@ -232,8 +233,8 @@ def setup(i):
          "CK_COMPILER_FLAG_STD99": "-Qstd=c99", 
          "CK_CSTD99": "-Qstd=c99", 
          "CK_CXX": "icc", 
-         "CK_DLL_EXT": ".so", 
-         "CK_EXE_EXT": ".out", 
+         "CK_DLL_EXT": file_extensions.get('dll',''),
+         "CK_EXE_EXT": file_extensions.get('exe',''),
          "CK_EXTRA_LIB_DL": "-ldl", 
          "CK_EXTRA_LIB_M": "-lm", 
          "CK_F90": "ifort", 
@@ -254,7 +255,7 @@ def setup(i):
          "CK_LB_OUTPUT": "-o ", 
          "CK_LD": "xild",
          "CK_LD_FLAGS_EXTRA": "", 
-         "CK_LIB_EXT": ".a", 
+         "CK_LIB_EXT": file_extensions.get('lib',''),
          "CK_LINKER_FLAG_OPENMP": "-lpthread -liomp5", 
          "CK_MAKE": "make", 
          "CK_OPT_SIZE": "-Os", 
@@ -286,8 +287,8 @@ def setup(i):
          "CK_COMPILER_FLAG_STD99": "/Qstd=c99", 
          "CK_CSTD99": "/Qstd=c99", 
          "CK_CXX": "icl", 
-         "CK_DLL_EXT": ".dll", 
-         "CK_EXE_EXT": ".exe", 
+         "CK_DLL_EXT": file_extensions.get('dll',''),
+         "CK_EXE_EXT": file_extensions.get('exe',''),
          "CK_EXTRA_LIB_DL": "", 
          "CK_EXTRA_LIB_M": "", 
          "CK_F90": "ifort /fpp", 
@@ -307,7 +308,7 @@ def setup(i):
          "CK_LB_OUTPUT": "/OUT:", 
          "CK_LD_DYNAMIC_FLAGS": "/link /NODEFAULTLIB:LIBCMT", 
 #         "CK_LD_FLAGS_EXTRA": "bufferoverflowU.lib", 
-         "CK_LIB_EXT": ".lib", 
+         "CK_LIB_EXT": file_extensions.get('lib',''),
          "CK_MAKE": "nmake", 
          "CK_OPT_SIZE": "-Os", 
          "CK_OPT_SPEED": "-O3", 
