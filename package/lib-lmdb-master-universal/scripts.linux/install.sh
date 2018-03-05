@@ -20,7 +20,7 @@ echo ""
 echo "Building package ..."
 
     # on a Mac and compiling with LLVM:
-if [ "$CK_DLL_EXT" = ".dylib" ] && [ "$CK_CC" = "clang" ]
+if [ -n "$CK_ENV_COMPILER_LLVM_SET" ] && [ "$CK_DLL_EXT" = ".dylib" ]
 then
     MAKE_SOLIBS=" -install_name @rpath/liblmdb.dylib "
 else
