@@ -2218,7 +2218,7 @@ def virtual(i):
         blin+='\n'+r['bat']+'\n'
 
         if bwin!='': bwin+=' & '
-        bwin+=r['bat']
+        bwin+=r['bat'].replace('\n','')
 
     # Run shell
     import platform
