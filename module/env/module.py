@@ -2206,7 +2206,8 @@ def virtual(i):
 
     if len(l)==0: l=['']
 
-    b='' # string with env
+    blin='' # string with env
+    bwin='' # string with env
 
     for uoa in l:
         i['uoa']=uoa
@@ -2214,7 +2215,10 @@ def virtual(i):
         r=set(i)
         if r['return']>0: return r
 
-        b+='\n'+r['bat']+'\n'
+        blin+='\n'+r['bat']+'\n'
+
+        if bwin!='': bwin+=' & '
+        bwin+=r['bat']
 
     # Run shell
     import platform
@@ -2225,14 +2229,14 @@ def virtual(i):
 
     if platform.system().lower().startswith('win'): # pragma: no cover
        import subprocess
-       p = subprocess.Popen(["cmd", "/k", b], shell = True, env=os.environ)
+       p = subprocess.Popen(['cmd', '/K', bwin], shell = True, env=os.environ)
        p.wait()
     else:
        rx=ck.gen_tmp_file({})
        if rx['return']>0: return rx
        fn=rx['file_name']
 
-       rx=ck.save_text_file({'text_file':fn, 'string':b})
+       rx=ck.save_text_file({'text_file':fn, 'string':blin})
        if rx['return']>0: return rx
 
        os.system("bash --rcfile "+fn)

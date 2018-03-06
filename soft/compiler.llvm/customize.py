@@ -368,6 +368,13 @@ def setup(i):
 
              env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
+       x=cus.get('add_target_on_win','')
+       if x!='' and tbits=='64': 
+          x=x.replace('$#arch#$','x86_64')
+
+          if 'CK_COMPILER_FLAGS_OBLIGATORY' not in env: env['CK_COMPILER_FLAGS_OBLIGATORY']=''
+          env['CK_COMPILER_FLAGS_OBLIGATORY']+=' '+x
+
        x=env.get('CK_CXX','')
        if x!='' and x.find('-fpermissive')<0:
           x+=' -fpermissive'
