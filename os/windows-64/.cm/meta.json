@@ -38,6 +38,9 @@
     "lib": ".lib"
   },
   "generic": "yes",
+  "host_file_extensions": {
+    "exe2":".exe"
+  },
   "html_for_detached_console": "<html>\r\n<body>\r\n<script language=\"javascript\">\r\n<!--\r\nself.close();\r\n//-->\r\n</script> \r\nConsole was detached. This window can be closed!\r\n</body>\r\n</html>",
   "lib_dir": "lib",
   "make_dir": "mkdir ",

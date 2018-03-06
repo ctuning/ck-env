@@ -1,0 +1,46 @@
+{
+  "control": [
+    {
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://fursin.net",
+      "copyright": "See CK COPYRIGHT.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-03-09T23:46:05.410000",
+      "license": "See CK LICENSE.txt for licensing details",
+      "version": [
+        "1",
+        "1",
+        "0205"
+      ]
+    },
+    {
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://fursin.net",
+      "copyright": "See CK COPYRIGHT.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-03-12T13:31:16.623000",
+      "license": "See CK LICENSE.txt for licensing details",
+      "version": [
+        "1",
+        "1",
+        "0205"
+      ]
+    },
+    {
+      "author": "Grigori Fursin",
+      "author_email": "Grigori.Fursin@cTuning.org",
+      "author_webpage": "http://fursin.net",
+      "copyright": "See CK COPYRIGHT.txt for copyright details",
+      "engine": "CK",
+      "iso_datetime": "2015-03-12T13:46:44.123000",
+      "license": "See CK LICENSE.txt for licensing details",
+      "version": [
+        "1",
+        "1",
+        "0205"
+      ]
+    }
+  ]
+}

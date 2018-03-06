@@ -44,6 +44,9 @@
     "lib": ".a"
   }, 
   "generic": "yes", 
+  "host_file_extensions": {
+    "exe2":""
+  },
   "interpreter":"sh",
   "lib_dir": "lib", 
   "make_dir": "mkdir ", 

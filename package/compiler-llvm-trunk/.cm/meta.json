@@ -1,0 +1,41 @@
+{
+  "comment":"build LLVM from SVN trunk (very long)",
+  "check_exit_status": "yes",
+  "customize": {
+    "add_m32": "no",
+    "add_target_on_win": "--target=$#arch#$-pc-windows-msvc",
+    "add_to_ck_compiler_flags_obligatory": "",
+    "extra_dir": "",
+    "retarget": "no",
+    "tool_prefix": "",
+    "version": "trunk"
+  },
+  "deps": {
+    "tool-cmake": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "cmake",
+      "skip_from_bat": "yes",
+      "tags": "tool,cmake"
+    }
+  },
+  "end_full_path_universal": "bin$#sep#$clang$#host_file_ext_exe2#$",
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "only_for_target_os_tags": [
+    "linux",
+    "windows",
+    "android"
+  ],
+  "process_script": "process",
+  "soft_uoa": "1c2eb494b8ae3bc4",
+  "suggested_path": "llvm",
+  "tags": [
+    "compiler",
+    "llvm",
+    "vtrunk"
+  ]
+}

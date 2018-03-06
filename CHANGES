@@ -1,6 +1,7 @@
 * 2018.03.06 - fixed bug in ck virtual env for windows
              - fixed LLVM detection on latest Windows (targets)
              - added cmake packages v3.10.2 for Windows
+             - added package to build LLVM on Linux and Windows
 
 * 2018.03.02 - added possibility to reuse env from installed packages during reply
 

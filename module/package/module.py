@@ -1092,6 +1092,11 @@ def install(i):
               v=file_extensions[k]
               x=x.replace('$#file_ext_'+k+'#$',v)
 
+          host_file_extensions=hosd.get('host_file_extensions',{})
+          for k in host_file_extensions:
+              v=host_file_extensions[k]
+              x=x.replace('$#host_file_ext_'+k+'#$',v)
+
           fp=os.path.join(fp,x)
           if os.path.isfile(fp):
              if o=='con':
