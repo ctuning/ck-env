@@ -39,7 +39,9 @@ mkdir -p $INSTALL_DIR/install/include
 cp -r $INSTALL_DIR/leveldb-1.20/include $INSTALL_DIR/install
 
 mkdir -p $INSTALL_DIR/install/lib
-cp $INSTALL_DIR/leveldb-1.20/out-static/*.a $INSTALL_DIR/install/lib
-cp $INSTALL_DIR/leveldb-1.20/out-shared/*${CK_DLL_EXT} $INSTALL_DIR/install/lib
+
+    # preserve local symbolic links that may help us to identify the version later:
+cp -a $INSTALL_DIR/leveldb-1.20/out-static/*${CK_LIB_EXT}* $INSTALL_DIR/install/lib
+cp -a $INSTALL_DIR/leveldb-1.20/out-shared/*${CK_DLL_EXT}* $INSTALL_DIR/install/lib
 
 exit 0
