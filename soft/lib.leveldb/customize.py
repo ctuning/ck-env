@@ -10,6 +10,33 @@
 import os
 
 ##############################################################################
+# get version from path
+
+def version_cmd(i):
+
+    full_path       = i['full_path']
+    version_string  = ''
+
+    if os.path.islink(full_path):
+        symlink_target  = os.readlink(full_path)
+        library_name    = os.path.basename(full_path)
+        orig_length     = len(library_name)
+
+        #       Linux style library version:
+        if library_name == symlink_target[:orig_length] :
+            version_string = symlink_target[orig_length+1:]
+        else:
+            (base, ext) = library_name.rsplit('.', 1)
+            base_length = len(base)
+            ext_length  = len(ext)
+
+            #       OSX style library version:
+            if base == symlink_target[:base_length] and ext == symlink_target[-ext_length:] :
+                version_string = symlink_target[base_length+1:-ext_length-1]
+
+    return {'return':0, 'cmd':'', 'version': version_string}
+
+##############################################################################
 # setup environment setup
 
 def setup(i):
@@ -48,8 +75,6 @@ def setup(i):
             }
 
     """
-
-    import os
 
     # Get variables
     ck      = i['ck_kernel']
