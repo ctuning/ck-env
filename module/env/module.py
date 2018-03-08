@@ -408,6 +408,8 @@ def set(i):
              'target_os':tos,
              'device_id':tdid,
              'add_hint':'yes',
+             'reuse_deps':reuse_deps,
+             'deps_cache':deps_cache,
              'version_from':vfrom,
              'version_to':vto,
              'deps':cdeps}
@@ -690,6 +692,8 @@ def set(i):
                                        'host_os':hos,
                                        'target_os':tos,
                                        'device_id':tdid,
+                                       'reuse_deps':reuse_deps,
+                                       'deps_cache':deps_cache,
                                        'version_from':vfrom,
                                        'version_to':vto,
                                        'deps':cdeps})
@@ -2029,6 +2033,9 @@ def internal_install_package(i):
               (deps)                 - already resolved deps
               (sub_deps)             - deps for the package to be installed (for replay mainly)
 
+              (reuse_deps)           - if 'yes' reuse all deps if found in cache by tags
+              (deps_cache)           - list with resolved deps
+
               (quiet)                - if 'yes', automatically provide default answer to all questions when resolving dependencies ... 
 
               (install_to_env)       - install dependencies to env instead of CK-TOOLS (to keep it clean)!
@@ -2064,8 +2071,10 @@ def internal_install_package(i):
     hos=i.get('host_os','')
     tos=i.get('target_os','')
     tdid=i.get('device_id','')
-
     package_uoa=i.get('package_uoa','')
+
+    deps_cache=i.get('deps_cache',[])
+    reuse_deps=i.get('reuse_deps','')
 
     tags=i.get('tags','')
     or_tags=i.get('or_tags','')
@@ -2127,6 +2136,8 @@ def internal_install_package(i):
         'host_os':hos,
         'target_os':tos,
         'device_id':tdid,
+        'reuse_deps':reuse_deps,
+        'deps_cache':deps_cache,
         'version_from':vfrom,
         'version_to':vto,
         'add_hint':ah}

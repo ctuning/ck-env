@@ -70,6 +70,9 @@ def install(i):
 
               (deps)              - pre-set some deps, for example for compiler
 
+              (reuse_deps)           - if 'yes' reuse all deps if found in cache by tags
+              (deps_cache)           - list with resolved deps
+
               (deps.{KEY})        - set deps[KEY]["uoa']=value (user-friendly interface via CMD to set any given dependency)
               (preset_deps)       - dict with {"KEY":"UOA"} to preset dependencies
 
@@ -135,6 +138,9 @@ def install(i):
     xtags=i.get('tags','')
     xor_tags=i.get('or_tags','')
     xno_tags=i.get('no_tags','')
+
+    reuse_deps=i.get('reuse_deps','')
+    deps_cache=i.get('deps_cache',[])
 
     # Check if package_channel is specifies and add tag
     pchannel=ck.cfg.get('package_channel','')
@@ -631,6 +637,8 @@ def install(i):
            'repo_uoa':enruoa,
            'install_to_env':iev,
            'install_env':pr_env,
+           'reuse_deps':reuse_deps,
+           'deps_cache':deps_cache,
            'safe':safe,
            'deps':udeps}
        if o=='con': ii['out']='con'
@@ -960,6 +968,8 @@ def install(i):
            'target_device_id':tdid,
            'repo_uoa':enruoa,
            'install_to_env':iev,
+           'reuse_deps':reuse_deps,
+           'deps_cache':deps_cache,
            'safe':safe,
            'deps':udeps}
        if o=='con': ii['out']='con'
