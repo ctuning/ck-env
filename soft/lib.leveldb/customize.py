@@ -10,6 +10,33 @@
 import os
 
 ##############################################################################
+# get version from path
+
+def version_cmd(i):
+
+    full_path       = i['full_path']
+    version_string  = ''
+
+    if os.path.islink(full_path):
+        symlink_target  = os.readlink(full_path)
+        library_name    = os.path.basename(full_path)
+        orig_length     = len(library_name)
+
+        #       Linux style library version:
+        if library_name == symlink_target[:orig_length] :
+            version_string = symlink_target[orig_length+1:]
+        else:
+            (base, ext) = library_name.rsplit('.', 1)
+            base_length = len(base)
+            ext_length  = len(ext)
+
+            #       OSX style library version:
+            if base == symlink_target[:base_length] and ext == symlink_target[-ext_length:] :
+                version_string = symlink_target[base_length+1:-ext_length-1]
+
+    return {'return':0, 'cmd':'', 'version': version_string}
+
+##############################################################################
 # setup environment setup
 
 def setup(i):
@@ -49,23 +76,22 @@ def setup(i):
 
     """
 
-    import os
-
     # Get variables
     ck      = i['ck_kernel']
     cus     = i.get('customize',{})
     fp      = cus.get('full_path','')
 
-    install_root = os.path.dirname( os.path.dirname( fp ) )
-    found=False
+    path_lib        = os.path.dirname( fp )
+    install_root    = os.path.dirname( path_lib )
     while True:
        if os.path.isdir(os.path.join(install_root,'lib')):
           found=True
           break
        up_one_level = os.path.dirname(install_root)
        if up_one_level == install_root:
+          found=False
           break
-       install_root = up_one_level 
+       install_root = up_one_level
 
     if not found:
        return {'return':1, 'error':'can\'t find root dir of this installation'}
@@ -78,7 +104,6 @@ def setup(i):
     static_lib_name         = file_root_name + file_extensions.get('lib','')
     dynamic_lib_name        = file_root_name + file_extensions.get('dll','')
     env_prefix              = cus['env_prefix']
-    path_lib                = os.path.join(install_root,'lib')
 
     cus['path_lib']                 = path_lib
     cus['path_include']             = os.path.join(install_root,'include')
