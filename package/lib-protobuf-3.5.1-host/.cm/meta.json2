@@ -8,21 +8,21 @@
       "PACKAGE_BUILD_TYPE": "cmake",
       "PACKAGE_CONFIGURE_FLAGS": "-Dprotobuf_BUILD_TESTS=OFF",
       "PACKAGE_CONFIGURE_FLAGS_LINUX": "-DCMAKE_INSTALL_LIBDIR=lib",
-      "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "-DBUILD_SHARED_LIBS=OFF -Dprotobuf_MSVC_STATIC_RUNTIME=OFF",
+      "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "-Dprotobuf_BUILD_SHARED_LIBS=ON",
       "PACKAGE_FLAGS_LINUX": "-fPIC",
-      "PACKAGE_NAME": "v3.2.0.tar.gz",
-      "PACKAGE_NAME1": "v3.2.0.tar",
-      "PACKAGE_NAME2": "v3.2.0",
+      "PACKAGE_NAME": "v3.5.1.tar.gz",
+      "PACKAGE_NAME1": "v3.5.1.tar",
+      "PACKAGE_NAME2": "v3.5.1",
       "PACKAGE_RENAME": "YES",
-      "PACKAGE_SUB_DIR": "protobuf-3.2.0",
-      "PACKAGE_SUB_DIR1": "protobuf-3.2.0/cmake",
+      "PACKAGE_SUB_DIR": "protobuf-3.5.1",
+      "PACKAGE_SUB_DIR1": "protobuf-3.5.1/cmake",
       "PACKAGE_UNGZIP": "YES",
       "PACKAGE_UNTAR": "YES",
       "PACKAGE_UNTAR_SKIP_ERROR_WIN": "YES",
       "PACKAGE_URL": "https://github.com/google/protobuf/archive",
       "PACKAGE_WGET": "YES"
     },
-    "version": "3.2.0"
+    "version": "3.5.1"
   },
   "deps": {
     "cmake": {
@@ -59,8 +59,8 @@
   "tags": [
     "lib",
     "protobuf-host",
-    "v3.2.0",
-    "v3.2",
+    "v3.5.1",
+    "v3.5",
     "v3",
     "channel-stable"
   ],

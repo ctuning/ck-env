@@ -1,3 +1,5 @@
+* 2018.03.08 - added latest version of protobuf + fixed build for windows
+
 * 2018.03.06 - fixed bug in ck virtual env for windows
              - fixed LLVM detection on latest Windows (targets)
              - added cmake packages v3.10.2 for Windows
