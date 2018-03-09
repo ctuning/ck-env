@@ -1,3 +1,5 @@
+* 2018.03.09 - added bazel 0.11.1
+
 * 2018.03.08 - added latest version of protobuf + fixed build for windows
              - added experimental mode to "ck install --reuse_deps" to remember deps through installation of sub-deps
 
