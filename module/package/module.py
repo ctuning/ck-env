@@ -705,8 +705,12 @@ def install(i):
        new_env=rx.get('install_env',{})
        if len(new_env)>0: pr_env.update(new_env)
 
+    compiler_tag = '-'.join([   'compiled-by',
+                                udeps.get('compiler',{}).get('build_dir_name','unknown_compiler'),
+                                udeps.get('compiler',{}).get('ver','unknown_version') ])
+
     # Convert tags to string
-    stags=''
+    stags=compiler_tag
     for q in tags:
         if q!='':
            if stags!='': stags+=','
