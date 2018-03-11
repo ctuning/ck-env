@@ -1,0 +1,13 @@
+diff --git a/scripts/bootstrap/compile.sh b/scripts/bootstrap/compile.sh
+index 494c1a1..068f62a 100755
+--- a/scripts/bootstrap/compile.sh
++++ b/scripts/bootstrap/compile.sh
+@@ -121,7 +121,7 @@ function java_compilation() {
+ 
+   run "${JAVAC}" -classpath "${classpath}" -sourcepath "${sourcepath}" \
+       -d "${output}/classes" -source "$JAVA_VERSION" -target "$JAVA_VERSION" \
+-      -encoding UTF-8 "@${paramfile}"
++      -encoding UTF-8 "@${paramfile}" -J-Xmx500M
+ 
+   log "Extracting helper classes for $name..."
+   for f in ${library_jars} ; do

@@ -100,12 +100,12 @@ def setup(i):
           targets='AArch64'
        else:
           targets='ARM'
-    elif hname=='win':
-       if hbits=='64':
-          targets='X86'
+    elif hbits=='64':
+       targets='X86'
+       if hname=='win':
           cmake_flags='-Thost=x64'
-       else:
-          targets='X86'
+    else:
+       targets='X86'
 
     nie['CK_LLVM_CMAKE_TARGETS']=targets
     nie['CK_LLVM_CMAKE_FLAGS']=cmake_flags
