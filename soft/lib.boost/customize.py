@@ -120,6 +120,16 @@ def setup(i):
        x=str(sver[0])+'.'+str(sver[1])
        env[ep+'_SHORT_VER']=x
 
+    x=''
+    j=0
+    for y in sver:
+        j+=1
+        if x!='': x+='.'
+        x+=str(y)
+        if j==3: break
+    if x!='':
+       env[ep+'_VER']=x
+
     found=False
     lib_path = pi
     include_path = pi

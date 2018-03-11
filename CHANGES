@@ -1,3 +1,7 @@
+* 2018.03.11 - improved wiki listing of soft/packages (added general tags):
+               * https://github.com/ctuning/ck/wiki/Shared-soft-descriptions
+               * https://github.com/ctuning/ck/wiki/Shared-packages
+
 * 2018.03.08 - added latest version of protobuf + fixed build for windows
              - added experimental mode to "ck install --reuse_deps" to remember deps through installation of sub-deps
 

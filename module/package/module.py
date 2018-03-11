@@ -1628,6 +1628,9 @@ def show(i):
            xhos=lm.get('only_for_host_os_tags',[])
            xtos=lm.get('only_for_target_os_tags',[])
 
+           tags=lm.get('tags',[])
+           ytags=','.join(tags)
+
            yhos=''
            ytos=''
 
@@ -1676,7 +1679,8 @@ def show(i):
               ck.out('')
               ck.out('=== '+ln+' ('+ver+') ===')
               ck.out('')
-              ck.out('Host OS tags: <i>'+yhos+'</i>')
+              ck.out('Tags: <i>'+ytags+'</i>')
+              ck.out('<br>Host OS tags: <i>'+yhos+'</i>')
               ck.out('<br>Target OS tags: <i>'+ytos+'</i>')
               if y!='':
                  ck.out('')
