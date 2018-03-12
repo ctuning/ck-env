@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 * 2018.03.12 - renamed fgg.misc to misc (with various productivity functions)
              - added "ck add_key misc" to update keys in meta of selected entries
                (needed to add "dimensions" in description of ReQuEST artifacts)
+             - [LG] added 'update_tags_by_target_os_uoa' section to differentiate
+               between MacOS and "true Linux" (macos-64, linux-64, linux-32)
 
 * 2018.03.11 - improved wiki listing of soft/packages (added general tags):
                * https://github.com/ctuning/ck/wiki/Shared-soft-descriptions

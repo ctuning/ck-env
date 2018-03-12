@@ -1358,6 +1358,8 @@ def resolve(i):
         if tx!='': xtags.append(tx)
         tx=q.get('update_tags_by_target_platform2',{}).get(tplat2,'')
         if tx!='': xtags.append(tx)
+        tx=q.get('update_tags_by_target_os_uoa',{}).get(ytosx,'')       # Ugly, but quick
+        if tx!='': xtags.append(tx)
 
         for tx in xtags:
             if tags!='': tags+=','
