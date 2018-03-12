@@ -1,5 +1,8 @@
 {
   "actions": {
+    "add_key": {
+      "desc": "add key to meta/files of different entries"
+    },
     "merge_dicts": {
       "desc": "merge dictionaries in 2 files"
     },

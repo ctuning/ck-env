@@ -237,3 +237,95 @@ def sort_json_file(i):
     """
 
     return refresh_json(i)
+
+##############################################################################
+# add key to meta/files of different entries
+
+def add_key(i):
+    """
+    Input:  {
+              data            - CID of entries to update (can be wild cards)
+              (tags)          - prune entries by tags
+
+              key             - key in flat format
+              value           - value
+
+              (ignore_update) - ignore update info in entries
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    o=i.get('out','')
+
+    data=i.get('data','')
+    if data=='':
+       return {'return':1, 'error':'"data" is not defined'}
+
+    tags=i.get('tags','')
+
+    key=i.get('key','')
+    if key=='':
+       return {'return':1, 'error':'"key" is not defined'}
+
+    value=i.get('value','')
+    if value=='':
+       return {'return':1, 'error':'"value" is not defined'}
+
+    iu=i.get('ignore_update','')
+
+    # Search entries
+    r=ck.access({'action':'search',
+                 'cid':data,
+                 'tags':tags})
+    if r['return']>0: return r
+    lst=r['lst']
+
+    llst=len(lst)
+
+    if llst>0 and o=='con':
+       ck.out('Updating '+str(llst)+' entries ...')
+       ck.out('')
+
+    # Iterate over entries
+    for l in lst:
+        ruid=l['repo_uid']
+        ruoa=l['repo_uoa']
+        muid=l['module_uid']
+        muoa=l['module_uoa']
+        duid=l['data_uid']
+        duoa=l['data_uoa']
+
+        if o=='con':
+           ck.out('* '+ruoa+':'+muoa+':'+duoa)
+
+        # Load meta
+        r=ck.access({'action':'load',
+                     'repo_uoa':ruid,
+                     'module_uoa':muid,
+                     'data_uoa':duid})
+        if r['return']>0: return r
+        d=r['dict']
+
+        # Updating dict
+        r=ck.set_by_flat_key({'dict':d,
+                              'key':key,
+                              'value':value})
+        if r['return']>0: return r
+
+        # Store meta
+        r=ck.access({'action':'update',
+                     'repo_uoa':ruid,
+                     'module_uoa':muid,
+                     'data_uoa':duid,
+                     'dict':d,
+                     'substitute':'yes',
+                     'ignore_update':iu})
+        if r['return']>0: return r
+
+    return {'return':0}
