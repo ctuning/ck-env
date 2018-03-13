@@ -705,16 +705,14 @@ def install(i):
        new_env=rx.get('install_env',{})
        if len(new_env)>0: pr_env.update(new_env)
 
-    compiler_tag = '-'.join([   'compiled-by',
-                                udeps.get('compiler',{}).get('build_dir_name','unknown_compiler'),
-                                udeps.get('compiler',{}).get('ver','unknown_version') ])
+    # Extract compiler tags from the correct dictionary:
+    compiler_dict           = udeps.get('compiler') or udeps.get('host-compiler',{})
+    compiler_tag            = 'compiled-by-' + compiler_dict.get('build_dir_name','unknown_compiler')
+    compiler_version_tag    = compiler_tag + '-' + compiler_dict.get('ver','unknown_version')
 
-    # Convert tags to string
-    stags=compiler_tag
-    for q in tags:
-        if q!='':
-           if stags!='': stags+=','
-           stags+=q.strip()
+    # Join stripped tags and compiler tags into a CSV string:
+    stripped_tags   = [t.strip() for t in tags if t.strip()]
+    tags_csv        = ','.join( [ compiler_tag, compiler_version_tag ] + stripped_tags )
 
     xprocess=True
     xsetup=True
@@ -732,7 +730,7 @@ def install(i):
           if o=='con':
              ck.out('')
              ck.out('Searching if CK environment for this package already exists using:')
-             ck.out('  * Tags: '+stags)
+             ck.out('  * Tags: '+tags_csv)
              if len(udeps)>0:
                 for q in udeps:
                     v=udeps[q]
@@ -742,7 +740,7 @@ def install(i):
 
           r=ck.access({'action':'search',
                        'module_uoa':cfg['module_deps']['env'],
-                       'tags':stags,
+                       'tags':tags_csv,
                        'search_dict':{'setup':setup}})
           if r['return']>0: return r
           lst=r['lst']
@@ -825,7 +823,7 @@ def install(i):
           # Create dummy env and then set path there
           # TBD - if installation fails, we still have this dummy - need to check what to do ...
           #  can remove: ck rm env:* --tags=tmp
-          xx=stags
+          xx=tags_csv
           if xx!='': xx+=','
           xx+='tmp'
           rx=ck.access({'action':'add',
@@ -1316,7 +1314,7 @@ def install(i):
         'host_os':hos,
         'target_os':tos,
         'target_device_id':tdid,
-        'tags':stags,
+        'tags':tags_csv,
         'customize':cus,
         'features':features,
         'env_new':'yes',

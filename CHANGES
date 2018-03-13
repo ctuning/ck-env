@@ -1,4 +1,5 @@
-<<<<<<< HEAD
+* 2018.03.13 - added compiler_tag without version, for easier filtering. Support both compiler and host-compiler.
+
 * 2018.03.12 - renamed fgg.misc to misc (with various productivity functions)
              - added "ck add_key misc" to update keys in meta of selected entries
                (needed to add "dimensions" in description of ReQuEST artifacts)
