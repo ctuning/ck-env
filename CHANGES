@@ -10,16 +10,28 @@
                * https://github.com/ctuning/ck/wiki/Shared-packages
 
 * 2018.03.09 - added bazel 0.11.1
+             - [LG] added a 'compiled-by-$compiler$-$version$' tags to simplify filtering by compiler
+             - [LG] fixed package:lib-leveldb-1.20 to make make use the selected compiler
 
 * 2018.03.08 - added latest version of protobuf + fixed build for windows
              - added experimental mode to "ck install --reuse_deps" to remember deps through installation of sub-deps
+
+* 2018.03.07 - [LG] generalized package:lib-leveldb-1.20 install script to use variables coming from meta.json as much as possible
+             - [LG] bugfix: library files can be located deeper down the tree and should still be detected correctly
+             - [LG] detecting library's version by parsing symbolic link names (supporting both Linux and MacOSX conventions)
 
 * 2018.03.06 - fixed bug in ck virtual env for windows
              - fixed LLVM detection on latest Windows (targets)
              - added cmake packages v3.10.2 for Windows
              - added package to build LLVM on Linux and Windows
+             - [LG] fixed package:lib-leveldb-1.20 to preserve symbolic links between library files (for future version identification)
+
+* 2018.03.05 - [LG] added a new soft:lib.leveldb entry for detecting previously implicit dependency
+             - [LG] added a new package:lib-leveldb-1.20 entry for installing LevelDB from gitHub
+             - [LG] major compilers to use the file extensions provided by OS
 
 * 2018.03.02 - added possibility to reuse env from installed packages during reply
+             - [LG] delete-and-install-package deletes old incarnation of unZIPped archive before install
 
 * 2018.03.01 - added CK_ENV_LIB_BOOST_LFLAG_REGEX to boost ...
 
@@ -31,9 +43,11 @@
                for "ck vitual env", i.e. ck virtual env:UOA1,UOA2,UOA3
 
 * 2018.02.21 - added CK_LLVM_CONFIG var to LLVM soft desc
+             - [LG] fixed compiler.icc to set correct ICC-specific binary names and paths
 
 * 2018.02.20 - added deps_summary in env module to prepare
                recursive summaries of all resolved deps for reproducibility
+             - [LG] fixed compiler.icc to present the correct 'toolset' var consumed by Boost
 
 * 2018.02.19 - added platform.dsp dummy to be improved later 
 
