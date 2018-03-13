@@ -1,4 +1,5 @@
 {
+  "auto_detect": "yes",
   "customize": {
     "add_include_path": "yes", 
     "env_prefix": "CK_ENV_LIB_LAPACK",
