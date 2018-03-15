@@ -63,7 +63,6 @@ def install(i):
 
               (install_path)      - full path with soft is installed
               (path)              - path with soft is installed (path from the package will be appended)
-              (ask)               - if 'yes', ask path
 
               (skip_process)      - if 'yes', skip archive processing
               (skip_setup)        - if 'yes', skip environment setup
@@ -111,6 +110,7 @@ def install(i):
               (version_to)        - check version up to ... (list of numbers)
 
               (ask)               - if 'yes', ask more questions, otherwise select default actions
+              (ask_version)       - ask for the version of the package the user wants to install
             }
 
     Output: {
@@ -526,51 +526,69 @@ def install(i):
  
            pr_env[kpe]=x
 
-    # Check if has customized script
-    cs=None
-    cso=None # original - always in the current directory of a package!
+    ##########################################################################################
+    #
+    # All of the following:
+    #       * "original" directory of the current entry
+    #       * directory of the entry pointed by 'use_scripts_from_another_entry'
+    #       * directory of the entry pointed by 'use_preprocess_scripts_from_another_entry'
+    # may have a customization python script defined by the name 'custom_script_name'[.py]
+    #
+    # The interface methods that will be optionally called (if the script provides them) are:
+    #       * pre_path()
+    #       * post_deps()
+    #       * setup()
+    #       * post_setup()
+    #
+    # In case both the "original" and the "other" directory contain the customization script,
+    # each of the methods listed above will be attempted:
+    #       * first in the "other" (typically representing the base entry)
+    #       * and then in the "original" (typically representing the derived entry)
+    #
+    # The mechanism seems to be an attempt to perform multiple inheritance of the entries,
+    # both 'use_scripts_from_another_entry' and 'use_preprocess_scripts_from_another_entry'
+    # representing the parents.
+    #
+    ##########################################################################################
+    custom_script_name=cfg.get('custom_script_name','custom')
+    customization_script=None
+    original_customization_script=None # original - always in the current directory of a package!
 
-    csn=cfg.get('custom_script_name','custom')
-
-    ppp=p    # Main scripts
-    ppp1=ppp # Preprocess scripts
+    main_scripts_path=p
+    preprocess_scripts_path=main_scripts_path
 
     # Check if has original custom script
-    rx=ck.load_module_from_path({'path':ppp, 'module_code_name':csn, 'skip_init':'yes'})
+    rx=ck.load_module_from_path({'path':main_scripts_path, 'module_code_name':custom_script_name, 'skip_init':'yes'})
     if rx['return']==0: 
-       cso=rx['code']
+       original_customization_script=rx['code']
 
     x=d.get('use_scripts_from_another_entry',{})
     if len(x)>0:
-       xam=x.get('module_uoa','')
-       if xam=='': xam=work['self_module_uid']
-       xad=x.get('data_uoa','')
        r=ck.access({'action':'find',
-                    'module_uoa':xam,
-                    'data_uoa':xad})
+                    'module_uoa':   x.get('module_uoa', work['self_module_uid']),
+                    'data_uoa':     x.get('data_uoa','')
+                })
        if r['return']>0: return r
-       ppp=r['path']
-       ppp1=ppp # can be changed later via use_preprocess_scripts_from_another_entry
+       main_scripts_path=r['path']
+       preprocess_scripts_path=main_scripts_path # may change later via use_preprocess_scripts_from_another_entry
 
     x=d.get('use_preprocess_scripts_from_another_entry',{})
     if len(x)>0:
-       xam=x.get('module_uoa','')
-       if xam=='': xam=work['self_module_uid']
-       xad=x.get('data_uoa','')
        r=ck.access({'action':'find',
-                    'module_uoa':xam,
-                    'data_uoa':xad})
+                    'module_uoa':   x.get('module_uoa', work['self_module_uid']),
+                    'data_uoa':     x.get('data_uoa','')
+                })
        if r['return']>0: return r
-       ppp1=r['path']
+       preprocess_scripts_path=r['path']
 
     # Check if has custom script
-    if ppp1==ppp and cso!=None:
-       cs=cso
-       cso=None
+    if preprocess_scripts_path==main_scripts_path and original_customization_script:
+       customization_script=original_customization_script
+       original_customization_script=None
     else:
-       rx=ck.load_module_from_path({'path':ppp1, 'module_code_name':csn, 'skip_init':'yes'})
+       rx=ck.load_module_from_path({'path':preprocess_scripts_path, 'module_code_name':custom_script_name, 'skip_init':'yes'})
        if rx['return']==0: 
-          cs=rx['code']
+          customization_script=rx['code']
 
     # Check if need host CPU params
     features={}
@@ -629,7 +647,8 @@ def install(i):
 
     sdeps=''
     if len(udeps)>0:
-       ii={'action':'resolve',
+       env_resolve_action_dict={
+           'action':'resolve',
            'module_uoa':cfg['module_deps']['env'],
            'host_os':hos,
            'target_os':tos,
@@ -641,9 +660,9 @@ def install(i):
            'deps_cache':deps_cache,
            'safe':safe,
            'deps':udeps}
-       if o=='con': ii['out']='con'
+       if o=='con': env_resolve_action_dict['out']='con'
 
-       rx=ck.access(ii)
+       rx=ck.access(env_resolve_action_dict)
        if rx['return']>0: return rx
        sdeps=rx['bat']
        udeps=rx['deps'] # Update deps (add UOA)
@@ -667,7 +686,7 @@ def install(i):
     if rebuild=='yes': pr_env.update(fix_env_for_rebuild)
 
     # Customize installation before installation path is finalized ******************************************************
-    ii={"host_os_uoa":hosx,
+    param_dict_for_pre_path={"host_os_uoa":hosx,
         "host_os_uid":hos,
         "host_os_dict":hosd,
         "target_os_uoa":tosx,
@@ -686,20 +705,18 @@ def install(i):
         "ck_kernel":ck
        }
 
-    if o=='con': ii['interactive']='yes'
-    if i.get('quiet','')=='yes': ii['interactive']=''
+    if o=='con': param_dict_for_pre_path['interactive']='yes'
+    if i.get('quiet','')=='yes': param_dict_for_pre_path['interactive']=''
 
-    if cs!=None and 'pre_path' in dir(cs):
-       # In the new directory
-       rx=cs.pre_path(ii)
+    if customization_script and 'pre_path' in dir(customization_script):
+       rx=customization_script.pre_path(param_dict_for_pre_path)
        if rx['return']>0: return rx
 
        new_env=rx.get('install_env',{})
        if len(new_env)>0: pr_env.update(new_env)
 
-    if cso!=None and 'pre_path' in dir(cso):
-       # In the new directory
-       rx=cso.pre_path(ii)
+    if original_customization_script and 'pre_path' in dir(original_customization_script):
+       rx=original_customization_script.pre_path(param_dict_for_pre_path)
        if rx['return']>0: return rx
 
        new_env=rx.get('install_env',{})
@@ -714,16 +731,11 @@ def install(i):
     stripped_tags   = [t.strip() for t in tags if t.strip()]
     tags_csv        = ','.join( [ compiler_tag, compiler_version_tag ] + stripped_tags )
 
-    xprocess=True
-    xsetup=True
+    xprocess    = i.get('skip_process','')!='yes' or rebuild=='yes' or reinstall=='yes'
 
-    if i.get('skip_process','')=='yes': xprocess=False
-    if i.get('skip_setup','')=='yes' or d.get('skip_setup','')=='yes': xsetup=False
+    xsetup      = i.get('skip_setup','')!='yes' and d.get('skip_setup','')!='yes'
 
-    if rebuild=='yes' or reinstall=='yes': 
-       xprocess=True
-
-    ps=d.get('process_script','')
+    shell_script_name=d.get('process_script','')
     if pi=='':
        # Check if environment already exists to check installation path
        if enduoa=='':
@@ -798,7 +810,7 @@ def install(i):
                    ck.out('')
                    ck.out('It appears that package is already installed or at least file from the package is already found in path: '+fp)
 
-                   if ps!='':
+                   if shell_script_name:
                       ck.out('')
                       rx=ck.inp({'text':'Would you like to overwrite and process it again (y/N)? '})
                       x=rx['string'].strip().lower()
@@ -905,7 +917,7 @@ def install(i):
              if cus.get('no_os_in_suggested_path','')!='yes':
                 if not tosx.endswith(tbits): pix+='-'+tbits
 
-             if o=='con' and (i.get('ask','')=='yes' or cus.get('force_ask_path','')=='yes'):
+             if o=='con' and (ask=='yes' or cus.get('force_ask_path','')=='yes'):
                 ck.out('*** Suggested installation path: '+pix)
                 r=ck.inp({'text':'  Press Enter to use suggested path or input new installation path '+pie+': '})
                 pi=r['string'].strip()
@@ -963,7 +975,7 @@ def install(i):
 
     sdeps=''
     if len(udeps)>0:
-       ii={'action':'resolve',
+       env_resolve_action_dict={'action':'resolve',
            'module_uoa':cfg['module_deps']['env'],
            'host_os':hos,
            'target_os':tos,
@@ -974,9 +986,9 @@ def install(i):
            'deps_cache':deps_cache,
            'safe':safe,
            'deps':udeps}
-       if o=='con': ii['out']='con'
+       if o=='con': env_resolve_action_dict['out']='con'
 
-       rx=ck.access(ii)
+       rx=ck.access(env_resolve_action_dict)
        if rx['return']>0: return rx
        sdeps=rx['bat']
 
@@ -986,7 +998,7 @@ def install(i):
        ck.out('')
 
     # Customize installation based on resolved dependencies *************************************************************
-    ii={"host_os_uoa":hosx,
+    param_dict_for_post_deps={"host_os_uoa":hosx,
         "host_os_uid":hos,
         "host_os_dict":hosd,
         "target_os_uoa":tosx,
@@ -1004,18 +1016,18 @@ def install(i):
         "deps":udeps
        }
 
-    if o=='con': ii['interactive']='yes'
-    if i.get('quiet','')=='yes': ii['interactive']=''
+    if o=='con': param_dict_for_post_deps['interactive']='yes'
+    if i.get('quiet','')=='yes': param_dict_for_post_deps['interactive']=''
 
-    if cs!=None and 'post_deps' in dir(cs):
-       rx=cs.post_deps(ii)
+    if customization_script and 'post_deps' in dir(customization_script):
+       rx=customization_script.post_deps(param_dict_for_post_deps)
        if rx['return']>0: return rx
 
        new_env=rx.get('install_env',{})
        if len(new_env)>0: pr_env.update(new_env)
 
-    if cso!=None and 'post_deps' in dir(cso):
-       rx=cso.post_deps(ii)
+    if original_customization_script and 'post_deps' in dir(original_customization_script):
+       rx=original_customization_script.post_deps(param_dict_for_post_deps)
        if rx['return']>0: return rx
 
        new_env=rx.get('install_env',{})
@@ -1024,12 +1036,12 @@ def install(i):
     soft_cfg={}
 
     # Check if continue processing
-    if (ps!='' or (cs!=None and 'setup' in dir(cs))) and xprocess:
+    if (shell_script_name or (customization_script and 'setup' in dir(customization_script))) and xprocess:
        # start bat
-       sb=hosd.get('batch_prefix','')+'\n'
+       shell_wrapper_contents=hosd.get('batch_prefix','')+'\n'
 
        if host_add_path_string!='':
-          sb+=host_add_path_string+'\n\n'
+          shell_wrapper_contents+=host_add_path_string+'\n\n'
 
        # Check if extra params to pass as environment
        param=i.get('param',None)
@@ -1042,10 +1054,10 @@ def install(i):
               params[k[1:]]=i[k]
 
        if param!=None:
-          sb+='\n'
+          shell_wrapper_contents+='\n'
           xs=''
           if param.find(' ')>=0 and eifs!='': xs=eifs
-          sb+=eset+' CK_PARAM='+xs+param+xs+'\n'
+          shell_wrapper_contents+=eset+' CK_PARAM='+xs+param+xs+'\n'
 
        if len(params)>0:
           for q in params:
@@ -1053,9 +1065,9 @@ def install(i):
               if v!=None:
                  xs=''
                  if v.find(' ')>=0 and eifs!='': xs=eifs
-                 sb+=eset+' '+q+'='+xs+v+xs+'\n'
+                 shell_wrapper_contents+=eset+' '+q+'='+xs+v+xs+'\n'
 
-       sb+='\n'
+       shell_wrapper_contents+='\n'
 
        # Check installation path
        if pi=='' and cus.get('skip_path','')!='yes':
@@ -1129,7 +1141,7 @@ def install(i):
        # Check if need to use scripts from another entry
        if cont:
           # Customize main installation
-          ii={"host_os_uoa":hosx,
+          param_dict_for_setup={"host_os_uoa":hosx,
               "host_os_uid":hos,
               "host_os_dict":hosd,
               "target_os_uoa":tosx,
@@ -1145,59 +1157,57 @@ def install(i):
               "customize":cus,
               "self_cfg":cfg,
               "version":ver,
-              "path":ppp,
+              "path":main_scripts_path,
               "path_original_package":p,
-              "script_path":ppp1,
+              "script_path":preprocess_scripts_path,
               "out":oo,
               "install_path":pi
              }
 
-          if o=='con': ii['interactive']='yes'
-          if i.get('quiet','')=='yes': ii['interactive']=''
+          if o=='con': param_dict_for_setup['interactive']='yes'
+          if i.get('quiet','')=='yes': param_dict_for_setup['interactive']=''
 
-          iic=copy.deepcopy(ii)
+          param_dict_for_post_setup=copy.deepcopy(param_dict_for_setup)
 
-          iic['ck_kernel']=ck
-          ii['ck_kernel']=ck
+          param_dict_for_post_setup['ck_kernel']=ck
+          param_dict_for_setup['ck_kernel']=ck
 
-          if cs!=None and 'setup' in dir(cs):
-             rx=cs.setup(ii)
+          if customization_script and 'setup' in dir(customization_script):
+             rx=customization_script.setup(param_dict_for_setup)
              if rx['return']>0: return rx
 
              soft_cfg=rx.get('soft_cfg',{})
 
              # Update install env from customized script (if needed)
              new_env=rx.get('install_env',{})
-             if len(new_env)>0:
-                pr_env.update(new_env)
+             if len(new_env)>0: pr_env.update(new_env)
 
-          if cso!=None and 'setup' in dir(cso):
-             rx=cso.setup(ii)
+          if original_customization_script and 'setup' in dir(original_customization_script):
+             rx=original_customization_script.setup(param_dict_for_setup)
              if rx['return']>0: return rx
 
              # Update install env from customized script (if needed)
              new_env=rx.get('install_env',{})
-             if len(new_env)>0:
-                pr_env.update(new_env)
+             if len(new_env)>0: pr_env.update(new_env)
 
           # Prepare process script
-          if ps!='':
-             ps+=sext
-             px=os.path.join(ppp,ps)
+          if shell_script_name:
+             shell_script_name+=sext
+             shell_script_full_path=os.path.join(main_scripts_path,shell_script_name)
 
-             if not os.path.isfile(px):
-                return {'return':1, 'error':'processing script '+ps+' is not found'}
+             if not os.path.isfile(shell_script_full_path):
+                return {'return':1, 'error':'processing script '+shell_script_name+' is not found'}
 
              # Add deps if needed before running
              if sdeps!='':
-                sb+=sdeps
+                shell_wrapper_contents+=sdeps
 
              # Add compiler dep again, if there
              for k in sorted(udeps, key=lambda v: udeps[v].get('sort',0)):
                  if 'compiler' in k:
                     x=udeps[k].get('bat','').strip()
-                    if x!='' and not sb.endswith(x):
-                       sb+='\n'+x+' 1\n\n'
+                    if x!='' and not shell_wrapper_contents.endswith(x):
+                       shell_wrapper_contents+='\n'+x+' 1\n\n'
 
              # Add misc environment (prepared above)
              for q in pr_env:
@@ -1207,12 +1217,12 @@ def install(i):
 
                  if qq.find(' ')>0:
                     qq=eifs+qq+eifs
-                 sb+=eset+' '+q+'='+qq+'\n'
+                 shell_wrapper_contents+=eset+' '+q+'='+qq+'\n'
 
              # If install path has space, add quotes for some OS ...
              xs=''
              if pi.find(' ')>=0 and eifs!='': xs=eifs
-             sb+=eset+' INSTALL_DIR='+xs+pi+xs+'\n'
+             shell_wrapper_contents+=eset+' INSTALL_DIR='+xs+pi+xs+'\n'
 
              # If Windows, add MingW path
              if wb=='yes':
@@ -1221,24 +1231,24 @@ def install(i):
                               'path':pi})
                 if rm['return']>0: return rm
                 ming_pi=rm['path']
-                sb+=eset+' INSTALL_DIR_MINGW='+xs+ming_pi+xs+'\n'
+                shell_wrapper_contents+=eset+' INSTALL_DIR_MINGW='+xs+ming_pi+xs+'\n'
 
              xs=''
              if p.find(' ')>=0 and eifs!='': xs=eifs
-             sb+=eset+' PACKAGE_DIR='+xs+ppp+xs+'\n'
+             shell_wrapper_contents+=eset+' PACKAGE_DIR='+xs+main_scripts_path+xs+'\n'
 
              # If Windows, add MingW path
              if wb=='yes':
                 rm=ck.access({'action':'convert_to_cygwin_path',
                               'module_uoa':cfg['module_deps']['os'],
-                              'path':ppp})
+                              'path':main_scripts_path})
                 if rm['return']>0: return rm
                 ming_ppp=rm['path']
-                sb+=eset+' PACKAGE_DIR_MINGW='+xs+ming_ppp+xs+'\n'
+                shell_wrapper_contents+=eset+' PACKAGE_DIR_MINGW='+xs+ming_ppp+xs+'\n'
 
              xs=''
              if p.find(' ')>=0 and eifs!='': xs=eifs
-             sb+=eset+' ORIGINAL_PACKAGE_DIR='+xs+p+xs+'\n'
+             shell_wrapper_contents+=eset+' ORIGINAL_PACKAGE_DIR='+xs+p+xs+'\n'
 
              # If Windows, add MingW path
              if wb=='yes':
@@ -1247,31 +1257,31 @@ def install(i):
                               'path':p})
                 if rm['return']>0: return rm
                 ming_p=rm['path']
-                sb+=eset+' ORIGINAL_PACKAGE_DIR_MINGW='+xs+ming_p+xs+'\n'
+                shell_wrapper_contents+=eset+' ORIGINAL_PACKAGE_DIR_MINGW='+xs+ming_p+xs+'\n'
 
-             sb+='\n'
+             shell_wrapper_contents+='\n'
 
              xs=''
              if p.find(' ')>=0 and eifsc!='': xs=eifsc
-             sb+=scall+' '+xs+px+xs+'\n\n'
+             shell_wrapper_contents+=scall+' '+xs+shell_script_full_path+xs+'\n\n'
 
              if wb=='yes' and d.get('check_exit_status','')!='yes':
-                sb+='exit /b 0\n'
+                shell_wrapper_contents+='exit /b 0\n'
 
              rs=i.get('record_script','')
 
              # Generate tmp file (or use record script)
-             if rs!='':
-                fn=rs
-                if fn==os.path.basename(fn):
-                   fn=os.path.join(os.getcwd(),fn)
+             if rs:
+                shell_wrapper_name=rs
+                if shell_wrapper_name==os.path.basename(shell_wrapper_name):
+                   shell_wrapper_name=os.path.join(os.getcwd(),shell_wrapper_name)
              else:
                 rx=ck.gen_tmp_file({'prefix':'tmp-ck-', 'suffix':sext})
                 if rx['return']>0: return rx
-                fn=rx['file_name']
+                shell_wrapper_name=rx['file_name']
 
              # Write to tmp file
-             rx=ck.save_text_file({'text_file':fn, 'string':sb})
+             rx=ck.save_text_file({'text_file':shell_wrapper_name, 'string':shell_wrapper_contents})
              if rx['return']>0: return rx
 
              # Go to installation path
@@ -1282,32 +1292,32 @@ def install(i):
              # Check if need to set executable flags
              se=hosd.get('set_executable','')
              if se!='':
-                x=se+' '+fn
+                x=se+' '+shell_wrapper_name
                 rx=os.system(x)
 
              # Run script
-             rx=os.system(fn)
+             rx=os.system(shell_wrapper_name)
 
              # Remove script (if tmp)
-             if rs=='' and os.path.isfile(fn): 
-                os.remove(fn)
+             if rs=='' and os.path.isfile(shell_wrapper_name):
+                os.remove(shell_wrapper_name)
 
              if rx>0: 
                 return {'return':1, 'error':'package installation failed'}
 
           # Check if has post-setup Python script
-          iic['new_env']=pr_env
+          param_dict_for_post_setup['new_env']=pr_env
 
-          if cs!=None and 'post_setup' in dir(cs):
-             rx=cs.post_setup(iic)
+          if customization_script and 'post_setup' in dir(customization_script):
+             rx=customization_script.post_setup(param_dict_for_post_setup)
              if rx['return']>0: return rx
 
-          if cso!=None and 'post_setup' in dir(cso):
-             rx=cso.post_setup(iic)
+          if original_customization_script and 'post_setup' in dir(original_customization_script):
+             rx=original_customization_script.post_setup(param_dict_for_post_setup)
              if rx['return']>0: return rx
 
     # Preparing soft registration
-    ii={'action':'setup',
+    soft_registration_action_dict={'action':'setup',
         'module_uoa':cfg['module_deps']['soft'],
         'data_uoa':suoa,
         'soft_name':dname,
@@ -1328,26 +1338,26 @@ def install(i):
     if enduoa=='': nw='yes'
 
     if cus.get('collect_device_info','')!='yes':
-        ii['skip_device_info_collection']='yes'
+        soft_registration_action_dict['skip_device_info_collection']='yes'
 
     if d.get('remove_deps','')=='yes':
-       ii['deps_copy']=udeps
+       soft_registration_action_dict['deps_copy']=udeps
     else:
-       ii['deps']=udeps
+       soft_registration_action_dict['deps']=udeps
 
     if d.get('no_install_path','')!='yes':
        if fp!='':
-          ii['full_path']=fp
-          ii['full_path_install']=pi
+          soft_registration_action_dict['full_path']=fp
+          soft_registration_action_dict['full_path_install']=pi
        elif pi!='':              # mainly for compatibility with previous CK soft manager
-          ii['install_path']=pi
+          soft_registration_action_dict['install_path']=pi
 
-    if duid!='': ii['package_uoa']=duid
+    if duid!='': soft_registration_action_dict['package_uoa']=duid
 
     if len(soft_cfg)>0:
-       ii.update(soft_cfg)
+       soft_registration_action_dict.update(soft_cfg)
 
-    iii=copy.deepcopy(ii)
+    ck_install_file_contents=copy.deepcopy(soft_registration_action_dict)
 
     # Check if need to setup environment
     if xsetup:
@@ -1373,9 +1383,9 @@ def install(i):
              ck.out('  (full path = '+fp+')')
              ck.out('')
 
-          if o=='con': ii['out']='con'
+          if o=='con': soft_registration_action_dict['out']='con'
 
-          rx=ck.access(ii)
+          rx=ck.access(soft_registration_action_dict)
           if rx['return']>0: return rx
 
           enduoa=rx['env_data_uoa']
@@ -1383,15 +1393,15 @@ def install(i):
 
     # Recording cus dict to install dir to be able to rebuild env later if needed 
     if pi!='':
-       pic=os.path.join(pi, cfg['ck_install_file'])
+       ck_install_file_path=os.path.join(pi, cfg['ck_install_file'])
 
        if o=='con':
           ck.out('')
-          ck.out('Recording CK configuration to '+pic+' ...')
+          ck.out('Recording CK configuration to '+ck_install_file_path+' ...')
 
-       iii['env_data_uoa']=enduid
+       ck_install_file_contents['env_data_uoa']=enduid
 
-       rx=ck.save_json_to_file({'json_file':pic, 'dict':iii, 'sort_keys':'yes'})
+       rx=ck.save_json_to_file({'json_file':ck_install_file_path, 'dict':ck_install_file_contents, 'sort_keys':'yes'})
        if rx['return']>0: return rx
 
     if o=='con' and pi!='':
@@ -1528,14 +1538,13 @@ def rebuild_deps(i):
              ntos=hos
 
         # Attempt to install package by tags
-        ii={'action':'install',
+        r=ck.access({'action':'install',
             'module_uoa':work['self_module_uid'],
             'tags':tags,
             'host_os':hos,
             'target_os':ntos,
             'device_id':tdid,
-            'out':oo}
-        r=ck.access(ii)
+            'out':oo})
         if r['return']>0: 
            ck.out('')
            ck.out('Package installation failed: '+r['error']+'!')
@@ -1571,13 +1580,13 @@ def show(i):
     if i.get('repo_uoa','')!='': unique_repo=True
 
     import copy
-    ii=copy.deepcopy(i)
+    list_action_dict=copy.deepcopy(i)
 
-    ii['out']=''
-    ii['action']='list'
-    ii['add_meta']='yes'
+    list_action_dict['out']=''
+    list_action_dict['action']='list'
+    list_action_dict['add_meta']='yes'
 
-    rx=ck.access(ii)
+    rx=ck.access(list_action_dict)
     if rx['return']>0: return rx
 
     ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
