@@ -708,19 +708,11 @@ def install(i):
     if o=='con': param_dict_for_pre_path['interactive']='yes'
     if i.get('quiet','')=='yes': param_dict_for_pre_path['interactive']=''
 
-    if customization_script and 'pre_path' in dir(customization_script):
-       rx=customization_script.pre_path(param_dict_for_pre_path)
-       if rx['return']>0: return rx
+    rx = internal_run_if_present(customization_script, 'pre_path', param_dict_for_pre_path, pr_env)
+    if rx['return']>0: return rx
 
-       new_env=rx.get('install_env',{})
-       if len(new_env)>0: pr_env.update(new_env)
-
-    if original_customization_script and 'pre_path' in dir(original_customization_script):
-       rx=original_customization_script.pre_path(param_dict_for_pre_path)
-       if rx['return']>0: return rx
-
-       new_env=rx.get('install_env',{})
-       if len(new_env)>0: pr_env.update(new_env)
+    rx = internal_run_if_present(original_customization_script, 'pre_path', param_dict_for_pre_path, pr_env)
+    if rx['return']>0: return rx
 
     # Extract compiler tags from the correct dictionary:
     compiler_dict           = udeps.get('compiler') or udeps.get('host-compiler',{})
@@ -1019,19 +1011,11 @@ def install(i):
     if o=='con': param_dict_for_post_deps['interactive']='yes'
     if i.get('quiet','')=='yes': param_dict_for_post_deps['interactive']=''
 
-    if customization_script and 'post_deps' in dir(customization_script):
-       rx=customization_script.post_deps(param_dict_for_post_deps)
-       if rx['return']>0: return rx
+    rx = internal_run_if_present(customization_script, 'post_deps', param_dict_for_post_deps, pr_env)
+    if rx['return']>0: return rx
 
-       new_env=rx.get('install_env',{})
-       if len(new_env)>0: pr_env.update(new_env)
-
-    if original_customization_script and 'post_deps' in dir(original_customization_script):
-       rx=original_customization_script.post_deps(param_dict_for_post_deps)
-       if rx['return']>0: return rx
-
-       new_env=rx.get('install_env',{})
-       if len(new_env)>0: pr_env.update(new_env)
+    rx = internal_run_if_present(original_customization_script, 'post_deps', param_dict_for_post_deps, pr_env)
+    if rx['return']>0: return rx
 
     soft_cfg={}
 
@@ -1172,23 +1156,13 @@ def install(i):
           param_dict_for_post_setup['ck_kernel']=ck
           param_dict_for_setup['ck_kernel']=ck
 
-          if customization_script and 'setup' in dir(customization_script):
-             rx=customization_script.setup(param_dict_for_setup)
-             if rx['return']>0: return rx
+          rx = internal_run_if_present(customization_script, 'setup', param_dict_for_setup, pr_env)
+          if rx['return']>0: return rx
+          else:
+                soft_cfg=rx.get('soft_cfg',{})
 
-             soft_cfg=rx.get('soft_cfg',{})
-
-             # Update install env from customized script (if needed)
-             new_env=rx.get('install_env',{})
-             if len(new_env)>0: pr_env.update(new_env)
-
-          if original_customization_script and 'setup' in dir(original_customization_script):
-             rx=original_customization_script.setup(param_dict_for_setup)
-             if rx['return']>0: return rx
-
-             # Update install env from customized script (if needed)
-             new_env=rx.get('install_env',{})
-             if len(new_env)>0: pr_env.update(new_env)
+          rx = internal_run_if_present(original_customization_script, 'setup', param_dict_for_setup, pr_env)
+          if rx['return']>0: return rx
 
           # Prepare process script
           if shell_script_name:
@@ -1308,13 +1282,11 @@ def install(i):
           # Check if has post-setup Python script
           param_dict_for_post_setup['new_env']=pr_env
 
-          if customization_script and 'post_setup' in dir(customization_script):
-             rx=customization_script.post_setup(param_dict_for_post_setup)
-             if rx['return']>0: return rx
+          rx = internal_run_if_present(customization_script, 'post_setup', param_dict_for_post_setup, {})
+          if rx['return']>0: return rx
 
-          if original_customization_script and 'post_setup' in dir(original_customization_script):
-             rx=original_customization_script.post_setup(param_dict_for_post_setup)
-             if rx['return']>0: return rx
+          rx = internal_run_if_present(original_customization_script, 'post_setup', param_dict_for_post_setup, {})
+          if rx['return']>0: return rx
 
     # Preparing soft registration
     soft_registration_action_dict={'action':'setup',
@@ -1414,6 +1386,20 @@ def install(i):
        ck.out('Installation time: '+str(elapsed_time)+' sec.')
 
     return {'return':0, 'elapsed_time':elapsed_time, 'env_data_uoa':enduoa, 'env_data_uid':enduid}
+
+##################################################################################
+# internal function: run a method of a given customization script with param_dict
+#                    and top up the topup_from_install_env dictionary from install_env
+
+def internal_run_if_present(script, method_name, param_dict, topup_from_install_env):
+    if script and method_name in dir(script):
+        method = getattr(script, method_name)
+        rx = method( param_dict )
+        if rx.get('return')==0:
+            topup_from_install_env.update( rx.get('install_env',{}) )
+    else:
+        rx = { 'return' : 0 };
+    return rx
 
 ##############################################################################
 # setup package (only environment)
