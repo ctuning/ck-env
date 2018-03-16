@@ -1,3 +1,5 @@
+* 2018.03.16 - added os:android25-arm64
+
 * 2018.03.13 - added compiler_tag without version, for easier filtering. Support both compiler and host-compiler.
 
 * 2018.03.12 - renamed fgg.misc to misc (with various productivity functions)
