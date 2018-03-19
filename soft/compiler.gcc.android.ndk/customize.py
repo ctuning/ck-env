@@ -519,6 +519,24 @@ def setup(i):
     x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
     if sysroot not in x:
        x=sysroot+' '+x
+
+    # Starting from NDK v16 there is no more usr/include path under platform dir,
+    # so we have to add it as explicit -Isysroot/usr/include under ndk root dir.
+    include_dir = os.path.join(psysroot, 'usr', 'include')
+    if not os.path.isdir(include_dir):
+        include_dir = os.path.join(pi, 'sysroot', 'usr', 'include')
+        x += ' -I' + include_dir
+        asm_include_dirs = {
+            'arm64': 'aarch64-linux-android',
+            'arm': 'arm-linux-androideabi',
+            'x86_64': 'x86_64-linux-android',
+            'x86': 'i686-linux-android',
+            'mips': 'mipsel-linux-android',
+            'mips64': 'mips64el-linux-android',
+        }
+        if arch in asm_include_dirs:
+            x += ' -I' + os.path.join(include_dir, asm_include_dirs[arch])
+
     env['CK_COMPILER_FLAGS_OBLIGATORY']=x
 
     if ef!='':
