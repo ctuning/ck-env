@@ -714,14 +714,20 @@ def install(i):
     rx = internal_run_if_present(original_customization_script, 'pre_path', param_dict_for_pre_path, pr_env)
     if rx['return']>0: return rx
 
+
     # Extract compiler tags from the correct dictionary:
     compiler_dict           = udeps.get('compiler') or udeps.get('host-compiler',{})
-    compiler_tag            = 'compiled-by-' + compiler_dict.get('build_dir_name','unknown_compiler')
-    compiler_version_tag    = compiler_tag + '-' + compiler_dict.get('ver','unknown_version')
+    if len(compiler_dict):
+        compiler_tags       = [ 'compiled-by-' + compiler_dict.get('build_dir_name','unknown_compiler') ]
+        compiler_version    = compiler_dict.get('ver')
+        if compiler_version:
+            compiler_tags.append( compiler_tags[0] + '-' + compiler_version )
+    else:
+        compiler_tags           = []
 
     # Join stripped tags and compiler tags into a CSV string:
     stripped_tags   = [t.strip() for t in tags if t.strip()]
-    tags_csv        = ','.join( [ compiler_tag, compiler_version_tag ] + stripped_tags )
+    tags_csv        = ','.join( compiler_tags + stripped_tags )
 
     xprocess    = i.get('skip_process','')!='yes' or rebuild=='yes' or reinstall=='yes'
 
