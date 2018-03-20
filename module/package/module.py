@@ -912,7 +912,7 @@ def install(i):
              nm += cus.get('extra_suggested_path','')
 
              # Then another extra path, if non-empty
-            nm += ep
+             nm += ep
 
              # Finally OS
              if cus.get('no_os_in_suggested_path','')!='yes':
