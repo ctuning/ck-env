@@ -1967,6 +1967,8 @@ def clean(i):
         duoa=q['data_uoa']
 
         d=q['meta']
+        info_data_name  = q.get('info',{}).get('data_name','UNKNOWN')
+        tags_csv        = ','.join(d.get('tags',[]))
 
         cus=d.get('customize',{})
         fp=cus.get('full_path','')
@@ -1994,7 +1996,7 @@ def clean(i):
         if force=='yes':
            s='yes'
         elif o=='con':
-           r=ck.inp({'text':'Are you sure to delete'+x+' CK entry env:"'+duoa+'" (y/N): '})
+           r=ck.inp({'text':'Are you sure to delete'+x+' CK entry env:"'+duoa+'" - a '+info_data_name+' with tags: '+tags_csv+' (y/N): '})
            if r['return']>0: return r
            s=r['string'].strip().lower()
            if s=='y': s='yes'
