@@ -76,7 +76,7 @@ def install(i):
               (preset_deps)       - dict with {"KEY":"UOA"} to preset dependencies
 
               (param)             - string converted into CK_PARAM and passed to processing script
-              (params)            - dict, keys are onverted into <KEY>=<VALUE> and passed to processing script
+              (params)            - dict, keys are converted into <KEY>=<VALUE> and passed to processing script
 
               (env)               - add environment vars
               (env.{KEY})         - set env[KEY]=value (user-friendly interface via CMD)
@@ -1759,7 +1759,7 @@ def prepare_install_path(i):
 def distribute(i):
     """
     Input:  {
-              (data_uoa) - pacakge UOA
+              (data_uoa) - package UOA
 
               (ext)      - output package ext (ck-distro-{ext}).zip  If not specified, UID is generated.
                 or
