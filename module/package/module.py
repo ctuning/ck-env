@@ -440,9 +440,7 @@ def install(i):
     cus=d.get('customize',{})
     env=d.get('env',{})
 
-    ev=i.get('extra_version','')
-    if ev=='':
-       ev=cus.get('extra_version','')
+    extra_version=i.get('extra_version', cus.get('extra_version','') )
 
     udeps=d.get('deps',{})
 
@@ -467,7 +465,7 @@ def install(i):
 
     dname=d.get('package_name','')
 
-    ver=cus.get('version','')+ev
+    ver=cus.get('version','')+extra_version
     extra_dir=cus.get('extra_dir','')
 
     # This environment will be passed to process scripts (if any)
@@ -714,20 +712,32 @@ def install(i):
     rx = internal_run_if_present(original_customization_script, 'pre_path', param_dict_for_pre_path, pr_env)
     if rx['return']>0: return rx
 
+    dep_tags = []
 
-    # Extract compiler tags from the correct dictionary:
-    compiler_dict           = udeps.get('compiler') or udeps.get('host-compiler',{})
-    if len(compiler_dict):
-        compiler_tags       = [ 'compiled-by-' + compiler_dict.get('build_dir_name','unknown_compiler') ]
-        compiler_version    = compiler_dict.get('ver')
-        if compiler_version:
-            compiler_tags.append( compiler_tags[0] + '-' + compiler_version )
-    else:
-        compiler_tags           = []
+    # Iterate through all dependencies and check which tags we need to create from them,
+    #   preserving the desired sort order:
+    #
+    for dep_name, dep_dict in sorted(udeps.items(), key=lambda pair: pair[1].get('sort',0)) :
+        if dep_name in ('compiler', 'host-compiler') :
+            dep_tag_prefix  = 'compiled-by-'
+        elif dep_dict.get('add_to_tags', dep_dict.get('add_to_path','') ):
+            dep_tag_prefix = 'needs-'
+        else:
+            dep_tag_prefix = ''
+
+        # Empty prefix means we don't want this dependency to appear in tags:
+        #
+        if dep_tag_prefix:
+            dep_tag     = dep_tag_prefix + dep_dict.get('build_dir_name','unknown_' + dep_name)
+            dep_tags.append( dep_tag )
+
+            dep_version = dep_dict.get('ver')
+            if dep_version:
+                dep_tags.append( dep_tag + '-' + dep_version )
 
     # Join stripped tags and compiler tags into a CSV string:
     stripped_tags   = [t.strip() for t in tags if t.strip()]
-    tags_csv        = ','.join( compiler_tags + stripped_tags )
+    tags_csv        = ','.join( dep_tags + stripped_tags )
 
     xprocess    = i.get('skip_process','')!='yes' or rebuild=='yes' or reinstall=='yes'
 
@@ -1309,7 +1319,7 @@ def install(i):
         'env_repo_uoa':enruoa,
         'env_data_uoa':enduoa,
         'env':env,
-        'extra_version':ev
+        'extra_version':extra_version
        }
 
     nw='no'
