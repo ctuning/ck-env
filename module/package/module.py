@@ -908,14 +908,11 @@ def install(i):
                     if vr!='':
                        nm+='-'+vr
 
-             # Tnen some extra path, if needed
-             esp=cus.get('extra_suggested_path','')
-             if esp!='':
-                nm+=esp
+             # Then some extra path, if non-empty
+             nm += cus.get('extra_suggested_path','')
 
-             # Tnen some extra path, if needed
-             if ep!='':
-                nm+=esp
+             # Then another extra path, if non-empty
+            nm += ep
 
              # Finally OS
              if cus.get('no_os_in_suggested_path','')!='yes':
@@ -1635,8 +1632,6 @@ def show(i):
            cus=lm.get('customize',{})
 
            ver=cus.get('version','')
-
-           ep=cus.get('env_prefix','')
 
            xhos=lm.get('only_for_host_os_tags',[])
            xtos=lm.get('only_for_target_os_tags',[])
