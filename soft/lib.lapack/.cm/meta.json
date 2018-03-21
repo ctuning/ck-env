@@ -10,7 +10,7 @@
       "win": 4
     },
     "soft_file": {
-      "linux": "liblapack.a",
+      "linux": "liblapack$#file_ext_dll#$",
       "win": "liblapack.lib"
     }
   }, 
