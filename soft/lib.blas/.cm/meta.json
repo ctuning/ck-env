@@ -4,6 +4,7 @@
     "check_that_exists": "yes", 
     "ck_version": 10, 
     "env_prefix": "CK_ENV_LIB_BLAS", 
+    "file_root_name": "libblas",
     "include_file": "cblas.h", 
     "limit_recursion_dir_search": {
       "linux": 3

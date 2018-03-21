@@ -5,6 +5,7 @@
 # See CK COPYRIGHT.txt for copyright details
 #
 # Developer: Flavio Vella, flavio@dividiti.com
+# OSX port:  Leo Gordon, leo@dividiti.com
 #
 
 import os
@@ -16,10 +17,10 @@ def version_cmd(i):
 
     ck=i['ck_kernel']
 
-    fp=i['full_path']
-    fn=os.path.basename(fp)
+    full_path=i['full_path']
+    fn=os.path.basename(full_path)
 
-    rfp=os.path.realpath(fp)
+    rfp=os.path.realpath(full_path)
     rfn=os.path.basename(rfp)
 
     ver=''
@@ -75,94 +76,80 @@ def setup(i):
 
     # Get variables
     ck=i['ck_kernel']
-    s=''
-
-    iv=i.get('interactive','')
-
     cus=i.get('customize',{})
-    fp=cus.get('full_path','')
+    full_path=cus.get('full_path','')
 
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
     # Check platform
-    hplat=hosd.get('ck_name','')
     tplat=hosd.get('ck_name','')
-
-    hproc=hosd.get('processor','')
-    tproc=tosd.get('processor','')
-
-    remote=tosd.get('remote','')
-    tbits=tosd.get('bits','')
 
     env=i['env']
 
-    fi=cus.get('include_file','')
-
-    pi=fp
+    # Looking for the parent of the 'lib'/'lib64' dir:
+    #
+    path_lib        = os.path.dirname(full_path)
+    lib_parent_dir  = path_lib
     found=False
     while True:
-       if os.path.isdir(os.path.join(pi,'lib')) or os.path.isdir(os.path.join(pi,'lib64')):
+       if os.path.isdir(os.path.join(lib_parent_dir,'lib')) or os.path.isdir(os.path.join(lib_parent_dir,'lib64')):
           found=True
           break
-       pix=os.path.dirname(pi)
-       if pix==pi:
+       up_one_level=os.path.dirname(lib_parent_dir)
+       if up_one_level==lib_parent_dir:
           break
-       pi=pix
+       lib_parent_dir=up_one_level
 
     if not found:
        return {'return':1, 'error':'can\'t find root dir of the libBLAS installation'}
 
-    lb=os.path.basename(fp)
-    lbs=lb
-    if lbs.endswith('.so'):
-       lbs=lbs[:-3]+'.a'
 
-    if lb.endswith('.a'):
-       lb=lb[:-2]
+    # Looking for the parent of the 'include' dir that contains our include_file:
+    #
+    pl0 = os.path.dirname( os.path.realpath(full_path) )
+    pl1 = os.path.dirname( pl0 )
+    pl2 = os.path.dirname( pl1 )
 
-    if not lb.endswith('.dll') and not lb.endswith('.so'):
-       lb+='.so'
+    include_file_name=cus.get('include_file','')
+    if os.path.isfile(os.path.join(pl0,'Headers',include_file_name)):
+        include_parent_dir   = pl0
+        include_sub_dir      = 'Headers'
+    elif os.path.isfile(os.path.join(pl1,'include',include_file_name)):
+        include_parent_dir   = pl1
+        include_sub_dir      = 'include'
+    elif os.path.isfile(os.path.join(pl2,'include',include_file_name)):
+        include_parent_dir   = pl2
+        include_sub_dir      = 'include'
+    else:
+        return {'return':1, 'error':'can\'t find include file'}
 
-    pl=os.path.dirname(fp)
-    cus['path_lib']=pl
+    file_extensions     = hosd.get('file_extensions',{})    # not clear whether hosd or tosd should be used in soft detection
+    file_root_name      = cus['file_root_name']
+    cus['path_lib']     = path_lib
+    cus['static_lib']   = file_root_name + file_extensions.get('lib','')
+    cus['dynamic_lib']  = file_root_name + file_extensions.get('dll','')
+    cus['path_include'] = os.path.join(include_parent_dir, include_sub_dir)
+    cus['include_name'] = include_file_name
 
-    pl1=os.path.dirname(pl)
-    pl2=os.path.dirname(pl1)
-
-    pi=''
-    if os.path.isfile(os.path.join(pl1,'include',fi)):
-       pi=pl1
-    elif os.path.isfile(os.path.join(pl2,'include',fi)):
-       pi=pl2
-
-    if pi=='':
-       return {'return':1, 'error':'can\'t find include file'}
-
-    cus['path_include']=os.path.join(pi,'include')
-    cus['include_name']=fi
-
-    cus['static_lib']=lbs
-    cus['dynamic_lib']=lb
-
-    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 
-      'lib_path': cus.get('path_lib','')})
+    r = ck.access({'action': 'lib_path_export_script', 'module_uoa': 'os', 'host_os_dict': hosd, 'lib_path': path_lib})
     if r['return']>0: return r
-    s += r['script']
+    shell_setup_script_contents = r['script']
 
-    ep=cus.get('env_prefix','')
-    if pi!='':
-       env[ep]=pi
+    env_prefix          = cus.get('env_prefix','')
+    install_root        = include_parent_dir    # or should lib_parent_dir be used instead? Not clear.
+    env[env_prefix]     = install_root
 
-    pb=os.path.join(pi,'bin')
-    if tplat=='win' and os.path.isdir(pb):
-       env[ep+'_BIN']=pb
-       cus['path_bin']=pb
+    path_bin=os.path.join(install_root,'bin')
+    if os.path.isdir(path_bin):
+       env[env_prefix+'_BIN']=path_bin
+       cus['path_bin']=path_bin
        if tplat=='win':
-          s+='\nset PATH='+pb+';%PATH%\n\n'
+          shell_setup_script_contents += '\nset PATH='+path_bin+';%PATH%\n\n'
 
-    env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
-    env[ep+'_STATIC_NAME']=cus.get('static_lib','')
-    env[ep+'_DYNAMIC_NAME']=cus.get('dynamic_lib','')
+    env[env_prefix+'_INCLUDE_NAME'] = cus.get('include_name','')
+    env[env_prefix+'_STATIC_NAME']  = cus.get('static_lib','')
+    env[env_prefix+'_DYNAMIC_NAME'] = cus.get('dynamic_lib','')
 
-    return {'return':0, 'bat':s}
+    return {'return':0, 'bat':shell_setup_script_contents}
+
