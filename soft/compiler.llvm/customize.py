@@ -181,27 +181,30 @@ def setup(i):
     hplat=hosd.get('ck_name','')
 
     envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
+    path_install=cus.get('path_install','')
 
-    fp=cus.get('full_path','')
+    full_path=cus.get('full_path','')
 
     tp=''
 
     arch=target_d.get('android_ndk_arch','')
 
     # Check path
-    ep=cus.get('env_prefix','')
-    if ep!='' and fp!='':
-       p1=os.path.dirname(fp)
-       pi=os.path.dirname(p1)
+    env_prefix=cus.get('env_prefix','')
+    if env_prefix and full_path:
+       compiler_bin_dir         = os.path.dirname(full_path)
+       path_install             = os.path.dirname(compiler_bin_dir)
 
-       env[ep]=pi
-       env[ep+'_BIN']=p1
+       env[env_prefix]          = path_install
+       env[env_prefix+'_BIN']   = compiler_bin_dir
 
-       cus['path_lib']=pi+sdirs+'lib'
-       cus['path_include']=pi+sdirs+'include'
+       cus['path_include']      = path_install + sdirs + 'include'
 
-       pname=os.path.basename(fp)
+       path_lib                 = path_install + sdirs + 'lib'
+       if os.path.isdir( path_lib ):
+            cus['path_lib']     = path_lib
+
+       pname=os.path.basename(full_path)
 
        j=pname.find('-clang')
        if j>0:
@@ -382,9 +385,10 @@ def setup(i):
 
        x=cus.get('add_extra_path','')
        if x!='':
-          s+='\nset PATH='+pi+x+';%PATH%\n\n'
+          s+='\nset PATH='+path_install+x+';%PATH%\n\n'
 
-    else:
+    else:   # winh!='yes'
+
        ### Linux Host  #########################################################
        env.update({
           "CK_AR": "$#tool_prefix#$ar", 
@@ -452,9 +456,10 @@ def setup(i):
        elif mac=='yes':
           env["CK_LB"]="$#tool_prefix#$ar -rcs"
           env["CK_LB_OUTPUT"]=""
-          env["CK_AR_PATH_FOR_CMAKE"]       = pi + sdirs + 'bin' + sdirs + 'llvm-ar'
-          env["CK_RANLIB_PATH_FOR_CMAKE"]   = pi + sdirs + 'bin' + sdirs + 'llvm-ranlib'
-          env["CK_EXTRA_MISC_CXX_FLAGS"]    = '-L' + pi + sdirs + 'lib' + ' -stdlib=libstdc++'
+          env["CK_AR_PATH_FOR_CMAKE"]       = compiler_bin_dir + sdirs + 'llvm-ar'
+          env["CK_RANLIB_PATH_FOR_CMAKE"]   = compiler_bin_dir + sdirs + 'llvm-ranlib'
+          env["CK_EXTRA_MISC_CXX_FLAGS"]    = '-L' + path_lib + ' -stdlib=libstdc++'
+          env["CK_COMPILER_OWN_LIB_LOC"]    = '-L' + path_lib
        else:
           env["CK_LB"]="$#tool_prefix#$ar rcs"
           env["CK_LB_OUTPUT"]="-o "
@@ -491,11 +496,11 @@ def setup(i):
 
            # Hack to check that sometimes clang++-3.x is not available
            if k=='CK_CXX':
-               pxx=os.path.join(env.get(ep+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
+               pxx=os.path.join(env.get(env_prefix+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
                if not os.path.isfile(pxx):
                    v=v.replace('$#tool_postfix#$','')
            elif k=='CK_LLVM_CONFIG':
-               pxx=os.path.join(env.get(ep+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
+               pxx=os.path.join(env.get(env_prefix+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
                if not os.path.isfile(pxx):
                    v=v.replace('$#tool_postfix#$','')
 
@@ -546,7 +551,7 @@ def setup(i):
 
        x=cus.get('add_extra_path','')
        if x!='':
-          s+='\nexport PATH='+pi+x+':%PATH%\n\n'
+          s+='\nexport PATH='+path_install+x+':%PATH%\n\n'
 
     env['CK_COMPILER_TOOLCHAIN_NAME']='clang'
 
@@ -562,7 +567,7 @@ def setup(i):
               continue
            xf1+='.exe'
 
-        xp=os.path.join(p1,xf1)
+        xp=os.path.join(compiler_bin_dir, xf1)
         if os.path.isfile(xp):
            env[xk]=xf
            if xe!='': env[xk]+=' '+xe
