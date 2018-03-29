@@ -460,6 +460,7 @@ def setup(i):
           env["CK_RANLIB_PATH_FOR_CMAKE"]   = compiler_bin_dir + sdirs + 'llvm-ranlib'
           env["CK_EXTRA_MISC_CXX_FLAGS"]    = '-L' + path_lib + ' -stdlib=libstdc++'
           env["CK_COMPILER_OWN_LIB_LOC"]    = '-L' + path_lib
+          env["CK_COMPILER_STDLIB"]         = '-stdlib=libstdc++'
        else:
           env["CK_LB"]="$#tool_prefix#$ar rcs"
           env["CK_LB_OUTPUT"]="-o "
