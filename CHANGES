@@ -1,3 +1,5 @@
+* 2018.03.31 - added printing of versions when resolving dependencies
+
 * 2018.03.19 - added module:artifact to describe artifact for ReQuEST tournaments, conferences and journals
 
 * 2018.03.16 - added os:android25-arm64

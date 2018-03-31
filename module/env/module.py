@@ -1460,7 +1460,10 @@ def resolve(i):
         if o=='con':
            ck.out('')
            x='    Resolved. CK environment UID = '+uoa
-           if dver!='': x+=' (detected version '+dver+')'
+           if dver!='': 
+              x+=' (detected version '+dver+')'
+           elif ver!='':
+              x+=' (version '+ver+')'
            ck.out(x)
 
         bdn=cus.get('build_dir_name','')
