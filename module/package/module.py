@@ -764,7 +764,7 @@ def install(i):
                        'search_dict':{'setup':setup}})
           if r['return']>0: return r
           lst=r['lst']
-          if len(lst)>0:
+          if len(lst)==1:
              fe=lst[0]
 
              enruoa=fe['repo_uid']
@@ -780,6 +780,16 @@ def install(i):
 
                 ck.out('')
                 ck.out('CK environment found for this package: '+x)
+          elif len(lst)>1:
+             ck.out('')
+             ck.out('AMBIGUITY: more than one environment entry found for this installation')
+
+             ck.out('')
+             for je in lst:
+                 ck.out(' * '+je['data_uid'])
+             ck.out('')
+
+             return {'return':1, 'error':'more than one environment entry found for this installation, please specify using --env_data_uoa={correct environment entry UID}'}
           else:
              if o=='con':
                 ck.out('')
