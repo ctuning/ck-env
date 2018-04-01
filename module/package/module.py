@@ -764,6 +764,28 @@ def install(i):
                        'search_dict':{'setup':setup}})
           if r['return']>0: return r
           lst=r['lst']
+
+          # If more than one entry, try to prune by package UID if exists
+          if duid!='':
+             new_lst=[]
+             for je in lst:
+                 skip=False
+                 rje=ck.access({'action':'load',
+                                'module_uoa':cfg['module_deps']['env'],
+                                'data_uoa':je['data_uid'],
+                                'repo_uoa':je['repo_uid']})
+                 if rje['return']==0:
+                    print (rje['dict'].get('customize',{}).get('used_package_uid',''))
+                    print (duid)
+
+                    if rje['dict'].get('customize',{}).get('used_package_uid','')!=duid:
+                       skip=True
+
+                 if not skip:
+                    new_lst.append(je)
+
+             lst=new_lst
+
           if len(lst)==1:
              fe=lst[0]
 
