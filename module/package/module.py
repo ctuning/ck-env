@@ -766,7 +766,7 @@ def install(i):
           lst=r['lst']
 
           # If more than one entry, try to prune by package UID if exists
-          if duid!='':
+          if len(lst)>1 and duid!='':
              new_lst=[]
              for je in lst:
                  skip=False
