@@ -182,9 +182,10 @@ def setup(i):
 
        if ep!='':
           env[ep]           = path_install
-          env[ep + '_BIN']  = path_bin
+          if path_bin!='/usr/bin':
+              env[ep + '_BIN']  = path_bin
           if path_lib:
-            env[ep + '_LIB']  = path_lib
+              env[ep + '_LIB']  = path_lib
 
        tool_postfix=''
 
