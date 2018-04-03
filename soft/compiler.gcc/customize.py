@@ -8,6 +8,7 @@
 #
 
 import os
+import subprocess
 
 ##############################################################################
 # customize directories to automatically find and register software
@@ -123,11 +124,8 @@ def setup(i):
 
     """
 
-    import os
-
     # Get variables
     ck=i['ck_kernel']
-    s=''
 
     iv=i.get('interactive','')
 
@@ -152,28 +150,39 @@ def setup(i):
     file_extensions = target_d.get('file_extensions',{})
 
     envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
+    path_install=cus.get('path_install','')
 
-    fp=cus.get('full_path','')
+    full_path=cus.get('full_path','')
 
     # Check path
     ep=cus.get('env_prefix','')
-    if fp!='':
-       p1=os.path.dirname(fp)
-       pi=os.path.dirname(p1)
+    if full_path!='':
 
-       if p1!='/usr/bin':
-          cus['path_bin']=p1
+       # Ask the compiler where it keeps its dynamic library -
+       # it may be used by other components and should be exposed:
+       #
+       # FIXME: please test if this bit works on Windows
+       #        and make the following unconditional if it does:
+       #
+       if winh!='yes':
+           path_lib = os.path.dirname( subprocess.check_output( [ full_path, '-print-file-name=libstdc++' + file_extensions.get('dll','') ] ).decode('utf-8').rstrip() )
+
+       path_bin=os.path.dirname(full_path)
+       path_install=os.path.dirname(path_bin)
+
+       if path_bin!='/usr/bin':
+          cus['path_bin']=path_bin
 
        if ep!='':
-          env[ep]=pi
-          if p1!='/usr/bin': 
-             env[ep+'_BIN']=p1
+          env[ep]           = path_install
+          env[ep + '_BIN']  = path_bin
+          if path_lib:
+            env[ep + '_LIB']  = path_lib
 
-       tp=''
+       tool_postfix=''
 
        # Trick to check that long name
-       pname=os.path.basename(fp)
+       pname=os.path.basename(full_path)
 
        j=pname.find('-gcc')
        if j>0:
@@ -182,14 +191,14 @@ def setup(i):
        if hplat=='linux':
           sname=cus.get('soft_file',{}).get(hplat,'')
           if pname.startswith(sname+'-'):
-             tp=pname[len(sname):]
+             tool_postfix=pname[len(sname):]
 
        if cus.get('tool_prefix','')=='':
           cus['tool_prefix_configured']='yes'
           cus['tool_prefix']=''
        if cus.get('tool_postfix','')=='':
           cus['tool_postfix_configured']='yes'
-          cus['tool_postfix']=tp
+          cus['tool_postfix']=tool_postfix
        if cus.get('retarget','')=='':
           cus['retarget']='no'
 
@@ -306,10 +315,7 @@ def setup(i):
        cus['linking_for_retargeting']=lfr
        env['CK_LD_FLAGS_EXTRA']=lfr
 
-       if winh=='yes':
-          env['CK_SYS_ROOT']=pi+'\\arm-none-linux-gnueabi\\libc'
-       else:
-          env['CK_SYS_ROOT']=pi+'/arm-none-linux-gnueabi/libc'
+       env['CK_SYS_ROOT']=os.path.join(path_install, 'arm-none-linux-gnueabi', 'libc')
 
        x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
        y='--sysroot="'+env['CK_SYS_ROOT']+'"'
@@ -352,32 +358,34 @@ def setup(i):
     if winh!='yes':
 
        x=env.get('CK_AR','')
-       x1=os.path.join(p1,x)
+       x1=os.path.join(path_bin,x)
        if not os.path.isfile(x1):
           x='gcc-ar'
-          x1=os.path.join(p1,x)
+          x1=os.path.join(path_bin,x)
           if os.path.isfile(x1):
              env['CK_AR']=x
              env['CK_LB']=x+' rcs'
 
        x=env.get('CK_RANLIB','')
-       x1=os.path.join(p1,x)
+       x1=os.path.join(path_bin,x)
        if not os.path.isfile(x1):
           x='gcc-ranlib'
-          x1=os.path.join(p1,x)
+          x1=os.path.join(path_bin,x)
           if os.path.isfile(x1):
              env['CK_RANLIB']=x
 
+    shell_setup_script_contents = ''
+
     x=cus.get('bugfix1','')
     if winh!='yes' and (x=='yes' or os.path.isdir('/usr/lib/x86_64-linux-gnu')):
-       s+='\nexport LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH\n'
+       shell_setup_script_contents+='\nexport LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LIBRARY_PATH\n'
 
     x=cus.get('add_extra_path','')
     if x!='' and winh=='yes':
-       s+='\nset PATH='+pi+x+';%PATH%\n\n'
+       shell_setup_script_contents+='\nset PATH='+path_install+x+';%PATH%\n\n'
 
     # Otherwise may be problems on Windows during cross-compiling
     env['CK_OPT_UNWIND']=' '
     env['CK_FLAGS_DYNAMIC_BIN']=' '
 
-    return {'return':0, 'bat':s, 'env':env, 'tags':tags}
+    return {'return':0, 'bat':shell_setup_script_contents, 'env':env, 'tags':tags}

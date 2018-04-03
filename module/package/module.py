@@ -764,7 +764,29 @@ def install(i):
                        'search_dict':{'setup':setup}})
           if r['return']>0: return r
           lst=r['lst']
-          if len(lst)>0:
+
+          # If more than one entry, try to prune by package UID if exists
+          if len(lst)>1 and duid!='':
+             new_lst=[]
+             for je in lst:
+                 skip=False
+                 rje=ck.access({'action':'load',
+                                'module_uoa':cfg['module_deps']['env'],
+                                'data_uoa':je['data_uid'],
+                                'repo_uoa':je['repo_uid']})
+                 if rje['return']==0:
+                    print (rje['dict'].get('customize',{}).get('used_package_uid',''))
+                    print (duid)
+
+                    if rje['dict'].get('customize',{}).get('used_package_uid','')!=duid:
+                       skip=True
+
+                 if not skip:
+                    new_lst.append(je)
+
+             lst=new_lst
+
+          if len(lst)==1:
              fe=lst[0]
 
              enruoa=fe['repo_uid']
@@ -780,6 +802,16 @@ def install(i):
 
                 ck.out('')
                 ck.out('CK environment found for this package: '+x)
+          elif len(lst)>1:
+             ck.out('')
+             ck.out('AMBIGUITY: more than one environment entry found for this installation')
+
+             ck.out('')
+             for je in lst:
+                 ck.out(' * '+je['data_uid'])
+             ck.out('')
+
+             return {'return':1, 'error':'more than one environment entry found for this installation, please specify using --env_data_uoa={correct environment entry UID}'}
           else:
              if o=='con':
                 ck.out('')
