@@ -25,11 +25,13 @@
       "force_target_as_host": "yes", 
       "local": "yes", 
       "name": "cmake", 
+      "skip_from_bat": "yes",
       "sort": 5, 
       "tags": "tool,cmake"
     }, 
     "compiler": {
       "local": "yes", 
+      "skip_from_bat": "yes",
       "name": "C++ compiler", 
       "sort": 10, 
       "tags": "compiler,lang-cpp"

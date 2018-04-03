@@ -23,6 +23,7 @@
     "cmake": {
       "force_target_as_host": "yes",
       "local": "yes",
+      "skip_from_bat": "yes",
       "name": "cmake",
       "sort": 5,
       "tags": "tool,cmake"
@@ -30,6 +31,7 @@
     "compiler": {
       "local": "yes",
       "name": "C++ compiler",
+      "skip_from_bat": "yes",
       "sort": 10,
       "tags": "compiler,lang-cpp"
     },
