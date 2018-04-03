@@ -167,12 +167,10 @@ def setup(i):
        if winh!='yes':
             first_param         = '-print-file-name=libstdc++' + file_extensions.get('dll','')
             libdetect_output    = subprocess.check_output( [ full_path, first_param ], stderr=subprocess.STDOUT ).decode('utf-8')
-            print("DEBUG: libdetect_output = " + libdetect_output)
             if libdetect_output:
                 path_lib = os.path.dirname( libdetect_output.rstrip() )
-                print("DEBUG: path_lib = " + path_lib)
             else:
-                print("DEBUG: subprocess.check_output(['" + full_path + "', " + first_param + "]) did not return anything")
+                print("WARNING: subprocess.check_output(['" + full_path + "', " + first_param + "]) did not return anything")
 
        path_bin=os.path.dirname(full_path)
        path_install=os.path.dirname(path_bin)
