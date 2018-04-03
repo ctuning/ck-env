@@ -165,7 +165,7 @@ def setup(i):
        #        and make the following unconditional if it does:
        #
        if winh!='yes':
-           path_lib = os.path.dirname( subprocess.check_output( [ full_path, '-print-file-name=libstdc++' + file_extensions.get('dll','') ] ).rstrip() )
+           path_lib = os.path.dirname( subprocess.check_output( [ full_path, '-print-file-name=libstdc++' + file_extensions.get('dll','') ] ).decode('utf-8').rstrip() )
 
        path_bin=os.path.dirname(full_path)
        path_install=os.path.dirname(path_bin)
