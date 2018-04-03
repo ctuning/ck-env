@@ -1,5 +1,5 @@
 {
-  "auto_detect": "no",
+  "auto_detect": "yes",
   "customize": {
     "add_to_path": "yes", 
     "check_that_exists": "yes",
