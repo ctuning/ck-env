@@ -165,7 +165,14 @@ def setup(i):
        #        and make the following unconditional if it does:
        #
        if winh!='yes':
-           path_lib = os.path.dirname( subprocess.check_output( [ full_path, '-print-file-name=libstdc++' + file_extensions.get('dll','') ] ).decode('utf-8').rstrip() )
+            first_param         = '-print-file-name=libstdc++' + file_extensions.get('dll','')
+            libdetect_output    = subprocess.check_output( [ full_path, first_param ], stderr=subprocess.STDOUT )
+            print("DEBUG: libdetect_output = " + libdetect_output)
+            if libdetect_output:
+                path_lib = os.path.dirname( libdetect_output.decode('utf-8').rstrip() )
+                print("DEBUG: path_lib = " + path_lib)
+            else:
+                print("DEBUG: subprocess.check_output(['" + full_path + "', " + first_param + "]) did not return anything")
 
        path_bin=os.path.dirname(full_path)
        path_install=os.path.dirname(path_bin)
