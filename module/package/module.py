@@ -720,7 +720,7 @@ def install(i):
     for dep_name, dep_dict in sorted(udeps.items(), key=lambda pair: pair[1].get('sort',0)) :
         if dep_name in ('compiler', 'host-compiler') :
             dep_tag_prefix  = 'compiled-by-'
-        elif dep_dict.get('add_to_tags', dep_dict.get('add_to_path','') ):
+        elif dep_dict.get('add_to_tags', dep_dict.get('add_to_path','') )=='yes':
             dep_tag_prefix = 'needs-'
         else:
             dep_tag_prefix = ''
