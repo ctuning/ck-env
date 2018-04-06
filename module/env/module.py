@@ -1309,6 +1309,22 @@ def resolve(i):
                  q['skipped']='yes'
                  continue
 
+        if q.get('skipped','')!='yes':
+           check_env=q.get('disable_if_env',{})
+           if len(check_env)>0:
+              disable=True
+              for j in check_env:
+                  v=check_env[j]
+                  if install_env.get(j,'').lower()!=v.lower():
+                     disable=False
+                     break
+
+              if disable:
+                 q['skipped']='yes'
+                 continue
+              else:
+                 q['enabled']='yes'
+
         ytos=tos
         ytdid=tdid
         ytosx=tosx
