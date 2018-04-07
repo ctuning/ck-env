@@ -51,6 +51,17 @@
         "mingw"
       ]
     },
+    "rpc": {
+      "detect_platform": "no",
+      "name": "CK: remote machine accessed via RPC",
+      "sort": 70,
+      "tags": [
+        "linux",
+        "windows",
+        "mingw",
+        "rpc"
+      ]
+    },
     "host": {
       "detect_platform": "yes",
       "name": "CK: this host machine as a target",

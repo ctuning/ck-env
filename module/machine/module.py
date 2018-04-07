@@ -46,7 +46,7 @@ def add(i):
 
               (use_host)                   - if 'yes', configure host as target
 
-              (access_type)                - access type to the machine ("android", "mingw", "wa_android", "wa_linux", "ck_node", "ssh")
+              (access_type)                - access type to the machine ("android", "mingw", "wa_android", "wa_linux", "ck_node", "ssh", "rpc")
 
               (share)                      - if 'yes', share public info about platform with the community via cknowledge.org/repo
             }
@@ -261,15 +261,33 @@ def add(i):
         files=r.get('files',{})
         dd['device_cfg']={'wa_config':r.get('cfg',{})}
 
-    ########################################################## Additional questions for SSH or CK
-    if at=='ssh' or at=='ck_node':
+    ########################################################## Additional questions for SSH or CK or RPC
+    if at=='ssh' or at=='ck_node' or at=='rpc':
         if 'device_cfg' not in dd:
             dd['device_cfg']={}
 
         dx={}
+        henv={}
+        keyfile=''
 
         #####################
-        if at=='ssh':
+        if at=='rpc':
+            #####################
+            ck.out('')
+            r=ck.inp({'text':'Enter hostname (Enter for localhost):          '})
+
+            host=r['string'].strip()
+            if host=='': host='localhost'
+            dx['host']=host
+
+            #####################
+            ck.out('')
+            r=ck.inp({'text':'Enter host port if needed:                     '})
+
+            port=r['string'].strip()
+            dx['port']=port
+
+        elif at=='ssh':
             #####################
             ck.out('')
             r=ck.inp({'text':'Enter hostname (Enter for localhost):          '})
@@ -325,6 +343,9 @@ def add(i):
             keyfile=r['string'].strip()
             dx['keyfile']=keyfile
 
+        henv['CK_MACHINE_HOST']=dx.get('host','')
+        henv['CK_MACHINE_PORT']=dx.get('port','')
+
         #####################
         path_to_files="tmp-ck"
         if at=='ck_node':
@@ -343,14 +364,20 @@ def add(i):
 
         keyfile1=''
 
-        uod={
-             "remote": "yes",
-             "remote_ssh":"yes",
+        if at=='rpc':
+           uod={
+                 'preset_host_env':henv,
+                 'skip_platform_detection':'yes'
+               }
+        else:
+           uod={
+            "remote": "yes",
+            "remote_ssh":"yes",
              "remote_deinit": "",
              "remote_dir_sep": tosd.get('dir_sep',''),
              "remote_env_quotes_if_space": tosd.get('env_quotes_if_space',''),
              "remote_shell_end": "\""
-            }
+           }
 
         if at=='ssh':
             port2=''
@@ -820,6 +847,31 @@ def check(i):
 
     if at=='host' or at=='wa_linux':
         connected='yes'
+    elif at=='rpc':
+        import telnetlib
+
+        connected='no'
+
+        rp=device_cfg.get('remote_params',{})
+        host=rp.get('host','')
+        port=rp.get('port','')
+
+        try:
+           tn=telnetlib.Telnet(host, int(port))
+           connected='yes'
+        except:
+           pass
+
+        try:
+           tn.write(b"exit\n")
+        except:
+           pass
+
+        try:
+           tn.close
+        except:
+           pass
+
     else:
         # Check status of remote
         connected='no'

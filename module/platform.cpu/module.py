@@ -154,7 +154,12 @@ def detect(i):
     new_format=''
     unique_cpus=[]
 
-    if unix:
+    spd=tosd.get('skip_platform_detection','')
+
+    if spd=='yes':
+       # Nothing
+       pass
+    elif unix:
        # Get all params
        params={}
        if remote=='yes' and remote_ssh!='yes':

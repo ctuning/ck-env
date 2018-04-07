@@ -182,6 +182,10 @@ def detect(i):
     dv=''
     if tdid!='': dv=' -s '+tdid
 
+    spd=tosd.get('skip_platform_detection','')
+    if spd=='yes':
+       sgi='yes'
+
     # Init
     prop={}
     prop_all={}
@@ -290,7 +294,7 @@ def detect(i):
        if model!='': prop['name']+=' '+model
        prop['model']=model
        prop['vendor']=manu
-    else:
+    elif spd!='yes':
        x1=''
        x2=''
 

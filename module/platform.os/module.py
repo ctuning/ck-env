@@ -181,6 +181,9 @@ def detect(i):
 
     ro=hosd.get('redirect_stdout','')
 
+    if tosd.get('skip_platform_detection','')=='yes':
+       sic='yes'
+
     # Check devices, if remote
     if sic!='yes' and remote=='yes' and tdid=='':
        # Get devices
