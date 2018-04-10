@@ -107,6 +107,13 @@ O: Arm
 C: Adding new Android OS entries
 W:
 
+N: Dmitry
+E:
+H: https://github.com/zzzzzzzzzzzzz
+O: MIPT
+C: feedback about Unix-Win packages and installation debugging
+W:
+
 N: Stuart Taylor
 E:
 H:
@@ -120,4 +127,3 @@ H:
 O: Arm
 C: Fixing error with GPU freq env
 W:
-
