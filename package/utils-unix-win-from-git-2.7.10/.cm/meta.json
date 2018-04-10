@@ -1,0 +1,40 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "PACKAGE_BUILD_TYPE": "",
+      "PACKAGE_COPY": "NO",
+      "PACKAGE_GIT": "NO",
+      "PACKAGE_NAME": "Git-2.17.0-32-bit.exe",
+      "PACKAGE_RUN":"YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_UNZIP": "NO",
+      "PACKAGE_URL": "https://github.com/git-for-windows/git/releases/download/v2.17.0.windows.1",
+      "PACKAGE_WGET": "YES"
+    },
+    "version": "2.7.10"
+  },
+  "end_full_path": {
+    "win": "usr\\bin\\expr.exe"
+  },
+  "only_for_host_os_tags": [
+    "windows"
+  ],
+  "process_script": "install",
+  "soft_uoa": "3d7bbd39e4e0400c",
+  "suggested_path": "tool-unix-win-from-git",
+  "tags": [
+    "utils",
+    "unix-win",
+    "git",
+    "v2.7.10",
+    "v2.7",
+    "v2",
+    "channel-stable"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

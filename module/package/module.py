@@ -111,6 +111,8 @@ def install(i):
 
               (ask)               - if 'yes', ask more questions, otherwise select default actions
               (ask_version)       - ask for the version of the package the user wants to install
+
+              (debug)             - if 'yes', open shell before installing but with all resolved deps
             }
 
     Output: {
@@ -141,6 +143,8 @@ def install(i):
 
     reuse_deps=i.get('reuse_deps','')
     deps_cache=i.get('deps_cache',[])
+
+    debug=i.get('debug','')
 
     # Check if package_channel is specifies and add tag
     pchannel=ck.cfg.get('package_channel','')
@@ -1280,6 +1284,17 @@ def install(i):
 
              shell_wrapper_contents+='\n'
 
+             if debug=='yes':
+                import platform
+
+                xs='Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!'
+                if platform.system().lower().startswith('win'):
+                   shell_wrapper_contents+='echo '+xs+'\n'
+                   shell_wrapper_contents+='cmd\n'
+                else:
+                   shell_wrapper_contents+='echo "'+xs+'"\n'
+                   shell_wrapper_contents+='bash\n'
+
              xs=''
              if p.find(' ')>=0 and eifsc!='': xs=eifsc
              shell_wrapper_contents+=scall+' '+xs+shell_script_full_path+xs+'\n\n'
@@ -1300,6 +1315,9 @@ def install(i):
                 shell_wrapper_name=rx['file_name']
 
              # Write to tmp file
+             print ('XYZ=',shell_wrapper_name)
+             print ('XYZ2=',shell_wrapper_contents)
+
              rx=ck.save_text_file({'text_file':shell_wrapper_name, 'string':shell_wrapper_contents})
              if rx['return']>0: return rx
 
