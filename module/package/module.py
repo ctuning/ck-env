@@ -1315,9 +1315,6 @@ def install(i):
                 shell_wrapper_name=rx['file_name']
 
              # Write to tmp file
-             print ('XYZ=',shell_wrapper_name)
-             print ('XYZ2=',shell_wrapper_contents)
-
              rx=ck.save_text_file({'text_file':shell_wrapper_name, 'string':shell_wrapper_contents})
              if rx['return']>0: return rx
 
