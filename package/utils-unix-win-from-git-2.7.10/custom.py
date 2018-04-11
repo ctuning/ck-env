@@ -83,6 +83,6 @@ def setup(i):
     pi=i.get('install_path','')
 
     nie={} # new env
-    nie['PACKAGE_CMD']='/DIR="'+pi+'" /SILENT'
+#    nie['PACKAGE_CMD']='/DIR="'+pi+'" /SILENT'
 
     return {'return':0, 'install_env':nie}
