@@ -108,7 +108,14 @@ def setup(i):
 
     pi=os.path.join(p2,'include')
     pl=os.path.join(p2,'lib')
+
     pb=os.path.join(p2,'bin')
+    if not os.path.isdir(pb):
+       p2x=os.path.dirname(p2)
+       pb=os.path.join(p2x,'bin')
+       if not os.path.isdir(pb):
+          p2x=os.path.dirname(p2x)
+          pb=os.path.join(p2x,'bin')
 
     cus['path_include']=pi
     cus['path_lib']=pl

@@ -2257,14 +2257,15 @@ def virtual(i):
     # Run shell
     import platform
     import os
+    import subprocess
 
     ck.out('')
     ck.out('Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
 
     if platform.system().lower().startswith('win'): # pragma: no cover
-       import subprocess
        p = subprocess.Popen(['cmd', '/K', bwin], shell = True, env=os.environ)
        p.wait()
+       return_code  = p.returncode
     else:
        rx=ck.gen_tmp_file({})
        if rx['return']>0: return rx
@@ -2273,9 +2274,9 @@ def virtual(i):
        rx=ck.save_text_file({'text_file':fn, 'string':blin})
        if rx['return']>0: return rx
 
-       os.system("bash --rcfile "+fn)
+       return_code = subprocess.call(['/bin/bash','--rcfile', fn, '-i'], shell = False)
 
-    return {'return':0}
+    return {'return':return_code, 'error':'Unknown error from the nested shell'}
 
 ##############################################################################
 # remove tmp entries (when installation to env entry failed)
