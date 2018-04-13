@@ -116,7 +116,7 @@ def setup(i):
        ck.inp({'text':'Press Enter to continue!'})
 
     else:
-       if habi.startswith('arm'):
+       if habi.startswith('arm') or habi.startswith('aarch'):
           if hbits=='64':
              nie['PACKAGE_NAME']='clang+llvm-5.0.0-aarch64-linux-gnu.tar.xz'
           else:
@@ -140,14 +140,14 @@ def setup(i):
                    mver=ver[:j1]
 
           if 'debian' in flavor:
-             nie['PACKAGE_NAME']='clang+llvm-5.0.0-aarch64-linux-gnu.tar.xz'
+             nie['PACKAGE_NAME']='clang+llvm-5.0.0-x86_64-linux-gnu-debian8.tar.xz'
           else:
              nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu16.04.tar.xz'
 
              if mver=='14.04':
                 nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu14.04.tar.xz'
-             elif mver=='16.10':
-                nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu16.10.tar.xz'
+             elif mver=='16.04':
+                nie['PACKAGE_NAME']='clang+llvm-5.0.0-linux-x86_64-ubuntu16.04.tar.xz'
 
        nie['PACKAGE_UNXTAR']='YES'
        nie['PACKAGE_UNTAR_EXTRA']='--strip 1'

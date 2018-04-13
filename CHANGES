@@ -1,3 +1,5 @@
+* 2018.04.13 - added packages for LLVM 5.0.1 and 6.0.0, and fixed LLVM 4.x and 5.x for aarch64
+
 * 2018.04.10 - added package:utils-unix-win-from-git-2.7.10 (see https://github.com/BVLC/caffe/issues/5654)
              - added "-debug" option to "ck install package" to debug installation from shell with resolved deps
 

@@ -91,14 +91,13 @@ def setup(i):
        if hbits!='64':
           return {'return':1, 'error':'this package doesn\'t support non 64-bit MacOS'}
 
-       nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-apple-darwin.tar.xz'
-
+       nie['PACKAGE_NAME']='clang+llvm-5.0.1-x86_64-apple-darwin.tar.xz'
        nie['PACKAGE_UNXTAR']='YES'
        nie['PACKAGE_UNTAR_EXTRA']='--strip 1'
        nie['PACKAGE_SKIP_LINUX_MAKE']='YES'
 
     elif hname=='win':
-       f='LLVM-4.0.0-win'
+       f='LLVM-5.0.1-win'
        if hbits=='64':
           f+='64.exe'
        else:
@@ -118,9 +117,9 @@ def setup(i):
     else:
        if habi.startswith('arm') or habi.startswith('aarch'):
           if hbits=='64':
-             nie['PACKAGE_NAME']='clang+llvm-4.0.0-aarch64-linux-gnu.tar.xz'
+             nie['PACKAGE_NAME']='clang+llvm-5.0.1-aarch64-linux-gnu.tar.xz'
           else:
-             nie['PACKAGE_NAME']='clang+llvm-4.0.0-armv7a-linux-gnueabihf.tar.xz'
+             nie['PACKAGE_NAME']='clang+llvm-5.0.1-armv7a-linux-gnueabihf.tar.xz'
        else:
           r=ck.access({'action':'detect','module_uoa':'platform.os', 'out':o})
           if r['return']>0: return r
@@ -140,16 +139,13 @@ def setup(i):
                    mver=ver[:j1]
 
           if 'debian' in flavor:
-             nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-debian8.tar.xz'
+             nie['PACKAGE_NAME']='clang+llvm-5.0.1-x86_64-linux-gnu-debian8.tar.xz'
           else:
-             nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz'
-
+             nie['PACKAGE_NAME']='clang+llvm-5.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz'
              if mver=='14.04':
-                nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz'
+                nie['PACKAGE_NAME']='clang+llvm-5.0.1-x86_64-linux-gnu-ubuntu-14.04.tar.xz'
              elif mver=='16.04':
-                nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz'
-             elif mver=='16.10':
-                nie['PACKAGE_NAME']='clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-16.10.tar.xz'
+                nie['PACKAGE_NAME']='clang+llvm-5.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz'
 
        nie['PACKAGE_UNXTAR']='YES'
        nie['PACKAGE_UNTAR_EXTRA']='--strip 1'
