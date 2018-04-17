@@ -32,12 +32,6 @@
       "name": "C++ compiler", 
       "sort": 10, 
       "tags": "compiler,lang-cpp"
-    }, 
-    "lib-openmpi": {
-      "local": "yes", 
-      "name": "MPI Library", 
-      "sort": 11, 
-      "tags": "lib,mpi,openmpi"
     }
   }, 
   "end_full_path": {
