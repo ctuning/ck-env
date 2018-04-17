@@ -1031,8 +1031,11 @@ def show(i):
         info=q['info']
         meta=q['meta']
 
+        if len(meta)==0:
+           continue
+
         cus=meta.get('customize',{})
-        setup=meta.get('setup','')
+        setup=meta.get('setup',{})
         tags=meta.get('tags',[])
 
         host_os_uoa=setup.get('host_os_uoa','')
