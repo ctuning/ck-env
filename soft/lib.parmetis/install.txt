@@ -1,0 +1,2 @@
+You can download and install latest (or required) package from
+* http://glaros.dtc.umn.edu/gkhome/metis/parmetis/download
