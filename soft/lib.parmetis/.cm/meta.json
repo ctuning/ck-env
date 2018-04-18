@@ -22,8 +22,6 @@
   "soft_name": "ParMetis library", 
   "tags": [
     "lib", 
-    "metis",
-    "parallel",
     "parmetis"
   ]
 }
