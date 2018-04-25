@@ -2231,33 +2231,23 @@ def virtual(i):
 
     """
 
-    # Prepare env
-    l=[] # list of UOA
+    duoa        = i.get('data_uoa', i.get('uoa','') )
 
-    duoa=i.get('data_uoa','')
-    if duoa=='':
-       duoa=i.get('uoa','')
+    list_of_uoa = duoa.split(',')
 
-    if duoa=='':
-       l=[]
-    else:
-       l=duoa.split(',')
+    shell_script_contents_for_linux     = '' # string with env
+    shell_script_contents_for_windows   = '' # string with env
 
-    if len(l)==0: l=['']
-
-    blin='' # string with env
-    bwin='' # string with env
-
-    for uoa in l:
+    for uoa in list_of_uoa:
         i['uoa']=uoa
 
         r=set(i)
         if r['return']>0: return r
 
-        blin+='\n'+r['bat']+'\n'
+        shell_script_contents_for_linux +='\n'+r['bat']+'\n'
 
-        if bwin!='': bwin+=' & '
-        bwin+=r['bat'].replace('\n','')
+        if shell_script_contents_for_windows != '': shell_script_contents_for_windows+=' & '
+        shell_script_contents_for_windows += r['bat'].replace('\n','')
 
     # Run shell
     import platform
@@ -2268,7 +2258,7 @@ def virtual(i):
     ck.out('Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
 
     if platform.system().lower().startswith('win'): # pragma: no cover
-       p = subprocess.Popen(['cmd', '/K', bwin], shell = True, env=os.environ)
+       p = subprocess.Popen(['cmd', '/K', shell_script_contents_for_windows], shell = True, env=os.environ)
        p.wait()
        return_code  = p.returncode
     else:
@@ -2276,7 +2266,7 @@ def virtual(i):
        if rx['return']>0: return rx
        file_name=rx['file_name']
 
-       rx=ck.save_text_file({'text_file':file_name, 'string':blin})
+       rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents_for_linux })
        if rx['return']>0: return rx
 
        shell_cmd        = i.get('shell_cmd', None)
