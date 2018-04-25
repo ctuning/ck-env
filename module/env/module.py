@@ -2218,7 +2218,9 @@ def xset(i):
 def virtual(i):
     """
     Input:  {
-              data_uoa or uoa - environment UOA to pre-load (see "ck show env") - can be listed via ,
+              data_uoa or uoa   - environment UOA to pre-load (see "ck show env") - can be listed via ,
+
+              (shell_cmd)       - command line to run in the "environment-enriched" shell (make sure it is suitably quoted)
             }
 
     Output: {
@@ -2272,12 +2274,15 @@ def virtual(i):
     else:
        rx=ck.gen_tmp_file({})
        if rx['return']>0: return rx
-       fn=rx['file_name']
+       file_name=rx['file_name']
 
-       rx=ck.save_text_file({'text_file':fn, 'string':blin})
+       rx=ck.save_text_file({'text_file':file_name, 'string':blin})
        if rx['return']>0: return rx
 
-       return_code = subprocess.call(['/bin/bash','--rcfile', fn, '-i'], shell = False)
+       shell_cmd        = i.get('shell_cmd', None)
+       full_cmd_list    = ['/bin/bash','--rcfile', file_name, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )
+
+       return_code = subprocess.call(full_cmd_list, shell = False)
 
     return {'return':return_code, 'error':'Unknown error from the nested shell'}
 
