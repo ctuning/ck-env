@@ -120,6 +120,7 @@ def setup(i):
     cus['path_include']=pi
     cus['path_lib']=pl
     cus['path_bin']=pb
+    env['CK_ENV_LIB_MPI_CC'] = os.path.join(pb,'mpicc')
 
     r = ck.access({'action': 'lib_path_export_script', 
                    'module_uoa': 'os', 

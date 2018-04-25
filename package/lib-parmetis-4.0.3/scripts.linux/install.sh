@@ -14,7 +14,7 @@ cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 
 PREFIX=${INSTALL_DIR}/install
 
-make config shared=1 prefix=$PREFIX cc=${CK_ENV_LIB_MPI_BIN}/mpicc
+make config shared=1 prefix=$PREFIX cc=${CK_ENV_LIB_MPI_CC}
 if [ "${?}" != "0" ] ; then
     echo "Error: configure failed!"
       exit 1
