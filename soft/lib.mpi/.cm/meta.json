@@ -22,6 +22,7 @@
   "soft_name": "MPI library",
   "tags": [
     "lib",
-    "mpi"
+    "mpi",
+    "openmpi"
   ]
 }
