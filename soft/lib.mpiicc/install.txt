@@ -1,2 +1,12 @@
 You can download and install latest (or required) package from
-* https://www.open-mpi.org
+* https://software.intel.com/en-us/articles/installing-intel-free-libs-and-python-apt-repo
+
+APT Instactions:
+1. wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+2. apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+3. sudo wget https://apt.repos.intel.com/setup/intelproducts.list -O /etc/apt/sources.list.d/intelproducts.list
+4. sudo sh -c 'echo deb https://apt.repos.intel.com/mpi all main > /etc/apt/sources.list.d/intel-mpi.list'
+5. sudo apt-get update
+6. sudo apt-get install intel-mpi
+7. ck detect soft:lib.mpiicc --full_path=<<INSTALLATION_PATH>>/bin/mpivars.sh 
+
