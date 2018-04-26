@@ -1,0 +1,29 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "add_to_path": "yes", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_MPI", 
+    "limit_recursion_dir_search": {
+      "linux": 12, 
+      "win": 3
+    }, 
+    "soft_file": {
+      "linux": "mpiicc", 
+      "win": "mpiicc"
+    }, 
+    "soft_path_example": {
+      "linux": "", 
+      "win": ""
+    }
+  }, 
+  "deps": {}, 
+  "soft_name": "Intel MPI library", 
+  "tags": [
+    "lib", 
+    "mpi", 
+    "intel",
+    "mpiicc"
+  ]
+}
