@@ -215,11 +215,11 @@ def internal_detect(i):
           tool=ry['tool']
 
     # Preparing CMD
-    cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
+    soft_version_cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
     if o=='con':
        ck.out('')
-       ck.out('Prepared cmd: '+cmd+' ...')
+       ck.out('Prepared cmd: '+soft_version_cmd+' ...')
 
     # Check version (via customized script) ...
     ver=''
@@ -228,7 +228,7 @@ def internal_detect(i):
         'bat':env,
         'host_os_dict':hosd,
         'target_os_dict':tosd,
-        'cmd':cmd,
+        'cmd':soft_version_cmd,
         'use_locale':cus.get('use_locale_for_version',''),
         'custom_script_obj':cs}
     rx=get_version(ii)
@@ -623,7 +623,7 @@ def setup(i):
           ver=''
 
        if ver=='':
-          scmd=cus.get('soft_version_cmd',{}).get(hplat,'')
+          soft_version_cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
           if o=='con':
              ck.out('')
@@ -634,7 +634,7 @@ def setup(i):
               'bat':sdeps,
               'host_os_dict':hosd,
               'target_os_dict':tosd,
-              'cmd':scmd,
+              'cmd':soft_version_cmd,
               'custom_script_obj':cs,
               'skip_existing':skip_existing,
               'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
@@ -1559,7 +1559,7 @@ def check(i):
     if rx['return']==0: 
        cs=rx['code']
 
-    scmd=cus.get('soft_version_cmd',{}).get(hplat,'')
+    soft_version_cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
     # Check where to search depending if Windows or Linux
     dirs=[]
@@ -1754,7 +1754,7 @@ def check(i):
                'bat':sbat,
                'host_os_dict':hosd,
                'target_os_dict':tosd,
-               'cmd':scmd,
+               'cmd':soft_version_cmd,
                'use_locale':cus.get('use_locale_for_version',''),
                'custom_script_obj':cs}
            rx=get_version(ii)
@@ -1988,7 +1988,7 @@ def get_version(i):
 
     fp=i.get('full_path','')
     sb=i.get('bat','')
-    cmdx=i.get('cmd','')
+    soft_version_cmd=i.get('cmd','')
 
     cs=i.get('custom_script_obj','')
     if cs=='': cs=None
@@ -2034,7 +2034,7 @@ def get_version(i):
           rx=cs.version_cmd({'full_path':fp,
                              'host_os_dict':hosd,
                              'target_os_dict':tosd,
-                             'cmd':cmdx,
+                             'cmd':soft_version_cmd,
                              'ck_kernel':ck,
                              'out':o})
           if rx['return']>0: return rx
@@ -2050,9 +2050,9 @@ def get_version(i):
              cmd+=nout
 
           if i.get('skip_add_target_file','')=='yes':
-             cmd+=' '+cmdx
+             cmd+=' '+soft_version_cmd
           else:
-             cmd+=fp+' '+cmdx
+             cmd+=fp+' '+soft_version_cmd
 
     if ver=='':
        if 'parse_version' not in dir(cs):
