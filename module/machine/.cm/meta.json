@@ -62,6 +62,15 @@
         "rpc"
       ]
     },
+    "avro": {
+      "detect_platform": "no",
+      "name": "AVRO: multiple remote machines accessed via Apache AVRO",
+      "sort": 80,
+      "tags": [
+        "linux",
+        "windows"
+      ]
+    },
     "host": {
       "detect_platform": "yes",
       "name": "CK: this host machine as a target",

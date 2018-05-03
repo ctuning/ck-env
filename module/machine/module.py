@@ -46,7 +46,7 @@ def add(i):
 
               (use_host)                   - if 'yes', configure host as target
 
-              (access_type)                - access type to the machine ("android", "mingw", "wa_android", "wa_linux", "ck_node", "ssh", "rpc")
+              (access_type)                - access type to the machine ("android", "mingw", "wa_android", "wa_linux", "ck_node", "ssh", "rpc", "avro")
 
               (share)                      - if 'yes', share public info about platform with the community via cknowledge.org/repo
             }
@@ -417,6 +417,48 @@ def add(i):
 
         dd['device_cfg']['update_target_os_dict']=uod
 
+    ########################################################## Additional questions for Apache AVRO distributed platforms
+    if at=='avro':
+        if 'device_cfg' not in dd:
+            dd['device_cfg']={}
+
+        dx={}
+        henv={}
+
+        #####################
+        avro_config=i.get('avro_config','')
+        if avro_config=='':
+           ck.out('')
+           r=ck.inp({'text':'Enter path to AVRO JSON file with configuration of all nodes: '})
+           avro_config=r['string'].strip()
+
+        # Check if exists
+        if not os.path.isfile(avro_config):
+           return {'return':1, 'error':'AVRO configuration file not found ('+avro_config+')'}
+
+        # Add to files to save to machine dir
+        r=ck.load_json_file({'json_file':avro_config})
+        if r['return']>0: return r
+
+        dx['avro_config']=r['dict']
+
+#        henv['CK_MACHINE_HOST']=dx.get('host','')
+
+        r=ck.load_text_file({'text_file':avro_config})
+        if r['return']>0: return r
+        files['ip']=r['string']
+
+        dd['device_cfg']['remote_params']=dx
+
+        uod={
+             'preset_host_env':henv,
+             'skip_platform_detection':'yes'
+           }
+
+        tosd.update(uod)
+
+        dd['device_cfg']['update_target_os_dict']=uod
+
     # Detect various parameters of the platform (to suggest platform name as well)
     pn=''
     rp={}
@@ -777,6 +819,7 @@ def machine_init(i):
         if r['return']>0: return r
 
         dd=r['dict']
+        pp=r['path'] # can be useful to get access to machine specific files (such as for Apache Avro ip configuration)
 
         # Get main parameters
         host_os_uoa=dd.get('host_os_uoa','')
@@ -785,6 +828,8 @@ def machine_init(i):
 
         at=dd.get('access_type','')
         ecfg=dd.get('device_cfg',{})
+
+        ecfg['path_to_ck_target_entry']=pp
 
         # Update input (if undefined)
         if ii.get('host_os','')=='':
@@ -871,6 +916,9 @@ def check(i):
            tn.close
         except:
            pass
+
+    elif at=='avro':
+        connected='yes'
 
     else:
         # Check status of remote
