@@ -2235,6 +2235,12 @@ def virtual(i):
 
     list_of_uoa = duoa.split(',')
 
+    for xcid in i.get('xcids',[]):
+        if xcid['module_uoa'] == 'env':
+            list_of_uoa.append( xcid['data_uoa'] )
+        else:
+            return {'return':1, 'error':"all CID entries have to be of 'env' type"}
+
     shell_script_contents_for_linux     = '' # string with env
     shell_script_contents_for_windows   = '' # string with env
 
