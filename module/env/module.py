@@ -2233,7 +2233,13 @@ def virtual(i):
 
     duoa        = i.get('data_uoa', i.get('uoa','') )
 
-    list_of_uoa = duoa.split(',')
+    if duoa.find(',')!=-1:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
+        ck.out('')
+        ck.out('DEPRECATED: You seem to be using CSV format within a CID. Please list multiple CIDs on your command line instead.')
+        ck.out('')
+        list_of_uoa = duoa.split(',')
+    else:
+        list_of_uoa = [ duoa ]
 
     for xcid in i.get('xcids',[]):
         if xcid['module_uoa'] == 'env':
