@@ -2586,7 +2586,7 @@ def compare_versions(i):
     lv1=len(v1)
     lv2=len(v2)
 
-    if lv1==lv2 and sorted(v1)==sorted(v2):
+    if lv1==lv2 and v1==v2:
        result='='
     else:
        result='<'

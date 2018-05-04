@@ -60,8 +60,8 @@ class CompareVersionsTests(unittest.TestCase):
         verbosely_compare_versions(ver_12,  ver_120)
         verbosely_compare_versions(ver_120, ver_120, '=')
         verbosely_compare_versions(ver_125, ver_120, '>')
-        verbosely_compare_versions(ver_125, ver_13)
-        verbosely_compare_versions(ver_103, ver_130)
+        verbosely_compare_versions(ver_103, ver_13,  '<')
+        verbosely_compare_versions(ver_103, ver_130, '<')
 
 if __name__ == '__main__':
     import ck.kernel
