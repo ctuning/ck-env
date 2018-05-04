@@ -50,6 +50,7 @@ class CompareVersionsTests(unittest.TestCase):
             if expected_sign:
                 self.assertEqual(   result,                 expected_sign,   "Expected '"+expected_sign+"', but got '"+result+"' instead")
 
+        ver_103     = [ 1, 0, 3 ]
         ver_12      = [ 1, 2 ]
         ver_120     = [ 1, 2, 0 ]
         ver_125     = [ 1, 2, 5 ]
@@ -60,6 +61,7 @@ class CompareVersionsTests(unittest.TestCase):
         verbosely_compare_versions(ver_120, ver_120, '=')
         verbosely_compare_versions(ver_125, ver_120, '>')
         verbosely_compare_versions(ver_125, ver_13)
+        verbosely_compare_versions(ver_103, ver_130)
 
 if __name__ == '__main__':
     import ck.kernel
