@@ -31,10 +31,8 @@ class CompareVersionsTests(unittest.TestCase):
                 ret_struct = {'return': 0, 'result': '<'}
         """
 
-        def verbosely_compare_versions(left_version, right_version, expected_sign=None):
-
-#            if expected_sign:
-#                print('Checking that ',left_version, ' is indeed ', expected_sign, right_version)
+        def compare_one_pair_one_way(left_version, right_version, expected_sign):
+            "Run one verbose comparison"
 
             ret_struct = ck.access({
                 'action':       'compare_versions',
@@ -50,18 +48,32 @@ class CompareVersionsTests(unittest.TestCase):
             if expected_sign:
                 self.assertEqual(   result,                 expected_sign,   "Expected '"+expected_sign+"', but got '"+result+"' instead")
 
+        def compare_direct_and_reverse(left_version, right_version, expected_sign=None):
+            "Try both directions to test for symmetry of < / > relation"
+
+            compare_one_pair_one_way(left_version, right_version, expected_sign)
+            compare_one_pair_one_way(right_version, left_version, {'>':'<', '<':'>', '=':'=', None:None}[expected_sign] )
+
+
+        # Your favourite vectors go here:
+        #
+        ver_10ab    = [ 1, 0, 'ab' ]
         ver_103     = [ 1, 0, 3 ]
         ver_12      = [ 1, 2 ]
         ver_120     = [ 1, 2, 0 ]
         ver_125     = [ 1, 2, 5 ]
         ver_13      = [ 1, 3 ]
         ver_130     = [ 1, 3, 0 ]
+        ver_2107    = [ 2, 10, 7 ]
+        ver_2_27    = [ 2,  2, 7 ]
 
-        verbosely_compare_versions(ver_12,  ver_120)
-        verbosely_compare_versions(ver_120, ver_120, '=')
-        verbosely_compare_versions(ver_125, ver_120, '>')
-        verbosely_compare_versions(ver_103, ver_13,  '<')
-        verbosely_compare_versions(ver_103, ver_130, '<')
+        compare_direct_and_reverse(ver_12,      ver_120,    '<')    # old behaviour confirmed
+        compare_direct_and_reverse(ver_120,     ver_120,    '=')
+        compare_direct_and_reverse(ver_125,     ver_120,    '>')
+        compare_direct_and_reverse(ver_103,     ver_13,     '<')
+        compare_direct_and_reverse(ver_103,     ver_130,    '<')    # against an old bug where vector components were sorted first
+        compare_direct_and_reverse(ver_103,     ver_10ab,   '>')    # any integer is higher than any letter combo
+        compare_direct_and_reverse(ver_2107,    ver_2_27,   '>')    # against alphabetic ordering of integers
 
 if __name__ == '__main__':
     import ck.kernel
