@@ -67,7 +67,7 @@ class CompareVersionsTests(unittest.TestCase):
         ver_2107    = [ 2, 10, 7 ]
         ver_2_27    = [ 2,  2, 7 ]
 
-        compare_direct_and_reverse(ver_12,      ver_120,    '<')    # old behaviour confirmed
+        compare_direct_and_reverse(ver_12,      ver_120,    '=')    # switched to new behaviour
         compare_direct_and_reverse(ver_120,     ver_120,    '=')
         compare_direct_and_reverse(ver_125,     ver_120,    '>')
         compare_direct_and_reverse(ver_103,     ver_13,     '<')

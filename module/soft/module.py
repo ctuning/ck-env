@@ -2578,44 +2578,28 @@ def compare_versions(i):
 
     """
 
-    result=''
+    def compare_versions_core(v1_orig, v2_orig):
 
-    v1=i['version1']
-    v2=i['version2']
+        len_diff = len(v2_orig)-len(v1_orig)    # determine the (signed) length of zero-padding
 
-    lv1=len(v1)
-    lv2=len(v2)
+        # now pad the shorter to match the longer:
+        (v1, v2) = (v1_orig + [0]*len_diff, v2_orig) if len_diff>0 else (v1_orig, v2_orig + [0]*-len_diff)
 
-    if lv1==lv2 and v1==v2:
-       result='='
-    else:
-       result='<'
-       for j1 in range(0,lv1):
-           x1=v1[j1]
-           if j1>=lv2:
-              result='>'
-              break
-           else:
-              x2=v2[j1]
-              if type(x1)!=int or type(x2)!=int:
-                 if type(x1)==int:
-                    result='>'
-                    break
-                 elif type(x2)==int:
-                    result='<'
-                    break
-                 elif x1>x2:
-                    result='>'
-                    break
-                 elif x1<x2:
-                    result='<'
-                    break
-              else:
-                 if x1>x2:
-                    result='>'
-                    break
-                 elif x1<x2:
-                    break
+        for j in range(0,len(v1)):
+            (t1, t2) = (type(v1[j]), type(v2[j]))
+            if t1 == t2:        # perform natural comparison within the same type
+                if v1[j]<v2[j]:
+                    return '<'
+                elif v1[j]>v2[j]:
+                    return '>'
+            elif t1 == int:     # but any integer is higher than any letter combination
+                return '>'
+            elif t2 == int:
+                return '<'
+
+        return '='
+
+    result = compare_versions_core(i['version1'], i['version2'])
 
     if i.get('out','')=='con':
        ck.out(result)
