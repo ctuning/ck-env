@@ -82,7 +82,6 @@ def setup(i):
 
     # Get variables
     ck=i['ck_kernel']
-    s=''
 
     iv=i.get('interactive','')
 
@@ -95,6 +94,8 @@ def setup(i):
 
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
+
+    file_extensions = hosd.get('file_extensions',{})
 
     win=tosd.get('windows_base','')
     winh=hosd.get('windows_base','')
@@ -168,7 +169,7 @@ def setup(i):
                    'host_os_dict': hosd, 
                    'lib_path': cus.get('path_lib', '')})
     if r['return']>0: return r
-    s += r['script']
+    shell_setup_script_contents = r['script']
 
     ############################################################
     # Setting environment depending on the platform
@@ -178,7 +179,7 @@ def setup(i):
        if fp.endswith('.lib'):
           fpd=fp[:-4]+'.dll'
        if fpd.endswith('.dll') and os.path.isfile(fpd):
-          s+='\nset PATH='+p1+';%PATH%\n\n'
+          shell_setup_script_contents += '\nset PATH='+p1+';%PATH%\n\n'
 
        compiler = p0[len('libboost_system'):p0.find('-mt')]
        ver_suffix = p0[p0.find('-mt')+3:-len('.lib')]
@@ -196,6 +197,11 @@ def setup(i):
        env[ep+'_LFLAG_FILESYSTEM']='-lboost_filesystem'
        env[ep+'_LFLAG_REGEX']='-lboost_regex'
 
+    for python_ver_suffix in ('', '3'):
+        python_library_path_candidate = os.path.join(lib_path, 'libboost_python' + python_ver_suffix + file_extensions.get('dll',''))
+        if os.path.exists( python_library_path_candidate ):
+            env[ep + '_PYTHON_LIBRARY'] = python_library_path_candidate
+
     # Check if host is windows and target is android
     # then copy libboost_thread_pthread.a to libboost_thread.a ,
     # otherwise other soft may not understand that ...
@@ -208,6 +214,6 @@ def setup(i):
           import shutil
           shutil.copyfile(px0,px1)
 
-       s+='\nset LD_LIBRARY_PATH='+p1+':%LD_LIBRARY_PATH%\n\n'
+       shell_setup_script_contents += '\nset LD_LIBRARY_PATH='+p1+':%LD_LIBRARY_PATH%\n\n'
 
-    return {'return':0, 'bat':s}
+    return {'return':0, 'bat':shell_setup_script_contents }
