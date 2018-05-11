@@ -612,6 +612,7 @@ def install(i):
     pr_env['CK_TARGET_CPU_BITS']=tosd.get('bits','')
     pr_env['CK_HOST_OS_ID']=hosn
     pr_env['CK_TARGET_OS_ID']=osn
+    pr_env['CK_MD5SUM_CMD']=hosd.get('md5sum', 'md5sum')
 
     # Check if need host GPGPU params
     # We need a question here ('out':oo), since there can be multiple available drivers and we need to let user select the right one
