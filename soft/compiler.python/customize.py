@@ -54,7 +54,7 @@ def limit(i):
         if q.endswith('.exe'):
            q1=q1[:-4]
         if q.find('X11')<0 and q.find('pkgs')<0 and q.lower().find('openoffice')<0:
-           if q1=='python' or q1=='python2' or q1=='python3':
+           if q1=='python' or q1=='python2' or (q1.startswith('python3') and not q1.endswith('m')):
               drx.append(q)
 
     return {'return':0, 'list':drx}
