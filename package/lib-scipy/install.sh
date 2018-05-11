@@ -30,7 +30,7 @@ rm -rf "${EXTRA_PYTHON_SITE}"
 ######################################################################################
 echo "Installing SciPy and its dependencies to '${PACKAGE_LIB_DIR}' ..."
 
-${CK_PYTHON_BIN} -m pip install scipy --prefix=${EXTRA_PYTHON_SITE} --ignore-installed
+${CK_ENV_COMPILER_PYTHON_FILE} -m pip install scipy --prefix=${EXTRA_PYTHON_SITE} --ignore-installed
 
 if [ "${?}" != "0" ] ; then
   echo "Error: installation failed!"
