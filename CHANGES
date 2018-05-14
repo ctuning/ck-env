@@ -1,3 +1,6 @@
+* 2018.05.14 - [FGG] moved here imagenet soft/packages for imagenet (aux,val) from ck-caffe
+               to be able to reuse across different AI frameworks (TF, Caffe, Caffe2, MXNet, CNTK
+
 * 2018.05.03 - added support to machine module (target configuration) for Apache AVRO farms of machines
                (to support ReQuEST submission)
 
