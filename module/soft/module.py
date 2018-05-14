@@ -2322,8 +2322,7 @@ def show(i):
     """
     Input:  {
                (the same as list; can use wildcards)
-
-
+               (out_file) - output to file (for mediawiki)
             }
 
     Output: {
@@ -2334,7 +2333,13 @@ def show(i):
 
     """
 
+    import os
+
     o=i.get('out','')
+
+    of=i.get('out_file','')
+    if of!='':
+       xof=os.path.splitext(of)
 
     html=False
     if o=='html' or i.get('web','')=='yes':
@@ -2369,6 +2374,9 @@ def show(i):
 
     repo_url={}
     repo_private={}
+
+    size=0
+    isize=1
 
     private=''
     for l in ll:
@@ -2449,31 +2457,47 @@ def show(i):
 
            ###############################################################
            elif o=='mediawiki':
+              s=''
+
               x=lr
               y=''
               if url!='':
                  x='['+url+' '+lr+']'
                  y='['+url+'/tree/master/soft/'+ln+' link]'
-              ck.out('')
-              ck.out('=== '+ln+' ('+name+') ===')
-              ck.out('')
-              ck.out('Auto-detect?: '+ad)
-              ck.out('<br>Environment variable: <b>'+ep+'</b>')
-              ck.out('')
-              ck.out('Tags: <i>'+ytags+'</i>')
-              ck.out('<br>Host OS tags: <i>'+yhos+'</i>')
-              ck.out('<br>Target OS tags: <i>'+ytos+'</i>')
+
+              s+='\n'
+              s+='=== '+ln+' ('+name+') ===\n'
+              s+='\n'
+              s+='Auto-detect?: '+ad+'\n'
+              s+='<br>Environment variable: <b>'+ep+'</b>\n'
+              s+='\n'
+              s+='Tags: <i>'+ytags+'</i>\n'
+              s+='<br>Host OS tags: <i>'+yhos+'</i>\n'
+              s+='<br>Target OS tags: <i>'+ytos+'</i>\n'
               if y!='':
-                 ck.out('')
-                 ck.out('Software entry with meta: <i>'+y+'</i>')
-              ck.out('')
-              ck.out('Which CK repo: '+x)
+                 s+='\n'
+                 s+='Software entry with meta: <i>'+y+'</i>\n'
+              s+='\n'
+              s+='Which CK repo: '+x+'\n'
               if to_get!='':
-                 ck.out('<br>How to get: <i>'+to_get+'</i>')
+                 s+='<br>How to get: <i>'+to_get+'</i>\n'
               if to_get!='':
-                 ck.out('')
-                 ck.out('How to detect: <b>ck detect soft:'+ln+' (--target_os={CK OS UOA})</b>')
-              ck.out('')
+                 s+='\n'
+                 s+='How to detect: <b>ck detect soft:'+ln+' (--target_os={CK OS UOA})</b>\n'
+
+              s+='\n'
+
+              if of=='':
+                 ck.out(s)
+              else:
+                 with open(of, "a") as ff:
+                      ff.write(s)
+                 
+                 size+=len(s)
+                 if size>=80000:
+                    isize+=1
+                    of=xof[0]+str(isize)+xof[1]
+                    size=0 
 
            ###############################################################
            elif o=='con' or o=='txt':

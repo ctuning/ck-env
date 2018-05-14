@@ -1605,6 +1605,7 @@ def show(i):
     """
     Input:  {
                (the same as list; can use wildcards)
+               (out_file) - output to file (for mediawiki)
             }
 
     Output: {
@@ -1615,7 +1616,13 @@ def show(i):
 
     """
 
+    import os
+
     o=i.get('out','')
+
+    of=i.get('out_file','')
+    if of!='':
+       xof=os.path.splitext(of)
 
     html=False
     if o=='html' or i.get('web','')=='yes':
@@ -1650,6 +1657,9 @@ def show(i):
 
     repo_url={}
     repo_private={}
+
+    size=0
+    isize=1
 
     private=''
     for l in ll:
@@ -1727,28 +1737,44 @@ def show(i):
 
            ###############################################################
            elif o=='mediawiki':
+              s=''
+
               x=lr
               y=''
               if url!='':
                  x='['+url+' '+lr+']'
                  y='['+url+'/tree/master/package/'+ln+' link]'
-              ck.out('')
-              ck.out('=== '+ln+' ('+ver+') ===')
-              ck.out('')
-              ck.out('Tags: <i>'+ytags+'</i>')
-              ck.out('<br>Host OS tags: <i>'+yhos+'</i>')
-              ck.out('<br>Target OS tags: <i>'+ytos+'</i>')
+
+              s='\n'
+              s+='=== '+ln+' ('+ver+') ===\n'
+              s+='\n'
+              s+='Tags: <i>'+ytags+'</i>\n'
+              s+='<br>Host OS tags: <i>'+yhos+'</i>\n'
+              s+='<br>Target OS tags: <i>'+ytos+'</i>\n'
               if y!='':
-                 ck.out('')
-                 ck.out('Package entry with meta: <i>'+y+'</i>')
-              ck.out('')
-              ck.out('Which CK repo: '+x)
+                 s+='\n'
+                 s+='Package entry with meta: <i>'+y+'</i>\n'
+              s+='\n'
+              s+='Which CK repo: '+x+'\n'
               if to_get!='':
-                 ck.out('<br>How to get: <i>'+to_get+'</i>')
+                 s+='<br>How to get: <i>'+to_get+'</i>\n'
               if to_get!='':
-                 ck.out('')
-                 ck.out('How to install: <i>ck install package:'+ln+' (--target_os={CK OS UOA})</i>')
-              ck.out('')
+                 s+='\n'
+                 s+='How to install: <i>ck install package:'+ln+' (--target_os={CK OS UOA})</i>'
+
+              s+='\n'
+
+              if of=='':
+                 ck.out(s)
+              else:
+                 with open(of, "a") as ff:
+                      ff.write(s)
+                 
+                 size+=len(s)
+                 if size>=100000:
+                    isize+=1
+                    of=xof[0]+str(isize)+xof[1]
+                    size=0 
 
            ###############################################################
            elif o=='con' or o=='txt':
@@ -1767,7 +1793,6 @@ def show(i):
                  if ld!='': s+=ss1+'  '+ld
 
               ck.out(s)
-
 
     if html:
        h+='</table>\n'
