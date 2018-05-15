@@ -3,7 +3,6 @@
   "check_exit_status": "yes",
   "customize": {
     "extra_dir": "",
-    "force_ask_path": "yes",
     "install_env": {
       "IMAGENET_VAL_MD5": "29b22e2961454d5413ddabcf34fc5622",
       "IMAGENET_VAL_URL": "http://www.image-net.org/challenges/LSVRC/2012/nnoupb/ILSVRC2012_img_val.tar"
