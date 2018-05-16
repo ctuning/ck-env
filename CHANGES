@@ -1,3 +1,5 @@
+* 2018.05.16 - [FGG] added soft/package for spack: https://github.com/spack/spack
+
 * 2018.05.15 - [FGG] added ImageNet train dataset package/soft
 
 * 2018.05.14 - [FGG] moved here imagenet soft/packages for imagenet (aux,val) from ck-caffe
