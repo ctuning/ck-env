@@ -67,7 +67,7 @@ The minimal installation requires:
 
 ### Linux/MacOS
 
-You can install CK in your local user space as following:
+You can install CK in your local user space as follows:
 
 ```
 $ git clone http://github.com/ctuning/ck
@@ -88,7 +88,7 @@ First you need to download and install a few dependencies from the following sit
 * Git: https://git-for-windows.github.io
 * Minimal Python: https://www.python.org/downloads/windows
 
-You can then install CK as following:
+You can then install CK as follows:
 ```
  $ pip install ck
 ```
@@ -116,19 +116,19 @@ Installation of a CK workflow for virtual environments and packages
 Usage
 =====
 
-You can easily detect and register in the CK all the instances of GCC and LLVM as following:
+You can easily detect and register in the CK all the instances of GCC and LLVM as follows:
 ```
  $ ck detect soft:compiler.gcc
  $ ck detect soft:compiler.llvm
 ```
 
-You can now see multiple versions of the detected software registered in the CK as following:
+You can now see multiple versions of the detected software registered in the CK as follows:
 ```
  $ ck show env
 ```
 
 You can then compile and run unified CK benchmarks shared by the community using 
-any of the above compiler instances (GCC, LLVM, ICC ...) and their versions simply as following:
+any of the above compiler instances (GCC, LLVM, ICC ...) and their versions simply as follows:
 
 ```
  $ ck pull repo:ck-autotuning
