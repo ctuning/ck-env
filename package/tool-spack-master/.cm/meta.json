@@ -9,9 +9,7 @@
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_URL": "https://github.com/spack/spack"
-    }, 
-    "use_git_revision": "yes", 
-    "version": "master"
+    }
   }, 
   "end_full_path": {
     "linux": "src/bin/spack"
