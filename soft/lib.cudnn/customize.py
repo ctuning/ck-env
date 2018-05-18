@@ -68,14 +68,16 @@ def version_cmd(i):
 
              ver=v1+'.'+v2+'.'+v3
 
-    if ver=='' and rfn.startswith(fn):
+    if ver=='':
        fn=os.path.basename(fp)
+
        rfp=os.path.realpath(fp)
        rfn=os.path.basename(rfp)
 
-       ver=rfn[len(fn)+1:]
-       if ver!='':
-          ver='api-'+ver
+       if rfn.startswith(fn):
+          ver=rfn[len(fn)+1:]
+          if ver!='':
+             ver='api-'+ver
 
     return {'return':0, 'cmd':'', 'version':ver}
 
