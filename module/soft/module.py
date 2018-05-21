@@ -2663,6 +2663,8 @@ def prepare_target_name(i):
 
     tool=''
 
+    sdirs=hosd.get('dir_sep','')
+
     plat=tplat
     osd=tosd
     if cus.get('soft_file_from_host_os','')=='yes':
@@ -2680,5 +2682,7 @@ def prepare_target_name(i):
         v=file_extensions[k]
 
         tool=tool.replace('$#file_ext_'+k+'#$',v)
+
+    tool=tool.replace('$#sep#$', sdirs)
 
     return {'return':0, 'tool':tool}

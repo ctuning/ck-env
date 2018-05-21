@@ -8,9 +8,7 @@
       "linux": 5, 
       "win": 5
     }, 
-    "soft_file": {
-      "linux": "scipy/__init__.py"
-    }
+    "soft_file_universal": "scipy$#sep#$__init__.py"
   }, 
   "soft_name": "SciPy Python library", 
   "tags": [

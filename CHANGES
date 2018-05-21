@@ -1,3 +1,5 @@
+* 2018.05.21 - [FGG] added support for host separator via $#sep#$ in soft_file_universal
+
 * 2018.05.16 - [FGG] added soft/package for spack: https://github.com/spack/spack
 
 * 2018.05.15 - [FGG] added ImageNet train dataset package/soft
