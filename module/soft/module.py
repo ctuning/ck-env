@@ -571,9 +571,11 @@ def setup(i):
 
     # Check if has custom script
     cs=None
-    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'data_uoa':duoa ,'cfg':d, 'skip_init':'yes'})
     if rx['return']==0: 
        cs=rx['code']
+    elif not rx['error'].startswith("can't find module code"):
+       return rx
 
     ########################################################################
     ########################################################################
