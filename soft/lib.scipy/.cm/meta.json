@@ -1,5 +1,4 @@
 {
-  "min_kernel_dep": "1.9.4.3",
   "auto_detect": "yes", 
   "customize": {
     "check_that_exists": "yes", 
