@@ -2,7 +2,8 @@
   "check_exit_status": "yes", 
   "customize": {
     "install_env": {
-        "PYTHON_PACKAGE_NAME": "scipy"
+        "PYTHON_PACKAGE_NAME":  "scipy",
+        "PIP_INSTALL_OPTIONS":  "--ignore-installed"
     }
   }, 
   "deps": {
