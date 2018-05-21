@@ -9,9 +9,8 @@
 
 # PACKAGE_DIR
 # INSTALL_DIR
+# PYTHON_PACKAGE_NAME
 
-echo "**************************************************************"
-echo "Installing SciPy package and its dependencies ..."
 
     # This is where pip will install the modules.
     # It has its own funny structure we don't control :
@@ -22,15 +21,15 @@ SHORT_PYTHON_VERSION=`${CK_ENV_COMPILER_PYTHON_FILE} -c 'import sys;print(sys.ve
 export PACKAGE_LIB_DIR="${EXTRA_PYTHON_SITE}/lib/python${SHORT_PYTHON_VERSION}/site-packages"
 export PYTHONPATH=$PACKAGE_LIB_DIR:$PYTHONPATH
 
-######################################################################################
+echo "**************************************************************"
 echo ""
-echo "Removing ${EXTRA_PYTHON_SITE}"
+echo "Cleanup: removing ${EXTRA_PYTHON_SITE}"
 rm -rf "${EXTRA_PYTHON_SITE}"
 
 ######################################################################################
-echo "Installing SciPy and its dependencies to '${PACKAGE_LIB_DIR}' ..."
+echo "Installing '${PYTHON_PACKAGE_NAME}' and its dependencies to '${PACKAGE_LIB_DIR}' ..."
 
-${CK_ENV_COMPILER_PYTHON_FILE} -m pip install scipy --prefix=${EXTRA_PYTHON_SITE} --ignore-installed
+${CK_ENV_COMPILER_PYTHON_FILE} -m pip install ${PYTHON_PACKAGE_NAME} --prefix=${EXTRA_PYTHON_SITE} --ignore-installed
 
 if [ "${?}" != "0" ] ; then
   echo "Error: installation failed!"

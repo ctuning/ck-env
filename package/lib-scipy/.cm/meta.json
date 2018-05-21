@@ -1,8 +1,8 @@
 {
   "check_exit_status": "yes", 
-  "comment": "install SciPy", 
   "customize": {
     "install_env": {
+        "PYTHON_PACKAGE_NAME": "scipy"
     }
   }, 
   "deps": {
