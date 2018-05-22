@@ -15,6 +15,10 @@
       "tags": "compiler,python"
     }
   }, 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "lib-python-scipy",
+    "module_uoa": "package"
+  },
   "end_full_path_universal": "build$#sep#$PIL$#sep#$__init__.py", 
   "only_for_host_os_tags": [
     "linux"
