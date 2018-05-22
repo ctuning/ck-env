@@ -23,8 +23,8 @@
     "linux"
   ], 
   "process_script": "install", 
-  "soft_uoa": "lib.scipy",
-  "suggested_path": "lib-scipy",
+  "soft_uoa": "lib.python.scipy",
+  "suggested_path": "lib-python-scipy",
   "tags": [
     "lib",
     "python-package",
