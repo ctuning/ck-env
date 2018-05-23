@@ -1,0 +1,30 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+echo "*** Available GPU frequencies:"
+cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_frequencies
+
+echo "*** Current GPU frequency:"
+cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
+
+echo "*** Minimum GPU frequency:"
+cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
+
+echo "*** Maximum GPU frequency:"
+cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+
+echo
+
+echo "*** Available GPU governors:"
+cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_governors
+
+echo "*** Current GPU governor:"
+cat /sys/class/misc/mali0/device/devfreq/gpufreq/governor
