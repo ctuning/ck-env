@@ -6,6 +6,9 @@
     "merge_dicts": {
       "desc": "merge dictionaries in 2 files"
     },
+    "prepare_entry_template": {
+      "desc": "select template for a given module"
+    },
     "process_all_files_recursively": {
       "desc": "process all files recursively using some action"
     },
@@ -15,9 +18,15 @@
     "replace_string_in_file": {
       "desc": "replace string in a file"
     },
+    "select_uoa": {
+      "desc": "select UOA"
+    },
     "sort_json_file": {
       "desc": "sort JSON file"
     }
+  },
+  "module_deps": {
+    "soft":"5e1100048ab875d7"
   },
   "copyright": "See CK COPYRIGHT.txt for copyright details",
   "desc": "auxiliary functions shared by Grigori Fursin",

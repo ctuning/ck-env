@@ -1,3 +1,5 @@
+* 2018.05.24 - [FGG] added universal handling of templates for new entries in misc module
+
 * 2018.05.21 - [FGG] added support for host separator via $#sep#$ in soft_file_universal
 
 * 2018.05.16 - [FGG] added soft/package for spack: https://github.com/spack/spack
