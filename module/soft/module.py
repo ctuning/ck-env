@@ -194,11 +194,27 @@ def internal_detect(i):
        if duid!=duoa: x+=' ('+duid+')'
        ck.out('Software description entry found: '+x)
 
-    # Check if has custom script
+
+    # Check if customize script is redirected into another entry:
+    #
+    another_entry_with_customize_script=d.get('use_customize_script_from_another_entry', None)
+    if another_entry_with_customize_script:
+       r=ck.access({'action':'find',
+                    'module_uoa':   another_entry_with_customize_script.get('module_uoa', work['self_module_uid']),
+                    'data_uoa':     another_entry_with_customize_script.get('data_uoa','')
+                })
+       if r['return']>0: return r
+       customization_script_path = r['path']
+    else:
+       customization_script_path = p
+
+
     cs=None
-    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+    rx=ck.load_module_from_path({'path':customization_script_path, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
     if rx['return']==0: 
        cs=rx['code']
+    elif another_entry_with_customize_script or not rx['error'].startswith("can't find module code"):
+       return rx
 
     # Checking name
     cus=d.get('customize',{})
@@ -569,13 +585,28 @@ def setup(i):
         vuoa=v.get('uoa','') # can be undefined if OS specific
         if vuoa!='': setup['deps_'+q]=vuoa
 
-    # Check if has custom script
+
+    # Check if customize script is redirected into another entry:
+    #
+    another_entry_with_customize_script=d.get('use_customize_script_from_another_entry', None)
+    if another_entry_with_customize_script:
+       r=ck.access({'action':'find',
+                    'module_uoa':   another_entry_with_customize_script.get('module_uoa', work['self_module_uid']),
+                    'data_uoa':     another_entry_with_customize_script.get('data_uoa','')
+                })
+       if r['return']>0: return r
+       customization_script_path = r['path']
+    else:
+       customization_script_path = p
+
+
     cs=None
-    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'data_uoa':duoa ,'cfg':d, 'skip_init':'yes'})
+    rx=ck.load_module_from_path({'path':customization_script_path, 'module_code_name':cfg['custom_script_name'], 'data_uoa':duoa ,'cfg':d, 'skip_init':'yes'})
     if rx['return']==0: 
        cs=rx['code']
-    elif not rx['error'].startswith("can't find module code"):
+    elif another_entry_with_customize_script or not rx['error'].startswith("can't find module code"):
        return rx
+
 
     ########################################################################
     ########################################################################
@@ -960,11 +991,28 @@ def setup(i):
        if pi.find(' ')>=0 and eifs!='':
           xs=eifs
 
-       # Check if has custom script
+
+       # Check if customize script is redirected into another entry:
+       #
+       another_entry_with_customize_script=d.get('use_customize_script_from_another_entry', None)
+       if another_entry_with_customize_script:
+          r=ck.access({'action':'find',
+                       'module_uoa':   another_entry_with_customize_script.get('module_uoa', work['self_module_uid']),
+                       'data_uoa':     another_entry_with_customize_script.get('data_uoa','')
+                   })
+          if r['return']>0: return r
+          customization_script_path = r['path']
+       else:
+          customization_script_path = p
+
+
        cs=None
-       rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+       rx=ck.load_module_from_path({'path':customization_script_path, 'module_code_name':cfg['custom_script_name'], 'data_uoa':duoa ,'cfg':d, 'skip_init':'yes'})
        if rx['return']==0: 
           cs=rx['code']
+       elif another_entry_with_customize_script or not rx['error'].startswith("can't find module code"):
+          return rx
+
 
        sadd=''
        if cs!=None and 'setup' in dir(cs):
@@ -1555,11 +1603,28 @@ def check(i):
 
     rr={'return':0}
 
-    # Check if has custom script
+
+    # Check if customize script is redirected into another entry:
+    #
+    another_entry_with_customize_script=d.get('use_customize_script_from_another_entry', None)
+    if another_entry_with_customize_script:
+       r=ck.access({'action':'find',
+                    'module_uoa':   another_entry_with_customize_script.get('module_uoa', work['self_module_uid']),
+                    'data_uoa':     another_entry_with_customize_script.get('data_uoa','')
+                })
+       if r['return']>0: return r
+       customization_script_path = r['path']
+    else:
+       customization_script_path = p
+
+
     cs=None
-    rx=ck.load_module_from_path({'path':p, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
+    rx=ck.load_module_from_path({'path':customization_script_path, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
     if rx['return']==0: 
        cs=rx['code']
+    elif another_entry_with_customize_script or not rx['error'].startswith("can't find module code"):
+       return rx
+
 
     soft_version_cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
