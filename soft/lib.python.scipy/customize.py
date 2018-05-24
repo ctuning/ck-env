@@ -15,11 +15,15 @@ def version_cmd(i):
     package_name            = os.path.basename( path_without_init_py )
     site_dir                = os.path.dirname( path_without_init_py )
     ck                      = i['ck_kernel']
+    cus                     = i['customize']
 
-    rx=ck.load_module_from_path({'path':path_without_init_py, 'module_code_name':'version', 'skip_init':'yes'})
+    version_module_name     = cus.get('version_module_name', '__init__')
+    version_variable_name   = cus.get('version_variable_name', '__version__')
+
+    rx=ck.load_module_from_path({'path':path_without_init_py, 'module_code_name':version_module_name, 'skip_init':'yes'})
     if rx['return']==0:
         loaded_package  = rx['code']
-        version_string  = getattr(loaded_package, 'version')
+        version_string  = getattr(loaded_package, version_variable_name)
     else:
         ck.out('Failed to import package '+package_name+' : '+rx['error'])
         version_string  = ''
@@ -79,6 +83,7 @@ def setup(i):
             }
 
     """
+
 
     # Get variables
     ck=i['ck_kernel']
