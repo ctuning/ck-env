@@ -246,6 +246,7 @@ def internal_detect(i):
         'target_os_dict':tosd,
         'cmd':soft_version_cmd,
         'use_locale':cus.get('use_locale_for_version',''),
+        'customize':cus,
         'custom_script_obj':cs}
     rx=get_version(ii)
     if rx['return']==0:
@@ -668,17 +669,19 @@ def setup(i):
               'host_os_dict':hosd,
               'target_os_dict':tosd,
               'cmd':soft_version_cmd,
+              'customize':cus,
               'custom_script_obj':cs,
               'skip_existing':skip_existing,
               'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
               'use_locale':cus.get('use_locale_for_version','')}
           rx=get_version(ii)
-          if rx['return']>0 and rx['return']!=16 and rx['return']!=22: return rx
           if rx['return']==0:
              ver=rx['version']
              if o=='con':
                 ck.out('')
                 ck.out('  Detected version: '+ver)
+          elif rx['return']!=16 and rx['return']!=22:
+             return rx
           else:
              if o=='con':
                 ck.out('')
@@ -1823,6 +1826,7 @@ def check(i):
                'target_os_dict':tosd,
                'cmd':soft_version_cmd,
                'use_locale':cus.get('use_locale_for_version',''),
+               'customize':cus,
                'custom_script_obj':cs}
            rx=get_version(ii)
            if rx['return']>0:
@@ -2057,8 +2061,8 @@ def get_version(i):
     sb=i.get('bat','')
     soft_version_cmd=i.get('cmd','')
 
-    cs=i.get('custom_script_obj','')
-    if cs=='': cs=None
+    cs=i.get('custom_script_obj', None)
+    cus=i.get('customize',{})   # should we be more strict [] here?
 
     hosd=i.get('host_os_dict',{})
     tosd=i.get('target_os_dict',{})
@@ -2103,6 +2107,7 @@ def get_version(i):
                              'target_os_dict':tosd,
                              'cmd':soft_version_cmd,
                              'ck_kernel':ck,
+                             'customize':cus,
                              'out':o})
           if rx['return']>0: return rx
           cmd=rx.get('cmd','')
