@@ -370,7 +370,7 @@ def prepare_entry_template(i):
     truoa=i.get('template_repo','')
 
     if tuoa=='':
-       lst=[{'data_uid':'', 'data_uoa':'', 'info':{'data_name':'Empty entry'}, 'meta':{'sort':9999}}] # Add it to the end
+       lst=[{'data_uid':'', 'data_uoa':'', 'repo_uid':'', 'info':{'data_name':'Empty entry'}, 'meta':{'sort':9999}}] # Add it to the end
 
        if tuoa=='':
           ii={'action':'search',
@@ -382,16 +382,19 @@ def prepare_entry_template(i):
 
           lst+=r['lst']
 
+       if len(lst)==1:
+          c=lst[0]
+
        # Make selection
-       if oo=='con':
+       if oo=='con' and len(lst)>1:
           r=select_uoa({'text':'Select template for the new entry', 
                         'choices':lst})
           if r['return']>0: return r
 
           c=r['choice']
 
-          tuoa=c['data_uid']
-          truoa=c['repo_uid']
+       tuoa=c['data_uid']
+       truoa=c['repo_uid']
 
     d=i.get('dict',{})
 
