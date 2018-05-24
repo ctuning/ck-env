@@ -376,6 +376,7 @@ def prepare_entry_template(i):
           ii={'action':'search',
               'module_uoa':omuoa,
               'data_uoa':tuoa,
+              'add_info':'yes',
               'search_dict':{'template':'yes'}}
           r=ck.access(ii)
           if r['return']>0: return r
