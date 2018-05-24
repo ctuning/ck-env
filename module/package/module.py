@@ -531,10 +531,10 @@ def install(i):
     ##########################################################################################
     #
     # All of the following:
-    #       * "original" directory of the current entry
-    #       * directory of the entry pointed by 'use_scripts_from_another_entry'
-    #       * directory of the entry pointed by 'use_preprocess_scripts_from_another_entry'
-    # may have a customization python script defined by the name 'custom_script_name'[.py]
+    #       (1) "original" directory of the current entry
+    #       (2) directory of the entry pointed by 'use_scripts_from_another_entry'
+    #       (3) directory of the entry pointed by 'use_preprocess_scripts_from_another_entry'
+    # may have a customization python script 'custom.py' (named in module/package/.cm/meta.json)
     #
     # The interface methods that will be optionally called (if the script provides them) are:
     #       * pre_path()
@@ -547,50 +547,71 @@ def install(i):
     #       * first in the "other" (typically representing the base entry)
     #       * and then in the "original" (typically representing the derived entry)
     #
+    # The top two entries listed above may also contain install.{sh|bat} scripts.
+    #
     # The mechanism seems to be an attempt to perform multiple inheritance of the entries,
     # both 'use_scripts_from_another_entry' and 'use_preprocess_scripts_from_another_entry'
     # representing the parents.
     #
     ##########################################################################################
-    custom_script_name=cfg.get('custom_script_name','custom')
     customization_script=None
     original_customization_script=None # original - always in the current directory of a package!
 
-    main_scripts_path=p
-    preprocess_scripts_path=main_scripts_path
 
-    # Check if has original custom script
-    rx=ck.load_module_from_path({'path':main_scripts_path, 'module_code_name':custom_script_name, 'skip_init':'yes'})
+    # Initial assumption is that the "original" directory of the entry contains the customization script:
+    #
+    (customization_script_path, shell_script_path) = (p, p)
+
+
+    # Loading original_customization_script from the original entry, if possible:
+    #
+    rx=ck.load_module_from_path({'path':customization_script_path, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
     if rx['return']==0: 
        original_customization_script=rx['code']
 
-    x=d.get('use_scripts_from_another_entry',{})
-    if len(x)>0:
+
+    # The second entry may contain both custom.py and install.{sh|bat} :
+    #
+    another_entry_with_scripts=d.get('use_scripts_from_another_entry', None)
+    if another_entry_with_scripts:
        r=ck.access({'action':'find',
-                    'module_uoa':   x.get('module_uoa', work['self_module_uid']),
-                    'data_uoa':     x.get('data_uoa','')
+                    'module_uoa':   another_entry_with_scripts.get('module_uoa', work['self_module_uid']),
+                    'data_uoa':     another_entry_with_scripts.get('data_uoa','')
                 })
        if r['return']>0: return r
-       main_scripts_path=r['path']
-       preprocess_scripts_path=main_scripts_path # may change later via use_preprocess_scripts_from_another_entry
+       (customization_script_path, shell_script_path) = (r['path'], r['path']) # may change later via use_preprocess_scripts_from_another_entry
 
-    x=d.get('use_preprocess_scripts_from_another_entry',{})
-    if len(x)>0:
+
+    # The third entry may only contain custom.py :
+    #
+    another_entry_with_preprocess_scripts=d.get('use_preprocess_scripts_from_another_entry', None)
+    if another_entry_with_preprocess_scripts:
        r=ck.access({'action':'find',
-                    'module_uoa':   x.get('module_uoa', work['self_module_uid']),
-                    'data_uoa':     x.get('data_uoa','')
+                    'module_uoa':   another_entry_with_preprocess_scripts.get('module_uoa', work['self_module_uid']),
+                    'data_uoa':     another_entry_with_preprocess_scripts.get('data_uoa','')
                 })
        if r['return']>0: return r
-       preprocess_scripts_path=r['path']
+       customization_script_path=r['path']
 
-    # Check if has custom script
-    if preprocess_scripts_path==main_scripts_path and original_customization_script:
-       customization_script=original_customization_script
-       original_customization_script=None
-    else:
-       rx=ck.load_module_from_path({'path':preprocess_scripts_path, 'module_code_name':custom_script_name, 'skip_init':'yes'})
+
+    # What follows may be a bit confusing:
+    #
+    # If original_customization_script existed, we will only attempt to load customization_script from another_entry_with_preprocess_scripts.
+    #
+    # However if there was no original_customization_script, we may attempt to load:
+    #   (1) original_customization_script again [ if defined last ] - will silently fail again
+    #   (2) customization_script from use_scripts_from_another_entry [ if defined last ]
+    #   (3) customization_script from use_preprocess_scripts_from_another_entry [ if defined last ]
+    # In any case the loading is allowed to silently fail without notice.
+    #
+    if another_entry_with_preprocess_scripts or not original_customization_script:
+       rx=ck.load_module_from_path({'path':customization_script_path, 'module_code_name':cfg['custom_script_name'], 'skip_init':'yes'})
        if rx['return']==0: 
           customization_script=rx['code']
+
+    else:       # if there was no other script to load, we move the previously loaded code into customization_script
+       (original_customization_script, customization_script) = (None, original_customization_script)
+
 
     # Check if need host CPU params
     features={}
@@ -1191,9 +1212,9 @@ def install(i):
               "customize":cus,
               "self_cfg":cfg,
               "version":ver,
-              "path":main_scripts_path,
+              "path":shell_script_path,
               "path_original_package":p,
-              "script_path":preprocess_scripts_path,
+              "script_path":customization_script_path,
               "out":oo,
               "install_path":pi
              }
@@ -1217,7 +1238,7 @@ def install(i):
           # Prepare process script
           if shell_script_name:
              shell_script_name+=sext
-             shell_script_full_path=os.path.join(main_scripts_path,shell_script_name)
+             shell_script_full_path=os.path.join(shell_script_path,shell_script_name)
 
              if not os.path.isfile(shell_script_full_path):
                 return {'return':1, 'error':'processing script '+shell_script_name+' is not found'}
@@ -1259,13 +1280,13 @@ def install(i):
 
              xs=''
              if p.find(' ')>=0 and eifs!='': xs=eifs
-             shell_wrapper_contents+=eset+' PACKAGE_DIR='+xs+main_scripts_path+xs+'\n'
+             shell_wrapper_contents+=eset+' PACKAGE_DIR='+xs+shell_script_path+xs+'\n'
 
              # If Windows, add MingW path
              if wb=='yes':
                 rm=ck.access({'action':'convert_to_cygwin_path',
                               'module_uoa':cfg['module_deps']['os'],
-                              'path':main_scripts_path})
+                              'path':shell_script_path})
                 if rm['return']>0: return rm
                 ming_ppp=rm['path']
                 shell_wrapper_contents+=eset+' PACKAGE_DIR_MINGW='+xs+ming_ppp+xs+'\n'

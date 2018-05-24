@@ -26,6 +26,7 @@
   "ck_install_file": "ck-install.json", 
   "ck_install_file_saved": "ck-install-saved.json", 
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
+  "custom_script_name": "custom",
   "desc": "managing software packages (installing tools, registering in CK environments)", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
