@@ -344,6 +344,11 @@ def prepare_entry_template_ignore_files(dr, files):
 def prepare_entry_template(i):
     """
     Input:  {
+              original_module_uoa - add template for this original module 
+              (template)          - force using this template
+              (skip_custom_note)  - if 'yes', do not print note about customization at the end
+
+              all params from "ck add" function
             }
 
     Output: {
@@ -373,6 +378,9 @@ def prepare_entry_template(i):
        lst=[{'data_uid':'', 'data_uoa':'', 'repo_uid':'', 'info':{'data_name':'Empty entry'}, 'meta':{'sort':9999}}] # Add it to the end
 
        if tuoa=='':
+          if oo=='con':
+             ck.out('Searching for templates ...')
+
           ii={'action':'search',
               'module_uoa':omuoa,
               'data_uoa':tuoa,
@@ -388,11 +396,15 @@ def prepare_entry_template(i):
 
        # Make selection
        if oo=='con' and len(lst)>1:
+          ck.out('')
+
           r=select_uoa({'text':'Select template for the new entry', 
                         'choices':lst})
           if r['return']>0: return r
 
           c=r['choice']
+
+          ck.out('')
 
        tuoa=c['data_uid']
        truoa=c['repo_uid']
@@ -423,10 +435,10 @@ def prepare_entry_template(i):
     r=ck.access(i)
     if r['return']>0: return r
 
+    pnew=r['path']
+
     # Copy files to a new entry if template
     if tuoa!='':
-       pnew=r['path']
-
        d=os.listdir(p)
        for f in d:
            if f!='.cm' and not f.endswith('.pyc') and 'tmp' not in f:
@@ -442,6 +454,14 @@ def prepare_entry_template(i):
 
               except IOError as e: 
                  return {'return':1, 'error':'problem copying files from template ('+str(e)+')'}
+
+    # Print info about customization
+    if i.get('skip_custom_note', '')!='yes' and oo=='con':
+       ck.out('')
+       ck.out('You can continue customizing this entry (tags, dependencies, etc):')
+       ck.out('')
+       ck.out(' * JSON meta:   '+os.path.join(pnew, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta']))
+       ck.out(' * Other files: '+pnew)
 
     return r
 
