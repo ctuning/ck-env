@@ -15,8 +15,8 @@ cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_frequencies
 echo "*** Current CPU frequency from scaling:"
 cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
 
-echo "*** Current CPU frequency:"
-cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq
+#echo "*** Current CPU frequency:"
+#cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq
 
 echo "*** Minimum CPU frequency:"
 cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq
