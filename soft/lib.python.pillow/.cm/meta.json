@@ -3,6 +3,8 @@
   "customize": {
     "check_that_exists": "yes", 
     "env_prefix": "CK_ENV_PYTHON_PACKAGE_PILLOW", 
+    "version_module_name":      "version",
+    "version_variable_name":    "__version__",
     "limit_recursion_dir_search": {
       "linux": 5, 
       "win": 5
@@ -15,5 +17,9 @@
     "python-package", 
     "pillow",
     "PIL"
-  ]
+  ],
+  "use_customize_script_from_another_entry": {
+    "module_uoa":   "soft",
+    "data_uoa":     "lib.python.scipy"
+  }
 }

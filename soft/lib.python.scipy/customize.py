@@ -6,24 +6,24 @@
 #
 
 import os
-from pprint import pprint
 
 ##############################################################################
 
 def version_cmd(i):
-#    print("**************** version_cmd() called with the following data: ***************")
-#    pprint(i)
-
     path_with_init_py       = i['full_path']                            # the full_path that ends with PACKAGE_NAME/__init__.py
     path_without_init_py    = os.path.dirname( path_with_init_py )
     package_name            = os.path.basename( path_without_init_py )
     site_dir                = os.path.dirname( path_without_init_py )
     ck                      = i['ck_kernel']
+    cus                     = i['customize']
 
-    rx=ck.load_module_from_path({'path':site_dir+'/'+package_name, 'module_code_name':'version', 'skip_init':'yes'})
+    version_module_name     = cus.get('version_module_name', '__init__')
+    version_variable_name   = cus.get('version_variable_name', '__version__')
+
+    rx=ck.load_module_from_path({'path':path_without_init_py, 'module_code_name':version_module_name, 'skip_init':'yes'})
     if rx['return']==0:
         loaded_package  = rx['code']
-        version_string  = getattr(loaded_package, 'version')
+        version_string  = getattr(loaded_package, version_variable_name)
     else:
         ck.out('Failed to import package '+package_name+' : '+rx['error'])
         version_string  = ''
@@ -33,9 +33,6 @@ def version_cmd(i):
 ##############################################################################
 
 def dirs(i):
-#    print("**************** dirs() called with the following data: ***************")
-#    pprint(i)
-
     hosd    = i['host_os_dict']
     macos   = hosd.get('macos','')
     #dirs    = []
@@ -87,8 +84,6 @@ def setup(i):
 
     """
 
-#    print("**************** setup() called with the following data: ***************")
-#    pprint(i)
 
     # Get variables
     ck=i['ck_kernel']
