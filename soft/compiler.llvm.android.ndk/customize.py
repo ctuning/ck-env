@@ -84,16 +84,23 @@ def parse_version(i):
     ver=''
 
     for q in lst:
-        q=q.strip()
+        q=q.strip().lower()
         if q!='':
-           j=q.lower().find(' version ')
-           if j>0 and (q.lower().startswith('clang') or q.lower().startswith('android clang')):
+           j=q.find(' version ')
+           if j>0 and (q.startswith('clang') or q.startswith('android clang')):
               q=q[j+9:]
               j=q.find(' ')
               if j>0:
                  q=q[:j]
               ver=q
               break
+
+           j=q.find('clang version ')
+           if j>0:
+              j1=q.find(' ', j+14)
+              if j1>0:
+                 ver=q[j+14:j1].strip()
+                 break
 
     if ver=='':
         ck.out('')
