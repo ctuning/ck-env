@@ -1,7 +1,6 @@
 {
+  "check_exit_status": "yes", 
   "customize": {
-    "extra_dir": "", 
-    "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_BUILD_TYPE": "", 
       "PACKAGE_GIT": "YES", 
@@ -10,25 +9,29 @@
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_URL": "https://github.com/spack/spack"
-    }
+    }, 
+    "version": "5.0.1"
   }, 
   "end_full_path": {
-    "linux": "src/bin/spack"
+    "linux": "spack/llvm/bin/clang" 
   }, 
-  "need_cpu_info": "no", 
-  "only_for_host_os_tags": [
-    "linux" 
-  ], 
+  "need_cpu_info": "yes", 
   "only_for_target_os_tags": [
     "linux" 
   ], 
   "process_script": "install", 
-  "soft_uoa": "e29497d516564e3b", 
-  "suggested_path": "tool-spack", 
+  "soft_uoa": "1c2eb494b8ae3bc4", 
+  "suggested_path": "llvm-5.0.1", 
   "tags": [
-    "tool", 
-    "spack", 
-    "vmaster"
+    "compiler", 
+    "llvm", 
+    "lang-c", 
+    "lang-cpp", 
+    "v5.0.1-spack", 
+    "v5.0.1", 
+    "v5.0", 
+    "v5", 
+    "vspack"
   ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 
