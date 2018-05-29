@@ -310,7 +310,7 @@ def snapshot(i):
        s1+='mkdir %CK_TOOLS%\n'
        s1+='\n'
 
-       s2+='rem uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
+       s2=s+'rem uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
        s2+='rem ck set kernel var.install_to_env=yes\n'
        s2+='\n'
 
@@ -336,7 +336,7 @@ def snapshot(i):
        s1+='mkdir ${CK_TOOLS}\n'
        s1+='\n'
 
-       s2+='# uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
+       s2=s+'# uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
        s2+='# ck set kernel var.install_to_env=yes\n'
        s2+='\n'
 
