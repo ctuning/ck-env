@@ -368,7 +368,7 @@ def snapshot(i):
        ck.out('')
        ck.out('Recording '+fname+' ...')
 
-    r=ck.list_all_files({'path':'.'})
+    r=ck.list_all_files({'path':'.', 'all':'yes'})
     if r['return']>0: return r
 
     flx=r['list']
