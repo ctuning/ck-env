@@ -1,3 +1,8 @@
+* 2018.05.29 - [FGG] added "ck snapshot artifact --repo={name of repo}" to prepare a zip file
+               with selected repo, all dependencies, ck-master and 2 scripts 
+               to prepare virtual CK environment with repo snapshots 
+               and to start a shell.
+
 * 2018.05.24 - [FGG] added universal handling of templates for new entries in misc module
 
 * 2018.05.21 - [FGG] added support for host separator via $#sep#$ in soft_file_universal
