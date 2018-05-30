@@ -253,6 +253,10 @@ def set(i):
     x='required software '
     if name!='': x='"'+name+'"'
     war='no registered CK environment was found for '+x+' dependency with tags="'+tags+'"'
+
+    if no_tags!='':
+       war+=', no_tags="'+no_tags+'"'
+
     if len(setup)>0:
        ro=readable_os({'setup':setup})
        if ro['return']>0: return ro
@@ -285,7 +289,6 @@ def set(i):
 
     try_to_reinstall=False
     if lx==0 and duoa!='':
-
        # Check exact problem
        rx=ck.access({'action':'load',
                      'module_uoa':work['self_module_uid'],
@@ -460,6 +463,18 @@ def set(i):
               auoa=q['data_uoa']
               auid=q['data_uid']
               aname=met.get('soft_name','')
+
+              # Check no tags:
+              if no_tags!='':
+                 split_no_tags=no_tags.split(',')
+                 soft_tags=met.get('tags',[])
+                 soft_skip=False
+                 for st in soft_tags:
+                     if st in split_no_tags:
+                        soft_skip=True
+                        break
+                 if soft_skip:
+                    continue
 
               auoas.append(q['data_uoa'])
               ds=met.get('auto_detect','')
