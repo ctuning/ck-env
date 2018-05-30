@@ -59,10 +59,10 @@
   "package_extra_name":" (parallel, mpi, fortran, static)",
   "process_script": "install", 
   "soft_uoa": "01ef32c29d84f24b", 
-  "suggested_path": "lib-hdf5", 
+  "suggested_path": "lib-hdf5-static", 
   "tags": [
     "lib", 
-    "hdf5", 
+    "hdf5-static", 
     "vstatic",
     "vparallel",
     "vmpi",
