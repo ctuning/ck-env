@@ -513,6 +513,9 @@ def setup(i):
        psysroot=platform_path+'/'+platform+'/arch-'+arch
     sysroot='--sysroot "'+psysroot+'"'
 
+    if not os.path.isdir(psysroot):
+       return {'return':1, 'error':'System root ('+psysroot+') is not found - please check your Android NDK for selected OS'}
+
     env['CK_SYS_ROOT']=psysroot
 
     x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
