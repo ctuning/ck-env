@@ -1,6 +1,6 @@
-diff -ruN protobuf-3.5.1\cmake\libprotoc.cmake protobuf-3.5.1-new\cmake\libprotoc.cmake
---- protobuf-3.5.1\cmake\libprotoc.cmake	Thu Mar 08 15:04:42 2018
-+++ protobuf-3.5.1-new\cmake\libprotoc.cmake	Thu Mar 08 15:05:05 2018
+diff -ruN protobuf-3.5.1/cmake/libprotoc.cmake protobuf-3.5.1-new/cmake/libprotoc.cmake
+--- protobuf-3.5.1/cmake/libprotoc.cmake	Thu Mar 08 15:04:42 2018
++++ protobuf-3.5.1-new/cmake/libprotoc.cmake	Thu Mar 08 15:05:05 2018
 @@ -73,7 +73,7 @@
    ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_message_field.cc
    ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_primitive_field.cc

@@ -1,6 +1,6 @@
-diff -ruN protobuf-3.2.0\cmake\install.cmake protobuf-3.2.0-new\cmake\install.cmake
---- protobuf-3.2.0\cmake\install.cmake	Fri Jan 27 23:03:40 2017
-+++ protobuf-3.2.0-new\cmake\install.cmake	Wed May 10 10:07:15 2017
+diff -ruN protobuf-3.2.0/cmake/install.cmake protobuf-3.2.0-new/cmake/install.cmake
+--- protobuf-3.2.0/cmake/install.cmake	Fri Jan 27 23:03:40 2017
++++ protobuf-3.2.0-new/cmake/install.cmake	Wed May 10 10:07:15 2017
 @@ -14,8 +14,8 @@
      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${_library})
  endforeach()
@@ -22,9 +22,9 @@ diff -ruN protobuf-3.2.0\cmake\install.cmake protobuf-3.2.0-new\cmake\install.cm
    NAMESPACE protobuf::
    FILE ${CMAKE_INSTALL_CMAKEDIR}/protobuf-targets.cmake
  )
-diff -ruN protobuf-3.2.0\cmake\libprotoc.cmake protobuf-3.2.0-new\cmake\libprotoc.cmake
---- protobuf-3.2.0\cmake\libprotoc.cmake	Fri Jan 27 23:03:40 2017
-+++ protobuf-3.2.0-new\cmake\libprotoc.cmake	Wed May 10 10:03:21 2017
+diff -ruN protobuf-3.2.0/cmake/libprotoc.cmake protobuf-3.2.0-new/cmake/libprotoc.cmake
+--- protobuf-3.2.0/cmake/libprotoc.cmake	Fri Jan 27 23:03:40 2017
++++ protobuf-3.2.0-new/cmake/libprotoc.cmake	Wed May 10 10:03:21 2017
 @@ -72,7 +72,7 @@
    ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_message_field.cc
    ${protobuf_source_dir}/src/google/protobuf/compiler/javanano/javanano_primitive_field.cc
@@ -63,9 +63,9 @@ diff -ruN protobuf-3.2.0\cmake\libprotoc.cmake protobuf-3.2.0-new\cmake\libproto
  
  add_library(libprotoc ${protobuf_SHARED_OR_STATIC}
    ${libprotoc_files})
-diff -ruN protobuf-3.2.0\cmake\protoc.cmake protobuf-3.2.0-new\cmake\protoc.cmake
---- protobuf-3.2.0\cmake\protoc.cmake	Fri Jan 27 23:03:40 2017
-+++ protobuf-3.2.0-new\cmake\protoc.cmake	Wed May 10 10:07:25 2017
+diff -ruN protobuf-3.2.0/cmake/protoc.cmake protobuf-3.2.0-new/cmake/protoc.cmake
+--- protobuf-3.2.0/cmake/protoc.cmake	Fri Jan 27 23:03:40 2017
++++ protobuf-3.2.0-new/cmake/protoc.cmake	Wed May 10 10:07:25 2017
 @@ -2,5 +2,7 @@
    ${protobuf_source_dir}/src/google/protobuf/compiler/main.cc
  )
