@@ -13,7 +13,14 @@ import os
 # customize directories to automatically find and register software
 
 def dirs(i):
-    return {'return':0}
+    hosd=i['host_os_dict']
+    phosd=hosd.get('ck_name','')
+    dirs=i.get('dirs', [])
+    if phosd=='win':
+        win_dir = 'C:\\Users\\All Users\\Microsoft'
+        if os.path.isdir(win_dir):
+            dirs.append(win_dir)
+    return {'return':0, 'dirs':dirs}
 
 ##############################################################################
 # prepare env
@@ -22,6 +29,9 @@ def version_cmd(i):
 
     fp=i['full_path']
     cmdx=i['cmd']
+
+    if ' ' in fp:
+       fp='"'+fp+'"'
 
     cmd=fp+' '+cmdx
 
@@ -168,6 +178,10 @@ def setup(i):
     tags=i['tags']
     cus=i['customize']
 
+    hos=i['host_os_uid']
+    tos=i['host_os_uid']
+    tdid=i['target_device_id']
+
     hosd=i.get('host_os_dict',{})
     target_d=i.get('target_os_dict',{})
     winh=hosd.get('windows_base','')
@@ -190,6 +204,35 @@ def setup(i):
     tp=''
 
     arch=target_d.get('android_ndk_arch','')
+
+    # Need to check that if path has spaces on Windows, then convert to non-space format, 
+    # otherwise many issues with CMAKE ...
+    if winh=='yes' and ' ' in fp:
+       cmd='@for %%A in ("'+fp+'") do echo %%~sA'
+
+       r=ck.access({'action':'shell',
+                    'module_uoa':'os',
+                    'host_os':hos,
+                    'target_os':tos,
+                    'device_id':tdid,
+                    'cmd':cmd,
+                    'split_to_list':'yes'})
+       if r['return']>0: return r
+       x=r['stdout_lst']
+
+       if len(x)>2 and x[0]=='':
+          y=x[2]
+       if len(y)>0:
+          pp1=os.path.dirname(fp)
+          pp2=os.path.dirname(pp1)
+          pp3=os.path.dirname(pp2)
+          pp4=os.path.dirname(pp3) # since later will need real long name (to detect arch)
+
+          fp=y
+           
+          ck.out('')
+          ck.out('  Removed spaces from Windows path: '+fp)
+          ck.out('')
 
     # Check path
     ep=cus.get('env_prefix','')
