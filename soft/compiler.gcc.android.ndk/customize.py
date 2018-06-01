@@ -97,7 +97,6 @@ def parse_version(i):
 
     for q in lst:
         q=q.strip()
-        print (q)
         if q!='':
            j=q.lower().find(') ')
            if j>0:
