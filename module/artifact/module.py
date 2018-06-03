@@ -76,8 +76,11 @@ def recursive_repos(i):
 def snapshot(i):
     """
     Input:  {
-              repo   - which repo to snapshot with all deps
-              (date) - use this date (YYYYMMDD) instead of current one
+              repo         - which repo to snapshot with all deps
+              (file_name)  - customize name ("ck-artifacts-" by default)
+              (no_deps)    - if 'yes', do not process repo dependencies (useful for results repo accompanying main repos)
+              (copy_repos) - if 'yes', copy repositories instead of zipping
+              (date)       - use this date (YYYYMMDD) instead of current one
             }
 
     Output: {
@@ -91,6 +94,7 @@ def snapshot(i):
     import os
     import platform
     import zipfile
+    import shutil
 
     o=i.get('out','')
 
@@ -98,10 +102,23 @@ def snapshot(i):
     if repo=='':
        return {'return':1, 'error': '"repo" to snapshot is not defined'}
 
+    no_deps=i.get('no_deps','')=='yes'
+
+    copy_repos=i.get('copy_repos','')=='yes'
+    force_clean=i.get('force_clean','')=='yes'
+
     # Preparing tmp directory where to zip repos and add scripts ...
     curdir0=os.getcwd()
 
-    ptmp=os.path.join(curdir0, 'tmp')
+#    ptmp=os.path.join(curdir0, 'tmp')
+    import tempfile
+    ptmp=os.path.join(tempfile.gettempdir(),'tmp-proceedings')
+    if o=='con':
+       ck.out('Temp directory: '+ptmp)
+       ck.out('')
+
+    if os.path.isdir(ptmp) and force_clean:
+       shutil.rmtree(ptmp, onerror=ck.rm_read_only)
 
     if os.path.isdir(ptmp):
        r=ck.inp({'text':'Directory "'+ptmp+'" exists. Delete (Y/n)?'})
@@ -122,17 +139,18 @@ def snapshot(i):
     curdir=os.getcwd()
 
     # Checking repo deps
-    if o=='con':
-       ck.out('Checking dependencies on other repos ...')
-
-    r=recursive_repos({'repo':repo})
-    if r['return']>0: return r
-
-    # Removing redundant
     final_repo_deps=[]
-    for q in reversed(r['repo_deps']):
-        if q not in final_repo_deps:
-           final_repo_deps.append(q)
+    if not no_deps:
+       if o=='con':
+          ck.out('Checking dependencies on other repos ...')
+
+       r=recursive_repos({'repo':repo})
+       if r['return']>0: return r
+
+       # Removing redundant
+       for q in reversed(r['repo_deps']):
+           if q not in final_repo_deps:
+              final_repo_deps.append(q)
 
     final_repo_deps.append(repo)
 
@@ -167,6 +185,7 @@ def snapshot(i):
         qq=ck.cache_repo_info[ruid]
 
         d=qq['dict']
+        p=d.get('path','')
 
         t=d.get('shared','')
 
@@ -175,7 +194,6 @@ def snapshot(i):
 
            if len(duoa)>il: il=len(duoa)
 
-           p=d.get('path','')
            url=d.get('url','')
 
            branch=''
@@ -183,6 +201,8 @@ def snapshot(i):
 
            if os.path.isdir(p):
               # Detect status
+              pc=os.getcwd()
+
               os.chdir(p)
 
               # Get current branch
@@ -195,11 +215,27 @@ def snapshot(i):
               if r['return']==0 and r['return_code']==0: 
                  checkout=r['stdout'].strip()
 
+              os.chdir(pc)
+
            x={'branch':branch, 'checkout':checkout, 'path':p, 'type':t, 'url':url, 'data_uoa':duoa}
            pp.append(x)
            pp2[duoa]=x
 
+        if copy_repos:
+           pu=os.path.join(ptmp,'CK')
+           if not os.path.isdir(pu):
+              os.mkdir(pu)
+           pu1=os.path.join(pu,repo)
+
+           if o=='con':
+              ck.out(' * Copying repo '+repo+' ...')
+
+           shutil.copytree(p,pu1,ignore=shutil.ignore_patterns('*.pyc', 'tmp', 'tmp*', '__pycache__'))
+
     # Print
+    if o=='con':
+       ck.out('')
+
     for q in pp:
         name=q['data_uoa']
 
@@ -245,39 +281,40 @@ def snapshot(i):
 
        date=a1+a2+a3
 
-    zips=[]
-    for repo in final_repo_deps:
-        if o=='con':
-           ck.out('')
-           ck.out(' * '+repo)
-           ck.out('')
+    if not copy_repos:
+       zips=[]
+       for repo in final_repo_deps:
+           if o=='con':
+              ck.out('')
+              ck.out(' * '+repo)
+              ck.out('')
 
-        an='ckr-'+repo
+              an='ckr-'+repo
 
-        if pp2[repo].get('branch','')!='':
-           an+='--'+pp2[repo]['branch']
+              if pp2[repo].get('branch','')!='':
+                 an+='--'+pp2[repo]['branch']
 
-        if pp2[repo].get('checkout','')!='':
-           an+='--'+pp2[repo]['checkout']
+              if pp2[repo].get('checkout','')!='':
+                 an+='--'+pp2[repo]['checkout']
 
-        an+='.zip'
+              an+='.zip'
 
-        zips.append(an)
+              zips.append(an)
 
-        r=ck.access({'action':'zip',
-                     'module_uoa':cfg['module_deps']['repo'],
-                     'data_uoa':repo,
-                     'archive_name':an,
-                     'overwrite':'yes',
-                     'out':o})
-        if r['return']>0: return r
+              r=ck.access({'action':'zip',
+                           'module_uoa':cfg['module_deps']['repo'],
+                           'data_uoa':repo,
+                           'archive_name':an,
+                           'overwrite':'yes',
+                           'out':o})
+              if r['return']>0: return r
 
-    # Print sequence of adding CK repos (for self-sustainable virtual CK artifact)
-    if o=='con':
-       ck.out('')
+       # Print sequence of adding CK repos (for self-sustainable virtual CK artifact)
+       if o=='con':
+          ck.out('')
 
-       for z in zips:
-           ck.out('ck add repo --zip='+z)
+          for z in zips:
+              ck.out('ck add repo --zip='+z)
 
     # Cloning CK master
     if o=='con':
@@ -292,78 +329,93 @@ def snapshot(i):
        ck.out('')
        ck.out('Preparing scripts ...')
 
-    f1=cfg['bat_prepare_virtual_ck']
-    f2=cfg['bat_start_virtual_ck']
+    for tp in ['win','linux']:
 
-    if platform.system().lower().startswith('win'): # pragma: no cover
-       f1+='.bat'
-       f2+='.bat'
+        f1=cfg['bat_prepare_virtual_ck']
+        f2=cfg['bat_start_virtual_ck']
 
-       s='set PATH=%~dp0\\ck-master\\bin;%PATH%\n'
-       s+='set PYTHONPATH=%~dp0\\ck-master;%PYTHONPATH%\n'
-       s+='\n'
-       s+='set CK_REPOS=%~dp0\\CK\n'
-       s+='set CK_TOOLS=%~dp0\\CK-TOOLS\n'
-       s+='\n'
+        if tp=='win':
+           f1+='.bat'
+           f2+='.bat'
+           f3='\\'
+           f4='%~dp0'+f3
 
-       s1=s+'mkdir %CK_REPOS%\n'
-       s1+='mkdir %CK_TOOLS%\n'
-       s1+='\n'
+           s='set PATH='+f4+'ck-master\\bin;%PATH%\n'
+           s+='set PYTHONPATH='+f4+'ck-master;%PYTHONPATH%\n'
+           s+='\n'
+           s+='set CK_REPOS='+f4+'CK\n'
+           s+='set CK_TOOLS='+f4+'CK-TOOLS\n'
+           s+='\n'
 
-       s2=s+'rem uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
-       s2+='rem ck set kernel var.install_to_env=yes\n'
-       s2+='\n'
+           s1=s+'mkdir %CK_REPOS%\n'
+           s1+='mkdir %CK_TOOLS%\n'
+           s1+='\n'
 
-       s2+='call ck ls repo\n\n'
-       s2+='cmd\n'
+           s2=s+'rem uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
+           s2+='rem ck set kernel var.install_to_env=yes\n'
+           s2+='\n'
 
-       s3='call '
+           s2+='call ck ls repo\n\n'
+           s2+='cmd\n'
 
-    else:
-       f1+='.sh'
-       f2+='.sh'
+           s3='call '
 
-       s='#! /bin/bash\n'
-       s+='\n'
-       s+='export PATH=$PWD/ck-master/bin:$PATH\n'
-       s+='export PYTHONPATH=$PWD/ck-master:$PYTHONPATH\n'
-       s+='\n'
-       s+='export CK_REPOS=$PWD/CK\n'
-       s+='export CK_TOOLS=$PWD/CK-TOOLS\n'
-       s+='\n'
+        else:
+           f1+='.sh'
+           f2+='.sh'
+           f3='/'
+           f4='$PWD'+f3
 
-       s1=s+'mkdir ${CK_REPOS}\n'
-       s1+='mkdir ${CK_TOOLS}\n'
-       s1+='\n'
+           s='#! /bin/bash\n'
+           s+='\n'
+           s+='export PATH='+f4+'ck-master/bin:$PATH\n'
+           s+='export PYTHONPATH='+f4+'ck-master:$PYTHONPATH\n'
+           s+='\n'
+           s+='export CK_REPOS='+f4+'CK\n'
+           s+='export CK_TOOLS='+f4+'CK-TOOLS\n'
+           s+='\n'
 
-       s2=s+'# uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
-       s2+='# ck set kernel var.install_to_env=yes\n'
-       s2+='\n'
+           s1=s+'mkdir ${CK_REPOS}\n'
+           s1+='mkdir ${CK_TOOLS}\n'
+           s1+='\n'
 
-       s2+='ck ls repo\n\n'
-       s2+='bash\n'
+           s2=s+'# uncomment next line to install tools to CK env entries rather than CK_TOOLS directory\n'
+           s2+='# ck set kernel var.install_to_env=yes\n'
+           s2+='\n'
 
-       s3=''
+           s2+='ck ls repo\n\n'
+           s2+='bash\n'
 
-    # preparing unzip
-    for z in zips:
-        s1+=s3+'ck add repo --zip='+z+'\n'
+           s3=''
 
-    # Recording scripts
-    r=ck.save_text_file({'text_file':f1, 'string':s1})
-    if r['return']>0: return r
-    r=ck.save_text_file({'text_file':f2, 'string':s2})
-    if r['return']>0: return r
+        # importing repos
+        if copy_repos:
+           for repo in final_repo_deps:
+               s1+=s3+'ck import repo --quiet --path='+f4+'CK'+f3+repo+'\n'
 
-    # If non-Windows, set 755
-    if not platform.system().lower().startswith('win'): # pragma: no cover
-       os.system('chmod 755 '+f1)
-       os.system('chmod 755 '+f2)
+        else:
+           for z in zips:
+               s1+=s3+'ck add repo --zip='+z+'\n'
+
+        # Recording scripts
+        r=ck.save_text_file({'text_file':f1, 'string':s1})
+        if r['return']>0: return r
+        r=ck.save_text_file({'text_file':f2, 'string':s2})
+        if r['return']>0: return r
+
+        # If non-Windows, set 755
+        if tp!='win':
+           os.system('chmod 755 '+f1)
+           os.system('chmod 755 '+f2)
 
     # Generating final zip pack
-    fname='ck-artifacts-'+date+'.zip'
+    fn=i.get('file_name','')
+    if fn=='': fn='ck-artifacts-'
+    fname=fn+date+'.zip'
 
     # Write archive
+    os.chdir(ptmp)
+
     if o=='con':
        ck.out('')
        ck.out('Recording '+fname+' ...')
@@ -386,5 +438,10 @@ def snapshot(i):
 
     except Exception as e:
        return {'return':1, 'error':'failed to prepare CK artifact collections ('+format(e)+')'}
+
+    os.chdir(curdir0)
+
+    if os.path.isdir(ptmp) and force_clean:
+       shutil.rmtree(ptmp, onerror=ck.rm_read_only)
 
     return {'return':0}
