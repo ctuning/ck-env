@@ -169,11 +169,13 @@ def snapshot(i):
     pp2={}
     il=0
 
-    for repo in final_repo_deps:
+    path_to_main_repo=''
+
+    for xrepo in final_repo_deps:
         # Reload repo to get UID
         r=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['repo'],
-                     'data_uoa':repo})
+                     'data_uoa':xrepo})
         if r['return']>0: return r
 
         ruid=r['data_uid']
@@ -186,6 +188,9 @@ def snapshot(i):
 
         d=qq['dict']
         p=d.get('path','')
+
+        if xrepo==repo:
+           path_to_main_repo=p
 
         t=d.get('shared','')
 
@@ -225,12 +230,22 @@ def snapshot(i):
            pu=os.path.join(ptmp,'CK')
            if not os.path.isdir(pu):
               os.mkdir(pu)
-           pu1=os.path.join(pu,repo)
+           pu1=os.path.join(pu,xrepo)
 
            if o=='con':
-              ck.out(' * Copying repo '+repo+' ...')
+              ck.out(' * Copying repo '+xrepo+' ...')
 
            shutil.copytree(p,pu1,ignore=shutil.ignore_patterns('*.pyc', 'tmp', 'tmp*', '__pycache__'))
+
+    # Copying Readme if exists
+    fr='README.md'
+    pr1=os.path.join(path_to_main_repo, fr)
+    if os.path.isfile(pr1):
+       pr2=os.path.join(ptmp, fr)
+       if os.path.isfile(pr2):
+          os.remove(pr2)
+
+       shutil.copy(pr1,pr2)
 
     # Print
     if o=='con':
