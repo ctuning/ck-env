@@ -1706,7 +1706,7 @@ def show(i):
 
        h+='<p>\n'
        h+='See <pre>ck install package --help</pre> for more installation options.\n'
-       h+='See <a href="https://github.com/ctuning/ck/wiki/Portable-workflows">CK documentation</a> for further details.\n'
+       h+='See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a> for further details.\n'
 
        h+='<p>\n'
        h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black;">\n'
