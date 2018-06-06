@@ -1805,14 +1805,16 @@ def show(i):
               x1=''
               x2=''
               z1=''
+              z11=''
               if url!='':
                  x1='<a href="'+url+'">'
                  x2='</a>'
                  z1='<a href="'+yh+'">'
+                 z11='<a href="'+yh+'/.cm/meta.json">'
 
-              h+='  <td nowrap valign="top"><b>'+z1+ln+x2+'</b></td>\n'
+              h+='  <td nowrap valign="top">'+z1+ln+x2+'</b> <i>('+z11+'CK meta'+x2+')</i></td>\n'
 
-              h+='  <td nowrap valign="top"><i>'+x1+lr+x2+'</i></td>\n'
+              h+='  <td nowrap valign="top">'+x1+lr+x2+'</td>\n'
 
               h+='  <td valign="top">'+ytags+'\n'
 
