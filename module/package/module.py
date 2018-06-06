@@ -1667,13 +1667,57 @@ def show(i):
     ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
 
     if html:
-       h+='<i><b>Note:</b> you can install package via <pre>$ ck install package:{package UOA} (--target_os=android21-arm64)</i><br><br>\n'
-       h+='<table cellpadding="5">\n'
+       h+='You can install a CK package into CK virtual environment as follows:\n'
+       h+='<pre>\n'
+       h+=' ck pull repo:{Repo UOA - see below}\n'
+       h+=' ck install package:{Package UOA - see below}\n'
+       h+='</pre>\n'
+
+       h+='using tags:\n'
+       h+='<pre>\n'
+       h+=' ck install package --tags={some tags from below}\n'
+       h+='</pre>\n'
+
+       h+='to an unusual path:\n'
+       h+='<pre>\n'
+       h+=' ck install package:{Package UOA - see below} --install_path={full installation path}\n'
+       h+='</pre>\n'
+
+       h+='to a CK virtual environment entry :\n'
+       h+='<pre>\n'
+       h+=' $ ck set kernel var.install_to_env=yes\n'
+       h+=' ck install package:{Package UOA - see below}\n'
+       h+='</pre>\n'
+
+       h+='or for a different OS target (Android):\n'
+       h+='<pre>\n'
+       h+=' ck ls os:android* | sort\n'
+       h+=' ck install package:{Package UOA - see below} --target_os={OS UOA from above}\n'
+       h+='</pre>\n'
+
+       h+='You can then see or use registered virtual CK environments for installed packages as follows:\n'
+       h+='<pre>\n'
+       h+=' ck show env\n'
+       h+=' ck show env --tags={some tags from below}\n'
+       h+='\n'
+       h+=' ck virtual env:{UID from above}\n'
+       h+=' ck virtual env --tags={some tags from below}\n'
+       h+='</pre>\n'
+
+       h+='<p>\n'
+       h+='See <pre>ck install package --help</pre> for more installation options.\n'
+       h+='See <a href="https://github.com/ctuning/ck/wiki/Portable-workflows">CK documentation</a> for further details.\n'
+
+       h+='<p>\n'
+       h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black;">\n'
 
        h+=' <tr>\n'
-       h+='  <td><b>CK&nbsp;module&nbsp;(aka&nbsp;wrapper,&nbsp;plugin&nbsp;or&nbsp;container):</b></td>\n'
-       h+='  <td width="200"><b>CK Repository:</b></td>\n'
-       h+='  <td><b>Description:</b></td>\n'
+       h+='  <td nowrap><b>Package UOA:</b></td>\n'
+       h+='  <td nowrap><b>Repo UOA</b></td>\n'
+       h+='  <td><b>Tags:</b></td>\n'
+       h+='  <td><b>Host OS:</b></td>\n'
+       h+='  <td><b>Target OS:</b></td>\n'
+       h+='  <td><b>Notes:</b></td>\n'
        h+=' </tr>\n'
 
     repo_url={}
@@ -1702,7 +1746,7 @@ def show(i):
 
         private=repo_private.get(lr_uid,'')
 
-        if lr not in cfg.get('skip_repos',[]) and private!='yes':
+        if lr not in cfg.get('skip_repos',[]) and private!='yes' and url!='':
            lm=l['meta']
            ld=lm.get('desc','')
 
@@ -1729,6 +1773,16 @@ def show(i):
                if ytos!='': ytos+=','
                ytos+=q
 
+           if yhos=='':
+              yhos='any'
+           else:
+              yhos=yhos.replace('linux','linux,macos')
+
+           if ytos=='':
+              ytos='any'
+           else:
+              ytos=ytos.replace('linux','linux,macos')
+
            if lr=='default':
               to_get=''
            elif url.find('github.com/ctuning/')>0:
@@ -1736,21 +1790,40 @@ def show(i):
            else:
               to_get='ck pull repo --url='+url
 
+           x=lr
+           y=''
+           yh=''
+           if url!='':
+              yh=url+'/tree/master/package/'+ln
+              x='['+url+' '+lr+']'
+              y='['+yh+' link]'
+
            ###############################################################
            if html:
               h+=' <tr>\n'
 
-              h+='  <td valign="top"><b>'+ln+'</b></td>\n'
-
               x1=''
               x2=''
+              z1=''
               if url!='':
                  x1='<a href="'+url+'">'
                  x2='</a>'
+                 z1='<a href="'+yh+'">'
 
-              h+='  <td valign="top"><i>'+x1+lr+x2+'</i></td>\n'
+              h+='  <td nowrap valign="top"><b>'+z1+ln+x2+'</b></td>\n'
 
-              h+='  <td valign="top">'+ld+'\n'
+              h+='  <td nowrap valign="top"><i>'+x1+lr+x2+'</i></td>\n'
+
+              h+='  <td valign="top">'+ytags+'\n'
+
+              h+='  <td valign="top">'+yhos+'\n'
+              h+='  <td valign="top">'+ytos+'\n'
+
+              h1=''
+              if ld!='':
+                 h1+='<p>\n'+ld
+
+              h+='  <td valign="top">'+h1+'\n'
 
               h+='</td>\n'
 
@@ -1817,6 +1890,10 @@ def show(i):
 
     if html:
        h+='</table>\n'
+
+       if of!='':
+          r=ck.save_text_file({'text_file':of, 'string':h})
+          if r['return']>0: return r
 
     return {'return':0, 'html':h}
 

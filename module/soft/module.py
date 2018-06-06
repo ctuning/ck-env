@@ -2463,18 +2463,19 @@ def show(i):
        h+=' ck show env --tags={some tags from below}\n'
        h+='\n'
        h+=' ck virtual env:{UID from above}\n'
-       h+=' ck vitual env --tags={some tags from below}\n'
+       h+=' ck virtual env --tags={some tags from below}\n'
        h+='</pre>\n'
 
        h+='<p>\n'
-       h+='See <a href="https://github.com/ctuning/ck/wiki/Portable-workflows">CK documentation</a> for more details.\n'
+       h+='See <pre>ck detect soft --help</pre> for more detection options.\n'
+       h+='See <a href="https://github.com/ctuning/ck/wiki/Portable-workflows">CK documentation</a> for further details.\n'
 
        h+='<p>\n'
        h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black">\n'
 
        h+=' <tr>\n'
-       h+='  <td><b>Soft UOA:</b></td>\n'
-       h+='  <td width="200"><b>Repo UOA</b></td>\n'
+       h+='  <td nowrap><b>Soft UOA:</b></td>\n'
+       h+='  <td nowrap><b>Repo UOA</b></td>\n'
        h+='  <td><b>Tags:</b></td>\n'
        h+='  <td><b>Host OS:</b></td>\n'
        h+='  <td><b>Target OS:</b></td>\n'
@@ -2507,7 +2508,7 @@ def show(i):
 
         private=repo_private.get(lr_uid,'')
 
-        if lr not in cfg.get('skip_repos',[]) and private!='yes':
+        if lr not in cfg.get('skip_repos',[]) and private!='yes' and url!='':
            lm=l['meta']
            ld=lm.get('desc','')
 
@@ -2574,9 +2575,9 @@ def show(i):
                  x2='</a>'
                  z1='<a href="'+yh+'">'
 
-              h+='  <td valign="top"><b>'+z1+ln+x2+'</b></td>\n'
+              h+='  <td nowrap valign="top"><b>'+z1+ln+x2+'</b></td>\n'
 
-              h+='  <td valign="top"><i>'+x1+lr+x2+'</i></td>\n'
+              h+='  <td nowrap valign="top"><i>'+x1+lr+x2+'</i></td>\n'
 
               h+='  <td valign="top">'+ytags+'\n'
               h+='  <td valign="top">'+yhos+'\n'
