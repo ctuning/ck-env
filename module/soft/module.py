@@ -1107,9 +1107,32 @@ def setup(i):
        piib=cus.get('path_include','')
 
        if cus.get('skip_add_dirs','')!='yes': # and pi!='':
-          if pib!='' and cus.get('skip_add_to_bin','')!='yes': sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
-          if plib!='': sb+=eset+' '+envp_l+'='+xs+plib+xs+'\n'
-          if piib!='': sb+=eset+' '+envp_i+'='+xs+piib+xs+'\n'
+          if pib!='' and cus.get('skip_add_to_bin','')!='yes': 
+             sb+=eset+' '+envp_b+'='+xs+pib+xs+'\n'
+             if hplat=='win':
+                rcc=ck.access({'action':'convert_to_cygwin_path',
+                               'module_uoa':cfg['module_deps']['os'],
+                               'path':pib})
+                if rcc['return']==0:
+                   sb+=eset+' '+envp_b+'_CYGWIN='+xs+rcc['path']+xs+'\n'
+
+          if plib!='': 
+             sb+=eset+' '+envp_l+'='+xs+plib+xs+'\n'
+             if hplat=='win':
+                rcc=ck.access({'action':'convert_to_cygwin_path',
+                               'module_uoa':cfg['module_deps']['os'],
+                               'path':plib})
+                if rcc['return']==0:
+                   sb+=eset+' '+envp_l+'_CYGWIN='+xs+rcc['path']+xs+'\n'
+
+          if piib!='': 
+             sb+=eset+' '+envp_i+'='+xs+piib+xs+'\n'
+             if hplat=='win':
+                rcc=ck.access({'action':'convert_to_cygwin_path',
+                               'module_uoa':cfg['module_deps']['os'],
+                               'path':piib})
+                if rcc['return']==0:
+                   sb+=eset+' '+envp_i+'_CYGWIN='+xs+rcc['path']+xs+'\n'
 
        if sadd!='':
           sb+='\n'+sadd
