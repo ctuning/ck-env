@@ -164,13 +164,30 @@ def setup(i):
        # FIXME: please test if this bit works on Windows
        #        and make the following unconditional if it does:
        #
-       if winh!='yes':
-            first_param         = '-print-file-name=libstdc++' + file_extensions.get('dll','')
-            libdetect_output    = subprocess.check_output( [ full_path, first_param ], stderr=subprocess.STDOUT ).decode('utf-8')
-            if libdetect_output:
-                path_lib = os.path.dirname( libdetect_output.rstrip() )
-            else:
-                print("WARNING: subprocess.check_output(['" + full_path + "', " + first_param + "]) did not return anything")
+
+       # FGG indeed fixed that for Windows and Linux
+       first_param = '-print-file-name=libstdc++' + file_extensions.get('dll','')
+       path_lib=''
+
+       r=ck.access({'action':'run_and_get_stdout',
+                    'module_uoa':'os',
+                    'cmd': full_path+' '+first_param})
+       if r['return']==0:
+          path_lib=r['stdout'].strip()
+       else:
+          ck.out('WARNING: problem obtaining GCC LIB path ('+r['error']+')')
+
+       if path_lib!='' and not os.path.isdir(path_lib):
+          ck.out('WARNING: returned GCC LIB path is not a real path ('+path_lib+')')
+          path_lib=''
+
+#       if winh!='yes':
+#            first_param         = '-print-file-name=libstdc++' + file_extensions.get('dll','')
+#            libdetect_output    = subprocess.check_output( [ full_path, first_param ], stderr=subprocess.STDOUT ).decode('utf-8')
+#            if libdetect_output:
+#                path_lib = os.path.dirname( libdetect_output.rstrip() )
+#            else:
+#                print("WARNING: subprocess.check_output(['" + full_path + "', " + first_param + "]) did not return anything")
 
        path_bin=os.path.dirname(full_path)
        path_install=os.path.dirname(path_bin)
@@ -182,7 +199,7 @@ def setup(i):
           env[ep]           = path_install
           if path_bin!='/usr/bin':
               env[ep + '_BIN']  = path_bin
-          if path_lib:
+          if path_lib!='':
               env[ep + '_LIB']  = path_lib
 
        tool_postfix=''
