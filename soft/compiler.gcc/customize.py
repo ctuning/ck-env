@@ -158,6 +158,9 @@ def setup(i):
     ep=cus.get('env_prefix','')
     if full_path!='':
 
+       path_bin=os.path.dirname(full_path)
+       path_install=os.path.dirname(path_bin)
+
        # Ask the compiler where it keeps its dynamic library -
        # it may be used by other components and should be exposed:
        #
@@ -172,14 +175,21 @@ def setup(i):
        r=ck.access({'action':'run_and_get_stdout',
                     'module_uoa':'os',
                     'cmd': full_path+' '+first_param})
-       if r['return']==0:
-          path_lib=r['stdout'].strip()
-       else:
+       if r['return']>0:
           ck.out('WARNING: problem obtaining GCC LIB path ('+r['error']+')')
+       else:
+          xpath_lib=r['stdout'].strip()
+          if xpath_lib!='' and winh=='yes':
+             xpath_lib=os.path.join(path_install,xpath_lib)
 
-       if path_lib!='' and not os.path.isdir(path_lib):
-          ck.out('WARNING: returned GCC LIB path is not a real path ('+path_lib+')')
-          path_lib=''
+          # Check that file really exists
+          if not os.path.isfile(xpath_lib):
+             xpath_lib=''
+          else:
+             path_lib=os.path.dirname(xpath_lib)
+
+       if path_lib=='':
+          ck.out('WARNING: couldn\'t detect GCC stdlib++ path ...')
 
 #       if winh!='yes':
 #            first_param         = '-print-file-name=libstdc++' + file_extensions.get('dll','')
@@ -189,8 +199,6 @@ def setup(i):
 #            else:
 #                print("WARNING: subprocess.check_output(['" + full_path + "', " + first_param + "]) did not return anything")
 
-       path_bin=os.path.dirname(full_path)
-       path_install=os.path.dirname(path_bin)
 
        if path_bin!='/usr/bin':
           cus['path_bin']=path_bin

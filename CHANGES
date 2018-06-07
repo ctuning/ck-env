@@ -1,3 +1,6 @@
+* 2018.06.07 - [FGG] fixing GCC stdlib++ detection on Windows 
+               (see https://github.com/BVLC/caffe/issues/5631#issuecomment-395323054)
+
 * 2018.06.01 - [FGG] added support for os:android26* android27* and android28*
                      improved detection of correct Android NDK GCC
 
