@@ -141,7 +141,7 @@ def generate_element(root, d):
 
         root.append(e)
 
-    return {'return':0, 'element':e}
+    return {'return':0}
 
 ##############################################################################
 # generate XML from DICT (JSON)
@@ -207,7 +207,7 @@ def generate(i):
     r=generate_element(root,d)
     if r['return']>0: return r
 
-    root.append(r['element'])
+#    root.append(r['element'])
 
     # Save to XML file
     if ocon: ck.out('* Recording XML ...')
