@@ -1,3 +1,6 @@
+* 2018.06.08 - [FGG] added xml module to validate XML files via DTD
+               (needed to generate ACM DL proceedings for ReQuEST tournament)
+
 * 2018.06.07 - [FGG] fixing GCC stdlib++ detection on Windows 
                (see https://github.com/BVLC/caffe/issues/5631#issuecomment-395323054)
              - [FGG] automatically generate _CYGWIN for _BIN,_LIB,_INCLUDE paths 
