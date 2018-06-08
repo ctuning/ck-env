@@ -1,5 +1,8 @@
 {
   "actions": {
+    "generate": {
+      "desc": "generate XML from DICT (JSON)"
+    },
     "validate": {
       "desc": "validate XML against DTD"
     }
