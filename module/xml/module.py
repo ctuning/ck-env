@@ -132,11 +132,25 @@ def generate_element(root, d):
         v=l[k]
 
         if type(v)==list:
-          r=generate_element(e,v)
-          if r['return']>0: return r
+           r=generate_element(e,v)
+           if r['return']>0: return r
         else:
            v=str(v)
            if v!='':
+              # Check $% %$
+              if v.startswith('$%'):
+                 j=v.find('%$')
+                 if j>0:
+                    v1=v[2:j].strip()
+                    v=v[j+2:].strip()
+
+                    # Convert JSON to dict (attributes)
+                    r=ck.convert_json_str_to_dict({'str':v1, 'skip_quote_replacement':'yes'})
+                    if r['return']>0: return r
+                    attributes=r['dict']
+
+                    e=etree.Element(k, attrib=attributes)
+
               e.text=v
 
         root.append(e)
