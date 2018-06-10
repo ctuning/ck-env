@@ -296,6 +296,8 @@ def snapshot(i):
 
        date=a1+a2+a3
 
+    date=date.strip()
+
     if not copy_repos:
        zips=[]
        for repo in final_repo_deps:
