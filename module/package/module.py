@@ -1714,12 +1714,13 @@ def show(i):
        h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black;">\n'
 
        h+=' <tr>\n'
-       h+='  <td nowrap><b>Package UOA:</b></td>\n'
+       h+='  <td nowrap><b>#</b></td>\n'
+       h+='  <td nowrap><b>Package UOA</b></td>\n'
        h+='  <td nowrap><b>Repo UOA</b></td>\n'
-       h+='  <td><b>Tags:</b></td>\n'
-       h+='  <td><b>Host OS:</b></td>\n'
-       h+='  <td><b>Target OS:</b></td>\n'
-       h+='  <td><b>Notes:</b></td>\n'
+       h+='  <td><b>Tags</b></td>\n'
+       h+='  <td><b>Host OS</b></td>\n'
+       h+='  <td><b>Target OS</b></td>\n'
+       h+='  <td><b>Notes</b></td>\n'
        h+=' </tr>\n'
 
     repo_url={}
@@ -1729,7 +1730,10 @@ def show(i):
     isize=1
 
     private=''
+    num=0
     for l in ll:
+        num+=1
+
         ln=l['data_uoa']
         lr=l['repo_uoa']
 
@@ -1814,14 +1818,16 @@ def show(i):
                  z1='<a href="'+yh+'">'
                  z11='<a href="'+yh+'/.cm/meta.json">'
 
+              h+='  <td nowrap valign="top">'+str(num)+'</b></td>\n'
+
               h+='  <td nowrap valign="top">'+z1+ln+x2+'</b> <i>('+z11+'CK meta'+x2+')</i></td>\n'
 
               h+='  <td nowrap valign="top">'+x1+lr+x2+'</td>\n'
 
-              h+='  <td valign="top">'+ytags+'\n'
+              h+='  <td valign="top"><small>'+ytags+'</small>\n'
 
-              h+='  <td valign="top">'+yhos+'\n'
-              h+='  <td valign="top">'+ytos+'\n'
+              h+='  <td valign="top"><small>'+yhos+'</small>\n'
+              h+='  <td valign="top"><small>'+ytos+'</small>\n'
 
               h1=''
               if ld!='':
