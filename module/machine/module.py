@@ -46,7 +46,26 @@ def add(i):
 
               (use_host)                   - if 'yes', configure host as target
 
-              (access_type)                - access type to the machine ("android", "mingw", "wa_android", "wa_linux", "ck_node", "ssh", "rpc", "avro")
+              (access_type)                - access type to the machine: 
+                                                 "android"
+                                                 "mingw"
+                                                 "wa_android"
+                                                 "wa_linux"
+                                                 "ck_node"
+                                                 "ssh"
+                                                 "rpc"
+                                                 "avro"
+                                                 "quantum"
+
+                 Extra options per access type:
+
+                   * avro:
+                       avro_config         - full path to JSON configuration file
+
+                   * quantum:
+                       access_key          - full path to access key file if needed - will be available via env CK_QCK_ACCESS_KEY_FILE
+                       user_login          - user login if needed - will be available via env CK_QCK_ACCESS_LOGIN
+                       user_password       - user password if needed - will be available via env CK_QCK_ACCESS_PASSWORD
 
               (share)                      - if 'yes', share public info about platform with the community via cknowledge.org/repo
             }
@@ -129,6 +148,15 @@ def add(i):
        prefix=tat[at].get('alias_prefix','')
        rtags=tat[at].get('record_tags','')
        dos=''
+
+    # Check if use target OS as host OS (useful for Quantum)
+    if tat[at].get('use_target_os_as_host','')=='yes':
+       ii={'action':'detect',
+           'module_uoa':cfg['module_deps']['platform.os'],
+           'host_os':hos}
+       r=ck.access(ii)
+       if r['return']>0: return r
+       tos=r['os_uoa']
 
     # Extra checks
     if tos=='':
@@ -448,6 +476,63 @@ def add(i):
         if r['return']>0: return r
         files['ip']=r['string']
 
+        dd['device_cfg']['remote_params']=dx
+
+        uod={
+             'preset_host_env':henv,
+             'skip_platform_detection':'yes'
+           }
+
+        tosd.update(uod)
+
+        dd['device_cfg']['update_target_os_dict']=uod
+
+    ########################################################## Additional questions for Apache AVRO distributed platforms
+    if at=='quantum':
+        if 'device_cfg' not in dd:
+            dd['device_cfg']={}
+
+        dx={}
+        henv={}
+
+        #####################
+        access_key=i.get('access_key','')
+        if access_key=='':
+           ck.out('')
+           r=ck.inp({'text':'Input full path to an access key file for your remote Quantum machine or press Enter if it\'s not used: '})
+           access_key=r['string'].strip()
+
+        # Check if exists
+        if access_key!='':
+           if not os.path.isfile(access_key):
+              return {'return':1, 'error':'Access key file was not found ('+access_key+')'}
+
+           dx['qck_access_key_file']=access_key
+           henv['CK_QCK_ACCESS_KEY_FILE']=access_key
+
+        #####################
+        user_login=i.get('user_login','')
+        if user_login=='':
+           ck.out('')
+           r=ck.inp({'text':'Input user login name or press Enter if it\'s not used: '})
+           user_login=r['string'].strip()
+
+        if user_login!='':
+           dx['qck_access_login']=user_login
+           henv['CK_QCK_ACCESS_LOGIN']=user_login
+
+        #####################
+        user_password=i.get('user_password','')
+        if user_password=='':
+           ck.out('')
+           r=ck.inp({'text':'Input user password or press Enter if it\'s not used (note that it will be stored in the CK "machine" entry in a plain text): '})
+           user_password=r['string'].strip()
+
+        if user_password!='':
+           dx['qck_access_password']=user_password
+           henv['CK_QCK_ACCESS_PASSWORD']=user_password
+
+        # Set vars used in program module
         dd['device_cfg']['remote_params']=dx
 
         uod={
@@ -917,7 +1002,7 @@ def check(i):
         except:
            pass
 
-    elif at=='avro':
+    elif at=='avro' or at=='quantum':
         connected='yes'
 
     else:

@@ -42,6 +42,15 @@
         "android-with-arch"
       ]
     },
+    "avro": {
+      "detect_platform": "no",
+      "name": "AVRO: multiple remote machines accessed via Apache AVRO",
+      "sort": 80,
+      "tags": [
+        "linux",
+        "windows"
+      ]
+    },
     "ck_node": {
       "detect_platform": "yes",
       "name": "CK: remote Windows machine accessed via CK crowd node",
@@ -50,6 +59,22 @@
         "windows",
         "mingw"
       ]
+    },
+    "host": {
+      "detect_platform": "yes",
+      "name": "CK: this host machine as a target",
+      "sort": 5,
+      "tags": []
+    },
+    "quantum": {
+      "detect_platform": "no",
+      "name": "Quantum: remote quantum machine",
+      "sort": 90,
+      "tags": [
+        "linux",
+        "windows"
+      ],
+      "use_target_os_as_host": "yes"
     },
     "rpc": {
       "detect_platform": "no",
@@ -61,21 +86,6 @@
         "mingw",
         "rpc"
       ]
-    },
-    "avro": {
-      "detect_platform": "no",
-      "name": "AVRO: multiple remote machines accessed via Apache AVRO",
-      "sort": 80,
-      "tags": [
-        "linux",
-        "windows"
-      ]
-    },
-    "host": {
-      "detect_platform": "yes",
-      "name": "CK: this host machine as a target",
-      "sort": 5,
-      "tags": []
     },
     "ssh": {
       "detect_platform": "yes",

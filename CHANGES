@@ -1,3 +1,6 @@
+* 2018.06.13 - [FGG] added support for remote quantum machines 
+                     in the "machine" module
+
 * 2018.06.08 - [FGG] added xml module to validate XML files via DTD
                      (needed to generate ACM DL proceedings for ReQuEST tournament)
                [FGG] added universal XML generator from special dict
