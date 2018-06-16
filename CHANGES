@@ -1,3 +1,5 @@
+* 2018.06.16 - [FGG] added detection of OpenCL library on Linux
+
 * 2018.06.13 - [FGG] added support for remote quantum machines 
                      in the "machine" module
 

@@ -1,0 +1,4 @@
+On Ubuntu you can install OpenGL as follows:
+$ sudo apt-get install libgl1-mesa-glx
+
+
