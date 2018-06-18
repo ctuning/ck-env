@@ -800,7 +800,7 @@ def list_repos(i):
     ll=rx['lst']
 
     if html:
-       h+='You can reuse modules and other components with a common API from below repositories:\n'
+       h+='You can reuse modules and other components with a common API from below repositories (most of them were shared with the permissive 3-clause BSD license or CC-BY):\n'
        h+='<pre>\n'
        h+=' ck pull repo:{Repo UOA - see below}\n'
        h+='</pre>\n'
@@ -924,16 +924,18 @@ def list_repos(i):
            continue
 
         url=d.get('url','')
+        external_url=d.get('external_url','')
         rd=d.get('repo_deps',{})
 
         ld=d.get('desc','')
 
-        if lr=='default':
-           to_get=''
-        elif url.find('github.com/ctuning/')>0:
+        to_get=''
+        if url.find('github.com/ctuning/')>0:
            to_get='ck pull repo:'+lr
-        else:
+        elif url!='':
            to_get='ck pull repo --url='+url
+        elif external_url!='':
+           to_get='[ <a href=\"'+external_url+'\">external link</a> ]'
 
         ###############################################################
         if html:
@@ -961,7 +963,10 @@ def list_repos(i):
 
            h+='  <td nowrap valign="top"><a name="'+lr+'">'+str(num)+'</b></td>\n'
                                                      
-           h+='  <td nowrap valign="top"><b>'+x1+lr+x2+'</b> <i>('+z1+'.ckr.json)</i></td>\n'
+           x5=''
+           if url!='':
+              x5=' <i>('+z1+'.ckr.json)</i>'
+           h+='  <td nowrap valign="top"><b>'+x1+lr+x2+'</b>'+x5+'</td>\n'
 
            h+='  <td valign="top">'+ld+'\n'
 

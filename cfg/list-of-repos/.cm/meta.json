@@ -1052,5 +1052,19 @@
       "sync": "yes",
       "url": "https://github.com/ctuning/ck-tensorflow"
     }
+  },
+  "ffffffff1237432a": {
+    "data_uoa": "external-kdatasets",
+    "dict": {
+      "desc": "Grigori Fursin shared all data sets from the <a href=\"http://dl.acm.org/citation.cfm?id=1806647\">PLDI'10 paper \"Evaluating iterative optimization across 1000 datasets\"</a> in the reusable Collective Knowledge Format via Google Drive (size > 20GB) to support open computer systems research.",
+      "external_url": "https://drive.google.com/folderview?id=0B-wXENVfIO82dzYwaUNIVElxaGc&amp;usp=sharing"
+    }
+  },
+  "ffffffff2337432a": {
+    "data_uoa": "external-shared-via-bittorent",
+    "dict": {
+      "desc": "Large CK repositories shared via BitTorrent.",
+      "external_url": "https://github.com/ctuning/ck/wiki/Shared-repos#list-of-repositories-shared-via-bittorrent"
+    }
   }
 }
