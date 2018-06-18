@@ -648,7 +648,7 @@ def list_kernel_functions(i):
 
     # Process functions
     if html:
-       h+='You can reuse these portable functions (Python 2.6+ and 3+) from the CK modules or in your own Python scripts:\n'
+       h+='We encourage you to reuse these portable productivity functions (Python 2.6+ and 3+) from the CK modules or in your own Python scripts:\n'
        h+='\n'
        h+='<pre>\n'
        h+='    import ck.kernel as ck\n'
