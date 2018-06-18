@@ -1,4 +1,5 @@
 * 2018.06.18 - [FGG] added ck list_kernel_functions misc to generate docs about CK functions
+               [FGG] added automatic generation of a list of repositories
 
 * 2018.06.16 - [FGG] added detection of OpenCL library on Linux
 

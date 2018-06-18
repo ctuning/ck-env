@@ -1,0 +1,1021 @@
+{
+  "0115c36449e973a7": {
+    "data_uoa": "ck-request-asplos18-resnet-tvm-fpga",
+    "dict": {
+      "ck_artifact": "9375838469ad4029",
+      "recache": "yes",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-mxnet"
+        },
+        {
+          "repo_uoa": "ck-request"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-resnet-tvm-fpga"
+    }
+  },
+  "07aff7c7b258f26b": {
+    "data_uoa": "ck-ccprof",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/proywm/ck-ccprof"
+    }
+  },
+  "0af2a402baf4d084": {
+    "data_uoa": "ck-crowdtuning-results",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-crowdtuning-results"
+    }
+  },
+  "0e280708076a2427": {
+    "data_uoa": "reproduce-anon-paper",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/paperasub/reproduce-anon-paper.git"
+    }
+  },
+  "0e40b194adc51b5a": {
+    "data_uoa": "ck-request-asplos18-caffe-intel",
+    "dict": {
+      "ck_artifact": "e7cc77d72f13441e",
+      "recache": "yes",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-caffe",
+          "repo_url": "https://github.com/dividiti/ck-caffe"
+        },
+        {
+          "repo_uoa": "ck-request"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-caffe-intel"
+    }
+  },
+  "147d284ae646bb5a": {
+    "data_uoa": "ck-rpi-optimization-results",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-rpi-optimization",
+          "repo_url": "http://github.com/dividiti/ck-rpi-optimization"
+        },
+        {
+          "repo_uoa": "ck-assets"
+        },
+        {
+          "repo_uoa": "ck-docker"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-rpi-optimization-results"
+    }
+  },
+  "18bb3d4130a4aaf9": {
+    "data_uoa": "ck-docker",
+    "dict": {
+      "shared": "git",
+      "url": "git@github.com:dividiti/ck-docker.git"
+    }
+  },
+  "1ca4108a0485b920": {
+    "data_uoa": "ck-cluster18",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-cluster18"
+    }
+  },
+  "1e884df489890fa1": {
+    "data_uoa": "gemmbench",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "url": "git@github.com:dividiti/gemmbench.git"
+    }
+  },
+  "1ff43ae88715a8c1": {
+    "data_uoa": "ck-env",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-env.git"
+    }
+  },
+  "215d441c19db1fed": {
+    "data_uoa": "ck-web",
+    "dict": {
+      "shared": "git",
+      "sync": "yes",
+      "url": "https://github.com/ctuning/ck-web.git"
+    }
+  },
+  "24494b63f14e067d": {
+    "data_uoa": "ck-rescue-hpc",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-rescue-hpc"
+    }
+  },
+  "2f937a661883ae0e": {
+    "data_uoa": "ck-request-asplos18-results-caffe-intel",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-request-asplos18-results"
+        },
+        {
+          "repo_uoa": "ck-request-asplos18-caffe-intel"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-results-caffe-intel"
+    }
+  },
+  "2fbac50a48b19646": {
+    "data_uoa": "reproduce-pamela-project-medium-dataset",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "reproduce-pamela-project"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-pamela-project-small-dataset"
+    }
+  },
+  "31e50f714fc996c4": {
+    "data_uoa": "ck-seissol",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-seissol"
+    }
+  },
+  "35287339a4756f75": {
+    "data_uoa": "ck-caffe",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "sync": "yes",
+      "url": "git@github.com:dividiti/ck-caffe.git"
+    }
+  },
+  "39ebcdfa4adc73e6": {
+    "data_uoa": "ck-dissemination-modules",
+    "dict": {
+      "shared": "git",
+      "sync": "yes",
+      "url": "https://github.com/ctuning/ck-dissemination-modules.git"
+    }
+  },
+  "3abe4a16a4fb17d7": {
+    "data_uoa": "ck-tensorrt",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        }
+      ],
+      "shared": "git",
+      "url": "git@github.com:dividiti/ck-tensorrt.git"
+    }
+  },
+  "410382d03df408ec": {
+    "data_uoa": "ck-wa",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-docker"
+        },
+        {
+          "repo_uoa": "ck-wa-workloads"
+        },
+        {
+          "repo_uoa": "ck-wa-extra"
+        },
+        {
+          "repo_uoa": "ck-crowdtuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-wa"
+    }
+  },
+  "429dcb214d3fa659": {
+    "data_uoa": "ctuning-programs",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ctuning-datasets-min"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ctuning-programs"
+    }
+  },
+  "4439c9443bbab749": {
+    "data_uoa": "ck-rpi-optimization",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-rpi-optimization"
+    }
+  },
+  "446f2904180ff833": {
+    "data_uoa": "reproduce-pamela-project",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-pamela-project"
+    }
+  },
+  "447abab2183bf4b5": {
+    "data_uoa": "ck-crowdsource-dnn-optimization",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-crowdsource-dnn-optimization"
+    }
+  },
+  "4784a9da122ed85c": {
+    "data_uoa": "ck-assets",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-assets"
+    }
+  },
+  "48749c65f60bbfdb": {
+    "data_uoa": "ck-request-asplos18-mobilenets-armcl-opencl",
+    "dict": {
+      "ck_artifact": "08da9685582866a0",
+      "recache": "yes",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-caffe",
+          "repo_url": "https://github.com/dividiti/ck-caffe"
+        },
+        {
+          "repo_uoa": "ck-tensorflow"
+        },
+        {
+          "repo_uoa": "ck-math"
+        },
+        {
+          "repo_uoa": "ck-request"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-request-asplos18-mobilenets-armcl-opencl"
+    }
+  },
+  "490d7a29be946f5b": {
+    "data_uoa": "ck-nntest",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-nntest"
+    }
+  },
+  "4b4e921eb5f74ab7": {
+    "data_uoa": "ck-crowd-scenarios-arc",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        },
+        {
+          "repo_uoa": "ck-caffe"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-crowd-scenarios-arc"
+    }
+  },
+  "4e58bd6003fc6875": {
+    "data_uoa": "reproduce-fgg-2010",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-fgg-2010"
+    }
+  },
+  "4e5c54028b119f1a": {
+    "data_uoa": "ck-nntest-private",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-ai"
+        },
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-nntest-private"
+    }
+  },
+  "4f49a0bdde6167b4": {
+    "data_uoa": "ck-qiskit",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning",
+          "repo_url": "https://github.com/ctuning/ck-autotuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-qiskit"
+    }
+  },
+  "4ffcc1307484d840": {
+    "data_uoa": "ctuning-datasets-min",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ctuning-datasets-min"
+    }
+  },
+  "518dbddc445d680c": {
+    "data_uoa": "ck-mvnc",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ctuning-datasets-min"
+        },
+        {
+          "repo_uoa": "ck-caffe",
+          "repo_url": "https://github.com/dividiti/ck-caffe"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-mvnc"
+    }
+  },
+  "604419a9fcc7a081": {
+    "data_uoa": "default",
+    "dict": {
+      "type": ""
+    }
+  },
+  "640f0b9dadc5bfda": {
+    "data_uoa": "reproduce-cgo2017-paper",
+    "dict": {
+      "passed_artifact_evaluation": "yes",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-docker"
+        },
+        {
+          "repo_uoa": "ck-autotuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/SamAinsworth/reproduce-cgo2017-paper"
+    }
+  },
+  "6456e78d8c044a88": {
+    "data_uoa": "ck-rigetti",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning",
+          "repo_url": "https://github.com/ctuning/ck-autotuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-rigetti"
+    }
+  },
+  "678494f8b520000f": {
+    "data_uoa": "ck-mxnet",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        },
+        {
+          "repo_uoa": "ctuning-datasets-min"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-mxnet"
+    }
+  },
+  "68121412a8ff317c": {
+    "data_uoa": "ck-cluster",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-cluster"
+    }
+  },
+  "6d04bb400f29474d": {
+    "data_uoa": "ck-old-packages",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-old-packages"
+    }
+  },
+  "6f879c2276134cbf": {
+    "data_uoa": "ck-crowdtuning-platforms",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-crowdtuning-platforms"
+    }
+  },
+  "6fc8d41b94891b3a": {
+    "data_uoa": "ck-request-asplos18-results-mobilenets-armcl-opencl",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-request-asplos18-results"
+        },
+        {
+          "repo_uoa": "ck-request-asplos18-mobilenets-armcl-opencl",
+          "repo_url": "https://github.com/dividiti/ck-request-asplos18-mobilenets-armcl-opencl"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-results-mobilenets-armcl-opencl"
+    }
+  },
+  "71433a2b4d403d80": {
+    "data_uoa": "reproduce-adapt16",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-adapt16"
+    }
+  },
+  "735bf92a043caa05": {
+    "data_uoa": "ck-crowdtuning",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ctuning-programs"
+        },
+        {
+          "repo_uoa": "ck-web"
+        },
+        {
+          "repo_uoa": "ck-crowdtuning-platforms"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-crowdtuning"
+    }
+  },
+  "754e85a102d75042": {
+    "data_uoa": "ck-dissemination",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/gfursin/ck-dissemination.git"
+    }
+  },
+  "78241b48f2865a4b": {
+    "data_uoa": "ck-ai",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-caffe",
+          "repo_url": "https://github.com/dividiti/ck-caffe"
+        },
+        {
+          "repo_uoa": "ck-caffe2"
+        },
+        {
+          "repo_uoa": "ck-tensorflow"
+        },
+        {
+          "repo_uoa": "ck-tensorrt",
+          "repo_url": "https://github.com/dividiti/ck-tensorrt"
+        },
+        {
+          "repo_uoa": "ck-mxnet"
+        },
+        {
+          "repo_uoa": "ck-cntk"
+        },
+        {
+          "repo_uoa": "ck-crowdtuning"
+        }
+      ],
+      "shared": "git",
+      "skip_from_index": "yes",
+      "url": "https://github.com/ctuning/ck-ai"
+    }
+  },
+  "7d60433aa9fd29fe": {
+    "data_uoa": "reproduce-carp-project",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-carp-project"
+    }
+  },
+  "84fc89e8504dc5a2": {
+    "data_uoa": "ck-math",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-math"
+    }
+  },
+  "8f3741434566b104": {
+    "data_uoa": "reproduce-ck-paper",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ctuning-programs"
+        },
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-ck-paper"
+    }
+  },
+  "90009e454e059d40": {
+    "data_uoa": "ck-tbd-suite",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-caffe",
+          "repo_url": "https://github.com/dividiti/ck-caffe"
+        },
+        {
+          "repo_uoa": "ck-tensorflow"
+        },
+        {
+          "repo_uoa": "ck-mxnet"
+        },
+        {
+          "repo_uoa": "ck-cntk"
+        },
+        {
+          "repo_uoa": "ck-crowdtuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-tbd-suite"
+    }
+  },
+  "944d5b8a6b4ba2f8": {
+    "data_uoa": "ck-dev-compilers",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-dev-compilers"
+    }
+  },
+  "9482c22d7601b0df": {
+    "data_uoa": "reproduce-milepost-project",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        },
+        {
+          "repo_uoa": "ck-docker"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-milepost-project"
+    }
+  },
+  "9bb172637b2083c2": {
+    "data_uoa": "ck-request-asplos18-iot-farm",
+    "dict": {
+      "ck_artifact": "640fb4c4b9ba9822",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-tensorflow"
+        },
+        {
+          "repo_uoa": "ck-request"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-iot-farm"
+    }
+  },
+  "9fa400bbc0821635": {
+    "data_uoa": "ck-crowd-scenarios",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        },
+        {
+          "repo_uoa": "ck-caffe"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-crowd-scenarios"
+    }
+  },
+  "a0954ac5952880c7": {
+    "data_uoa": "ck-lift",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/lift-project/ck-lift"
+    }
+  },
+  "a9a13491790f9610": {
+    "data_uoa": "ck-nntest-outputs",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/dividiti/ck-nntest-outputs"
+    }
+  },
+  "aa8299de464392e3": {
+    "data_uoa": "ck-kann",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-caffe",
+          "repo_url": "http://github.com/dividiti/ck-caffe"
+        }
+      ],
+      "shared": "git",
+      "sync": "yes",
+      "url": "http://github.com/dividiti/ck-kann"
+    }
+  },
+  "ab816740663debac": {
+    "data_uoa": "ck-request-asplos18-results-iot-farm",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-request-asplos18-results"
+        },
+        {
+          "repo_uoa": "ck-request-asplos18-iot-farm"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-results-iot-farm"
+    }
+  },
+  "b147cf2ad44fb39c": {
+    "data_uoa": "ck-analytics",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        },
+        {
+          "repo_uoa": "ck-env"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-analytics"
+    }
+  },
+  "b674321852dd4dd6": {
+    "data_uoa": "ck-wa-extra",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-wa-extra"
+    }
+  },
+  "b8adffa0791cb38a": {
+    "data_uoa": "ck-caffe2",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        },
+        {
+          "repo_uoa": "ck-caffe"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-caffe2"
+    }
+  },
+  "ba416ebde828395d": {
+    "data_uoa": "ck-tiny-dnn",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-crowdtuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-tiny-dnn"
+    }
+  },
+  "bd5c40d5b3fd5035": {
+    "data_uoa": "ck-clsmith",
+    "dict": {
+      "passed_artifact_evaluation": "yes",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-clsmith"
+    }
+  },
+  "c47366a47958ef4b": {
+    "data_uoa": "ck-request-asplos18-mobilenets-tvm-arm",
+    "dict": {
+      "ck_artifact": "8b220a7f172a47d4",
+      "recache": "yes",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-mxnet"
+        },
+        {
+          "repo_uoa": "ck-request"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-mobilenets-tvm-arm"
+    }
+  },
+  "ca14419905306152": {
+    "data_uoa": "ck-request-asplos18-results-mobilenets-tvm-arm",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-request-asplos18-results"
+        },
+        {
+          "repo_uoa": "ck-request-asplos18-mobilenets-tvm-arm"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-results-mobilenets-tvm-arm"
+    }
+  },
+  "cca2211feceec6dc": {
+    "data_uoa": "ck-wa-workloads",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-wa-workloads"
+    }
+  },
+  "d5849a2a4cdf999d": {
+    "data_uoa": "reproduce-ck-paper-large-experiments",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-analytics"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-ck-paper-large-experiments"
+    }
+  },
+  "de640faafc01c0a0": {
+    "data_uoa": "ck-quantum",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env",
+          "repo_url": "https://github.com/ctuning/ck-env"
+        },
+        {
+          "repo_uoa": "ck-rigetti",
+          "repo_url": "https://github.com/ctuning/ck-rigetti"
+        },
+        {
+          "repo_uoa": "ck-qiskit",
+          "repo_url": "https://github.com/ctuning/ck-qiskit"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-quantum"
+    }
+  },
+  "e1eb9104ef494917": {
+    "data_uoa": "ck-autotuning",
+    "dict": {
+      "checkouts": {
+        "stable": {
+          "branch": "master",
+          "checkout": "5efde26"
+        }
+      },
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        },
+        {
+          "repo_uoa": "ck-analytics"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-autotuning"
+    }
+  },
+  "e3f9da42311dbb44": {
+    "data_uoa": "ck-web-adapt-workshop",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-web-adapt-workshop"
+    }
+  },
+  "e593999edb49689a": {
+    "data_uoa": "ck-cntk",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        },
+        {
+          "repo_uoa": "ctuning-datasets-min"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-cntk"
+    }
+  },
+  "f05d5e4ab641cca0": {
+    "data_uoa": "ck-artifact-evaluation",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        },
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        },
+        {
+          "repo_uoa": "ck-web"
+        },
+        {
+          "repo_uoa": "ck-docker"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-artifact-evaluation"
+    }
+  },
+  "f2be9b14e67b8b23": {
+    "data_uoa": "ck-request-asplos18-results",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-request"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-results"
+    }
+  },
+  "f5418c86ed803058": {
+    "data_uoa": "ck-request",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        },
+        {
+          "repo_uoa": "ck-artifact-evaluation"
+        },
+        {
+          "repo_uoa": "ck-docker"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request"
+    }
+  },
+  "f875f3fa86ea9d28": {
+    "data_uoa": "ck-request-asplos18-results-resnet-tvm-fpga",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-request-asplos18-results"
+        },
+        {
+          "repo_uoa": "ck-request-asplos18-resnet-tvm-fpga"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-results-resnet-tvm-fpga"
+    }
+  },
+  "fc46c9bebd155893": {
+    "data_uoa": "ck-tensorflow",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "sync": "yes",
+      "url": "https://github.com/ctuning/ck-tensorflow"
+    }
+  }
+}

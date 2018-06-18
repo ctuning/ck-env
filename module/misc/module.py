@@ -751,3 +751,254 @@ def list_kernel_functions(i):
           if r['return']>0: return r
 
     return {'return':0}
+
+##############################################################################
+# list repositories
+
+def list_repos(i):
+    """
+    Input:  {
+               (the same as ck search; can use wildcards)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+
+    of=i.get('out_file','')
+    if of!='':
+       xof=os.path.splitext(of)
+
+    html=False
+    if o=='html' or i.get('web','')=='yes':
+       html=True
+
+    h=''
+
+    unique_repo=False
+    if i.get('repo_uoa','')!='': unique_repo=True
+
+    import copy
+    ii=copy.deepcopy(i)
+
+    ii['out']=''
+    ii['module_uoa']=cfg['module_deps']['repo']
+    ii['action']='list'
+    ii['add_meta']='yes'
+
+    rx=ck.access(ii)
+    if rx['return']>0: return rx
+
+    ll=rx['lst']
+
+    if html:
+       h+='You can reuse modules and other components with a common API from below repositories:\n'
+       h+='<pre>\n'
+       h+=' ck pull repo:{Repo UOA - see below}\n'
+       h+='</pre>\n'
+
+       h+='You can add dependency on a given repository in your own CK repository by editing your .ckr.json file as follows:\n'
+       h+='<pre>\n'
+       h+=' {\n'
+       h+='   ...\n'
+       h+='   "dict": {\n'
+       h+='      "repo_deps": [\n'
+       h+='         {\n'
+       h+='           "repo_uoa": "ck-tensorflow",\n'
+       h+='           "repo_url": "https://github.com/ctuning/ck-tensorflow"\n'
+       h+='         }\n'
+       h+='         ...\n'
+       h+='      ]\n'
+       h+='      ...\n'
+       h+='   }\n'
+       h+='}\n'
+       h+='</pre>\n'
+
+       h+='See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>\n'
+       h+=' and <a href="https://github.com/ctuning/ck/wiki#user-content-reusable-ck-components">already shared reusable components</a> for further details.\n'
+
+       h+='<p>\n'
+       h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black;">\n'
+
+       h+=' <tr>\n'
+       h+='  <td nowrap><b>#</b></td>\n'
+       h+='  <td nowrap><b>Repository UOA</b></td>\n'
+       h+='  <td><b>Description</b></td>\n'
+       h+=' </tr>\n'
+
+    repos={}
+    repo_url={}
+    repo_private={}
+
+    # Checking installed repos
+    private=''
+    remote=''
+    for l in ll:
+
+        lr=l['data_uoa']
+        lr_uid=l['data_uid']
+
+        url=''
+
+        if lr=='default':
+           url='https://github.com/ctuning/ck/tree/master/ck/repo'
+        else:
+           rx=ck.load_repo_info_from_cache({'repo_uoa':lr_uid})
+           if rx['return']>0: return rx
+           url=rx.get('dict',{}).get('url','')
+           private=rx.get('dict',{}).get('private','')
+           remote=rx.get('dict',{}).get('remote','')
+
+        if lr not in cfg.get('skip_repos',[]) and remote!='yes' and private!='yes' and url!='':
+           repos[lr_uid]={'data_uoa':lr}
+
+    # Check which already manually added from cfg:list-of-repos
+    rruoa=i.get('repo_uoa','')
+
+    r=ck.access({'action':'load',
+                 'module_uoa':cfg['module_deps']['cfg'],
+                 'data_uoa':cfg['cfg-list-of-modules']})
+    if r['return']>0 and r['return']!=16: return r
+    if r['return']==0:
+       repos.update(r['dict'])
+       if rruoa=='': rruoa=r['repo_uid']
+
+    # Try to fill in missing information
+    for repo in repos:
+        x=repos[repo]
+
+        d=x.get('dict',{})
+        if len(d)==0:
+           # Find real repo and get .ckr.json
+           rx=ck.access({'action':'where',
+                         'module_uoa':cfg['module_deps']['repo'],
+                         'data_uoa':repo})
+           if rx['return']==0: 
+              pckr=os.path.join(rx['path'], ck.cfg['repo_file'])
+              if os.path.isfile(pckr):
+                 rx=ck.load_json_file({'json_file':pckr})
+                 if rx['return']>0: return rx
+
+                 d=rx['dict']['dict']
+
+                 if 'path' in d:
+                    del(d['path'])
+
+                 x['dict']=d
+
+    # Record list
+    if rruoa=='': rruoa='ck-env'
+
+    r=ck.access({'action':'update',
+                 'module_uoa':cfg['module_deps']['cfg'],
+                 'data_uoa':cfg['cfg-list-of-modules'],
+                 'repo_uoa':rruoa,
+                 'dict':repos,
+                 'sort_keys':'yes',
+                 'ignore_update':'yes'})
+    if r['return']>0: return r
+    
+    # Show repos
+    num=0
+    for repo in sorted(repos, key=lambda k: repos[k]['data_uoa']):
+        l=repos[repo]
+
+        num+=1
+
+        lr=l['data_uoa']
+        lr_uid=repo
+
+        d=l.get('dict',{})
+
+        if d.get('skip_from_index','')=='yes':
+           continue
+
+        url=d.get('url','')
+        rd=d.get('repo_deps',{})
+
+        ld=d.get('desc','')
+
+        if lr=='default':
+           to_get=''
+        elif url.find('github.com/ctuning/')>0:
+           to_get='ck pull repo:'+lr
+        else:
+           to_get='ck pull repo --url='+url
+
+        ###############################################################
+        if html:
+           h+=' <tr>\n'
+
+           x1=''
+           x2=''
+           z1=''
+           z11=''
+
+           if url=='' and lr=='default':
+              url='https://github.com/ctuning/ck/tree/master/ck/repo'
+
+           if url!='':
+              x1='<a href="'+url+'">'
+              x2='</a>'
+
+              url2=url
+              if '/tree/master/' not in url2:
+                 url2+='/tree/master/'
+              else:
+                 url2+='/'
+
+              z1='<a href="'+url2+'.ckr.json">'
+
+           h+='  <td nowrap valign="top"><a name="'+lr+'">'+str(num)+'</b></td>\n'
+                                                     
+           h+='  <td nowrap valign="top"><b>'+x1+lr+x2+'</b> <i>('+z1+'.ckr.json)</i></td>\n'
+
+           h+='  <td valign="top">'+ld+'\n'
+
+           if to_get!='':
+              h+='<p>\n'
+              h+='How to get:\n'
+              h+='<pre>\n'
+              h+=to_get+'\n'
+              h+='</pre>\n'
+
+           if len(rd)>0:
+              h+='<p>Dependencies on other repositories:\n'
+              h+='<ul>\n'
+              for qq in sorted(rd, key=lambda k: k['repo_uoa']):
+                  repo_uoa=qq['repo_uoa']
+                  repo_url=qq.get('repo_url','')
+
+                  if repo_url=='':
+                     repo_url='https://github.com/ctuning/'+repo_uoa
+
+                  if repo_url!='':
+                     repo_uoa='<a href="'+repo_url+'">'+repo_uoa+'</a>'
+
+                  h+='<li>'+repo_uoa+'\n'
+              h+='</ul>\n'
+
+           if d.get('ck_artifact','')!='' or d.get('passed_artifact_evaluation','')=='yes':
+              h+='<p>Workflow passed <a href="http://cTuning.org/ae">Artifact Evaluation</a>\n'
+              h+='<p><center><img src="https://www.acm.org/binaries/content/gallery/acm/publications/replication-badges/artifacts_evaluated_reusable_dl.jpg" width="64"></center>\n'
+
+           h+='</td>\n'
+
+           h+=' </tr>\n'
+
+    if html:
+       h+='</table>\n'
+
+       if of!='':
+          r=ck.save_text_file({'text_file':of, 'string':h})
+          if r['return']>0: return r
+
+    return {'return':0}
