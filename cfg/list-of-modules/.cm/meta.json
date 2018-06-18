@@ -3,6 +3,7 @@
     "data_uoa": "ck-request-asplos18-resnet-tvm-fpga",
     "dict": {
       "ck_artifact": "9375838469ad4029",
+      "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
       "recache": "yes",
       "repo_deps": [
         {
@@ -19,6 +20,8 @@
   "07aff7c7b258f26b": {
     "data_uoa": "ck-ccprof",
     "dict": {
+      "desc": "CK workflow for CGO'18 paper \"CCProf: Lightweight Detection of Cache Conflicts\".",
+      "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -31,6 +34,7 @@
   "0af2a402baf4d084": {
     "data_uoa": "ck-crowdtuning-results",
     "dict": {
+      "desc": "Copy of public results from different crowdsourced experiments in the CK format from <a href=\"http://cKnowledge.org/repo\">this public repo</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -43,6 +47,7 @@
   "0e280708076a2427": {
     "data_uoa": "reproduce-anon-paper",
     "dict": {
+      "desc": "Testing CK anonymous workflows to run on AWS for <a href=\"http://cTuning.org/ae\">Artifact Evaluation</a>.",
       "shared": "git",
       "url": "https://github.com/paperasub/reproduce-anon-paper.git"
     }
@@ -51,6 +56,7 @@
     "data_uoa": "ck-request-asplos18-caffe-intel",
     "dict": {
       "ck_artifact": "e7cc77d72f13441e",
+      "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
       "recache": "yes",
       "repo_deps": [
         {
@@ -68,6 +74,7 @@
   "147d284ae646bb5a": {
     "data_uoa": "ck-rpi-optimization-results",
     "dict": {
+      "desc": "Experimental results in the unified and reproducible CK format from crowd-tuning programs across Rapsberry Pi devices (see <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">interactive report</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-rpi-optimization",
@@ -87,13 +94,15 @@
   "18bb3d4130a4aaf9": {
     "data_uoa": "ck-docker",
     "dict": {
+      "desc": "Unified CK JSON API to automate Docker functions (see the <a href=\"https://github.com/ctuning/ck-request-asplos18-caffe-intel\">real use case</a>).",
       "shared": "git",
-      "url": "git@github.com:dividiti/ck-docker.git"
+      "url": "https://github.com/ctuning/ck-docker"
     }
   },
   "1ca4108a0485b920": {
     "data_uoa": "ck-cluster18",
     "dict": {
+      "desc": "Experimental CK workflow to automate SuperComputing'18 Student Cluster Competition.",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-cluster18"
     }
@@ -101,6 +110,7 @@
   "1e884df489890fa1": {
     "data_uoa": "gemmbench",
     "dict": {
+      "desc": "Customizable CK workflows and portable packages to crowdsource GEMM benchmarking.",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -119,6 +129,7 @@
   "1ff43ae88715a8c1": {
     "data_uoa": "ck-env",
     "dict": {
+      "desc": "Portable CK package manager with a unified JSON API and with virtual environment allowing automatic detection, installation and rebuilding of a given software or data sets across diverse platforms, environments, compilers and libraries with easy co-existence of multiple tools (see <a href=\"http://cKnowledge.org/shared-packages.html\">shared packages</a>, <a href=\"http://cKnowledge.org/shared-soft-detection-plugins.html\">software detection plugins</a> and <a href=\"https://github.com/ctuning/ck/wiki/Portable-workflows\">other details</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-web"
@@ -131,6 +142,7 @@
   "215d441c19db1fed": {
     "data_uoa": "ck-web",
     "dict": {
+      "desc": "Portable CK web server and web front-end with a unified JSON API for dashboards, benchmark scoreboards, interactive articles, graphs, crowdsourced experiments, etc (see <a href=\"http://cKnowledge.org/request-results\">demo</a>).",
       "shared": "git",
       "sync": "yes",
       "url": "https://github.com/ctuning/ck-web.git"
@@ -139,6 +151,7 @@
   "24494b63f14e067d": {
     "data_uoa": "ck-rescue-hpc",
     "dict": {
+      "desc": "CK resources for <a href=\"http://rescue-hpc.org\">ResCuE-HPC'18 workshop at SuperComputing'18</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-web"
@@ -151,6 +164,7 @@
   "2f937a661883ae0e": {
     "data_uoa": "ck-request-asplos18-results-caffe-intel",
     "dict": {
+      "desc": "Collected experimental results in the CK format from the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">1st ACM ReQuEST-ASPLOS'18 tournament</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-request-asplos18-results"
@@ -178,6 +192,7 @@
   "31e50f714fc996c4": {
     "data_uoa": "ck-seissol",
     "dict": {
+      "desc": "Customizable CK workflow and portable CK packages for Seissol application.",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-seissol"
     }
@@ -185,6 +200,7 @@
   "35287339a4756f75": {
     "data_uoa": "ck-caffe",
     "dict": {
+      "desc": "Portable/customizable installation and unified access to Caffe AI framework with different workflows and data sets (see the real use case from the <a href=\"https://github.com/ctuning/ck-request-asplos18-caffe-intel\">ACM ReQuEST tournament</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -201,6 +217,7 @@
   "39ebcdfa4adc73e6": {
     "data_uoa": "ck-dissemination-modules",
     "dict": {
+      "desc": "CK modules with a unified JSON API for artifact evaluation, interactive articles, ACM proceedings generation, knowledge dissemination, etc (see <a href=\"http://cTuning.org/ae\">Artifact Evaluation</a>).",
       "shared": "git",
       "sync": "yes",
       "url": "https://github.com/ctuning/ck-dissemination-modules.git"
@@ -209,6 +226,7 @@
   "3abe4a16a4fb17d7": {
     "data_uoa": "ck-tensorrt",
     "dict": {
+      "desc": "Portable/customizable installation and unified access to Nvidia TensorRT framework with different workflows and data sets (see <a href=\"http://cKnowledge.org/ai\">unified AI project</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -221,6 +239,7 @@
   "410382d03df408ec": {
     "data_uoa": "ck-wa",
     "dict": {
+      "desc": "Collective Knowledge workflow for ARM's workload automation tool: an open framework for gathering and sharing knowledge about system design and optimization using real-world workloads.",
       "repo_deps": [
         {
           "repo_uoa": "ck-docker"
@@ -242,6 +261,7 @@
   "429dcb214d3fa659": {
     "data_uoa": "ctuning-programs",
     "dict": {
+      "desc": "Evolving set of diverse and portable programs shared by the community in the unified CK format to participate in collaborative benchmarking, optimization and co-design while gradually substituting rigid, non-portable and outdated and non representative benchmarks (see the <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">real use case</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -257,6 +277,7 @@
   "4439c9443bbab749": {
     "data_uoa": "ck-rpi-optimization",
     "dict": {
+      "desc": "CK workflows, portable packages and interactive articles to crowdsource autotuning of shared workloads across Rapsberry Pi devices (see <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">interactive report</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -269,6 +290,7 @@
   "446f2904180ff833": {
     "data_uoa": "reproduce-pamela-project",
     "dict": {
+      "desc": "Customizable CK workflows and portable CK packages for EU PAMELA project.",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -284,6 +306,7 @@
   "447abab2183bf4b5": {
     "data_uoa": "ck-crowdsource-dnn-optimization",
     "dict": {
+      "desc": "GUI to crowdsource benchmarking and optimization of DNN engines and models across diverse Linux or Windows platforms (see <a href=\"http://cKnowledge.org/ai\">unified AI vision</a>).",
       "shared": "git",
       "url": "https://github.com/dividiti/ck-crowdsource-dnn-optimization"
     }
@@ -291,6 +314,7 @@
   "4784a9da122ed85c": {
     "data_uoa": "ck-assets",
     "dict": {
+      "desc": "Public and reusable CK slides, presentations and other assets (see real use cases in <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">this paper</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-dissemination-modules"
@@ -304,6 +328,7 @@
     "data_uoa": "ck-request-asplos18-mobilenets-armcl-opencl",
     "dict": {
       "ck_artifact": "08da9685582866a0",
+      "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
       "recache": "yes",
       "repo_deps": [
         {
@@ -324,16 +349,10 @@
       "url": "https://github.com/dividiti/ck-request-asplos18-mobilenets-armcl-opencl"
     }
   },
-  "490d7a29be946f5b": {
-    "data_uoa": "ck-nntest",
-    "dict": {
-      "shared": "git",
-      "url": "https://github.com/dividiti/ck-nntest"
-    }
-  },
   "4b4e921eb5f74ab7": {
     "data_uoa": "ck-crowd-scenarios-arc",
     "dict": {
+      "desc": "Archive of outdated scenarios to crowdsource benchmarking and optimization of deep learning across Android devices (see <a href=\"https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments&hl=en\">Android app</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -349,6 +368,7 @@
   "4e58bd6003fc6875": {
     "data_uoa": "reproduce-fgg-2010",
     "dict": {
+      "desc": "Demo of experimental results in the reproducible CK format from past papers.",
       "repo_deps": [
         {
           "repo_uoa": "ck-math"
@@ -358,24 +378,10 @@
       "url": "https://github.com/ctuning/reproduce-fgg-2010"
     }
   },
-  "4e5c54028b119f1a": {
-    "data_uoa": "ck-nntest-private",
-    "dict": {
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-ai"
-        },
-        {
-          "repo_uoa": "ck-dissemination-modules"
-        }
-      ],
-      "shared": "git",
-      "url": "https://github.com/dividiti/ck-nntest-private"
-    }
-  },
   "4f49a0bdde6167b4": {
     "data_uoa": "ck-qiskit",
     "dict": {
+      "desc": "CK workflows and portable packages for Quantum Information Software Kit (QISKit).",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning",
@@ -389,6 +395,7 @@
   "4ffcc1307484d840": {
     "data_uoa": "ctuning-datasets-min",
     "dict": {
+      "desc": "A minimal set of public and reusable data sets in the CK format with unified JSON meta information (used by programs from ctuning-programs repository).",
       "shared": "git",
       "url": "https://github.com/ctuning/ctuning-datasets-min"
     }
@@ -396,6 +403,7 @@
   "518dbddc445d680c": {
     "data_uoa": "ck-mvnc",
     "dict": {
+      "desc": "Portable/customizable installation and unified access to Caffe and other AI frameworks on Movidius NN accelerator with different workflows and data sets.",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -415,12 +423,14 @@
   "604419a9fcc7a081": {
     "data_uoa": "default",
     "dict": {
+      "desc": "A set of internal modules always available inside CK framework.",
       "type": ""
     }
   },
   "640f0b9dadc5bfda": {
     "data_uoa": "reproduce-cgo2017-paper",
     "dict": {
+      "desc": "Customizable CK workflow and portable CK packages from the CGO'17 paper \"Software Prefetching for Indirect Memory Accesses\".",
       "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
@@ -437,6 +447,7 @@
   "6456e78d8c044a88": {
     "data_uoa": "ck-rigetti",
     "dict": {
+      "desc": "Customizable CK workflow and portable CK packages from Rigetti.",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning",
@@ -450,6 +461,7 @@
   "678494f8b520000f": {
     "data_uoa": "ck-mxnet",
     "dict": {
+      "desc": "Portable/customizable installation and unified access to MXNet AI frameworks with different workflows and data sets (see the <a href=\"https://github.com/ctuning/ck-request-asplos18-mobilenets-tvm-arm\">use case</a> from ReQuEST tournament).",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -465,16 +477,10 @@
       "url": "https://github.com/ctuning/ck-mxnet"
     }
   },
-  "68121412a8ff317c": {
-    "data_uoa": "ck-cluster",
-    "dict": {
-      "shared": "git",
-      "url": "https://github.com/dividiti/ck-cluster"
-    }
-  },
   "6d04bb400f29474d": {
     "data_uoa": "ck-old-packages",
     "dict": {
+      "desc": "Collection of outdated CK packages for legacy.",
       "repo_deps": [
         {
           "repo_uoa": "ck-env"
@@ -487,6 +493,7 @@
   "6f879c2276134cbf": {
     "data_uoa": "ck-crowdtuning-platforms",
     "dict": {
+      "desc": "Reusable meta description of diverse platforms (and their properties) participated in experiment crowdsourcing such as benchmarking of deep learning across Android devices (see <a href=\"https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments&hl=en\">Android app</a> and <a href=\"http://cKnowledge.org/dnn-crowd-benchmarking-results\">live results</a>).",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-crowdtuning-platforms"
     }
@@ -494,6 +501,7 @@
   "6fc8d41b94891b3a": {
     "data_uoa": "ck-request-asplos18-results-mobilenets-armcl-opencl",
     "dict": {
+      "desc": "Collected experimental results in the CK format from the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">1st ACM ReQuEST-ASPLOS'18 tournament</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-request-asplos18-results"
@@ -510,6 +518,7 @@
   "71433a2b4d403d80": {
     "data_uoa": "reproduce-adapt16",
     "dict": {
+      "desc": "CK workflows and packages from reproducible ADAPT'16 paper.",
       "shared": "git",
       "url": "https://github.com/ctuning/reproduce-adapt16"
     }
@@ -517,6 +526,7 @@
   "735bf92a043caa05": {
     "data_uoa": "ck-crowdtuning",
     "dict": {
+      "desc": "Portable and customizable CK workflow to crowdsource diverse experiments across diverse platforms (cloud, mobile phones, tablets, laptops, data centers, etc) such as multi-objective autotuning (see the <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">real use case</a> and <a href=\"http://cKnowledge.org/repo\">open CK repository</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ctuning-programs"
@@ -535,6 +545,7 @@
   "754e85a102d75042": {
     "data_uoa": "ck-dissemination",
     "dict": {
+      "desc": "Different artifacts from Grigori Fursin's R&D in the reusable CK form (used to automatically generate this <a href=\"http://fursin.net/cv.html\">interactive CV</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-dissemination-modules"
@@ -547,6 +558,7 @@
   "78241b48f2865a4b": {
     "data_uoa": "ck-ai",
     "dict": {
+      "desc": "[UNDER DEVELOPMENT] Collection of all CK workflows and packages for AI.",
       "repo_deps": [
         {
           "repo_uoa": "ck-caffe",
@@ -580,6 +592,7 @@
   "7d60433aa9fd29fe": {
     "data_uoa": "reproduce-carp-project",
     "dict": {
+      "desc": "Customizable CK workflows and portable CK packages for EU CARP project.",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -592,6 +605,7 @@
   "84fc89e8504dc5a2": {
     "data_uoa": "ck-math",
     "dict": {
+      "desc": "Collective of CK packages to unify detection, installation and rebuilding of popular mathematical packages such as OpenBLAS, clBLAST and Boost across different OS (see <a href=\"http://cKnowledge.org/shared-packages.html\">shared packages</a> and <a href=\"http://cKnowledge.org/shared-soft-detection-plugins.html\">software detection plugins</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -604,6 +618,7 @@
   "8f3741434566b104": {
     "data_uoa": "reproduce-ck-paper",
     "dict": {
+      "desc": "Customizable CK workflows and portable CK packages for the past CK paper.",
       "repo_deps": [
         {
           "repo_uoa": "ctuning-programs"
@@ -619,6 +634,7 @@
   "90009e454e059d40": {
     "data_uoa": "ck-tbd-suite",
     "dict": {
+      "desc": "[UNDER DEVELOPMENT] Customizable CK workflows and portable CK packages for TBD benchmark.",
       "repo_deps": [
         {
           "repo_uoa": "ck-caffe",
@@ -644,6 +660,7 @@
   "944d5b8a6b4ba2f8": {
     "data_uoa": "ck-dev-compilers",
     "dict": {
+      "desc": "CK packages to rebuild and test different compilers such as GCC and LLVM.",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-dev-compilers"
     }
@@ -651,6 +668,7 @@
   "9482c22d7601b0df": {
     "data_uoa": "reproduce-milepost-project",
     "dict": {
+      "desc": "Customizable CK workflows and portable CK packages for the <a href=\"https://en.wikipedia.org/wiki/MILEPOST_GCC\">MILEPOST project</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -667,6 +685,7 @@
     "data_uoa": "ck-request-asplos18-iot-farm",
     "dict": {
       "ck_artifact": "640fb4c4b9ba9822",
+      "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-tensorflow"
@@ -682,6 +701,7 @@
   "9fa400bbc0821635": {
     "data_uoa": "ck-crowd-scenarios",
     "dict": {
+      "desc": "Automatically generated scenarios (code and data) for our Android app to crowdsource benchmarking and optimization of deep learning across diverse devices and data sets (see <a href=\"https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments&hl=en\">Android app</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -697,6 +717,8 @@
   "a0954ac5952880c7": {
     "data_uoa": "ck-lift",
     "dict": {
+      "desc": "[OUTDATED] Portable/customizable installation and unified access to Lift compiler.",
+      "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
           "repo_uoa": "ck-env"
@@ -706,16 +728,10 @@
       "url": "https://github.com/lift-project/ck-lift"
     }
   },
-  "a9a13491790f9610": {
-    "data_uoa": "ck-nntest-outputs",
-    "dict": {
-      "shared": "git",
-      "url": "https://github.com/dividiti/ck-nntest-outputs"
-    }
-  },
   "aa8299de464392e3": {
     "data_uoa": "ck-kann",
     "dict": {
+      "desc": "Portable/customizable installation and unified access to KANN AI framework with different workflows and data sets.",
       "repo_deps": [
         {
           "repo_uoa": "ck-caffe",
@@ -730,6 +746,7 @@
   "ab816740663debac": {
     "data_uoa": "ck-request-asplos18-results-iot-farm",
     "dict": {
+      "desc": "Collected experimental results in the CK format from the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">1st ACM ReQuEST-ASPLOS'18 tournament</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-request-asplos18-results"
@@ -745,6 +762,7 @@
   "b147cf2ad44fb39c": {
     "data_uoa": "ck-analytics",
     "dict": {
+      "desc": "Unified CK JSON API for predictive analytics, statistical analysis, graphs, experiments and interactive reports (see the <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">real use case</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-web"
@@ -760,6 +778,7 @@
   "b674321852dd4dd6": {
     "data_uoa": "ck-wa-extra",
     "dict": {
+      "desc": "Extra resources in the reusable Collective Knowledge Format for ARM's Workload Automation Framework.",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-wa-extra"
     }
@@ -767,6 +786,7 @@
   "b8adffa0791cb38a": {
     "data_uoa": "ck-caffe2",
     "dict": {
+      "desc": "[PACKAGES MUST BE UPDATED SINCE CAFFE2 MOVED TO ANOTHER GITHUB REPOSITORY] Portable/customizable installation and unified access to Caffe2 AI framework with different workflows and data sets (see <a href=\"https://arxiv.org/abs/1801.06378\">ReQuEST intro</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -785,6 +805,7 @@
   "ba416ebde828395d": {
     "data_uoa": "ck-tiny-dnn",
     "dict": {
+      "desc": "[OUTDATED] Portable/customizable installation for TinyDNN AI framework.",
       "repo_deps": [
         {
           "repo_uoa": "ck-crowdtuning"
@@ -800,6 +821,7 @@
   "bd5c40d5b3fd5035": {
     "data_uoa": "ck-clsmith",
     "dict": {
+      "desc": "Portable and customizable CK workflow to crowdsource detection of OpenCL bugs.",
       "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
@@ -814,6 +836,7 @@
     "data_uoa": "ck-request-asplos18-mobilenets-tvm-arm",
     "dict": {
       "ck_artifact": "8b220a7f172a47d4",
+      "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
       "recache": "yes",
       "repo_deps": [
         {
@@ -830,6 +853,7 @@
   "ca14419905306152": {
     "data_uoa": "ck-request-asplos18-results-mobilenets-tvm-arm",
     "dict": {
+      "desc": "Collected experimental results in the CK format from the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">1st ACM ReQuEST-ASPLOS'18 tournament</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-request-asplos18-results"
@@ -845,6 +869,7 @@
   "cca2211feceec6dc": {
     "data_uoa": "ck-wa-workloads",
     "dict": {
+      "desc": "ARM's workloads in the universal Collective Knowledge Format with JSON API and JSON meta information to power Workload Automation Framework",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-wa-workloads"
     }
@@ -852,6 +877,7 @@
   "d5849a2a4cdf999d": {
     "data_uoa": "reproduce-ck-paper-large-experiments",
     "dict": {
+      "desc": "Demo with different experiments in the reproducible CK format from one of our past papers.",
       "repo_deps": [
         {
           "repo_uoa": "ck-analytics"
@@ -864,6 +890,7 @@
   "de640faafc01c0a0": {
     "data_uoa": "ck-quantum",
     "dict": {
+      "desc": "CK workflows and portable packages for Quantum programs.",
       "repo_deps": [
         {
           "repo_uoa": "ck-env",
@@ -891,6 +918,7 @@
           "checkout": "5efde26"
         }
       },
+      "desc": "Portable and customizable CK workflow for multi-dimensional and multi-objective benchmarking, autotuning and co-design (see real use cases: <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">1</a> and <a href=\"https://github.com/dividiti/ck-request-asplos18-mobilenets-armcl-opencl\">2</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-env"
@@ -906,6 +934,7 @@
   "e3f9da42311dbb44": {
     "data_uoa": "ck-web-adapt-workshop",
     "dict": {
+      "desc": "CK resources for the <a href=\"http://adapt-workshop.org\">ADAPT workshop</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-web"
@@ -918,6 +947,7 @@
   "e593999edb49689a": {
     "data_uoa": "ck-cntk",
     "dict": {
+      "desc": "Portable/customizable installation and unified access to CNTK AI framework with different workflows and data sets (see <a href=\"http://cKnowledge.org/request\">ReQuEST tournaments</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -936,6 +966,7 @@
   "f05d5e4ab641cca0": {
     "data_uoa": "ck-artifact-evaluation",
     "dict": {
+      "desc": "CK modules and data for artifact evaluation (see <a href=\"http://cTuning.org/ae\">Artifact Evaluation</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-env"
@@ -957,6 +988,7 @@
   "f2be9b14e67b8b23": {
     "data_uoa": "ck-request-asplos18-results",
     "dict": {
+      "desc": "Results in the portable and reproducible CK format from the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">1st ACM ReQuEST-ASPLOS'18 tournament</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-request"
@@ -969,6 +1001,7 @@
   "f5418c86ed803058": {
     "data_uoa": "ck-request",
     "dict": {
+      "desc": "CK workflows, packages and components for <a href=\"http://cKnowledge.org/request\">ACM ReQuEST tournaments</a> on software/hardware co-design of Pareto-efficient deep learning and other emerging workloads.",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
@@ -990,6 +1023,7 @@
   "f875f3fa86ea9d28": {
     "data_uoa": "ck-request-asplos18-results-resnet-tvm-fpga",
     "dict": {
+      "desc": "Collected experimental results in the CK format from the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">1st ACM ReQuEST-ASPLOS'18 tournament</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-request-asplos18-results"
@@ -1005,6 +1039,7 @@
   "fc46c9bebd155893": {
     "data_uoa": "ck-tensorflow",
     "dict": {
+      "desc": "Portable/customizable installation and unified access to TensorFlow AI framework with different workflows and data sets.",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning"
