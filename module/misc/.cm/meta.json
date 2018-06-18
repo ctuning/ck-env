@@ -31,7 +31,7 @@
       "desc": "sort JSON file"
     }
   },
-  "cfg-list-of-modules": "list-of-modules",
+  "cfg-list-of-repos": "list-of-repos",
   "copyright": "See CK COPYRIGHT.txt for copyright details",
   "desc": "auxiliary functions shared by Grigori Fursin",
   "developer": "Grigori Fursin",

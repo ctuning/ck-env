@@ -867,7 +867,7 @@ def list_repos(i):
 
     r=ck.access({'action':'load',
                  'module_uoa':cfg['module_deps']['cfg'],
-                 'data_uoa':cfg['cfg-list-of-modules']})
+                 'data_uoa':cfg['cfg-list-of-repos']})
     if r['return']>0 and r['return']!=16: return r
     if r['return']==0:
        repos.update(r['dict'])
@@ -901,7 +901,7 @@ def list_repos(i):
 
     r=ck.access({'action':'update',
                  'module_uoa':cfg['module_deps']['cfg'],
-                 'data_uoa':cfg['cfg-list-of-modules'],
+                 'data_uoa':cfg['cfg-list-of-repos'],
                  'repo_uoa':rruoa,
                  'dict':repos,
                  'sort_keys':'yes',
