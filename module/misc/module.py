@@ -913,8 +913,6 @@ def list_repos(i):
     for repo in sorted(repos, key=lambda k: repos[k]['data_uoa']):
         l=repos[repo]
 
-        num+=1
-
         lr=l['data_uoa']
         lr_uid=repo
 
@@ -936,6 +934,8 @@ def list_repos(i):
            to_get='ck pull repo --url='+url
         elif external_url!='':
            to_get='[ <a href=\"'+external_url+'\">external link</a> ]'
+
+        num+=1
 
         ###############################################################
         if html:
