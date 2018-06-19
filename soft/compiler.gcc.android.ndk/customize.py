@@ -509,9 +509,10 @@ def setup(i):
     ##############
     if winh=='yes':
        psysroot=platform_path+'\\'+platform+'\\arch-'+arch
+       sysroot='--sysroot "'+psysroot+'"'
     else:
        psysroot=platform_path+'/'+platform+'/arch-'+arch
-    sysroot='--sysroot "'+psysroot+'"'
+       sysroot='--sysroot '+psysroot
 
     if not os.path.isdir(psysroot):
        return {'return':1, 'error':'System root ('+psysroot+') is not found - please check your Android NDK for selected OS'}
