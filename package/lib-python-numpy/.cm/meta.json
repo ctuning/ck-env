@@ -3,7 +3,7 @@
   "customize": {
     "install_env": {
       "PIP_INSTALL_OPTIONS": "--ignore-installed",
-      "PYTHON_PACKAGE_NAME": "scipy"
+      "PYTHON_PACKAGE_NAME": "numpy"
     }
   },
   "deps": {
@@ -15,20 +15,23 @@
       "tags": "compiler,python"
     }
   },
-  "end_full_path_universal": "build$#sep#$scipy$#sep#$__init__.py",
-  "only_for_host_os_tags": [
-  ],
+  "end_full_path_universal": "build$#sep#$numpy$#sep#$__init__.py",
+  "only_for_host_os_tags": [],
   "only_for_target_os_tags": [
     "windows",
     "linux"
   ],
   "process_script": "install",
-  "soft_uoa": "4460bdb0ade2a3df",
-  "suggested_path": "lib-python-scipy",
+  "soft_uoa": "6a10047b1bcd16fc",
+  "suggested_path": "lib-python-numpy",
   "tags": [
     "lib",
     "python-package",
-    "scipy",
+    "numpy",
     "vmaster"
-  ]
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "e4d8d3d2c4c67902",
+    "module_uoa": "package"
+  }
 }
