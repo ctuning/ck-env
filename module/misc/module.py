@@ -822,7 +822,7 @@ def list_repos(i):
        h+='}\n'
        h+='</pre>\n'
 
-       h+='<p>Feel free to add description of your own CK repository in this <a href="https://github.com/ctuning/ck-env/blob/master/cfg/list-of-modules/.cm/meta.json">JSON file</a>.\n'
+       h+='<p>Feel free to add description of your own CK repository in this <a href="https://github.com/ctuning/ck-env/blob/master/cfg/list-of-repos/.cm/meta.json">JSON file</a>.\n'
 
        h+='<p>See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>\n'
        h+=' and <a href="https://github.com/ctuning/ck/wiki#user-content-reusable-ck-components">already shared reusable components</a> for further details.\n'
