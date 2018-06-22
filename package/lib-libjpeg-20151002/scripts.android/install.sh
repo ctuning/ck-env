@@ -1,0 +1,5 @@
+#! /bin/bash
+
+export PACKAGE_FLAGS_ANDROID="${PACKAGE_FLAGS_ANDROID} -D__ANDROID_API__=${CK_ANDROID_API_LEVEL}"
+
+return 0

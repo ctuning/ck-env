@@ -1,3 +1,6 @@
+* 2018.06.22 - [FGG] added support for the latest Android NDK in libjpeg 
+               (needed for our Android app to crowdsource DNN benchmarking)
+
 * 2018.06.19 - [FGG] added NumPy package/soft and cleaned up other Python packages meta ...
 
 * 2018.06.18 - [FGG] added ck list_kernel_functions misc to generate docs about CK functions
