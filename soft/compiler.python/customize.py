@@ -25,17 +25,24 @@ def dirs(i):
        if roaming_app_data is not None:
           dr.append(roaming_app_data)
 
-       for px in ['C:\\', 'D:\\']:
-           x=[]
+       for drive_name in ['C:', 'D:']:
+           top_level_filenames = []
            try:
-              x=os.listdir(px)
+              top_level_filenames = os.listdir(drive_name + '\\')
            except:
               pass
 
-           for q in x:
-               qq=os.path.join(px,q)
-               if os.path.isdir(qq) and q.lower().startswith('python'):
-                  dr.append(qq)
+           top_level_python_filenames = [ fn  for fn in top_level_filenames if fn.lower().startswith('python') ]
+
+           top_level_python_filenames.expand([
+                'ProgramData\\Anaconda3',
+                'ProgramData\\Anaconda2',
+           ])
+
+           for q in top_level_filenames:
+               candidate_python_dir=os.path.join(drive_name, q)
+               if os.path.isdir(candidate_python_dir):
+                  dr.append(candidate_python_dir)
 
     return {'return':0}
 
