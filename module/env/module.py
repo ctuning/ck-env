@@ -2281,25 +2281,32 @@ def virtual(i):
     import os
     import subprocess
 
+    shell_cmd        = i.get('shell_cmd', None)
+
     ck.out('')
     ck.out('Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
 
     if platform.system().lower().startswith('win'): # pragma: no cover
-       p = subprocess.Popen(['cmd', '/K', shell_script_contents_for_windows], shell = True, env=os.environ)
-       p.wait()
-       return_code  = p.returncode
+        if shell_cmd:
+            shell_script_contents_for_windows += ' & ' + shell_cmd
+            termination_flag = '/C'     # terminate the CMD shell when the environment script & shell_cmd are over
+        else
+            termination_flag = '/K'     # remain in the CMD shell
+
+        p = subprocess.Popen(['cmd', termination_flag, shell_script_contents_for_windows], shell = True, env=os.environ)
+        p.wait()
+        return_code  = p.returncode
     else:
-       rx=ck.gen_tmp_file({})
-       if rx['return']>0: return rx
-       file_name=rx['file_name']
+        rx=ck.gen_tmp_file({})
+        if rx['return']>0: return rx
+        file_name=rx['file_name']
 
-       rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents_for_linux })
-       if rx['return']>0: return rx
+        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents_for_linux })
+        if rx['return']>0: return rx
 
-       shell_cmd        = i.get('shell_cmd', None)
-       full_cmd_list    = ['/bin/bash','--rcfile', file_name, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )
+        full_cmd_list    = ['/bin/bash','--rcfile', file_name, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )
 
-       return_code = subprocess.call(full_cmd_list, shell = False)
+        return_code = subprocess.call(full_cmd_list, shell = False)
 
     return {'return':return_code, 'error':'Unknown error from the nested shell'}
 
