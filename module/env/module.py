@@ -2290,7 +2290,7 @@ def virtual(i):
         if shell_cmd:
             shell_script_contents_for_windows += ' & ' + shell_cmd
             termination_flag = '/C'     # terminate the CMD shell when the environment script & shell_cmd are over
-        else
+        else:
             termination_flag = '/K'     # remain in the CMD shell
 
         p = subprocess.Popen(['cmd', termination_flag, shell_script_contents_for_windows], shell = True, env=os.environ)
