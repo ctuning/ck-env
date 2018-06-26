@@ -34,7 +34,7 @@ def dirs(i):
 
            top_level_python_filenames = [ fn  for fn in top_level_filenames if fn.lower().startswith('python') ]
 
-           top_level_python_filenames.expand([
+           top_level_python_filenames.extend([
                 'ProgramData\\Anaconda3',
                 'ProgramData\\Anaconda2',
            ])
