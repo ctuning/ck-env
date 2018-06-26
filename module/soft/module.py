@@ -1654,76 +1654,57 @@ def check(i):
 
     soft_version_cmd=cus.get('soft_version_cmd',{}).get(hplat,'')
 
-    # Check where to search depending if Windows or Linux
-    dirs=[]
+    # Decide where to search depending on the Operating System
+    #
+    # 1) list all the potential places:
+    #
+    dir_candidates = []
     if hplat=='win':
-       x=os.environ.get('ProgramW6432','')
-       if x!='' and os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       x=os.environ.get('ProgramFiles(x86)','')
-       if x!='' and os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       x=os.environ.get('ProgramFiles','')
-       if x!='' and os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       x='C:\\Program Files'
-       if os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       x='D:\\Program Files'
-       if os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       x='C:\\Program Files (x86)'
-       if os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       x='D:\\Program Files (x86)'
-       if os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
+        dir_candidates.extend([
+            os.environ.get('ProgramW6432', ''),
+            os.environ.get('ProgramFiles(x86)', ''),
+            os.environ.get('ProgramFiles', ''),
+            'C:\\Program Files',
+            'D:\\Program Files',
+            'C:\\Program Files (x86)',
+            'D:\\Program Files (x86)',
+        ])
     else:
-       x='/usr'
-       if os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       x='/opt'
-       if os.path.isdir(x) and x not in dirs:
-          dirs.append(x)
-       #
-       # FIXME: Currently treating OSX as a subset of Linux:
-       #
-       if hosd.get('macos'):
-          #
-          # The location of software installed by brew prior to softlinking:
-          #
-          x='/usr/local/Cellar'
-          if os.path.isdir(x) and x not in dirs:
-             dirs.append(x)
+        dir_candidates.extend([
+            '/usr',
+            '/opt',
+        ])
+        if hosd.get('macos'):           # MacOSX is currently treated as a flavour of Linux
+            dir_candidates.extend([
+                '/usr/local/Cellar',    # The location of software installed by brew prior to softlinking
+            ])
 
-    # Add from CK_TOOLS env
-    x=os.environ.get(env_install_path,'')
-    if x!='':
-       dirs.append(x)
+    dir_candidates.append(
+        os.environ.get(env_install_path, '')                    # from CK_TOOLS env
+    )
 
-    # Add extra from CK_DIRS
-    x=os.environ.get(env_search,'')
-    if x!='':
-       if hplat=='win':
-          xx=x.split(';')
-       else:
-          xx=x.split(':')
-       for x in xx:
-           if x!='':
-              dirs.append(x)
+    dir_separator   = ';' if hplat=='win' else ':'
+    dir_candidates.extend(
+        os.environ.get(env_search, '').split( dir_separator )   # from CK_DIRS
+    )
 
-    # Check from input
-    x=i.get('search_dirs','')
-    if x!='':
-       xx=x.split(',')
+    dir_candidates.extend(
+        i.get('search_dirs', '').split(',')                     # from input
+    )
 
-       for x in xx:
-           if x!='':
-              dirs.append(x)
-
-    # Add user space
     from os.path import expanduser
-    dirs.append(expanduser("~"))
+    dir_candidates.append(
+        expanduser("~")                                         # from user space
+    )
+
+    #
+    # 2) filter through the candidates to find suitable and unique ones:
+    #
+    dirs=[]
+    for candidate in dir_candidates:
+        if candidate and os.path.isdir(candidate) and candidate not in dirs:
+            dirs.append(candidate)
+
 
     # Check if interactive
     iv='yes'
