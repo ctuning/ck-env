@@ -1,3 +1,5 @@
+* 2018.06.27 - [FGG] added basic templates for soft entries
+
 * 2018.06.22 - [FGG] added support for the latest Android NDK in libjpeg 
                (needed for our Android app to crowdsource DNN benchmarking)
 

@@ -24,5 +24,6 @@
     "blas",
     "opencl-blas",
     "clblast"
-  ]
+  ],
+  "template":"yes"
 }

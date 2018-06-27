@@ -21,5 +21,6 @@
     "raw",
     "val",
     "caffe"
-  ]
+  ],
+  "template":"yes"
 }

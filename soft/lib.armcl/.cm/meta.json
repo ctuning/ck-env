@@ -21,5 +21,6 @@
     "arm",
     "armcl",
     "arm-compute-library"
-  ]
+  ],
+  "template":"yes"
 }

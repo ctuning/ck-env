@@ -2835,3 +2835,80 @@ def prepare_target_name(i):
     tool=tool.replace('$#sep#$', sdirs)
 
     return {'return':0, 'tool':tool}
+
+##############################################################################
+# add software detection plugin with template
+
+def add(i):
+    """
+    Input:  {
+              (template) - if !='', use this program as template!
+              (tags)     - if !='', use these tags
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    o=i.get('out','')
+
+    # Redirect to a universal template ...
+
+    muoa=i['module_uoa']
+
+    i['original_module_uoa']=muoa
+    i['module_uoa']=cfg['module_deps']['misc']
+    i['action']='prepare_entry_template'
+    if 'cid' in i: del(i['cid'])
+
+    r=ck.access(i)
+    if r['return']>0: return r
+
+    # Update newly created entry with special keys
+    duid=r['data_uid']
+    duoa=r['data_uoa']
+    ruid=r['repo_uid']
+
+    dd=r['dict']
+
+    if 'template' in dd: del(dd['template'])
+
+    xtags=i.get('tags','')
+    if xtags=='':
+       ck.out('')
+       r=ck.inp({'text':'Enter tags for your new soft detection plugin separated by comma (for example lib,tflite): '})
+       xtags=r['string'].strip()
+
+    tags=[]
+    if xtags!='':
+       for q in xtags.split(','):
+           q=q.strip()
+           if q not in tags:
+              tags.append(q)
+    else:
+       for k in dd.get('tags',[]):
+           if k!='template': 
+              tags.append(k)
+    dd['tags']=tags
+
+    ii={'action':'update',
+        'module_uoa':muoa,
+        'data_uoa':duid,
+        'repo_uoa':ruid,
+        'dict':dd,
+        'substitute':'yes',
+        'sort_keys':'yes',
+        'ignore_update':'yes'
+       }
+
+    if o=='con':
+       ck.out('')
+       ck.out('Further details about how to update meta.json and customize.py of your new software detection plugin:')
+       ck.out('')
+       ck.out(' * https://github.com/ctuning/ck/wiki/Adding-new-workflows')
+
+    return ck.access(ii)

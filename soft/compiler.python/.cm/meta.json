@@ -42,5 +42,6 @@
     "compiler", 
     "python", 
     "lang-python"
-  ]
+  ],
+  "template":"yes"
 }

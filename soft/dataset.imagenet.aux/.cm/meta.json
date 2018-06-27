@@ -20,5 +20,6 @@
     "imagenet",
     "aux",
     "caffe"
-  ]
+  ],
+  "template":"yes"
 }

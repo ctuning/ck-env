@@ -44,5 +44,6 @@
     "compiler", 
     "java", 
     "lang-java"
-  ]
+  ],
+  "template":"yes"
 }

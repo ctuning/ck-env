@@ -17,5 +17,6 @@
     "imagenet", 
     "raw", 
     "train" 
-  ]
+  ],
+  "template":"yes"
 }

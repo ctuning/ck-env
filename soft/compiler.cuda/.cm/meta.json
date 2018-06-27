@@ -98,5 +98,6 @@
     "cuda", 
     "lang-c-cuda", 
     "lang-cpp-cuda"
-  ]
+  ],
+  "template":"yes"
 }

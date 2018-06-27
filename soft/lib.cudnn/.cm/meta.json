@@ -24,5 +24,6 @@
     "cuda", 
     "cudnn", 
     "dnn"
-  ]
+  ],
+  "template":"yes"
 }

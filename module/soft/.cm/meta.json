@@ -1,5 +1,8 @@
 {
   "actions": {
+    "add": {
+      "desc": "add software detection plugin with template"
+    },
     "check": {
       "desc": "check is given software is already installed and register it in the CK or install it if package exists (the same as 'detect')"
     },
@@ -54,6 +57,7 @@
   "module_deps": {
     "env": "9b9b3208ac44b891",
     "machine": "84be34883a81b2a9",
+    "misc": "cddc5e04b0da610e",
     "os":"0440cb72c2bc5cc6",
     "platform.os": "41e31cc4496b8a8e"
   }
