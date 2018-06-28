@@ -1,7 +1,9 @@
-* 2018.06.27 - [FGG] added basic templates for soft entries
+* 2018.06.28 - [FGG] added basic templates for package plugins
+
+* 2018.06.27 - [FGG] added basic templates for soft plugins
 
 * 2018.06.22 - [FGG] added support for the latest Android NDK in libjpeg 
-               (needed for our Android app to crowdsource DNN benchmarking)
+                     (needed for our Android app to crowdsource DNN benchmarking)
 
 * 2018.06.19 - [FGG] added NumPy package/soft and cleaned up other Python packages meta ...
 

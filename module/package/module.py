@@ -2306,3 +2306,103 @@ def reinstall(i):
 
     i['reinstall']='yes'
     return install(i)
+
+##############################################################################
+# add package with template
+
+def add(i):
+    """
+    Input:  {
+              soft       - specify related soft UOA
+
+              (template) - if !='', use this program as template!
+              (tags)     - if !='', use these tags
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    o=i.get('out','')
+
+    # Check related soft first
+    suoa=i.get('soft','')
+    if suoa=='':
+       return {'return':1, 'error':'related softwre detection plugin is not specified. Use --soft={name from http://cKnowledge.org/shared-soft-detection-plugins.html}'}
+
+    # Load soft to get UID and tags
+    r=ck.access({'action':'load',
+                 'module_uoa':cfg['module_deps']['soft'],
+                 'data_uoa':suoa})
+    if r['return']>0: return r
+
+    suid=r['data_uid']
+    sd=r['dict']
+    stags=sd.get('tags',[])
+
+    # Redirect to a universal template ...
+    muoa=i['module_uoa']
+
+    i['original_module_uoa']=muoa
+    i['module_uoa']=cfg['module_deps']['misc']
+    i['action']='prepare_entry_template'
+    if 'cid' in i: del(i['cid'])
+
+    r=ck.access(i)
+    if r['return']>0: return r
+
+    # Update newly created entry with special keys
+    duid=r['data_uid']
+    duoa=r['data_uoa']
+    ruid=r['repo_uid']
+
+    dd=r['dict']
+
+    if 'template' in dd: del(dd['template'])
+
+    # Process tags
+    xtags=i.get('tags','')
+    if xtags=='':
+       ck.out('')
+       r=ck.inp({'text':'Enter extra version tags for your package plugin separated by comma (for example v6.0,v6): '})
+       xtags=r['string'].strip()
+
+    tags=stags
+    if xtags!='':
+       for q in xtags.split(','):
+           q=q.strip()
+           if q not in tags:
+              tags.append(q)
+
+    dd['soft_uoa']=suid
+    dd['tags']=tags
+
+    x=sd.get('customize',{}).get('soft_file_universal','')
+    if x!='':
+       dd['end_full_path_universal_FROM_SOFT_TO_FIX_ABOVE']=x
+    else:
+       x=sd.get('customize',{}).get('soft_file',{})
+       dd['end_full_path__FROM_SOFT_TO_FIX_ABOVE']=x
+
+    # Update new entry
+    ii={'action':'update',
+        'module_uoa':muoa,
+        'data_uoa':duid,
+        'repo_uoa':ruid,
+        'dict':dd,
+        'substitute':'yes',
+        'sort_keys':'yes',
+        'ignore_update':'yes'
+       }
+
+    if o=='con':
+       ck.out('')
+       ck.out('Further details about how to update meta.json and other files of your new package installation plugin:')
+       ck.out('')
+       ck.out(' * https://github.com/ctuning/ck/wiki/Adding-new-workflows')
+
+    return ck.access(ii)

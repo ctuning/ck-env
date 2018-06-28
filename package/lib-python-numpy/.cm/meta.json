@@ -33,5 +33,6 @@
   "use_scripts_from_another_entry": {
     "data_uoa": "e4d8d3d2c4c67902",
     "module_uoa": "package"
-  }
+  },
+  "template":"yes"
 }

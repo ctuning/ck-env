@@ -1,5 +1,8 @@
 {
   "actions": {
+    "add": {
+      "desc": "add package with template"
+    },
     "distribute": {
       "desc": "prepare distribution"
     }, 
@@ -37,6 +40,7 @@
   "module_deps": {
     "env": "9b9b3208ac44b891", 
     "machine": "84be34883a81b2a9", 
+    "misc": "cddc5e04b0da610e",
     "os": "0440cb72c2bc5cc6", 
     "platform.cpu": "aa6b542a420b8db9", 
     "platform.gpgpu": "192ed4e0bbdbe743", 

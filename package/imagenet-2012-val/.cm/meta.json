@@ -28,5 +28,6 @@
     "caffe",
     "ilsvrc2012",
     "channel-stable"
-  ]
+  ],
+  "template":"yes"
 }

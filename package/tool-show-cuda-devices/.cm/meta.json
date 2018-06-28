@@ -15,5 +15,6 @@
     "tool",
     "show-cuda-devices",
     "channel-stable"
-  ]
+  ],
+  "template":"yes"
 }

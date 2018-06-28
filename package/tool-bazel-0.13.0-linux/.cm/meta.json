@@ -34,5 +34,6 @@
     "v0.13", 
     "v0", 
     "channel-stable"
-  ]
+  ],
+  "template":"yes"
 }
