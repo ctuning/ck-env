@@ -7,6 +7,8 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+import os
+
 ##############################################################################
 # internal: select extension
 def get_ext(i):
@@ -191,8 +193,6 @@ def setup(i):
 
     hwin=hosd.get('windows_base','')
 
-    sdirs=hosd.get('dir_sep','')
-
     ep=cus.get('env_prefix','')
     fp=cus.get('full_path','')
     if ep!='' and fp!='':
@@ -216,6 +216,17 @@ def setup(i):
 
     env=i['env']
 
+    env.update({
+        # FIXME: check whether Boost also agrees to compile under windows+icc and extend to windows platform if so
+        "CK_COMPILER_TOOLCHAIN_NAME" : 'intel-' + ('darwin' if macos else 'linux'),
+        "CK_DLL_EXT": file_extensions.get('dll',''),
+        "CK_EXE_EXT": file_extensions.get('exe',''),
+        "CK_LIB_EXT": file_extensions.get('lib',''),
+        "CK_OPT_SIZE": "-Os",
+        "CK_OPT_SPEED": "-O3",
+        "CK_OPT_SPEED_SAFE": "-O2",
+    })
+
     ############################################################
     # Setting environment depending on the platform
     if hplat=='linux':
@@ -233,8 +244,6 @@ def setup(i):
          "CK_COMPILER_FLAG_STD99": "-Qstd=c99", 
          "CK_CSTD99": "-Qstd=c99", 
          "CK_CXX": "icc", 
-         "CK_DLL_EXT": file_extensions.get('dll',''),
-         "CK_EXE_EXT": file_extensions.get('exe',''),
          "CK_EXTRA_LIB_DL": "-ldl", 
          "CK_EXTRA_LIB_M": "-lm", 
          "CK_F90": "ifort", 
@@ -255,12 +264,8 @@ def setup(i):
          "CK_LB_OUTPUT": "-o ", 
          "CK_LD": "xild",
          "CK_LD_FLAGS_EXTRA": "", 
-         "CK_LIB_EXT": file_extensions.get('lib',''),
          "CK_LINKER_FLAG_OPENMP": "-lpthread -liomp5", 
          "CK_MAKE": "make", 
-         "CK_OPT_SIZE": "-Os", 
-         "CK_OPT_SPEED": "-O3", 
-         "CK_OPT_SPEED_SAFE": "-O2", 
          "CK_OBJDUMP": "objdump -d", 
          "CK_OBJ_EXT": ".o", 
          "CK_PLUGIN_FLAG": "-fplugin=", 
@@ -287,8 +292,6 @@ def setup(i):
          "CK_COMPILER_FLAG_STD99": "/Qstd=c99", 
          "CK_CSTD99": "/Qstd=c99", 
          "CK_CXX": "icl", 
-         "CK_DLL_EXT": file_extensions.get('dll',''),
-         "CK_EXE_EXT": file_extensions.get('exe',''),
          "CK_EXTRA_LIB_DL": "", 
          "CK_EXTRA_LIB_M": "", 
          "CK_F90": "ifort /fpp", 
@@ -308,11 +311,7 @@ def setup(i):
          "CK_LB_OUTPUT": "/OUT:", 
          "CK_LD_DYNAMIC_FLAGS": "/link /NODEFAULTLIB:LIBCMT", 
 #         "CK_LD_FLAGS_EXTRA": "bufferoverflowU.lib", 
-         "CK_LIB_EXT": file_extensions.get('lib',''),
          "CK_MAKE": "nmake", 
-         "CK_OPT_SIZE": "-Os", 
-         "CK_OPT_SPEED": "-O3", 
-         "CK_OPT_SPEED_SAFE": "-O2", 
          "CK_OBJDUMP": "dumpbin /disasm", 
          "CK_OBJ_EXT": ".obj"
        })
@@ -338,9 +337,6 @@ def setup(i):
                  'split_to_list':'yes'})
     if r['return']>0: return r
 
-    # FIXME: check whether Boost also agrees to compile under windows+icc and extend to windows platform if so
-    env['CK_COMPILER_TOOLCHAIN_NAME']='intel-' + ('darwin' if macos else 'linux')
-
     pcl=''
     for x in reversed(r['stdout_lst']):
         x=x.strip()
@@ -352,19 +348,19 @@ def setup(i):
     if ep!='' and pcl!='':
        # Found compiler path (useful for CMAKE)
        bin_dir = os.path.dirname(pcl)
-       env[ep+'_BIN'] = bin_dir
-       env['CK_LD_PATH_FOR_CMAKE'] = bin_dir + sdirs + 'xild'
 
-       xiar_path = bin_dir + sdirs + 'xiar'
-       env['CK_AR_PATH_FOR_CMAKE'] = xiar_path
-
-       env['CK_RANLIB_PATH_FOR_CMAKE'] = '/usr/bin/ranlib'
+       env[ep+'_BIN']                   = bin_dir
+       env['CK_CC_FULL_PATH']           = os.path.join(bin_dir, env['CK_CC'])
+       env['CK_CXX_FULL_PATH']          = os.path.join(bin_dir, env['CK_CXX'])
+       env['CK_AR_PATH_FOR_CMAKE']      = os.path.join(bin_dir, 'xiar')
+       env['CK_LD_PATH_FOR_CMAKE']      = os.path.join(bin_dir, 'xild')
+       env['CK_RANLIB_PATH_FOR_CMAKE']  = '/usr/bin/ranlib'
 
        ## FIXME: A more elegant and portable solution would be to create an executable ranlib wrapper around 'xiar'.
        ##        The current problem is that we do not have access to the entry_dir at this point.
        #
-       # path_to_wrapper  = entry_dir + sdirs + 'ranlib_wrapper'
-       # wrapper_contents = "#!/bin/bash\n\nexec " + xiar_path + " s $@\n"
+       # path_to_wrapper  = os.path.join(entry_dir, 'ranlib_wrapper')
+       # wrapper_contents = "#!/bin/bash\n\nexec " + env['CK_AR_PATH_FOR_CMAKE'] + " s $@\n"
        # rx=ck.save_text_file({'text_file' : path_to_wrapper, 'string' : wrapper_contents})
        # if rx['return']>0: return rx
        # os.chmod(path_to_wrapper, 0o755)
