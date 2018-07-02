@@ -54,7 +54,8 @@
       "tags": "compiler,gcc,ndk"
     }
   }, 
-  "env": {}, 
+  "env": {
+  },
   "soft_name": "LLVM compiler", 
   "tags": [
     "compiler", 

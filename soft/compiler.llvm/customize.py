@@ -173,15 +173,10 @@ def setup(i):
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
 
-    sdirs=hosd.get('dir_sep','')
-
     mac=target_d.get('macos','')
     file_extensions = target_d.get('file_extensions',{})
 
     hplat=hosd.get('ck_name','')
-
-    envp=cus.get('env_prefix','')
-    path_install=cus.get('path_install','')
 
     full_path=cus.get('full_path','')
 
@@ -190,17 +185,17 @@ def setup(i):
     arch=target_d.get('android_ndk_arch','')
 
     # Check path
-    env_prefix=cus.get('env_prefix','')
-    if env_prefix and full_path:
-       compiler_bin_dir         = os.path.dirname(full_path)
-       path_install             = os.path.dirname(compiler_bin_dir)
+    env_prefix          = cus.get('env_prefix','')
+    compiler_bin_dir    = os.path.dirname(full_path)
+    path_install        = os.path.dirname(compiler_bin_dir)
 
+    if env_prefix and full_path:
        env[env_prefix]          = path_install
        env[env_prefix+'_BIN']   = compiler_bin_dir
 
-       cus['path_include']      = path_install + sdirs + 'include'
+       cus['path_include']      = os.path.join(path_install, 'include')
 
-       path_lib                 = path_install + sdirs + 'lib'
+       path_lib                 = os.path.join(path_install, 'lib')
        if os.path.isdir( path_lib ):
             cus['path_lib']     = path_lib
 
@@ -225,48 +220,59 @@ def setup(i):
           cus['retarget']='no'
 
 
-    env.update({"CK_COMPILER_FLAG_STD90": "-std=c90", 
-                "CK_COMPILER_FLAG_STD99": "-std=c99"})
+    prefix=cus.get('tool_prefix','')
+
+    # Common part for all operating systems:
+    env.update({"CK_COMPILER_FLAG_STD90": "-std=c90",
+                "CK_COMPILER_FLAG_STD99": "-std=c99",
+                "CK_COMPILER_FLAG_CPP11": "-std=c++11",
+                "CK_COMPILER_FLAG_CPP0X": "-std=c++0x",
+                "CK_COMPILER_FLAG_OPENMP": "-fopenmp",
+                "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread",
+                "CK_COMPILER_TOOLCHAIN_NAME": "clang",
+                "CK_ASM_EXT": ".s",
+                "CK_DLL_EXT": file_extensions.get('dll',''),
+                "CK_EXE_EXT": file_extensions.get('exe',''),
+                "CK_LIB_EXT": file_extensions.get('lib',''),
+                "CK_OBJ_EXT": ".o",
+                "CK_FLAG_PREFIX_INCLUDE": "-I",
+                "CK_FLAG_PREFIX_LIB_DIR": "-L",
+                "CK_FLAG_PREFIX_VAR": "-D",
+                "CK_FLAGS_CREATE_ASM": "-S",
+                "CK_FLAGS_CREATE_OBJ": "-c",
+                "CK_FLAGS_DYNAMIC_BIN": " ",					# to avoid problems on Windows during cross-compilation
+                "CK_LINKER_FLAG_OPENMP": "-fopenmp",
+                "CK_OPT_SIZE": "-Os",
+                "CK_OPT_SPEED": "-O3",
+                "CK_OPT_SPEED_SAFE": "-O2",
+                "CK_OPT_UNWIND": " ",							# to avoid problems on Windows during cross-compilation
+                "CK_PLUGIN_FLAG": "-fplugin=",
+    })
 
     ############################################################
     if winh=='yes':
 
+       # Common Windows settings:
        env.update({
              "CK_AFTER_COMPILE_TO_BC": "ren *.o *", 
-             "CK_ASM_EXT": ".s", 
              "CK_BC_EXT": ".bc", 
              "CK_COMPILER_ENABLE_EXCEPTIONS": "-fcxx-exceptions",
-             "CK_CC": "$#tool_prefix#$clang", 
-             "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
-             "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
-             "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
-             "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
-             "CK_CXX": "$#tool_prefix#$clang++", 
+             "CK_CC": "$#tool_prefix#$clang",
+             "CK_CXX": "$#tool_prefix#$clang++",
              "CK_F90": "", 
              "CK_F95": "", 
              "CK_FC": "", 
-             "CK_FLAGS_CREATE_ASM": "-S", 
              "CK_FLAGS_CREATE_BC": "-c -emit-llvm", 
-             "CK_FLAGS_CREATE_OBJ": "-c", 
              "CK_FLAGS_DYNAMIC_BIN": " ", 
              "CK_FLAGS_OUTPUT": "-o", 
-             "CK_FLAG_PREFIX_INCLUDE": "-I", 
-             "CK_FLAG_PREFIX_LIB_DIR": "-L", 
-             "CK_FLAG_PREFIX_VAR": "-D", 
-             "CK_LINKER_FLAG_OPENMP": "-fopenmp", 
              "CK_MAKE": "nmake", 
-             "CK_OBJ_EXT": ".o", 
-             "CK_OPT_SIZE": "-Os", 
-             "CK_OPT_SPEED": "-O3", 
-             "CK_OPT_SPEED_SAFE": "-O2", 
-             "CK_PLUGIN_FLAG": "-fplugin=", 
              "CM_INTERMEDIATE_OPT_TOOL": "opt", 
              "CM_INTERMEDIATE_OPT_TOOL_OUT": "-o",
              "CK_FLAGS_DLL_NO_LIBCMT": " ", 
            }) 
 
-       # Modify if Android
-       if remote=='yes':
+       # Modify if ...
+       if remote=='yes':	# Android under Windows:
           env.update({
              "CK_AR": "%CK_ANDROID_COMPILER_PREFIX%-ar", 
              "CK_COMPILER_FLAG_GPROF": "-pg", 
@@ -286,11 +292,9 @@ def setup(i):
              "CK_LD_FLAGS_EXTRA": "", 
              "CK_OBJDUMP": "%CK_ANDROID_COMPILER_PREFIX%-objdump -d",
              "CK_PROFILER": "gprof"})
-       else:
+       else:				# non-Android and Windows
           env.update({
              "CK_AR": "lib", 
-             "CK_DLL_EXT": file_extensions.get('dll',''),
-             "CK_EXE_EXT": file_extensions.get('exe',''),
              "CK_EXTRA_LIB_DL": "", 
              "CK_EXTRA_LIB_M": "", 
              "CK_FLAGS_DLL": "", 
@@ -302,11 +306,8 @@ def setup(i):
              "CK_LD_DYNAMIC_FLAGS": "", 
              "CK_LD_FLAGS_MISC": "-fuse-ld=link.exe", 
              "CK_LD_FLAGS_EXTRA": "", 
-             "CK_LIB_EXT": file_extensions.get('lib',''),
              "CK_OBJDUMP": "llvm-objdump -d"})
 
-       prefix_configured=cus.get('tool_prefix_configured','')
-       prefix=cus.get('tool_prefix','')
 
        if prefix!='':
           env['CK_COMPILER_PREFIX']=prefix
@@ -321,8 +322,7 @@ def setup(i):
        retarget=cus.get('retarget','')
        lfr=cus.get('linking_for_retargeting','')
 
-       if remote=='yes':
-          ### Android target #########################################################
+       if remote=='yes':	# again, Android under Windows
 
 #          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
           y='-target %CK_ANDROID_TOOLCHAIN% -gcc-toolchain %CK_ENV_COMPILER_GCC% --sysroot=%CK_SYS_ROOT%'
@@ -332,7 +332,8 @@ def setup(i):
              x='-fPIE -pie '
 
           env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
-       else:
+
+       else:				# again, non-Android Windows
           env["CK_COMPILER_FLAGS_OBLIGATORY"]="-DWINDOWS"
 
           if retarget=='yes' and lfr!='':
@@ -387,58 +388,37 @@ def setup(i):
        if x!='':
           s+='\nset PATH='+path_install+x+';%PATH%\n\n'
 
-    else:   # winh!='yes'
+    else:   # Unix platforms:
 
-       ### Linux Host  #########################################################
+       # Common Unix settings:
        env.update({
           "CK_AR": "$#tool_prefix#$ar", 
-          "CK_ASM_EXT": ".s", 
-          "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$", 
+          "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$",
           "CK_LLVM_CONFIG": "$#tool_prefix#$llvm-config$#tool_postfix#$", 
           "CK_COMPILER_FLAGS_OBLIGATORY": "", 
           "CK_COMPILER_ENABLE_EXCEPTIONS": "-fcxx-exceptions",
-          "CK_COMPILER_FLAG_CPP11": "-std=c++11", 
-          "CK_COMPILER_FLAG_CPP0X": "-std=c++0x", 
           "CK_COMPILER_FLAG_GPROF": "-pg", 
-          "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
           "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
-          "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
-          "CK_CXX": "$#tool_prefix#$clang++$#tool_postfix#$", 
-          "CK_DLL_EXT": file_extensions.get('dll',''),
-          "CK_EXE_EXT": file_extensions.get('exe',''),
+          "CK_CXX": "$#tool_prefix#$clang++$#tool_postfix#$",
           "CK_EXTRA_LIB_DL": "-ldl", 
           "CK_EXTRA_LIB_M": "-lm", 
-          "CK_FLAGS_CREATE_ASM": "-S", 
-          "CK_FLAGS_CREATE_OBJ": "-c", 
           "CK_FLAGS_DLL": "-shared -fPIC", 
           "CK_FLAGS_DLL_EXTRA": "", 
           "CK_FLAGS_OUTPUT": "-o ", 
           "CK_FLAGS_STATIC_BIN": "-static -fPIC", 
           "CK_FLAGS_STATIC_LIB": "-fPIC", 
-          "CK_FLAG_PREFIX_INCLUDE": "-I", 
-          "CK_FLAG_PREFIX_LIB_DIR": "-L", 
-          "CK_FLAG_PREFIX_VAR": "-D", 
           "CK_GPROF_OUT_FILE": "gmon.out", 
           "CK_LD_FLAGS_EXTRA": "", 
-          "CK_LIB_EXT": file_extensions.get('lib',''),
-          "CK_LINKER_FLAG_OPENMP": "-fopenmp", 
           "CK_MAKE": "make", 
           "CK_OBJDUMP": "$#tool_prefix#$objdump -d", 
-          "CK_OBJ_EXT": ".o", 
-          "CK_OPT_SIZE": "-Os", 
-          "CK_OPT_SPEED": "-O3", 
-          "CK_OPT_SPEED_SAFE": "-O2", 
-          "CK_PLUGIN_FLAG": "-fplugin=", 
           "CK_PROFILER": "gprof"
         })
 
-       # Modify if Android
-       if remote=='yes':
+       # Modify if ...
+       if remote=='yes':	# Android under Unix
           env.update({
              "CK_AR": "${CK_ANDROID_COMPILER_PREFIX}-ar", 
              "CK_COMPILER_FLAG_GPROF": "-pg", 
-             "CK_DLL_EXT": ".so", 
-             "CK_EXE_EXT": ".out", 
              "CK_EXTRA_LIB_DL": "-ldl", 
              "CK_EXTRA_LIB_M": "-lm", 
              "CK_FLAGS_DLL": "-shared -fPIC", 
@@ -448,26 +428,23 @@ def setup(i):
              "CK_LB": "${CK_ANDROID_COMPILER_PREFIX}-ar rcs", 
              "CK_LB_OUTPUT": "-o ", 
              "CK_LD_FLAGS_EXTRA": "", 
-             "CK_LIB_EXT": ".a", 
              "CK_LD_DYNAMIC_FLAGS": "", 
              "CK_LD_FLAGS_EXTRA": "", 
              "CK_OBJDUMP": "${CK_ANDROID_COMPILER_PREFIX}-objdump -d",
              "CK_PROFILER": "gprof"})
-       elif mac=='yes':
+       elif mac=='yes':		# non-Android and Mac
           env["CK_LB"]="$#tool_prefix#$ar -rcs"
           env["CK_LB_OUTPUT"]=""
-          env["CK_AR_PATH_FOR_CMAKE"]       = compiler_bin_dir + sdirs + 'llvm-ar'
-          env["CK_RANLIB_PATH_FOR_CMAKE"]   = compiler_bin_dir + sdirs + 'llvm-ranlib'
+          env["CK_AR_PATH_FOR_CMAKE"]       = os.path.join(compiler_bin_dir, 'llvm-ar')
+          env["CK_RANLIB_PATH_FOR_CMAKE"]   = os.path.join(compiler_bin_dir, 'llvm-ranlib')
           env["CK_COMPILER_OWN_LIB_LOC"]    = '-L' + path_lib
           env["CK_CXX_COMPILER_STDLIB"]     = '-stdlib=libstdc++'
-       else:
+       else:				# non-Android and Linux
           env["CK_LB"]="$#tool_prefix#$ar rcs"
           env["CK_LB_OUTPUT"]="-o "
 
        # Ask a few more questions
        # (tool prefix)
-       prefix_configured=cus.get('tool_prefix_configured','')
-       prefix=cus.get('tool_prefix','')
 
        env['CK_COMPILER_PREFIX']=prefix
        cus['tool_prefix']=prefix
@@ -514,8 +491,7 @@ def setup(i):
           cus['linking_for_retargeting']=lfr
           env['CK_LD_FLAGS_EXTRA']=lfr
 
-       if remote=='yes':
-          ### Android target #########################################################
+       if remote=='yes':	# again, Android under Unix
 
 #          x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
           y='-target $CK_ANDROID_TOOLCHAIN -gcc-toolchain $CK_ENV_COMPILER_GCC --sysroot=$CK_SYS_ROOT'
@@ -526,8 +502,7 @@ def setup(i):
 
           env["CK_COMPILER_FLAGS_OBLIGATORY"]='-lm '+x+y
 
-       else:
-          ### Linux Host  #########################################################
+       else:				# non-Android and Unix
           add_m32=cus.get('add_m32','')
           if env.get('CK_COMPILER_ADD_M32','').lower()=='yes' or os.environ.get('CK_COMPILER_ADD_M32','').lower()=='yes':
              add_m32='yes'
@@ -553,7 +528,6 @@ def setup(i):
        if x!='':
           s+='\nexport PATH='+path_install+x+':%PATH%\n\n'
 
-    env['CK_COMPILER_TOOLCHAIN_NAME']='clang'
 
     # CHECK if some LLVM specific binaries exist (rather than standard)
     for x in sbin:
@@ -586,8 +560,5 @@ def setup(i):
           x+=' '+y
           env["CK_COMPILER_FLAGS_OBLIGATORY"]=x
 
-    # Otherwise may be problems on Windows during cross-compiling
-    env['CK_OPT_UNWIND']=' '
-    env['CK_FLAGS_DYNAMIC_BIN']=' '
 
     return {'return':0, 'bat':s}
