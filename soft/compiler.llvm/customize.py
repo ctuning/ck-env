@@ -159,7 +159,7 @@ def setup(i):
 
     iv=i.get('interactive','')
 
-    env=i['env']
+    env=i['env']                # load the initial state of env{} from .cm/meta.json and apply OS-dependent modifications here
     cfg=i.get('cfg',{})
     deps=i.get('deps',{})
     tags=i['tags']
@@ -223,30 +223,12 @@ def setup(i):
     prefix=cus.get('tool_prefix','')
 
     # Common part for all operating systems:
-    env.update({"CK_COMPILER_FLAG_STD90": "-std=c90",
-                "CK_COMPILER_FLAG_STD99": "-std=c99",
-                "CK_COMPILER_FLAG_CPP11": "-std=c++11",
-                "CK_COMPILER_FLAG_CPP0X": "-std=c++0x",
-                "CK_COMPILER_FLAG_OPENMP": "-fopenmp",
-                "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread",
-                "CK_COMPILER_TOOLCHAIN_NAME": "clang",
-                "CK_ASM_EXT": ".s",
+    env.update({
                 "CK_DLL_EXT": file_extensions.get('dll',''),
                 "CK_EXE_EXT": file_extensions.get('exe',''),
                 "CK_LIB_EXT": file_extensions.get('lib',''),
-                "CK_OBJ_EXT": ".o",
-                "CK_FLAG_PREFIX_INCLUDE": "-I",
-                "CK_FLAG_PREFIX_LIB_DIR": "-L",
-                "CK_FLAG_PREFIX_VAR": "-D",
-                "CK_FLAGS_CREATE_ASM": "-S",
-                "CK_FLAGS_CREATE_OBJ": "-c",
                 "CK_FLAGS_DYNAMIC_BIN": " ",					# to avoid problems on Windows during cross-compilation
-                "CK_LINKER_FLAG_OPENMP": "-fopenmp",
-                "CK_OPT_SIZE": "-Os",
-                "CK_OPT_SPEED": "-O3",
-                "CK_OPT_SPEED_SAFE": "-O2",
                 "CK_OPT_UNWIND": " ",							# to avoid problems on Windows during cross-compilation
-                "CK_PLUGIN_FLAG": "-fplugin=",
     })
 
     ############################################################
