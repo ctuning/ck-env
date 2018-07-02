@@ -8,7 +8,6 @@
 #
 
 import os
-import subprocess
 
 ##############################################################################
 # customize directories to automatically find and register software
@@ -163,12 +162,7 @@ def setup(i):
 
        # Ask the compiler where it keeps its dynamic library -
        # it may be used by other components and should be exposed:
-       #
-       # FIXME: please test if this bit works on Windows
-       #        and make the following unconditional if it does:
-       #
 
-       # FGG indeed fixed that for Windows and Linux
        first_param = '-print-file-name=libstdc++' + file_extensions.get('dll','')
        path_lib=''
 
@@ -190,14 +184,6 @@ def setup(i):
 
        if path_lib=='':
           ck.out('WARNING: couldn\'t detect GCC stdlib++ path ...')
-
-#       if winh!='yes':
-#            first_param         = '-print-file-name=libstdc++' + file_extensions.get('dll','')
-#            libdetect_output    = subprocess.check_output( [ full_path, first_param ], stderr=subprocess.STDOUT ).decode('utf-8')
-#            if libdetect_output:
-#                path_lib = os.path.dirname( libdetect_output.rstrip() )
-#            else:
-#                print("WARNING: subprocess.check_output(['" + full_path + "', " + first_param + "]) did not return anything")
 
 
        if path_bin!='/usr/bin':
