@@ -222,7 +222,7 @@ def setup(i):
 
     prefix=cus.get('tool_prefix','')
 
-    # Common part for all operating systems:
+    # Common part for all operating systems (topping up whatever is defined in .cm/meta.json ) :
     env.update({
                 "CK_DLL_EXT": file_extensions.get('dll',''),
                 "CK_EXE_EXT": file_extensions.get('exe',''),
@@ -240,7 +240,9 @@ def setup(i):
              "CK_BC_EXT": ".bc", 
              "CK_COMPILER_ENABLE_EXCEPTIONS": "-fcxx-exceptions",
              "CK_CC": "$#tool_prefix#$clang",
+             "CK_CC_FULL_PATH": os.path.join(compiler_bin_dir, "$#tool_prefix#$clang"),
              "CK_CXX": "$#tool_prefix#$clang++",
+             "CK_CXX_FULL_PATH": os.path.join(compiler_bin_dir, "$#tool_prefix#$clang++"),
              "CK_F90": "", 
              "CK_F95": "", 
              "CK_FC": "", 
@@ -376,12 +378,14 @@ def setup(i):
        env.update({
           "CK_AR": "$#tool_prefix#$ar", 
           "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$",
+          "CK_CC_FULL_PATH": os.path.join(compiler_bin_dir, "$#tool_prefix#$clang$#tool_postfix#$"),
           "CK_LLVM_CONFIG": "$#tool_prefix#$llvm-config$#tool_postfix#$", 
           "CK_COMPILER_FLAGS_OBLIGATORY": "", 
           "CK_COMPILER_ENABLE_EXCEPTIONS": "-fcxx-exceptions",
           "CK_COMPILER_FLAG_GPROF": "-pg", 
           "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
           "CK_CXX": "$#tool_prefix#$clang++$#tool_postfix#$",
+          "CK_CXX_FULL_PATH": os.path.join(compiler_bin_dir, "$#tool_prefix#$clang++$#tool_postfix#$"),
           "CK_EXTRA_LIB_DL": "-ldl", 
           "CK_EXTRA_LIB_M": "-lm", 
           "CK_FLAGS_DLL": "-shared -fPIC", 
@@ -451,20 +455,22 @@ def setup(i):
        cus['tool_postfix_configured']='yes'
 
        for k in env:
-           v=env[k]
+            v=env[k]
 
-           # Hack to check that sometimes clang++-3.x is not available
-           if k=='CK_CXX':
-               pxx=os.path.join(env.get(env_prefix+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
-               if not os.path.isfile(pxx):
-                   v=v.replace('$#tool_postfix#$','')
-           elif k=='CK_LLVM_CONFIG':
-               pxx=os.path.join(env.get(env_prefix+'_BIN',''),v.replace('$#tool_postfix#$',postfix))
-               if not os.path.isfile(pxx):
-                   v=v.replace('$#tool_postfix#$','')
+            if v.find('$#tool_postfix#$')>=0:
 
-           v=v.replace('$#tool_postfix#$',postfix)
-           env[k]=v
+                # A hack to skip the tool_postfix if clang++-3.x is not available :
+                #
+                if v.startswith('/') :      # are we dealing with an absolute path?
+                    if not os.path.isfile( v.replace('$#tool_postfix#$',postfix) ):
+                        v = v.replace('$#tool_postfix#$', '')
+                else:                       # otherwise prepend <compiler_bin_dir> in front of it:
+                    potential_postfixed_path = os.path.join(compiler_bin_dir, v.replace('$#tool_postfix#$',postfix))
+                    if not os.path.isfile( potential_postfixed_path ):
+                        v = v.replace('$#tool_postfix#$', '')
+
+                v=v.replace('$#tool_postfix#$',postfix)
+                env[k]=v
 
        retarget=cus.get('retarget','')
        lfr=cus.get('linking_for_retargeting','')
