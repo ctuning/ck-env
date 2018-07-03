@@ -657,6 +657,22 @@
       "url": "https://github.com/ctuning/ck-tbd-suite"
     }
   },
+  "9116e3c9d3784902": {
+    "data_uoa": "ck-pytorch",
+    "dict": {
+      "desc": "Portable/customizable installation and unified access to PyTorch AI framework with different workflows and data sets.",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-pytorch"
+    }
+  },
   "944d5b8a6b4ba2f8": {
     "data_uoa": "ck-dev-compilers",
     "dict": {
@@ -757,6 +773,35 @@
       ],
       "shared": "git",
       "url": "https://github.com/ctuning/ck-request-asplos18-results-iot-farm"
+    }
+  },
+  "ac0aeabaf54f5f93": {
+    "data_uoa": "ck-env",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-env.git"
+    }
+  },
+  "acb7cea44acac9c9": {
+    "data_uoa": "ck-tensorflow",
+    "dict": {
+      "desc": "Portable/customizable installation and unified access to TensorFlow AI framework with different workflows and data sets.",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "sync": "yes",
+      "url": "https://github.com/ctuning/ck-tensorflow"
     }
   },
   "b147cf2ad44fb39c": {
@@ -931,6 +976,27 @@
       "url": "https://github.com/ctuning/ck-autotuning"
     }
   },
+  "e1f04fc2ba0c7823": {
+    "data_uoa": "ck-quantum",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env",
+          "repo_url": "https://github.com/ctuning/ck-env"
+        },
+        {
+          "repo_uoa": "ck-rigetti",
+          "repo_url": "https://github.com/ctuning/ck-rigetti"
+        },
+        {
+          "repo_uoa": "ck-qiskit",
+          "repo_url": "https://github.com/ctuning/ck-qiskit"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-quantum"
+    }
+  },
   "e3f9da42311dbb44": {
     "data_uoa": "ck-web-adapt-workshop",
     "dict": {
@@ -998,6 +1064,13 @@
       "url": "https://github.com/ctuning/ck-request-asplos18-results"
     }
   },
+  "f4b9993c6d17ba95": {
+    "data_uoa": "ck-web-cknowledge",
+    "dict": {
+      "shared": "git",
+      "url": "https://gitlab.com/gfursin/ck-web-cknowledge"
+    }
+  },
   "f5418c86ed803058": {
     "data_uoa": "ck-request",
     "dict": {
@@ -1034,23 +1107,6 @@
       ],
       "shared": "git",
       "url": "https://github.com/ctuning/ck-request-asplos18-results-resnet-tvm-fpga"
-    }
-  },
-  "fc46c9bebd155893": {
-    "data_uoa": "ck-tensorflow",
-    "dict": {
-      "desc": "Portable/customizable installation and unified access to TensorFlow AI framework with different workflows and data sets.",
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-autotuning"
-        },
-        {
-          "repo_uoa": "ck-math"
-        }
-      ],
-      "shared": "git",
-      "sync": "yes",
-      "url": "https://github.com/ctuning/ck-tensorflow"
     }
   },
   "ffffffff1237432a": {
