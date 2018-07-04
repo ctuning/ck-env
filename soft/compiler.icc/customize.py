@@ -219,6 +219,7 @@ def setup(i):
     env.update({
         # FIXME: check whether Boost also agrees to compile under windows+icc and extend to windows platform if so
         "CK_COMPILER_TOOLCHAIN_NAME" : 'intel-' + ('darwin' if macos else 'linux'),
+        "CK_COMPILER_VERSION": i.get('version', ''),
         "CK_DLL_EXT": file_extensions.get('dll',''),
         "CK_EXE_EXT": file_extensions.get('exe',''),
         "CK_LIB_EXT": file_extensions.get('lib',''),

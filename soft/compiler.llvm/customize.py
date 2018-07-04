@@ -224,6 +224,7 @@ def setup(i):
 
     # Common part for all operating systems (topping up whatever is defined in .cm/meta.json ) :
     env.update({
+                "CK_COMPILER_VERSION": i.get('version', ''),
                 "CK_DLL_EXT": file_extensions.get('dll',''),
                 "CK_EXE_EXT": file_extensions.get('exe',''),
                 "CK_LIB_EXT": file_extensions.get('lib',''),

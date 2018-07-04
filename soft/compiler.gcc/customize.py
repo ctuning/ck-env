@@ -236,6 +236,8 @@ def setup(i):
       "CK_COMPILER_FLAG_OPENMP": "-fopenmp", 
       "CK_COMPILER_FLAG_PLUGIN": "-fplugin=", 
       "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread", 
+      "CK_COMPILER_TOOLCHAIN_NAME": "gcc",
+      "CK_COMPILER_VERSION": i.get('version', ''),
       "CK_OPT_ALL_WARNINGS": "-Wall", 
       "CK_CXX": "$#tool_prefix#$g++$#tool_postfix#$",
       "CK_CXX_FULL_PATH": os.path.join(path_bin, "$#tool_prefix#$g++$#tool_postfix#$"),
@@ -303,8 +305,6 @@ def setup(i):
     env['CK_COMPILER_POSTFIX']=postfix
     cus['tool_postfix']=postfix
     cus['tool_postfix_configured']='yes'
-
-    env['CK_COMPILER_TOOLCHAIN_NAME']='gcc'
 
     for k in env:
         v=env[k]
