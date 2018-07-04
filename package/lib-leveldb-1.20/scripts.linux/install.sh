@@ -24,12 +24,12 @@ cd $BUILD_DIR
     # on a Mac and compiling with LLVM:
 if [ -n "$CK_ENV_COMPILER_LLVM_SET" ] && [ "$CK_DLL_EXT" = ".dylib" ]
 then
-    INSTALL_PATH='@rpath' make CXX="${CK_ENV_COMPILER_LLVM_BIN}/${CK_CXX} -stdlib=libstdc++" CC="${CK_ENV_COMPILER_LLVM_BIN}/${CK_CC}" LDFLAGS="-lstdc++"
+    INSTALL_PATH='@rpath' make CXX="${CK_CXX_FULL_PATH} -stdlib=libstdc++" CC=$CK_CC_FULL_PATH LDFLAGS="-lstdc++"
 else
     # NOTE: the obvious AR=$CK_AR won't work for this Makefile, because:
     #   (1) llvm-ar refuses to take -rs argument
     #   (2) the current version of CK_AR defined by soft:compiler.llvm doesn't contain the version number
-    make CXX=$CK_CXX CC=$CK_CC
+    make CXX=$CK_CXX_FULL_PATH CC=$CK_CC_FULL_PATH
 fi
 
 if [ "${?}" != "0" ] ; then
