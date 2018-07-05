@@ -222,9 +222,15 @@ def setup(i):
 
     prefix=cus.get('tool_prefix','')
 
+    # trim the version to the standard "Major.Minor.Revision" format:
+    version = i.get('version', '')
+    version_tail = version.find('-')
+    if version_tail>=0:
+        version = version[:version_tail]
+
     # Common part for all operating systems (topping up whatever is defined in .cm/meta.json ) :
     env.update({
-                "CK_COMPILER_VERSION": i.get('version', ''),
+                "CK_COMPILER_VERSION": version,
                 "CK_DLL_EXT": file_extensions.get('dll',''),
                 "CK_EXE_EXT": file_extensions.get('exe',''),
                 "CK_LIB_EXT": file_extensions.get('lib',''),
