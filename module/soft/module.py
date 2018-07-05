@@ -2473,7 +2473,8 @@ def show(i):
        h+='<p>\n'
        h+='See <pre>ck detect soft --help</pre> for more detection options.\n'
        h+='See <a href="http://cKnowledge.org/shared-packages.html">related CK packages</a>,\n'
-       h+=' <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>\n'
+       h+=' <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
+       h+=' <a href="https://portalparts.acm.org/3230000/3229762/fm/frontmatter.pdf">ACM ReQuEST-ASPLOS\'18 report</a>\n'
        h+=' and the latest <a href="http://cKnowledge.org/rpi-crowd-tuning">CK paper</a> for further details.\n'
 
        h+='<p>\n'
