@@ -109,11 +109,7 @@ def setup(i):
     p1=os.path.dirname(fp)
     p2=os.path.dirname(p1)
 
-    print (fp)
-    print (p1)
-
     pb=os.path.join(p2, 'bin')
-    print (pb)
     if not os.path.isdir(pb):
        pbx=os.path.dirname(pb)
        pb=os.path.join(pbx,'bin')
