@@ -82,6 +82,9 @@ def setup(i):
     cus=i.get('customize',{})
     fp=cus.get('full_path','')
 
+    p1=os.path.dirname(fp)
+    p2=os.path.dirname(p1)
+
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
@@ -103,57 +106,29 @@ def setup(i):
 
     ep=cus['env_prefix']
 
-    # Bin and root dir
-    fp=os.path.realpath(fp)
-
-    p1=os.path.dirname(fp)
-    p2=os.path.dirname(p1)
-
-    print (fp)
-    print (p1)
-
-    pb=os.path.join(p2, 'bin')
-    print (pb)
-    if not os.path.isdir(pb):
-       pbx=os.path.dirname(pb)
-       pb=os.path.join(pbx,'bin')
-       if not os.path.isdir(pb):
-          return {'return':1, 'error':'can\'t find bin directory'}
-
-    env[ep]=p2
-
-    # Include dir
     pi=os.path.join(p2,'include')
-    if not os.path.isdir(pi):
-       return {'return':1, 'error':'can\'t find include directory'}
-
-    # Lib dir
     pl=os.path.join(p2,'lib')
-    if not os.path.isdir(pl):
-       return {'return':1, 'error':'can\'t find lib directory'}
+
+    pb=os.path.join(p2,'bin')
+    if not os.path.isdir(pb):
+       p2x=os.path.dirname(p2)
+       pb=os.path.join(p2x,'bin')
+       if not os.path.isdir(pb):
+          p2x=os.path.dirname(p2x)
+          pb=os.path.join(p2x,'bin')
 
     cus['path_include']=pi
     cus['path_lib']=pl
     cus['path_bin']=pb
+    env['CK_ENV_LIB_MPI_CC'] = os.path.join(pb,'mpicc')
 
-    # Check different compilers
-    for q in [{'file':'mpicc', 'var':'_CC'},
-              {'file':'mpicxx', 'var':'_CXX'},
-              {'file':'mpifort', 'var':'_FC'},
-              {'file':'mpirun', 'var':'_RUN'}]:
-        bfile=q['file']
-        if win=='yes': bfile+='.exe'
-        xbfile=os.path.join(pb, bfile)
-        if os.path.isfile(xbfile):
-           env['CK_ENV_LIB_MPI'+q['var']] = bfile
-           env['CK_ENV_LIB_MPI'+q['var']+'_FULL'] = xbfile
-
-    # Prepare library paths
     r = ck.access({'action': 'lib_path_export_script', 
                    'module_uoa': 'os', 
                    'host_os_dict': hosd, 
                    'lib_path': cus.get('path_lib','')})
     if r['return']>0: return r
     s += r['script']
+
+    env[ep]=p2
 
     return {'return':0, 'bat':s}

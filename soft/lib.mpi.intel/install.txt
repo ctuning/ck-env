@@ -8,5 +8,6 @@ APT Instactions:
 4. sudo sh -c 'echo deb https://apt.repos.intel.com/mpi all main > /etc/apt/sources.list.d/intel-mpi.list'
 5. sudo apt-get update
 6. sudo apt-get install intel-mpi
-7. ck detect soft:lib.mpiicc --full_path=<<INSTALLATION_PATH>>/bin/mpivars.sh 
-
+7. ck detect soft --tags=lib,mpi,intel
+Note that if this library is installed in an unusual path, you can help CK detect it as follows:
+7. ck detect soft --tags=lib,mpi,intel --search_dirs=<<INSTALLATION_PATH>>

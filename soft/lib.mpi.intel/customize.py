@@ -10,28 +10,38 @@
 import os
 
 ##############################################################################
-# get version from path
+# parse software version
 
-def version_cmd(i):
+def parse_version(i):
 
-    ck=i['ck_kernel']
+    lst=i['output']
 
-    fp=i['full_path']
+    hosd=i.get('host_os_dict',{})
+    hplat=hosd.get('ck_name','')
 
     ver=''
 
-    p0=os.path.basename(fp)
-    p1=os.path.dirname(fp)
+    for q in lst:
+        q=q.strip()
+        if q!='':
+           if hplat=='win':
+              j=q.lower().find(' version ')
+              if j>=0:
+                 q=q[j+10:]
+                 j=q.find(' ')
+                 if j>=0:
+                    ver=q[:j]
+                    break
+           else:
+              j=q.lower().find(') ')
+              if j>=0:
+                 ver=q[j+2:]
+                 j=ver.find(' ')
+                 if j>=0:
+                    ver=ver[:j]
+                    break
 
-    lst=os.listdir(p1)
-    for fn in lst:
-        if fn.startswith(p0):
-           x=fn[len(p0):]
-           if x.startswith('.'):
-              ver=x[1:]
-              break
-
-    return {'return':0, 'cmd':'', 'version':ver}
+    return {'return':0, 'version':ver}
 
 ##############################################################################
 # setup environment setup
@@ -106,20 +116,14 @@ def setup(i):
     # Bin and root dir
     fp=os.path.realpath(fp)
 
-    p1=os.path.dirname(fp)
-    p2=os.path.dirname(p1)
-
-    print (fp)
-    print (p1)
-
-    pb=os.path.join(p2, 'bin')
-    print (pb)
+    pb=os.path.dirname(fp)
     if not os.path.isdir(pb):
        pbx=os.path.dirname(pb)
        pb=os.path.join(pbx,'bin')
        if not os.path.isdir(pb):
           return {'return':1, 'error':'can\'t find bin directory'}
 
+    p2=os.path.dirname(pb)
     env[ep]=p2
 
     # Include dir
@@ -137,10 +141,11 @@ def setup(i):
     cus['path_bin']=pb
 
     # Check different compilers
-    for q in [{'file':'mpicc', 'var':'_CC'},
-              {'file':'mpicxx', 'var':'_CXX'},
-              {'file':'mpifort', 'var':'_FC'},
-              {'file':'mpirun', 'var':'_RUN'}]:
+    for q in [{'file':'mpiicc', 'var':'_CC'},
+              {'file':'mpiicpc', 'var':'_CXX'},
+              {'file':'mpiifort', 'var':'_FC'},
+              {'file':'mpirun', 'var':'_RUN'},
+              {'file':'mpitune', 'var':'_TUNE'}]:
         bfile=q['file']
         if win=='yes': bfile+='.exe'
         xbfile=os.path.join(pb, bfile)

@@ -11,14 +11,25 @@
     }, 
     "soft_file": {
       "linux": "mpiicc", 
-      "win": "mpiicc"
+      "win": "mpiicc.exe"
     }, 
     "soft_path_example": {
       "linux": "", 
       "win": ""
+    },
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1", 
+      "win": "--version > $#filename#$ 2>&1"
     }
   }, 
-  "deps": {}, 
+  "deps": {
+    "compiler": {
+      "local": "yes", 
+      "name": "Intel C compiler", 
+      "sort": 1, 
+      "tags": "compiler,lang-cpp,icc"
+    } 
+  }, 
   "soft_name": "Intel MPI library", 
   "tags": [
     "lib", 

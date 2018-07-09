@@ -9,25 +9,25 @@
       "PACKAGE_CONFIGURE_FLAGS": "--enable-parallel --with-zlib --disable-shared --enable-fortran", 
       "PACKAGE_CONFIGURE_FLAGS_LINUX": "", 
       "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "", 
-      "PACKAGE_NAME": "hdf5-1.10.1.tar.bz2", 
-      "PACKAGE_NAME1": "hdf5-1.10.1.tar", 
-      "PACKAGE_NAME2": "hdf5-1.10.1", 
+      "PACKAGE_NAME": "hdf5-1.10.2.tar.bz2", 
+      "PACKAGE_NAME1": "hdf5-1.10.2.tar", 
+      "PACKAGE_NAME2": "hdf5-1.10.2", 
       "PACKAGE_PATCH": "YES", 
       "PACKAGE_RENAME": "NO", 
       "PACKAGE_SKIP_CLEAN_INSTALL": "NO", 
       "PACKAGE_SKIP_CLEAN_OBJ": "NO", 
       "PACKAGE_SKIP_CLEAN_PACKAGE": "NO", 
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
-      "PACKAGE_SUB_DIR": "hdf5-1.10.1", 
-      "PACKAGE_SUB_DIR1": "hdf5-1.10.1", 
+      "PACKAGE_SUB_DIR": "hdf5-1.10.2", 
+      "PACKAGE_SUB_DIR1": "hdf5-1.10.2", 
       "PACKAGE_UNBZIP": "YES", 
       "PACKAGE_UNGZIP": "NO", 
       "PACKAGE_UNTAR": "YES", 
       "PACKAGE_UNTAR_SKIP_ERROR_WIN": "YES", 
-      "PACKAGE_URL": "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.1/src", 
+      "PACKAGE_URL": "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.2/src", 
       "PACKAGE_WGET": "YES"
     }, 
-    "version": "1.10.1"
+    "version": "1.10.2"
   }, 
   "deps": {
     "compiler": {
@@ -67,7 +67,7 @@
     "vparallel",
     "vmpi",
     "vfortran",
-    "v1.10.1", 
+    "v1.10.2", 
     "v1.10", 
     "v1", 
     "channel-stable"

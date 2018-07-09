@@ -1,3 +1,9 @@
+* 2018.07.09 - [FGG] fixed intel mpi detection
+                     fixed compilation of HDF5 parallel version with intel mpi
+                     renamed soft:lib.mpiicc to soft:lib.mpi.intel
+                     moved package:lib-openmpi-1.10.3-universal from ck-math repo
+                     unified vars for soft:lib.mpi
+
 * 2018.06.28 - [FGG] added basic templates for package plugins
 
 * 2018.06.27 - [FGG] added basic templates for soft plugins
