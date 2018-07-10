@@ -15,6 +15,7 @@
   },
   "deps": {},
   "end_full_path": {
+    "android": "imagenet_mean.binaryproto",
     "linux": "imagenet_mean.binaryproto",
     "win": "imagenet_mean.binaryproto"
   },

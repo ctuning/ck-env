@@ -9,6 +9,7 @@
       "win": 3
     },
     "soft_file": {
+      "android": "imagenet_mean.binaryproto",
       "linux": "imagenet_mean.binaryproto",
       "win": "imagenet_mean.binaryproto"
     }
