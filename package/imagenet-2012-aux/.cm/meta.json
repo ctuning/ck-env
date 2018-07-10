@@ -14,11 +14,7 @@
     "version": "2012"
   },
   "deps": {},
-  "end_full_path": {
-    "android": "imagenet_mean.binaryproto",
-    "linux": "imagenet_mean.binaryproto",
-    "win": "imagenet_mean.binaryproto"
-  },
+  "end_full_path_universal": "imagenet_mean.binaryproto",
   "need_cpu_info": "no",
   "process_script": "install",
   "soft_uoa": "167d823440e6a59a",

@@ -2570,8 +2570,13 @@ def show(i):
            y=''
            yh=''
            if url!='':
-              yh=url+'/tree/master/soft/'+ln
-              x='['+url+' '+lr+']'
+              url2=url
+
+              if url2.endswith('.git'):
+                 url2=url2[:-4]
+
+              yh=url2+'/tree/master/soft/'+ln
+              x='['+url2+' '+lr+']'
               y='['+yh+' link]'
 
            ###############################################################
@@ -2587,7 +2592,7 @@ def show(i):
                  z1='<a href="'+yh+'">'
                  z11='<a href="'+yh+'/.cm/meta.json">'
 
-              h+='  <td nowrap valign="top">'+str(num)+'</b></td>\n'
+              h+='  <td nowrap valign="top"><a name="'+ln+'">'+str(num)+'</b></td>\n'
 
               h+='  <td nowrap valign="top">'+z1+ln+x2+'</b> <i>('+z11+'CK meta'+x2+')</i></td>\n'
 

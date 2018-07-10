@@ -8,11 +8,7 @@
       "linux": 3,
       "win": 3
     },
-    "soft_file": {
-      "android": "imagenet_mean.binaryproto",
-      "linux": "imagenet_mean.binaryproto",
-      "win": "imagenet_mean.binaryproto"
-    }
+    "soft_file_universal": "imagenet_mean.binaryproto"
   },
   "deps": {},
   "soft_name": "ImageNet dataset (aux)",

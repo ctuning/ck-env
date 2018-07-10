@@ -801,8 +801,8 @@ def install(i):
                                 'data_uoa':je['data_uid'],
                                 'repo_uoa':je['repo_uid']})
                  if rje['return']==0:
-                    print (rje['dict'].get('customize',{}).get('used_package_uid',''))
-                    print (duid)
+#                    print (rje['dict'].get('customize',{}).get('used_package_uid',''))
+#                    print (duid)
 
                     if rje['dict'].get('customize',{}).get('used_package_uid','')!=duid:
                        skip=True
@@ -1801,8 +1801,12 @@ def show(i):
            y=''
            yh=''
            if url!='':
-              yh=url+'/tree/master/package/'+ln
-              x='['+url+' '+lr+']'
+              url2=url
+              if url2.endswith('.git'):
+                 url2=url2[:-4]
+
+              yh=url2+'/tree/master/package/'+ln
+              x='['+url2+' '+lr+']'
               y='['+yh+' link]'
 
            ###############################################################
@@ -1819,9 +1823,9 @@ def show(i):
                  z1='<a href="'+yh+'">'
                  z11='<a href="'+yh+'/.cm/meta.json">'
 
-              h+='  <td nowrap valign="top">'+str(num)+'</b></td>\n'
+              h+='  <td nowrap valign="top"><a name="'+ln+'">'+str(num)+'</b></td>\n'
 
-              h+='  <td nowrap valign="top">'+z1+ln+x2+'</b> <i>('+z11+'CK meta'+x2+')</i></td>\n'
+              h+='  <td nowrap valign="top">'+z1+ln+x2+' <i>('+z11+'CK meta'+x2+')</i></td>\n'
 
               h+='  <td nowrap valign="top">'+x1+lr+x2+'</td>\n'
 
