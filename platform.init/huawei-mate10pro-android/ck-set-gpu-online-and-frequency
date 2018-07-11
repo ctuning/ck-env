@@ -1,0 +1,58 @@
+#! /system/bin/sh
+ 
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+if [ "$CK_GPU_FREQ_GOVERNOR" != "" ]; then
+  governor=$CK_GPU_FREQ_GOVERNOR
+else
+  governor=gpu_scene_aware
+fi
+#echo "    Setting GPU governor policy to $governor ..."
+#echo $governor | sudo tee /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/governor
+
+echo
+
+echo "    Printing current frequency ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
+echo "    Printing minimum frequency ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
+echo "    Printing maximum frequency ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+echo "    Printing all available frequencies ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_frequencies
+
+echo
+
+if [ "$CK_GPU_FREQ_INDEX" != "" ]; then
+  index=$CK_GPU_FREQ_INDEX
+else
+  index=0
+fi
+echo "    Setting GPU frequency index to $index ..."
+
+all_freqs=(`su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_frequencies`)
+freq=${all_freqs[$index]}
+
+# This works for both stepping down and stepping up of the frequency index.
+echo "    Setting maximum frequency to $freq (Hz) ..."
+echo $freq | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+echo "    Setting minimum frequency to $freq (Hz) ..."
+echo $freq | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
+echo "    Setting maximum frequency to $freq (Hz) ..."
+echo $freq | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+
+echo
+
+echo "    Printing current frequency ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
+echo "    Printing minimum frequency ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
+echo "    Printing maximum frequency ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
