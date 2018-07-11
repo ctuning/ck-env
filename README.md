@@ -156,10 +156,7 @@ The concepts have been described in the following publications:
 }
 ```
 
-* http://tinyurl.com/zyupd5v (DATE'16)
-* http://arxiv.org/abs/1506.06256 (CPC'15)
-* http://hal.inria.fr/hal-01054763 (Journal of Scientific Programming'14)
-* https://hal.inria.fr/inria-00436029 (GCC Summit'09)
+All CK-related publications: [link](https://github.com/ctuning/ck/wiki/Publications)
 
 Questions and comments
 ======================
