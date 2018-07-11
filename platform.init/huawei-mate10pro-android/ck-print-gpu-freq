@@ -9,6 +9,10 @@
 # Developer: Anton Lokhmotov
 #
 
+su -c cat /sys/class/misc/mali0/device/gpuinfo
+
+echo
+
 echo "*** Current GPU frequency (Hz):"
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
 
