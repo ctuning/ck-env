@@ -9,7 +9,7 @@
 # Developer: Anton Lokhmotov
 #
 
-# TODO: how to change the governor? (the below approach doesn't work)
+# TODO: How to change the GPU governor? (the below approach doesn't work)
 #if [ "$CK_GPU_FREQ_GOVERNOR" != "" ]; then
 #  governor=$CK_GPU_FREQ_GOVERNOR
 #else
@@ -20,13 +20,13 @@
 
 #echo
 
-echo "    Printing current frequency ..."
+echo "    Printing current GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
-echo "    Printing minimum frequency ..."
+echo "    Printing minimum GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
-echo "    Printing maximum frequency ..."
+echo "    Printing maximum GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
-echo "    Printing all available frequencies ..."
+echo "    Printing all available GPU frequencies ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_frequencies
 
 echo
@@ -36,25 +36,41 @@ if [ "$CK_GPU_FREQ_INDEX" != "" ]; then
 else
   index=0
 fi
-echo "    Setting GPU frequency index to $index ..."
 
-all_freqs=(`su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_frequencies`)
-freq=${all_freqs[$index]}
+if [ "$CK_GPU_FREQ_INDEX_MIN" != "" ]; then
+  index_min=$CK_GPU_FREQ_INDEX_MIN
+else
+  index_min=$index
+fi
+echo "    Setting minimum GPU frequency index to $index_min ..."
 
-# This works for both stepping down and stepping up of the frequency index.
-echo "    Setting maximum frequency to $freq (Hz) ..."
-echo $freq | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
-echo "    Setting minimum frequency to $freq (Hz) ..."
-echo $freq | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
-echo "    Setting maximum frequency to $freq (Hz) ..."
-echo $freq | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+if [ "$CK_GPU_FREQ_INDEX_MAX" != "" ]; then
+  index_max=$CK_GPU_FREQ_INDEX_MAX
+else
+  index_max=$index
+fi
+echo "    Setting maximum GPU frequency index to $index_max ..."
 
 echo
 
-echo "    Printing current frequency ..."
+all_freqs=(`su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_frequencies`)
+freq_min=${all_freqs[$index_min]}
+freq_max=${all_freqs[$index_max]}
+
+# This works for both stepping down and stepping up of the frequency index.
+echo "    Setting maximum GPU frequency to $freq_max (Hz) ..."
+echo $freq_max | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+echo "    Setting minimum GPU frequency to $freq_min (Hz) ..."
+echo $freq_min | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
+echo "    Setting maximum GPU frequency to $freq_max (Hz) ..."
+echo $freq_max | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+
+echo
+
+echo "    Printing current GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
-echo "    Printing minimum frequency ..."
+echo "    Printing minimum GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
-echo "    Printing maximum frequency ..."
+echo "    Printing maximum GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
 

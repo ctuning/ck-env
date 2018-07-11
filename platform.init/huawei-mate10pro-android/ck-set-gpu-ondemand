@@ -1,0 +1,20 @@
+#! /system/bin/sh
+ 
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+# Index | 0         | 1         | 2         | 3         | 4         | 5         | 6         | 7
+# Freq  | 103750000 | 150909000 | 237143000 | 332000000 | 415000000 | 550000000 | 667000000 | 767000000
+
+echo "    Putting the GPU into the 'ondemand' mode ..."
+
+export CK_GPU_FREQ_INDEX_MIN=0
+export CK_GPU_FREQ_INDEX_MAX=7
+./ck-set-gpu-online-and-frequency
+
