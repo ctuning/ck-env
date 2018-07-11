@@ -12,6 +12,7 @@ software (compilers, libraries, tools, models, data sets)
 using [CK software detection plugins](http://cKnowledge.org/shared-soft-detection-plugins.html)
 or install missing [packages](http://cKnowledge.org/shared-packages.html) 
 in a unified way across diverse hardware with Linux, Windows, MacOS and Android operating systems.
+It also allows users to collect information about a given platform in a unified way.
 
 Further info:
 * [First feeling about CK](https://github.com/ctuning/ck/wiki/First-feeling)
@@ -160,6 +161,7 @@ The concepts have been described in the following publications:
 * http://hal.inria.fr/hal-01054763 (Journal of Scientific Programming'14)
 * https://hal.inria.fr/inria-00436029 (GCC Summit'09)
 
-Feedback
-========
-* https://groups.google.com/forum/#!forum/collective-knowledge
+Questions and comments
+======================
+
+You are welcome to get in touch with the [https://github.com/ctuning/ck/wiki/Contacts](CK community) if you have questions or comments!
