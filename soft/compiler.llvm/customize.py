@@ -91,14 +91,19 @@ def parse_version(i):
         q=q.strip()
         if q!='':
            j=q.lower().find(' version ')
-           if j>0 and q.lower().startswith('clang'):
+           if j>0:
+              if q.lower().startswith('clang'):
               q=q[j+9:]
               j=q.find(' ')
               if j>0:
                  q=q[:j]
               ver=q
               break
-
+              else:
+                 j1=q.find(' (')
+                 if j1>0:
+                    ver=q[j+9:j1]
+                    break
     if ver=='':
         ck.out('')
         ck.out('  WARNING: can\'t detect clang version from the following output:')
