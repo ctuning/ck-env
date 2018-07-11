@@ -1,0 +1,17 @@
+#! /system/bin/sh
+ 
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+echo "    Putting the CPU into the 'powersave' mode ..."
+
+export CK_CPU_GOVERNOR=powersave
+curr_dir=$( cd "$(dirname "$0")" ; pwd -P )
+$curr_dir/ck-set-cpu-online-and-frequency
+
