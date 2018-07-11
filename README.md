@@ -164,4 +164,4 @@ The concepts have been described in the following publications:
 Questions and comments
 ======================
 
-You are welcome to get in touch with the [https://github.com/ctuning/ck/wiki/Contacts](CK community) if you have questions or comments!
+You are welcome to get in touch with the [CK community](https://github.com/ctuning/ck/wiki/Contacts) if you have questions or comments!
