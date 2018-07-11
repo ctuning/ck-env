@@ -93,12 +93,12 @@ def parse_version(i):
            j=q.lower().find(' version ')
            if j>0:
               if q.lower().startswith('clang'):
-              q=q[j+9:]
-              j=q.find(' ')
-              if j>0:
-                 q=q[:j]
-              ver=q
-              break
+                 q=q[j+9:]
+                 j=q.find(' ')
+                 if j>0:
+                    q=q[:j]
+                 ver=q
+                 break
               else:
                  j1=q.find(' (')
                  if j1>0:
