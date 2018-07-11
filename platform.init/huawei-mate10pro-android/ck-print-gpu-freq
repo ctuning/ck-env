@@ -16,11 +16,15 @@ echo
 echo "*** Current GPU frequency (Hz):"
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
 
-#echo "*** Minimum GPU frequency:"
-#cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
+echo
 
-#echo "*** Maximum GPU frequency:"
-#cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+echo "*** Minimum GPU frequency:"
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
+
+echo
+
+echo "*** Maximum GPU frequency:"
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
 
 echo
 
