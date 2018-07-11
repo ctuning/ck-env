@@ -16,5 +16,6 @@ echo "    Putting the GPU into the 'powersave' mode ..."
 echo "demand" | su -c tee /sys/class/misc/mali0/device/power_policy
 
 export CK_GPU_FREQ_INDEX=0
-./ck-set-gpu-online-and-frequency
+curr_dir=$( cd "$(dirname "$0")" ; pwd -P )
+$curr_dir/ck-set-gpu-online-and-frequency
 

@@ -17,5 +17,6 @@ echo "demand" | su -c tee /sys/class/misc/mali0/device/power_policy
 
 export CK_GPU_FREQ_INDEX_MIN=0
 export CK_GPU_FREQ_INDEX_MAX=7
-./ck-set-gpu-online-and-frequency
+curr_dir=$( cd "$(dirname "$0")" ; pwd -P )
+$curr_dir/ck-set-gpu-online-and-frequency
 
