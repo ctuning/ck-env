@@ -67,10 +67,10 @@ echo $freq_max | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
 
 echo
 
-echo "    Printing current GPU frequency ..."
-su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
 echo "    Printing minimum GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
 echo "    Printing maximum GPU frequency ..."
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
+echo "    Printing current GPU frequency ..."
+su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/cur_freq
 
