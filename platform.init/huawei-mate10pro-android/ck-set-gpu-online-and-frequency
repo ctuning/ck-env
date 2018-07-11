@@ -58,11 +58,11 @@ freq_min=${all_freqs[$index_min]}
 freq_max=${all_freqs[$index_max]}
 
 # This works for both stepping down and stepping up of the frequency index.
-echo "    Setting maximum GPU frequency to $freq_max (Hz) ..."
+echo "    Setting maximum GPU frequency to $freq_max Hz ..."
 echo $freq_max | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
-echo "    Setting minimum GPU frequency to $freq_min (Hz) ..."
+echo "    Setting minimum GPU frequency to $freq_min Hz ..."
 echo $freq_min | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/min_freq
-echo "    Setting maximum GPU frequency to $freq_max (Hz) ..."
+echo "    Setting maximum GPU frequency to $freq_max Hz ..."
 echo $freq_max | su -c tee /sys/class/misc/mali0/device/devfreq/gpufreq/max_freq
 
 echo
