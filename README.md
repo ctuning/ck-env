@@ -1,40 +1,31 @@
 Fighting software and hardware chaos in research
 ================================================
 
-*Feel free to provide your favorite software descriptions (see examples [here](https://github.com/ctuning/ck-env/tree/master/soft)).*
-*Do not hesitate to ask for instructions and help [here](https://groups.google.com/forum/#!forum/collective-knowledge)!*
-
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](http://cKnowledge.org)
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-Researchers nowadays suffer from continuously changing
-software and hardware stack when sharing, customizing
-and reproducing experimental results:
+This is a [Collective Knowledge](https://github.com/ctuning/ck) repository
+providing functionality for portable, customizable, eproducible and automated experimental workflows.
+It lets users automatically detect multiple versions of different
+software (compilers, libraries, tools, models, data sets) 
+using [CK software detection plugins](http://cKnowledge.org/shared-soft-detection-plugins.html)
+or install missing [packages](http://cKnowledge.org/shared-packages.html) 
+in a unified way across diverse hardware with Linux, Windows, MacOS and Android operating systems.
 
-![SW/HW chaos](https://github.com/ctuning/ck-guide-images/blob/master/image-mess.png)
-
-This is an extension repository to the [Collective Knowledge Framework](https://github.com/ctuning/ck)
-to let users automatically detect or install multiple versions of various software
-(compilers, libraries, tools, models, data sets) 
-across diverse hardware with Linux, Windows, MacOS and Android operating systems.
-This, in turn, allows researchers implement portable, customizable and reproducible experimental workflows
-as described [here](https://github.com/ctuning/ck/wiki/Portable-workflows).
-
-The community gradually describes various software using [CK entries](https://github.com/ctuning/ck-env/tree/master/soft) 
-with JSON meta and simple Python scripts to detect coexisting installations. 
-See already shared [software descriptions](https://github.com/ctuning/ck/wiki/Shared-soft-descriptions)
-and [package descriptions](https://github.com/ctuning/ck/wiki/Shared-packages).
-
-Please, check [CK portable experimental workflows](https://github.com/ctuning/ck/wiki/Portable-workflows)
-for more details!
+Further info:
+* [First feeling about CK](https://github.com/ctuning/ck/wiki/First-feeling)
+* [CK portable experimental workflows](https://github.com/ctuning/ck/wiki/Portable-workflows)
+* [CK documentation including "Getting Started Guide"](https://github.com/ctuning/ck/wiki)
+  * [Reusable software detection plugins](http://cKnowledge.org/shared-soft-detection-plugins.html)
+  * [Reusable CK packages to automate installation of workflows across diverse platforms](http://cKnowledge.org/shared-packages.html)
+  * [Shared CK programs (workflows)](http://cKnowledge.org/shared-programs.html)
+* [Reproducible SW/HW co-design competitions for deep learning and other emerging workloads using CK](http://cKnowledge.org/request)
 
 Contributors
 ============
-* General Motors and dividiti use CK to crowdsource benchmarking and optimization of CAFFE with different versions of compilers, libraries, models and data sets: [public CK repo](https://github.com/dividiti/ck-caffe)
+* General Motors and dividiti use CK to crowdsource benchmarking and optimization of deep learning with different versions of compilers, libraries, models and data sets: [public CK repo](https://github.com/dividiti/ck-caffe)
 * ARM and the cTuning foundation use CK to systematize SW/HW co-design: [HiPEAC Info'45 page 17](https://www.hipeac.net/assets/public/publications/newsletter/hipeacinfo45.pdf), [ARM TechCon'16 presentation and demo](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16), [public CK repo](https://github.com/ctuning/ck-wa)
-* The community gradually provides description of all existing software in the CK format: [GitHub](https://github.com/ctuning/ck-env/tree/master/soft), [Wiki](https://github.com/ctuning/ck/wiki/Shared-soft-descriptions)
-* The community gradually adds various packages to automatically rebuild software: [Wiki](https://github.com/ctuning/ck/wiki/Shared-packages)
 
 Acknowledgments
 ===============
