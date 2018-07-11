@@ -1,0 +1,35 @@
+#! /system/bin/sh
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+if [ "$CK_THERMAL_ZONE" != "" ]; then
+  zone=$CK_THERMAL_ZONE
+else
+  zone=0
+fi
+
+echo "*** Temperature:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/temp`"
+
+echo "*** Temperature - trip point 0 <`cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_0_type`>:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_0_temp`"
+
+echo "*** Temperature - trip point 1 <`cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_1_type`>:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_1_temp`"
+
+echo "*** Policy:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/policy`"
+
+echo "*** Available policies:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/available_policies`"
+
+echo "*** Sustainable power:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/sustainable_power`"
+
