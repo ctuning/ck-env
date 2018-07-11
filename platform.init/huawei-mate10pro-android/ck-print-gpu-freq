@@ -33,6 +33,11 @@ su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/governor
 
 echo
 
+echo "*** Current GPU power policy:"
+su -c cat /sys/class/misc/mali0/device/power_policy
+
+echo
+
 echo "*** Available GPU frequencies (Hz):"
 su -c cat /sys/class/misc/mali0/device/devfreq/gpufreq/available_frequencies
 

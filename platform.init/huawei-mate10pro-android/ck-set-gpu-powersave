@@ -13,6 +13,7 @@
 # Freq  | 103750000 | 150909000 | 237143000 | 332000000 | 415000000 | 550000000 | 667000000 | 767000000
 
 echo "    Putting the GPU into the 'powersave' mode ..."
+echo "demand" | su -c tee /sys/class/misc/mali0/device/power_policy
 
 export CK_GPU_FREQ_INDEX=0
 ./ck-set-gpu-online-and-frequency
