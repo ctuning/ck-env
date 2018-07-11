@@ -1,0 +1,58 @@
+#! /system/bin/sh
+ 
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Anton Lokhmotov
+#
+
+governor=ondemand
+if [ "$CK_CPU_GOVERNOR" != "" ]; then
+  governor=$CK_CPU_GOVERNOR
+fi
+
+online=1
+if [ "$CK_CPU_ONLINE" != "" ]; then
+  online=$CK_CPU_ONLINE
+fi
+
+echo "    Bringing all CPUs online ..."
+for cpu_dir in /sys/devices/system/cpu/cpu*
+do
+  if [ "$online" == "1" ] && [ -f "$cpu_dir/online" ]; then
+    echo $online | su -c tee $cpu_dir/online > /dev/null
+  fi
+done
+
+for cpu_dir in /sys/devices/system/cpu/cpu*
+do
+  if [ -d "$cpu_dir/cpufreq" ] && [ -f "$cpu_dir/online" ] && [ -f "$cpu_dir/cpufreq/scaling_governor" ]; then
+    echo "*** Processing $cpu_dir ..."
+
+    echo "    Setting CPU governor to $governor ..."
+    echo $governor | su -c tee $cpu_dir/cpufreq/scaling_governor
+    echo "    Printing CPU governor ..."
+    cat $cpu_dir/cpufreq/scaling_governor
+
+    all_freqs=($(cat $cpu_dir/cpufreq/scaling_available_frequencies))
+    index_max=`expr ${#all_freqs[@]} - 1`
+    index_min=0
+    freq_max=${all_freqs[$index_max]}
+    freq_min=${all_freqs[$index_min]}
+
+    echo "    Setting minimum CPU frequency to $freq_min kHz ..."
+    echo $freq_min | su -c tee $cpu_dir/cpufreq/scaling_min_freq
+    echo "    Setting maximum CPU frequency to $freq_max kHz ..."
+    echo $freq_max | su -c tee $cpu_dir/cpufreq/scaling_max_freq
+    echo "    Printing minimum CPU frequency ..."
+    su -c cat $cpu_dir/cpufreq/scaling_min_freq
+    echo "    Printing maximum CPU frequency ..."
+    su -c cat $cpu_dir/cpufreq/scaling_max_freq
+    echo "    Printing current CPU frequency ..."
+    su -c cat $cpu_dir/cpufreq/scaling_cur_freq
+  fi
+done
+
