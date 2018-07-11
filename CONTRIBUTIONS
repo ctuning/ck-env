@@ -127,3 +127,9 @@ H:
 O: Arm
 C: Fixing error with GPU freq env
 W:
+
+N: Todd Gamblin
+E:
+O: LLNL
+C: discussing how to connect CK and spack, and fixing detection of native LLVM on MacOS (https://github.com/ctuning/ck-env/pull/70)
+W:
