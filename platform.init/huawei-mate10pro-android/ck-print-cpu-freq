@@ -9,7 +9,7 @@
 # Developer: Anton Lokhmotov
 #
 
-echo "*** Current CPU frequency:"
+echo "*** Current CPU frequency (kHz):"
 cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
 
 #echo "*** Current CPU frequency:"
@@ -28,10 +28,11 @@ cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 echo
 
-echo "*** Available CPU frequencies:"
+echo "*** Available CPU frequencies (kHz):"
 cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_frequencies
 
 echo
 
 echo "*** Available CPU governors:"
 cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_governors
+
