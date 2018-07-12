@@ -9,20 +9,27 @@
 # Developer: Anton Lokhmotov
 #
 
+if [ "$CK_THERMAL_ZONE" != "" ]; then
+  zone=$CK_THERMAL_ZONE
+else
+  zone=0
+fi
+
 echo "*** Temperature:"
-echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/temp`"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/temp`"
 
-echo "*** Temperature - trip point 0 <`cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_type`>:"
-echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp`"
+echo "*** Temperature - trip point 0 <`cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_0_type`>:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_0_temp`"
 
-echo "*** Temperature - trip point 1 <`cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_1_type`>:"
-echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_1_temp`"
+echo "*** Temperature - trip point 1 <`cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_1_type`>:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/trip_point_1_temp`"
 
 echo "*** Policy:"
-echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/policy`"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/policy`"
 
 echo "*** Available policies:"
-echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/available_policies`"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/available_policies`"
 
 echo "*** Sustainable power:"
-echo "[zone 0] `cat /sys/devices/virtual/thermal/thermal_zone0/sustainable_power`"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/sustainable_power`"
+
