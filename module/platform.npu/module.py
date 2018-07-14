@@ -329,7 +329,7 @@ def show(i):
 
     h='<h2>Neural Network Accelerators participating in crowd-tuning</h2>\n'
 
-    h+='<i>Reuse/extend <a href="https://github.com/ctuning/ck-crowdtuning-platforms/tree/master/platform.npu">CK JSON meta information</a> of these neural network accelerators using "ck pull repo:ck-crowdtuning-platforms" ...</i><br><br>\n'
+    h+='<i>Reuse/extend <a href="https://github.com/ctuning/ck-crowdtuning-platforms/tree/master/platform.npu">CK JSON meta information</a> of these Neural Processing Units using "ck pull repo:ck-crowdtuning-platforms" ...</i><br><br>\n'
 
     h+='<table class="ck_table" border="0" cellpadding="6" cellspacing="0">\n'
 
