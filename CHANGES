@@ -1,3 +1,5 @@
+* 2018.07.14 - [FGG] added platform.npu (while keeping platform.nn for any neural network even biological)
+
 * 2018.07.09 - [FGG] fixed intel mpi detection
                      fixed compilation of HDF5 parallel version with intel mpi
                      renamed soft:lib.mpiicc to soft:lib.mpi.intel
