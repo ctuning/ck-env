@@ -13,7 +13,9 @@
 # Freq  | 103750000 | 150909000 | 237143000 | 332000000 | 415000000 | 550000000 | 667000000 | 767000000
 
 echo "    Putting the GPU into the 'performance' mode ..."
+echo "always_on" | su -c tee /sys/class/misc/mali0/device/power_policy
 
 export CK_GPU_FREQ_INDEX=6
-./ck-set-gpu-online-and-frequency
+curr_dir=$( cd "$(dirname "$0")" ; pwd -P )
+$curr_dir/ck-set-gpu-online-and-frequency
 
