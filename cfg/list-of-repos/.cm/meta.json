@@ -161,6 +161,13 @@
       "url": "https://github.com/ctuning/ck-rescue-hpc"
     }
   },
+  "291b94f6b4697b81": {
+    "data_uoa": "ck-spack",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-spack"
+    }
+  },
   "2f937a661883ae0e": {
     "data_uoa": "ck-request-asplos18-results-caffe-intel",
     "dict": {

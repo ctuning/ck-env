@@ -552,6 +552,7 @@ def list_kernel_functions(i):
     """
 
     import os
+    import copy
 
     o=i.get('out','')
 
@@ -564,6 +565,18 @@ def list_kernel_functions(i):
        html=True
 
     h=''
+    h2=''
+    hcfg=''
+    if i.get('new','')=='yes':
+       ii=copy.deepcopy(i)
+       ii['ck_title']='Shared CK kernel functions and configurations'
+       r=preload_html_for_lists(ii)
+       if r['return']>0: return r
+
+       h=r['html_start']+'\n'
+       h2=r['html_stop']+'\n'
+
+       hcfg=h
 
     p=ck.work['env_root'] # Internal CK path
 
@@ -673,12 +686,15 @@ def list_kernel_functions(i):
        h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black;">\n'
 
        h+=' <tr>\n'
+       h+='  <td nowrap><b>#</b></td>\n'
        h+='  <td nowrap><b>Function name</b></td>\n'
        h+='  <td nowrap><b>Note and API</b></td>\n'
        h+=' </tr>\n'
 
     hdev=h
 
+    num1=0
+    num2=0
     for f in sorted(funcs):
         x=funcs[f]
 
@@ -709,8 +725,16 @@ def list_kernel_functions(i):
         if target!='':
            x+='<p>&nbsp;&nbsp;&nbsp;<i>for '+target+'</i>'
 
+        if 'end users' in target or 'end-users' in target:
+           num1+=1
+           num=num1
+        else:
+           num2+=1
+           num=num2
+
         zh=' <tr>\n'
-        zh+='  <td nowrap valign="top"><a name="'+f+'"><a href="'+url+'#L'+str(line+1)+'"><b>ck.'+f+'('+i+')</b></a>'+x+'</b></td>\n'
+        zh+='  <td nowrap valign="top"><a name="'+f+'">'+str(num)+'</td>\n'
+        zh+='  <td nowrap valign="top"><a href="'+url+'#L'+str(line+1)+'"><b>ck.'+f+'('+i+')</b></a>'+x+'</b></td>\n'
         zh+='  <td nowrap valign="top">'+xapi+'</td>\n'
         zh+=' </tr>\n'
 
@@ -720,7 +744,7 @@ def list_kernel_functions(i):
            hdev+=zh
 
     # Prepare config
-    hcfg='You can access the following CK internal variables:\n'
+    hcfg+='You can access the following CK internal variables:\n'
     hcfg+='\n'
     hcfg+='<pre>\n'
     hcfg+='    import ck.kernel as ck\n'
@@ -735,10 +759,13 @@ def list_kernel_functions(i):
     for x in cfg:
         hcfg+=x+'\n'
     hcfg+='</pre>\n'
+    hcfg+=h2
 
     if html:
        h+='</table>\n'
+       h+=h2
        hdev+='</table>\n'
+       hdev+=h2
 
        if of!='':
           r=ck.save_text_file({'text_file':of+'.html', 'string':h})
@@ -770,6 +797,7 @@ def list_repos(i):
     """
 
     import os
+    import copy
 
     o=i.get('out','')
 
@@ -782,6 +810,15 @@ def list_repos(i):
        html=True
 
     h=''
+    h2=''
+    if i.get('new','')=='yes':
+       ii=copy.deepcopy(i)
+       ii['ck_title']='Shared CK modules'
+       r=preload_html_for_lists(ii)
+       if r['return']>0: return r
+
+       h=r['html_start']+'\n'
+       h2=r['html_stop']+'\n'
 
     unique_repo=False
     if i.get('repo_uoa','')!='': unique_repo=True
@@ -1007,9 +1044,291 @@ def list_repos(i):
 
     if html:
        h+='</table>\n'
+       h+=h2
 
        if of!='':
           r=ck.save_text_file({'text_file':of, 'string':h})
           if r['return']>0: return r
 
     return {'return':0}
+
+##############################################################################
+# list modules
+
+def list_modules(i):
+    """
+    Input:  {
+              (new) - if 'yes', add htmls
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+    import copy
+
+    o=i.get('out','')
+
+    of=i.get('out_file','')
+    if of!='':
+       xof=os.path.splitext(of)
+
+    html=False
+    if o=='html' or i.get('web','')=='yes':
+       html=True
+
+    h=''
+    h2=''
+    if i.get('new','')=='yes':
+       ii=copy.deepcopy(i)
+       ii['ck_title']='Shared CK modules'
+       r=preload_html_for_lists(ii)
+       if r['return']>0: return r
+
+       h=r['html_start']+'\n'
+       h2=r['html_stop']+'\n'
+
+    unique_repo=False
+    if i.get('repo_uoa','')!='': unique_repo=True
+
+    ii=copy.deepcopy(i)
+
+    ii['out']=''
+    ii['action']='list'
+    ii['module_uoa']=cfg['module_deps']['module']
+    ii['add_meta']='yes'
+
+    rx=ck.access(ii)
+    if rx['return']>0: return rx
+
+    ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
+
+    if html:
+       h+='You can install and reuse CK modules as follows:\n'
+       h+='<pre>\n'
+       h+=' ck pull repo:{Repo UOA - see below}\n'
+       h+=' ck help {module UOA - see below}\n'
+       h+='</pre>\n'
+
+       h+='You can check a JSON API of a given action of a given module as follows:\n'
+       h+='<pre>\n'
+       h+=' ck {module action - see below} {module UOA} --help\n'
+       h+='</pre>\n'
+
+       h+='You can add your own dummy CK module as follows:\n'
+       h+='<pre>\n'
+       h+=' ck add module:{my module alias}\n'
+       h+='</pre>\n'
+
+       h+='You can add a new action to the CK module as follows:\n'
+       h+='<pre>\n'
+       h+=' ck add_action module:{my module alias}\n'
+       h+='</pre>\n'
+
+       h+='See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>\n'
+       h+=' and the latest <a href="http://cKnowledge.org/rpi-crowd-tuning">CK paper</a> for further details.\n'
+
+       h+='<p>\n'
+       h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black;">\n'
+
+       h+=' <tr>\n'
+       h+='  <td nowrap><b>#</b></td>\n'
+       h+='  <td nowrap><b>Module&nbsp;UOA with JSON API<br>(Python module/wrapper/plugin)</b></td>\n'
+       h+='  <td nowrap><b>Repo UOA</b></td>\n'
+       h+='  <td><b>Description and actions</b></td>\n'
+       h+=' </tr>\n'
+
+    repo_url={}
+    repo_private={}
+
+    private=''
+    num=0
+    for l in ll:
+        ln=l['data_uoa']
+        lr=l['repo_uoa']
+
+        lr_uid=l['repo_uid']
+        url=''
+        if lr=='default':
+           url='https://github.com/ctuning/ck/tree/master/ck/repo'
+        elif lr_uid in repo_url:
+           url=repo_url[lr_uid]
+        else:
+           rx=ck.load_repo_info_from_cache({'repo_uoa':lr_uid})
+           if rx['return']>0: return rx
+           url=rx.get('dict',{}).get('url','')
+           repo_private[lr_uid]=rx.get('dict',{}).get('private','')
+           repo_url[lr_uid]=url
+
+        private=repo_private.get(lr_uid,'')
+
+#        if lr not in cfg.get('skip_repos',[]) and private!='yes' and url!='':
+        if lr not in cfg.get('skip_repos',[]) and private!='yes' and url!='':
+           num+=1
+
+           lm=l['meta']
+           ld=lm.get('desc','')
+
+           actions=lm.get('actions',{})
+
+           if lr=='default':
+              to_get=''
+           elif url.find('github.com/ctuning/')>0:
+              to_get='ck pull repo:'+lr
+           else:
+              to_get='ck pull repo --url='+url
+
+           ###############################################################
+           if html:
+              h+=' <tr>\n'
+
+              x1=''
+              x2=''
+              z1=''
+              z11=''
+              if url!='':
+                 x1='<a href="'+url+'">'
+                 x2='</a>'
+
+                 url2=url
+
+                 if url2.endswith('.git'):
+                    url2=url2[:-4]
+
+                 if '/tree/master/' not in url2:
+                    url2+='/tree/master/module/'
+                 else:
+                    url2+='/module/'
+
+                 z1='<a href="'+url2+ln+'/module.py">'
+                 z11='<a href="'+url2+ln+'/.cm/meta.json">'
+
+              h+='  <td nowrap valign="top"><a name="'+ln+'">'+str(num)+'</b></td>\n'
+
+              h+='  <td nowrap valign="top">'+z1+ln+x2+'</b> <i>('+z11+'CK meta'+x2+')</i></td>\n'
+
+              h+='  <td nowrap valign="top"><b>'+x1+lr+x2+'</b></td>\n'
+
+              h+='  <td valign="top">'+ld+'\n'
+
+              if len(actions)>0:
+                 h+='<ul>\n'
+                 for q in sorted(actions):
+                     qq=actions[q]
+                     qd=qq.get('desc','')
+                     h+='<li>"ck <i>'+q+'</i> '+ln+'"'
+                     if qd!='':
+                        h+=' - '+qd
+                 h+='</ul>\n'
+
+              h+='</td>\n'
+
+              h+=' </tr>\n'
+
+           ###############################################################
+           elif o=='mediawiki':
+              x=lr
+              if url!='':
+                 x='['+url+' '+lr+']'
+              ck.out('')
+              ck.out('=== '+ln+' ('+lr+') ===')
+              ck.out('')
+              ck.out('Desc: '+ld)
+              ck.out('<br>CK Repo URL: '+x)
+              if to_get!='':
+                 ck.out('<br>How to get: <i>'+to_get+'</i>')
+              ck.out('')
+              if len(actions)>0:
+
+                 ck.out('Actions (functions):')
+                 ck.out('')
+
+                 for q in sorted(actions):
+                     qq=actions[q]
+                     qd=qq.get('desc','')
+                     ck.out('* \'\''+q+'\'\' - '+qd)
+
+           ###############################################################
+           elif o=='con' or o=='txt':
+              if unique_repo:
+                 ck.out('')
+                 s=ln+' - '+ld
+
+              else:
+                 ss=''
+                 if len(ln)<35: ss=' '*(35-len(ln))
+
+                 ss1=''
+                 if len(lr)<30: ss1=' '*(30-len(lr))
+
+                 s=ln+ss+'  ('+lr+')'
+                 if ld!='': s+=ss1+'  '+ld
+
+              ck.out(s)
+
+              if len(actions)>0:
+                 ck.out('')
+                 for q in sorted(actions):
+                     qq=actions[q]
+                     qd=qq.get('desc','')
+                     ck.out('  * '+q+' - '+qd)
+
+
+    if html:
+       h+='</table>\n'
+       h+=h2
+
+       if of!='':
+          r=ck.save_text_file({'text_file':of, 'string':h})
+          if r['return']>0: return r
+
+    return {'return':0}
+
+##############################################################################
+# preload HTMLs for lists of components
+
+def preload_html_for_lists(i):
+    """
+    Input:  {
+              (html_file_start) - ck_start_html by default
+              (html_file_stop)  - ck_stop_html by default
+              (ck_title)        - update title in the start file
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              html_start
+              html_stop
+            }
+
+    """
+
+    fstart=i.get('html_file_start','')
+    if fstart=='': fstart='ck_start.html'
+
+    fstop=i.get('html_file_stop','')
+    if fstop=='': fstop='ck_stop.html'
+
+    ck_title=i.get('ck_title','')
+
+    # Load first file
+    r=ck.load_text_file({'text_file':fstart})
+    if r['return']>0: return r
+
+    html_start=r['string'].replace('$#ck_title#$',ck_title)
+
+    # Load second file
+    r=ck.load_text_file({'text_file':fstop})
+    if r['return']>0: return r
+
+    html_stop=r['string'].replace('$#ck_title#$',ck_title)
+
+    return {'return':0, 'html_start':html_start, 'html_stop':html_stop}

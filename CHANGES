@@ -1,3 +1,5 @@
+* 2018.07/17 - [FGG] added support for new website when generating lists of components
+
 * 2018.07.14 - [FGG] added platform.npu (while keeping platform.nn for any neural network even biological)
 
 * 2018.07.09 - [FGG] fixed intel mpi detection

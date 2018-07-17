@@ -2410,6 +2410,7 @@ def show(i):
     """
 
     import os
+    import copy
 
     o=i.get('out','')
 
@@ -2422,11 +2423,21 @@ def show(i):
        html=True
 
     h=''
+    h2=''
+    if i.get('new','')=='yes':
+       ii=copy.deepcopy(i)
+       ii['action']='preload_html_for_lists'
+       ii['module_uoa']=cfg['module_deps']['misc']
+       ii['ck_title']='Shared CK software detection plugins'
+       r=ck.access(ii)
+       if r['return']>0: return r
+
+       h=r['html_start']+'\n'
+       h2=r['html_stop']+'\n'
 
     unique_repo=False
     if i.get('repo_uoa','')!='': unique_repo=True
 
-    import copy
     ii=copy.deepcopy(i)
 
     ii['out']=''
@@ -2673,6 +2684,7 @@ def show(i):
 
     if html:
        h+='</table>\n'
+       h+=h2
 
        if of!='':
           r=ck.save_text_file({'text_file':of, 'string':h})
