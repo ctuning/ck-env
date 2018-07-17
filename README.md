@@ -15,7 +15,7 @@ in a unified way across diverse hardware with Linux, Windows, MacOS and Android 
 It also allows users to collect information about a given platform in a unified way.
 
 Further info:
-* [First feeling about CK](https://github.com/ctuning/ck/wiki/First-feeling)
+* [First CK steps](https://github.com/ctuning/ck/wiki/First-steps)
 * [CK portable experimental workflows](https://github.com/ctuning/ck/wiki/Portable-workflows)
 * [CK documentation including "Getting Started Guide"](https://github.com/ctuning/ck/wiki)
   * [Reusable software detection plugins](http://cKnowledge.org/shared-soft-detection-plugins.html)
