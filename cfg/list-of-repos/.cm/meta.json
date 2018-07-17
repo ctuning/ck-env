@@ -164,6 +164,12 @@
   "291b94f6b4697b81": {
     "data_uoa": "ck-spack",
     "dict": {
+      "desc": "CK front-end for spack packages.",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        }
+      ],
       "shared": "git",
       "url": "https://github.com/ctuning/ck-spack"
     }
