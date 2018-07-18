@@ -2363,7 +2363,9 @@ def cat(i):
         env_script_name     = loaded_adict['dict']['env_script']
         setup_script_path   = os.path.join( loaded_adict['path'], env_script_name)
         rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
-        header_line         = '{} {}[ {} ]{}'.format(rem_marker, '-' * 40, setup_script_path, '-' * 40)
+        data_name           = loaded_adict['data_name']
+        version             = loaded_adict['dict']['customize'].get('version', 'UNKNOWN_VERSION')
+        header_line         = '{} {}[ {} ver. {}, {} ]{}'.format(rem_marker, '-' * 20, data_name, version, setup_script_path, '-' * 20)
 
         ck.out( header_line )
 
