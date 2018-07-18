@@ -2360,29 +2360,34 @@ def cat(i):
         })
         if loaded_adict['return']>0: return loaded_adict
 
-        env_script_name     = loaded_adict['dict']['env_script']
-        setup_script_path   = os.path.join( loaded_adict['path'], env_script_name)
-        rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
-        data_name           = loaded_adict['data_name']
-        version             = loaded_adict['dict']['customize'].get('version', 'UNKNOWN_VERSION')
-        tags_csv            = ','.join( loaded_adict['dict']['tags'] )
+        entry_directory_path    = loaded_adict['path']
 
-        header_lines = [
-                    rem_marker,
-                    '{} {}[ {} ver. {}, {} ]{}'.format(rem_marker, '-' * 20, data_name, version, setup_script_path, '-' * 20),
-                    '{} Tags: {}'.format(rem_marker, tags_csv),
-                    rem_marker,
-        ]
+        env_script_name     = loaded_adict['dict'].get('env_script')
+        if env_script_name:
+            setup_script_path   = os.path.join( entry_directory_path, env_script_name)
+            rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
+            data_name           = loaded_adict['data_name']
+            version             = loaded_adict['dict']['customize'].get('version', 'UNKNOWN_VERSION')
+            tags_csv            = ','.join( loaded_adict['dict']['tags'] )
 
-        with open(setup_script_path, 'r') as setup_script_file:
-            for input_line in setup_script_file:
-                input_line = input_line.rstrip()
-                ck.out( input_line )
-                if input_line.endswith('CK generated script'):
-                    for header_line in header_lines:
-                        ck.out( header_line )
+            header_lines = [
+                        rem_marker,
+                        '{} {}[ {} ver. {}, {} ]{}'.format(rem_marker, '-' * 20, data_name, version, setup_script_path, '-' * 20),
+                        '{} Tags: {}'.format(rem_marker, tags_csv),
+                        rem_marker,
+            ]
 
-        ck.out( "\n\n" )
+            with open(setup_script_path, 'r') as setup_script_file:
+                for input_line in setup_script_file:
+                    input_line = input_line.rstrip()
+                    ck.out( input_line )
+                    if input_line.endswith('CK generated script'):
+                        for header_line in header_lines:
+                            ck.out( header_line )
+
+            ck.out( "\n\n" )
+        else:
+            ck.out( "\nNB: CK entry env:{} (path= {} ) seems to be incomplete and cannot be displayed at this time\n".format(uoa, entry_directory_path) )
 
     return {'return':0}
 
