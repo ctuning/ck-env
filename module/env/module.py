@@ -2314,7 +2314,7 @@ def virtual(i):
 ##############################################################################
 # show the shell script for setting up this env
 
-def view(i):
+def cat(i):
     """
     Input:  {
               data_uoa or uoa   - environment UOA to pre-load (see "ck virtual env")

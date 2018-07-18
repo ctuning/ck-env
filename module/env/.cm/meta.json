@@ -30,7 +30,7 @@
     "virtual": {
       "desc": "pre-load environment for the shell"
     }, 
-    "view": {
+    "cat": {
       "desc": "show the shell script for setting up this env"
     },
     "xset": {
