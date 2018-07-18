@@ -2365,13 +2365,23 @@ def cat(i):
         rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
         data_name           = loaded_adict['data_name']
         version             = loaded_adict['dict']['customize'].get('version', 'UNKNOWN_VERSION')
-        header_line         = '{} {}[ {} ver. {}, {} ]{}'.format(rem_marker, '-' * 20, data_name, version, setup_script_path, '-' * 20)
+        tags_csv            = ','.join( loaded_adict['dict']['tags'] )
 
-        ck.out( header_line )
+        header_lines = [
+                    rem_marker,
+                    '{} {}[ {} ver. {}, {} ]{}'.format(rem_marker, '-' * 20, data_name, version, setup_script_path, '-' * 20),
+                    '{} Tags: {}'.format(rem_marker, tags_csv),
+                    rem_marker,
+        ]
 
         with open(setup_script_path, 'r') as setup_script_file:
-            for line in setup_script_file:
-                ck.out( line.rstrip() )
+            for input_line in setup_script_file:
+                input_line = input_line.rstrip()
+                ck.out( input_line )
+                if input_line.endswith('CK generated script'):
+                    for header_line in header_lines:
+                        ck.out( header_line )
+
         ck.out( "\n\n" )
 
     return {'return':0}
