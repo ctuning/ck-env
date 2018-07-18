@@ -2262,7 +2262,7 @@ def virtual(i):
         else:
             return {'return':1, 'error':"all CID entries have to be of 'env' type"}
 
-    shell_script_contents_for_linux     = '' # string with env
+    shell_script_contents_for_unix      = '' # string with env
     shell_script_contents_for_windows   = '' # string with env
 
     for uoa in list_of_uoa:
@@ -2271,7 +2271,7 @@ def virtual(i):
         r=set(i)
         if r['return']>0: return r
 
-        shell_script_contents_for_linux +='\n'+r['bat']+'\n'
+        shell_script_contents_for_unix +='\n'+r['bat']+'\n'
 
         if shell_script_contents_for_windows != '': shell_script_contents_for_windows+=' & '
         shell_script_contents_for_windows += r['bat'].replace('\n','')
@@ -2301,7 +2301,7 @@ def virtual(i):
         if rx['return']>0: return rx
         file_name=rx['file_name']
 
-        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents_for_linux })
+        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents_for_unix })
         if rx['return']>0: return rx
 
         full_cmd_list    = ['/bin/bash','--rcfile', file_name, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )
@@ -2309,6 +2309,64 @@ def virtual(i):
         return_code = subprocess.call(full_cmd_list, shell = False)
 
     return {'return':return_code, 'error':'Unknown error from the nested shell'}
+
+
+##############################################################################
+# show the shell script for setting up this env
+
+def view(i):
+    """
+    Input:  {
+              data_uoa or uoa   - environment UOA to pre-load (see "ck virtual env")
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    duoa        = i.get('data_uoa', i.get('uoa','') )
+
+    if duoa.find(',')!=-1:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
+        # ck.out('')
+        # ck.out('DEPRECATED: You seem to be using CSV format within a CID. Please list multiple CIDs on your command line instead.')
+        # ck.out('')
+        list_of_uoa = duoa.split(',')
+    else:
+        list_of_uoa = [ duoa ]
+
+    for xcid in i.get('xcids',[]):
+        if xcid['module_uoa'] == 'env':
+            list_of_uoa.append( xcid['data_uoa'] )
+        else:
+            return {'return':1, 'error':"all CID entries have to be of 'env' type"}
+
+    for uoa in list_of_uoa:
+
+        loaded_adict = ck.access({'action':'load',
+            'module_uoa':   'env',
+            'data_uoa':     uoa,
+        })
+        if loaded_adict['return']>0: return loaded_adict
+
+        env_script_name     = loaded_adict['dict']['env_script']
+        setup_script_path   = os.path.join( loaded_adict['path'], env_script_name)
+        rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
+        header_line         = '{} {}[ {} ]{}'.format(rem_marker, '-' * 40, setup_script_path, '-' * 40)
+
+        ck.out( header_line )
+
+        with open(setup_script_path, 'r') as setup_script_file:
+            for line in setup_script_file:
+                ck.out( line.rstrip() )
+        ck.out( "\n\n" )
+
+    return {'return':0}
 
 ##############################################################################
 # remove tmp entries (when installation to env entry failed)
