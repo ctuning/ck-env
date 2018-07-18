@@ -30,6 +30,9 @@
     "virtual": {
       "desc": "pre-load environment for the shell"
     }, 
+    "view": {
+      "desc": "show the shell script for setting up this env"
+    },
     "xset": {
       "desc": "set env for command line (pre-set various flags)"
     }
