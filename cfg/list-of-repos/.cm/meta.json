@@ -491,7 +491,7 @@
     }
   },
   "68121412a8ff317c": {
-    "data_uoa": "ck-cluster",
+    "data_uoa": "ck-graph-analytics",
     "dict": {
       "desc": "Collection of graph analytics packages and application in the CK format.",
       "repo_deps": [
