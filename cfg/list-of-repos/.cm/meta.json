@@ -490,6 +490,28 @@
       "url": "https://github.com/ctuning/ck-mxnet"
     }
   },
+  "68121412a8ff317c": {
+    "data_uoa": "ck-cluster",
+    "dict": {
+      "desc": "Collection of graph analytics packages and application in the CK format.",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        },
+        {
+          "repo_uoa": "ck-artifact-evaluation"
+        },
+        {
+          "repo_uoa": "ck-docker"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-graph-analytics"
+    }
+  },
   "6d04bb400f29474d": {
     "data_uoa": "ck-old-packages",
     "dict": {
