@@ -2330,13 +2330,19 @@ def view(i):
 
     import os
 
-    duoa        = i.get('data_uoa', i.get('uoa','') )
+    duoa        = i.get('data_uoa', i.get('uoa', '*') )
+    tags_csv    = i.get('tags')
 
     if duoa.find(',')!=-1:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
         # ck.out('')
         # ck.out('DEPRECATED: You seem to be using CSV format within a CID. Please list multiple CIDs on your command line instead.')
         # ck.out('')
         list_of_uoa = duoa.split(',')
+    elif duoa.find('*')!=-1 or duoa.find('?')!=-1 or tags_csv:
+        searched_adict = ck.access( dict(i, action='search') )
+        if searched_adict['return']>0: return rx
+
+        list_of_uoa = [ entry['data_uoa'] for entry in searched_adict['lst'] ]
     else:
         list_of_uoa = [ duoa ]
 
