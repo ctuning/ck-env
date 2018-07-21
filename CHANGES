@@ -1,3 +1,6 @@
+* 2018.07.21 - [FGG] added "ck replace_strings_in_file misc"
+                     to customize text files like config.cmake in a new TVM package
+
 * 2018.07.19 - [FGG] added soft and package for Python matplotlib and requests 
                      needed for VTA workflow from TVM
 

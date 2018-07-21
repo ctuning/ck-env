@@ -30,6 +30,9 @@
     "replace_string_in_file": {
       "desc": "replace string in a file"
     },
+    "replace_strings_in_file": {
+      "desc": "replace multiple strings in a given file"
+    },
     "select_uoa": {
       "desc": "select UOA"
     },

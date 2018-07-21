@@ -1332,3 +1332,55 @@ def preload_html_for_lists(i):
     html_stop=r['string'].replace('$#ck_title#$',ck_title)
 
     return {'return':0, 'html_start':html_start, 'html_stop':html_stop}
+
+##############################################################################
+# replace multiple strings in a given file
+
+def replace_strings_in_file(i):
+    """
+    Input:  {
+              file
+              (file_out)            - if !='', use this file for output, otherwise overwrite original one!
+              replacement_json_file - replacement file with multiple strings to substitute
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              (updated)    - if 'yes', files was updated
+            }
+
+    """
+
+    import copy
+
+    o=i.get('out','')
+
+    fin=i['file']
+    rjf=i['replacement_json_file']
+
+    fout=i.get('file_out','')
+    if fout=='': fout=fin
+
+    rx=ck.load_text_file({'text_file':fin})
+    if rx['return']>0: return rx
+    s=rx['string']
+
+    rx=ck.load_json_file({'json_file':rjf})
+    if rx['return']>0: return rx
+    rep=rx['dict']
+
+    sx=s
+    for k in rep:
+        v=rep[k]
+        sx=sx.replace(k,v)
+
+    r={'return':0, 'updated':'no'}
+
+    if s!=sx or fin!=fout:
+       r=ck.save_text_file({'text_file':fout, 'string':sx})
+       r['updated']='yes'
+
+    return r
