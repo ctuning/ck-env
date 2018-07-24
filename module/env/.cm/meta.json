@@ -39,6 +39,7 @@
   }, 
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
   "custom_script_name": "customize", 
+  "default_bat_name": "env",
   "desc": "software environments (to abstract multiple tools and their versions)", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 

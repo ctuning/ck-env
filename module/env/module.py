@@ -919,7 +919,8 @@ def set(i):
     # Process CMD first:
     sb=''
 
-    es=d.get('env_script','')
+    es=d.get('env_script','') or ( cfg['default_bat_name'] + hosd.get('script_ext','') )
+
     ppu=''
     if i.get('force_env_init','')=='yes':
        ppu=' 1'
@@ -1074,7 +1075,7 @@ def show(i):
            # Check target OS
            if target_os_uoa in target_os_name:
               tduoa=target_os_name[target_os_uoa]
-           else:
+           elif target_os_uoa:
               # Load
               ry=ck.access({'action':'load',
                             'module_uoa':cfg['module_deps']['os'],
@@ -1082,6 +1083,8 @@ def show(i):
               if ry['return']>0: return ry
               tduoa=ry['data_uoa']
               target_os_name[target_os_uoa]=tduoa
+           else:
+              tduoa = 'N/A'
 
            stags=''
            for t in tags:
@@ -2352,6 +2355,14 @@ def cat(i):
         else:
             return {'return':1, 'error':"all CID entries have to be of 'env' type"}
 
+    # Get some info about OS
+    ii={'action':'detect',
+        'module_uoa':cfg['module_deps']['platform.os'],
+        'skip_info_collection':'yes'}
+    r=ck.access(ii)
+    if r['return']>0: return r
+    hosd=r['host_os_dict']
+
     for uoa in list_of_uoa:
 
         loaded_adict = ck.access({'action':'load',
@@ -2361,33 +2372,30 @@ def cat(i):
         if loaded_adict['return']>0: return loaded_adict
 
         entry_directory_path    = loaded_adict['path']
+        env_script_name         = loaded_adict['dict'].get('env_script') or ( cfg['default_bat_name'] + hosd.get('script_ext','') )
 
-        env_script_name     = loaded_adict['dict'].get('env_script')
-        if env_script_name:
-            setup_script_path   = os.path.join( entry_directory_path, env_script_name)
-            rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
-            data_name           = loaded_adict['data_name']
-            version             = loaded_adict['dict']['customize'].get('version', 'UNKNOWN_VERSION')
-            tags_csv            = ','.join( loaded_adict['dict']['tags'] )
+        setup_script_path   = os.path.join( entry_directory_path, env_script_name)
+        rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
+        data_name           = loaded_adict['data_name']
+        version             = loaded_adict['dict'].get('customize',{}).get('version', 'UNKNOWN_VERSION')
+        tags_csv            = ','.join( loaded_adict['dict'].get('tags',[]) )
 
-            header_lines = [
-                        rem_marker,
-                        '{} {}[ {} ver. {}, {} ]{}'.format(rem_marker, '-' * 20, data_name, version, setup_script_path, '-' * 20),
-                        '{} Tags: {}'.format(rem_marker, tags_csv),
-                        rem_marker,
-            ]
+        header_lines = [
+                    rem_marker,
+                    '{} {}[ {} ver. {}, {} ]{}'.format(rem_marker, '-' * 20, data_name, version, setup_script_path, '-' * 20),
+                    '{} Tags: {}'.format(rem_marker, tags_csv),
+                    rem_marker,
+        ]
 
-            with open(setup_script_path, 'r') as setup_script_file:
-                for input_line in setup_script_file:
-                    input_line = input_line.rstrip()
-                    ck.out( input_line )
-                    if input_line.endswith('CK generated script'):
-                        for header_line in header_lines:
-                            ck.out( header_line )
+        with open(setup_script_path, 'r') as setup_script_file:
+            for input_line in setup_script_file:
+                input_line = input_line.rstrip()
+                ck.out( input_line )
+                if input_line.endswith('CK generated script'):
+                    for header_line in header_lines:
+                        ck.out( header_line )
 
-            ck.out( "\n\n" )
-        else:
-            ck.out( "\nNB: CK entry env:{} (path= {} ) seems to be incomplete and cannot be displayed at this time\n".format(uoa, entry_directory_path) )
+        ck.out( "\n\n" )
 
     return {'return':0}
 
