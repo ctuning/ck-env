@@ -12,15 +12,11 @@
       "PACKAGE_URL": "https://github.com/spack/spack"
     }
   }, 
-  "end_full_path": {
-    "linux": "src/bin/spack"
-  }, 
+  "end_full_path_universal": "src/bin/spack",
   "need_cpu_info": "no", 
   "only_for_host_os_tags": [
-    "linux" 
   ], 
   "only_for_target_os_tags": [
-    "linux" 
   ], 
   "process_script": "install", 
   "soft_uoa": "e29497d516564e3b", 

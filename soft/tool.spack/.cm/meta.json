@@ -6,7 +6,7 @@
     "build_dir_name": "spack", 
     "check_that_exists": "yes", 
     "ck_version": 10, 
-    "env_prefix": "CK_ENV_TOOL_SPACKE", 
+    "env_prefix": "CK_ENV_TOOL_SPACK", 
     "limit_recursion_dir_search": {
       "linux": 3 
     }, 
