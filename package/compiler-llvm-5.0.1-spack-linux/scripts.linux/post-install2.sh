@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Installation script for MXNet via spack
+# Installation script for LLVM via spack
 #
 # See CK LICENSE for licensing details.
 # See CK COPYRIGHT for copyright details.
@@ -28,7 +28,7 @@ echo "" >> $INSTALL_DIR/src/etc/spack/config.yaml
 echo "  build_jobs: ${CK_HOST_CPU_NUMBER_OF_PROCESSORS}" >> $INSTALL_DIR/src/etc/spack/config.yaml
 
 echo ""
-echo "Invoking \"spack install mxnet ^libjpeg ^protobuf@3.1.0 ^vtk+osmesa\""
+echo "Invoking \"spack install llvm@${PACKAGE_VERSION}\""
 
 spack install llvm@${PACKAGE_VERSION}
 
