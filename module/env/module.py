@@ -157,8 +157,7 @@ def set(i):
     tdid=i.get('target_device_id','')
     if tdid=='': tdid=i.get('device_id','')
 
-    user_env=False
-    if hos!='' or tos!='' or tdid!='': user_env=True
+    user_env = (hos!='' or tos!='' or tdid!='')
 
     # Get some info about OS
     ii={'action':'detect',
@@ -231,7 +230,6 @@ def set(i):
        setup={'host_os_uoa':hos,
               'target_os_uoa':tos,
               'target_os_bits':tbits}
-       ii['search_dict']={'setup':setup}
 
     if reuse_deps=='yes' and skip_cache!='yes':
        # Check in cache!
@@ -276,7 +274,8 @@ def set(i):
                          'or_tags':or_tags, 
                          'no_tags':no_tags, 
                          'version_from':vfrom, 
-                         'version_to':vto})
+                         'version_to':vto,
+                         'setup':setup})
     if r['return']>0: return r
     sbov=r.get('skipped_because_of_version','')
 
@@ -754,8 +753,6 @@ def set(i):
                           if rx['return']>0: return rx
                       ck.out('')
 
-
-          if o=='con':
              ck.out('')
           return {'return':1, 'error':war}
 
@@ -1250,9 +1247,6 @@ def resolve(i):
     tos=i.get('target_os','')
     tdid=i.get('target_device_id','')
     if tdid=='': tdid=i.get('device_id','')
-
-    user_env=False
-    if hos!='' or tos!='' or tdid!='': user_env=True
 
     # Get some info about OS
     ii={'action':'detect',
@@ -1832,7 +1826,8 @@ def prune_search_list(i):
               (no_tags)              - string of tags to exclude
               (version_from)         - check version starting from ... (list of numbers)
               (version_to)           - check version up to ... (list of numbers)
-              (package_uoa)          - prune by specific package 
+              (package_uoa)          - prune by specific package
+              (setup)                - prune by given setup dictionary
             }
 
     Output: {
@@ -1863,6 +1858,8 @@ def prune_search_list(i):
 
     vfrom=i.get('version_from',[])
     vto=i.get('version_to',[])
+
+    search_setup_dict=i.get('setup', {})
 
     nlst=[]
 
@@ -1947,6 +1944,14 @@ def prune_search_list(i):
               if result=='>':
                  skip=True
                  skipped_because_of_version='yes'
+
+        if not skip:
+            entry_setup_dict = meta.get('setup')    # if entry_setup_dict is empty it matches anything
+            if entry_setup_dict and len(search_setup_dict)>0:
+                rx=ck.compare_dicts({'dict1':entry_setup_dict, 'dict2':search_setup_dict})
+                if rx['return']>0: return rx
+                if rx['equal']!='yes':
+                    skip=True
 
         if not skip:
             nlst.append(q)
