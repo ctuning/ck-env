@@ -513,3 +513,51 @@ def run_and_get_stdout(i):
       error = error.decode(encoding='UTF-8')
 
   return {'return':0, 'return_code':p1.returncode, 'stdout':output, 'stderr':error}
+
+##############################################################################
+# find file or directory in all above directories from a given path
+
+def find_file_above_path(i):
+    """
+    Input:  {
+              (path) - if not specified, use current path
+              file   - search for file or directory
+            }
+
+    Output: {
+              path   - path where file or directory was found (or empty if not found)
+
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+
+    path_found=''
+
+    sfile=i['file']
+
+    path=i.get('path','')
+    if path=='':
+       path=os.getcwd()
+
+    while True:
+       path1=os.path.dirname(path)
+
+       print (path1)
+
+       if path1==path:
+          break
+
+       path=path1
+
+       path2=os.path.join(path, sfile)
+       print (path2)
+       if os.path.isfile(path2) or os.path.isdir(path2):
+          path_found=path
+          break
+
+    return {'return':0, 'path': path_found}
