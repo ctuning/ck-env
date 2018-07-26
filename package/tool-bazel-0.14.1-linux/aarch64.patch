@@ -27,7 +27,7 @@ diff --git a/third_party/BUILD b/third_party/BUILD
 index 63da36c..b22c63f 100644
 --- a/third_party/BUILD
 +++ b/third_party/BUILD
-@@ -584,6 +584,10 @@ config_setting( 
+@@ -649,6 +649,10 @@ config_setting(
      name = "arm",
      values = {"host_cpu": "arm"},
  )
