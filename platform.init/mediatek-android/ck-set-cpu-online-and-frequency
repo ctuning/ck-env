@@ -1,5 +1,13 @@
 #! /system/bin/sh
-# Part of Collective Knowledge; Developer: Grigori Fursin
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developers: Grigori Fursin, Anton Lokhmotov
+#
 
 governor=ondemand
 if [ "$CK_CPU_FREQ_GOVERNOR" != "" ]; then

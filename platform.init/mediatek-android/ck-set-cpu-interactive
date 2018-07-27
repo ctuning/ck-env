@@ -6,14 +6,13 @@
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
 #
-# Developer: Grigori Fursin
+# Developers: Grigori Fursin, Anton Lokhmotov
 #
-
-
 
 export PATH=/data/local/tmp/tools:$PATH
 export CK_CPU_FREQ_GOVERNOR=interactive
 export CK_CPU_ONLINE=0
 
+curr_dir=$( cd "$(dirname "$0")" ; pwd -P )
+$curr_dir/ck-set-cpu-online-and-frequency
 
-./ck-set-cpu-online-and-frequency

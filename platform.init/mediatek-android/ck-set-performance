@@ -6,8 +6,9 @@
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
 #
-# Developer: Grigori Fursin
+# Developers: Grigori Fursin, Anton Lokhmotov
 #
 
-./ck-set-cpu-performance
-./ck-set-gpu-performance
+curr_dir=$( cd "$(dirname "$0")" ; pwd -P )
+$curr_dir/ck-set-cpu-performance
+$curr_dir/ck-set-gpu-performance

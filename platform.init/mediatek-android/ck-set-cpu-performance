@@ -6,7 +6,7 @@
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
 #
-# Developer: Grigori Fursin
+# Developers: Grigori Fursin, Anton Lokhmotov
 #
 
 export PATH=/data/local/tmp/tools:$PATH
@@ -18,4 +18,6 @@ cpuinfo_max_freq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq`
 export CK_CPU_FREQ_FILE=cpuinfo_max_freq
 export CK_CPU_ONLINE=1
 
-./ck-set-cpu-online-and-frequency 1
+curr_dir=$( cd "$(dirname "$0")" ; pwd -P )
+$curr_dir/ck-set-cpu-online-and-frequency 1
+
