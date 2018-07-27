@@ -275,7 +275,8 @@ def set(i):
                          'no_tags':no_tags, 
                          'version_from':vfrom, 
                          'version_to':vto,
-                         'setup':setup})
+                         'setup':setup,
+    })
     if r['return']>0: return r
     sbov=r.get('skipped_because_of_version','')
 
@@ -329,6 +330,7 @@ def set(i):
                                'no_tags':no_tags, 
                                'version_from':vfrom, 
                                'version_to':vto,
+                               'setup':setup,
                                'package_uoa':package_uoa})
           if r['return']>0: return r
           sbov=r.get('skipped_because_of_version','')
@@ -546,6 +548,7 @@ def set(i):
                                   'no_tags':no_tags,
                                   'version_from':vfrom, 
                                   'version_to':vto,
+                                  'setup':setup,
                                   'package_uoa':package_uoa})
              if r['return']>0: return r
 
