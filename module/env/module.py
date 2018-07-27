@@ -1993,6 +1993,11 @@ def clean(i):
     force=i.get('force','')
     if force=='': force=i.get('f','')
 
+    # If repo is not defined, use "local" to avoid removing env entries in other repos
+    ruoa=i.get('repo_uoa','')
+    if ruoa=='': ruoa='local'
+    i['repo_uoa']=ruoa
+
     ii=copy.deepcopy(i)
     ii['action']='show'
     ii['out']=''
@@ -2546,3 +2551,53 @@ def deps_summary(i):
            ds[x]['deps']=r['deps_summary']
 
     return {'return':0, 'deps_summary':ds}
+
+##############################################################################
+# delete env entries
+
+def rm(i):
+    """
+    Input:  {
+              (repo_uoa) - local by default
+              (f)        - force removing
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    # Check that repo_uoa is local by default to avoid deleting permanent env in other entries
+
+    ruoa=i.get('repo_uoa','')
+    if ruoa=='': ruoa='local'
+    i['repo_uoa']=ruoa
+
+    i['common_func']='yes'
+
+    return ck.access(i)
+
+##############################################################################
+# delete env entry
+
+def delete(i):
+    """
+    Input:  { See rm function }
+    Output: { See rm function }
+    """
+
+    return rm(i)
+
+##############################################################################
+# delete env entry
+
+def remove(i):
+    """
+    Input:  { See rm function }
+    Output: { See rm function }
+    """
+
+    return rm(i)

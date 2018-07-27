@@ -1,7 +1,13 @@
 {
   "actions": {
+    "cat": {
+      "desc": "show the shell script for setting up this env"
+    }, 
     "clean": {
       "desc": "remote env entry and installed package"
+    }, 
+    "delete": {
+      "desc": "delete env entry"
     }, 
     "deps_summary": {
       "desc": "extracting summary of all deps"
@@ -15,8 +21,14 @@
     "refresh": {
       "desc": "refresh environment setup (re-setup related software version)"
     }, 
+    "remove": {
+      "desc": "delete env entry"
+    }, 
     "resolve": {
       "desc": "resolve all dependencies for a given software"
+    }, 
+    "rm": {
+      "desc": "delete env entries"
     }, 
     "rmtmp": {
       "desc": "remove tmp entries (when installation to env entry failed)"
@@ -30,16 +42,13 @@
     "virtual": {
       "desc": "pre-load environment for the shell"
     }, 
-    "cat": {
-      "desc": "show the shell script for setting up this env"
-    },
     "xset": {
       "desc": "set env for command line (pre-set various flags)"
     }
   }, 
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
   "custom_script_name": "customize", 
-  "default_bat_name": "env",
+  "default_bat_name": "env", 
   "desc": "software environments (to abstract multiple tools and their versions)", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 

@@ -1,3 +1,6 @@
+* 2018.07.27 - [Leo] adding support for permanent entries
+               [FGG] added support to clean/rm entries from local repo by default
+
 * 2018.07.21 - [FGG] added "ck replace_strings_in_file misc"
                      to customize text files like config.cmake in a new TVM package
 
