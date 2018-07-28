@@ -41,12 +41,14 @@ def setup(i):
 
     fp=cus.get('full_path','')
 
-    ep=cus.get('env_prefix','')
-    if ep!='' and fp!='':
+    ep=cus['env_prefix']
+    if fp!='':
        p1=os.path.dirname(fp)
        p2=os.path.dirname(p1)
+       p3=os.path.dirname(p2)
 
        env[ep]=p2
        env[ep+'_BIN']=p1
+       env[ep+'_ROOT']=p3
 
     return {'return':0, 'bat':s}
