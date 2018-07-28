@@ -1762,7 +1762,7 @@ def show(i):
 
         private=repo_private.get(lr_uid,'')
 
-        if lr not in cfg.get('skip_repos',[]) and private!='yes' and url!='':
+        if lr not in cfg.get('skip_repos',[]) and private!='yes' and url!='' and lr!='ck-spack':
            num+=1
 
            lm=l['meta']
