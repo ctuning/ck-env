@@ -17,6 +17,25 @@
       "url": "https://github.com/ctuning/ck-request-asplos18-resnet-tvm-fpga"
     }
   },
+  "0442e96ea67b7957": {
+    "data_uoa": "ck-tvm",
+    "dict": {
+      "desc": "Portable/customizable installation and unified access to TVM/VTA AI frameworks with different workflows and data sets.",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        },
+        {
+          "repo_uoa": "ctuning-datasets-min"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-tvm"
+    }
+  },
   "07aff7c7b258f26b": {
     "data_uoa": "ck-ccprof",
     "dict": {
@@ -172,6 +191,23 @@
       ],
       "shared": "git",
       "url": "https://github.com/ctuning/ck-spack"
+    }
+  },
+  "2d162976f4e728a0": {
+    "data_uoa": "ck-request-asplos18-resnet-tvm-fpga",
+    "dict": {
+      "ck_artifact": "9375838469ad4029",
+      "recache": "yes",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-mxnet"
+        },
+        {
+          "repo_uoa": "ck-request"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-request-asplos18-resnet-tvm-fpga"
     }
   },
   "2f937a661883ae0e": {
