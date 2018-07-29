@@ -2401,12 +2401,14 @@ def cat(i):
         ]
 
         with open(setup_script_path, 'r') as setup_script_file:
+            line_number = 0
             for input_line in setup_script_file:
                 input_line = input_line.rstrip()
                 ck.out( input_line )
-                if input_line.endswith('CK generated script'):
+                if not line_number:
                     for header_line in header_lines:
                         ck.out( header_line )
+                line_number += 1
 
         ck.out( "\n\n" )
 
