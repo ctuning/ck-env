@@ -978,10 +978,6 @@ def show(i):
 
     o=i.get('out','')
 
-    ruoa=i.get('repo_uoa','')
-    muoa=i.get('module_uoa','')
-    duoa=i.get('data_uoa','')
-
     tags=i.get('tags','')
 
     tos_uoa=i.get('target_os','')
@@ -1016,17 +1012,26 @@ def show(i):
        wname=True 
        name=name.lower()
 
-    ii={'action':'search',
-        'module_uoa':muoa,
-        'repo_uoa':ruoa,
-        'data_uoa':duoa,
-        'tags':tags,
-        'add_info':'yes',
-        'add_meta':'yes'}
-    rx=ck.access(ii)
-    if rx['return']>0: return rx
+    # creating a list of patterns from the "main xcid" and the list of auxiliary xcids:
+    full_xcids_list = [{
+        'repo_uoa': i.get('repo_uoa',''),
+        'module_uoa': i.get('module_uoa',''),
+        'data_uoa': i.get('data_uoa',''),
+    }] + i.get('xcids',[])
 
-    lst=rx['lst']
+    lst = []
+
+    # iterating through the list of patterns:
+    for xcid in full_xcids_list:
+        rx=ck.access({'action':'search',
+            'repo_uoa':xcid.get('repo_uoa',''),
+            'module_uoa':xcid.get('module_uoa',''),
+            'data_uoa':xcid.get('data_uoa',''),
+            'tags':tags,
+            'add_info':'yes',
+            'add_meta':'yes'})
+        if rx['return']>0: return rx
+        lst += rx['lst']
 
     # prepare view
     view=[]
