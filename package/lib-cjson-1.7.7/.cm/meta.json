@@ -1,0 +1,74 @@
+{
+  "comment": "RECOMMENDED", 
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "CMAKE_CONFIG": "Release", 
+      "PACKAGE_AUTOGEN": "NO", 
+      "PACKAGE_BUILD_TYPE": "cmake", 
+      "PACKAGE_CONFIGURE_FLAGS": "", 
+      "PACKAGE_CONFIGURE_FLAGS_ANDROID": "-DBUILD_SHARED_LIBS=OFF", 
+      "PACKAGE_CONFIGURE_FLAGS_LINUX": "", 
+      "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "", 
+      "PACKAGE_GIT": "YES", 
+      "PACKAGE_GIT_CHECKOUT": "v1.7.7", 
+      "PACKAGE_PATCH": "NO", 
+      "PACKAGE_SKIP_CLEAN_INSTALL": "NO", 
+      "PACKAGE_SKIP_CLEAN_OBJ": "YES", 
+      "PACKAGE_SKIP_CLEAN_PACKAGE": "NO", 
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
+      "PACKAGE_SKIP_CMAKE_TARGET": "NO", 
+      "PACKAGE_SUB_DIR": "src", 
+      "PACKAGE_SUB_DIR1": "src", 
+      "PACKAGE_URL": "https://github.com/DaveGamble/cJSON.git", 
+      "SUBSTITUTE_ORIGINAL_PACKAGE_DIR": "$#path_to_cid=package:29bda32a8e0f465a#$"
+    }, 
+    "use_git_revision": "yes", 
+    "version": "1.7.7"
+  }, 
+  "deps": {
+    "cmake": {
+      "force_target_as_host": "yes", 
+      "local": "yes", 
+      "name": "cmake", 
+      "sort": 5, 
+      "tags": "tool,cmake"
+    }, 
+    "compiler": {
+      "local": "yes", 
+      "name": "C++ compiler", 
+      "sort": 10, 
+      "tags": "compiler,lang-cpp"
+    }
+  }, 
+  "end_full_path": {
+    "linux": "install/lib/libcjson.so"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "eb8146fc8f72921a", 
+  "suggested_path": "lib-cjson", 
+  "tags": [
+    "lib", 
+    "cjson", 
+    "v1.7.7", 
+    "v1.7", 
+    "v1", 
+    "channel-stable"
+  ], 
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "fd44428fbc77f77f", 
+    "module_uoa": "84e27ad9dd12e734"
+  }, 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}
