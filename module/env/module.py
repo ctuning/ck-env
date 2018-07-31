@@ -1089,7 +1089,7 @@ def show(i):
               tduoa=ry['data_uoa']
               target_os_name[target_os_uoa]=tduoa
            else:
-              tduoa = 'N/A'
+              tduoa = 'Any'
 
            stags=''
            for t in tags:
