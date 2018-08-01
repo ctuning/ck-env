@@ -10,4 +10,4 @@
 #
 
 . ck-set-cpu-ondemand
-. ck-set-gpu-powersave
+. ck-set-gpu-ondemand

@@ -9,7 +9,7 @@
 # Developer: Grigori Fursin (info provided by Anton Lokhmotov)
 #
 
-export CK_GPU_FREQ_GOVERNOR=1
+export CK_GPU_FREQ_GOVERNOR=0
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 . ck-set-gpu-online-and-frequency 177
