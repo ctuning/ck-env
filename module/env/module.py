@@ -1034,9 +1034,21 @@ def show(i):
         lst += rx['lst']
 
     # prepare view
-    view=[]
+    unsorted_dicts=[]
 
-    lv={} # length of each field
+    table_fields = [
+        # (internal)         (external)
+        ('data_uid',        'Env UID:'),
+        ('target_os_uoa',   'Target OS:'),
+        ('tbits',           'Bits:'),
+        ('data_name',       'Name:'),
+        ('version',         'Version:'),
+        ('tags',            'Tags:'),
+    ]
+
+    # width of each field (initialized with minimum required width)
+    max_width = { internal: len(external) for (internal,external) in table_fields }
+
 
     target_os_name={} # Caching target OS names
 
@@ -1083,7 +1095,7 @@ def show(i):
 
            tags_csv = ','.join( [t for t in tags if t] )
 
-           vv = {
+           env_info = {
                 'data_uid':         duid,
                 'repo_uid':         ruid,
                 'tags':             tags_csv,
@@ -1095,21 +1107,16 @@ def show(i):
                 'data_name':        dname,
            }
 
-           # Check length
-           for k in vv:
-               v=str(vv[k])
-               l=len(v)
-               if k not in lv: lv[k]=l
-               elif l>lv[k]: lv[k]=l
+           # Find maximum width for each field:
+           for (internal, external) in table_fields:
+               field_width = len(str(env_info[internal]))
+               if field_width>max_width[internal]:
+                    max_width[internal]=field_width
 
-           view.append(vv)
-
-           if lv['data_name']<5: lv['data_name']=5
-           if lv['target_os_uoa']<10: lv['target_os_uoa']=10
-           if lv['version']<8: lv['version']=8
+           unsorted_dicts.append(env_info)
 
     # Sort by target_os_uoa, name and split version
-    vs=sorted(view, key=lambda k: (k['target_os_uoa'],
+    sorted_dicts=sorted(unsorted_dicts, key=lambda k: (k['target_os_uoa'],
                                    k['tbits'],
                                    k['data_name'],
                                    internal_get_val(k.get('version_split',[]), 0, 0),
@@ -1120,41 +1127,35 @@ def show(i):
               reverse=True)
 
     # Print
-    if o=='con':
-       if len(vs)>0:
-          # Headers
-          sh ='Env UID:' + (' ' * (lv['data_uid']- 8))
-          sh+=' Target OS:' + (' ' * (lv['target_os_uoa']-10))
-          sh+=' Bits:'
-          sh+=' Name:' + (' ' * (lv['data_name']- 5))
-          sh+=' Version:' + (' ' * (lv['version']- 8))
-          sh+=' Tags:'
+    if o=='con' and len(sorted_dicts)>0:
 
-          ck.out(sh)
+          # All fields aligned to the left
+          header_format = '{:<' + str(max_width['data_uid'])      + '} ' \
+                        + '{:<' + str(max_width['target_os_uoa']) + '} ' \
+                        + '{:<' + str(max_width['tbits'])         + '} ' \
+                        + '{:<' + str(max_width['data_name'])     + '} ' \
+                        + '{:<' + str(max_width['version'])       + '} ' \
+                        + '{}'
 
+          # Some fields (data_name, version and tags) aligned to the right
+          body_format   = '{:>' + str(max_width['data_uid'])      + '} ' \
+                        + '{:>' + str(max_width['target_os_uoa']) + '} ' \
+                        + '{:>' + str(max_width['tbits'])         + '} ' \
+                        + '{:<' + str(max_width['data_name'])     + '} ' \
+                        + '{:<' + str(max_width['version'])       + '} ' \
+                        + '{}'
+
+          header_line   = header_format.format( *[ external for (internal, external) in table_fields ] )
+
+          ck.out(header_line)
           ck.out('')
-          for q in vs:
-              x=q['data_uid']
-              sh=(' ' * (lv['data_uid']- len(x))) + x
 
-              x=q['target_os_uoa']
-              sh+=' '+(' ' * (lv['target_os_uoa']- len(x))) + x
+          for field_value in sorted_dicts:
+              body_line = body_format.format( *[ field_value[internal] for (internal, external) in table_fields ] )
 
-              x=q['tbits']
-              sh+=' '+(' ' * (5 - len(x))) + x
+              ck.out( body_line )
 
-              x=q['data_name']
-              sh+=' '+ x + (' ' * (lv['data_name']- len(x)))
-
-              x=q['version']
-              sh+=' '+ x + (' ' * (lv['version'] - len(x)))
-
-              x=q['tags']
-              sh+=' '+x
-
-              ck.out(sh)
-
-    return {'return':0, 'lst':lst, 'view':vs}
+    return {'return':0, 'lst':lst, 'view':sorted_dicts}
 
 ##############################################################################
 # resolve all dependencies
@@ -1594,8 +1595,6 @@ def refresh(i):
 
     # prepare view
     view=[]
-
-    lv={} # length of each field
 
     target_os_name={} # Caching target OS names
 
