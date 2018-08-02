@@ -1036,18 +1036,18 @@ def show(i):
     # prepare view
     unsorted_dicts=[]
 
-    table_fields = [
-        # (internal)         (external)
-        ('data_uid',        'Env UID:'),
-        ('target_os_uoa',   'Target OS:'),
-        ('tbits',           'Bits:'),
-        ('data_name',       'Name:'),
-        ('version',         'Version:'),
-        ('tags',            'Tags:'),
+    table_fields = [    # Rearranging the lines below will rearrange the fields in the output:
+        # (internal)         (external)     (align)
+        ('data_uid',        'Env UID:',     ':>'),
+        ('target_os_uoa',   'Target OS:',   ':>'),
+        ('tbits',           'Bits:',        ':>'),
+        ('data_name',       'Name:',        ':<'),
+        ('version',         'Version:',     ':<'),
+        ('tags',            'Tags:',        ':<'),
     ]
 
     # width of each field (initialized with minimum required width)
-    max_width = { internal: len(external) for (internal,external) in table_fields }
+    max_width = { internal: len(external) for (internal, external, _) in table_fields }
 
 
     target_os_name={} # Caching target OS names
@@ -1108,9 +1108,9 @@ def show(i):
            }
 
            # Find maximum width for each field:
-           for (internal, external) in table_fields:
-               field_width = len(str(env_info[internal]))
-               if field_width>max_width[internal]:
+           for (internal, _, _) in table_fields:
+                field_width = len(str(env_info[internal]))
+                if field_width>max_width[internal]:
                     max_width[internal]=field_width
 
            unsorted_dicts.append(env_info)
@@ -1129,23 +1129,18 @@ def show(i):
     # Print
     if o=='con' and len(sorted_dicts)>0:
 
-          # All fields aligned to the left
-          header_format = '{p[data_uid]:<'      + str(max_width['data_uid'])      + '} ' \
-                        + '{p[target_os_uoa]:<' + str(max_width['target_os_uoa']) + '} ' \
-                        + '{p[tbits]:<'         + str(max_width['tbits'])         + '} ' \
-                        + '{p[data_name]:<'     + str(max_width['data_name'])     + '} ' \
-                        + '{p[version]:<'       + str(max_width['version'])       + '} ' \
-                        + '{p[tags]}'
+          last_field_name       = table_fields[-1][0]   # the last field is not padded, it is treated separately
 
-          # Some fields (data_name, version and tags) aligned to the right
-          body_format   = '{p[data_uid]:>'      + str(max_width['data_uid'])      + '} ' \
-                        + '{p[target_os_uoa]:>' + str(max_width['target_os_uoa']) + '} ' \
-                        + '{p[tbits]:>'         + str(max_width['tbits'])         + '} ' \
-                        + '{p[data_name]:<'     + str(max_width['data_name'])     + '} ' \
-                        + '{p[version]:<'       + str(max_width['version'])       + '} ' \
-                        + '{p[tags]}'
+          # All fields of the header are aligned to the left
+          header_format = ' '.join( [ '{{p[{}]{}{}}}'.format(internal, ':<', max_width[internal]) for (internal, _, _) in table_fields[:-1]] \
+                                    + [ '{{p[{}]}}'.format(last_field_name) ] )
 
-          header_line   = header_format.format( p=dict(table_fields) )
+          # Fields of the body are aligned differently, depending on the third column of table_fields:
+          body_format   = ' '.join( [ '{{p[{}]{}{}}}'.format(internal, body_align, max_width[internal]) for (internal, _, body_align) in table_fields[:-1]] \
+                                    + [ '{{p[{}]}}'.format(last_field_name) ] )
+
+
+          header_line   = header_format.format( p={ internal: external for (internal, external, _) in table_fields } )
 
           ck.out(header_line)
           ck.out('')
