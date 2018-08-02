@@ -1041,8 +1041,6 @@ def show(i):
     target_os_name={} # Caching target OS names
 
     for q in lst:
-        vv={}
-
         duoa=q['data_uoa']
         duid=q['data_uid']
 
@@ -1067,16 +1065,8 @@ def show(i):
 
         dname=info.get('data_name','')
 
-        add=True
-        if name!='':
-           if wname:
-              if not fnmatch.fnmatch(dname.lower(), name):
-                 add=False
-           else:
-              if name!=dname:
-                 add=False
-
-        if add:
+        if (not name) \
+        or ( ( fnmatch.fnmatch(dname.lower(), name)) if wname else (name == dname) ):
            # Check target OS
            if target_os_uoa in target_os_name:
               tduoa=target_os_name[target_os_uoa]
@@ -1091,21 +1081,19 @@ def show(i):
            else:
               tduoa = 'Any'
 
-           stags=''
-           for t in tags:
-               if t!='':
-                  if stags!='': stags+=','
-                  stags+=t
+           tags_csv = ','.join( [t for t in tags if t] )
 
-           vv['data_uid']=duid
-           vv['repo_uid']=ruid
-           vv['tags']=stags
-           vv['host_os_uoa']=host_os_uoa
-           vv['target_os_uoa']=tduoa
-           vv['tbits']=tbits
-           vv['version']=version
-           vv['version_split']=sversion
-           vv['data_name']=dname
+           vv = {
+                'data_uid':         duid,
+                'repo_uid':         ruid,
+                'tags':             tags_csv,
+                'host_os_uoa':      host_os_uoa,
+                'target_os_uoa':    tduoa,
+                'tbits':            tbits,
+                'version':          version,
+                'version_split':    sversion,
+                'data_name':        dname,
+           }
 
            # Check length
            for k in vv:
@@ -1660,18 +1648,14 @@ def refresh(i):
                   q!='retargeted':
                   tagsx.append(q)
 
-           stags=''
-           for t in tagsx:
-               if t!='':
-                  if stags!='': stags+=','
-                  stags+=t
+           tags_csv = ','.join( [t for t in tagsx if t] )
 
            ck.out('  All tags="'+sftags+'"')
-           ck.out('  Searching soft UOA by tags="'+stags+'" ...')
+           ck.out('  Searching soft UOA by tags="'+tags_csv+'" ...')
 
            rx=ck.access({'action':'search',
                          'module_uoa':cfg['module_deps']['soft'],
-                         'tags':stags})
+                         'tags':tags_csv})
            if rx['return']>0: return rx
 
            lst=rx['lst']
@@ -2380,6 +2364,7 @@ def cat(i):
     r=ck.access(ii)
     if r['return']>0: return r
     hosd=r['host_os_dict']
+    rem_marker  = hosd['rem']
 
     for uoa in list_of_uoa:
 
@@ -2393,7 +2378,6 @@ def cat(i):
         env_script_name         = loaded_adict['dict'].get('env_script') or ( cfg['default_bat_name'] + hosd.get('script_ext','') )
 
         setup_script_path   = os.path.join( entry_directory_path, env_script_name)
-        rem_marker          = ('#' if env_script_name=='env.sh' else 'REM')
         data_name           = loaded_adict['data_name']
         version             = loaded_adict['dict'].get('customize',{}).get('version', 'UNKNOWN_VERSION')
         tags_csv            = ','.join( loaded_adict['dict'].get('tags',[]) )
@@ -2410,7 +2394,7 @@ def cat(i):
             for input_line in setup_script_file:
                 input_line = input_line.rstrip()
                 ck.out( input_line )
-                if not line_number:
+                if not line_number:     # insert the auto-generated header right after the first line
                     for header_line in header_lines:
                         ck.out( header_line )
                 line_number += 1
