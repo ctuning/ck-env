@@ -1130,28 +1130,28 @@ def show(i):
     if o=='con' and len(sorted_dicts)>0:
 
           # All fields aligned to the left
-          header_format = '{:<' + str(max_width['data_uid'])      + '} ' \
-                        + '{:<' + str(max_width['target_os_uoa']) + '} ' \
-                        + '{:<' + str(max_width['tbits'])         + '} ' \
-                        + '{:<' + str(max_width['data_name'])     + '} ' \
-                        + '{:<' + str(max_width['version'])       + '} ' \
-                        + '{}'
+          header_format = '{p[data_uid]:<'      + str(max_width['data_uid'])      + '} ' \
+                        + '{p[target_os_uoa]:<' + str(max_width['target_os_uoa']) + '} ' \
+                        + '{p[tbits]:<'         + str(max_width['tbits'])         + '} ' \
+                        + '{p[data_name]:<'     + str(max_width['data_name'])     + '} ' \
+                        + '{p[version]:<'       + str(max_width['version'])       + '} ' \
+                        + '{p[tags]}'
 
           # Some fields (data_name, version and tags) aligned to the right
-          body_format   = '{:>' + str(max_width['data_uid'])      + '} ' \
-                        + '{:>' + str(max_width['target_os_uoa']) + '} ' \
-                        + '{:>' + str(max_width['tbits'])         + '} ' \
-                        + '{:<' + str(max_width['data_name'])     + '} ' \
-                        + '{:<' + str(max_width['version'])       + '} ' \
-                        + '{}'
+          body_format   = '{p[data_uid]:>'      + str(max_width['data_uid'])      + '} ' \
+                        + '{p[target_os_uoa]:>' + str(max_width['target_os_uoa']) + '} ' \
+                        + '{p[tbits]:>'         + str(max_width['tbits'])         + '} ' \
+                        + '{p[data_name]:<'     + str(max_width['data_name'])     + '} ' \
+                        + '{p[version]:<'       + str(max_width['version'])       + '} ' \
+                        + '{p[tags]}'
 
-          header_line   = header_format.format( *[ external for (internal, external) in table_fields ] )
+          header_line   = header_format.format( p=dict(table_fields) )
 
           ck.out(header_line)
           ck.out('')
 
-          for field_value in sorted_dicts:
-              body_line = body_format.format( *[ field_value[internal] for (internal, external) in table_fields ] )
+          for field_values in sorted_dicts:
+              body_line = body_format.format( p=field_values )
 
               ck.out( body_line )
 
