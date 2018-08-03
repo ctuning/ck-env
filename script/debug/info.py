@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 #
 # An example script entry (returns current ticker status of Kraken cryptocurrency exchange)
