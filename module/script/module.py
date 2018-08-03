@@ -103,14 +103,14 @@ def run(i):
 
        rr=script_function(func_input_data)
        if rr['return']>0:
-          return {'return':1, 'error':'script failed ('+rr['error']+')'}
+            return {'return':1, 'error':'script failed ('+rr['error']+')'}      # LG: why not just return rr?
+
+       rr['return_code']=rr['return']       # LG: for compatibility with a different protocol?
 
        output_json_file = i.get('output_json_file')
        if output_json_file:
             r=ck.save_json_to_file({'json_file': output_json_file, 'dict':rr})
             if r['return']>0: return r
-
-       rr['return_code']=0
 
     else:
        ss=d.get('sub_scripts',{})
