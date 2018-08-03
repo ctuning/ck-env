@@ -1,1 +1,4 @@
-{}
+{
+    "default_python_script_name":   "info",
+    "default_function_name":        "show"
+}

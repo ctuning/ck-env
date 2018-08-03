@@ -46,7 +46,7 @@ def run(i):
                 or
 
               (code)              - Python script name (without .py)
-              (func)              - Python func in this script
+              (func)              - Python function name in this script
               (dict)              - dict to pass to script
 
             }
@@ -71,8 +71,6 @@ def run(i):
     name=i.get('name','')
     params=i.get('params','')
 
-    code=i.get('code','')
-    func=i.get('func','')
 
     # Loading entry
     rx=ck.access({'action':'load',
@@ -82,18 +80,21 @@ def run(i):
     d=rx['dict']
     p=rx['path']
 
-    if code!='' and func!='':
+    python_script_name  = i.get('code', d.get('default_python_script_name') )
+    function_name       = i.get('func', d.get('default_function_name') )
+
+    if python_script_name and function_name:
        cs=None
-       r=ck.load_module_from_path({'path':p, 'module_code_name':code, 'skip_init':'yes'})
+       r=ck.load_module_from_path({'path':p, 'module_code_name':python_script_name, 'skip_init':'yes'})
        if r['return']>0: return r
 
        cs=r.get('code', None)
        if cs==None:
           return {'return':1, 'error':'no python code found'}
 
-       script_func=getattr(cs, func)
+       script_func=getattr(cs, function_name)
        if script_func==None:
-          return {'return':1, 'error':'function '+func+' not found in python script '+code}
+          return {'return':1, 'error':'function '+function_name+' not found in python script '+python_script_name}
 
        # Call customized script
        ii=i.get('dict',{})

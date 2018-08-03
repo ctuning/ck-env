@@ -33,10 +33,10 @@ def show(i):
         python3   info.py
         python3.6 info.py
 
-        ck run script:debug --code=info --func=show @input1.json @input2.json                       # run via CK (default interpreter)
+        ck run script:debug @input1.json @input2.json                       # run via CK (default interpreter)
 
-        CK_PYTHON=python2 ck run script:debug --code=info --func=show @input1.json @input2.json     # run via CK (specify interpreter)
-        CK_PYTHON=python3 ck run script:debug --code=info --func=show @input1.json @input2.json
+        CK_PYTHON=python2 ck run script:debug @input1.json @input2.json     # run via CK (specify interpreter)
+        CK_PYTHON=python3 ck run script:debug @input1.json @input2.json
     }
 
     """
