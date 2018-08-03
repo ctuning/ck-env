@@ -168,6 +168,11 @@ def _run_external(i):
     data_uoa        = i['data_uoa']
     which_python    = i['which_python']
     keep_tmp_files  = i.get('keep_tmp_files', 'no')
+    code            = i.get('code','')
+    func            = i.get('func','')
+
+    code = '--code=' + code if code else ''
+    func = '--func=' + func if func else ''
 
     ## Generate two temporary names for JSON files:
     #
@@ -184,7 +189,7 @@ def _run_external(i):
 
     ## Form and run the external ck command with the given Python:
     #
-    cmd = "CK_PYTHON={} ck run {}:{} @{} --output_json_file={}".format(which_python, module_uoa, data_uoa, input_json_file, output_json_file)
+    cmd = "CK_PYTHON={} ck run {}:{} {} {} @{} --output_json_file={}".format(which_python, module_uoa, data_uoa, code, func, input_json_file, output_json_file)
 
     return_code = os.system(cmd)
 
