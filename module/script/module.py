@@ -11,6 +11,9 @@ cfg={}  # Will be updated by CK (meta description of this module)
 work={} # Will be updated by CK (temporal data)
 ck=None # Will be updated by CK (initialized CK kernel) 
 
+import os
+
+
 # Local settings
 
 ##############################################################################
@@ -30,8 +33,9 @@ def init(i):
     """
     return {'return':0}
 
+
 ##############################################################################
-# run script
+# run a function in a Python script (main mode)
 
 def run(i):
     """
@@ -62,7 +66,6 @@ def run(i):
 
     """
 
-    import os
 
     ruoa=i.get('repo_uoa','')
     muoa=i.get('script_module_uoa','')
@@ -131,3 +134,70 @@ def run(i):
        rr={'return':0, 'return_code':rx}
 
     return rr
+
+
+##############################################################################
+# run a function in a Python script via a CK wrapper
+
+def _run_external(i):
+    """
+    Input:  {
+              data_uoa            - data UOA of the script entry
+              which_python        - path to the desired Python interpreter
+              (script_module_uoa) - module UOA of the script entry
+              (keep_tmp_files)    - "yes" will keep them, deleted otherwise
+
+              (code)              - Python script name (without .py)
+              (func)              - Python function name in this script
+              (dict)              - dict to pass to script
+              (output_json_file)  - filename to save the output dictionary into
+
+            }
+
+    Output: {
+              return        - return code =  0, if successful
+                                          >  0, if error
+              (error)       - error text if return > 0
+
+              (return_code) - script's return code
+            }
+
+    """
+
+    module_uoa      = i.get('script_module_uoa', work['self_module_uoa'])
+    data_uoa        = i['data_uoa']
+    which_python    = i['which_python']
+    keep_tmp_files  = i.get('keep_tmp_files', 'no')
+
+    ## Generate two temporary names for JSON files:
+    #
+    gentmp_adict = ck.gen_tmp_file({'prefix': 'ck_call_', 'suffix': '.json'})
+    if gentmp_adict['return']>0: return gentmp_adict
+
+    input_json_file = gentmp_adict['file_name']
+    output_json_file = input_json_file.replace('ck_call_', 'ck_response_')
+
+    ## Fill in the input_json_file with input parameters:
+    #
+    input_adict = ck.save_json_to_file( {'json_file': input_json_file, 'dict': {'dict': i.get('dict',{})} } )
+    if input_adict['return']>0: return input_adict
+
+    ## Form and run the external ck command with the given Python:
+    #
+    cmd = "CK_PYTHON={} ck run {}:{} @{} --output_json_file={}".format(which_python, module_uoa, data_uoa, input_json_file, output_json_file)
+
+    return_code = os.system(cmd)
+
+    ## Parse the output_json_file and return its contents:
+    #
+    output_adict = ck.load_json_file( {'json_file': output_json_file} )
+    if output_adict['return']>0: return output_adict
+
+    output_dict = output_adict['dict']
+    output_dict['return_code'] = return_code
+
+    if return_code==0 and output_dict['return']==0 and keep_tmp_files!='yes':
+        os.remove(input_json_file)
+        os.remove(output_json_file)
+
+    return output_dict

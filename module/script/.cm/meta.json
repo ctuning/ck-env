@@ -2,6 +2,9 @@
   "actions": {
     "run": {
       "desc": "run a given script (host OS dependent)"
+    },
+    "_run_external": {
+      "desc": "run a given function in a given script entry via an external CK command"
     }
   }, 
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
