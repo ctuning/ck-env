@@ -193,6 +193,9 @@ def _run_external(i):
 
     return_code = os.system(cmd)
 
+    if keep_tmp_files=='yes':
+        ck.out("Temporary JSON files' generated: {} and {}".format(input_json_file, output_json_file))
+
     ## Parse the output_json_file and return its contents:
     #
     output_adict = ck.load_json_file( {'json_file': output_json_file} )
