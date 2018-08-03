@@ -37,6 +37,10 @@ def show(i):
 
         CK_PYTHON=python2 ck run script:debug @input1.json @input2.json     # run via CK (specify interpreter)
         CK_PYTHON=python3 ck run script:debug @input1.json @input2.json
+
+        ## Using experimental _run_external() method to run a script under any given Python:
+        #
+        ck _run_external script:debug --which_python=python3 --keep_tmp_files @input1.json @input2.json
     }
 
     """
