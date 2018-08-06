@@ -1,0 +1,15 @@
+#! /bin/bash
+
+#
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developer: Wen Yang <wen.yang99@zte.com.cn>
+#
+
+export CK_CPU_FREQ_GOVERNER=ondemand
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+. ck-set-cpu-online-and-frequency
