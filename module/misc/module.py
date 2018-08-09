@@ -813,7 +813,7 @@ def list_repos(i):
     h2=''
     if i.get('new','')=='yes':
        ii=copy.deepcopy(i)
-       ii['ck_title']='Shared CK modules'
+       ii['ck_title']='Shared CK repositories'
        r=preload_html_for_lists(ii)
        if r['return']>0: return r
 
@@ -1298,6 +1298,7 @@ def preload_html_for_lists(i):
               (html_file_start) - ck_start_html by default
               (html_file_stop)  - ck_stop_html by default
               (ck_title)        - update title in the start file
+              (out_file)        - get page name
             }
 
     Output: {
@@ -1310,6 +1311,14 @@ def preload_html_for_lists(i):
             }
 
     """
+
+    import os
+
+    out_file=i.get('out_file','')
+
+    page_name=os.path.basename(out_file)
+    if page_name.endswith('.html'):
+       page_name=page_name[:-5]
 
     fstart=i.get('html_file_start','')
     if fstart=='': fstart='ck_start.html'
@@ -1324,6 +1333,7 @@ def preload_html_for_lists(i):
     if r['return']>0: return r
 
     html_start=r['string'].replace('$#ck_title#$',ck_title)
+    html_start=html_start.replace('$#ck_page#$',page_name)
 
     # Load second file
     r=ck.load_text_file({'text_file':fstop})
