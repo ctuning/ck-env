@@ -1216,8 +1216,8 @@ def resolve(i):
        ck.out('  -----------------------------------')
        ck.out('  Resolving software dependencies ...')
 
-    sb=''
-    sb1=''
+    combined_env_script_body=''
+    alternative_combined_env_script_body=''
 
     install_env=i.get('install_env',{})
 
@@ -1460,13 +1460,8 @@ def resolve(i):
         dver=rx.get('detected_version','')
         if dver!='': q['detected_ver']=dver
 
-        # add choices
-        zchoices=[]
-        for zw in lst:
-            zchoices.append(zw['data_uid'])
-
         if 'choices' not in q or len('choices')==0: 
-           q['choices']=zchoices
+           q['choices'] = [zw['data_uid'] for zw in lst]
 
         cus=dd.get('customize',{})
 
@@ -1496,18 +1491,18 @@ def resolve(i):
 
         env=rx['env']
 
-        bt=rx['bat']
+        individual_env_script_body = rx['bat']
 
-        q['bat']=bt
-        sb+=bt
+        q['bat'] = individual_env_script_body
+        combined_env_script_body += individual_env_script_body
 
         if q.get('skip_from_bat','')!='yes':
-           sb1+=bt
+           alternative_combined_env_script_body += individual_env_script_body
 
     if o=='con':
        ck.out('  -----------------------------------')
 
-    return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'cut_bat':sb1, 'res_deps':res}
+    return {'return':0, 'deps':deps, 'env': env, 'bat':combined_env_script_body, 'cut_bat':alternative_combined_env_script_body, 'res_deps':res}
 
 ##############################################################################
 # refresh environment (re-setup soft)
