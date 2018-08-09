@@ -1796,6 +1796,24 @@ def internal_get_val(lst, index, default_value):
        v=lst[index]
     return v
 
+
+##############################################################################
+# parse 'A;B,C;D,~E,F' into [ [(True, A)], [(True, B), (True, C)], [(True, D), (False, E), (True, F)] ]
+
+def parse_disjunction(disjunction):
+    def parse_conjunction(conjunction):
+        def parse_literal(literal):
+
+            return (False, literal[1:]) if literal.startswith('~') else (True, literal)
+
+        literals = [parse_literal(literal) for literal in conjunction.split(',')]
+
+        return literals
+
+    conjunctions = [parse_conjunction(conj) for conj in disjunction.split(';')] if len(disjunction) else []
+
+    return conjunctions
+
 ##############################################################################
 # Prune search list by no_tags
 
@@ -1830,12 +1848,7 @@ def prune_search_list(i):
     ntags=[]
     if no_tags!='': ntags=no_tags.split(',')
 
-    or_tags=i.get('or_tags','')
-    otags=[]
-    if or_tags!='': 
-       xotags=or_tags.split(';')
-       for q in xotags:
-           otags.append(q.split(','))
+    otags = parse_disjunction( i.get('or_tags','') )
 
     vfrom=i.get('version_from',[])
     vto=i.get('version_to',[])
@@ -1867,11 +1880,11 @@ def prune_search_list(i):
             otags_ok = False
             for conjunction in otags:
                 otags_ok = True
-                for t in conjunction:
-                    if t not in tags:       # if at least one member of conjunction is False, the whole conjunction is False
-                        otags_ok = False
+                for (bsign, t) in conjunction:
+                    if (t in tags) != bsign:    # Pythonic XOR
+                        otags_ok = False        # if at least one member of conjunction is False, the whole conjunction is False
                         break
-                if otags_ok:                # if the current conjunction is True, the whole disjunction is True
+                if otags_ok:                    # if the current conjunction is True, the whole disjunction is True
                     break
             if not otags_ok:
                 continue
