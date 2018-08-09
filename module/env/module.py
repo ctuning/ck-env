@@ -1842,7 +1842,7 @@ def prune_search_list(i):
 
     search_setup_dict=i.get('setup', {})
 
-    nlst=[]
+    pruned_lst=[]
 
     skipped_because_of_version=''
 
@@ -1850,94 +1850,91 @@ def prune_search_list(i):
         meta=q.get('meta','')
         tags=meta.get('tags',[])
 
-        skip=False
-
         # Check package UOA
         if package_uoa!='':
-           xpackage_uoa=meta.get('package_uoa','')
-           if xpackage_uoa=='':
-              xpackage_uoa=meta.get('customize',{}).get('used_package_uid','')
-           if xpackage_uoa!='' and xpackage_uoa!=package_uoa:
-              skip=True
+            xpackage_uoa=meta.get('package_uoa','')
+            if xpackage_uoa=='':
+                xpackage_uoa=meta.get('customize',{}).get('used_package_uid','')
+            if xpackage_uoa!='' and xpackage_uoa!=package_uoa:
+                continue
 
         # Check that not temporal entry (unfinished installation)
-        if not skip and 'tmp' in tags:
-           skip=True
+        if 'tmp' in tags:
+            continue
 
         # Check or tags
-        if not skip and len(otags)>0:
-           found=False
-           for t in otags:
-               found=True
-               for t1 in t:
-                   if t1 not in tags:
-                      found=False
-                      break
-               if found:
-                  break
-           if not found:
-              skip=True
+        if len(otags)>0:
+            otags_ok = False
+            for conjunction in otags:
+                otags_ok = True
+                for t in conjunction:
+                    if t not in tags:       # if at least one member of conjunction is False, the whole conjunction is False
+                        otags_ok = False
+                        break
+                if otags_ok:                # if the current conjunction is True, the whole disjunction is True
+                    break
+            if not otags_ok:
+                continue
 
         # Check no tags
-        if not skip:
-           for t in ntags:
-               if t in tags:
-                   skip=True
-                   break
+        ntags_ok=True
+        for t in ntags:
+            if t in tags:
+                ntags_ok=False
+                break
+        if not ntags_ok:
+            continue
 
         # Check version
-        if not skip and (len(vfrom)>0 or len(vto)>0):
-           v=meta.get('setup',{}).get('version_split',[])
+        if len(vfrom)>0 or len(vto)>0:
+            v=meta.get('setup',{}).get('version_split',[])
 
-           # first check from env, but if not set, check from package
-           if len(v)==0:
-              v=meta.get('customize',{}).get('version_split',[])
-              if len(v)==0:
-                 ver=meta.get('customize',{}).get('version','')
+            # first check from env, but if not set, check from package
+            if len(v)==0:
+                v=meta.get('customize',{}).get('version_split',[])
+                if len(v)==0:
+                    ver=meta.get('customize',{}).get('version','')
  
-                 if ver!='':
-                    rx=ck.access({'action':'split_version',
-                                  'module_uoa':cfg['module_deps']['soft'],
-                                  'version':ver})
-                    if rx['return']>0: return rx
-                    v=rx['version_split']
+                    if ver!='':
+                        rx=ck.access({'action':'split_version',
+                                    'module_uoa':cfg['module_deps']['soft'],
+                                    'version':ver})
+                        if rx['return']>0: return rx
+                        v=rx['version_split']
 
-           if len(vfrom)>0:
-              r=ck.access({'action':'compare_versions',
-                           'module_uoa':cfg['module_deps']['soft'],
-                           'version1':vfrom,
-                           'version2':v})
-              if r['return']>0: return r
-              result=r['result']
+            if len(vfrom)>0:
+                r=ck.access({'action':'compare_versions',
+                            'module_uoa':cfg['module_deps']['soft'],
+                            'version1':vfrom,
+                            'version2':v})
+                if r['return']>0: return r
 
-              if result=='>':
-                 skip=True
-                 skipped_because_of_version='yes'
+                if r['result']=='>':
+                    skipped_because_of_version='yes'
+                    continue
 
-           if not skip and len(vto)>0:
-              r=ck.access({'action':'compare_versions',
-                           'module_uoa':cfg['module_deps']['soft'],
-                           'version1':v,
-                           'version2':vto})
-              if r['return']>0: return r
-              result=r['result']
+            if len(vto)>0:
+                r=ck.access({'action':'compare_versions',
+                            'module_uoa':cfg['module_deps']['soft'],
+                            'version1':v,
+                            'version2':vto})
+                if r['return']>0: return r
 
-              if result=='>':
-                 skip=True
-                 skipped_because_of_version='yes'
+                if r['result']=='>':
+                    skipped_because_of_version='yes'
+                    continue
 
-        if not skip:
-            entry_setup_dict = meta.get('setup')    # if entry_setup_dict is empty it matches anything
-            if entry_setup_dict and len(search_setup_dict)>0:
-                rx=ck.compare_dicts({'dict1':entry_setup_dict, 'dict2':search_setup_dict})
-                if rx['return']>0: return rx
-                if rx['equal']!='yes':
-                    skip=True
+        entry_setup_dict = meta.get('setup')    # if entry_setup_dict is empty it matches anything
+        if entry_setup_dict and len(search_setup_dict)>0:
+            rx=ck.compare_dicts({'dict1':entry_setup_dict, 'dict2':search_setup_dict})
+            if rx['return']>0: return rx
+            if rx['equal']!='yes':
+                continue
 
-        if not skip:
-            nlst.append(q)
+        # If we haven't hit "continue" anywhere above, the list element is ok to be included:
+        pruned_lst.append(q)
 
-    return {'return':0, 'lst':nlst, 'skipped_because_of_version':skipped_because_of_version}
+    return {'return':0, 'lst':pruned_lst, 'skipped_because_of_version':skipped_because_of_version}
 
 ##############################################################################
 # remote env entry and installed package
