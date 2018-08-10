@@ -33,6 +33,9 @@
     "replace_strings_in_file": {
       "desc": "replace multiple strings in a given file"
     },
+    "select_string": {
+      "desc": "given a list of strings, pick one by index OR substring match"
+    },
     "select_uoa": {
       "desc": "select UOA"
     },

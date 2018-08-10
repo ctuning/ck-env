@@ -466,6 +466,70 @@ def prepare_entry_template(i):
     return r
 
 ##############################################################################
+# Universal string selector.
+#
+# Given an ordered list of options (strings)
+
+def select_string(i):
+    """
+    Input:  {
+                options         - an ordered list of strings to select from
+                (question)      - the question to ask
+                (default)       - default selection
+            }
+
+    Output: {
+                return          - return code =  0, if successful
+                                              >  0, if error
+                (error)         - error text if return > 0
+                selected_index  - an index < len(options)
+            }
+
+    """
+
+    question    = i.get('question', 'Please select from the options above')
+    options     = i.get('options')
+    default     = i.get('default', '')  # empty string means no default
+    num_options = len(options)
+
+    if not options:
+        return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
+
+    for i in range(num_options):
+        if not isinstance(options[i], list):
+            options[i] = [ options[i] ]
+
+        ck.out("{:>2}) {}".format(i, options[i][0]))
+        for extra_line in options[i][1:]:
+            ck.out('    {}'.format(extra_line))
+        ck.out('')
+
+    inp_adict = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if len(default) else '')})
+
+    response = inp_adict['string']
+
+    if (not len(response)) and len(default):
+        response = default
+
+    try:    # try to convert into int() and see if it works
+        selected_index = int(response)
+        if selected_index >= num_options:
+            return {'return': 2, 'error': 'Selected index out of range [0..{}]'.format(num_options-1)}
+    except:
+        num_matches = 0
+        for i in range(num_options):
+            if response in options[i][0]:
+                selected_index = i
+                num_matches += 1
+
+        if num_matches!=1:
+            return {'return': 3, 'error': 'Instead of 1 unique match there were {}'.format(num_matches)}
+
+    ck.out("You selected [{:02}]".format(selected_index))
+
+    return {'return':0, 'selected_index': selected_index}
+
+##############################################################################
 # Universal UOA selector (improved version forked 
 # from ck-autotuning:module:choice and ck.kernel)
 
