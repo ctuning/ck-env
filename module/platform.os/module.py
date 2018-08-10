@@ -259,8 +259,6 @@ def detect(i):
              else:
                 if o=='con' and i.get('return_multi_devices','')!='yes':
                    ck.out('')
-                   zz={}
-                   iz=0
                    for j in range(0, len(devices)):
                        zs=str(j)
                        ck.out(zs+') '+devices[j])
@@ -581,37 +579,38 @@ def detect(i):
        if len(lrx)==1:
           pi_uoa=lrx[0]['data_uid']
        elif len(lrx)>1:
-          if piuoa!='':
-             pi_uoa=piuoa
-          elif o=='con':
-             # Select platform.init
-             ck.out('')
-             ck.out('Some support tools and scripts may be available for your target platform in CK:')
-             ck.out('')
-             zz={}
-             iz=0
-             for z1 in sorted(lrx, key=lambda v: (v.get('meta',{}).get('sort',0),v['data_uoa'])):
-                 z=z1['data_uid']
-                 zu=z1['data_uoa']
+            if piuoa!='':
+                pi_uoa=piuoa
+            elif o=='con':
+                # Select platform.init
+                ck.out('')
+                ck.out('Some support tools and scripts may be available for your target platform in CK:')
+                ck.out('')
 
-                 zs=str(iz)
-                 zz[zs]=z
+                plat_options = []
+                data_uids = []
+                for z1 in sorted(lrx, key=lambda v: (v.get('meta',{}).get('sort',0),v['data_uoa'])):
+                    duid=z1['data_uid']
+                    duoa=z1['data_uoa']
 
-                 ck.out(zs+') '+zu+' ('+z+')')
+                    data_uids.append( duid )
+                    plat_options.append( '{} ({})'.format(duoa, duid) )
 
-                 iz+=1
+                select_adict = ck.access({'action': 'select_string',
+                                        'module_uoa': 'misc',
+                                        'options': plat_options,
+                                        'default': '',
+                                        'question': 'Select option (or Enter to skip selection and do not ask this question again for your target OS)',
+                })
+                if select_adict['return']>0: return select_adict
 
-             ck.out('')
-             rx=ck.inp({'text':'Select option (or Enter to skip selection and do not ask this question again for your target OS): '})
-             z=rx['string'].strip()
+                response = select_adict['response']
 
-             if z=='':
-                pi_uoa='-'
-             else:
-                if z not in zz:
-                   return {'return':1, 'error':'option is not recognized'}
-
-                pi_uoa=zz[z]
+                if response=='':
+                    pi_uoa = '-'
+                else:
+                    selected_index = select_adict['selected_index']
+                    pi_uoa = data_uids[selected_index]
 
        # Record if new
        if pi_uoa!='':

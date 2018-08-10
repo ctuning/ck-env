@@ -489,10 +489,10 @@ def select_string(i):
 
     question    = i.get('question', 'Please select from the options above')
     options     = i.get('options')
-    default     = i.get('default', '')  # empty string means no default
+    default     = i.get('default', None)
     num_options = len(options)
 
-    if not options:
+    if not options or len(options)==0:
         return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
 
     for i in range(num_options):
@@ -508,13 +508,16 @@ def select_string(i):
 
     response = inp_adict['string']
 
-    if (not len(response)) and len(default):
+    if response=='' and default!=None:
         response = default
+
+        if response=='':    # since it was a default, it was an allowed scenario (not having a selected_index)
+            return {'return':0, 'response': response}
 
     try:    # try to convert into int() and see if it works
         selected_index = int(response)
         if selected_index >= num_options:
-            return {'return': 2, 'error': 'Selected index out of range [0..{}]'.format(num_options-1)}
+            return {'return': 2, 'response': response, 'error': 'Selected index out of range [0..{}]'.format(num_options-1)}
     except:
         num_matches = 0
         for i in range(num_options):
@@ -523,11 +526,11 @@ def select_string(i):
                 num_matches += 1
 
         if num_matches!=1:
-            return {'return': 3, 'error': 'Instead of 1 unique match there were {}'.format(num_matches)}
+            return {'return': 3, 'response': response, 'error': 'Instead of 1 unique match there were {}'.format(num_matches)}
 
     #ck.out("You selected [{:02}]".format(selected_index))
 
-    return {'return':0, 'selected_index': selected_index}
+    return {'return':0, 'response': response, 'selected_index': selected_index}
 
 ##############################################################################
 # Universal UOA selector (improved version forked 
