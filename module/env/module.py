@@ -626,57 +626,47 @@ def set(i):
 
                 ck.out('')
                 ck.out('More than one environment found for '+xq+':')
-                zz={}
-                for z in range(0, lx):
-                    j=l[z]
+                ck.out('')
 
-                    zi=j.get('info',{})
-                    zm=j.get('meta',{})
-                    zu=j.get('data_uid','')
+                dep_options = []
+
+                for opt_dict in l:  # looping through all options for this environment
+                    zi=opt_dict.get('info',{})
+                    zm=opt_dict.get('meta',{})
+                    zu=opt_dict.get('data_uid','')
+
                     zdn=zi.get('data_name','')
-                    cus=zm.get('customize',{})
                     zdeps=zm.get('deps',{})
-                    xsetup=zm.get('setup',{})
                     xtags=zm.get('tags','')
+                    cus=zm.get('customize',{})
                     ver=cus.get('version','')
 
-                    xtarget_os_uoa=xsetup.get('target_os_uoa','')
+                    tags_csv = ','.join( [t for t in xtags if t] )
 
-                    xstags=''
-                    for t in xtags:
-                        if t!='':
-                           if xstags!='': xstags+=','
-                           xstags+=t
-
-                    zs=str(z)
-                    zz[zs]=zu
-
-                    ck.out('')
-                    ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
+                    this_option = [ '{} - v{} ({} ({}))'.format(zdn, ver, tags_csv, zu) ]
 
                     if len(zdeps)>0:
-                       for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
-                           jj=zdeps[j]
-                           juoa=jj.get('uoa','')
-                           if juoa!='': # if empty, it most likely means that this unresolved dependency
+                        for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
+                            jj=zdeps[j]
+                            juoa=jj.get('uoa','')
+                            if juoa!='': # if empty, it most likely means that this unresolved dependency
                                         # is for a different target
-                              jtags=jj.get('tags','')
-                              jver=jj.get('ver','')
+                                jtags=jj.get('tags','')
+                                jver=jj.get('ver','')
 
-                              js='                                  '
-                              js+='- Depends on "'+j+'" (env UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
-                              ck.out(js)
+                                this_option.append( '{}- Depends on "{}" (env UOA={}, tags="{}", version={})'.format(' '*35, j, juoa, jtags, jver))
 
-                ck.out('')
-                rx=ck.inp({'text':'Select one of the options for '+xq+' or press Enter for 0: '})
-                x=rx['string'].strip()
+                    dep_options.append(this_option)
 
-                if x=='': x='0'
+                select_adict = ck.access({'action': 'select_string',
+                                            'module_uoa': 'misc',
+                                            'options': dep_options,
+                                            'default': '0',
+                                            'question': 'Select one of the options for '+xq,
+                })
+                if select_adict['return']>0: return select_adict
 
-                if x not in zz:
-                   return {'return':1, 'error':'option is not recognized'}
-
-                ilx=int(x)
+                ilx = select_adict['selected_index']
 
        if ilx<len(l):
           duid=l[ilx]['data_uid']
