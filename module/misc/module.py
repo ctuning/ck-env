@@ -525,7 +525,7 @@ def select_string(i):
         if num_matches!=1:
             return {'return': 3, 'error': 'Instead of 1 unique match there were {}'.format(num_matches)}
 
-    ck.out("You selected [{:02}]".format(selected_index))
+    #ck.out("You selected [{:02}]".format(selected_index))
 
     return {'return':0, 'selected_index': selected_index}
 
