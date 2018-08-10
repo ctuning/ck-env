@@ -1892,35 +1892,31 @@ def check(i):
              ck.out('')
 
           if iv=='yes':
-             ck.out('  Registering software installations found on your machine in the CK:')
-             ck.out('')
-             ck.out('    (HINT: enter -1 to force CK package installation)')
-             ck.out('')
+                ck.out('  Registering software installations found on your machine in the CK:')
+                ck.out('')
+                ck.out('    (HINT: enter -1 to force CK package installation)')
+                ck.out('')
 
-             iq=0
+                ver_options = []
 
-             for kk in vlst:
-                 q=kk['path']
-                 ver=kk.get('version','')
+                for kk in vlst:
+                    q=kk['path']
+                    ver=kk.get('version','')
 
-                 x=q
-                 if ver!='':x='Version '+ver+' - '+x
+                    ver_options.append( 'Version {} - {}'.format(ver, q) if ver else q )
 
-                 ck.out('    '+str(iq)+') '+x)
-                 iq+=1
+                select_adict = ck.access({'action': 'select_string',
+                                    'module_uoa': 'misc',
+                                    'options': ver_options,
+                                    'default': '0',
+                                    'question': 'Please select the number of any above installation',
+                })
+                if select_adict['return']>0: return select_adict
 
-             ck.out('')
-             rx=ck.inp({'text':'    Please, select the number of any above installation or press Enter to select 0: '})
-             xx=rx['string'].strip()
-             if xx=='': xx='0'
-             il=0
-             try:
-                il=int(xx)
-             except:
-                il=-1
+                il = select_adict.get('selected_index', -1)
 
-             if il<0 or il>=len(lst):
-                return {'return':1, 'error':'selection number is not recognized'}
+                if il<0:
+                    return {'return':1, 'error':'selection number is not recognized'}
 
     # If not found, quit
     if len(lst)==0:
