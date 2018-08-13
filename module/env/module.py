@@ -1746,28 +1746,21 @@ def readable_os(i):
             }
     """
 
-    setup=i.get('setup',{})
+    original_setup = i.get('setup',{})
 
     import copy
-    setup1=copy.deepcopy(setup)
+    enriched_setup = copy.deepcopy( original_setup )
 
-    x=setup.get('host_os_uoa','')
-    if x!='':
-       r=ck.access({'action':'load',
-                    'module_uoa':cfg['module_deps']['os'],
-                    'data_uoa':x})
-       if r['return']>0: return r
-       setup1['host_os_uoa']=r['data_uoa']
+    for setup_key in ('host_os_uoa', 'target_os_uoa'):
+        setup_value = setup.get(setup_key)
+        if setup_value:
+            r=ck.access({'action':'load',
+                        'module_uoa':cfg['module_deps']['os'],
+                        'data_uoa':setup_value})
+            if r['return']>0: return r
+            enriched_setup[setup_key]=r['data_uoa']
 
-    x=setup.get('target_os_uoa','')
-    if x!='':
-       r=ck.access({'action':'load',
-                    'module_uoa':cfg['module_deps']['os'],
-                    'data_uoa':x})
-       if r['return']>0: return r
-       setup1['target_os_uoa']=r['data_uoa']
-
-    return {'return':0, 'setup1':setup1}
+    return {'return':0, 'setup1':enriched_setup}
 
 ##############################################################################
 # internal function: get value from list without error if out of bounds
