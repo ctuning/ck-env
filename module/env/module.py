@@ -118,8 +118,7 @@ def set(i):
     import json
 
     o=i.get('out','')
-    oo=''
-    if o=='con': oo='con'
+    ooo = o if o=='con' else ''     # shouldn't we consider other options?
 
     ran=i.get('random','')
     quiet=i.get('quiet','')
@@ -218,14 +217,6 @@ def set(i):
     dd={}
     setup={}
 
-    # Search
-    ii={'action':'search',
-        'module_uoa':work['self_module_uid'],
-        'tags':tags,
-        'repo_uoa':enruoa,
-        'add_info':'yes',
-        'add_meta':'yes'} # Need to sort by version, if ambiguity
-
     if user_env or i.get('local','')=='yes':
        setup={'host_os_uoa':hos,
               'target_os_uoa':tos,
@@ -233,37 +224,43 @@ def set(i):
 
     if reuse_deps=='yes' and skip_cache!='yes':
        # Check in cache!
-       dmatch={'setup':setup, 'tags':tags.split(',')}
-       for q in deps_cache:
-           d1=q.get('meta',{})
-           r=ck.compare_dicts({'dict1':d1, 'dict2':dmatch})
+       dep_query = {'setup':setup, 'tags':tags.split(',')}
+       for dc_q in deps_cache:
+           dep_meta = dc_q.get('meta',{})
+           r=ck.compare_dicts({'dict1':dep_meta, 'dict2':dep_query})     # if dep_meta contains dep_query...
            if r['return']>0: return r
            if r['equal']=='yes':
-              duoa=q.get('uoa','')
+              duoa = dc_q.get('uoa','')
               reuse_deps='no' # to avoid updating cache
               break
 
-    ii['data_uoa']=duoa
+    # Search
+    ii={'action':'search',
+        'module_uoa':work['self_module_uid'],
+        'tags':tags,
+        'repo_uoa':enruoa,
+        'data_uoa':duoa,
+        'add_info':'yes',
+        'add_meta':'yes'} # Need to sort by version, if ambiguity
 
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
     # Prepare possible warning
-    x='required software '
-    if name!='': x='"'+name+'"'
-    war='no registered CK environment was found for '+x+' dependency with tags="'+tags+'"'
+    x = '"{}"'.format(name) if name else 'required software '
+    msg_env_not_found = 'no registered CK environment was found for {} dependency with tags="{}"'.format(x, tags)
 
     if no_tags!='':
-       war+=', no_tags="'+no_tags+'"'
+       msg_env_not_found+=', no_tags="'+no_tags+'"'
 
     if len(setup)>0:
        ro=readable_os({'setup':setup})
        if ro['return']>0: return ro
        setup1=ro['setup1']
 
-       war+=' and setup='+json.dumps(setup1)
+       msg_env_not_found+=' and setup='+json.dumps(setup1)
 
     if len(vfrom)>0 or len(vto)>0:
-       war+=' and version constraints ('+json.dumps(vfrom)+' <= v <= '+json.dumps(vto)+')'
+       msg_env_not_found+=' and version constraints ('+json.dumps(vfrom)+' <= v <= '+json.dumps(vto)+')'
 
     # Search for environment entries
     r=ck.access(ii)
@@ -385,7 +382,7 @@ def set(i):
 
     if lx==0 and duoa=='' and tags!='' and (safe=='yes' or package_uoa!=''):
        ck.out('==========================================================================================')
-       ck.out('WARNING: '+war)
+       ck.out('WARNING: '+msg_env_not_found)
        showed_warning=True
 
        if len(install_env)>0:
@@ -399,7 +396,7 @@ def set(i):
               if k in ['LFLAGS', 'CXXFLAGS', 'CK_HOST_CPU_NUMBER_OF_PROCESSORS', 'LCORE_FLAGS']:
                  del(install_env[k])
 
-       iii1={'out':oo,
+       rx=internal_install_package({'out':ooo,
              'package_uoa':package_uoa,
              'tags':tags,
              'or_tags':or_tags, 
@@ -416,12 +413,9 @@ def set(i):
              'deps_cache':deps_cache,
              'version_from':vfrom,
              'version_to':vto,
-             'deps':cdeps}
-
-       if try_to_reinstall:
-          iii1['sub_deps']=i.get('current_deps',{})
-
-       rx=internal_install_package(iii1)
+             'deps':cdeps,
+             'sub_deps': i.get('current_deps',{}) if try_to_reinstall else {},
+       })
        if rx['return']>0 and rx['return']!=16: return rx
 
        if rx['return']==0:
@@ -435,7 +429,7 @@ def set(i):
        if o=='con' and tags!='' and not showed_warning:
           ck.out('')
           ck.out(' ********')
-          ck.out(' WARNING: '+war)
+          ck.out(' WARNING: '+msg_env_not_found)
           ck.out('')
 
           showed_warning=True
@@ -510,7 +504,7 @@ def set(i):
                         'version_from':vfrom, 
                         'version_to':vto,
 #                        'deps':cdeps,
-                        'out':oo}
+                        'out':ooo}
                     if len(setup)>0:
                        ii.update(setup)
                     ry=ck.access(ii)
@@ -686,9 +680,9 @@ def set(i):
        if tags!='':
           if not showed_warning:
              ck.out('==========================================================================================')
-             ck.out('WARNING: '+war)
+             ck.out('WARNING: '+msg_env_not_found)
 
-          rx=internal_install_package({'out':oo,
+          rx=internal_install_package({'out':ooo,
                                        'tags':tags,
                                        'or_tags':or_tags, 
                                        'no_tags':no_tags,
@@ -747,7 +741,7 @@ def set(i):
                       ck.out('')
 
              ck.out('')
-          return {'return':1, 'error':war}
+          return {'return':1, 'error':msg_env_not_found}
 
     # Load selected environment entry
     r=ck.access({'action':'load',
@@ -786,44 +780,44 @@ def set(i):
     to_delete=False
     err=''
 
-    edeps=d.get('deps',{}) # sub-dependencies of the selected environment 
-                           # (normally already resolved, but check if software changed in the mean time)
-    for q in edeps:
-        qq=edeps[q]
-        cqq=qq.get('dict',{}).get('customize',{})
-        sfc=cqq.get('skip_file_check','')
-        fp=cqq.get('full_path','')
+    subdeps=d.get('deps',{})    # sub-dependencies of the selected environment
+                                # (normally already resolved, but check if software has changed in the meantime)
+    for subdep_name in subdeps:
+        subdep=subdeps[subdep_name]
+        subdep_cus=subdep.get('dict',{}).get('customize',{})
+        sfc=subdep_cus.get('skip_file_check','')
+        fp=subdep_cus.get('full_path','')
 
         if sfc!='yes' and fp!='' and not os.path.isfile(fp):
            outdated=True
-           err='one of sub-dependencies ('+q+') have changed (file '+fp+' not found)'
+           err='one of sub-dependencies ('+subdep_name+') have changed (file '+fp+' not found)'
            break
 
-        deuoa=qq.get('uoa','')
-        if deuoa!='':
+        subdep_uoa=subdep.get('uoa','')
+        if subdep_uoa!='':
            rx=ck.access({'action':'find',
                          'module_uoa':work['self_module_uid'],
-                         'data_uoa':deuoa})
+                         'data_uoa':subdep_uoa})
            if rx['return']>0:
               if rx['return']!=16: return rx
               outdated=True
-              err='one of sub-dependencies ('+q+') have changed (CK environment '+deuoa+' not found)'
+              err='one of sub-dependencies ('+subdep_name+') have changed (CK environment '+subdep_uoa+' not found)'
               break
 
         if reuse_deps=='yes' and skip_cache!='yes':
            # Check in cache!
-           dmatch2={'setup':setup, 'tags':qq.get('tags','').split(',')}
-           dc_found=False
+           subdep_query = {'setup':setup, 'tags':subdep.get('tags','').split(',')}
+           dc_found = False
            for dc_q in deps_cache:
-               d1=dc_q.get('meta',{})
-               r=ck.compare_dicts({'dict1':d1, 'dict2':dmatch2})
+               dep_meta = dc_q.get('meta',{})
+               r=ck.compare_dicts({'dict1':dep_meta, 'dict2':subdep_query})      # if dep_meta contains subdep_query...
                if r['return']>0: return r
                if r['equal']=='yes':
-                  dc_found=True
+                  dc_found = True
                   break
 
            if not dc_found:
-              deps_cache.append({'meta':dmatch2, 'uoa':deuoa})
+              deps_cache.append({'meta':subdep_query, 'uoa':subdep_uoa})
 
     # Check if has changed but try to continue
     if outdated and ' have changed ' in err and o=='con' and quiet!='yes':
@@ -896,7 +890,7 @@ def set(i):
 
     # Update cache
     if reuse_deps=='yes' and skip_cache!='yes':
-       deps_cache.append({'meta':dmatch, 'uoa':duoa})
+       deps_cache.append({'meta':dep_query, 'uoa':duoa})
 
     # Prepare environment and bat
     env=i.get('env',{})
@@ -1579,8 +1573,6 @@ def refresh(i):
     target_os_name={} # Caching target OS names
 
     for q in lst:
-        vv={}
-
         duoa=q['data_uoa']
         duid=q['data_uid']
 
@@ -1964,9 +1956,8 @@ def clean(i):
     import os
     import shutil
 
-    oo=''
     o=i.get('out','')
-    if o=='con': oo=o
+    ooo = o if o=='con' else ''     # shouldn't we consider other options?
 
     force=i.get('force','')
     if force=='': force=i.get('f','')
@@ -2039,7 +2030,7 @@ def clean(i):
                         'data_uoa':duid,
                         'repo_uoa':ruid,
                         'force':s,
-                        'out':oo})
+                        'out':ooo})
            if r['return']>0: return r
 
            # Delete package
@@ -2100,8 +2091,7 @@ def internal_install_package(i):
     import os
 
     o=i.get('out','')
-    oo=''
-    if o=='con': oo=o
+    ooo = o if o=='con' else ''     # shouldn't we consider other options?
 
     hos=i.get('host_os','')
     tos=i.get('target_os','')
@@ -2158,10 +2148,10 @@ def internal_install_package(i):
         os.chdir('..')
         save_cur_dir=os.getcwd()
 
-    vv={'action':'install',
+    install_adict={'action':'install',
         'module_uoa':cfg['module_deps']['package'],
         'data_uoa':package_uoa,
-        'out':oo,
+        'out':ooo,
         'tags':tags,
         'or_tags':or_tags,
         'no_tags':no_tags,
@@ -2178,21 +2168,21 @@ def internal_install_package(i):
         'add_hint':ah}
 
     # Check if there is a compiler in resolved deps to reuse it
-    xdeps=i.get('sub_deps',{})
-    if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
-    if cdeps.get('compiler-mcl',{}).get('uoa','')!='': xdeps['compiler-mcl']=cdeps['compiler-mcl']
-    if len(xdeps)>0: vv['deps']=xdeps
+    sub_deps=i.get('sub_deps',{})
+    if cdeps.get('compiler',{}).get('uoa','')!='': sub_deps['compiler']=cdeps['compiler']
+    if cdeps.get('compiler-mcl',{}).get('uoa','')!='': sub_deps['compiler-mcl']=cdeps['compiler-mcl']
+    if len(sub_deps)>0: install_adict['deps']=sub_deps
 
     duoa=''
     duid=''
 
-    rx=ck.access(vv)
+    rx=ck.access(install_adict)
     if rx['return']==0:
        duoa=rx['env_data_uoa']
        duid=rx['env_data_uid']
 
        os.chdir(save_cur_dir)
-    elif rx['return']!=16:
+    elif rx['return']!=16:  # 16 is a "magic number" meaning "user chose not to install" or "package not found"
        return rx
 
     return {'return':0, 'env_data_uoa':duoa, 'env_data_uid':duid}
@@ -2347,10 +2337,10 @@ def cat(i):
             return {'return':1, 'error':"all CID entries have to be of 'env' type"}
 
     # Get some info about OS
-    ii={'action':'detect',
+    r=ck.access({'action':'detect',
         'module_uoa':cfg['module_deps']['platform.os'],
-        'skip_info_collection':'yes'}
-    r=ck.access(ii)
+        'skip_info_collection':'yes',
+    })
     if r['return']>0: return r
     hosd=r['host_os_dict']
     rem_marker  = hosd['rem']
