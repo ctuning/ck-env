@@ -1810,10 +1810,20 @@ def prune_search_list(i):
             }
     """
 
+    import sys
+
+    if sys.version_info[0]==2:
+        import __builtin__
+        BI_module = __builtin__
+    else:
+        import builtins
+        BI_module = builtins
+
     lst=i.get('lst',[])
 
     no_tags_csv = i.get('no_tags','')
-    no_tags_set = set( no_tags_csv.split(',') if no_tags_csv!='' else [] )
+
+    no_tags_set = BI_module.set( no_tags_csv.split(',') if no_tags_csv!='' else [] )
 
     otags = parse_disjunction( i.get('or_tags','') )
 
@@ -1837,7 +1847,7 @@ def prune_search_list(i):
             if entry_package_uoa and entry_package_uoa!=query_package_uoa:
                 continue
 
-        entry_tags_set = set( meta.get('tags',[]) )
+        entry_tags_set = BI_module.set( meta.get('tags',[]) )
 
         # Filter out temporary entries (unfinished installation)
         if 'tmp' in entry_tags_set:
