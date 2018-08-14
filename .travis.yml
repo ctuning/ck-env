@@ -82,5 +82,5 @@ install:
     -       ck install package:lib-leveldb-1.20                                 # install one C/C++ package
 
 script:
-    - echo "You have reached the end of the test, congratulations!"
+    - ck show env                                                               # show everything that has been detected or installed
 
