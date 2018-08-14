@@ -2181,6 +2181,7 @@ def internal_install_package(i):
     return {'return':0, 'env_data_uoa':duoa, 'env_data_uid':duid}
 
 ##############################################################################
+# DEPRECATED - use "ck virtual env" instead!
 # set env for command line (pre-set various flags)
 
 def xset(i):
