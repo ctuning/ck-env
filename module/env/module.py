@@ -984,7 +984,7 @@ def show(i):
     ver = i.get('version','')
     if ver!='': extended_tags.append( 'v'+ver )
 
-    tags += ','.join(extended_tags)
+    tags = ','.join(extended_tags)
 
     name=i.get('name','')
     wname=False
@@ -1543,7 +1543,7 @@ def refresh(i):
     ver = i.get('version','')
     if ver!='': extended_tags.append( 'v'+ver )
 
-    tags += ','.join(extended_tags)
+    tags = ','.join(extended_tags)
 
 
     # FIXME: seems like the following bit was copied from show(), but the actual pattern matching bit was not, so there is no pattern matching actually.
