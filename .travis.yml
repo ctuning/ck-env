@@ -1,0 +1,72 @@
+# After changing this file, check it on:
+#   http://lint.travis-ci.org/
+
+os:         linux
+language:   python
+
+python:
+    - 2.7
+    - 3.6
+
+env:
+    global:
+        - TRAVIS_CK_CXX_COMPILER=gcc
+
+matrix:
+    include:
+        - os: osx
+          language: generic
+          python:   2.7
+          env:      WANTED_PYTHON_VERSION=2.7
+        - os: osx
+          language: generic
+          python:   3.7
+          env:      WANTED_PYTHON_VERSION=3.7
+
+before_install:
+    - |
+        if [ $TRAVIS_OS_NAME == "osx" ]; then
+            brew update                                                         # this swaps python versions and makes 3 the default one
+
+            if [ "$WANTED_PYTHON_VERSION" == "2.7" ]; then
+                brew reinstall python\@2 || brew link --overwrite python\@2     # install and link python2 and pip2 to /usr/local/bin
+                export PATH=/usr/local/opt/python\@2/bin:$PATH
+                export PYTHON_EXE=python
+                brew install gcc\@6 || brew link --overwrite gcc\@6             # to avoid symlink conflict with oclint
+            else
+                brew reinstall python                                           # install and link python3 and pip3 to /usr/local/bin
+                export PATH=/usr/local/opt/python/bin:$PATH
+                export PYTHON_EXE=python3
+            fi
+
+            export CK_PLATFORM_NAME="generic-macos "                            # used later by CK
+        else
+            sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            sudo apt-get update -qq
+            sudo apt-get install -qq g++-6
+            sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+            sudo apt-get install python-pip
+            export WANTED_PYTHON_VERSION=$TRAVIS_PYTHON_VERSION                 # since Python is supported in Linux, get it from Travis
+            export CK_PLATFORM_NAME="generic-linux "                            # used later by CK (note the trailing space to make the choice unique)
+            export PYTHON_EXE=python
+        fi
+
+install:
+    - CWD=`pwd`
+    - THIS_REPO_NAME=`basename $CWD`
+    - echo "TRAVIS_OS_NAME=${TRAVIS_OS_NAME}, WANTED_PYTHON_VERSION=${WANTED_PYTHON_VERSION}, TF_PREBUILT_VERSION=${TF_PREBUILT_VERSION}"
+    - echo "CWD=${CWD}, THIS_REPO_NAME=${THIS_REPO_NAME}, PATH=${PATH}"
+    - which ${PYTHON_EXE}
+    - ${PYTHON_EXE} --version
+    - ${PYTHON_EXE} -m pip install --ignore-installed --verbose pip setuptools  # make sure pip is also up to date no matter what
+    - ${PYTHON_EXE} -m pip install -r requirements.txt                          # ck kernel itself and some essential components
+    - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
+    - echo "$CK_PLATFORM_NAME" | ck detect platform.os --update_platform_init   # set the platform to generic-linux (1) or generic-macos (2)
+    -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`    # pick the one Travis has set for us in the PATH
+    -       ck install package --tags=lib,python-package,scipy                  # install one Python package
+    - echo 0 | ck detect soft:compiler.${TRAVIS_CK_CXX_COMPILER}                # force detection of a specific C/C++ compiler
+    -       ck install package:lib-leveldb-1.20                                 # install one C/C++ package
+
+script:
+    - echo "You have reached the end of the test, congratulations!"
+
