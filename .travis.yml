@@ -9,7 +9,8 @@ python:
     - 3.6
 
 env:
-    global:
+    matrix:
+        - TRAVIS_CK_CXX_COMPILER=llvm
         - TRAVIS_CK_CXX_COMPILER=gcc
 
 matrix:
@@ -17,11 +18,19 @@ matrix:
         - os: osx
           language: generic
           python:   2.7
-          env:      WANTED_PYTHON_VERSION=2.7
+          env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=2.7
+        - os: osx
+          language: generic
+          python:   2.7
+          env:      TRAVIS_CK_CXX_COMPILER=gcc  WANTED_PYTHON_VERSION=2.7
         - os: osx
           language: generic
           python:   3.7
-          env:      WANTED_PYTHON_VERSION=3.7
+          env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=3.7
+        - os: osx
+          language: generic
+          python:   3.7
+          env:      TRAVIS_CK_CXX_COMPILER=gcc  WANTED_PYTHON_VERSION=3.7
 
 before_install:
     - |
@@ -38,7 +47,11 @@ before_install:
                 export PYTHON_EXE=python3
             fi
 
-            brew install gcc\@6 || brew link --overwrite gcc\@6                 # to avoid symlink conflict with oclint
+            if [ "$TRAVIS_CK_CXX_COMPILER" == "llvm" ]; then
+                brew install llvm\@5
+            elif [ "$TRAVIS_CK_CXX_COMPILER" == "gcc" ]; then
+                brew install gcc\@6 || brew link --overwrite gcc\@6             # to avoid symlink conflict with oclint
+            fi
 
             export CK_PLATFORM_NAME="generic-macos "                            # used later by CK
         else
