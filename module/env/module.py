@@ -786,11 +786,11 @@ def set(i):
         subdep=subdeps[subdep_name]
         subdep_cus=subdep.get('dict',{}).get('customize',{})
         sfc=subdep_cus.get('skip_file_check','')
-        fp=subdep_cus.get('full_path','')
+        full_path=subdep_cus.get('full_path','')
 
-        if sfc!='yes' and fp!='' and not os.path.isfile(fp):
+        if sfc!='yes' and full_path!='' and not os.path.isfile(full_path):
            outdated=True
-           err='one of sub-dependencies ('+subdep_name+') have changed (file '+fp+' not found)'
+           err='one of sub-dependencies ('+subdep_name+') have changed (file '+full_path+' not found)'
            break
 
         subdep_uoa=subdep.get('uoa','')
@@ -834,11 +834,11 @@ def set(i):
     # Check if file exists for current dependency
     verx=''
     cus=d.get('customize',{})
-    fp=cus.get('full_path','')
+    full_path=cus.get('full_path','')
 
     tc='it appears that your environment has changed - '
-    if not outdated and fp!='' and cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
-       err=tc+'software file not found in a specified path ('+fp+')'
+    if not outdated and full_path!='' and cus.get('skip_file_check','')!='yes' and not os.path.isfile(full_path):
+       err=tc+'software file not found in a specified path ('+full_path+')'
        outdated=True
 
     ver_in_env=cus.get('version','') # detected version during installation
@@ -848,7 +848,7 @@ def set(i):
           # Check version (via customized script) ...
           ii={'action':'get_version',
               'module_uoa':cfg['module_deps']['soft'],
-              'full_path':fp,
+              'full_path':full_path,
               'bat':'',
               'host_os_dict':hosd,
               'target_os_dict':tosd,
@@ -964,37 +964,34 @@ def show(i):
 
     tags=i.get('tags','')
 
+    extended_tags = [ tags ] if tags else []
+
     tos_uoa=i.get('target_os','')
     if tos_uoa!='':
-       # Load OS
-       ry=ck.access({'action':'load',
+        # Load OS
+        ry=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['os'],
                      'data_uoa':tos_uoa})
-       if ry['return']>0: return ry
+        if ry['return']>0: return ry
 
-       tos_uoa=ry['data_uoa']
-       tosz=ry['dict'].get('base_uoa','')
-       if tosz!='': tos_uoa=tosz
+        tos_uoa = ry['dict'].get('base_uoa','') or ry['data_uoa']
 
-       if tags!='': tags+=','
-       tags+='target-os-'+tos_uoa
+        extended_tags.append( 'target-os-'+tos_uoa )
 
-    tb=i.get('target_bits','')
-    if tb!='':
-       if tags!='': tags+=','
-       tags+=tb+'bits'
+    tb = i.get('target_bits','')
+    if tb!='': extended_tags.append( tb+'bits' )
 
-    ver=i.get('version','')
-    if ver!='':
-       if tags!='': tags+=','
-       tags+='v'+ver
+    ver = i.get('version','')
+    if ver!='': extended_tags.append( 'v'+ver )
+
+    tags += ','.join(extended_tags)
 
     name=i.get('name','')
     wname=False
     if name.find('*')>=0 or name.find('?')>=0:
-       import fnmatch
-       wname=True 
-       name=name.lower()
+        import fnmatch
+        wname=True
+        name=name.lower()
 
     # creating a list of patterns from the "main xcid" and the list of auxiliary xcids:
     full_xcids_list = [{
@@ -1520,39 +1517,41 @@ def refresh(i):
 
     o=i.get('out','')
 
-    ruoa=i.get('repo_uoa','')
-    if ruoa=='': ruoa='local'
-
+    ruoa = i.get('repo_uoa','') or 'local'
     muoa=i.get('module_uoa','')
     duoa=i.get('data_uoa','')
 
     tags=i.get('tags','')
 
+    extended_tags = [ tags ] if tags else []
+
     tos_uoa=i.get('target_os','')
     if tos_uoa!='':
-       # Load OS
-       ry=ck.access({'action':'load',
+        # Load OS
+        ry=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['os'],
                      'data_uoa':tos_uoa})
-       if ry['return']>0: return ry
-       tos_uoa=ry['data_uoa']
-       tosz=ry['dict'].get('base_uoa','')
-       if tosz!='': tos_uoa=tosz
-       tags+='target-os-'+tos_uoa
+        if ry['return']>0: return ry
 
-    tb=i.get('target_bits','')
-    if tb!='':
-       tags+=tb+'bits'
+        tos_uoa = ry['dict'].get('base_uoa','') or ry['data_uoa']
 
-    ver=i.get('version','')
-    if ver!='':
-       tags+='v'+ver
+        extended_tags.append( 'target-os-'+tos_uoa )
 
+    tb = i.get('target_bits','')
+    if tb!='': extended_tags.append( tb+'bits' )
+
+    ver = i.get('version','')
+    if ver!='': extended_tags.append( 'v'+ver )
+
+    tags += ','.join(extended_tags)
+
+
+    # FIXME: seems like the following bit was copied from show(), but the actual pattern matching bit was not, so there is no pattern matching actually.
     name=i.get('name','')
     wname=False
     if name.find('*')>=0 or name.find('?')>=0:
        import fnmatch
-       wname=True 
+       wname=True
        name=name.lower()
 
     ii={'action':'search',
@@ -1590,11 +1589,7 @@ def refresh(i):
         if 'tmp' in tags:
            continue
 
-        sftags=''
-        for t in tags:
-            if t!='':
-               if sftags!='': sftags+=','
-               sftags+=t
+        tags_csv = ','.join( [t for t in tags if t] )
 
         host_os_uoa=setup.get('host_os_uoa','')
         target_os_uoa=setup.get('target_os_uoa','')
@@ -1607,26 +1602,26 @@ def refresh(i):
         ck.out(dname+' (Env: '+duid+')')
 
         ck.out('')
-        ck.out('  Tags="'+sftags+'"')
+        ck.out('  Tags="'+tags_csv+'"')
 
         soft_uoa=meta.get('soft_uoa','')
         if soft_uoa=='':
-           # Trying to detect by some tags
-           tagsx=[]
+           # Trying to detect the soft entry by "abstracting out" some of the tags:
+           subtags=[]
            for q in tags:
                if not q.startswith('host-os-') and not q.startswith('target-os-') and \
                   not q.endswith('bits') and not q.startswith('v') and \
                   q!='retargeted':
-                  tagsx.append(q)
+                  subtags.append(q)
 
-           tags_csv = ','.join( [t for t in tagsx if t] )
+           subtags_csv = ','.join( [t for t in subtags if t] )
 
-           ck.out('  All tags="'+sftags+'"')
-           ck.out('  Searching soft UOA by tags="'+tags_csv+'" ...')
+           ck.out('  All tags="'+tags_csv+'"')
+           ck.out('  Searching soft UOA by tags="'+subtags_csv+'" ...')
 
            rx=ck.access({'action':'search',
                          'module_uoa':cfg['module_deps']['soft'],
-                         'tags':tags_csv})
+                         'tags':subtags_csv})
            if rx['return']>0: return rx
 
            lst=rx['lst']
@@ -1693,7 +1688,7 @@ def refresh(i):
             'data_uoa':soft_uoa,
             'customize':cus,
             'deps':deps,
-            'tags':sftags,
+            'tags':tags_csv,
             'package_uoa':package_uoa,
             'skip_device_info_collection':'yes',
             'soft_name':dname,
@@ -1752,7 +1747,7 @@ def readable_os(i):
     enriched_setup = copy.deepcopy( original_setup )
 
     for setup_key in ('host_os_uoa', 'target_os_uoa'):
-        setup_value = setup.get(setup_key)
+        setup_value = original_setup.get(setup_key)
         if setup_value:
             r=ck.access({'action':'load',
                         'module_uoa':cfg['module_deps']['os'],
@@ -1817,61 +1812,54 @@ def prune_search_list(i):
 
     lst=i.get('lst',[])
 
-    package_uoa=i.get('package_uoa','')
-
-    no_tags=i.get('no_tags','')
-    ntags=[]
-    if no_tags!='': ntags=no_tags.split(',')
+    no_tags_csv = i.get('no_tags','')
+    no_tags_set = set( no_tags_csv.split(',') if no_tags_csv!='' else [] )
 
     otags = parse_disjunction( i.get('or_tags','') )
 
     vfrom=i.get('version_from',[])
     vto=i.get('version_to',[])
 
-    search_setup_dict=i.get('setup', {})
+    query_setup_dict=i.get('setup', {})
 
     pruned_lst=[]
 
     skipped_because_of_version=''
 
-    for q in lst:
-        meta=q.get('meta','')
-        tags=meta.get('tags',[])
+    query_package_uoa=i.get('package_uoa','')
 
-        # Check package UOA
-        if package_uoa!='':
-            xpackage_uoa=meta.get('package_uoa','')
-            if xpackage_uoa=='':
-                xpackage_uoa=meta.get('customize',{}).get('used_package_uid','')
-            if xpackage_uoa!='' and xpackage_uoa!=package_uoa:
+    for entry in lst:
+        meta=entry.get('meta','')
+
+        # Filter by package UOA
+        if query_package_uoa:
+            entry_package_uoa = meta.get('package_uoa','') or meta.get('customize',{}).get('used_package_uid','')
+            if entry_package_uoa and entry_package_uoa!=query_package_uoa:
                 continue
 
-        # Check that not temporal entry (unfinished installation)
-        if 'tmp' in tags:
+        entry_tags_set = set( meta.get('tags',[]) )
+
+        # Filter out temporary entries (unfinished installation)
+        if 'tmp' in entry_tags_set:
             continue
 
-        # Check or tags
+        # Filter out matches agains 'no_tags'
+        if no_tags_set & entry_tags_set:
+            continue
+
+        # Filter by matching against 'or_tags' (full DNF support)
         if len(otags)>0:
             otags_ok = False
             for conjunction in otags:
                 otags_ok = True
                 for (bsign, t) in conjunction:
-                    if (t in tags) != bsign:    # Pythonic XOR
+                    if (t in entry_tags_set) != bsign:    # Pythonic XOR
                         otags_ok = False        # if at least one member of conjunction is False, the whole conjunction is False
                         break
                 if otags_ok:                    # if the current conjunction is True, the whole disjunction is True
                     break
             if not otags_ok:
                 continue
-
-        # Check no tags
-        ntags_ok=True
-        for t in ntags:
-            if t in tags:
-                ntags_ok=False
-                break
-        if not ntags_ok:
-            continue
 
         # Check version
         if len(vfrom)>0 or len(vto)>0:
@@ -1913,14 +1901,14 @@ def prune_search_list(i):
                     continue
 
         entry_setup_dict = meta.get('setup')    # if entry_setup_dict is empty it matches anything
-        if entry_setup_dict and len(search_setup_dict)>0:
-            rx=ck.compare_dicts({'dict1':entry_setup_dict, 'dict2':search_setup_dict})
+        if entry_setup_dict and len(query_setup_dict)>0:
+            rx=ck.compare_dicts({'dict1':entry_setup_dict, 'dict2':query_setup_dict})       # check whether entry_setup_dict contains query_setup_dict
             if rx['return']>0: return rx
             if rx['equal']!='yes':
                 continue
 
         # If we haven't hit "continue" anywhere above, the list element is ok to be included:
-        pruned_lst.append(q)
+        pruned_lst.append(entry)
 
     return {'return':0, 'lst':pruned_lst, 'skipped_because_of_version':skipped_because_of_version}
 
@@ -1974,7 +1962,7 @@ def clean(i):
                  'module_uoa':cfg['module_deps']['package']})
     if r['return']>0: return r
 
-    path=r['path']
+    install_path=r['path']
 
     for q in lst:
         ruid=q['repo_uid']
@@ -1986,49 +1974,49 @@ def clean(i):
         tags_csv        = ','.join(d.get('tags',[]))
 
         cus=d.get('customize',{})
-        fp=cus.get('full_path','')
-        fp4=''
+        full_path=cus.get('full_path','')
+        absolute_package_install_path=''
 
-        if fp.startswith(path):
-           j=1
-           if path.endswith(os.path.sep) or path.endswith('/'):
-              j=0
-           fp1=fp[len(path)+j:]
+        if full_path.startswith(install_path):
+            if install_path.endswith(os.path.sep) or install_path.endswith('/'):    # is the first not enough?
+                j=0
+            else:
+                j=1
+            relative_path=full_path[len(install_path)+j:]
 
-           fp2=fp1.split(os.path.sep)
+            package_install_dir_name=relative_path.split(os.path.sep)[0]
 
-           if len(fp2)>0:
-              fp3=fp2[0]
+            if package_install_dir_name!='':
+                absolute_package_install_path = os.path.join(install_path, package_install_dir_name)
 
-              if fp3!='':
-                 fp4=os.path.join(path,fp3)
 
-        x=''
-        if fp4!='' and os.path.isdir(fp4):
-           x=' package in dir "'+fp4+'" and'
+        if absolute_package_install_path and os.path.isdir(absolute_package_install_path):
+            display_location = ' package in dir "'+absolute_package_install_path+'" and'
+        else:
+            display_location = ''
 
-        s=''
         if force=='yes':
-           s='yes'
+            delete_bool = True
         elif o=='con':
-           r=ck.inp({'text':'Are you sure to delete'+x+' CK entry env:"'+duoa+'" - a '+info_data_name+' with tags: '+tags_csv+' (y/N): '})
-           if r['return']>0: return r
-           s=r['string'].strip().lower()
-           if s=='y': s='yes'
+            r=ck.inp({'text':'Are you sure to delete'+display_location+' CK entry env:"'+duoa+'" - a '+info_data_name+' with tags: '+tags_csv+' (y/N): '})
+            if r['return']>0: return r
+            delete_bool = r['string'].strip().lower() == 'y'
+        else:
+            delete_bool = False
 
-        if s=='yes':
-           # Delete entry
-           r=ck.access({'action':'rm',
+        if delete_bool:
+            # Delete entry
+            r=ck.access({'action':'rm',
                         'module_uoa':work['self_module_uid'],
                         'data_uoa':duid,
                         'repo_uoa':ruid,
-                        'force':s,
+                        'force': 'yes' if delete_bool else '',  # convert it to 'yes' string (whether originally 'yes' or 'y')
                         'out':ooo})
-           if r['return']>0: return r
+            if r['return']>0: return r
 
-           # Delete package
-           if fp4!='' and os.path.isdir(fp4):
-              shutil.rmtree(fp4)
+            # Delete package
+            if absolute_package_install_path and os.path.isdir(absolute_package_install_path):
+                shutil.rmtree(absolute_package_install_path)
 
     return {'return':0}
 
