@@ -102,7 +102,7 @@ def parse_version(i):
               else:
                  j1=q.find(' (')
                  if j1>0:
-                    ver=q[j+9:j1]+' (native, install via "brew install llvm" instead)'
+                    ver=q[j+9:j1]+'_Apple_native'
                     break
     if ver=='':
         ck.out('')
