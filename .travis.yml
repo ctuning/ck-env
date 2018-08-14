@@ -49,8 +49,10 @@ before_install:
 
             if [ "$TRAVIS_CK_CXX_COMPILER" == "llvm" ]; then
                 brew install llvm\@5
+                TRAVIS_CK_COMPILER_CHOICE = "Version 5"
             elif [ "$TRAVIS_CK_CXX_COMPILER" == "gcc" ]; then
                 brew install gcc\@6 || brew link --overwrite gcc\@6             # to avoid symlink conflict with oclint
+                TRAVIS_CK_COMPILER_CHOICE = "Version 6"
             fi
 
             export CK_PLATFORM_NAME="generic-macos "                            # used later by CK
@@ -78,7 +80,7 @@ install:
     - echo "$CK_PLATFORM_NAME" | ck detect platform.os --update_platform_init   # set the platform to generic-linux (1) or generic-macos (2)
     -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`    # pick the one Travis has set for us in the PATH
     -       ck install package --tags=lib,python-package,scipy                  # install one Python package
-    - echo 0 | ck detect soft:compiler.${TRAVIS_CK_CXX_COMPILER}                # force detection of a specific C/C++ compiler
+    - echo "$TRAVIS_CK_COMPILER_CHOICE" | ck detect soft:compiler.${TRAVIS_CK_CXX_COMPILER}     # force detection of a specific C/C++ compiler
     -       ck install package:lib-leveldb-1.20                                 # install one C/C++ package
 
 script:
