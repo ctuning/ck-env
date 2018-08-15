@@ -3,35 +3,35 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
-      "PACKAGE_NAME_TEMPLATE": "jdk-9.0.1_",
-      "PACKAGE_URL": "http://download.oracle.com/otn-pub/java/jdk/9.0.1+11",
+      "PACKAGE_NAME_TEMPLATE": "jdk-10.0.2_",
+      "PACKAGE_URL": "http://download.oracle.com/otn-pub/java/jdk/10.0.2+13/19aef61b38124481863b1413dce1855f",
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies",
       "PACKAGE_WGET_HEADER": "Cookie: oraclelicense=accept-securebackup-cookie"
     },
-    "version": "9.0.1"
+    "version": "10.0.2"
   },
   "end_full_path": {
-    "android": "jdk9.0.1/bin/javac",
-    "linux": "jdk9.0.1/bin/javac",
+    "android": "jdk10.0.2/bin/javac",
+    "linux": "jdk10.0.2/bin/javac",
     "win": "bin\\javac.exe"
   },
   "need_cpu_info": "yes",
   "process_script": "install",
   "soft_uoa": "0129a3b82235cbc0",
-  "suggested_path": "jdk-9.0.1",
+  "suggested_path": "jdk-10.0.2",
   "tags": [
     "compiler",
     "java",
     "lang-java",
-    "v9.0.1",
-    "v9.0",
-    "v9",
+    "v10.0.2",
+    "v10.0",
+    "v10",
     "channel-stable"
   ],
+  "template": "yes",
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
-  },
-  "template":"yes"
+  }
 }
