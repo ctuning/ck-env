@@ -1,3 +1,6 @@
+
+Linux & MacOS: [![Travis Build Status](https://travis-ci.org/ctuning/ck-env.svg?branch=master)](https://travis-ci.org/ctuning/ck-env)
+
 Fighting software and hardware chaos in research
 ================================================
 
