@@ -1,5 +1,6 @@
 
 Linux & MacOS: [![Travis Build Status](https://travis-ci.org/ctuning/ck-env.svg?branch=master)](https://travis-ci.org/ctuning/ck-env)
+Windows: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/github/ctuning/ck-env?branch=master&svg=true)](https://ci.appveyor.com/project/ens-lg4/ck-env)
 
 Fighting software and hardware chaos in research
 ================================================
