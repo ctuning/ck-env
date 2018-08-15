@@ -76,9 +76,8 @@ install:
     - echo "CWD=${CWD}, THIS_REPO_NAME=${THIS_REPO_NAME}, PATH=${PATH}"
     - which ${PYTHON_EXE}
     - ${PYTHON_EXE} --version
-    - ls -ld /usr/local/bin
-    - ls -ld /usr/local/bin/pip
-    - ${PYTHON_EXE} -m pip install --upgrade --verbose pip setuptools           # make sure pip is also up to date no matter what
+    - rm -f `which pip`                                                         # the file is removable, but not writeable
+    - ${PYTHON_EXE} -m pip install --ignore_installed --verbose pip setuptools  # make sure pip is also up to date no matter what
     - ${PYTHON_EXE} -m pip install -r requirements.txt                          # ck kernel itself and some essential components
     - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
     - echo "$CK_PLATFORM_NAME" | ck detect platform.os --update_platform_init   # set the platform to generic-linux (1) or generic-macos (2)
