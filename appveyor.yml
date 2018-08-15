@@ -27,7 +27,7 @@ install:
     - ck install package --tags=lib,python-package,scipy
     - echo Version 10| ck detect soft:sdk.microsoft
     - echo Version 19.14| ck detect soft:compiler.microsoft
-    - ck install package:lib-leveldb-1.20
+    - ck install package:lib-lmdb-master-universal
 
 test_script:
     - ck show env
