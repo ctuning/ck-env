@@ -12,8 +12,8 @@
     "version": "10.0.2"
   },
   "end_full_path": {
-    "android": "jdk10.0.2/bin/javac",
-    "linux": "jdk10.0.2/bin/javac",
+    "android": "jdk-10.0.2/bin/javac",
+    "linux": "jdk-10.0.2/bin/javac",
     "win": "bin\\javac.exe"
   },
   "need_cpu_info": "yes",
