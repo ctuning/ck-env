@@ -27,6 +27,7 @@ install:
     - ck install package --tags=lib,python-package,scipy
     - echo Version 10| ck detect soft:sdk.microsoft
     - echo Version 19| ck detect soft:compiler.microsoft
+    - ck install package:lib-leveldb-1.20
 
 test_script:
     - ck show env
