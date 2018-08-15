@@ -51,8 +51,8 @@ before_install:
                 brew install llvm\@5
                 export TRAVIS_CK_COMPILER_CHOICE="Version 5"
             elif [ "$TRAVIS_CK_CXX_COMPILER" == "gcc" ]; then
-                brew install gcc\@6 || brew link --overwrite gcc\@6             # to avoid symlink conflict with oclint
-                export TRAVIS_CK_COMPILER_CHOICE="Version 6"
+                brew install gcc\@7 || brew link --overwrite gcc\@7             # to avoid symlink conflict with oclint
+                export TRAVIS_CK_COMPILER_CHOICE="Version 7"
             fi
 
             export CK_PLATFORM_NAME="generic-macos "                            # used later by CK
