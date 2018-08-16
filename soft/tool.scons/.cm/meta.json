@@ -30,7 +30,7 @@
   "deps": {
     "python": {
       "local": "yes", 
-      "name": "Pyton", 
+      "name": "Python interpreter",
       "sort": 10, 
       "tags": "compiler,lang-python"
     }
