@@ -34,7 +34,7 @@ def init(i):
 # set environment for tools and libraries 
 # (multiple versions of the same tools/libraries can co-exist)
 
-def set(i):
+def env_set(i):
     """
     Input:  {
               (host_os)              - host OS (detect, if ommitted)
@@ -1426,7 +1426,7 @@ def resolve(i):
 
         if o=='con': ii['out']='con'
 
-        rx=set(ii)
+        rx=env_set(ii)
         if rx['return']>0: return rx
 
         lst=rx['lst']
@@ -1810,20 +1810,11 @@ def prune_search_list(i):
             }
     """
 
-    import sys
-
-    if sys.version_info[0]==2:
-        import __builtin__
-        BI_module = __builtin__
-    else:
-        import builtins
-        BI_module = builtins
-
     lst=i.get('lst',[])
 
     no_tags_csv = i.get('no_tags','')
 
-    no_tags_set = BI_module.set( no_tags_csv.split(',') if no_tags_csv!='' else [] )
+    no_tags_set = set( no_tags_csv.split(',') if no_tags_csv!='' else [] )
 
     otags = parse_disjunction( i.get('or_tags','') )
 
@@ -1847,7 +1838,7 @@ def prune_search_list(i):
             if entry_package_uoa and entry_package_uoa!=query_package_uoa:
                 continue
 
-        entry_tags_set = BI_module.set( meta.get('tags',[]) )
+        entry_tags_set = set( meta.get('tags',[]) )
 
         # Filter out temporary entries (unfinished installation)
         if 'tmp' in entry_tags_set:
@@ -2201,7 +2192,7 @@ def xset(i):
     i['bat_new']='yes'
     i['print']='yes'
 
-    return set(i)
+    return env_set(i)
 
 ##############################################################################
 # pre-load environment for the shell
@@ -2244,7 +2235,7 @@ def virtual(i):
     for uoa in list_of_uoa:
         i['uoa']=uoa
 
-        r=set(i)
+        r=env_set(i)
         if r['return']>0: return r
 
         shell_script_contents_for_unix +='\n'+r['bat']+'\n'

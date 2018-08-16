@@ -20,6 +20,7 @@ matrix:
           python:   2.7
           env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=2.7
         - os: osx
+          osx_image: xcode9.2
           language: generic
           python:   2.7
           env:      TRAVIS_CK_CXX_COMPILER=gcc  WANTED_PYTHON_VERSION=2.7
@@ -28,6 +29,7 @@ matrix:
           python:   3.7
           env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=3.7
         - os: osx
+          osx_image: xcode9.2
           language: generic
           python:   3.7
           env:      TRAVIS_CK_CXX_COMPILER=gcc  WANTED_PYTHON_VERSION=3.7
@@ -51,8 +53,8 @@ before_install:
                 brew install llvm\@5
                 export TRAVIS_CK_COMPILER_CHOICE="Version 5"
             elif [ "$TRAVIS_CK_CXX_COMPILER" == "gcc" ]; then
-                brew install gcc\@6 || brew link --overwrite gcc\@6             # to avoid symlink conflict with oclint
-                export TRAVIS_CK_COMPILER_CHOICE="Version 6"
+                brew install gcc\@7 || brew link --overwrite gcc\@7             # to avoid symlink conflict with oclint
+                export TRAVIS_CK_COMPILER_CHOICE="Version 7"
             fi
 
             export CK_PLATFORM_NAME="generic-macos "                            # used later by CK
@@ -74,6 +76,7 @@ install:
     - echo "CWD=${CWD}, THIS_REPO_NAME=${THIS_REPO_NAME}, PATH=${PATH}"
     - which ${PYTHON_EXE}
     - ${PYTHON_EXE} --version
+    - rm -f `which pip`                                                         # the file is removable, but not writeable
     - ${PYTHON_EXE} -m pip install --ignore-installed --verbose pip setuptools  # make sure pip is also up to date no matter what
     - ${PYTHON_EXE} -m pip install -r requirements.txt                          # ck kernel itself and some essential components
     - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
@@ -81,7 +84,7 @@ install:
     -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`    # pick the one Travis has set for us in the PATH
     -       ck install package --tags=lib,python-package,scipy                  # install one Python package
     - echo "$TRAVIS_CK_COMPILER_CHOICE" | ck detect soft:compiler.${TRAVIS_CK_CXX_COMPILER}     # force detection of a specific C/C++ compiler
-    -       ck install package:lib-leveldb-1.20                                 # install one C/C++ package
+    -       ck install package:lib-lmdb-master-universal                        # install one C/C++ package
 
 script:
     - ck show env                                                               # show everything that has been detected or installed

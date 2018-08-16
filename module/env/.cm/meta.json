@@ -45,7 +45,10 @@
     "xset": {
       "desc": "set env for command line (pre-set various flags)"
     }
-  }, 
+  },
+  "actions_redirect": {
+    "set" : "env_set"
+  },
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
   "custom_script_name": "customize", 
   "default_bat_name": "env", 
