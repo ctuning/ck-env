@@ -1,3 +1,5 @@
+* 2018.08.16 - [FGG] added Python deps to Scons
+
 * 2018.08.14 - [Leo] added first automated tests
                [FGG] moved outdated JDK 9 to ck-old-packages repo, and added JDK 8.181 and JDK 10.0.2
 

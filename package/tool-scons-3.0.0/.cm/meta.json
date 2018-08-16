@@ -18,6 +18,15 @@
     }, 
     "version": "3.0.0"
   }, 
+  "deps": {
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python",
+      "sort": 20,
+      "tags": "compiler,python"
+    }
+  },
   "end_full_path": {
     "linux": "install/bin/scons", 
     "win": "install\\bin\\scons.bat"
