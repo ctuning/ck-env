@@ -648,7 +648,7 @@ def setup(i):
     ver=cus.get('version','')
     vercus=ver
     if fp!='':
-       if cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
+       if cus.get('skip_file_check','')!='yes' and not os.path.exists(fp):
           return {'return':1, 'error':'software not found in a specified path ('+fp+')'}
 
        skip_existing='no'
@@ -1239,7 +1239,7 @@ def search_tool(i):
               path_list             - path list
               file_name             - name of file to find (can be with patterns)
               (recursion_level_max) - if >0, limit dir recursion
-              (can_be_dir)          - if 'yes', return directory as well
+              (can_be_dir)          - if 'yes', return matched directories as well
               (return_symlinks)     - if 'yes', symlinks are returned as-is. Otherwise, they're resolved
             }
 
@@ -1281,21 +1281,10 @@ def search_tool(i):
         r=list_all_files({'path':p, 
                           'file_name':fn, 
                           'pattern':pt,
+                          'can_be_dir':cbd,
                           'recursion_level_max':rlm})
         if r['return']>0: return r
-        for q in r['list']:
-            new=True
-            if cbd!='yes' and os.path.isdir(q):
-               new=False
-
-#            if new:
-#               for qq in lst:
-#                   if os.path.realpath(q)==os.path.realpath(qq):
-#                      new=False
-#                      break
-
-            if new:
-               lst.append(q)
+        lst.extend( r['list'] )
 
 #    if return_symlinks != 'yes':
 #      # resolving symlinks
@@ -1351,6 +1340,7 @@ def list_all_files(i):
               (file_name)           - search for a specific file name
               (pattern)             - return only files with this pattern
               (path_ext)            - path extension (needed for recursion)
+              (can_be_dir)          - if 'yes', return matched directories as well
               (recursion_level_max) - if >0, limit dir recursion
             }
 
@@ -1368,9 +1358,11 @@ def list_all_files(i):
 
     list_of_results=[]
 
-    fname = i.get('file_name', '')
+    fname               = i.get('file_name', '')
+    fname_with_sep_bool = fname.find(os.sep)>=0
 
-    fname_with_sep = fname.find(os.sep)>=0
+    can_be_dir          = i.get('can_be_dir', '')
+    can_be_dir_bool     = can_be_dir == 'yes'
 
     pattern=i.get('pattern','')
     if pattern!='':
@@ -1399,28 +1391,26 @@ def list_all_files(i):
                 pass
 
             if p!='':
-                add=True
-
+                candidate = None
                 if fname!='':
-                    if fname_with_sep and os.path.isdir(p):
-                        px=os.path.join(po,fname)
-                        add=False
-                        if os.path.isfile(px):
-                            if px not in list_of_results:
-                                list_of_results.append(px)
+                    if fname_with_sep_bool and os.path.isdir(p):
+                        deep_candidate = os.path.join(po, fname)
+                        if os.path.exists( deep_candidate ):
+                            candidate = deep_candidate
 
-                    elif fname!=fn:
-                        add=False
+                    elif fname==fn:
+                        candidate = p
 
-                if pattern!='' and not fnmatch.fnmatch(fn, pattern):
-                    add=False
+                elif pattern!='' and fnmatch.fnmatch(fn, pattern):
+                    candidate = p
 
-                if add:
-                    list_of_results.append(p)
+                if candidate and (candidate not in list_of_results):
+                    if os.path.isfile( candidate ) or (can_be_dir_bool and os.path.isdir( candidate )):
+                        list_of_results.append( candidate )
 
                 if _internal_check_encoded_path_is_dir(p):
                     r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
-                                   'pattern':pattern, 'file_name':fname, 
+                                   'pattern':pattern, 'file_name':fname, 'can_be_dir':can_be_dir,
                                    'recursion_level':rl+1, 'recursion_level_max':rlm})
                     if r['return']>0: return r
                     list_of_results.extend( r.get('list',[]) )
