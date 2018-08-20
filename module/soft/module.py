@@ -1335,35 +1335,30 @@ def list_all_files(i):
     import sys
     import os
 
-    a=[]
+    list_of_results=[]
 
-    fname=i.get('file_name','')
+    fname = i.get('file_name', '')
 
-    fname_with_sep=False
-    if fname.find(os.sep)>=0:
-        fname_with_sep=True
+    fname_with_sep = fname.find(os.sep)>=0
 
     pattern=i.get('pattern','')
     if pattern!='':
        import fnmatch
 
-    pe=''
-    if i.get('path_ext','')!='': 
-       pe=i['path_ext']
-
-    po=i.get('path','')
+    pe = i.get('path_ext', '')
+    po = i.get('path','')
     if sys.version_info[0]<3: po=unicode(po)
 
     rl=i.get('recursion_level',0)
     rlm=i.get('recursion_level_max',0)
 
-    if rlm>0 and rl>rlm: 
+    if rl>rlm:
        return {'return':0, 'list':[]}
 
     try:
        dirList=os.listdir(po)
     except Exception as e:
-       None
+       pass
     else:
        for fn in dirList:
            p=''
@@ -1380,8 +1375,8 @@ def list_all_files(i):
                       px=os.path.join(po,fname)
                       add=False
                       if os.path.isfile(px):
-                          if px not in a:
-                              a.append(px)
+                          if px not in list_of_results:
+                              list_of_results.append(px)
 
                   elif fname!=fn:
                       add=False
@@ -1390,7 +1385,7 @@ def list_all_files(i):
                  add=False
 
               if add:
-                 a.append(p)
+                 list_of_results.append(p)
 
               recursive=False
               problem=False    # Need this complex structure to support UTF-8 file names in Python 2.7
@@ -1427,10 +1422,9 @@ def list_all_files(i):
                                    'pattern':pattern, 'file_name':fname, 
                                    'recursion_level':rl+1, 'recursion_level_max':rlm})
                  if r['return']>0: return r
-                 for q in r.get('list',[]):
-                     a.append(q)
+                 list_of_results.extend( r.get('list',[]) )
 
-    return {'return':0, 'list':a}
+    return {'return':0, 'list':list_of_results}
 
 ##############################################################################
 # check is given software is already installed and register it in the CK or install it if package exists (the same as 'detect')
