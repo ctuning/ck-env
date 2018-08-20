@@ -1311,6 +1311,37 @@ def search_tool(i):
 
 
 ##############################################################################
+# A helper function for list_all_files()
+
+def _internal_check_encoded_path_is_dir( path ):
+    """
+        Need this complex structure to support UTF-8 file names in Python 2.7
+    """
+
+    import os
+    import sys
+
+    try:
+        if os.path.isdir( path ):
+            return path
+    except Exception as e:
+
+        try:
+            path = path.encode('utf-8')
+            if os.path.isdir( path ):
+                return path
+        except Exception as e:
+
+            try:
+                path = path.encode(sys.stdin.encoding)
+                if os.path.isdir(p):
+                    return path
+            except Exception as e:
+                pass
+
+    return None
+
+##############################################################################
 # List all files recursively in a given directory
 
 def list_all_files(i):
@@ -1343,86 +1374,56 @@ def list_all_files(i):
 
     pattern=i.get('pattern','')
     if pattern!='':
-       import fnmatch
+        import fnmatch
 
     pe = i.get('path_ext', '')
-    po = i.get('path','')
+    po = i.get('path', '')
     if sys.version_info[0]<3: po=unicode(po)
 
     rl=i.get('recursion_level',0)
     rlm=i.get('recursion_level_max',0)
 
     if rl>rlm:
-       return {'return':0, 'list':[]}
+        return {'return':0, 'list':[]}
 
     try:
-       dirList=os.listdir(po)
+        dirList=os.listdir(po)
     except Exception as e:
-       pass
+        pass
     else:
-       for fn in dirList:
-           p=''
-           try:
-              p=os.path.join(po, fn)
-           except Exception as e: 
-              pass
+        for fn in dirList:
+            p=''
+            try:
+                p=os.path.join(po, fn)
+            except Exception as e:
+                pass
 
-           if p!='':
-              add=True
+            if p!='':
+                add=True
 
-              if fname!='':
-                  if fname_with_sep and os.path.isdir(p):
-                      px=os.path.join(po,fname)
-                      add=False
-                      if os.path.isfile(px):
-                          if px not in list_of_results:
-                              list_of_results.append(px)
+                if fname!='':
+                    if fname_with_sep and os.path.isdir(p):
+                        px=os.path.join(po,fname)
+                        add=False
+                        if os.path.isfile(px):
+                            if px not in list_of_results:
+                                list_of_results.append(px)
 
-                  elif fname!=fn:
-                      add=False
+                    elif fname!=fn:
+                        add=False
 
-              if pattern!='' and not fnmatch.fnmatch(fn, pattern):
-                 add=False
+                if pattern!='' and not fnmatch.fnmatch(fn, pattern):
+                    add=False
 
-              if add:
-                 list_of_results.append(p)
+                if add:
+                    list_of_results.append(p)
 
-              recursive=False
-              problem=False    # Need this complex structure to support UTF-8 file names in Python 2.7
-              try:
-                 if os.path.isdir(p): # and os.path.realpath(p)==p: # real path was useful
-                                                                    # to avoid cases when directory links to itself
-                                                                    # however, since we limit recursion, it doesn't matter ...
-                    recursive=True
-              except Exception as e: 
-                 problem=True
-                 pass
-
-              if problem:
-                 problem=False
-                 try:
-                    p=p.encode('utf-8')
-                    if os.path.isdir(p): 
-                       recursive=True
-                 except Exception as e: 
-                    problem=True
-                    pass
-
-
-                 if problem:
-                    try:
-                       p=p.encode(sys.stdin.encoding)
-                       if os.path.isdir(p):
-                          recursive=True
-                    except Exception as e: 
-                       pass
-
-              if recursive:
-                 r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
+                if _internal_check_encoded_path_is_dir(p):
+                    r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
                                    'pattern':pattern, 'file_name':fname, 
                                    'recursion_level':rl+1, 'recursion_level_max':rlm})
-                 if r['return']>0: return r
-                 list_of_results.extend( r.get('list',[]) )
+                    if r['return']>0: return r
+                    list_of_results.extend( r.get('list',[]) )
 
     return {'return':0, 'list':list_of_results}
 
