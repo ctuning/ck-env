@@ -1574,10 +1574,10 @@ def check(i):
                  'module_uoa':work['self_module_uid'],
                  'data_uoa':duoa})
     if r['return']>0: return r
-    d=r['dict']
-    p=r['path']
+    soft_entry_dict=r['dict']
+    soft_entry_path=r['path']
 
-    cus=d.get('customize',{})
+    cus=soft_entry_dict.get('customize',{})
 
     duoa=r['data_uoa']
     duid=r['data_uid']
@@ -1605,7 +1605,7 @@ def check(i):
     deps=i.get('deps',{})
     sbat=''
     if len(deps)==0:
-       deps=d.get('deps',{})
+       deps=soft_entry_dict.get('deps',{})
 
        if len(deps)>0:
           ii={'action':'resolve',
@@ -1632,7 +1632,7 @@ def check(i):
 
     # Check if customize script is redirected into another entry:
     #
-    another_entry_with_customize_script=d.get('use_customize_script_from_another_entry', None)
+    another_entry_with_customize_script=soft_entry_dict.get('use_customize_script_from_another_entry', None)
     if another_entry_with_customize_script:
        r=ck.access({'action':'find',
                     'module_uoa':   another_entry_with_customize_script.get('module_uoa', work['self_module_uid']),
@@ -1641,7 +1641,7 @@ def check(i):
        if r['return']>0: return r
        customization_script_path = r['path']
     else:
-       customization_script_path = p
+       customization_script_path = soft_entry_path
 
 
     cs=None
@@ -1720,7 +1720,8 @@ def check(i):
            "target_os_uid":tos,
            "target_os_dict":tosd,
            "target_device_id":tdid,
-           "cfg":d,
+           "soft_entry_path":soft_entry_path,   # This is also a valid path suitable for soft detection (but not by default)
+           "cfg":soft_entry_dict,
            "self_cfg":cfg,
            "ck_kernel":ck,
            "dirs":dirs,
@@ -1728,7 +1729,8 @@ def check(i):
           }
        rx=cs.dirs(ii)
        if rx['return']>0: return rx
-       if len(rx.get('dirs',[]))>0: dirs=rx['dirs']
+       if rx.get('dirs'): dirs=rx['dirs']   # If anything was returned at all, trust that value, even if it is empty.
+                                            # NB: Otherwise it may be the case that the original list was modified as a side effect.
 
     # Check which file to search for
     sname=i.get('soft_name','')
@@ -1752,7 +1754,7 @@ def check(i):
        sname+='*'
 
     # Search tools
-    suname=d.get('soft_name','')
+    suname=soft_entry_dict.get('soft_name','')
     x=sname
     if suname!='': x=suname+' ('+sname+')'
 
@@ -1950,7 +1952,7 @@ def check(i):
        if dx.get('env_data_uoa','')!='' and env_data_uoa=='':
           env_data_uoa=dx['env_data_uoa']
 
-       dname=d.get('soft_name','')
+       dname=soft_entry_dict.get('soft_name','')
        if cus.get('package_extra_name','')!='':
           dname+=cus['package_extra_name']
 
