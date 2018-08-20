@@ -1697,6 +1697,11 @@ def check(i):
         expanduser("~")                                         # from user space
     )
 
+    if cus.get('detect_in_soft_dir', '')=='yes':
+        dir_candidates.append(
+            soft_entry_path
+        )
+
     #
     # 2) filter through the candidates to find suitable and unique ones:
     #
