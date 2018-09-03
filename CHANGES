@@ -1,3 +1,5 @@
+* 2018.09.02 - [FGG] added missing customize.py for lapack
+
 * 2018.08.16 - [FGG] added Python deps to Scons
 
 * 2018.08.14 - [Leo] added first automated tests
