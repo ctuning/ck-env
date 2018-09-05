@@ -188,6 +188,26 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
       echo "Error: git checkout failed!"
       exit 1
     fi
+
+    cd ..
+  fi
+
+  if [ "${PACKAGE_GIT_SUBMODULES}" == "YES" ] ; then
+    cd ${PACKAGE_SUB_DIR}
+
+    echo ""
+    echo "Initialization git submodules ..."
+    echo ""
+
+    git submodule init
+    git submodule update
+
+    if [ "${?}" != "0" ] ; then
+      echo "Error: git submodule initialization failed!"
+      exit 1
+    fi
+
+    cd ..
   fi
 fi
 
