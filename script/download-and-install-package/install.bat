@@ -156,6 +156,27 @@ if "%PACKAGE_GIT%" == "YES" (
      echo Error: git checkout failed ...
      goto err
     )
+
+    cd ..
+  )
+
+  if "%PACKAGE_GIT_SUBMODULES%" == "YES" (
+    cd %PACKAGE_SUB_DIR%
+
+    echo.
+    echo Initialization git submodules ...
+    echo.
+
+    git submodule init
+    git submodule update
+
+    if %errorlevel% neq 0 (
+     echo.
+     echo Error: git submodule initialization failed!
+     goto err
+    )
+
+    cd ..
   )
 )
 
