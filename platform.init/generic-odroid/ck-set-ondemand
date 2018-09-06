@@ -9,5 +9,6 @@
 # Developer: Grigori Fursin
 #
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
 . ck-set-cpu-ondemand
 . ck-set-gpu-ondemand
