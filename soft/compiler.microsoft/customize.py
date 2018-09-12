@@ -225,6 +225,12 @@ def setup(i):
     s+='set CUR_DIR=%CD%\n'
 
     s+='\n'
+    s+='rem Cleaning previous environment (to avoid conflicts if calling it several times during compilation)\n'
+    s+='\n'
+    s+='set "VCINSTALLDIR="\n'
+    s+='set "VSINSTALLDIR="\n'
+
+    s+='\n'
     s+='rem Setting environment\n'
 
     s+='call "'+fp+'" '+ext+'\n\n'
