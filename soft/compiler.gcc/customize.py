@@ -142,6 +142,7 @@ def setup(i):
     target_d=i.get('target_os_dict',{})
     winh=hosd.get('windows_base','')
     win=target_d.get('windows_base','')
+    mac=target_d.get('macos','')
     remote=target_d.get('remote','')
     mingw=target_d.get('mingw','')
     tbits=target_d.get('bits','')
@@ -257,7 +258,7 @@ def setup(i):
       "CK_FLAG_PREFIX_VAR": "-D", 
       "CK_GPROF_OUT_FILE": "gmon.out", 
       "CK_LB": "$#tool_prefix#$ar rcs", 
-      "CK_LB_OUTPUT": "-o ", 
+      "CK_LB_OUTPUT": '' if mac=='yes' else '-o ',
       "CK_LD": "$#tool_prefix#$ld", 
       "CK_LD_FLAGS_EXTRA": "", 
       "CK_LIB_EXT": file_extensions.get('lib',''),

@@ -34,7 +34,7 @@ def init(i):
 # set environment for tools and libraries 
 # (multiple versions of the same tools/libraries can co-exist)
 
-def set(i):
+def env_set(i):
     """
     Input:  {
               (host_os)              - host OS (detect, if ommitted)
@@ -118,8 +118,7 @@ def set(i):
     import json
 
     o=i.get('out','')
-    oo=''
-    if o=='con': oo='con'
+    ooo = o if o=='con' else ''     # shouldn't we consider other options?
 
     ran=i.get('random','')
     quiet=i.get('quiet','')
@@ -218,14 +217,6 @@ def set(i):
     dd={}
     setup={}
 
-    # Search
-    ii={'action':'search',
-        'module_uoa':work['self_module_uid'],
-        'tags':tags,
-        'repo_uoa':enruoa,
-        'add_info':'yes',
-        'add_meta':'yes'} # Need to sort by version, if ambiguity
-
     if user_env or i.get('local','')=='yes':
        setup={'host_os_uoa':hos,
               'target_os_uoa':tos,
@@ -233,37 +224,43 @@ def set(i):
 
     if reuse_deps=='yes' and skip_cache!='yes':
        # Check in cache!
-       dmatch={'setup':setup, 'tags':tags.split(',')}
-       for q in deps_cache:
-           d1=q.get('meta',{})
-           r=ck.compare_dicts({'dict1':d1, 'dict2':dmatch})
+       dep_query = {'setup':setup, 'tags':tags.split(',')}
+       for dc_q in deps_cache:
+           dep_meta = dc_q.get('meta',{})
+           r=ck.compare_dicts({'dict1':dep_meta, 'dict2':dep_query})     # if dep_meta contains dep_query...
            if r['return']>0: return r
            if r['equal']=='yes':
-              duoa=q.get('uoa','')
+              duoa = dc_q.get('uoa','')
               reuse_deps='no' # to avoid updating cache
               break
 
-    ii['data_uoa']=duoa
+    # Search
+    ii={'action':'search',
+        'module_uoa':work['self_module_uid'],
+        'tags':tags,
+        'repo_uoa':enruoa,
+        'data_uoa':duoa,
+        'add_info':'yes',
+        'add_meta':'yes'} # Need to sort by version, if ambiguity
 
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
     # Prepare possible warning
-    x='required software '
-    if name!='': x='"'+name+'"'
-    war='no registered CK environment was found for '+x+' dependency with tags="'+tags+'"'
+    x = '"{}"'.format(name) if name else 'required software '
+    msg_env_not_found = 'no registered CK environment was found for {} dependency with tags="{}"'.format(x, tags)
 
     if no_tags!='':
-       war+=', no_tags="'+no_tags+'"'
+       msg_env_not_found+=', no_tags="'+no_tags+'"'
 
     if len(setup)>0:
        ro=readable_os({'setup':setup})
        if ro['return']>0: return ro
        setup1=ro['setup1']
 
-       war+=' and setup='+json.dumps(setup1)
+       msg_env_not_found+=' and setup='+json.dumps(setup1)
 
     if len(vfrom)>0 or len(vto)>0:
-       war+=' and version constraints ('+json.dumps(vfrom)+' <= v <= '+json.dumps(vto)+')'
+       msg_env_not_found+=' and version constraints ('+json.dumps(vfrom)+' <= v <= '+json.dumps(vto)+')'
 
     # Search for environment entries
     r=ck.access(ii)
@@ -385,7 +382,7 @@ def set(i):
 
     if lx==0 and duoa=='' and tags!='' and (safe=='yes' or package_uoa!=''):
        ck.out('==========================================================================================')
-       ck.out('WARNING: '+war)
+       ck.out('WARNING: '+msg_env_not_found)
        showed_warning=True
 
        if len(install_env)>0:
@@ -399,7 +396,7 @@ def set(i):
               if k in ['LFLAGS', 'CXXFLAGS', 'CK_HOST_CPU_NUMBER_OF_PROCESSORS', 'LCORE_FLAGS']:
                  del(install_env[k])
 
-       iii1={'out':oo,
+       rx=internal_install_package({'out':ooo,
              'package_uoa':package_uoa,
              'tags':tags,
              'or_tags':or_tags, 
@@ -416,12 +413,9 @@ def set(i):
              'deps_cache':deps_cache,
              'version_from':vfrom,
              'version_to':vto,
-             'deps':cdeps}
-
-       if try_to_reinstall:
-          iii1['sub_deps']=i.get('current_deps',{})
-
-       rx=internal_install_package(iii1)
+             'deps':cdeps,
+             'sub_deps': i.get('current_deps',{}) if try_to_reinstall else {},
+       })
        if rx['return']>0 and rx['return']!=16: return rx
 
        if rx['return']==0:
@@ -435,7 +429,7 @@ def set(i):
        if o=='con' and tags!='' and not showed_warning:
           ck.out('')
           ck.out(' ********')
-          ck.out(' WARNING: '+war)
+          ck.out(' WARNING: '+msg_env_not_found)
           ck.out('')
 
           showed_warning=True
@@ -510,7 +504,7 @@ def set(i):
                         'version_from':vfrom, 
                         'version_to':vto,
 #                        'deps':cdeps,
-                        'out':oo}
+                        'out':ooo}
                     if len(setup)>0:
                        ii.update(setup)
                     ry=ck.access(ii)
@@ -626,57 +620,47 @@ def set(i):
 
                 ck.out('')
                 ck.out('More than one environment found for '+xq+':')
-                zz={}
-                for z in range(0, lx):
-                    j=l[z]
+                ck.out('')
 
-                    zi=j.get('info',{})
-                    zm=j.get('meta',{})
-                    zu=j.get('data_uid','')
+                dep_options = []
+
+                for opt_dict in l:  # looping through all options for this environment
+                    zi=opt_dict.get('info',{})
+                    zm=opt_dict.get('meta',{})
+                    zu=opt_dict.get('data_uid','')
+
                     zdn=zi.get('data_name','')
-                    cus=zm.get('customize',{})
                     zdeps=zm.get('deps',{})
-                    xsetup=zm.get('setup',{})
                     xtags=zm.get('tags','')
+                    cus=zm.get('customize',{})
                     ver=cus.get('version','')
 
-                    xtarget_os_uoa=xsetup.get('target_os_uoa','')
+                    tags_csv = ','.join( [t for t in xtags if t] )
 
-                    xstags=''
-                    for t in xtags:
-                        if t!='':
-                           if xstags!='': xstags+=','
-                           xstags+=t
-
-                    zs=str(z)
-                    zz[zs]=zu
-
-                    ck.out('')
-                    ck.out(zs+') '+zdn+' - v'+ver+' ('+xstags+' ('+zu+'))')
+                    this_option = [ '{} - v{} ({} ({}))'.format(zdn, ver, tags_csv, zu) ]
 
                     if len(zdeps)>0:
-                       for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
-                           jj=zdeps[j]
-                           juoa=jj.get('uoa','')
-                           if juoa!='': # if empty, it most likely means that this unresolved dependency
+                        for j in sorted(zdeps, key=lambda v: zdeps[v].get('sort',0)):
+                            jj=zdeps[j]
+                            juoa=jj.get('uoa','')
+                            if juoa!='': # if empty, it most likely means that this unresolved dependency
                                         # is for a different target
-                              jtags=jj.get('tags','')
-                              jver=jj.get('ver','')
+                                jtags=jj.get('tags','')
+                                jver=jj.get('ver','')
 
-                              js='                                  '
-                              js+='- Depends on "'+j+'" (env UOA='+juoa+', tags="'+jtags+'", version='+jver+')'
-                              ck.out(js)
+                                this_option.append( '{}- Depends on "{}" (env UOA={}, tags="{}", version={})'.format(' '*35, j, juoa, jtags, jver))
 
-                ck.out('')
-                rx=ck.inp({'text':'Select one of the options for '+xq+' or press Enter for 0: '})
-                x=rx['string'].strip()
+                    dep_options.append(this_option)
 
-                if x=='': x='0'
+                select_adict = ck.access({'action': 'select_string',
+                                            'module_uoa': 'misc',
+                                            'options': dep_options,
+                                            'default': '0',
+                                            'question': 'Select one of the options for '+xq,
+                })
+                if select_adict['return']>0: return select_adict
 
-                if x not in zz:
-                   return {'return':1, 'error':'option is not recognized'}
-
-                ilx=int(x)
+                ilx = select_adict['selected_index']
 
        if ilx<len(l):
           duid=l[ilx]['data_uid']
@@ -696,9 +680,9 @@ def set(i):
        if tags!='':
           if not showed_warning:
              ck.out('==========================================================================================')
-             ck.out('WARNING: '+war)
+             ck.out('WARNING: '+msg_env_not_found)
 
-          rx=internal_install_package({'out':oo,
+          rx=internal_install_package({'out':ooo,
                                        'tags':tags,
                                        'or_tags':or_tags, 
                                        'no_tags':no_tags,
@@ -757,7 +741,7 @@ def set(i):
                       ck.out('')
 
              ck.out('')
-          return {'return':1, 'error':war}
+          return {'return':1, 'error':msg_env_not_found}
 
     # Load selected environment entry
     r=ck.access({'action':'load',
@@ -796,44 +780,44 @@ def set(i):
     to_delete=False
     err=''
 
-    edeps=d.get('deps',{}) # sub-dependencies of the selected environment 
-                           # (normally already resolved, but check if software changed in the mean time)
-    for q in edeps:
-        qq=edeps[q]
-        cqq=qq.get('dict',{}).get('customize',{})
-        sfc=cqq.get('skip_file_check','')
-        fp=cqq.get('full_path','')
+    subdeps=d.get('deps',{})    # sub-dependencies of the selected environment
+                                # (normally already resolved, but check if software has changed in the meantime)
+    for subdep_name in subdeps:
+        subdep=subdeps[subdep_name]
+        subdep_cus=subdep.get('dict',{}).get('customize',{})
+        sfc=subdep_cus.get('skip_file_check','')
+        full_path=subdep_cus.get('full_path','')
 
-        if sfc!='yes' and fp!='' and not os.path.isfile(fp):
+        if sfc!='yes' and full_path!='' and not os.path.isfile(full_path):
            outdated=True
-           err='one of sub-dependencies ('+q+') have changed (file '+fp+' not found)'
+           err='one of sub-dependencies ('+subdep_name+') have changed (file '+full_path+' not found)'
            break
 
-        deuoa=qq.get('uoa','')
-        if deuoa!='':
+        subdep_uoa=subdep.get('uoa','')
+        if subdep_uoa!='':
            rx=ck.access({'action':'find',
                          'module_uoa':work['self_module_uid'],
-                         'data_uoa':deuoa})
+                         'data_uoa':subdep_uoa})
            if rx['return']>0:
               if rx['return']!=16: return rx
               outdated=True
-              err='one of sub-dependencies ('+q+') have changed (CK environment '+deuoa+' not found)'
+              err='one of sub-dependencies ('+subdep_name+') have changed (CK environment '+subdep_uoa+' not found)'
               break
 
         if reuse_deps=='yes' and skip_cache!='yes':
            # Check in cache!
-           dmatch2={'setup':setup, 'tags':qq.get('tags','').split(',')}
-           dc_found=False
+           subdep_query = {'setup':setup, 'tags':subdep.get('tags','').split(',')}
+           dc_found = False
            for dc_q in deps_cache:
-               d1=dc_q.get('meta',{})
-               r=ck.compare_dicts({'dict1':d1, 'dict2':dmatch2})
+               dep_meta = dc_q.get('meta',{})
+               r=ck.compare_dicts({'dict1':dep_meta, 'dict2':subdep_query})      # if dep_meta contains subdep_query...
                if r['return']>0: return r
                if r['equal']=='yes':
-                  dc_found=True
+                  dc_found = True
                   break
 
            if not dc_found:
-              deps_cache.append({'meta':dmatch2, 'uoa':deuoa})
+              deps_cache.append({'meta':subdep_query, 'uoa':subdep_uoa})
 
     # Check if has changed but try to continue
     if outdated and ' have changed ' in err and o=='con' and quiet!='yes':
@@ -850,11 +834,11 @@ def set(i):
     # Check if file exists for current dependency
     verx=''
     cus=d.get('customize',{})
-    fp=cus.get('full_path','')
+    full_path=cus.get('full_path','')
 
     tc='it appears that your environment has changed - '
-    if not outdated and fp!='' and cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
-       err=tc+'software file not found in a specified path ('+fp+')'
+    if not outdated and full_path!='' and cus.get('skip_file_check','')!='yes' and not os.path.isfile(full_path):
+       err=tc+'software file not found in a specified path ('+full_path+')'
        outdated=True
 
     ver_in_env=cus.get('version','') # detected version during installation
@@ -864,7 +848,7 @@ def set(i):
           # Check version (via customized script) ...
           ii={'action':'get_version',
               'module_uoa':cfg['module_deps']['soft'],
-              'full_path':fp,
+              'full_path':full_path,
               'bat':'',
               'host_os_dict':hosd,
               'target_os_dict':tosd,
@@ -906,7 +890,7 @@ def set(i):
 
     # Update cache
     if reuse_deps=='yes' and skip_cache!='yes':
-       deps_cache.append({'meta':dmatch, 'uoa':duoa})
+       deps_cache.append({'meta':dep_query, 'uoa':duoa})
 
     # Prepare environment and bat
     env=i.get('env',{})
@@ -980,37 +964,34 @@ def show(i):
 
     tags=i.get('tags','')
 
+    extended_tags = [ tags ] if tags else []
+
     tos_uoa=i.get('target_os','')
     if tos_uoa!='':
-       # Load OS
-       ry=ck.access({'action':'load',
+        # Load OS
+        ry=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['os'],
                      'data_uoa':tos_uoa})
-       if ry['return']>0: return ry
+        if ry['return']>0: return ry
 
-       tos_uoa=ry['data_uoa']
-       tosz=ry['dict'].get('base_uoa','')
-       if tosz!='': tos_uoa=tosz
+        tos_uoa = ry['dict'].get('base_uoa','') or ry['data_uoa']
 
-       if tags!='': tags+=','
-       tags+='target-os-'+tos_uoa
+        extended_tags.append( 'target-os-'+tos_uoa )
 
-    tb=i.get('target_bits','')
-    if tb!='':
-       if tags!='': tags+=','
-       tags+=tb+'bits'
+    tb = i.get('target_bits','')
+    if tb!='': extended_tags.append( tb+'bits' )
 
-    ver=i.get('version','')
-    if ver!='':
-       if tags!='': tags+=','
-       tags+='v'+ver
+    ver = i.get('version','')
+    if ver!='': extended_tags.append( 'v'+ver )
+
+    tags = ','.join(extended_tags)
 
     name=i.get('name','')
     wname=False
     if name.find('*')>=0 or name.find('?')>=0:
-       import fnmatch
-       wname=True 
-       name=name.lower()
+        import fnmatch
+        wname=True
+        name=name.lower()
 
     # creating a list of patterns from the "main xcid" and the list of auxiliary xcids:
     full_xcids_list = [{
@@ -1216,8 +1197,8 @@ def resolve(i):
        ck.out('  -----------------------------------')
        ck.out('  Resolving software dependencies ...')
 
-    sb=''
-    sb1=''
+    combined_env_script_body=''
+    alternative_combined_env_script_body=''
 
     install_env=i.get('install_env',{})
 
@@ -1445,7 +1426,7 @@ def resolve(i):
 
         if o=='con': ii['out']='con'
 
-        rx=set(ii)
+        rx=env_set(ii)
         if rx['return']>0: return rx
 
         lst=rx['lst']
@@ -1460,13 +1441,8 @@ def resolve(i):
         dver=rx.get('detected_version','')
         if dver!='': q['detected_ver']=dver
 
-        # add choices
-        zchoices=[]
-        for zw in lst:
-            zchoices.append(zw['data_uid'])
-
         if 'choices' not in q or len('choices')==0: 
-           q['choices']=zchoices
+           q['choices'] = [zw['data_uid'] for zw in lst]
 
         cus=dd.get('customize',{})
 
@@ -1496,18 +1472,18 @@ def resolve(i):
 
         env=rx['env']
 
-        bt=rx['bat']
+        individual_env_script_body = rx['bat']
 
-        q['bat']=bt
-        sb+=bt
+        q['bat'] = individual_env_script_body
+        combined_env_script_body += individual_env_script_body
 
         if q.get('skip_from_bat','')!='yes':
-           sb1+=bt
+           alternative_combined_env_script_body += individual_env_script_body
 
     if o=='con':
        ck.out('  -----------------------------------')
 
-    return {'return':0, 'deps':deps, 'env': env, 'bat':sb, 'cut_bat':sb1, 'res_deps':res}
+    return {'return':0, 'deps':deps, 'env': env, 'bat':combined_env_script_body, 'cut_bat':alternative_combined_env_script_body, 'res_deps':res}
 
 ##############################################################################
 # refresh environment (re-setup soft)
@@ -1541,39 +1517,41 @@ def refresh(i):
 
     o=i.get('out','')
 
-    ruoa=i.get('repo_uoa','')
-    if ruoa=='': ruoa='local'
-
+    ruoa = i.get('repo_uoa','') or 'local'
     muoa=i.get('module_uoa','')
     duoa=i.get('data_uoa','')
 
     tags=i.get('tags','')
 
+    extended_tags = [ tags ] if tags else []
+
     tos_uoa=i.get('target_os','')
     if tos_uoa!='':
-       # Load OS
-       ry=ck.access({'action':'load',
+        # Load OS
+        ry=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['os'],
                      'data_uoa':tos_uoa})
-       if ry['return']>0: return ry
-       tos_uoa=ry['data_uoa']
-       tosz=ry['dict'].get('base_uoa','')
-       if tosz!='': tos_uoa=tosz
-       tags+='target-os-'+tos_uoa
+        if ry['return']>0: return ry
 
-    tb=i.get('target_bits','')
-    if tb!='':
-       tags+=tb+'bits'
+        tos_uoa = ry['dict'].get('base_uoa','') or ry['data_uoa']
 
-    ver=i.get('version','')
-    if ver!='':
-       tags+='v'+ver
+        extended_tags.append( 'target-os-'+tos_uoa )
 
+    tb = i.get('target_bits','')
+    if tb!='': extended_tags.append( tb+'bits' )
+
+    ver = i.get('version','')
+    if ver!='': extended_tags.append( 'v'+ver )
+
+    tags = ','.join(extended_tags)
+
+
+    # FIXME: seems like the following bit was copied from show(), but the actual pattern matching bit was not, so there is no pattern matching actually.
     name=i.get('name','')
     wname=False
     if name.find('*')>=0 or name.find('?')>=0:
        import fnmatch
-       wname=True 
+       wname=True
        name=name.lower()
 
     ii={'action':'search',
@@ -1594,8 +1572,6 @@ def refresh(i):
     target_os_name={} # Caching target OS names
 
     for q in lst:
-        vv={}
-
         duoa=q['data_uoa']
         duid=q['data_uid']
 
@@ -1613,11 +1589,7 @@ def refresh(i):
         if 'tmp' in tags:
            continue
 
-        sftags=''
-        for t in tags:
-            if t!='':
-               if sftags!='': sftags+=','
-               sftags+=t
+        tags_csv = ','.join( [t for t in tags if t] )
 
         host_os_uoa=setup.get('host_os_uoa','')
         target_os_uoa=setup.get('target_os_uoa','')
@@ -1630,26 +1602,26 @@ def refresh(i):
         ck.out(dname+' (Env: '+duid+')')
 
         ck.out('')
-        ck.out('  Tags="'+sftags+'"')
+        ck.out('  Tags="'+tags_csv+'"')
 
         soft_uoa=meta.get('soft_uoa','')
         if soft_uoa=='':
-           # Trying to detect by some tags
-           tagsx=[]
+           # Trying to detect the soft entry by "abstracting out" some of the tags:
+           subtags=[]
            for q in tags:
                if not q.startswith('host-os-') and not q.startswith('target-os-') and \
                   not q.endswith('bits') and not q.startswith('v') and \
                   q!='retargeted':
-                  tagsx.append(q)
+                  subtags.append(q)
 
-           tags_csv = ','.join( [t for t in tagsx if t] )
+           subtags_csv = ','.join( [t for t in subtags if t] )
 
-           ck.out('  All tags="'+sftags+'"')
-           ck.out('  Searching soft UOA by tags="'+tags_csv+'" ...')
+           ck.out('  All tags="'+tags_csv+'"')
+           ck.out('  Searching soft UOA by tags="'+subtags_csv+'" ...')
 
            rx=ck.access({'action':'search',
                          'module_uoa':cfg['module_deps']['soft'],
-                         'tags':tags_csv})
+                         'tags':subtags_csv})
            if rx['return']>0: return rx
 
            lst=rx['lst']
@@ -1716,7 +1688,7 @@ def refresh(i):
             'data_uoa':soft_uoa,
             'customize':cus,
             'deps':deps,
-            'tags':sftags,
+            'tags':tags_csv,
             'package_uoa':package_uoa,
             'skip_device_info_collection':'yes',
             'soft_name':dname,
@@ -1769,28 +1741,21 @@ def readable_os(i):
             }
     """
 
-    setup=i.get('setup',{})
+    original_setup = i.get('setup',{})
 
     import copy
-    setup1=copy.deepcopy(setup)
+    enriched_setup = copy.deepcopy( original_setup )
 
-    x=setup.get('host_os_uoa','')
-    if x!='':
-       r=ck.access({'action':'load',
-                    'module_uoa':cfg['module_deps']['os'],
-                    'data_uoa':x})
-       if r['return']>0: return r
-       setup1['host_os_uoa']=r['data_uoa']
+    for setup_key in ('host_os_uoa', 'target_os_uoa'):
+        setup_value = original_setup.get(setup_key)
+        if setup_value:
+            r=ck.access({'action':'load',
+                        'module_uoa':cfg['module_deps']['os'],
+                        'data_uoa':setup_value})
+            if r['return']>0: return r
+            enriched_setup[setup_key]=r['data_uoa']
 
-    x=setup.get('target_os_uoa','')
-    if x!='':
-       r=ck.access({'action':'load',
-                    'module_uoa':cfg['module_deps']['os'],
-                    'data_uoa':x})
-       if r['return']>0: return r
-       setup1['target_os_uoa']=r['data_uoa']
-
-    return {'return':0, 'setup1':setup1}
+    return {'return':0, 'setup1':enriched_setup}
 
 ##############################################################################
 # internal function: get value from list without error if out of bounds
@@ -1800,6 +1765,24 @@ def internal_get_val(lst, index, default_value):
     if index<len(lst):
        v=lst[index]
     return v
+
+
+##############################################################################
+# parse 'A;B,C;D,~E,F' into [ [(True, A)], [(True, B), (True, C)], [(True, D), (False, E), (True, F)] ]
+
+def parse_disjunction(disjunction):
+    def parse_conjunction(conjunction):
+        def parse_literal(literal):
+
+            return (False, literal[1:]) if literal.startswith('~') else (True, literal)
+
+        literals = [parse_literal(literal) for literal in conjunction.split(',')]
+
+        return literals
+
+    conjunctions = [parse_conjunction(conj) for conj in disjunction.split(';')] if len(disjunction) else []
+
+    return conjunctions
 
 ##############################################################################
 # Prune search list by no_tags
@@ -1829,120 +1812,106 @@ def prune_search_list(i):
 
     lst=i.get('lst',[])
 
-    package_uoa=i.get('package_uoa','')
+    no_tags_csv = i.get('no_tags','')
 
-    no_tags=i.get('no_tags','')
-    ntags=[]
-    if no_tags!='': ntags=no_tags.split(',')
+    no_tags_set = set( no_tags_csv.split(',') if no_tags_csv!='' else [] )
 
-    or_tags=i.get('or_tags','')
-    otags=[]
-    if or_tags!='': 
-       xotags=or_tags.split(';')
-       for q in xotags:
-           otags.append(q.split(','))
+    otags = parse_disjunction( i.get('or_tags','') )
 
     vfrom=i.get('version_from',[])
     vto=i.get('version_to',[])
 
-    search_setup_dict=i.get('setup', {})
+    query_setup_dict=i.get('setup', {})
 
-    nlst=[]
+    pruned_lst=[]
 
     skipped_because_of_version=''
 
-    for q in lst:
-        meta=q.get('meta','')
-        tags=meta.get('tags',[])
+    query_package_uoa=i.get('package_uoa','')
 
-        skip=False
+    for entry in lst:
+        meta=entry.get('meta','')
 
-        # Check package UOA
-        if package_uoa!='':
-           xpackage_uoa=meta.get('package_uoa','')
-           if xpackage_uoa=='':
-              xpackage_uoa=meta.get('customize',{}).get('used_package_uid','')
-           if xpackage_uoa!='' and xpackage_uoa!=package_uoa:
-              skip=True
+        # Filter by package UOA
+        if query_package_uoa:
+            entry_package_uoa = meta.get('package_uoa','') or meta.get('customize',{}).get('used_package_uid','')
+            if entry_package_uoa and entry_package_uoa!=query_package_uoa:
+                continue
 
-        # Check that not temporal entry (unfinished installation)
-        if not skip and 'tmp' in tags:
-           skip=True
+        entry_tags_set = set( meta.get('tags',[]) )
 
-        # Check or tags
-        if not skip and len(otags)>0:
-           found=False
-           for t in otags:
-               found=True
-               for t1 in t:
-                   if t1 not in tags:
-                      found=False
-                      break
-               if found:
-                  break
-           if not found:
-              skip=True
+        # Filter out temporary entries (unfinished installation)
+        if 'tmp' in entry_tags_set:
+            continue
 
-        # Check no tags
-        if not skip:
-           for t in ntags:
-               if t in tags:
-                   skip=True
-                   break
+        # Filter out matches agains 'no_tags'
+        if no_tags_set & entry_tags_set:
+            continue
+
+        # Filter by matching against 'or_tags' (full DNF support)
+        if len(otags)>0:
+            otags_ok = False
+            for conjunction in otags:
+                otags_ok = True
+                for (bsign, t) in conjunction:
+                    if (t in entry_tags_set) != bsign:    # Pythonic XOR
+                        otags_ok = False        # if at least one member of conjunction is False, the whole conjunction is False
+                        break
+                if otags_ok:                    # if the current conjunction is True, the whole disjunction is True
+                    break
+            if not otags_ok:
+                continue
 
         # Check version
-        if not skip and (len(vfrom)>0 or len(vto)>0):
-           v=meta.get('setup',{}).get('version_split',[])
+        if len(vfrom)>0 or len(vto)>0:
+            v=meta.get('setup',{}).get('version_split',[])
 
-           # first check from env, but if not set, check from package
-           if len(v)==0:
-              v=meta.get('customize',{}).get('version_split',[])
-              if len(v)==0:
-                 ver=meta.get('customize',{}).get('version','')
+            # first check from env, but if not set, check from package
+            if len(v)==0:
+                v=meta.get('customize',{}).get('version_split',[])
+                if len(v)==0:
+                    ver=meta.get('customize',{}).get('version','')
  
-                 if ver!='':
-                    rx=ck.access({'action':'split_version',
-                                  'module_uoa':cfg['module_deps']['soft'],
-                                  'version':ver})
-                    if rx['return']>0: return rx
-                    v=rx['version_split']
+                    if ver!='':
+                        rx=ck.access({'action':'split_version',
+                                    'module_uoa':cfg['module_deps']['soft'],
+                                    'version':ver})
+                        if rx['return']>0: return rx
+                        v=rx['version_split']
 
-           if len(vfrom)>0:
-              r=ck.access({'action':'compare_versions',
-                           'module_uoa':cfg['module_deps']['soft'],
-                           'version1':vfrom,
-                           'version2':v})
-              if r['return']>0: return r
-              result=r['result']
+            if len(vfrom)>0:
+                r=ck.access({'action':'compare_versions',
+                            'module_uoa':cfg['module_deps']['soft'],
+                            'version1':vfrom,
+                            'version2':v})
+                if r['return']>0: return r
 
-              if result=='>':
-                 skip=True
-                 skipped_because_of_version='yes'
+                if r['result']=='>':
+                    skipped_because_of_version='yes'
+                    continue
 
-           if not skip and len(vto)>0:
-              r=ck.access({'action':'compare_versions',
-                           'module_uoa':cfg['module_deps']['soft'],
-                           'version1':v,
-                           'version2':vto})
-              if r['return']>0: return r
-              result=r['result']
+            if len(vto)>0:
+                r=ck.access({'action':'compare_versions',
+                            'module_uoa':cfg['module_deps']['soft'],
+                            'version1':v,
+                            'version2':vto})
+                if r['return']>0: return r
 
-              if result=='>':
-                 skip=True
-                 skipped_because_of_version='yes'
+                if r['result']=='>':
+                    skipped_because_of_version='yes'
+                    continue
 
-        if not skip:
-            entry_setup_dict = meta.get('setup')    # if entry_setup_dict is empty it matches anything
-            if entry_setup_dict and len(search_setup_dict)>0:
-                rx=ck.compare_dicts({'dict1':entry_setup_dict, 'dict2':search_setup_dict})
-                if rx['return']>0: return rx
-                if rx['equal']!='yes':
-                    skip=True
+        entry_setup_dict = meta.get('setup')    # if entry_setup_dict is empty it matches anything
+        if entry_setup_dict and len(query_setup_dict)>0:
+            rx=ck.compare_dicts({'dict1':entry_setup_dict, 'dict2':query_setup_dict})       # check whether entry_setup_dict contains query_setup_dict
+            if rx['return']>0: return rx
+            if rx['equal']!='yes':
+                continue
 
-        if not skip:
-            nlst.append(q)
+        # If we haven't hit "continue" anywhere above, the list element is ok to be included:
+        pruned_lst.append(entry)
 
-    return {'return':0, 'lst':nlst, 'skipped_because_of_version':skipped_because_of_version}
+    return {'return':0, 'lst':pruned_lst, 'skipped_because_of_version':skipped_because_of_version}
 
 ##############################################################################
 # remote env entry and installed package
@@ -1969,9 +1938,8 @@ def clean(i):
     import os
     import shutil
 
-    oo=''
     o=i.get('out','')
-    if o=='con': oo=o
+    ooo = o if o=='con' else ''     # shouldn't we consider other options?
 
     force=i.get('force','')
     if force=='': force=i.get('f','')
@@ -1995,7 +1963,7 @@ def clean(i):
                  'module_uoa':cfg['module_deps']['package']})
     if r['return']>0: return r
 
-    path=r['path']
+    install_path=r['path']
 
     for q in lst:
         ruid=q['repo_uid']
@@ -2007,49 +1975,49 @@ def clean(i):
         tags_csv        = ','.join(d.get('tags',[]))
 
         cus=d.get('customize',{})
-        fp=cus.get('full_path','')
-        fp4=''
+        full_path=cus.get('full_path','')
+        absolute_package_install_path=''
 
-        if fp.startswith(path):
-           j=1
-           if path.endswith(os.path.sep) or path.endswith('/'):
-              j=0
-           fp1=fp[len(path)+j:]
+        if full_path.startswith(install_path):
+            if install_path.endswith(os.path.sep) or install_path.endswith('/'):    # is the first not enough?
+                j=0
+            else:
+                j=1
+            relative_path=full_path[len(install_path)+j:]
 
-           fp2=fp1.split(os.path.sep)
+            package_install_dir_name=relative_path.split(os.path.sep)[0]
 
-           if len(fp2)>0:
-              fp3=fp2[0]
+            if package_install_dir_name!='':
+                absolute_package_install_path = os.path.join(install_path, package_install_dir_name)
 
-              if fp3!='':
-                 fp4=os.path.join(path,fp3)
 
-        x=''
-        if fp4!='' and os.path.isdir(fp4):
-           x=' package in dir "'+fp4+'" and'
+        if absolute_package_install_path and os.path.isdir(absolute_package_install_path):
+            display_location = ' package in dir "'+absolute_package_install_path+'" and'
+        else:
+            display_location = ''
 
-        s=''
         if force=='yes':
-           s='yes'
+            delete_bool = True
         elif o=='con':
-           r=ck.inp({'text':'Are you sure to delete'+x+' CK entry env:"'+duoa+'" - a '+info_data_name+' with tags: '+tags_csv+' (y/N): '})
-           if r['return']>0: return r
-           s=r['string'].strip().lower()
-           if s=='y': s='yes'
+            r=ck.inp({'text':'Are you sure to delete'+display_location+' CK entry env:"'+duoa+'" - a '+info_data_name+' with tags: '+tags_csv+' (y/N): '})
+            if r['return']>0: return r
+            delete_bool = r['string'].strip().lower() == 'y'
+        else:
+            delete_bool = False
 
-        if s=='yes':
-           # Delete entry
-           r=ck.access({'action':'rm',
+        if delete_bool:
+            # Delete entry
+            r=ck.access({'action':'rm',
                         'module_uoa':work['self_module_uid'],
                         'data_uoa':duid,
                         'repo_uoa':ruid,
-                        'force':s,
-                        'out':oo})
-           if r['return']>0: return r
+                        'force': 'yes' if delete_bool else '',  # convert it to 'yes' string (whether originally 'yes' or 'y')
+                        'out':ooo})
+            if r['return']>0: return r
 
-           # Delete package
-           if fp4!='' and os.path.isdir(fp4):
-              shutil.rmtree(fp4)
+            # Delete package
+            if absolute_package_install_path and os.path.isdir(absolute_package_install_path):
+                shutil.rmtree(absolute_package_install_path)
 
     return {'return':0}
 
@@ -2105,8 +2073,7 @@ def internal_install_package(i):
     import os
 
     o=i.get('out','')
-    oo=''
-    if o=='con': oo=o
+    ooo = o if o=='con' else ''     # shouldn't we consider other options?
 
     hos=i.get('host_os','')
     tos=i.get('target_os','')
@@ -2163,10 +2130,10 @@ def internal_install_package(i):
         os.chdir('..')
         save_cur_dir=os.getcwd()
 
-    vv={'action':'install',
+    install_adict={'action':'install',
         'module_uoa':cfg['module_deps']['package'],
         'data_uoa':package_uoa,
-        'out':oo,
+        'out':ooo,
         'tags':tags,
         'or_tags':or_tags,
         'no_tags':no_tags,
@@ -2183,26 +2150,27 @@ def internal_install_package(i):
         'add_hint':ah}
 
     # Check if there is a compiler in resolved deps to reuse it
-    xdeps=i.get('sub_deps',{})
-    if cdeps.get('compiler',{}).get('uoa','')!='': xdeps['compiler']=cdeps['compiler']
-    if cdeps.get('compiler-mcl',{}).get('uoa','')!='': xdeps['compiler-mcl']=cdeps['compiler-mcl']
-    if len(xdeps)>0: vv['deps']=xdeps
+    sub_deps=i.get('sub_deps',{})
+    if cdeps.get('compiler',{}).get('uoa','')!='': sub_deps['compiler']=cdeps['compiler']
+    if cdeps.get('compiler-mcl',{}).get('uoa','')!='': sub_deps['compiler-mcl']=cdeps['compiler-mcl']
+    if len(sub_deps)>0: install_adict['deps']=sub_deps
 
     duoa=''
     duid=''
 
-    rx=ck.access(vv)
+    rx=ck.access(install_adict)
     if rx['return']==0:
        duoa=rx['env_data_uoa']
        duid=rx['env_data_uid']
 
        os.chdir(save_cur_dir)
-    elif rx['return']!=16:
+    elif rx['return']!=16:  # 16 is a "magic number" meaning "user chose not to install" or "package not found"
        return rx
 
     return {'return':0, 'env_data_uoa':duoa, 'env_data_uid':duid}
 
 ##############################################################################
+# DEPRECATED - use "ck virtual env" instead!
 # set env for command line (pre-set various flags)
 
 def xset(i):
@@ -2224,7 +2192,7 @@ def xset(i):
     i['bat_new']='yes'
     i['print']='yes'
 
-    return set(i)
+    return env_set(i)
 
 ##############################################################################
 # pre-load environment for the shell
@@ -2267,7 +2235,7 @@ def virtual(i):
     for uoa in list_of_uoa:
         i['uoa']=uoa
 
-        r=set(i)
+        r=env_set(i)
         if r['return']>0: return r
 
         shell_script_contents_for_unix +='\n'+r['bat']+'\n'
@@ -2352,10 +2320,10 @@ def cat(i):
             return {'return':1, 'error':"all CID entries have to be of 'env' type"}
 
     # Get some info about OS
-    ii={'action':'detect',
+    r=ck.access({'action':'detect',
         'module_uoa':cfg['module_deps']['platform.os'],
-        'skip_info_collection':'yes'}
-    r=ck.access(ii)
+        'skip_info_collection':'yes',
+    })
     if r['return']>0: return r
     hosd=r['host_os_dict']
     rem_marker  = hosd['rem']

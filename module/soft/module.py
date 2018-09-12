@@ -648,7 +648,7 @@ def setup(i):
     ver=cus.get('version','')
     vercus=ver
     if fp!='':
-       if cus.get('skip_file_check','')!='yes' and not os.path.isfile(fp):
+       if cus.get('skip_file_check','')!='yes' and not os.path.exists(fp):
           return {'return':1, 'error':'software not found in a specified path ('+fp+')'}
 
        skip_existing='no'
@@ -1239,7 +1239,7 @@ def search_tool(i):
               path_list             - path list
               file_name             - name of file to find (can be with patterns)
               (recursion_level_max) - if >0, limit dir recursion
-              (can_be_dir)          - if 'yes', return directory as well
+              (can_be_dir)          - if 'yes', return matched directories as well
               (return_symlinks)     - if 'yes', symlinks are returned as-is. Otherwise, they're resolved
             }
 
@@ -1281,21 +1281,10 @@ def search_tool(i):
         r=list_all_files({'path':p, 
                           'file_name':fn, 
                           'pattern':pt,
+                          'can_be_dir':cbd,
                           'recursion_level_max':rlm})
         if r['return']>0: return r
-        for q in r['list']:
-            new=True
-            if cbd!='yes' and os.path.isdir(q):
-               new=False
-
-#            if new:
-#               for qq in lst:
-#                   if os.path.realpath(q)==os.path.realpath(qq):
-#                      new=False
-#                      break
-
-            if new:
-               lst.append(q)
+        lst.extend( r['list'] )
 
 #    if return_symlinks != 'yes':
 #      # resolving symlinks
@@ -1311,6 +1300,37 @@ def search_tool(i):
 
 
 ##############################################################################
+# A helper function for list_all_files()
+
+def _internal_check_encoded_path_is_dir( path ):
+    """
+        Need this complex structure to support UTF-8 file names in Python 2.7
+    """
+
+    import os
+    import sys
+
+    try:
+        if os.path.isdir( path ):
+            return path
+    except Exception as e:
+
+        try:
+            path = path.encode('utf-8')
+            if os.path.isdir( path ):
+                return path
+        except Exception as e:
+
+            try:
+                path = path.encode(sys.stdin.encoding)
+                if os.path.isdir(p):
+                    return path
+            except Exception as e:
+                pass
+
+    return None
+
+##############################################################################
 # List all files recursively in a given directory
 
 def list_all_files(i):
@@ -1320,6 +1340,7 @@ def list_all_files(i):
               (file_name)           - search for a specific file name
               (pattern)             - return only files with this pattern
               (path_ext)            - path extension (needed for recursion)
+              (can_be_dir)          - if 'yes', return matched directories as well
               (recursion_level_max) - if >0, limit dir recursion
             }
 
@@ -1335,102 +1356,66 @@ def list_all_files(i):
     import sys
     import os
 
-    a=[]
+    list_of_results=[]
 
-    fname=i.get('file_name','')
+    fname               = i.get('file_name', '')
+    fname_with_sep_bool = fname.find(os.sep)>=0
 
-    fname_with_sep=False
-    if fname.find(os.sep)>=0:
-        fname_with_sep=True
+    can_be_dir          = i.get('can_be_dir', '')
+    can_be_dir_bool     = can_be_dir == 'yes'
 
     pattern=i.get('pattern','')
     if pattern!='':
-       import fnmatch
+        import fnmatch
 
-    pe=''
-    if i.get('path_ext','')!='': 
-       pe=i['path_ext']
-
-    po=i.get('path','')
+    pe = i.get('path_ext', '')
+    po = i.get('path', '')
     if sys.version_info[0]<3: po=unicode(po)
 
     rl=i.get('recursion_level',0)
     rlm=i.get('recursion_level_max',0)
 
-    if rlm>0 and rl>rlm: 
-       return {'return':0, 'list':[]}
+    if rl>rlm:
+        return {'return':0, 'list':[]}
 
     try:
-       dirList=os.listdir(po)
+        dirList=os.listdir(po)
     except Exception as e:
-       None
+        pass
     else:
-       for fn in dirList:
-           p=''
-           try:
-              p=os.path.join(po, fn)
-           except Exception as e: 
-              pass
+        for fn in dirList:
+            p=''
+            try:
+                p=os.path.join(po, fn)
+            except Exception as e:
+                pass
 
-           if p!='':
-              add=True
+            if p!='':
+                candidate = None
+                if fname!='':
+                    if fname_with_sep_bool and os.path.isdir(p):
+                        deep_candidate = os.path.join(po, fname)
+                        if os.path.exists( deep_candidate ):
+                            candidate = deep_candidate
 
-              if fname!='':
-                  if fname_with_sep and os.path.isdir(p):
-                      px=os.path.join(po,fname)
-                      add=False
-                      if os.path.isfile(px):
-                          if px not in a:
-                              a.append(px)
+                    elif fname==fn:
+                        candidate = p
 
-                  elif fname!=fn:
-                      add=False
+                elif pattern!='' and fnmatch.fnmatch(fn, pattern):
+                    candidate = p
 
-              if pattern!='' and not fnmatch.fnmatch(fn, pattern):
-                 add=False
+                if candidate and (candidate not in list_of_results):
+                    if os.path.isfile( candidate ) or (can_be_dir_bool and os.path.isdir( candidate )):
+                        list_of_results.append( candidate )
 
-              if add:
-                 a.append(p)
-
-              recursive=False
-              problem=False    # Need this complex structure to support UTF-8 file names in Python 2.7
-              try:
-                 if os.path.isdir(p): # and os.path.realpath(p)==p: # real path was useful
-                                                                    # to avoid cases when directory links to itself
-                                                                    # however, since we limit recursion, it doesn't matter ...
-                    recursive=True
-              except Exception as e: 
-                 problem=True
-                 pass
-
-              if problem:
-                 problem=False
-                 try:
-                    p=p.encode('utf-8')
-                    if os.path.isdir(p): 
-                       recursive=True
-                 except Exception as e: 
-                    problem=True
-                    pass
-
-
-                 if problem:
-                    try:
-                       p=p.encode(sys.stdin.encoding)
-                       if os.path.isdir(p):
-                          recursive=True
-                    except Exception as e: 
-                       pass
-
-              if recursive:
-                 r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
-                                   'pattern':pattern, 'file_name':fname, 
+                if _internal_check_encoded_path_is_dir(p):
+                    r=list_all_files({'path':p, 'path_ext':os.path.join(pe, fn),
+                                   'pattern':pattern, 'file_name':fname, 'can_be_dir':can_be_dir,
                                    'recursion_level':rl+1, 'recursion_level_max':rlm})
-                 if r['return']>0: return r
-                 for q in r.get('list',[]):
-                     a.append(q)
+                    if r['return']>0: return r
+                    list_of_results.extend( r.get('list',[]) )
 
-    return {'return':0, 'list':a}
+    return {'return':0, 'list':list_of_results}
 
 ##############################################################################
 # check is given software is already installed and register it in the CK or install it if package exists (the same as 'detect')
@@ -1574,10 +1559,10 @@ def check(i):
                  'module_uoa':work['self_module_uid'],
                  'data_uoa':duoa})
     if r['return']>0: return r
-    d=r['dict']
-    p=r['path']
+    soft_entry_dict=r['dict']
+    soft_entry_path=r['path']
 
-    cus=d.get('customize',{})
+    cus=soft_entry_dict.get('customize',{})
 
     duoa=r['data_uoa']
     duid=r['data_uid']
@@ -1605,7 +1590,7 @@ def check(i):
     deps=i.get('deps',{})
     sbat=''
     if len(deps)==0:
-       deps=d.get('deps',{})
+       deps=soft_entry_dict.get('deps',{})
 
        if len(deps)>0:
           ii={'action':'resolve',
@@ -1632,7 +1617,7 @@ def check(i):
 
     # Check if customize script is redirected into another entry:
     #
-    another_entry_with_customize_script=d.get('use_customize_script_from_another_entry', None)
+    another_entry_with_customize_script=soft_entry_dict.get('use_customize_script_from_another_entry', None)
     if another_entry_with_customize_script:
        r=ck.access({'action':'find',
                     'module_uoa':   another_entry_with_customize_script.get('module_uoa', work['self_module_uid']),
@@ -1641,7 +1626,7 @@ def check(i):
        if r['return']>0: return r
        customization_script_path = r['path']
     else:
-       customization_script_path = p
+       customization_script_path = soft_entry_path
 
 
     cs=None
@@ -1697,6 +1682,11 @@ def check(i):
         expanduser("~")                                         # from user space
     )
 
+    if cus.get('detect_in_soft_dir', '')=='yes':
+        dir_candidates.append(
+            soft_entry_path
+        )
+
     #
     # 2) filter through the candidates to find suitable and unique ones:
     #
@@ -1720,7 +1710,8 @@ def check(i):
            "target_os_uid":tos,
            "target_os_dict":tosd,
            "target_device_id":tdid,
-           "cfg":d,
+           "soft_entry_path":soft_entry_path,   # This is also a valid path suitable for soft detection (but not by default)
+           "cfg":soft_entry_dict,
            "self_cfg":cfg,
            "ck_kernel":ck,
            "dirs":dirs,
@@ -1728,7 +1719,8 @@ def check(i):
           }
        rx=cs.dirs(ii)
        if rx['return']>0: return rx
-       if len(rx.get('dirs',[]))>0: dirs=rx['dirs']
+       if rx.get('dirs'): dirs=rx['dirs']   # If anything was returned at all, trust that value, even if it is empty.
+                                            # NB: Otherwise it may be the case that the original list was modified as a side effect.
 
     # Check which file to search for
     sname=i.get('soft_name','')
@@ -1752,7 +1744,7 @@ def check(i):
        sname+='*'
 
     # Search tools
-    suname=d.get('soft_name','')
+    suname=soft_entry_dict.get('soft_name','')
     x=sname
     if suname!='': x=suname+' ('+sname+')'
 
@@ -1892,35 +1884,31 @@ def check(i):
              ck.out('')
 
           if iv=='yes':
-             ck.out('  Registering software installations found on your machine in the CK:')
-             ck.out('')
-             ck.out('    (HINT: enter -1 to force CK package installation)')
-             ck.out('')
+                ck.out('  Registering software installations found on your machine in the CK:')
+                ck.out('')
+                ck.out('    (HINT: enter -1 to force CK package installation)')
+                ck.out('')
 
-             iq=0
+                ver_options = []
 
-             for kk in vlst:
-                 q=kk['path']
-                 ver=kk.get('version','')
+                for kk in vlst:
+                    q=kk['path']
+                    ver=kk.get('version','')
 
-                 x=q
-                 if ver!='':x='Version '+ver+' - '+x
+                    ver_options.append( 'Version {} - {}'.format(ver, q) if ver else q )
 
-                 ck.out('    '+str(iq)+') '+x)
-                 iq+=1
+                select_adict = ck.access({'action': 'select_string',
+                                    'module_uoa': 'misc',
+                                    'options': ver_options,
+                                    'default': '0',
+                                    'question': 'Please select the number of any above installation',
+                })
+                if select_adict['return']>0: return select_adict
 
-             ck.out('')
-             rx=ck.inp({'text':'    Please, select the number of any above installation or press Enter to select 0: '})
-             xx=rx['string'].strip()
-             if xx=='': xx='0'
-             il=0
-             try:
-                il=int(xx)
-             except:
-                il=-1
+                il = select_adict.get('selected_index', -1)
 
-             if il<0 or il>=len(lst):
-                return {'return':1, 'error':'selection number is not recognized'}
+                if il<0:
+                    return {'return':1, 'error':'selection number is not recognized'}
 
     # If not found, quit
     if len(lst)==0:
@@ -1954,7 +1942,7 @@ def check(i):
        if dx.get('env_data_uoa','')!='' and env_data_uoa=='':
           env_data_uoa=dx['env_data_uoa']
 
-       dname=d.get('soft_name','')
+       dname=soft_entry_dict.get('soft_name','')
        if cus.get('package_extra_name','')!='':
           dname+=cus['package_extra_name']
 

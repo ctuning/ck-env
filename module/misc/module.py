@@ -466,6 +466,73 @@ def prepare_entry_template(i):
     return r
 
 ##############################################################################
+# Universal string selector.
+#
+# Given an ordered list of options (strings)
+
+def select_string(i):
+    """
+    Input:  {
+                options         - an ordered list of strings to select from
+                (question)      - the question to ask
+                (default)       - default selection
+            }
+
+    Output: {
+                return          - return code =  0, if successful
+                                              >  0, if error
+                (error)         - error text if return > 0
+                selected_index  - an index < len(options)
+            }
+
+    """
+
+    question    = i.get('question', 'Please select from the options above')
+    options     = i.get('options')
+    default     = i.get('default', None)
+    num_options = len(options)
+
+    if not options or len(options)==0:
+        return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
+
+    for i in range(num_options):
+        if not isinstance(options[i], list):
+            options[i] = [ options[i] ]
+
+        ck.out("{:>2}) {}".format(i, options[i][0]))
+        for extra_line in options[i][1:]:
+            ck.out('    {}'.format(extra_line))
+        ck.out('')
+
+    inp_adict = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if len(default) else '')})
+
+    response = inp_adict['string']
+
+    if response=='' and default!=None:
+        response = default
+
+        if response=='':    # since it was a default, it was an allowed scenario (not having a selected_index)
+            return {'return':0, 'response': response}
+
+    try:    # try to convert into int() and see if it works
+        selected_index = int(response)
+        if selected_index >= num_options:
+            return {'return': 2, 'response': response, 'error': 'Selected index out of range [0..{}]'.format(num_options-1)}
+    except:
+        num_matches = 0
+        for i in range(num_options):
+            if response in options[i][0]:
+                selected_index = i
+                num_matches += 1
+
+        if num_matches!=1:
+            return {'return': 3, 'response': response, 'error': 'Instead of 1 unique match there were {}'.format(num_matches)}
+
+    #ck.out("You selected [{:02}]".format(selected_index))
+
+    return {'return':0, 'response': response, 'selected_index': selected_index}
+
+##############################################################################
 # Universal UOA selector (improved version forked 
 # from ck-autotuning:module:choice and ck.kernel)
 
@@ -813,7 +880,7 @@ def list_repos(i):
     h2=''
     if i.get('new','')=='yes':
        ii=copy.deepcopy(i)
-       ii['ck_title']='Shared CK modules'
+       ii['ck_title']='Shared CK repositories'
        r=preload_html_for_lists(ii)
        if r['return']>0: return r
 
@@ -1298,6 +1365,7 @@ def preload_html_for_lists(i):
               (html_file_start) - ck_start_html by default
               (html_file_stop)  - ck_stop_html by default
               (ck_title)        - update title in the start file
+              (out_file)        - get page name
             }
 
     Output: {
@@ -1310,6 +1378,14 @@ def preload_html_for_lists(i):
             }
 
     """
+
+    import os
+
+    out_file=i.get('out_file','')
+
+    page_name=os.path.basename(out_file)
+    if page_name.endswith('.html'):
+       page_name=page_name[:-5]
 
     fstart=i.get('html_file_start','')
     if fstart=='': fstart='ck_start.html'
@@ -1324,6 +1400,7 @@ def preload_html_for_lists(i):
     if r['return']>0: return r
 
     html_start=r['string'].replace('$#ck_title#$',ck_title)
+    html_start=html_start.replace('$#ck_page#$',page_name)
 
     # Load second file
     r=ck.load_text_file({'text_file':fstop})

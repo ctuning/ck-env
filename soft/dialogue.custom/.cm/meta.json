@@ -1,0 +1,32 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "detect_in_soft_dir": "yes", 
+    "env_mapping": [
+      {
+        "display_name": "your name", 
+        "variable": "CK_MY_NAME"
+      }, 
+      {
+        "display_name": "your age", 
+        "variable": "CK_MY_AGE"
+      }
+    ], 
+    "env_prefix": "CK_ENV_DIALOGUE_CUSTOM", 
+    "limit_recursion_dir_search": {
+      "linux": 0, 
+      "win": 0
+    }, 
+    "soft_file_universal": ".cm/meta.json"
+  }, 
+  "soft_name": "Example Custom Dialogue", 
+  "tags": [
+    "custom", 
+    "dialogue"
+  ], 
+  "use_customize_script_from_another_entry": {
+    "data_uoa": "f14e1ed51a944f13", 
+    "module_uoa": "soft"
+  }
+}
