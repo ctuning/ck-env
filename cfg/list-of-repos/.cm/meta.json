@@ -507,6 +507,18 @@
       "url": "https://github.com/ctuning/ck-rigetti"
     }
   },
+  "64ef2802afd7af03": {
+    "data_uoa": "ck-env",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-env.git"
+    }
+  },
   "678494f8b520000f": {
     "data_uoa": "ck-mxnet",
     "dict": {

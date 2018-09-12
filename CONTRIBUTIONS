@@ -133,3 +133,9 @@ E:
 O: LLNL
 C: discussing how to connect CK and spack, and fixing detection of native LLVM on MacOS (https://github.com/ctuning/ck-env/pull/70)
 W:
+
+N: Wen Yang
+E: GitHub: @w-simon
+O: 
+C: improving autotuning documentation and fixing bugs
+W:
