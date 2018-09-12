@@ -220,7 +220,7 @@ def internal_detect(i):
     cus=d.get('customize',{})
     tool=i.get('tool','')
     if tool=='':
-       if not skip and cus.get('soft_file_as_env','')!='':
+       if cus.get('soft_file_as_env','')!='':
           tool=svarb+cus['soft_file_as_env']+svare
 
        if cus.get('soft_file_not_tool','')!='yes':
