@@ -66,9 +66,8 @@ for file in ${source_dir}/* ; do
     # Restore the repository from zip.
     echo "  - adding 'repo:${repo}'"
     ck add repo --zip=${file} --quiet
-
     # Good place to break for testing (after the first restored repo).
-    break
+#    break
   fi
 done
 
