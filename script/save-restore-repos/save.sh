@@ -21,7 +21,7 @@ else
   exit
 fi
 
-# Check target directory.
+# Check the target directory.
 if [ -d "${CK_BACKUP}" ]; then
   target_dir=${CK_BACKUP}
 else
@@ -30,7 +30,7 @@ else
 fi
 
 # Proceeed if both the source and target directories exist.
-echo "Archiving CK repositories in '${source_dir}/' to '${target_dir}/' ..."
+echo "Saving CK repositories in '${source_dir}/' to '${target_dir}/' ..."
 echo
 
 # for all files
