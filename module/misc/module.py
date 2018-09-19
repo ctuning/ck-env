@@ -487,8 +487,10 @@ def select_string(i):
 
     """
 
+    import copy
+
     question    = i.get('question', 'Please select from the options above')
-    options     = i.get('options')
+    options     = copy.deepcopy( i.get('options') )
     default     = i.get('default', None)
     num_options = len(options)
 
