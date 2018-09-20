@@ -110,6 +110,7 @@ def setup(i):
     pl0 = os.path.dirname( os.path.realpath(full_path) )
     pl1 = os.path.dirname( pl0 )
     pl2 = os.path.dirname( pl1 )
+    pl3 = os.path.dirname( pl2 )
 
     include_file_name=cus.get('include_file','')
     if os.path.isfile(os.path.join(pl0,'Headers',include_file_name)):
@@ -118,9 +119,12 @@ def setup(i):
     elif os.path.isfile(os.path.join(pl1,'include',include_file_name)):
         include_parent_dir   = pl1
         include_sub_dir      = 'include'
-    elif os.path.isfile(os.path.join(pl2,'include',include_file_name)):
-        include_parent_dir   = pl2
-        include_sub_dir      = 'include'
+    elif os.path.isfile(os.path.join(pl3,'include','x86_64-linux-gnu',include_file_name)):
+        include_parent_dir   = pl3
+        include_sub_dir      = os.path.join(pl3,'include','x86_64-linux-gnu')
+    elif os.path.isfile(os.path.join(pl3,'include','arm-linux-gnueabihf',include_file_name)):
+        include_parent_dir   = pl3
+        include_sub_dir      = os.path.join(pl3,'include','arm-linux-gnueabihf')
     else:
         return {'return':1, 'error':'can\'t find include file'}
 
