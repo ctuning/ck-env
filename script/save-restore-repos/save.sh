@@ -41,7 +41,8 @@ for file in ${source_dir}/* ; do
     repo=$(basename ${dir})
     arch=${target_dir}/${repo}.zip
     echo "- archiving '${repo}' into '${arch}':"
-    ck zip repo:${repo} --archive_name=${arch}
+    # Use '--all' to save with .git information.
+    ck zip repo:${repo} --archive_name=${arch} --all
     du -hs ${dir}
     du -hs ${arch}
     echo
