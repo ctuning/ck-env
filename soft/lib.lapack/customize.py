@@ -8,6 +8,30 @@
 #
 
 ##############################################################################
+# get version from path
+
+import os
+
+def version_cmd(i):
+
+    ck=i['ck_kernel']
+
+    full_path=i['full_path']
+    fn=os.path.basename(full_path)
+
+    rfp=os.path.realpath(full_path)
+    rfn=os.path.basename(rfp)
+
+    ver=''
+
+    if rfn.startswith(fn):
+       ver=rfn[len(fn)+1:]
+       if ver!='':
+          ver='api-'+ver
+
+    return {'return':0, 'cmd':'', 'version':ver}
+
+##############################################################################
 # setup environment setup
 
 def setup(i):
