@@ -9,7 +9,7 @@
     "version": "7.0.0"
   },
   "end_full_path": {
-    "linux": "bin/clang-7.0",
+    "linux": "bin/clang-7",
     "win": "bin\\clang.exe"
   },
   "need_cpu_info": "yes",
