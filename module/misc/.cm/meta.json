@@ -41,6 +41,9 @@
     },
     "sort_json_file": {
       "desc": "sort JSON file"
+    },
+    "download": {
+      "desc": "download a bunch of CK entries from a remote server/repository to a local repo"
     }
   },
   "cfg-list-of-repos": "list-of-repos",
