@@ -1,4 +1,5 @@
 * 2018.09.25 - [FGG] added package cmake 3.12.2
+               [FGG] fixed bug reported in https://github.com/ctuning/ck-env/issues/77
 
 * 2018.09.24 - [FGG] added packages for LLVM 6.0.1 and 7.0.0
 
