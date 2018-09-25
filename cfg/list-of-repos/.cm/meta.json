@@ -118,6 +118,13 @@
       "url": "https://github.com/ctuning/ck-docker"
     }
   },
+  "1be6d862d67244da": {
+    "data_uoa": "ck-mlperf",
+    "dict": {
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-mlperf"
+    }
+  },
   "1ca4108a0485b920": {
     "data_uoa": "ck-cluster18",
     "dict": {
