@@ -1463,3 +1463,86 @@ def replace_strings_in_file(i):
        r['updated']='yes'
 
     return r
+
+
+def download(i):
+    """
+    Input:  {
+                xcids[]             - (remote) entries to be copied to a local repository, made of repo_uoa:module_uoa:data_uoa
+
+                (local_repo_uoa)    - where to store the copies locally ('local' by default)
+            }
+
+    Output: {
+                return      - return code =  0, if successful
+                                          >  0, if error
+                (error)     - error text if return > 0
+            }
+    """
+
+    import os
+
+    o               = i.get('out','')
+    local_repo_uoa  = i.get('local_repo_uoa', 'local')
+    source_addrs    = i.get('xcids', [])       # can unshift the "default entry" into this list when/if moving this method to the kernel
+
+
+    if len(source_addrs)==0:
+        return {'return':1, 'error': 'Need a non-empty list of remote CID addresses to download the entries from'}
+
+    for addr in source_addrs:
+        server_repo_uoa    = addr['repo_uoa']
+        if (not server_repo_uoa) or server_repo_uoa=='local':
+            return {'return':2, 'error': 'All entries to be copied have to be remote ({})'.format(addr)}
+
+        load_adict = {  'action':           'load',
+                        'repo_uoa':         server_repo_uoa,
+                        'module_uoa':       addr['module_uoa'],
+                        'data_uoa':         addr['data_uoa'],
+        }
+        r=ck.access( load_adict )
+        if r['return']>0: return r
+
+        meta_dict       = r['dict']
+        data_uid        = r['data_uid']
+        remote_repo_uoa = r['repo_uoa']     # this is where we originally found it...
+
+        add_adict = {   'action':           'add',
+                        'common_func':      'yes',
+                        'repo_uoa':         local_repo_uoa,
+                        'module_uoa':       addr['module_uoa'],
+                        'data_uoa':         addr['data_uoa'],
+                        'dict':             meta_dict,              # copying meta data
+                        'data_uid':         data_uid,               # copying the original data_uid
+        }
+        r=ck.access( add_adict )
+        if r['return']>0: return r
+
+        pull_adict = {  'action':           'pull',
+                        'repo_uoa':         server_repo_uoa,
+                        'module_uoa':       addr['module_uoa'],
+                        'data_uoa':         addr['data_uoa'],
+                        'archive':          'yes',
+        }
+        r=ck.access( pull_adict )
+        if r['return']>0: return r
+
+        zip_name = ck.cfg['default_archive_name']
+
+        push_adict = {  'action':           'push',
+                        'repo_uoa':         local_repo_uoa,
+                        'module_uoa':       addr['module_uoa'],
+                        'data_uoa':         addr['data_uoa'],
+                        'archive':          'yes',
+                        'filename':         zip_name,
+        }
+        r=ck.access( push_adict )
+        if r['return']>0: return r
+
+        os.remove(zip_name)     # to avoid clashing with the next one
+
+        if o=='con':
+            ck.out('{}[{}]:{}:{} -> {}:{}:{}' \
+                .format(server_repo_uoa, remote_repo_uoa, addr['module_uoa'], addr['data_uoa'], local_repo_uoa,addr['module_uoa'], addr['data_uoa']))
+
+    return {'return':0}
