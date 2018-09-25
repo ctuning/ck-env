@@ -377,6 +377,8 @@ def prepare_entry_template(i):
     if tuoa=='':
        lst=[{'data_uid':'', 'data_uoa':'', 'repo_uid':'', 'info':{'data_name':'Empty entry'}, 'meta':{'sort':9999}}] # Add it to the end
 
+       c=None
+
        if tuoa=='':
           if oo=='con':
              ck.out('Searching for templates ...')
@@ -406,8 +408,9 @@ def prepare_entry_template(i):
 
           ck.out('')
 
-       tuoa=c['data_uid']
-       truoa=c['repo_uid']
+       if c!=None:
+          tuoa=c['data_uid']
+          truoa=c['repo_uid']
 
     d=i.get('dict',{})
 
