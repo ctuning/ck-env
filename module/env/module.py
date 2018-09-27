@@ -1298,20 +1298,23 @@ def resolve(i):
                  continue
 
         if q.get('skipped','')!='yes':
-           check_env=q.get('disable_if_env',{})
-           if len(check_env)>0:
-              disable=True
-              for j in check_env:
-                  v=check_env[j]
-                  if install_env.get(j,'').lower()!=v.lower():
-                     disable=False
-                     break
+            check_env=q.get('disable_if_env',{})
+            if len(check_env)>0:
+                disable=True
+                for unwanted_variable_name in check_env:
+                    unwanted_variable_values = check_env[unwanted_variable_name]
+                    if not isinstance(unwanted_variable_values, list):
+                        unwanted_variable_values = [ unwanted_variable_values ]
 
-              if disable:
-                 q['skipped']='yes'
-                 continue
-              else:
-                 q['enabled']='yes'
+                    if install_env.get(unwanted_variable_name,'').lower() not in [uvv.lower() for uvv in unwanted_variable_values]:
+                        disable=False
+                        break
+
+                if disable:
+                    q['skipped']='yes'
+                    continue
+                else:
+                    q['enabled']='yes'
 
         ytos=tos
         ytdid=tdid
