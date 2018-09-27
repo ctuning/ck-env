@@ -404,6 +404,9 @@ def setup(i):
     if x!='' and winh=='yes':
        shell_setup_script_contents+='\nset PATH='+path_install+x+';%PATH%\n\n'
 
+    if mac=='yes':
+        shell_setup_script_contents+='\nexport DYLD_LIBRARY_PATH={}:$DYLD_LIBRARY_PATH\n'.format(path_lib)
+
     # Otherwise may be problems on Windows during cross-compiling
     env['CK_OPT_UNWIND']=' '
     env['CK_FLAGS_DYNAMIC_BIN']=' '
