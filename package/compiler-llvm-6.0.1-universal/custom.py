@@ -88,7 +88,7 @@ def setup(i):
 
     # Update vars
     if macos=='yes':
-       return {'return':0, 'error':'MacOS is not supported yet'}
+       return {'return':1, 'error':'MacOS is not supported yet'}
 #       if hbits!='64':
 #          return {'return':1, 'error':'this package doesn\'t support non 64-bit MacOS'}
 
@@ -118,11 +118,11 @@ def setup(i):
 
     else:
        if habi.startswith('arm') or habi.startswith('aarch'):
-          return {'return':0, 'error':'ARM platform is not supported yet'}
-#          if hbits=='64':
-#             nie['PACKAGE_NAME']='clang+llvm-6.0.1-aarch64-linux-gnu.tar.xz'
-#          else:
-#             nie['PACKAGE_NAME']='clang+llvm-6.0.1-armv7a-linux-gnueabihf.tar.xz'
+#          return {'return':1, 'error':'ARM platform is not supported yet'}
+          if hbits=='64':
+             nie['PACKAGE_NAME']='clang+llvm-6.0.1-aarch64-linux-gnu.tar.xz'
+          else:
+             nie['PACKAGE_NAME']='clang+llvm-6.0.1-armv7a-linux-gnueabihf.tar.xz'
        else:
           r=ck.access({'action':'detect','module_uoa':'platform.os', 'out':o})
           if r['return']>0: return r
