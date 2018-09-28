@@ -917,7 +917,7 @@ def setup(i):
        eset=hosd.get('env_set','')
        svarb=hosd.get('env_var_start','')
        svare=hosd.get('env_var_stop','')
-       sdirs=hosd.get('dir_sep','')
+
        evs=hosd.get('env_var_separator','')
        eifs=hosd.get('env_quotes_if_space','')
 
@@ -1644,6 +1644,13 @@ def check(i):
     # 1) list all the potential places:
     #
     dir_candidates = []
+
+    extra_search_dirs_universal = cus.get('extra_search_dirs_universal', [])
+    dir_candidates.extend( extra_search_dirs_universal )
+
+    extra_search_dirs = cus.get('extra_search_dirs', {}).get(hplat, [])
+    dir_candidates.extend( extra_search_dirs )
+
     if hplat=='win':
         dir_candidates.extend([
             os.environ.get('ProgramW6432', ''),
@@ -1690,10 +1697,13 @@ def check(i):
     #
     # 2) filter through the candidates to find suitable and unique ones:
     #
+    sdirs=hosd.get('dir_sep','')
     dirs=[]
     for candidate in dir_candidates:
-        if candidate and os.path.isdir(candidate) and candidate not in dirs:
-            dirs.append(candidate)
+        if candidate:
+            candidate=candidate.replace('$#sep#$', sdirs)
+            if os.path.isdir(candidate) and candidate not in dirs:
+                dirs.append(candidate)
 
 
     # Check if interactive
