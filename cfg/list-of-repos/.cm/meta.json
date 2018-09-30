@@ -645,6 +645,21 @@
       "url": "https://github.com/gfursin/ck-dissemination.git"
     }
   },
+  "76c4424a1473c873": {
+    "data_uoa": "ck-analytics",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        },
+        {
+          "repo_uoa": "ck-env"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-analytics"
+    }
+  },
   "78241b48f2865a4b": {
     "data_uoa": "ck-ai",
     "dict": {

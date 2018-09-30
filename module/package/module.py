@@ -1721,6 +1721,7 @@ def show(i):
        h+=' <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
        h+=' <a href="https://portalparts.acm.org/3230000/3229762/fm/frontmatter.pdf">ACM ReQuEST-ASPLOS\'18 report</a>\n'
        h+=' and the latest <a href="http://cKnowledge.org/rpi-crowd-tuning">CK paper</a> for further details.\n'
+       h+='See <a href="https://github.com/ctuning/ck-spack">ck-spack repository</a> connecting CK and spack package manager.\n'
 
        h+='<p>\n'
        h+='<table cellpadding="4" border="1" style="border-collapse: collapse; border: 1px solid black;">\n'
