@@ -1476,6 +1476,7 @@ def transfer(i):
                 (source_repo_uoa)   - in case the source is remote, the specific repository on the source (optional - only needed for disambiguation)
                 (target_server_uoa) - the optional target remote server (mapped as a local repository)
                 (target_repo_uoa)   - the repository to store the entries on target server ('local' by default)
+                (update_meta_dict)  - the dictionary with which to update the original meta.json
             }
 
     Output: {
@@ -1493,6 +1494,7 @@ def transfer(i):
     source_repo_uoa     = i.get('source_repo_uoa')
     target_server_uoa   = i.get('target_server_uoa')
     target_repo_uoa     = i.get('target_repo_uoa', 'local')
+    update_meta_dict    = i.get('update_meta_dict', {})
 
     source_addr_ext     = {'remote_repo_uoa': source_repo_uoa} if source_repo_uoa else {}
     target_addr_ext     = {'repo_uoa': target_server_uoa, 'remote_repo_uoa': target_repo_uoa} if target_server_uoa else {'repo_uoa': target_repo_uoa}
@@ -1517,6 +1519,8 @@ def transfer(i):
         meta_dict           = r['dict']
         data_uid            = r['data_uid']
         original_repo_uoa   = r['repo_uoa']     # this is where we originally found it...
+
+        meta_dict.update( update_meta_dict )
 
         add_adict = {   'action':           'add',
                         'common_func':      'yes',
