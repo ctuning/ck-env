@@ -500,16 +500,16 @@ def select_string(i):
     if not options or len(options)==0:
         return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
 
-    for i in range(num_options):
-        if not isinstance(options[i], list):
-            options[i] = [ options[i] ]
+    for j in range(num_options):
+        if not isinstance(options[j], list):
+            options[j] = [ options[j] ]
 
-        ck.out("{:>2}) {}".format(i, options[i][0]))
-        for extra_line in options[i][1:]:
+        ck.out("{:>2}) {}".format(j, options[j][0]))
+        for extra_line in options[j][1:]:
             ck.out('    {}'.format(extra_line))
         ck.out('')
 
-    inp_adict = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if len(default) else '')})
+    inp_adict = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if default!=None and len(default) else '')})
 
     response = inp_adict['string']
 
@@ -525,17 +525,20 @@ def select_string(i):
             return {'return': 2, 'response': response, 'error': 'Selected index out of range [0..{}]'.format(num_options-1)}
     except:
         num_matches = 0
-        for i in range(num_options):
-            if response in options[i][0]:
-                selected_index = i
+        for j in range(num_options):
+            if response in options[j][0]:
+                selected_index = j
                 num_matches += 1
 
         if num_matches!=1:
             return {'return': 3, 'response': response, 'error': 'Instead of 1 unique match there were {}'.format(num_matches)}
 
-    #ck.out("You selected [{:02}]".format(selected_index))
+    selected_value = options[selected_index][0]
 
-    return {'return':0, 'response': response, 'selected_index': selected_index}
+    if i.get('out')=='con':
+        ck.out('You selected [{:02}] == "{}"'.format(selected_index, selected_value))
+
+    return { 'return':0, 'response': response, 'selected_index': selected_index, 'selected_value': selected_value }
 
 ##############################################################################
 # Universal UOA selector (improved version forked 
