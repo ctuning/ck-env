@@ -479,6 +479,7 @@ def select_string(i):
                 options         - an ordered list of strings to select from
                 (question)      - the question to ask
                 (default)       - default selection
+                (no_autoselect) - if "yes", enforce the interactive choice even if there is only 1 option
             }
 
     Output: {
@@ -496,6 +497,7 @@ def select_string(i):
     options     = copy.deepcopy( i.get('options') )
     default     = i.get('default', None)
     num_options = len(options)
+    auto_select = i.get('no_autoselect', '') != 'yes'
 
     if not options or len(options)==0:
         return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
@@ -509,9 +511,12 @@ def select_string(i):
             ck.out('    {}'.format(extra_line))
         ck.out('')
 
-    inp_adict = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if default!=None and len(default) else '')})
-
-    response = inp_adict['string']
+    if len(options)==1 and auto_select:
+        ck.out('Since there is only one option, auto-selecting it')
+        response = '0'
+    else:
+        inp_adict = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if default!=None and len(default) else '')})
+        response = inp_adict['string']
 
     if response=='' and default!=None:
         response = default
