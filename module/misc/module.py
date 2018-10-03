@@ -483,10 +483,12 @@ def select_string(i):
             }
 
     Output: {
+                selected_index  - an index < len(options)
+                selected_value  - the string value at selected_index
+
                 return          - return code =  0, if successful
                                               >  0, if error
                 (error)         - error text if return > 0
-                selected_index  - an index < len(options)
             }
 
     """
