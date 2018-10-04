@@ -1487,6 +1487,7 @@ def transfer(i):
                 (target_server_uoa) - the optional target remote server (mapped as a local repository)
                 (target_repo_uoa)   - the repository to store the entries on target server ('local' by default)
                 (update_meta_dict)  - the dictionary with which to update the original meta.json
+                (tags)              - filter the source list by tags
             }
 
     Output: {
@@ -1505,63 +1506,93 @@ def transfer(i):
     target_server_uoa   = i.get('target_server_uoa')
     target_repo_uoa     = i.get('target_repo_uoa', 'local')
     update_meta_dict    = i.get('update_meta_dict', {})
-
-    source_addr_ext     = {'remote_repo_uoa': source_repo_uoa} if source_repo_uoa else {}
-    target_addr_ext     = {'repo_uoa': target_server_uoa, 'remote_repo_uoa': target_repo_uoa} if target_server_uoa else {'repo_uoa': target_repo_uoa}
+    tags                = i.get('tags')
 
     if len(source_addrs)==0:
         return {'return':1, 'error': 'Need a non-empty list of source CID addresses'}
 
-    for addr in source_addrs:
-        repo_uoa    = addr.get('repo_uoa')
-        if (not repo_uoa) and (not target_server_uoa):
+    expanded_source_addrs = []
+
+    for addr_pattern in source_addrs:
+        search_adict = {'action':       'search',
+        }
+        search_adict.update( addr_pattern )
+        if tags:
+            search_adict['tags']            = tags
+        if source_repo_uoa:
+            search_adict['remote_repo_uoa'] = source_repo_uoa
+
+        r=ck.access( search_adict )
+        if r['return']>0: return r
+
+        for found_addr in r['lst']:     # NB: remote found_addr comes with screwed up repo_uoa, we have to undo that
+            source_addr = {
+                'data_uoa':     found_addr['data_uoa'],
+                'module_uoa':   found_addr['module_uoa'],
+            }
+            if addr_pattern.get('repo_uoa') and found_addr.get('repo_uoa')!=addr_pattern.get('repo_uoa'):
+                source_addr.update( {
+                    'remote_repo_uoa':    found_addr.get('repo_uoa'),
+                    'repo_uoa':         addr_pattern.get('repo_uoa'),
+                })
+            else:
+                source_addr['repo_uoa'] = found_addr.get('repo_uoa')
+
+            expanded_source_addrs.append( source_addr )
+
+
+    for source_addr in expanded_source_addrs:
+        from_local = source_addr.get('remote_repo_uoa') == None
+        if from_local and (not target_server_uoa):
             return {'return':2, 'error': 'Cannot copy the entries locally (since IDs are to be preserved)'}
 
-        load_adict = {  'action':           'load',
-                        'module_uoa':       addr['module_uoa'],
-                        'data_uoa':         addr['data_uoa'],
+        target_addr = {
+            'module_uoa':       source_addr['module_uoa'],
+            'data_uoa':         source_addr['data_uoa'],
         }
-        if repo_uoa: load_adict.update( {'repo_uoa': repo_uoa} )
-        load_adict.update( source_addr_ext )
+        if target_server_uoa:
+            target_addr.update({
+                'remote_repo_uoa':  target_repo_uoa,
+                'repo_uoa':         target_server_uoa,
+            })
+        else:
+            target_addr['repo_uoa'] = target_repo_uoa
+
+
+        load_adict = {  'action':           'load',
+        }
+        load_adict.update( source_addr )
         r=ck.access( load_adict )
         if r['return']>0: return r
 
         meta_dict           = r['dict']
         data_uid            = r['data_uid']
-        original_repo_uoa   = r['repo_uoa']     # this is where we originally found it...
 
         meta_dict.update( update_meta_dict )
 
         add_adict = {   'action':           'add',
                         'common_func':      'yes',
-                        'module_uoa':       addr['module_uoa'],
-                        'data_uoa':         addr['data_uoa'],
                         'dict':             meta_dict,              # copying meta data
                         'data_uid':         data_uid,               # copying the original data_uid
         }
-        add_adict.update( target_addr_ext )
+        add_adict.update( target_addr )
         r=ck.access( add_adict )
         if r['return']>0: return r
 
         pull_adict = {  'action':           'pull',
-                        'module_uoa':       addr['module_uoa'],
-                        'data_uoa':         addr['data_uoa'],
                         'archive':          'yes',
         }
-        if repo_uoa: pull_adict.update( {'repo_uoa': repo_uoa} )
-        pull_adict.update( source_addr_ext )
+        pull_adict.update( source_addr )
         r=ck.access( pull_adict )
         if r['return']>0: return r
 
         zip_name = ck.cfg['default_archive_name']
 
         push_adict = {  'action':           'push',
-                        'module_uoa':       addr['module_uoa'],
-                        'data_uoa':         addr['data_uoa'],
                         'archive':          'yes',
                         'filename':         zip_name,
         }
-        push_adict.update( target_addr_ext )
+        push_adict.update( target_addr )
         r=ck.access( push_adict )
         if r['return']>0: return r
 
@@ -1569,9 +1600,9 @@ def transfer(i):
             os.remove(zip_name)     # to avoid clashing with the next one
 
         if o=='con':
-            source_addr = original_repo_uoa if repo_uoa in (original_repo_uoa, None) else '{}/{}'.format(repo_uoa, original_repo_uoa)
-            target_addr = '{}/{}'.format(target_server_uoa, target_repo_uoa) if target_server_uoa else target_repo_uoa
-            ck.out('{}:{}:{} -> {}:{}:{}' \
-                .format(source_addr, addr['module_uoa'], addr['data_uoa'], target_addr, addr['module_uoa'], addr['data_uoa']))
+            display_source_repo = source_addr['repo_uoa'] if from_local else '{}/{}'.format(source_addr['repo_uoa'], source_addr['remote_repo_uoa'])
+            display_target_repo = '{}/{}'.format(target_server_uoa, target_repo_uoa) if target_server_uoa else target_repo_uoa
+            display_mod_data    = '{}:{}'.format(source_addr['module_uoa'], source_addr['data_uoa'])
+            ck.out('{}:{} -> {}:{}'.format(display_source_repo, display_mod_data, display_target_repo, display_mod_data))
 
     return {'return':0}
