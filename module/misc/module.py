@@ -1526,7 +1526,7 @@ def transfer(i):
     if len(source_addrs)==0:
         return {'return':1, 'error': 'Need a non-empty list of source CID addresses'}
 
-    expanded_source_addrs = []
+    expanded_source_addrs = {}
 
     for addr_pattern in source_addrs:
         search_adict = {'action':       'search',
@@ -1553,13 +1553,16 @@ def transfer(i):
             else:
                 source_addr['repo_uoa'] = found_addr.get('repo_uoa')
 
-            expanded_source_addrs.append( source_addr )
+            cid = ':'.join([ source_addr['repo_uoa'], source_addr['module_uoa'], source_addr['data_uoa'] ])
+            if cid in expanded_source_addrs:
+                return {'return':2, 'error': "Entry {} was found on the source multiple times - please use --source_repo_uoa to disambiguate!".format(cid)}
+            else:
+                expanded_source_addrs[cid] = source_addr
 
-
-    for source_addr in expanded_source_addrs:
+    for source_addr in expanded_source_addrs.values():
         from_local = source_addr.get('remote_repo_uoa') == None
         if from_local and (not target_server_uoa):
-            return {'return':2, 'error': 'Cannot copy the entries locally (since IDs are to be preserved)'}
+            return {'return':3, 'error': 'Cannot copy the entries locally (since IDs are to be preserved)'}
 
         target_addr = {
             'module_uoa':       source_addr['module_uoa'],
