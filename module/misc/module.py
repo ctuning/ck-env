@@ -521,6 +521,7 @@ def select_string(i):
     if len(options)==1 and auto_select:
         ck.out('Since there is only one option, auto-selecting it')
         response = '0'
+        selected_index = 0
         num_matches = 1
 
     while num_matches!=1:
