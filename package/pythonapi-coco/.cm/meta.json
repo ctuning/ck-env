@@ -1,0 +1,29 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "PACKAGE_BRANCH": "master", 
+      "PACKAGE_NAME": "pythonapi-coco", 
+      "PACKAGE_URL": "https://github.com/cocodataset/cocoapi.git", 
+      "TOOL_NAME": "pythonapi-coco"
+    }, 
+    "version": "trunk"
+  }, 
+  "deps": {
+  }, 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "7432c898273fe70d", 
+  "suggested_path": "pythonapi-coco", 
+  "tags": [
+    "api", 
+    "pythonapi", 
+    "coco",
+    "trunk"
+  ]
+}
