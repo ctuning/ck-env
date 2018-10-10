@@ -2203,7 +2203,9 @@ def xset(i):
 def virtual(i):
     """
     Input:  {
-              data_uoa or uoa   - environment UOA to pre-load (see "ck show env") - can be listed via ,
+              data_uoa or uoa   - environment UOA to pre-load (see "ck show env")
+              (tag_groups)      - independent groups of or_tags, separated by a space, refer to separate env entries
+                                  that can be combined together: '--tag_groups=alpha,beta gamma,~delta epsilon;lambda,mu'
 
               (shell_cmd)       - command line to run in the "environment-enriched" shell (make sure it is suitably quoted)
             }
@@ -2217,6 +2219,7 @@ def virtual(i):
     """
 
     duoa        = i.get('data_uoa', i.get('uoa','') )
+    tag_groups  = i.get('tag_groups')
 
     if duoa.find(',')!=-1:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
         # ck.out('')
@@ -2232,13 +2235,19 @@ def virtual(i):
         else:
             return {'return':1, 'error':"all CID entries have to be of 'env' type"}
 
+    list_of_updates = [ {'uoa': uoa} for uoa in list_of_uoa if uoa ]
+
+    if tag_groups and len(tag_groups)>0:
+        list_of_updates += [ {'or_tags': or_tags} for or_tags in tag_groups.split(' ')]
+
     shell_script_contents_for_unix      = '' # string with env
     shell_script_contents_for_windows   = '' # string with env
 
-    for uoa in list_of_uoa:
-        i['uoa']=uoa
+    for dict_update in list_of_updates:
+        env_set_alist = i.copy()
+        env_set_alist.update( dict_update )
 
-        r=env_set(i)
+        r=env_set( env_set_alist )
         if r['return']>0: return r
 
         shell_script_contents_for_unix +='\n'+r['bat']+'\n'
