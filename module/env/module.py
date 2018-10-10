@@ -2240,8 +2240,7 @@ def virtual(i):
     if tag_groups and len(tag_groups)>0:
         list_of_updates += [ {'or_tags': or_tags} for or_tags in tag_groups.split(' ')]
 
-    shell_script_contents_for_unix      = '' # string with env
-    shell_script_contents_for_windows   = '' # string with env
+    shell_script_lines  = []
 
     for dict_update in list_of_updates:
         env_set_alist = i.copy()
@@ -2250,10 +2249,7 @@ def virtual(i):
         r=env_set( env_set_alist )
         if r['return']>0: return r
 
-        shell_script_contents_for_unix +='\n'+r['bat']+'\n'
-
-        if shell_script_contents_for_windows != '': shell_script_contents_for_windows+=' & '
-        shell_script_contents_for_windows += r['bat'].replace('\n','')
+        shell_script_lines.append( r['bat'].strip() )
 
     # Run shell
     import platform
@@ -2266,13 +2262,16 @@ def virtual(i):
     ck.out('Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
 
     if platform.system().lower().startswith('win'): # pragma: no cover
+
         if shell_cmd:
-            shell_script_contents_for_windows += ' & ' + shell_cmd
+            shell_script_lines.append( shell_cmd )
             termination_flag = '/C'     # terminate the CMD shell when the environment script & shell_cmd are over
         else:
             termination_flag = '/K'     # remain in the CMD shell
 
-        p = subprocess.Popen(['cmd', termination_flag, shell_script_contents_for_windows], shell = True, env=os.environ)
+        shell_script_contents = ' & '.join( shell_script_lines )
+
+        p = subprocess.Popen(['cmd', termination_flag, shell_script_contents], shell = True, env=os.environ)
         p.wait()
         return_code  = p.returncode
     else:
@@ -2280,7 +2279,10 @@ def virtual(i):
         if rx['return']>0: return rx
         file_name=rx['file_name']
 
-        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents_for_unix })
+        shell_script_contents = '\n\n'.join( shell_script_lines ) + '\n'
+        print(shell_script_contents)
+
+        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents })
         if rx['return']>0: return rx
 
         full_cmd_list    = ['/bin/bash','--rcfile', file_name, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )
