@@ -2280,7 +2280,6 @@ def virtual(i):
         file_name=rx['file_name']
 
         shell_script_contents = '\n\n'.join( shell_script_lines ) + '\n'
-        print(shell_script_contents)
 
         rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents })
         if rx['return']>0: return rx
