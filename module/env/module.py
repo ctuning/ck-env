@@ -2204,9 +2204,11 @@ def virtual(i):
     """
     Input:  {
               data_uoa or uoa   - environment UOA to pre-load (see "ck show env")
+              (tags)            - a combination of comma-separated tags to narrow down the search
+              (or_tags)         - a combination of semicolon-separated and comma-separated tags to narrow down the search
               (tag_groups)      - independent groups of or_tags, separated by a space, refer to separate env entries
                                   that can be combined together: '--tag_groups=alpha,beta gamma,~delta epsilon;lambda,mu'
-
+              (verbose)         - set to 'yes' to see the script that will be used to build the environment
               (shell_cmd)       - command line to run in the "environment-enriched" shell (make sure it is suitably quoted)
             }
 
@@ -2262,6 +2264,10 @@ def virtual(i):
 
         shell_script_lines.append( r['bat'].strip() )
 
+    if i.get('verbose', '')=='yes':
+        ck.out("*** Loading the following environment:\n")
+        ck.out("\n".join(shell_script_lines))
+        ck.out('')
 
     # Run shell
     import platform
@@ -2270,8 +2276,9 @@ def virtual(i):
 
     shell_cmd        = i.get('shell_cmd', None)
 
-    ck.out('')
-    ck.out('Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
+    if not shell_cmd:
+        ck.out('')
+        ck.out('*** Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
 
     if platform.system().lower().startswith('win'): # pragma: no cover
 
