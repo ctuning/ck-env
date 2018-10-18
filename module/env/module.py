@@ -2220,8 +2220,11 @@ def virtual(i):
 
     duoa        = i.get('data_uoa', i.get('uoa','') )
     tag_groups  = i.get('tag_groups')
+    list_of_updates = []
 
-    if duoa.find(',')!=-1:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
+    if not duoa:
+        list_of_uoa     = []
+    elif ',' in duoa:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
         # ck.out('')
         # ck.out('DEPRECATED: You seem to be using CSV format within a CID. Please list multiple CIDs on your command line instead.')
         # ck.out('')
@@ -2235,10 +2238,18 @@ def virtual(i):
         else:
             return {'return':1, 'error':"all CID entries have to be of 'env' type"}
 
-    list_of_updates = [ {'uoa': uoa} for uoa in list_of_uoa if uoa ]
+    for uoa in list_of_uoa:
+        if uoa:
+            if '*' not in uoa:  # be a wildcard or be present!
+                r = ck.access( {'action': 'load', 'module_uoa': 'env', 'data_uoa': uoa} )
+                if r['return']>0: return r
+            list_of_updates.append( {'uoa': uoa} )
 
-    if tag_groups and len(tag_groups)>0:
+    if tag_groups and len(tag_groups)>0:    # tag_groups are always added on top
         list_of_updates += [ {'or_tags': or_tags} for or_tags in tag_groups.split(' ')]
+
+    if not len(list_of_uoa) and ( i.get('tags') or i.get('or_tags') ):  # but make sure tags were seen at least once
+        list_of_updates.append( {} )
 
     shell_script_lines  = []
 
@@ -2250,6 +2261,7 @@ def virtual(i):
         if r['return']>0: return r
 
         shell_script_lines.append( r['bat'].strip() )
+
 
     # Run shell
     import platform
