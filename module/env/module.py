@@ -2253,6 +2253,9 @@ def virtual(i):
     if not len(list_of_uoa) and ( i.get('tags') or i.get('or_tags') ):  # but make sure tags were seen at least once
         list_of_updates.append( {} )
 
+    if not len(list_of_updates):    # if nothing else matched, let the user choose one env from the list
+        list_of_updates.append( { 'uoa' : '*'} )
+
     shell_script_lines  = []
 
     for dict_update in list_of_updates:
