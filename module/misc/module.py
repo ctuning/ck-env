@@ -481,6 +481,7 @@ def select_string(i):
                 (default)       - default selection
                 (no_autoselect) - if "yes", enforce the interactive choice even if there is only 1 option
                 (no_autoretry)  - if "yes", bail out on any unsuitable input, do not offer to retry
+                (no_skip_line)  - if "yes", do not skip a line after each option
             }
 
     Output: {
@@ -501,6 +502,7 @@ def select_string(i):
     default     = i.get('default', None)
     auto_select = i.get('no_autoselect', '') != 'yes'
     auto_retry  = i.get('no_autoretry', '') != 'yes'
+    skip_line   = i.get('no_skip_line', '') != 'yes'
 
     if not options or len(options)==0:
         return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
@@ -514,8 +516,10 @@ def select_string(i):
         ck.out("{:>2}) {}".format(j, options[j][0]))
         for extra_line in options[j][1:]:
             ck.out('    {}'.format(extra_line))
-        ck.out('')
+        if skip_line:
+            ck.out('')
 
+    ck.out('')
     num_matches = 0
 
     if len(options)==1 and auto_select:
