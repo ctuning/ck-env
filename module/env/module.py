@@ -1872,37 +1872,39 @@ def prune_search_list(i):
             # first check from env, but if not set, check from package
             if len(v)==0:
                 v=meta.get('customize',{}).get('version_split',[])
-                if len(v)==0:
-                    ver=meta.get('customize',{}).get('version','')
- 
-                    if ver!='':
-                        rx=ck.access({'action':'split_version',
-                                    'module_uoa':cfg['module_deps']['soft'],
-                                    'version':ver})
-                        if rx['return']>0: return rx
-                        v=rx['version_split']
 
-            if len(vfrom)>0:
-                r=ck.access({'action':'compare_versions',
-                            'module_uoa':cfg['module_deps']['soft'],
-                            'version1':vfrom,
-                            'version2':v})
-                if r['return']>0: return r
+            if len(v)==0:
+                ver=meta.get('customize',{}).get('version','')
 
-                if r['result']=='>':
-                    skipped_because_of_version='yes'
-                    continue
+                if ver!='' and ver[0].isdigit():
+                    rx=ck.access({'action':'split_version',
+                                'module_uoa':cfg['module_deps']['soft'],
+                                'version':ver})
+                    if rx['return']>0: return rx
+                    v=rx['version_split']
 
-            if len(vto)>0:
-                r=ck.access({'action':'compare_versions',
-                            'module_uoa':cfg['module_deps']['soft'],
-                            'version1':v,
-                            'version2':vto})
-                if r['return']>0: return r
+            if len(v)>0:
+                if len(vfrom)>0:
+                    r=ck.access({'action':'compare_versions',
+                                'module_uoa':cfg['module_deps']['soft'],
+                                'version1':vfrom,
+                                'version2':v})
+                    if r['return']>0: return r
 
-                if r['result']=='>':
-                    skipped_because_of_version='yes'
-                    continue
+                    if r['result']=='>':
+                        skipped_because_of_version='yes'
+                        continue
+
+                if len(vto)>0:
+                    r=ck.access({'action':'compare_versions',
+                                'module_uoa':cfg['module_deps']['soft'],
+                                'version1':v,
+                                'version2':vto})
+                    if r['return']>0: return r
+
+                    if r['result']=='>':
+                        skipped_because_of_version='yes'
+                        continue
 
         entry_setup_dict = meta.get('setup')    # if entry_setup_dict is empty it matches anything
         if entry_setup_dict and len(query_setup_dict)>0:
