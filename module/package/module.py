@@ -292,16 +292,18 @@ def install(i):
                                'target_os_uoa':tosx,
                                'target_os_dict':tosd})
                  if rx['return']==0:
-
-                    ll.append(q)
+                    ver = q.get('meta',{}).get('customize',{}).get('version','')
+                    supported_versions = q.get('meta',{}).get('customize',{}).get('supported_versions')
+                    if not ver and supported_versions:
+                        for s_version in supported_versions:
+                            q_clone = copy.deepcopy( q )
+                            q_clone['meta']['customize']['version'] = s_version
+                            ll.append( q_clone )
+                    else:
+                        ll.append(q)
 
              # Prune by no_tags
              if xno_tags!='' or xor_tags!='' or len(vfrom)>0 or len(vto)>0:
-                # print("About to prune_search_list of {} elements using version_from={} and version_to={}".format(len(ll), vfrom, vto))
-                # for lel in ll:
-                #     dd = lel.get('data_uoa')
-                #     vv = lel.get('meta', {}).get('customize', {}).get('version', "UNKNOWN_VERSION")
-                #     print(' ' + dd + ': ' + vv)
                 rx=ck.access({'action':'prune_search_list',
                               'module_uoa':cfg['module_deps']['env'],
                               'lst':ll,
@@ -311,12 +313,6 @@ def install(i):
                               'no_tags':xno_tags})
                 if rx['return']>0: return rx
                 ll=rx['lst']
-                # print("\nPruned down to {} elements:".format(len(ll)))
-                # for lel in ll:
-                #     dd = lel.get('data_uoa')
-                #     vv = lel.get('meta', {}).get('customize', {}).get('version', "UNKNOWN_VERSION")
-                #     print(' ' + dd + ': ' + vv)
-                # exit(0)
 
              # Select package 
              if len(ll)>0:
