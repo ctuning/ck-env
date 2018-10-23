@@ -126,11 +126,11 @@
     }
   },
   "1ca4108a0485b920": {
-    "data_uoa": "ck-cluster18",
+    "data_uoa": "ck-scc18",
     "dict": {
       "desc": "Experimental CK workflow to automate SuperComputing'18 Student Cluster Competition.",
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-cluster18"
+      "url": "https://github.com/ctuning/ck-scc18"
     }
   },
   "1e884df489890fa1": {
@@ -694,6 +694,27 @@
       "url": "https://github.com/ctuning/ck-ai"
     }
   },
+  "7ce37b63d958413d": {
+    "data_uoa": "ck-quantum",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env",
+          "repo_url": "https://github.com/ctuning/ck-env"
+        },
+        {
+          "repo_uoa": "ck-rigetti",
+          "repo_url": "https://github.com/ctuning/ck-rigetti"
+        },
+        {
+          "repo_uoa": "ck-qiskit",
+          "repo_url": "https://github.com/ctuning/ck-qiskit"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-quantum"
+    }
+  },
   "7d60433aa9fd29fe": {
     "data_uoa": "reproduce-carp-project",
     "dict": {
@@ -847,6 +868,18 @@
       ],
       "shared": "git",
       "url": "https://github.com/lift-project/ck-lift"
+    }
+  },
+  "a448ecf44bf67c48": {
+    "data_uoa": "ck-env",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-env.git"
     }
   },
   "aa8299de464392e3": {
