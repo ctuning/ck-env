@@ -302,17 +302,15 @@ def install(i):
                     else:
                         ll.append(q)
 
-             # Prune by no_tags
-             if xno_tags!='' or xor_tags!='' or len(vfrom)>0 or len(vto)>0:
-                rx=ck.access({'action':'prune_search_list',
+             rx=ck.access({'action':'prune_search_list',
                               'module_uoa':cfg['module_deps']['env'],
                               'lst':ll,
                               'version_from':vfrom,
                               'version_to':vto,
                               'or_tags':xor_tags,
                               'no_tags':xno_tags})
-                if rx['return']>0: return rx
-                ll=rx['lst']
+             if rx['return']>0: return rx
+             ll=rx['lst']
 
              # Select package 
              if len(ll)>0:
