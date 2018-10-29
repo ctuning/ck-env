@@ -292,30 +292,25 @@ def install(i):
                                'target_os_uoa':tosx,
                                'target_os_dict':tosd})
                  if rx['return']==0:
-                    # Split version
-                    ver=q.get('meta',{}).get('customize',{}).get('version','')
-                    if ver!='':
-                       rx=ck.access({'action':'split_version',
-                                     'module_uoa':cfg['module_deps']['soft'],
-                                     'version':ver})
-                       if rx['return']>0: return rx
-                       sver=rx['version_split']
+                    ver = q.get('meta',{}).get('customize',{}).get('version','')
+                    supported_versions = q.get('meta',{}).get('customize',{}).get('supported_versions')
+                    if not ver and supported_versions:
+                        for s_version in supported_versions:
+                            q_clone = copy.deepcopy( q )
+                            q_clone['meta']['customize']['version'] = s_version
+                            ll.append( q_clone )
+                    else:
+                        ll.append(q)
 
-                       q['meta']['customize']['version_split']=sver
-
-                    ll.append(q)
-
-             # Prune by no_tags
-             if xno_tags!='' or xor_tags!='' or len(vfrom)>0 or len(vto)>0:
-                rx=ck.access({'action':'prune_search_list',
+             rx=ck.access({'action':'prune_search_list',
                               'module_uoa':cfg['module_deps']['env'],
                               'lst':ll,
                               'version_from':vfrom,
                               'version_to':vto,
                               'or_tags':xor_tags,
                               'no_tags':xno_tags})
-                if rx['return']>0: return rx
-                ll=rx['lst']
+             if rx['return']>0: return rx
+             ll=rx['lst']
 
              # Select package 
              if len(ll)>0:
@@ -330,65 +325,59 @@ def install(i):
                                             k['data_uoa']),
                          reverse=True)
 
-                il=0
+                selected_index=0
                 if len(l)>1:
-                   ck.out('')
-                   ck.out('More than one package found:')
-                   ck.out('')
-                   if i.get('add_hint','')=='yes':
-                     ck.out('    (HINT: enter -1 to skip CK package installation and attemt to detect installed soft)')
-                     ck.out('')
+                    ver_options = []
+                    ck.out('')
+                    ck.out('More than one package found:')
+                    ck.out('')
 
-                   zz={}
-                   iz=0
-                   for z1 in l:
-                       z=z1['data_uid']
-                       zu=z1['data_uoa']
+                    display_to_idx={}
+                    for list_idx in range(len(l)):
+                        package_entry = l[list_idx]
+                        this_data_uid=package_entry['data_uid']
 
-                       dn=z1.get('info',{}).get('data_name','')
-                       if dn=='': dn=zu
+                        data_name_or_uoa = package_entry.get('info',{}).get('data_name', package_entry['data_uoa'])
 
-                       dmeta=z1.get('meta',{})
+                        dmeta=package_entry.get('meta',{})
 
-                       ver=''
-                       x=dmeta.get('customize',{}).get('version','')
-                       if x!='': ver='  Version '+x+' '
+                        declared_version = dmeta.get('customize',{}).get('version','')
+                        version_if_defined = '  Version {} '.format(declared_version) if declared_version else ''
 
-                       zs=str(iz)
-                       zz[zs]=z
+                        declared_comment = dmeta.get('comment','')
+                        comment_in_braces = (declared_comment + ', ' if declared_comment else '') + this_data_uid
 
-                       # If has short comment
-                       z1=dmeta.get('comment','')
-                       if z1!='':
-                          z1+=', '
+                        display_line = '{}{} ({})'.format(data_name_or_uoa, version_if_defined, comment_in_braces)
 
-                       ck.out(zs+') '+dn+ver+' ('+z1+z+')')
+                        display_to_idx[ display_line ] = list_idx
+                        ver_options.append( display_line )
 
-                       iz+=1
+                    skip_display_line = 'Skip CK package installation and attempt to detect installed soft'
+                    if i.get('add_hint','')=='yes':
+                        ver_options.append( skip_display_line )
 
-                   ck.out('')
-                   rx=ck.inp({'text':'Select package number (or Enter to select 0): '})
-                   ll=rx['string'].strip()
-                   if ll=='': ll='0'
+                    select_adict = ck.access({'action': 'select_string',
+                                    'module_uoa': 'misc',
+                                    'options': ver_options,
+                                    'default': '0',
+                                    'no_skip_line': 'yes',
+                                    'question': 'Please select the package to install',
+                    })
+                    if select_adict['return']>0: return select_adict
 
-                   if ll=='-1' and i.get('add_hint','')=='yes':
-                      return {'return':16, 'error':'skipped package installation!'}
+                    if select_adict['selected_value']==skip_display_line:
+                        return {'return':16, 'error':'skipped package installation!'}
 
-                   if ll not in zz:
-                      return {'return':1, 'error':'package number is not recognized'}
+                    selected_index = select_adict['selected_index']
 
-                   zduid=zz[ll]
-                   for il in range(0, len(l)):
-                       if l[il]['data_uid']==zduid: break
+                    ck.out('')
 
-                   ck.out('')
-
-                duid=l[il].get('data_uid','')
+                duid=l[selected_index].get('data_uid','')
                 duoa=duid
-                duoax=l[il].get('data_uoa','')
+                duoax=l[selected_index].get('data_uoa','')
 
-                d=l[il]['meta']
-                p=l[il]['path']
+                d=l[selected_index]['meta']
+                p=l[selected_index]['path']
 
                 if o=='con':
                    ck.out('')
@@ -469,7 +458,7 @@ def install(i):
 
     dname=d.get('package_name','')
 
-    ver=cus.get('version','')+extra_version
+    ver=cus.get('version','')+extra_version     # FIXME: probably misplaced - may spoil PACKAGE_VERSION variable
     extra_dir=cus.get('extra_dir','')
 
     # This environment will be passed to process scripts (if any)

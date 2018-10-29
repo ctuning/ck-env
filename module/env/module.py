@@ -1865,23 +1865,27 @@ def prune_search_list(i):
             if not otags_ok:
                 continue
 
-        # Check version
-        if len(vfrom)>0 or len(vto)>0:
-            v=meta.get('setup',{}).get('version_split',[])
+        v=meta.get('setup',{}).get('version_split',[])
 
-            # first check from env, but if not set, check from package
-            if len(v)==0:
-                v=meta.get('customize',{}).get('version_split',[])
-                if len(v)==0:
-                    ver=meta.get('customize',{}).get('version','')
- 
-                    if ver!='':
-                        rx=ck.access({'action':'split_version',
-                                    'module_uoa':cfg['module_deps']['soft'],
-                                    'version':ver})
-                        if rx['return']>0: return rx
-                        v=rx['version_split']
+        # first check from env, but if not set, check from package
+        if len(v)==0:
+            v=meta.get('customize',{}).get('version_split',[])
 
+        if len(v)==0:
+            ver=meta.get('customize',{}).get('version','')
+
+            if ver!='' and ver[0].isdigit():
+                rx=ck.access({'action':'split_version',
+                            'module_uoa':cfg['module_deps']['soft'],
+                            'version':ver})
+                if rx['return']>0: return rx
+                v=rx['version_split']
+
+                # NB: a side-effect: the result of version splitting is stored here:
+                #
+                entry['meta']['customize']['version_split'] = v
+
+        if len(v)>0:
             if len(vfrom)>0:
                 r=ck.access({'action':'compare_versions',
                             'module_uoa':cfg['module_deps']['soft'],
@@ -2203,8 +2207,12 @@ def xset(i):
 def virtual(i):
     """
     Input:  {
-              data_uoa or uoa   - environment UOA to pre-load (see "ck show env") - can be listed via ,
-
+              data_uoa or uoa   - environment UOA to pre-load (see "ck show env")
+              (tags)            - a combination of comma-separated tags to narrow down the search
+              (or_tags)         - a combination of semicolon-separated and comma-separated tags to narrow down the search
+              (tag_groups)      - independent groups of or_tags, separated by a space, refer to separate env entries
+                                  that can be combined together: '--tag_groups=alpha,beta gamma,~delta epsilon;lambda,mu'
+              (verbose)         - set to 'yes' to see the script that will be used to build the environment
               (shell_cmd)       - command line to run in the "environment-enriched" shell (make sure it is suitably quoted)
             }
 
@@ -2217,8 +2225,12 @@ def virtual(i):
     """
 
     duoa        = i.get('data_uoa', i.get('uoa','') )
+    tag_groups  = i.get('tag_groups')
+    list_of_updates = []
 
-    if duoa.find(',')!=-1:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
+    if not duoa:
+        list_of_uoa     = []
+    elif ',' in duoa:      # TODO: becomes deprecated (but still works) in 1.10, becomes an error in 1.11
         # ck.out('')
         # ck.out('DEPRECATED: You seem to be using CSV format within a CID. Please list multiple CIDs on your command line instead.')
         # ck.out('')
@@ -2232,19 +2244,37 @@ def virtual(i):
         else:
             return {'return':1, 'error':"all CID entries have to be of 'env' type"}
 
-    shell_script_contents_for_unix      = '' # string with env
-    shell_script_contents_for_windows   = '' # string with env
-
     for uoa in list_of_uoa:
-        i['uoa']=uoa
+        if uoa:
+            if '*' not in uoa:  # be a wildcard or be present!
+                r = ck.access( {'action': 'load', 'module_uoa': 'env', 'data_uoa': uoa} )
+                if r['return']>0: return r
+            list_of_updates.append( {'uoa': uoa} )
 
-        r=env_set(i)
+    if tag_groups and len(tag_groups)>0:    # tag_groups are always added on top
+        list_of_updates += [ {'or_tags': or_tags} for or_tags in tag_groups.split(' ')]
+
+    if not len(list_of_uoa) and ( i.get('tags') or i.get('or_tags') ):  # but make sure tags were seen at least once
+        list_of_updates.append( {} )
+
+    if not len(list_of_updates):    # if nothing else matched, let the user choose one env from the list
+        list_of_updates.append( { 'uoa' : '*'} )
+
+    shell_script_lines  = []
+
+    for dict_update in list_of_updates:
+        env_set_alist = i.copy()
+        env_set_alist.update( dict_update )
+
+        r=env_set( env_set_alist )
         if r['return']>0: return r
 
-        shell_script_contents_for_unix +='\n'+r['bat']+'\n'
+        shell_script_lines.append( r['bat'].strip() )
 
-        if shell_script_contents_for_windows != '': shell_script_contents_for_windows+=' & '
-        shell_script_contents_for_windows += r['bat'].replace('\n','')
+    if i.get('verbose', '')=='yes':
+        ck.out("*** Loading the following environment:\n")
+        ck.out("\n".join(shell_script_lines))
+        ck.out('')
 
     # Run shell
     import platform
@@ -2253,17 +2283,21 @@ def virtual(i):
 
     shell_cmd        = i.get('shell_cmd', None)
 
-    ck.out('')
-    ck.out('Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
+    if not shell_cmd:
+        ck.out('')
+        ck.out('*** Warning: you are in a new shell with a pre-set CK environment. Enter "exit" to return to the original one!')
 
     if platform.system().lower().startswith('win'): # pragma: no cover
+
         if shell_cmd:
-            shell_script_contents_for_windows += ' & ' + shell_cmd
+            shell_script_lines.append( shell_cmd )
             termination_flag = '/C'     # terminate the CMD shell when the environment script & shell_cmd are over
         else:
             termination_flag = '/K'     # remain in the CMD shell
 
-        p = subprocess.Popen(['cmd', termination_flag, shell_script_contents_for_windows], shell = True, env=os.environ)
+        shell_script_contents = ' & '.join( shell_script_lines )
+
+        p = subprocess.Popen(['cmd', termination_flag, shell_script_contents], shell = True, env=os.environ)
         p.wait()
         return_code  = p.returncode
     else:
@@ -2271,7 +2305,9 @@ def virtual(i):
         if rx['return']>0: return rx
         file_name=rx['file_name']
 
-        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents_for_unix })
+        shell_script_contents = '\n\n'.join( shell_script_lines ) + '\n'
+
+        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents })
         if rx['return']>0: return rx
 
         full_cmd_list    = ['/bin/bash','--rcfile', file_name, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )

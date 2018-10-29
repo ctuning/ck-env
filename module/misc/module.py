@@ -480,6 +480,8 @@ def select_string(i):
                 (question)      - the question to ask
                 (default)       - default selection
                 (no_autoselect) - if "yes", enforce the interactive choice even if there is only 1 option
+                (no_autoretry)  - if "yes", bail out on any unsuitable input, do not offer to retry
+                (no_skip_line)  - if "yes", do not skip a line after each option
             }
 
     Output: {
@@ -498,11 +500,14 @@ def select_string(i):
     question    = i.get('question', 'Please select from the options above')
     options     = copy.deepcopy( i.get('options') )
     default     = i.get('default', None)
-    num_options = len(options)
     auto_select = i.get('no_autoselect', '') != 'yes'
+    auto_retry  = i.get('no_autoretry', '') != 'yes'
+    skip_line   = i.get('no_skip_line', '') != 'yes'
 
     if not options or len(options)==0:
         return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
+
+    num_options = len(options)
 
     for j in range(num_options):
         if not isinstance(options[j], list):
@@ -511,39 +516,54 @@ def select_string(i):
         ck.out("{:>2}) {}".format(j, options[j][0]))
         for extra_line in options[j][1:]:
             ck.out('    {}'.format(extra_line))
-        ck.out('')
+        if skip_line:
+            ck.out('')
+
+    ck.out('')
+    num_matches = 0
 
     if len(options)==1 and auto_select:
         ck.out('Since there is only one option, auto-selecting it')
         response = '0'
-    else:
-        inp_adict = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if default!=None and len(default) else '')})
-        response = inp_adict['string']
+        selected_index = 0
+        num_matches = 1
 
-    if response=='' and default!=None:
-        response = default
+    while num_matches!=1:
 
-        if response=='':    # since it was a default, it was an allowed scenario (not having a selected_index)
-            return {'return':0, 'response': response}
+        r = ck.inp({'text': "{}{}: ".format(question, ' [ hit return for "{}" ]'.format(default) if default!=None and len(default) else '')})
+        response = r['string']
 
-    try:    # try to convert into int() and see if it works
-        selected_index = int(response)
-        if selected_index >= num_options:
-            return {'return': 2, 'response': response, 'error': 'Selected index out of range [0..{}]'.format(num_options-1)}
-    except:
-        num_matches = 0
-        for j in range(num_options):
-            if response in options[j][0]:
-                selected_index = j
-                num_matches += 1
+        if response=='' and default!=None:
+            response = default
 
-        if num_matches!=1:
-            return {'return': 3, 'response': response, 'error': 'Instead of 1 unique match there were {}'.format(num_matches)}
+        try:                                    # try to convert into int() and see if it works
+            error_message = None
 
-    selected_value = options[selected_index][0]
+            selected_index = int(response)
+            if selected_index < num_options:
+                num_matches = 1
+            else:
+                error_message = 'Selected index is out of range [0..{}]'.format(num_options-1)
+        except:
+            num_matches = 0
+            for j in range(num_options):
+                if response in options[j][0]:
+                    selected_index = j
+                    num_matches += 1
+
+            if num_matches!=1:
+                error_message = 'Instead of 1 unique match there were {}'.format(num_matches)
+
+        if error_message:
+            if auto_retry:
+                ck.out( error_message + ", please try again" )
+            else:
+                return { 'return': 1, 'response': response, 'error': error_message }
+
+    selected_value = options[selected_index][0] if selected_index >= 0 else ''
 
     if i.get('out')=='con':
-        ck.out('You selected [{:02}] == "{}"'.format(selected_index, selected_value))
+        ck.out('You selected [{}] == "{}"'.format(selected_index, selected_value))
 
     return { 'return':0, 'response': response, 'selected_index': selected_index, 'selected_value': selected_value }
 
@@ -1511,7 +1531,7 @@ def transfer(i):
     if len(source_addrs)==0:
         return {'return':1, 'error': 'Need a non-empty list of source CID addresses'}
 
-    expanded_source_addrs = []
+    expanded_source_addrs = {}
 
     for addr_pattern in source_addrs:
         search_adict = {'action':       'search',
@@ -1538,13 +1558,16 @@ def transfer(i):
             else:
                 source_addr['repo_uoa'] = found_addr.get('repo_uoa')
 
-            expanded_source_addrs.append( source_addr )
+            cid = ':'.join([ source_addr['repo_uoa'], source_addr['module_uoa'], source_addr['data_uoa'] ])
+            if cid in expanded_source_addrs:
+                return {'return':2, 'error': "Entry {} was found on the source multiple times - please use --source_repo_uoa to disambiguate!".format(cid)}
+            else:
+                expanded_source_addrs[cid] = source_addr
 
-
-    for source_addr in expanded_source_addrs:
+    for source_addr in expanded_source_addrs.values():
         from_local = source_addr.get('remote_repo_uoa') == None
         if from_local and (not target_server_uoa):
-            return {'return':2, 'error': 'Cannot copy the entries locally (since IDs are to be preserved)'}
+            return {'return':3, 'error': 'Cannot copy the entries locally (since IDs are to be preserved)'}
 
         target_addr = {
             'module_uoa':       source_addr['module_uoa'],

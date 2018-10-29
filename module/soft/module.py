@@ -803,12 +803,11 @@ def setup(i):
            if tg not in ltags:
               ltags.append(tg)
 
-    # Prepare final tags string
-    stags=''
-    for q in ltags:
-        if q!='':
-           if stags!='': stags+=','
-           stags+=q.strip()
+    unsplit_version_tag_prefix = cus.get('unsplit_version_to_tags_prefixed_with')
+    if unsplit_version_tag_prefix != None:      # NB: empty string is treated differently from absence!
+        ltags.append( unsplit_version_tag_prefix + ver_to_search )
+
+    tags_csv = ','.join( [t.strip() for t in ltags if t] )
 
     ########################################################################
     # Search if environment is already registered for this version
@@ -818,7 +817,7 @@ def setup(i):
        if o=='con':
           ck.out('')
           ck.out('Searching if environment already exists using:')
-          ck.out('  * Tags: '+stags)
+          ck.out('  * Tags: '+tags_csv)
           if len(deps)>0:
              for q in deps:
                  v=deps[q]
@@ -829,7 +828,7 @@ def setup(i):
        r=ck.access({'action':'search',
                     'module_uoa':cfg['module_deps']['env'],
                     'repo_uoa':enruoa,
-                    'tags':stags,
+                    'tags':tags_csv,
                     'search_dict':{'setup':setup}})
        if r['return']>0: return r
        lst=r['lst']
