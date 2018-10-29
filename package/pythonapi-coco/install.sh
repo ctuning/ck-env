@@ -22,8 +22,8 @@
 # LIB_NAME
 
 export SRC_DIR=${INSTALL_DIR}/src
-export API_DIR=${INSTALL_DIR}/PythonAPI
 export DST_DIR=`pwd`
+export API_DIR=${DST_DIR}/pycocotools
 export BLD_LOG=${INSTALL_DIR}/${PACKAGE_NAME}.log
 
 ################################################################################
@@ -62,6 +62,9 @@ set >> ${BLD_LOG}
 ################################################################################
 cd ${SRC_DIR}/PythonAPI
 make
+if [ ! -d "${API_DIR}" ]; then
+  mkdir ${API_DIR}
+fi
 cp -r pycocotools/* ${API_DIR}
 
 ################################################################################

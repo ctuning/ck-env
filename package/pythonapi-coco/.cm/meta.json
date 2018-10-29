@@ -11,6 +11,9 @@
   }, 
   "deps": {
   }, 
+  "end_full_path": {
+    "linux": "pycocotools/__init__.py"
+  }, 
   "only_for_host_os_tags": [
     "linux"
   ], 
