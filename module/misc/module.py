@@ -1507,6 +1507,7 @@ def transfer(i):
                 (target_server_uoa) - the optional target remote server (mapped as a local repository)
                 (target_repo_uoa)   - the repository to store the entries on target server ('local' by default)
                 (update_meta_dict)  - the dictionary with which to update the original meta.json
+                (update_mmeta_dict) - the dictionary with which to update the meta dictionary inside meta.json
                 (tags)              - filter the source list by tags
             }
 
@@ -1526,6 +1527,8 @@ def transfer(i):
     target_server_uoa   = i.get('target_server_uoa')
     target_repo_uoa     = i.get('target_repo_uoa', 'local')
     update_meta_dict    = i.get('update_meta_dict', {})
+    update_mmeta_dict    = i.get('update_mmeta_dict', {})
+
     tags                = i.get('tags')
 
     if len(source_addrs)==0:
@@ -1592,6 +1595,7 @@ def transfer(i):
         data_uid            = r['data_uid']
 
         meta_dict.update( update_meta_dict )
+        meta_dict.get('meta', {}).update( update_mmeta_dict )
 
         add_adict = {   'action':           'add',
                         'common_func':      'yes',
