@@ -1,14 +1,10 @@
 #! /bin/bash
 
 #
-# Installation script for dividiti's OpenCL profiler.
+# Installation script for pycocotools (Python API for COCO-dataset)
 #
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
-#
-# Developer(s):
-# - Grigori Fursin, grigori@dividiti.com, 2015
-# - Anton Lokhmotov, anton@dividiti.com, 2016-2017
 #
 
 # Standard env.
