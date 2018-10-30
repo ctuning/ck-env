@@ -2721,9 +2721,7 @@ def find_config_file(i):
     import os
 
     pf=i['full_path']
-    data_uid = i.get('data_uid')
-
-    ck.out('find_config_file called with : ' + str(i))
+    filter_data_uid = i.get('data_uid', '')
 
     pf1=os.path.dirname(pf)
 
@@ -2753,6 +2751,11 @@ def find_config_file(i):
 
        pf=pf1
        pf1=os.path.dirname(pf)
+
+    config_data_uid = d.get('data_uoa', '')
+    if filter_data_uid and (config_data_uid != filter_data_uid):
+        found = 'no'
+        d = {}
 
     return {'return':0, 'found':found, 'dict':d, 'filename':fn, 'path':pf2}
 
