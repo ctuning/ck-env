@@ -1633,3 +1633,50 @@ def transfer(i):
             ck.out('{}:{} -> {}:{}'.format(display_source_repo, display_mod_data, display_target_repo, display_mod_data))
 
     return {'return':0}
+
+
+def clone_server_repo(i):   # FIXME: it's probably better to zip the whole thing and transfer in one go
+    """
+    Input:  {
+                source_repo_uoa     - which remote repo to clone
+
+                (target_repo_uoa)   - the optional local name for the new repo (defaults to source_repo_uoa)
+            }
+
+    Output: {
+                return      - return code =  0, if successful
+                                          >  0, if error
+                (error)     - error text if return > 0
+            }
+    """
+
+    o                   = i.get('out','')
+    source_repo_uoa     = i.get('source_repo_uoa')
+
+    if not source_repo_uoa:
+        return {'return':1, 'error': 'source_repo_uoa is the obligatory parameter'}
+
+    target_repo_uoa     = i.get('target_repo_uoa', source_repo_uoa)
+
+
+    add_repo_adict = {  'action':       'add',
+                        'module_uoa':   'repo',
+                        'data_uoa':     target_repo_uoa,
+                        'quiet':        'yes',
+                        'out':          o,
+    }
+
+    r=ck.access( add_repo_adict )
+    if r['return']>0: return r
+
+    transfer_adict = {  'action':           'transfer',
+                        'module_uoa':       'misc',
+                        'cids':             [ 'remote-ck:*:*' ],    # sic: you call with unparsed 'cids' and the method will see parsed 'xcids'
+                        'source_repo_uoa':  source_repo_uoa,
+                        'target_repo_uoa':  target_repo_uoa,
+                        'out':              o,
+    }
+    r=ck.access( transfer_adict )
+    if r['return']>0: return r
+
+    return {'return':0}
