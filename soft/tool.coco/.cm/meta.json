@@ -10,11 +10,12 @@
       "linux": "pycocotools/__init__.py"
     }
   }, 
-  "soft_name": "COCO dataset Python API",
+  "soft_name": "COCO dataset API",
   "tags": [
-    "api",
-    "pythonapi",
+    "tool",
     "coco",
-    "trunk"
+    "api",
+    "vtrunk",
+    "vmaster"
   ]
 }

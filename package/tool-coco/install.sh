@@ -7,15 +7,6 @@
 # See CK COPYRIGHT.txt for copyright details.
 #
 
-# Standard env.
-# INSTALL_DIR
-# PACKAGE_DIR
-
-# Custom env (./cm/meta.json).
-# PACKAGE_URL
-# PACKAGE_BRANCH
-# PACKAGE_NAME
-
 export SRC_DIR=${INSTALL_DIR}/src
 export DST_DIR=`pwd`
 export API_DIR=${DST_DIR}/pycocotools
