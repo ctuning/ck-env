@@ -15,7 +15,7 @@
       "local": "yes",
       "name": "C compiler",
       "sort": 0,
-      "tags": "compiler,lang-c"
+      "tags": "compiler,lang-c,gcc"
     },
     "python": {
       "add_to_path": "yes",
