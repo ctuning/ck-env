@@ -1507,6 +1507,7 @@ def transfer(i):
                 (target_server_uoa) - the optional target remote server (mapped as a local repository)
                 (target_repo_uoa)   - the repository to store the entries on target server ('local' by default)
                 (update_meta_dict)  - the dictionary with which to update the original meta.json
+                (update_mmeta_dict) - the dictionary with which to update the meta dictionary inside meta.json
                 (tags)              - filter the source list by tags
             }
 
@@ -1526,6 +1527,8 @@ def transfer(i):
     target_server_uoa   = i.get('target_server_uoa')
     target_repo_uoa     = i.get('target_repo_uoa', 'local')
     update_meta_dict    = i.get('update_meta_dict', {})
+    update_mmeta_dict    = i.get('update_mmeta_dict', {})
+
     tags                = i.get('tags')
 
     if len(source_addrs)==0:
@@ -1592,6 +1595,7 @@ def transfer(i):
         data_uid            = r['data_uid']
 
         meta_dict.update( update_meta_dict )
+        meta_dict.get('meta', {}).update( update_mmeta_dict )
 
         add_adict = {   'action':           'add',
                         'common_func':      'yes',
@@ -1627,5 +1631,52 @@ def transfer(i):
             display_target_repo = '{}/{}'.format(target_server_uoa, target_repo_uoa) if target_server_uoa else target_repo_uoa
             display_mod_data    = '{}:{}'.format(source_addr['module_uoa'], source_addr['data_uoa'])
             ck.out('{}:{} -> {}:{}'.format(display_source_repo, display_mod_data, display_target_repo, display_mod_data))
+
+    return {'return':0}
+
+
+def clone_server_repo(i):   # FIXME: it's probably better to zip the whole thing and transfer in one go
+    """
+    Input:  {
+                source_repo_uoa     - which remote repo to clone
+
+                (target_repo_uoa)   - the optional local name for the new repo (defaults to source_repo_uoa)
+            }
+
+    Output: {
+                return      - return code =  0, if successful
+                                          >  0, if error
+                (error)     - error text if return > 0
+            }
+    """
+
+    o                   = i.get('out','')
+    source_repo_uoa     = i.get('source_repo_uoa')
+
+    if not source_repo_uoa:
+        return {'return':1, 'error': 'source_repo_uoa is the obligatory parameter'}
+
+    target_repo_uoa     = i.get('target_repo_uoa', source_repo_uoa)
+
+
+    add_repo_adict = {  'action':       'add',
+                        'module_uoa':   'repo',
+                        'data_uoa':     target_repo_uoa,
+                        'quiet':        'yes',
+                        'out':          o,
+    }
+
+    r=ck.access( add_repo_adict )
+    if r['return']>0: return r
+
+    transfer_adict = {  'action':           'transfer',
+                        'module_uoa':       'misc',
+                        'cids':             [ 'remote-ck:*:*' ],    # sic: you call with unparsed 'cids' and the method will see parsed 'xcids'
+                        'source_repo_uoa':  source_repo_uoa,
+                        'target_repo_uoa':  target_repo_uoa,
+                        'out':              o,
+    }
+    r=ck.access( transfer_adict )
+    if r['return']>0: return r
 
     return {'return':0}

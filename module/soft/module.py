@@ -247,7 +247,9 @@ def internal_detect(i):
         'cmd':soft_version_cmd,
         'use_locale':cus.get('use_locale_for_version',''),
         'customize':cus,
-        'custom_script_obj':cs}
+        'custom_script_obj':cs,
+        'data_uid': duid,
+    }
     rx=get_version(ii)
     if rx['return']==0:
        ver=rx['version']
@@ -673,7 +675,9 @@ def setup(i):
               'custom_script_obj':cs,
               'skip_existing':skip_existing,
               'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
-              'use_locale':cus.get('use_locale_for_version','')}
+              'use_locale':cus.get('use_locale_for_version',''),
+              'data_uid':   duid,
+          }
           rx=get_version(ii)
           if rx['return']==0:
              ver=rx['version']
@@ -1832,7 +1836,9 @@ def check(i):
                'cmd':soft_version_cmd,
                'use_locale':cus.get('use_locale_for_version',''),
                'customize':cus,
-               'custom_script_obj':cs}
+               'custom_script_obj':cs,
+               'data_uid': duid,
+           }
            rx=get_version(ii)
            if rx['return']>0:
               if o=='con':
@@ -1937,7 +1943,7 @@ def check(i):
     dname=''
     xtags=''
 
-    rx=find_config_file({'full_path':pf})
+    rx=find_config_file({'full_path':pf, 'data_uid': duid})
     if rx['return']>0: return rx
     found=rx['found']
 
@@ -2061,6 +2067,7 @@ def get_version(i):
     fp=i.get('full_path','')
     sb=i.get('bat','')
     soft_version_cmd=i.get('cmd','')
+    data_uid    = i.get('data_uid')
 
     cs=i.get('custom_script_obj', None)
     cus=i.get('customize',{})   # should we be more strict [] here?
@@ -2089,7 +2096,7 @@ def get_version(i):
 
     # Attempt to check via CK config file
     if i.get('skip_existing','')!='yes':
-       rx=find_config_file({'full_path':fp})
+       rx=find_config_file({'full_path':fp, 'data_uid': data_uid})
        if rx['return']>0: return rx
        found=rx['found']
        if found=='yes':
@@ -2714,6 +2721,7 @@ def find_config_file(i):
     import os
 
     pf=i['full_path']
+    filter_data_uid = i.get('data_uid', '')
 
     pf1=os.path.dirname(pf)
 
@@ -2743,6 +2751,11 @@ def find_config_file(i):
 
        pf=pf1
        pf1=os.path.dirname(pf)
+
+    config_data_uid = d.get('data_uoa', '')
+    if filter_data_uid and (config_data_uid != filter_data_uid):
+        found = 'no'
+        d = {}
 
     return {'return':0, 'found':found, 'dict':d, 'filename':fn, 'path':pf2}
 
