@@ -1,0 +1,3 @@
+Pre-requisites:
+* zip (sudo apt-get install zip)
+* protobuf 3.6.0 or newer (pip install -U protobuf)
