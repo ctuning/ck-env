@@ -1,0 +1,32 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "PACKAGE_BRANCH": "master",
+      "PACKAGE_NAME": "tool-coco",
+      "PACKAGE_URL": "https://github.com/cocodataset/cocoapi.git",
+      "TOOL_NAME": "tool-coco"
+    },
+    "version": "trunk"
+  },
+  "deps": {
+  },
+  "end_full_path": {
+    "linux": "pycocotools/__init__.py"
+  },
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "7432c898273fe70d",
+  "suggested_path": "tool-coco",
+  "tags": [
+    "api",
+    "pythonapi",
+    "coco",
+    "trunk"
+  ]
+}
