@@ -12,27 +12,10 @@ export DST_DIR=`pwd`
 export API_DIR=${DST_DIR}/pycocotools
 export BLD_LOG=${INSTALL_DIR}/${PACKAGE_NAME}.log
 
-################################################################################
-echo ""
-echo "Cloning '${PACKAGE_NAME}' from '${PACKAGE_URL}' ..."
+SUPPRESS_WARNINGS="-Wno-misleading-indentation -Wno-maybe-uninitialized"
 
-rm -rf ${SRC_DIR}
-git clone ${PACKAGE_URL} --no-checkout ${SRC_DIR}
-if [ "${?}" != "0" ] ; then
-  echo "Error: Cloning '${PACKAGE_NAME}' from '${PACKAGE_URL}' failed!"
-  exit 1
-fi
-
-################################################################################
-echo ""
-echo "Checking out the '${PACKAGE_BRANCH}' branch of '${PACKAGE_NAME}' ..."
-
-cd ${SRC_DIR}
-git checkout ${PACKAGE_BRANCH}
-if [ "${?}" != "0" ] ; then
-  echo "Error: Checking out the '${PACKAGE_BRANCH}' branch of '${PACKAGE_NAME}' failed!"
-  exit 1
-fi
+export CC=${CK_CC}
+export CFLAGS="${CFLAGS} ${SUPPRESS_WARNINGS}"
 
 ################################################################################
 echo ""

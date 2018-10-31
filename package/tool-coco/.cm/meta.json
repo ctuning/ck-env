@@ -2,19 +2,39 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+      "PACKAGE_GIT": "YES",
       "PACKAGE_NAME": "tool-coco",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_URL": "https://github.com/cocodataset/cocoapi.git",
       "TOOL_NAME": "tool-coco"
     },
     "version": "master"
   },
   "deps": {
-      "python": {
+    "compiler": {
+      "local": "yes",
+      "name": "C compiler",
+      "sort": 0,
+      "tags": "compiler,lang-c"
+    },
+    "python": {
       "add_to_path": "yes",
       "local": "yes",
       "name": "Python interpreter",
       "sort": 10,
       "tags": "compiler,python"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 60,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-matplotlib": {
+      "local": "yes",
+      "name": "Matplotlib python library",
+      "sort": 60,
+      "tags": "lib,python-package,matplotlib"
     }
   },
   "end_full_path": {
@@ -29,6 +49,10 @@
   "process_script": "install",
   "soft_uoa": "7432c898273fe70d",
   "suggested_path": "tool-coco",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  },
   "tags": [
     "tool",
     "coco",
