@@ -3,10 +3,8 @@
     "extra_dir": "",
     "git_src_dir": "src",
     "install_env": {
-      "BAZEL_PATCH1": "aarch64.patch",
-      "BAZEL_PATCH2": "aarch64-is-64bit.patch",
-      "BAZEL_PATCH3": "javac-max-heap-500mb.patch",
-      "BAZEL_PATCH4": "non-64bit-unix-warning.patch",
+      "BAZEL_PATCH1": "javac-max-heap-500mb.patch",
+      "BAZEL_PATCH2": "non-64bit-unix-warning.patch",
       "BAZEL_URL": "https://github.com/bazelbuild/bazel/releases/download/0.18.0/bazel-0.18.0-dist.zip",
       "BAZEL_ZIP": "bazel-0.18.0-dist.zip"
     }, 

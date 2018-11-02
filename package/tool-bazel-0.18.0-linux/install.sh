@@ -72,28 +72,16 @@ echo
 echo "Patching Bazel ..."
 
 echo "** PATCH **" >> ${BAZEL_INSTALL_LOG}
-# Apply patch for aarch64 machine.
-if [ "${MACH}"  == "aarch64" ] ; then
+# Apply patch for arm machine to prevent javac running out of heap memory.
+if [ "${HOSTTYPE}"  == "arm" ] ; then
   echo "Applying patch '${BAZEL_PATCH1}' ..."
   cd ${BAZEL_SRC_DIR} && patch -p1 < ${PACKAGE_DIR}/${BAZEL_PATCH1} >> ${BAZEL_INSTALL_LOG} 2>&1
 fi
 
-# Apply patch for aarch64 machine and 64-bit OS.
-if [ "${MACH}"  == "aarch64" ] && [ ${CK_TARGET_CPU_BITS} == 64 ]; then
-  echo "Applying patch '${BAZEL_PATCH2}' ..."
-  cd ${BAZEL_SRC_DIR} && patch -p1 < ${PACKAGE_DIR}/${BAZEL_PATCH2} >> ${BAZEL_INSTALL_LOG} 2>&1
-fi
-
-# Apply patch for arm machine to prevent javac running out of heap memory.
-if [ "${HOSTTYPE}"  == "arm" ] ; then
-  echo "Applying patch '${BAZEL_PATCH3}' ..."
-  cd ${BAZEL_SRC_DIR} && patch -p1 < ${PACKAGE_DIR}/${BAZEL_PATCH3} >> ${BAZEL_INSTALL_LOG} 2>&1
-fi
-
 # Apply patch for 32-bit OS to convert error to warning in mapped_file.h.
 if [ ${CK_TARGET_CPU_BITS} == 32 ]; then
-  echo "Applying patch '${BAZEL_PATCH4}' ..."
-  cd ${BAZEL_SRC_DIR} && patch -p1 < ${PACKAGE_DIR}/${BAZEL_PATCH4} >> ${BAZEL_INSTALL_LOG} 2>&1
+  echo "Applying patch '${BAZEL_PATCH2}' ..."
+  cd ${BAZEL_SRC_DIR} && patch -p1 < ${PACKAGE_DIR}/${BAZEL_PATCH2} >> ${BAZEL_INSTALL_LOG} 2>&1
 fi
 
 if [ "${?}" != "0" ] ; then
