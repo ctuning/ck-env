@@ -1,0 +1,40 @@
+  {
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "force_ask_path": "yes",
+    "install_env": {
+      "ANNOTATION_URL": "https://www.dropbox.com/s/y73j7o8f3xvzy6k/validation-annotations-bbox-min.csv",
+      "IMAGE_URL": "https://www.dropbox.com/s/1pe7y4xi66wsmpk/OpenImages2018-val-min.tar.gz",
+      "CLASSES_URL": "https://www.dropbox.com/s/3kcftx4h7tmfu8m/class-descriptions-boxable.csv",
+      "VAL_DIR": "validation-min", 
+      "VAL_IMAGE_ARCHIVE": "OpenImages2018-val-min.tar.gz"
+    },
+    "instances_val_file": "validation-annotations-bbox-min.csv",
+    "instances_classes_file": "class-descriptions-boxable.csv",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "2018"
+  },
+  "deps": {},
+  "end_full_path": {
+    "linux": "validation-min/005bd647ca0ac947.jpg",
+    "win": "validation-min/005bd647ca0ac947.jpg"
+  },
+  "need_cpu_info": "no",
+  "process_script": "install",
+  "soft_uoa": "df91cf74f7416f94",
+  "suggested_path": "dataset-openimages-min",
+  "tags": [
+    "dataset",
+    "openimages",
+    "OpenImages",
+    "open-images",
+    "Open-Images",
+    "2018",
+    "val",
+    "min",
+    "object-detection",
+    "channel-stable"
+  ]
+}
