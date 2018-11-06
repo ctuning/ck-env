@@ -1550,9 +1550,10 @@ def check(i):
                        'tags':tags})
           if r['return']>0: return r
           l=r['lst']
-          if len(l)>1:
-                candidate_names = [ x['data_uoa'] for x in l ]
-                return {'return':1, 'error': "Found {} soft entries matching tags '{}' :\n{} .\nPlease use more specific tags to prune".format(len(l), tags, candidate_names)}
+          if len(l)>1:      # FIXME: we could be smarter and assume several soft_candidates from the very start,
+                            #           merging all the options found into one big selector.
+                soft_candidates = [ x['data_uoa'] for x in l ]
+                return {'return':1, 'error': "Found {} soft entries matching tags '{}' :\n{} .\nPlease use more specific tags to prune".format(len(l), tags, soft_candidates)}
           elif len(l)==1:
                 duid=l[0].get('data_uid')
                 duoa=duid

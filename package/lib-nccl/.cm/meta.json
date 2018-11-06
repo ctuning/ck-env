@@ -16,11 +16,11 @@
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_SUB_DIR": "nccl", 
       "PACKAGE_SUB_DIR1": "install", 
-      "PACKAGE_GIT_CHECKOUT": "master",
+      "PACKAGE_GIT_CHECKOUT": "286916a1a37ca1fe8cd43e280f5c42ec29569fc5",
       "PACKAGE_URL": "https://github.com/NVIDIA/nccl.git", 
       "CUDA_ARC": "-arch=sm_37"
     }, 
-    "version": "master"
+    "version": "pre-2.3.5-5"
   }, 
   "deps": {
     "compiler": {
