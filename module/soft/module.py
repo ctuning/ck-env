@@ -1550,9 +1550,12 @@ def check(i):
                        'tags':tags})
           if r['return']>0: return r
           l=r['lst']
-          if len(l)>0:
-             duid=l[0].get('data_uid')
-             duoa=duid
+          if len(l)>1:
+                candidate_names = [ x['data_uoa'] for x in l ]
+                return {'return':1, 'error': "Found {} soft entries matching tags '{}' :\n{} .\nPlease use more specific tags to prune".format(len(l), tags, candidate_names)}
+          elif len(l)==1:
+                duid=l[0].get('data_uid')
+                duoa=duid
 
     if duoa=='':
        return {'return':1, 'error':'software entry was not found'}
