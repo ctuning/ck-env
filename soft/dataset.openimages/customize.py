@@ -89,6 +89,7 @@ def setup(i):
     ann = cus.get('instances_val_file','')
     
     if ann != '':
+        env['CK_ENV_DATASET_ANNOTATIONS_DIR'] = pi
         env['CK_ENV_DATASET_ANNOTATIONS'] = ann
 
     classes = cus.get('instances_classes_file','')
