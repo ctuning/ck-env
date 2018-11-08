@@ -3,8 +3,6 @@
 #
 # See CK LICENSE.txt for licensing details
 #
-# Developer: Zaborovskiy Vladislav, vladzab@yandex.ru, 
-#
 
 import os
 
