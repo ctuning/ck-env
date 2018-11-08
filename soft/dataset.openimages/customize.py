@@ -94,6 +94,7 @@ def setup(i):
     classes = cus.get('instances_classes_file','')
 
     if classes != '':
+        env['CK_ENV_DATASET_CLASSES_DIR'] = pi
         env['CK_ENV_DATASET_CLASSES'] = classes
 
     env['CK_ENV_DATASET_TYPE']='openimages'

@@ -7,6 +7,7 @@
       "ANNOTATION_URL": "https://www.dropbox.com/s/y73j7o8f3xvzy6k/validation-annotations-bbox-min.csv",
       "IMAGE_URL": "https://www.dropbox.com/s/1pe7y4xi66wsmpk/OpenImages2018-val-min.tar.gz",
       "CLASSES_URL": "https://www.dropbox.com/s/3kcftx4h7tmfu8m/class-descriptions-boxable.csv",
+      "LABELS_DIR": "/",
       "VAL_DIR": "validation-min", 
       "VAL_IMAGE_ARCHIVE": "OpenImages2018-val-min.tar.gz"
     },
