@@ -1,0 +1,21 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "env_prefix": "CK_ENV_TOOL_COCO",
+    "check_that_exists": "yes",
+    "limit_recursion_dir_search": {
+      "linux": 5
+    },
+    "soft_file": {
+      "linux": "pycocotools/__init__.py"
+    }
+  }, 
+  "soft_name": "COCO dataset API",
+  "tags": [
+    "tool",
+    "coco",
+    "api",
+    "vtrunk",
+    "vmaster"
+  ]
+}
