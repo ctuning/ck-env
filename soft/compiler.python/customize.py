@@ -60,7 +60,7 @@ def limit(i):
         q1=os.path.basename(q)
         if q.endswith('.exe'):
            q1=q1[:-4]
-        if q.find('X11')<0 and q.find('pkgs')<0 and q.lower().find('openoffice')<0:
+        if q.find('X11')<0 and q.find('pkgs')<0 and q.lower().find('openoffice')<0 and q.lower().find('man')<0:
            if q1=='python' or q1=='python2' or (q1.startswith('python3') and not q1.endswith('m')):
               drx.append(q)
 
