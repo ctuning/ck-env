@@ -29,6 +29,7 @@ echo "** SET **" >> ${BLD_LOG}
 set >> ${BLD_LOG}
 
 ################################################################################
+cp ${ORIGINAL_PACKAGE_DIR}/Makefile ${SRC_DIR}/PythonAPI/
 cd ${SRC_DIR}/PythonAPI
 make
 if [ ! -d "${API_DIR}" ]; then
