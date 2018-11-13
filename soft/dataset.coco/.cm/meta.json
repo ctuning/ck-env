@@ -8,7 +8,7 @@
       "linux": 5
     },
     "soft_file": {
-      "linux": ""
+      "linux": "COCO_val2014_000000000042.jpg"
     }
   },
   "deps": {},
