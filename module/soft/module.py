@@ -1739,6 +1739,11 @@ def check(i):
        if rx.get('dirs'): dirs=rx['dirs']   # If anything was returned at all, trust that value, even if it is empty.
                                             # NB: Otherwise it may be the case that the original list was modified as a side effect.
 
+    # Check if substitute all search dirs via kernel!
+    x=ck.cfg.get('soft_search_dirs','')
+    if x!='':
+       dirs=x.split(',')
+
     # Check which file to search for
     sname=i.get('soft_name','')
     if sname=='':
