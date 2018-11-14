@@ -110,6 +110,18 @@
       "url": "https://github.com/ctuning/ck-rpi-optimization-results"
     }
   },
+  "18783052ae4b61b6": {
+    "data_uoa": "ck-rescue-hpc",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-rescue-hpc"
+    }
+  },
   "18bb3d4130a4aaf9": {
     "data_uoa": "ck-docker",
     "dict": {
@@ -131,6 +143,21 @@
       "desc": "Experimental CK workflow to automate SuperComputing'18 Student Cluster Competition.",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-scc18"
+    }
+  },
+  "1db88c44a4086634": {
+    "data_uoa": "ctuning-programs",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ctuning-datasets-min"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ctuning-programs"
     }
   },
   "1e884df489890fa1": {
@@ -198,6 +225,21 @@
       ],
       "shared": "git",
       "url": "https://github.com/ctuning/ck-spack"
+    }
+  },
+  "2a0455ea3185e35f": {
+    "data_uoa": "ck-website",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        },
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-website"
     }
   },
   "2d162976f4e728a0": {
@@ -403,6 +445,13 @@
       ],
       "shared": "git",
       "url": "https://github.com/dividiti/ck-request-asplos18-mobilenets-armcl-opencl"
+    }
+  },
+  "4ae7df4c1a806867": {
+    "data_uoa": "ck-gui",
+    "dict": {
+      "shared": "git",
+      "url": "git@github.com:Chunosov/ck-gui"
     }
   },
   "4b4e921eb5f74ab7": {
