@@ -1545,15 +1545,20 @@ def check(i):
        tags=i.get('tags','')
 
        if tags!='':
-          r=ck.access({'action':'search',
-                       'module_uoa':work['self_module_uid'],
-                       'tags':tags})
+          r=ck.access({'action':        'search',
+                       'module_uoa':    work['self_module_uid'],
+                       'tags':          tags,
+                       'add_meta':      'yes',
+          })
           if r['return']>0: return r
           l=r['lst']
           if len(l)>1:      # FIXME: we could be smarter and assume several soft_candidates from the very start,
                             #           merging all the options found into one big selector.
-                soft_candidates = [ x['data_uoa'] for x in l ]
-                return {'return':1, 'error': "Found {} soft entries matching tags '{}' :\n{} .\nPlease use more specific tags to prune".format(len(l), tags, soft_candidates)}
+
+                ck.out("Found {} soft candidate entries matching tags '{}' :".format(len(l), tags))
+                for candidate in l:
+                    ck.out("\tck detect soft:{:<30}    # --tags={}".format(candidate['data_uoa'], ','.join(candidate['meta']['tags'])) )
+                return {'return':1, 'error': "Please use a command that uniquely defines a soft: entry"}
           elif len(l)==1:
                 duid=l[0].get('data_uid')
                 duoa=duid
