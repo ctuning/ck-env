@@ -139,3 +139,9 @@ E: GitHub: @w-simon
 O: 
 C: improving autotuning documentation and fixing bugs
 W:
+
+N: Stephen Herbein
+E: 
+O: LLNL
+C: fixing problem with soft detection on HPC systems with NFS
+W: https://herbein.net

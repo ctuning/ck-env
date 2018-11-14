@@ -1,3 +1,6 @@
+* 2018.11.14 - [FGG and Stephen Herbein] improved soft search in HPC 
+               (ck set kernel var.soft_search_dirs=dir1,dir2,...)
+
 * 2018.09.25 - [FGG] added package cmake 3.12.2
                [FGG] fixed bug reported in https://github.com/ctuning/ck-env/issues/77
 
