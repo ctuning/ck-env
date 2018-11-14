@@ -7,7 +7,7 @@
 # See CK COPYRIGHT.txt for copyright details.
 #
 
-export SRC_DIR=${INSTALL_DIR}/cocoapi
+export SRC_DIR=${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 export DST_DIR=${INSTALL_DIR}
 export API_DIR=${DST_DIR}/pycocotools
 export BLD_LOG=${INSTALL_DIR}/${PACKAGE_NAME}.log
