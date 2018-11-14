@@ -78,22 +78,17 @@ def setup(i):
 
     ep=cus.get('env_prefix','')
 
-    val_dir = cus.get('install_env', '').get('VAL_DIR', '')
+    ie = cus.get('install_env', '')
 
-    if val_dir != '':
-        env[ep + '_VAL_IMAGE_DIR'] = val_dir
-        env['CK_ENV_DATASET_IMAGE_DIR'] = p1
-    
-    ann = cus.get('instances_val_file','')
-    
-    if ann != '':
-        env['CK_ENV_DATASET_ANNOTATIONS'] = os.path.join(pi, ann)
+    val_dir = ie.get('VAL_DIR', '')
+    env[ep + '_VAL_IMAGE_DIR'] = val_dir
+    env['CK_ENV_DATASET_IMAGE_DIR'] = p1
 
-    classes = cus.get('instances_classes_file','')
+    ann = ie.get('VAL_FILE','')
+    env['CK_ENV_DATASET_ANNOTATIONS'] = os.path.join(pi, ann)
 
-    if classes != '':
-        env['CK_ENV_DATASET_CLASSES_DIR'] = pi
-        env['CK_ENV_DATASET_CLASSES'] = classes
+    classes = ie.get('CLASSES_FILE','')
+    env['CK_ENV_DATASET_CLASSES'] = os.path.join(pi, classes)
 
     env['CK_ENV_DATASET_TYPE']='openimages'
     env[ep] = pi
