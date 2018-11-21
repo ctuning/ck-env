@@ -1819,15 +1819,17 @@ def check(i):
 
        vlst=[]
 
-       # Sometimes can be the same paths (due to soft links) - remove:
-       lst1=[]
-       lst2=[]
-       for q in reversed(lst):
-           q2=os.path.realpath(q)
-           if q2 not in lst2:
-              lst1.append(q)
-              lst2.append(q2)
-       lst=reversed(lst1) # return to original order if need to avoid sorting
+#       FGG: decided to remove after discussing with LLNL because often picks up strange path instead of correct one ...
+
+#       # Sometimes can be the same paths (due to soft links) - remove:
+#       lst1=[]
+#       lst2=[]
+#       for q in reversed(lst):
+#           q2=os.path.realpath(q)
+#           if q2 not in lst2:
+#              lst1.append(q)
+#              lst2.append(q2)
+#       lst=reversed(lst1) # return to original order if need to avoid sorting
 
        # Process each path
        if o=='con':

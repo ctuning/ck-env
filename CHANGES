@@ -1,3 +1,6 @@
+* 2018.11.21 - [FGG and Stephen Herbein] do not prune symbolic links
+               when detecting software (otherwise have strange paths)
+
 * 2018.11.14 - [FGG and Stephen Herbein] improved soft search in HPC 
                (ck set kernel var.soft_search_dirs=dir1,dir2,...)
 

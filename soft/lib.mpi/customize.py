@@ -111,7 +111,7 @@ def setup(i):
 
     pb=os.path.join(p2, 'bin')
     if not os.path.isdir(pb):
-       pbx=os.path.dirname(pb)
+       pbx=os.path.dirname(p2)
        pb=os.path.join(pbx,'bin')
        if not os.path.isdir(pb):
           return {'return':1, 'error':'can\'t find bin directory'}
