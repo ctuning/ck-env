@@ -331,7 +331,7 @@
         }
       ],
       "shared": "git",
-      "url": "git@github.com:dividiti/ck-tensorrt.git"
+      "url": "git@github.com:ctuning/ck-tensorrt.git"
     }
   },
   "410382d03df408ec": {
@@ -726,7 +726,7 @@
         },
         {
           "repo_uoa": "ck-tensorrt",
-          "repo_url": "https://github.com/dividiti/ck-tensorrt"
+          "repo_url": "https://github.com/ctuning/ck-tensorrt"
         },
         {
           "repo_uoa": "ck-mxnet"
@@ -943,7 +943,7 @@
       ],
       "shared": "git",
       "sync": "yes",
-      "url": "http://github.com/dividiti/ck-kann"
+      "url": "http://github.com/ctuning/ck-kann"
     }
   },
   "ab816740663debac": {

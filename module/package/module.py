@@ -1477,17 +1477,7 @@ def internal_run_if_present(script, method_name, param_dict, topup_from_install_
 
 def setup(i):
     """
-    Input:  {
-               See 'install' function
-               skip_process=yes
-            }
-
-    Output: {
-              return       - return code =  0, if successful
-                                         >  0, if error
-              (error)      - error text if return > 0
-            }
-
+    See "install" API with skip_process=yes
     """
 
     i['skip_process']='yes'
