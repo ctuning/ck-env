@@ -1,3 +1,5 @@
+* 2018.11.26 - Added API to listed modules
+
 * 2018.11.21 - [FGG and Stephen Herbein] do not prune symbolic links
                when detecting software (otherwise have strange paths)
 

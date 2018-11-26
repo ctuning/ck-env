@@ -2463,6 +2463,7 @@ def show(i):
     ii['out']=''
     ii['action']='list'
     ii['add_meta']='yes'
+    ii['time_out']=-1
 
     rx=ck.access(ii)
     if rx['return']>0: return rx
@@ -2505,6 +2506,7 @@ def show(i):
        h+='See <pre>ck detect soft --help</pre> for more detection options.\n'
        h+='See <a href="http://cKnowledge.org/shared-packages.html">related CK packages</a>,\n'
        h+=' <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
+       h+=' <a href="https://github.com/ctuning/ck/wiki#contributing">"how to contribute" guide</a>,\n'
        h+=' <a href="https://portalparts.acm.org/3230000/3229762/fm/frontmatter.pdf">ACM ReQuEST-ASPLOS\'18 report</a>\n'
        h+=' and the latest <a href="http://cKnowledge.org/rpi-crowd-tuning">CK paper</a> for further details.\n'
 
@@ -2701,6 +2703,9 @@ def show(i):
 
               ck.out(s)
 
+    ck.out('')
+    ck.out('  Total soft detection plugins: '+str(num))
+    ck.out('')
 
     if html:
        h+='</table>\n'

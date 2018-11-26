@@ -1650,6 +1650,7 @@ def show(i):
     list_action_dict['out']=''
     list_action_dict['action']='list'
     list_action_dict['add_meta']='yes'
+    list_action_dict['time_out']=-1
 
     rx=ck.access(list_action_dict)
     if rx['return']>0: return rx
@@ -1698,6 +1699,7 @@ def show(i):
        h+='See <pre>ck install package --help</pre> for more installation options.\n'
        h+='See <a href="http://cKnowledge.org/shared-soft-detection-plugins.html">related CK soft detection plugins</a>,\n'
        h+=' <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
+       h+=' <a href="https://github.com/ctuning/ck/wiki#contributing">"how to contribute" guide</a>,\n'
        h+=' <a href="https://portalparts.acm.org/3230000/3229762/fm/frontmatter.pdf">ACM ReQuEST-ASPLOS\'18 report</a>\n'
        h+=' and the latest <a href="http://cKnowledge.org/rpi-crowd-tuning">CK paper</a> for further details.\n'
        h+='See <a href="https://github.com/ctuning/ck-spack">ck-spack repository</a> connecting CK and spack package manager.\n'
@@ -1893,6 +1895,10 @@ def show(i):
                  if ld!='': s+=ss1+'  '+ld
 
               ck.out(s)
+
+    ck.out('')
+    ck.out('  Total packages: '+str(num))
+    ck.out('')
 
     if html:
        h+='</table>\n'

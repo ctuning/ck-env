@@ -932,6 +932,7 @@ def list_repos(i):
     ii['module_uoa']=cfg['module_deps']['repo']
     ii['action']='list'
     ii['add_meta']='yes'
+    ii['time_out']=-1
 
     rx=ck.access(ii)
     if rx['return']>0: return rx
@@ -963,7 +964,8 @@ def list_repos(i):
 
        h+='<p>Feel free to add description of your own CK repository in this <a href="https://github.com/ctuning/ck-env/blob/master/cfg/list-of-repos/.cm/meta.json">JSON file</a>.\n'
 
-       h+='<p>See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>\n'
+       h+='<p>See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
+       h+=' <a href="https://github.com/ctuning/ck/wiki#contributing">"how to contribute" guide</a>\n'
        h+=' and <a href="https://github.com/ctuning/ck/wiki#user-content-reusable-ck-components">already shared reusable components</a> for further details.\n'
 
        h+='<p>\n'
@@ -1144,6 +1146,10 @@ def list_repos(i):
 
            h+=' </tr>\n'
 
+    ck.out('')
+    ck.out('  Total repos: '+str(num))
+    ck.out('')
+
     if html:
        h+='</table>\n'
        h+=h2
@@ -1204,6 +1210,7 @@ def list_modules(i):
     ii['action']='list'
     ii['module_uoa']=cfg['module_deps']['module']
     ii['add_meta']='yes'
+    ii['time_out']=-1
 
     rx=ck.access(ii)
     if rx['return']>0: return rx
@@ -1232,7 +1239,8 @@ def list_modules(i):
        h+=' ck add_action module:{my module alias}\n'
        h+='</pre>\n'
 
-       h+='See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>\n'
+       h+='See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
+       h+=' <a href="https://github.com/ctuning/ck/wiki#contributing">"how to contribute" guide</a>,\n'
        h+=' and the latest <a href="http://cKnowledge.org/rpi-crowd-tuning">CK paper</a> for further details.\n'
 
        h+='<p>\n'
@@ -1250,6 +1258,7 @@ def list_modules(i):
 
     private=''
     num=0
+
     for l in ll:
         ln=l['data_uoa']
         lr=l['repo_uoa']
@@ -1273,6 +1282,8 @@ def list_modules(i):
         if lr not in cfg.get('skip_repos',[]) and private!='yes' and url!='':
            num+=1
 
+           ck.out('  '+str(num)+') '+ln)
+
            lm=l['meta']
            ld=lm.get('desc','')
 
@@ -1292,6 +1303,7 @@ def list_modules(i):
               x1=''
               x2=''
               z1=''
+              z1full=''
               z11=''
               if url!='':
                  x1='<a href="'+url+'">'
@@ -1307,7 +1319,8 @@ def list_modules(i):
                  else:
                     url2+='/module/'
 
-                 z1='<a href="'+url2+ln+'/module.py">'
+                 z1full=url2+ln+'/module.py'
+                 z1='<a href="'+z1full+'">'
                  z11='<a href="'+url2+ln+'/.cm/meta.json">'
 
               h+='  <td nowrap valign="top"><a name="'+ln+'">'+str(num)+'</b></td>\n'
@@ -1321,11 +1334,23 @@ def list_modules(i):
               if len(actions)>0:
                  h+='<ul>\n'
                  for q in sorted(actions):
+
                      qq=actions[q]
                      qd=qq.get('desc','')
+
                      h+='<li>"ck <i>'+q+'</i> '+ln+'"'
                      if qd!='':
                         h+=' - '+qd
+
+                     if z1full!='':
+                        # Get API!
+                        l=-1
+                        rx=ck.get_api({'module_uoa':ln, 'func':q})
+                        if rx['return']==0:
+                           l=rx['line']
+
+                        if l!=-1:
+                           h+=' (&nbsp;<a href="'+z1full+'#L'+str(l)+'">API</a>&nbsp;)'
                  h+='</ul>\n'
 
               h+='</td>\n'
@@ -1380,6 +1405,10 @@ def list_modules(i):
                      qd=qq.get('desc','')
                      ck.out('  * '+q+' - '+qd)
 
+
+    ck.out('')
+    ck.out('  Total modules: '+str(num))
+    ck.out('')
 
     if html:
        h+='</table>\n'
