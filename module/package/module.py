@@ -1658,6 +1658,10 @@ def show(i):
     ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
 
     if html:
+       h+='<p>CK package manager unifies installation of code, data and models across different platforms and operating systems\n'
+       h+='using the most appropriate solutions including wget, make, cmake, scons, spack, vcpkg, conan, easybuild, etc.\n'
+
+       h+='<p>'
        h+='You can install a CK package into CK virtual environment as follows:\n'
        h+='<pre>\n'
        h+=' ck pull repo:{Repo UOA - see below}\n'
