@@ -133,6 +133,7 @@
   "1be6d862d67244da": {
     "data_uoa": "ck-mlperf",
     "dict": {
+      "desc": "CK workflows and components for <a href=\"http://mlperf.org\">MLPerf benchmark</a>).",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-mlperf"
     }
