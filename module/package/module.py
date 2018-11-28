@@ -2455,11 +2455,11 @@ def print_warning(i):
 
        ck.out('CK packages are developed, shared and improved by the community')
        ck.out('to help users automate installation and customization')
-       ck.out('of code and data across diverse platform:')
+       ck.out('of code and data across diverse and evolving platforms:')
        ck.out('* http://cKnowledge.org/shared-packages.html')
 
        ck.out('')
-       ck.out('Sometimes they may fail with newer code versions,')
+       ck.out('Therefore, they may sometimes fail with newer code versions,')
        ck.out('under new settings or in previously unseen environments.')
 
        ck.out('')
@@ -2467,13 +2467,12 @@ def print_warning(i):
        ck.out('and/or reporting it via CK mailing list and related repository:')
        ck.out('(please provide all details about how to reproduce it):')
 
-
        ck.out('')
        ck.out('* https://groups.google.com/forum/#!forum/collective-knowledge')
 
        if pduoa!='' or pruoa!='':
           ck.out('')
-          ck.out('Failed CK package:    '+pduoa)
+          ck.out('Failed(?) CK package: '+pduoa)
 
           if purl!='':
              ck.out('Original package URL: '+purl)
