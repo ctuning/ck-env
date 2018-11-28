@@ -2470,6 +2470,10 @@ def print_warning(i):
        ck.out('')
        ck.out('* https://groups.google.com/forum/#!forum/collective-knowledge')
 
+       ck.out('')
+       ck.out('You can turn off this message as follows:')
+       ck.out('$ ck set kernel --var.skip_message_when_package_fails=yes')
+
        if pduoa!='' or pruoa!='':
           ck.out('')
           ck.out('Failed(?) CK package: '+pduoa)
