@@ -1439,6 +1439,9 @@ def check(i):
               (interactive)       - if 'yes', and has questions, ask user
               (quiet)             - if 'yes', do not ask questions but select default value
 
+              (default_selection) - default value for the selection from the menu
+              (first_match)       - in case of match ambiguity in menu selection, just take the first match
+
               (skip_help)         - if 'yes', skip print help if not detected (when called from env setup)
 
               (deps)              - already resolved deps (if called from env)
@@ -1906,13 +1909,13 @@ def check(i):
                                            k.get('path','')),
                      reverse=True)
 
-       lst=[]
-       for q in vlst:
-           lst.append(q['path'])
+       lst = [ q['path'] for q in vlst ]
 
        if len(lst)>1:
           if o=='con':
              ck.out('')
+
+          default_selection = i.get('default_selection', '0')
 
           if iv=='yes':
                 ck.out('  Registering software installations found on your machine in the CK:')
@@ -1931,8 +1934,9 @@ def check(i):
                 select_adict = ck.access({'action': 'select_string',
                                     'module_uoa': 'misc',
                                     'options': ver_options,
-                                    'default': '0',
+                                    'default': default_selection,
                                     'question': 'Please select the number of any above installation',
+                                    'first_match': i.get('first_match', ''),
                 })
                 if select_adict['return']>0: return select_adict
 
