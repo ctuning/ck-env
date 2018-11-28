@@ -1352,7 +1352,7 @@ def install(i):
                 os.remove(shell_wrapper_name)
 
              if rx>0: 
-                print_warning({'package_data_uoa':duoa, 'package_repo_uoa':package_repo_uoa})
+                print_warning({'package_data_uoa':duoa, 'package_repo_uoa':package_repo_uoa, 'package_meta':d})
                 return {'return':1, 'error':'package installation failed'}
 
           # Check if has post-setup Python script
@@ -2427,6 +2427,7 @@ def print_warning(i):
     Input:  {
               package_data_uoa
               package_repo_uoa
+              package_meta
             }
 
     Output: {
@@ -2441,6 +2442,11 @@ def print_warning(i):
     if ck.cfg.get('skip_message_when_package_fails')!='yes':
        pduoa=i['package_data_uoa']
        pruoa=i['package_repo_uoa']
+       pmeta=i['package_meta']
+
+       pie=pmeta.get('customize',{}).get('install_env',{})
+       purl=pie.get('PACKAGE_URL','')
+       pc=pie.get('PACKAGE_GIT_CHECKOUT','')
 
        ck.out('')
        ck.out('***************************************************************')
@@ -2449,7 +2455,8 @@ def print_warning(i):
 
        ck.out('CK packages are developed, shared and improved by the community')
        ck.out('to help users automate installation and customization')
-       ck.out('of code and data across diverse platform.')
+       ck.out('of code and data across diverse platform:')
+       ck.out('* http://cKnowledge.org/shared-packages.html')
 
        ck.out('')
        ck.out('Sometimes they may fail with newer code versions,')
@@ -2466,9 +2473,15 @@ def print_warning(i):
 
        if pduoa!='' or pruoa!='':
           ck.out('')
-          ck.out('Failed package: '+pduoa)
+          ck.out('Failed CK package:    '+pduoa)
+
+          if purl!='':
+             ck.out('Original package URL: '+purl)
+             if pc!='':
+                ck.out('Git checkout:         '+pc)
+
           if pruoa!='':
-             ck.out('Repository:     '+pruoa)
+             ck.out('CK repo:              '+pruoa)
 
              # Attempt to read info about this repo
              r=ck.access({'action':'load',
@@ -2480,9 +2493,9 @@ def print_warning(i):
                 if url!='':
                    url1=url+'/tree/master/package/'+pduoa
                    url2=url+'/issues'
-                   ck.out('CK repo URL:    '+url)
-                   ck.out('CK package URL: '+url1)
-                   ck.out('Issues URL:     '+url2)
+                   ck.out('CK repo URL:          '+url)
+                   ck.out('CK package URL:       '+url1)
+                   ck.out('Issues URL:           '+url2)
 
        ck.out('***************************************************************')
        ck.out('***************************************************************')
