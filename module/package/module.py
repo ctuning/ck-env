@@ -250,6 +250,7 @@ def install(i):
     if duoa=='': duoa=i.get('data_uoa','')
     duid=''
     dname=''
+    package_repo_uoa=''
     d={}
 
     if duoa=='' and xtags=='':
@@ -257,6 +258,7 @@ def install(i):
        rx=ck.detect_cid_in_current_path({})
        if rx['return']==0:
           duoa=rx.get('data_uoa','')
+          package_repo_uoa=rx.get('repo_uoa','')
 
     if duoa!='':
        rx=ck.access({'action':'load',
@@ -268,6 +270,7 @@ def install(i):
 
        duoa=rx['data_uoa']
        duid=rx['data_uid']
+       package_repo_uoa=rx.get('repo_uoa','')
     else:
        # First, search by tags
        if xtags!='':
@@ -375,6 +378,7 @@ def install(i):
                 duid=l[selected_index].get('data_uid','')
                 duoa=duid
                 duoax=l[selected_index].get('data_uoa','')
+                package_repo_uoa=l[selected_index].get('repo_uoa','')
 
                 d=l[selected_index]['meta']
                 p=l[selected_index]['path']
@@ -1348,6 +1352,7 @@ def install(i):
                 os.remove(shell_wrapper_name)
 
              if rx>0: 
+                print_warning({'package_data_uoa':duoa, 'package_repo_uoa':package_repo_uoa})
                 return {'return':1, 'error':'package installation failed'}
 
           # Check if has post-setup Python script
@@ -2413,3 +2418,75 @@ def add(i):
        ck.out(' * https://github.com/ctuning/ck/wiki/Adding-new-workflows')
 
     return ck.access(ii)
+
+##############################################################################
+# internal: print community warning when package fails
+
+def print_warning(i):
+    """
+    Input:  {
+              package_data_uoa
+              package_repo_uoa
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    # Check if this warning is disabled in CK kernel
+    if ck.cfg.get('skip_message_when_package_fails')!='yes':
+       pduoa=i['package_data_uoa']
+       pruoa=i['package_repo_uoa']
+
+       ck.out('')
+       ck.out('***************************************************************')
+       ck.out('***************************************************************')
+       ck.out('***************************************************************')
+
+       ck.out('CK packages are developed, shared and improved by the community')
+       ck.out('to help users automate installation and customization')
+       ck.out('of code and data across diverse platform.')
+
+       ck.out('')
+       ck.out('Sometimes they may fail with newer code versions,')
+       ck.out('under new settings or in previously unseen environments.')
+
+       ck.out('')
+       ck.out('In such case, please help the community by fixing the problem')
+       ck.out('and/or reporting it via CK mailing list and related repository:')
+       ck.out('(please provide all details about how to reproduce it):')
+
+
+       ck.out('')
+       ck.out('* https://groups.google.com/forum/#!forum/collective-knowledge')
+
+       if pduoa!='' or pruoa!='':
+          ck.out('')
+          ck.out('Failed package: '+pduoa)
+          if pruoa!='':
+             ck.out('Repository:     '+pruoa)
+
+             # Attempt to read info about this repo
+             r=ck.access({'action':'load',
+                          'module_uoa':cfg['module_deps']['repo'],
+                          'data_uoa':pruoa})
+             if r['return']==0:
+                d=r['dict']
+                url=d.get('url','')
+                if url!='':
+                   url1=url+'/tree/master/package/'+pduoa
+                   url2=url+'/issues'
+                   ck.out('CK repo URL:    '+url)
+                   ck.out('CK package URL: '+url1)
+                   ck.out('Issues URL:     '+url2)
+
+       ck.out('***************************************************************')
+       ck.out('***************************************************************')
+       ck.out('***************************************************************')
+       ck.out('')
+
+    return {}

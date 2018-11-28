@@ -45,6 +45,7 @@
     "platform.cpu": "aa6b542a420b8db9", 
     "platform.gpgpu": "192ed4e0bbdbe743", 
     "platform.os": "41e31cc4496b8a8e", 
+    "repo": "befd7892b0d469e9",
     "soft": "5e1100048ab875d7"
   }
 }
