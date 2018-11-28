@@ -482,6 +482,7 @@ def select_string(i):
                 (no_autoselect) - if "yes", enforce the interactive choice even if there is only 1 option
                 (no_autoretry)  - if "yes", bail out on any unsuitable input, do not offer to retry
                 (no_skip_line)  - if "yes", do not skip a line after each option
+                (first_match)   - if "yes", take the first match in case there are multiple
             }
 
     Output: {
@@ -503,6 +504,7 @@ def select_string(i):
     auto_select = i.get('no_autoselect', '') != 'yes'
     auto_retry  = i.get('no_autoretry', '') != 'yes'
     skip_line   = i.get('no_skip_line', '') != 'yes'
+    first_match = i.get('first_match', '') == 'yes'
 
     if not options or len(options)==0:
         return {'return': 1, 'error': 'No options provided - please check the docstring for correct syntax'}
@@ -546,12 +548,14 @@ def select_string(i):
                 error_message = 'Selected index is out of range [0..{}]'.format(num_options-1)
         except:
             num_matches = 0
-            for j in range(num_options):
+            for j in reversed(range(num_options)):
                 if response in options[j][0]:
                     selected_index = j
                     num_matches += 1
 
-            if num_matches!=1:
+            if num_matches>1 and first_match:
+                break
+            elif num_matches!=1:
                 error_message = 'Instead of 1 unique match there were {}'.format(num_matches)
 
         if error_message:
