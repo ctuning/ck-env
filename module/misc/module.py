@@ -1102,6 +1102,9 @@ def list_repos(i):
            z11=''
            url2=''
 
+           if url!='' and url.startswith('git@'):
+              url=url.replace(':','/').replace('git@','https://')
+
            if url=='' and lr=='default':
               url='https://github.com/ctuning/ck/tree/master/ck/repo'
 
@@ -1135,9 +1138,9 @@ def list_repos(i):
            # TD
            workflow_desc=workflow_desc.replace('$#repo_url#$',url2)
 
-           if d.get('ck_artifact','')!='' or d.get('passed_artifact_evaluation','')=='yes':
+           if d.get('ck_artifact','')!='' or d.get('reproducible_article','')=='yes' or d.get('passed_artifact_evaluation','')=='yes':
               if workflow_desc!='': workflow_desc+='<p>'
-              workflow_desc+='Reproducible&nbsp;paper\n'
+              workflow_desc+='reproducible&nbsp;paper\n'
               if d.get('passed_artifact_evaluation','')=='yes':
                  workflow_desc+='-&nbsp;passed&nbsp;<a href="http://cTuning.org/ae">Artifact&nbsp;Evaluation</a>:\n'
                  workflow_desc+='<p><center><img src="https://www.acm.org/binaries/content/gallery/acm/publications/replication-badges/artifacts_evaluated_reusable_dl.jpg" width="64"></center>\n'

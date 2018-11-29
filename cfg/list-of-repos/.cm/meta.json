@@ -4,6 +4,7 @@
     "dict": {
       "ck_artifact": "9375838469ad4029",
       "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
+      "passed_artifact_evaluation": "yes",
       "recache": "yes",
       "repo_deps": [
         {
@@ -33,7 +34,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-tvm"
+      "url": "https://github.com/ctuning/ck-tvm",
+      "workflow_desc": "programs"
     }
   },
   "07aff7c7b258f26b": {
@@ -76,6 +78,7 @@
     "dict": {
       "ck_artifact": "e7cc77d72f13441e",
       "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
+      "passed_artifact_evaluation": "yes",
       "recache": "yes",
       "repo_deps": [
         {
@@ -93,7 +96,7 @@
   "147d284ae646bb5a": {
     "data_uoa": "ck-rpi-optimization-results",
     "dict": {
-      "desc": "Experimental results in the unified and reproducible CK format from crowd-tuning programs across Rapsberry Pi devices (see <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">interactive report</a>).",
+      "desc": "CK workflows, components, experimental results and interactive article about program crowd-tuning across Rapsberry Pi devices (see <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">interactive report</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-rpi-optimization",
@@ -106,6 +109,7 @@
           "repo_uoa": "ck-docker"
         }
       ],
+      "reproducible_article": "yes",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-rpi-optimization-results"
     }
@@ -113,13 +117,15 @@
   "18783052ae4b61b6": {
     "data_uoa": "ck-rescue-hpc",
     "dict": {
+      "desc": "CK components for <a href=\"http://rescue-hpc.org\">RESCUE-HPC workshop at Supercomputing</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-web"
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-rescue-hpc"
+      "url": "https://github.com/ctuning/ck-rescue-hpc",
+      "workflow_desc": "website generator"
     }
   },
   "18bb3d4130a4aaf9": {
@@ -133,15 +139,17 @@
   "1be6d862d67244da": {
     "data_uoa": "ck-mlperf",
     "dict": {
-      "desc": "CK workflows and components for <a href=\"http://mlperf.org\">MLPerf benchmark</a>).",
+      "desc": "CK workflows and components for the <a href=\"http://mlperf.org\">MLPerf benchmark</a>.",
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-mlperf"
+      "url": "https://github.com/ctuning/ck-mlperf",
+      "workflow_desc": "programs"
     }
   },
   "1ca4108a0485b920": {
     "data_uoa": "ck-scc18",
     "dict": {
       "desc": "CK workflow and components to automate SuperComputing'18 Student Cluster Competition.",
+      "passed_artifact_evaluation": "yes",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-scc18"
     }
@@ -177,7 +185,8 @@
         }
       ],
       "shared": "git",
-      "url": "git@github.com:dividiti/gemmbench.git"
+      "url": "git@github.com:dividiti/gemmbench.git",
+      "workflow_desc": "programs"
     }
   },
   "1ff43ae88715a8c1": {
@@ -231,6 +240,7 @@
   "2a0455ea3185e35f": {
     "data_uoa": "ck-website",
     "dict": {
+      "desc": "CK components for <a href=\"http://cKnowledge.org\">cKnowledge.org</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-env"
@@ -240,13 +250,16 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-website"
+      "url": "https://github.com/ctuning/ck-website",
+      "workflow_desc": "cKnowledge.org website generator"
     }
   },
   "2d162976f4e728a0": {
     "data_uoa": "ck-request-asplos18-resnet-tvm-fpga",
     "dict": {
       "ck_artifact": "9375838469ad4029",
+      "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
+      "passed_artifact_evaluation": "yes",
       "recache": "yes",
       "repo_deps": [
         {
@@ -285,7 +298,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/reproduce-pamela-project-small-dataset"
+      "url": "https://github.com/ctuning/reproduce-pamela-project-small-dataset",
+      "workflow_desc": "programs"
     }
   },
   "31e50f714fc996c4": {
@@ -293,7 +307,8 @@
     "dict": {
       "desc": "CK workflow and components for Seissol application.",
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-seissol"
+      "url": "https://github.com/ctuning/ck-seissol",
+      "workflow_desc": "programs"
     }
   },
   "35287339a4756f75": {
@@ -333,7 +348,8 @@
         }
       ],
       "shared": "git",
-      "url": "git@github.com:ctuning/ck-tensorrt.git"
+      "url": "git@github.com:ctuning/ck-tensorrt.git",
+      "workflow_desc": "programs"
     }
   },
   "410382d03df408ec": {
@@ -355,7 +371,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/dividiti/ck-wa"
+      "url": "https://github.com/dividiti/ck-wa",
+      "workflow_desc": "programs"
     }
   },
   "429dcb214d3fa659": {
@@ -371,7 +388,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ctuning-programs"
+      "url": "https://github.com/ctuning/ctuning-programs",
+      "workflow_desc": "programs"
     }
   },
   "4439c9443bbab749": {
@@ -435,6 +453,7 @@
     "dict": {
       "ck_artifact": "08da9685582866a0",
       "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
+      "passed_artifact_evaluation": "yes",
       "recache": "yes",
       "repo_deps": [
         {
@@ -459,7 +478,8 @@
     "data_uoa": "ck-gui",
     "dict": {
       "shared": "git",
-      "url": "git@github.com:Chunosov/ck-gui"
+      "url": "git@github.com:Chunosov/ck-gui",
+      "workflow_desc": "GUI, programs"
     }
   },
   "4b4e921eb5f74ab7": {
@@ -502,7 +522,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-qiskit"
+      "url": "https://github.com/ctuning/ck-qiskit",
+      "workflow_desc": "programs"
     }
   },
   "4ffcc1307484d840": {
@@ -530,7 +551,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-mvnc"
+      "url": "https://github.com/ctuning/ck-mvnc",
+      "workflow_desc": "programs"
     }
   },
   "604419a9fcc7a081": {
@@ -568,7 +590,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-rigetti"
+      "url": "https://github.com/ctuning/ck-rigetti",
+      "workflow_desc": "programs"
     }
   },
   "678494f8b520000f": {
@@ -587,7 +610,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-mxnet"
+      "url": "https://github.com/ctuning/ck-mxnet",
+      "workflow_desc": "programs"
     }
   },
   "68121412a8ff317c": {
@@ -609,7 +633,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-graph-analytics"
+      "url": "https://github.com/ctuning/ck-graph-analytics",
+      "workflow_desc": "programs"
     }
   },
   "6d04bb400f29474d": {
@@ -654,6 +679,7 @@
     "data_uoa": "reproduce-adapt16",
     "dict": {
       "desc": "CK workflows and packages from reproducible ADAPT'16 paper.",
+      "reproducible_article": "yes",
       "shared": "git",
       "url": "https://github.com/ctuning/reproduce-adapt16"
     }
@@ -741,27 +767,6 @@
       "url": "https://github.com/ctuning/ck-ai"
     }
   },
-  "7ce37b63d958413d": {
-    "data_uoa": "ck-quantum",
-    "dict": {
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-env",
-          "repo_url": "https://github.com/ctuning/ck-env"
-        },
-        {
-          "repo_uoa": "ck-rigetti",
-          "repo_url": "https://github.com/ctuning/ck-rigetti"
-        },
-        {
-          "repo_uoa": "ck-qiskit",
-          "repo_url": "https://github.com/ctuning/ck-qiskit"
-        }
-      ],
-      "shared": "git",
-      "url": "https://github.com/ctuning/ck-quantum"
-    }
-  },
   "7d60433aa9fd29fe": {
     "data_uoa": "reproduce-carp-project",
     "dict": {
@@ -772,7 +777,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/reproduce-carp-project"
+      "url": "https://github.com/ctuning/reproduce-carp-project",
+      "workflow_desc": "programs"
     }
   },
   "84fc89e8504dc5a2": {
@@ -800,6 +806,7 @@
           "repo_uoa": "ck-dissemination-modules"
         }
       ],
+      "reproducible_article": "yes",
       "shared": "git",
       "url": "https://github.com/ctuning/reproduce-ck-paper"
     }
@@ -827,7 +834,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-tbd-suite"
+      "url": "https://github.com/ctuning/ck-tbd-suite",
+      "workflow_desc": "programs"
     }
   },
   "9116e3c9d3784902": {
@@ -843,7 +851,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-pytorch"
+      "url": "https://github.com/ctuning/ck-pytorch",
+      "workflow_desc": "programs"
     }
   },
   "944d5b8a6b4ba2f8": {
@@ -866,6 +875,7 @@
           "repo_uoa": "ck-docker"
         }
       ],
+      "reproducible_article": "yes",
       "shared": "git",
       "url": "https://github.com/ctuning/reproduce-milepost-project"
     }
@@ -875,6 +885,7 @@
     "dict": {
       "ck_artifact": "640fb4c4b9ba9822",
       "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
+      "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
           "repo_uoa": "ck-tensorflow"
@@ -884,7 +895,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-request-asplos18-iot-farm"
+      "url": "https://github.com/ctuning/ck-request-asplos18-iot-farm",
+      "workflow_desc": "programs, <a href=\"$#repo_url#$/module\">reusable modules</a>"
     }
   },
   "9fa400bbc0821635": {
@@ -917,18 +929,6 @@
       "url": "https://github.com/lift-project/ck-lift"
     }
   },
-  "a448ecf44bf67c48": {
-    "data_uoa": "ck-env",
-    "dict": {
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-web"
-        }
-      ],
-      "shared": "git",
-      "url": "https://github.com/ctuning/ck-env.git"
-    }
-  },
   "aa8299de464392e3": {
     "data_uoa": "ck-kann",
     "dict": {
@@ -941,7 +941,8 @@
       ],
       "shared": "git",
       "sync": "yes",
-      "url": "http://github.com/ctuning/ck-kann"
+      "url": "http://github.com/ctuning/ck-kann",
+      "workflow_desc": "programs"
     }
   },
   "ab816740663debac": {
@@ -974,7 +975,8 @@
       ],
       "shared": "git",
       "sync": "yes",
-      "url": "https://github.com/ctuning/ck-tensorflow"
+      "url": "https://github.com/ctuning/ck-tensorflow",
+      "workflow_desc": "programs"
     }
   },
   "b674321852dd4dd6": {
@@ -1018,7 +1020,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-tiny-dnn"
+      "url": "https://github.com/ctuning/ck-tiny-dnn",
+      "workflow_desc": "programs"
     }
   },
   "bd5c40d5b3fd5035": {
@@ -1040,6 +1043,7 @@
     "dict": {
       "ck_artifact": "8b220a7f172a47d4",
       "desc": "CK workflow, portable packages and other artifacts for the <a href=\"http://cknowledge.org/request-cfp-asplos2018.html\">ReQuEST-ASPLOS'18 tournament</a>.",
+      "passed_artifact_evaluation": "yes",
       "recache": "yes",
       "repo_deps": [
         {
@@ -1093,7 +1097,7 @@
   "de640faafc01c0a0": {
     "data_uoa": "ck-quantum",
     "dict": {
-      "desc": "CK workflows and portable packages for Quantum programs.",
+      "desc": "CK workflows and components for open and reproducible <a href=\"http://cKnowledge.org/quantum\">Quantum hackathons</a>.",
       "repo_deps": [
         {
           "repo_uoa": "ck-env",
@@ -1109,7 +1113,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-quantum"
+      "url": "https://github.com/ctuning/ck-quantum",
+      "workflow_desc": "programs"
     }
   },
   "e1eb9104ef494917": {
@@ -1134,27 +1139,6 @@
       "url": "https://github.com/ctuning/ck-autotuning"
     }
   },
-  "e1f04fc2ba0c7823": {
-    "data_uoa": "ck-quantum",
-    "dict": {
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-env",
-          "repo_url": "https://github.com/ctuning/ck-env"
-        },
-        {
-          "repo_uoa": "ck-rigetti",
-          "repo_url": "https://github.com/ctuning/ck-rigetti"
-        },
-        {
-          "repo_uoa": "ck-qiskit",
-          "repo_url": "https://github.com/ctuning/ck-qiskit"
-        }
-      ],
-      "shared": "git",
-      "url": "https://github.com/ctuning/ck-quantum"
-    }
-  },
   "e3f9da42311dbb44": {
     "data_uoa": "ck-web-adapt-workshop",
     "dict": {
@@ -1165,7 +1149,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-web-adapt-workshop"
+      "url": "https://github.com/ctuning/ck-web-adapt-workshop",
+      "workflow_desc": "website generator"
     }
   },
   "e593999edb49689a": {
@@ -1222,13 +1207,6 @@
       ],
       "shared": "git",
       "url": "https://github.com/ctuning/ck-request-asplos18-results"
-    }
-  },
-  "f4b9993c6d17ba95": {
-    "data_uoa": "ck-web-cknowledge",
-    "dict": {
-      "shared": "git",
-      "url": "https://gitlab.com/gfursin/ck-web-cknowledge"
     }
   },
   "f5418c86ed803058": {
