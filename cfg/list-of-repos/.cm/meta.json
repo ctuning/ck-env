@@ -39,7 +39,7 @@
   "07aff7c7b258f26b": {
     "data_uoa": "ck-ccprof",
     "dict": {
-      "desc": "CK workflow for CGO'18 paper \"CCProf: Lightweight Detection of Cache Conflicts\".",
+      "desc": "CK workflow and components for the CGO'18 paper \"CCProf: Lightweight Detection of Cache Conflicts\".",
       "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
@@ -141,7 +141,7 @@
   "1ca4108a0485b920": {
     "data_uoa": "ck-scc18",
     "dict": {
-      "desc": "Experimental CK workflow to automate SuperComputing'18 Student Cluster Competition.",
+      "desc": "CK workflow and components to automate SuperComputing'18 Student Cluster Competition.",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-scc18"
     }
@@ -291,7 +291,7 @@
   "31e50f714fc996c4": {
     "data_uoa": "ck-seissol",
     "dict": {
-      "desc": "Customizable CK workflow and portable CK packages for Seissol application.",
+      "desc": "CK workflow and components for Seissol application.",
       "shared": "git",
       "url": "https://github.com/ctuning/ck-seissol"
     }
@@ -310,7 +310,8 @@
       ],
       "shared": "git",
       "sync": "yes",
-      "url": "git@github.com:dividiti/ck-caffe.git"
+      "url": "git@github.com:dividiti/ck-caffe.git",
+      "workflow_desc": "programs"
     }
   },
   "39ebcdfa4adc73e6": {
@@ -406,14 +407,20 @@
     "data_uoa": "ck-crowdsource-dnn-optimization",
     "dict": {
       "desc": "GUI to crowdsource benchmarking and optimization of DNN engines and models across diverse Linux or Windows platforms (see <a href=\"http://cKnowledge.org/ai\">unified AI vision</a>).",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        }
+      ],
       "shared": "git",
-      "url": "https://github.com/dividiti/ck-crowdsource-dnn-optimization"
+      "url": "https://github.com/dividiti/ck-crowdsource-dnn-optimization",
+      "workflow_desc": "GUI, programs"
     }
   },
   "4784a9da122ed85c": {
     "data_uoa": "ck-assets",
     "dict": {
-      "desc": "Public and reusable CK slides, presentations and other assets (see real use cases in <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">this paper</a>).",
+      "desc": "Public and reusable CK <a href=\"$#repo_url#$slide\">slides</a>, presentations, <a href=\"$#repo_url#$report/common-bib\">Latex BIB file</a>, and other assets (see real use cases in <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">this CK-generated interactive and reproducible article</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-dissemination-modules"
@@ -536,7 +543,7 @@
   "640f0b9dadc5bfda": {
     "data_uoa": "reproduce-cgo2017-paper",
     "dict": {
-      "desc": "Customizable CK workflow and portable CK packages from the CGO'17 paper \"Software Prefetching for Indirect Memory Accesses\".",
+      "desc": "CK workflow and components from the CGO'17 paper \"Software Prefetching for Indirect Memory Accesses\".",
       "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
@@ -553,7 +560,7 @@
   "6456e78d8c044a88": {
     "data_uoa": "ck-rigetti",
     "dict": {
-      "desc": "Customizable CK workflow and portable CK packages from Rigetti.",
+      "desc": "CK workflow and components from Rigetti",
       "repo_deps": [
         {
           "repo_uoa": "ck-autotuning",
@@ -562,18 +569,6 @@
       ],
       "shared": "git",
       "url": "https://github.com/ctuning/ck-rigetti"
-    }
-  },
-  "64ef2802afd7af03": {
-    "data_uoa": "ck-env",
-    "dict": {
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-web"
-        }
-      ],
-      "shared": "git",
-      "url": "https://github.com/ctuning/ck-env.git"
     }
   },
   "678494f8b520000f": {
@@ -679,13 +674,14 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-crowdtuning"
+      "url": "https://github.com/ctuning/ck-crowdtuning",
+      "workflow_desc": "<a href=\"$#repo_url#$/module\">reusable modules</a>"
     }
   },
   "754e85a102d75042": {
     "data_uoa": "ck-dissemination",
     "dict": {
-      "desc": "Different artifacts from Grigori Fursin's R&D in the reusable CK form (used to automatically generate this <a href=\"http://fursin.net/cv.html\">interactive CV</a>).",
+      "desc": "Different artifacts from Grigori Fursin's R&D as reusable CK components (used to automatically generate this <a href=\"http://fursin.net/cv.html\">interactive CV</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-dissemination-modules"
@@ -698,6 +694,7 @@
   "76c4424a1473c873": {
     "data_uoa": "ck-analytics",
     "dict": {
+      "desc": "Unified CK JSON API for predictive analytics, statistical analysis, graphs, experiments and interactive reports (see the <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">real use case</a>).",
       "repo_deps": [
         {
           "repo_uoa": "ck-web"
@@ -963,18 +960,6 @@
       "url": "https://github.com/ctuning/ck-request-asplos18-results-iot-farm"
     }
   },
-  "ac0aeabaf54f5f93": {
-    "data_uoa": "ck-env",
-    "dict": {
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-web"
-        }
-      ],
-      "shared": "git",
-      "url": "https://github.com/ctuning/ck-env.git"
-    }
-  },
   "acb7cea44acac9c9": {
     "data_uoa": "ck-tensorflow",
     "dict": {
@@ -990,22 +975,6 @@
       "shared": "git",
       "sync": "yes",
       "url": "https://github.com/ctuning/ck-tensorflow"
-    }
-  },
-  "b147cf2ad44fb39c": {
-    "data_uoa": "ck-analytics",
-    "dict": {
-      "desc": "Unified CK JSON API for predictive analytics, statistical analysis, graphs, experiments and interactive reports (see the <a href=\"http://cKnowledge.org/rpi-crowd-tuning\">real use case</a>).",
-      "repo_deps": [
-        {
-          "repo_uoa": "ck-web"
-        },
-        {
-          "repo_uoa": "ck-env"
-        }
-      ],
-      "shared": "git",
-      "url": "https://github.com/ctuning/ck-analytics"
     }
   },
   "b674321852dd4dd6": {
@@ -1032,7 +1001,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-caffe2"
+      "url": "https://github.com/ctuning/ck-caffe2",
+      "workflow_desc": "programs"
     }
   },
   "ba416ebde828395d": {
@@ -1054,7 +1024,7 @@
   "bd5c40d5b3fd5035": {
     "data_uoa": "ck-clsmith",
     "dict": {
-      "desc": "Portable and customizable CK workflow to crowdsource detection of OpenCL bugs.",
+      "desc": "CK workflow and components to crowdsource detection of OpenCL bugs from the PLDI'15 paper \"Many-Core Compiler Fuzzing\".",
       "passed_artifact_evaluation": "yes",
       "repo_deps": [
         {
@@ -1214,13 +1184,14 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-cntk"
+      "url": "https://github.com/ctuning/ck-cntk",
+      "workflow_desc": "programs"
     }
   },
   "f05d5e4ab641cca0": {
     "data_uoa": "ck-artifact-evaluation",
     "dict": {
-      "desc": "CK modules and data for artifact evaluation (see <a href=\"http://cTuning.org/ae\">Artifact Evaluation</a>).",
+      "desc": "CK components for the <a href=\"http://cTuning.org/ae\">Artifact Evaluation initiative</a> at systems, AI and ML conferences.",
       "repo_deps": [
         {
           "repo_uoa": "ck-env"
@@ -1236,7 +1207,8 @@
         }
       ],
       "shared": "git",
-      "url": "https://github.com/ctuning/ck-artifact-evaluation"
+      "url": "https://github.com/ctuning/ck-artifact-evaluation",
+      "workflow_desc": "AE website generator"
     }
   },
   "f2be9b14e67b8b23": {

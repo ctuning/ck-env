@@ -2,7 +2,7 @@
   "data_uid": "1ff43ae88715a8c1", 
   "data_name": "ck-env", 
   "dict": {
-    "url": "https://github.com/ctuning/ck-env.git", 
+    "url": "https://github.com/ctuning/ck-env", 
     "shared": "git",
     "repo_deps": [
       {

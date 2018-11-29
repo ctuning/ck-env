@@ -940,12 +940,18 @@ def list_repos(i):
     ll=rx['lst']
 
     if html:
-       h+='You can reuse modules and other components with a common API from below repositories (most of them were shared with the permissive 3-clause BSD license or CC-BY):\n'
+       h+='<p>Users share their reusable CK components (code, data, models) and workflows/pipelines using CK-compatible repositories and archives\n'
+       h+='(for example, see this <a href="https://github.com/ctuning/">CK repository</a>\n'
+       h+='with a complete compiler crowd-tuning workflow, an <a href="http://cKnowledge.org/rpi-crowd-tuning">automatically generated interactive article</a>,\n'
+       h+='and a <a href="http://cKnowledge.org/dashboard">public interactive dashboard</a>).\n'
+       h+='Most of them are shared with the permissive 3-clause BSD license or CC-BY to accelerate technology transfer!\n'
+
+       h+='<p>You can run and reuse workflows, <a href="http://cKnowledge.org/shared-modules.html">modules</a> and other components with a common API from below repositories:\n'
        h+='<pre>\n'
        h+=' ck pull repo:{Repo UOA - see below}\n'
        h+='</pre>\n'
 
-       h+='You can add dependency on a given repository in your own CK repository by editing your .ckr.json file as follows:\n'
+       h+='<p>You can add dependency on a given repository in your own CK repository by editing your .ckr.json file as follows:\n'
        h+='<pre>\n'
        h+=' {\n'
        h+='   ...\n'
@@ -962,7 +968,7 @@ def list_repos(i):
        h+='}\n'
        h+='</pre>\n'
 
-       h+='<p>Feel free to add description of your own CK repository in this <a href="https://github.com/ctuning/ck-env/blob/master/cfg/list-of-repos/.cm/meta.json">JSON file</a>.\n'
+       h+='<p>Feel free to add description of your own CK repository in <a href="https://github.com/ctuning/ck-env/blob/master/cfg/list-of-repos/.cm/meta.json">this JSON file</a>.\n'
 
        h+='<p>See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
        h+=' <a href="https://github.com/ctuning/ck/wiki#contributing">"how to contribute" guide</a>\n'
@@ -974,6 +980,7 @@ def list_repos(i):
        h+=' <tr>\n'
        h+='  <td nowrap><b>#</b></td>\n'
        h+='  <td nowrap><b>Repository UOA</b></td>\n'
+       h+='  <td nowrap><b>Workflow</b></td>\n'
        h+='  <td><b>Description</b></td>\n'
        h+=' </tr>\n'
 
@@ -1068,6 +1075,8 @@ def list_repos(i):
 
         ld=d.get('desc','')
 
+        workflow_desc=d.get('workflow_desc','')
+
         to_get=''
         if url.find('github.com/ctuning/')>0:
            to_get='ck pull repo:'+lr
@@ -1083,15 +1092,18 @@ def list_repos(i):
            h+=' <tr>\n'
 
            x1=''
+           x1readme=''
            x2=''
            z1=''
            z11=''
+           url2=''
 
            if url=='' and lr=='default':
               url='https://github.com/ctuning/ck/tree/master/ck/repo'
 
            if url!='':
               x1='<a href="'+url+'">'
+              x1readme='<a href="'+url+'#readme">'
               x2='</a>'
 
               url2=url
@@ -1106,13 +1118,32 @@ def list_repos(i):
 
               z1='<a href="'+url2+'.ckr.json">'
 
+           # TD
            h+='  <td nowrap valign="top"><a name="'+lr+'">'+str(num)+'</b></td>\n'
                                                      
+           # TD
            x5=''
            if url!='':
-              x5=' <i>('+z1+'.ckr.json)</i>'
+              x5='<br><ul>( '+x1readme+'README'+x2+' ; '+z1+'JSON meta</a> )'
+
            h+='  <td nowrap valign="top"><b>'+x1+lr+x2+'</b>'+x5+'</td>\n'
 
+           # TD
+           workflow_desc=workflow_desc.replace('$#repo_url#$',url2)
+
+           if d.get('ck_artifact','')!='' or d.get('passed_artifact_evaluation','')=='yes':
+              if workflow_desc!='': workflow_desc+='<p>'
+              workflow_desc+='Reproducible&nbsp;paper\n'
+              if d.get('passed_artifact_evaluation','')=='yes':
+                 workflow_desc+='-&nbsp;passed&nbsp;<a href="http://cTuning.org/ae">Artifact&nbsp;Evaluation</a>:\n'
+                 workflow_desc+='<p><center><img src="https://www.acm.org/binaries/content/gallery/acm/publications/replication-badges/artifacts_evaluated_reusable_dl.jpg" width="64"></center>\n'
+
+           h+='  <td valign="top"><center>\n'
+           h+='    '+workflow_desc+'\n'
+           h+='  </center></td>\n'
+
+           # TD
+           ld=ld.replace('$#repo_url#$',url2)
            h+='  <td valign="top">'+ld+'\n'
 
            if to_get!='':
@@ -1137,10 +1168,6 @@ def list_repos(i):
 
                   h+='<li>'+repo_uoa+'\n'
               h+='</ul>\n'
-
-           if d.get('ck_artifact','')!='' or d.get('passed_artifact_evaluation','')=='yes':
-              h+='<p>Workflow passed <a href="http://cTuning.org/ae">Artifact Evaluation</a>\n'
-              h+='<p><center><img src="https://www.acm.org/binaries/content/gallery/acm/publications/replication-badges/artifacts_evaluated_reusable_dl.jpg" width="64"></center>\n'
 
            h+='</td>\n'
 
