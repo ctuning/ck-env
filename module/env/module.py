@@ -51,6 +51,7 @@ def env_set(i):
 
               (or_tags)              - add entries which has groups of tags separated by ;
               (no_tags)              - exclude entris with these tags separated by comma
+              (search_dict)          - require verbatim matches of some attributes
 
               (local)                - if 'yes', add host_os, target_os, target_device_id to search
 
@@ -211,6 +212,7 @@ def env_set(i):
     tags=i.get('tags','')
     or_tags=i.get('or_tags','')
     no_tags=i.get('no_tags','')
+    search_dict = i.get('search_dict')
     duoa=i.get('uoa','')
 
     lx=0
@@ -238,10 +240,12 @@ def env_set(i):
     ii={'action':'search',
         'module_uoa':work['self_module_uid'],
         'tags':tags,
+        'search_dict':search_dict,
         'repo_uoa':enruoa,
         'data_uoa':duoa,
         'add_info':'yes',
-        'add_meta':'yes'} # Need to sort by version, if ambiguity
+        'add_meta':'yes',
+    } # Need to sort by version, if ambiguity
 
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
@@ -2212,6 +2216,7 @@ def virtual(i):
               (or_tags)         - a combination of semicolon-separated and comma-separated tags to narrow down the search
               (tag_groups)      - independent groups of or_tags, separated by a space, refer to separate env entries
                                   that can be combined together: '--tag_groups=alpha,beta gamma,~delta epsilon;lambda,mu'
+              (search_dict)     - require verbatim matches of some attributes
               (verbose)         - set to 'yes' to see the script that will be used to build the environment
               (shell_cmd)       - command line to run in the "environment-enriched" shell (make sure it is suitably quoted)
             }
@@ -2223,6 +2228,8 @@ def virtual(i):
             }
 
     """
+
+    import copy
 
     duoa        = i.get('data_uoa', i.get('uoa','') )
     tag_groups  = i.get('tag_groups')
@@ -2263,7 +2270,7 @@ def virtual(i):
     shell_script_lines  = []
 
     for dict_update in list_of_updates:
-        env_set_alist = i.copy()
+        env_set_alist = copy.deepcopy( i )
         env_set_alist.update( dict_update )
 
         r=env_set( env_set_alist )
