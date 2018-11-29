@@ -83,7 +83,7 @@ install:
     - echo "$CK_PLATFORM_NAME" | ck detect platform.os --update_platform_init   # set the platform to generic-linux (1) or generic-macos (2)
     -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`    # pick the one Travis has set for us in the PATH
     -       ck install package --tags=lib,python-package,scipy                  # install one Python package
-    - echo "$TRAVIS_CK_COMPILER_CHOICE" | ck detect soft:compiler.${TRAVIS_CK_CXX_COMPILER}     # force detection of a specific C/C++ compiler
+    - echo | ck detect soft:compiler.${TRAVIS_CK_CXX_COMPILER} --default_selection="$TRAVIS_CK_COMPILER_CHOICE" --first_match  # force detection of a specific C/C++ compiler version
     -       ck install package:lib-lmdb-master-universal                        # install one C/C++ package
 
 script:
