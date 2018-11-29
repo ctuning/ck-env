@@ -945,7 +945,7 @@ def list_repos(i):
 
     if html:
        h+='<p>Users share their reusable CK components (code, data, models) and workflows/pipelines using CK-compatible repositories and archives\n'
-       h+='(for example, see this <a href="https://github.com/ctuning/">CK repository</a>\n'
+       h+='(for example, see this <a href="https://github.com/dividiti/ck-rpi-optimization">CK repository</a>\n'
        h+='with a complete compiler crowd-tuning workflow, an <a href="http://cKnowledge.org/rpi-crowd-tuning">automatically generated interactive article</a>,\n'
        h+='and a <a href="http://cKnowledge.org/dashboard">public interactive dashboard</a>).\n'
        h+='Most of them are shared with the permissive 3-clause BSD license or CC-BY to accelerate technology transfer!\n'
