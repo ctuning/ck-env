@@ -242,12 +242,12 @@ def env_set(i):
         'tags':tags,
         'repo_uoa':enruoa,
         'data_uoa':duoa,
-        'add_info':'yes'
+        'add_info':'yes',
+        'add_meta':'yes'
     } # Need to sort by version, if ambiguity
 
     if search_dict!=None and len(search_dict)>0:
        ii['search_dict']=search_dict
-       ii['add_meta']='yes'
 
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
