@@ -249,6 +249,7 @@ def internal_detect(i):
         'customize':cus,
         'custom_script_obj':cs,
         'data_uid': duid,
+        'out': o,
     }
     rx=get_version(ii)
     if rx['return']==0:
@@ -677,6 +678,7 @@ def setup(i):
               'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
               'use_locale':cus.get('use_locale_for_version',''),
               'data_uid':   duid,
+              'out': o,
           }
           rx=get_version(ii)
           if rx['return']==0:
@@ -1857,6 +1859,7 @@ def check(i):
                'customize':cus,
                'custom_script_obj':cs,
                'data_uid': duid,
+               'out': o,
            }
            rx=get_version(ii)
            if rx['return']>0:
@@ -2123,11 +2126,6 @@ def get_version(i):
           ver=rx['dict'].get('customize',{}).get('version','')
 
     if ver=='':
-       # Generate tmp file
-       rx=ck.gen_tmp_file({})
-       if rx['return']>0: return rx
-       ftmp=rx['file_name']
-
        # Preparing CMD
        if 'version_cmd' in dir(cs):
           rx=cs.version_cmd({'full_path':fp,
@@ -2157,6 +2155,11 @@ def get_version(i):
     if ver=='':
        if 'parse_version' not in dir(cs):
           return {'return':22, 'error':'do not know how to detect version of a given software'}
+
+       # Generate tmp file
+       rx=ck.gen_tmp_file({})
+       if rx['return']>0: return rx
+       ftmp=rx['file_name']
  
        cmd=cmd.replace('$#filename#$', ftmp)
 
