@@ -240,12 +240,14 @@ def env_set(i):
     ii={'action':'search',
         'module_uoa':work['self_module_uid'],
         'tags':tags,
-        'search_dict':search_dict,
         'repo_uoa':enruoa,
         'data_uoa':duoa,
-        'add_info':'yes',
-        'add_meta':'yes',
+        'add_info':'yes'
     } # Need to sort by version, if ambiguity
+
+    if search_dict!=None and len(search_dict)>0:
+       ii['search_dict']=search_dict
+       ii['add_meta']='yes'
 
     iii=copy.deepcopy(ii) # may need to repeat after registration
 
@@ -1837,7 +1839,7 @@ def prune_search_list(i):
     query_package_uoa=i.get('package_uoa','')
 
     for entry in lst:
-        meta=entry.get('meta','')
+        meta=entry.get('meta',{})
 
         # Filter by package UOA
         if query_package_uoa:
