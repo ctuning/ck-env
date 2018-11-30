@@ -249,7 +249,7 @@ def internal_detect(i):
         'customize':cus,
         'custom_script_obj':cs,
         'data_uid': duid,
-        'out': o,
+        'out': o
     }
     rx=get_version(ii)
     if rx['return']==0:
@@ -678,7 +678,7 @@ def setup(i):
               'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
               'use_locale':cus.get('use_locale_for_version',''),
               'data_uid':   duid,
-              'out': o,
+              'out': o
           }
           rx=get_version(ii)
           if rx['return']==0:
