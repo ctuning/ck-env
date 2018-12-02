@@ -33,52 +33,11 @@ def init(i):
     return {'return':0}
 
 ##############################################################################
-# detect is given software is already installed and register it in the CK or install it if package exists (the same as 'check')
+# detect is given software is already installed and register it in the CK or install it if package exists
 
 def detect(i):
     """
-    Input:  {
-              (host_os)           - host OS (detect, if omitted)
-              (target_os)         - target OS (detect, if omitted)
-              (target_device_id)  - target device ID (detect, if omitted)
-
-              (data_uoa) or (uoa) - software UOA entry
-               or
-              (tags)              - search UOA by tags (separated by comma)
-
-              (interactive)       - if 'yes', and has questions, ask user
-              (quiet)             - if 'yes', do not ask questions but select default value
-
-              (skip_help)         - if 'yes', skip print help if not detected (when called from env setup)
-
-              (deps)              - already resolved deps (if called from env)
-
-              (extra_version)     - add extra version, when registering software 
-                                    (for example, -trunk-20160421)
-
-              (force_env_data_uoa) - force which env UID to use when regstering detect software -
-                                     useful when reinstalling broken env entry to avoid breaking
-                                     all dependencies of other software ...
-
-              (search_dirs)        - extra directories where to search soft (string separated by comma)
-
-              (soft_name)          - name to search explicitly
-
-              (version_from)       - check version starting from ... (string or list of numbers)
-              (version_to)         - check version up to ... (string list of numbers)
-
-              (full_path)          - force full path (rather than searching in all directories)
-            }
-
-    Output: {
-              return       - return code =  0, if successful
-                                         >  0, if error
-              (error)      - error text if return > 0
-
-              path_install - path to the detected software
-              cus          - dict with filled in info for the software
-            }
-
+    See "check" API
     """
 
     return check(i)
@@ -248,9 +207,10 @@ def internal_detect(i):
         'use_locale':cus.get('use_locale_for_version',''),
         'customize':cus,
         'custom_script_obj':cs,
-        'data_uid': duid,
-        'out': o
+        'data_uid': duid
     }
+    if ck.cfg.get('minimize_soft_detect_output','')!='yes':
+       ii['out']=o
     rx=get_version(ii)
     if rx['return']==0:
        ver=rx['version']
@@ -677,9 +637,10 @@ def setup(i):
               'skip_existing':skip_existing,
               'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
               'use_locale':cus.get('use_locale_for_version',''),
-              'data_uid':   duid,
-              'out': o
+              'data_uid': duid
           }
+          if ck.cfg.get('minimize_soft_detect_output','')!='yes':
+             ii['out']=o
           rx=get_version(ii)
           if rx['return']==0:
              ver=rx['version']
@@ -1423,7 +1384,7 @@ def list_all_files(i):
     return {'return':0, 'list':list_of_results}
 
 ##############################################################################
-# check is given software is already installed and register it in the CK or install it if package exists (the same as 'detect')
+# detect is given software is already installed and register it in the CK or install it if package exists
 
 def check(i):
     """
@@ -1463,6 +1424,8 @@ def check(i):
                                      all dependencies of other software ...
 
               (search_dirs)        - extra directories where to search soft (string separated by comma)
+
+              (search_depth)       - force directory recursive search depth when detecting installed software
 
               (soft_name)          - name to search explicitly
 
@@ -1784,7 +1747,17 @@ def check(i):
     ck.out('  Searching for '+x+' to automatically register in the CK - it may take some time, please wait ...')
     ck.out('')
 
-    rlm=cus.get('limit_recursion_dir_search',{}).get(hplat,0)
+    # Check directory recursion depth customization when searching for installed software
+    xrlm=i.get('search_depth','')
+    if xrlm=='':
+       xrlm=ck.cfg.get('force_soft_search_depth','')
+       if xrlm=='':
+          xrlm=cus.get('limit_recursion_dir_search_all','')
+
+    if xrlm!='':
+       rlm=int(xrlm)
+    else:
+       rlm=cus.get('limit_recursion_dir_search',{}).get(hplat,0)
 
     skip_sort='no'
 
@@ -1858,9 +1831,10 @@ def check(i):
                'use_locale':cus.get('use_locale_for_version',''),
                'customize':cus,
                'custom_script_obj':cs,
-               'data_uid': duid,
-               'out': o,
+               'data_uid': duid
            }
+           if ck.cfg.get('minimize_soft_detect_output','')!='yes':
+              ii['out']=o
            rx=get_version(ii)
            if rx['return']>0:
               if o=='con':

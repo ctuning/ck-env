@@ -1,3 +1,8 @@
+* 2018.12.02 - [FGG] added "ck set kernel var.minimize_soft_detect_output=yes"
+                     to minimize soft detection output (off by default)
+             - [FGG] added "ck detect soft --search_depth={num}"
+                     and "ck set kernel var.force_soft_search_depth={num}"
+
 * 2018.11.29 - added workflow description for repository listing
 
 * 2018.11.28 - added info about failed packages (how to report)

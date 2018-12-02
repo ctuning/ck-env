@@ -378,7 +378,8 @@ def env_set(i):
              ck.out(' Requested target OS bits               : '+setup.get('target_os_bits',''))
 
              ck.out('')
-             ck.out(' This is a possible bug - please report to the authors!')
+             ck.out(' This is a possible bug - please report here:')
+             ck.out('   * https://groups.google.com/forum/#!forum/collective-knowledge')
              ck.out('')
 
           return {'return':33, 'error':'current host or target OS ('+str(setup)+' is not matching the one in software env '+duoa}
