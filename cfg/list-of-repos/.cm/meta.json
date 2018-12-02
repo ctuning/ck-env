@@ -302,15 +302,6 @@
       "workflow_desc": "programs"
     }
   },
-  "31e50f714fc996c4": {
-    "data_uoa": "ck-seissol",
-    "dict": {
-      "desc": "CK workflow and components for Seissol application.",
-      "shared": "git",
-      "url": "https://github.com/ctuning/ck-seissol",
-      "workflow_desc": "programs"
-    }
-  },
   "35287339a4756f75": {
     "data_uoa": "ck-caffe",
     "dict": {
@@ -433,6 +424,18 @@
       "shared": "git",
       "url": "https://github.com/dividiti/ck-crowdsource-dnn-optimization",
       "workflow_desc": "GUI, programs"
+    }
+  },
+  "451fa8511c66a212": {
+    "data_uoa": "ck-env",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-web"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-env"
     }
   },
   "4784a9da122ed85c": {
