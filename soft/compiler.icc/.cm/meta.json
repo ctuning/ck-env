@@ -15,7 +15,7 @@
       "F95"
     ], 
     "limit_recursion_dir_search": {
-      "linux": 3, 
+      "linux": 4, 
       "win": 4
     }, 
     "only_for_target_os_tags": [
