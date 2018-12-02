@@ -120,7 +120,16 @@ def setup(i):
     cus['path_include']=pi
     cus['path_lib']=pl
     cus['path_bin']=pb
-    env['CK_ENV_LIB_MPI_CC'] = os.path.join(pb,'mpicc.mpich')
+
+    exe=os.path.join(pb,'mpicc.mpich')
+    if not os.path.isfile(exe):
+       exe=os.path.join(pb,'mpicc')
+    if not os.path.isfile(exe):
+       ck.out('')
+       ck.out('WARNING: mpicc.mpich or mpicc not found ('+exe+')!')
+       ck.out('')
+
+    env['CK_ENV_LIB_MPI_CC'] = exe
 
     r = ck.access({'action': 'lib_path_export_script', 
                    'module_uoa': 'os', 

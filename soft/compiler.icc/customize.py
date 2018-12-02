@@ -47,6 +47,7 @@ def limit(i):
     drx=[]
 
     for q in dr:
+
         if q.find('pkg_')<0:
            drx.append(q)
 
@@ -113,6 +114,9 @@ def parse_version(i):
     for q in lst:
         q=q.strip()
         if q!='':
+           if q.find('license has expired')>=0:
+              ver='expired'
+              break
            if hplat=='win':
               j=q.lower().find(' version ')
               if j>=0:
