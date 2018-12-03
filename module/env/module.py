@@ -226,7 +226,7 @@ def env_set(i):
 
     if reuse_deps=='yes' and skip_cache!='yes':
        # Check in cache!
-       dep_query = {'setup':setup, 'tags':tags.split(',')}
+       dep_query = {'setup':setup, 'tags':tags.split(','), 'or_tags':or_tags.split(','), 'no_tags':no_tags.split(',')}
        for dc_q in deps_cache:
            dep_meta = dc_q.get('meta',{})
            r=ck.compare_dicts({'dict1':dep_meta, 'dict2':dep_query})     # if dep_meta contains dep_query...
@@ -376,6 +376,14 @@ def env_set(i):
              ck.out('')
              ck.out(' Target OS bits in env '+duoa+' : '+dds.get('target_os_bits',''))
              ck.out(' Requested target OS bits               : '+setup.get('target_os_bits',''))
+
+             ck.out('')
+             ck.out(' Target or_tags : '+dds.get('tags',''))
+             ck.out(' Requested or_tags  : '+or_tags)
+
+             ck.out('')
+             ck.out(' Target no_tags : '+dds.get('no_tags',''))
+             ck.out(' Requested no_tags  : '+no_tags)
 
              ck.out('')
              ck.out(' This is a possible bug - please report here:')
@@ -813,7 +821,9 @@ def env_set(i):
 
         if reuse_deps=='yes' and skip_cache!='yes':
            # Check in cache!
-           subdep_query = {'setup':setup, 'tags':subdep.get('tags','').split(',')}
+           subdep_query = {'setup':setup, 'tags':subdep.get('tags','').split(','), 
+                                          'or_tags':subdep.get('or_tags','').split(','),
+                                          'no_tags':subdep.get('no_tags','').split(',')}
            dc_found = False
            for dc_q in deps_cache:
                dep_meta = dc_q.get('meta',{})
@@ -824,7 +834,9 @@ def env_set(i):
                   break
 
            if not dc_found:
-              deps_cache.append({'meta':subdep_query, 'uoa':subdep_uoa})
+              deps_cache.append({'meta':subdep_query, 'uoa':subdep_uoa, 'tags':tags.split(','),
+                                                                        'or_tags':or_tags.split(','),
+                                                                        'no_tags':no_tags.split(',')})
 
     # Check if has changed but try to continue
     if outdated and ' have changed ' in err and o=='con' and quiet!='yes':
@@ -897,7 +909,9 @@ def env_set(i):
 
     # Update cache
     if reuse_deps=='yes' and skip_cache!='yes':
-       deps_cache.append({'meta':dep_query, 'uoa':duoa})
+       deps_cache.append({'meta':dep_query, 'uoa':duoa, 'tags':tags.split(','),
+                                                        'or_tags':or_tags.split(','),
+                                                        'no_tags':no_tags.split(',')})
 
     # Prepare environment and bat
     env=i.get('env',{})

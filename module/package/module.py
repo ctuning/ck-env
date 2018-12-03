@@ -1241,11 +1241,13 @@ def install(i):
                 shell_wrapper_contents+=sdeps
 
              # Add compiler dep again, if there
+             shell_wrapper_contents+='\n'
              for k in sorted(udeps, key=lambda v: udeps[v].get('sort',0)):
-                 if 'compiler' in k:
+                 if 'compiler' in k or udeps[k].get('repeat_at_the_end','')=='yes':
                     x=udeps[k].get('bat','').strip()
                     if x!='' and not shell_wrapper_contents.endswith(x):
-                       shell_wrapper_contents+='\n'+x+' 1\n\n'
+                       shell_wrapper_contents+=x+' 1\n'
+             shell_wrapper_contents+='\n'
 
              # Add misc environment (prepared above)
              for q in pr_env:

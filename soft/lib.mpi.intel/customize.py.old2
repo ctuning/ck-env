@@ -123,33 +123,6 @@ def setup(i):
        if not os.path.isdir(pb):
           return {'return':1, 'error':'can\'t find bin directory'}
 
-    # Check mpivars.sh
-    pv='mpivars.'
-    if win=='yes':
-       pv+='bat'
-    else:
-       pv+='sh'
-
-    pvars=os.path.join(pb,pv)
-    if os.path.isfile(pvars):
-       ck.out('')
-       ck.out('File with vars found: '+pvars)
-       ck.out('')
-
-       if win=='yes':
-          ############################################################
-          s+='\n'
-          s+='rem Setting Intel MPI environment\n'
-
-          s+='call "'+pvars+'"\n\n'
-       else:
-          ################################################################
-          s+='\n'
-          s+='# Setting Intel MPI environment\n'
-
-          s+='. "'+pvars+'"\n\n'
-#          s+='. "'+pvars+'" -ofi_internal=1\n\n'
-
     p2=os.path.dirname(pb)
     env[ep]=p2
 

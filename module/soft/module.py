@@ -2138,8 +2138,11 @@ def get_version(i):
        cmd=cmd.replace('$#filename#$', ftmp)
 
        if o=='con':
+          cmdz=cmd.replace('\n','\n         ')
           ck.out('')
-          ck.out('  Prepared CMD to detect version: '+cmd+' ...')
+          ck.out('       ==============================')
+          ck.out('       Prepared CMD to detect version:')
+          ck.out('         '+cmdz.strip())
 
        # Finalizing batch file
        sb+='\n'+cmd+'\n'
@@ -2162,7 +2165,7 @@ def get_version(i):
 
        if o=='con':
           ck.out('')
-          ck.out('Executing "'+y+'" ...')
+          ck.out('       Executing "'+y+'" ...')
 
        ry=os.system(nout+y)
        # ignore return code (checking output file instead)
@@ -2187,10 +2190,10 @@ def get_version(i):
           return {'return':16, 'error':'version output file is empty'}
 
        if i.get('show','')=='yes':
-          ck.out('Output:')
+          ck.out('       Output:')
           ck.out('')
           for q in lst:
-              ck.out('  '+q)
+              ck.out('         '+q)
 
        # Calling customized script to parse version
        ii={'output':lst,
@@ -2206,7 +2209,8 @@ def get_version(i):
 
     if o=='con':
        ck.out('')
-       ck.out('Version detected: '+ver)
+       ck.out('        Version detected: '+ver)
+       ck.out('')
 
     return {'return':0, 'version':ver, 'version_lst':lst} 
 
