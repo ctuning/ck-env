@@ -94,7 +94,7 @@ def install(i):
               (record_script)     - record tmp installation script with pre-set environment
                                     (to be able to call it to rebuild package without CK)
 
-              (force_version)     - force version (useful for automatic installation of packages with multiple supported version)
+              (force_version)     - force version (useful for automatic installation of packages with multiple supported versions)
 
               (install_to_env)    - install this package and all dependencies to env instead of CK-TOOLS (to keep it clean)!
 
@@ -332,7 +332,7 @@ def install(i):
                 if len(l)>1:
                     ver_options = []
                     ck.out('')
-                    ck.out('More than one package found:')
+                    ck.out('More than one package or version found:')
                     ck.out('')
 
                     display_to_idx={}
