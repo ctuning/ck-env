@@ -37,6 +37,7 @@
       "tags": "compiler,lang-cpp"
     },
     "mpi": {
+      "add_to_path": "yes",
       "local": "yes", 
       "repeat_at_the_end": "yes",
       "name": "MPI library", 

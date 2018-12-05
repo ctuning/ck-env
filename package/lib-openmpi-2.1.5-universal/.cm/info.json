@@ -1,0 +1,21 @@
+{
+  "backup_data_uid": "541d25f95a46ed86", 
+  "backup_module_uid": "1dc07ee0f4742028", 
+  "backup_module_uoa": "package", 
+  "control": {
+    "author": "Anton Lokhmotov", 
+    "author_email": "anton@dividiti.com", 
+    "author_webpage": "http://dividiti.com", 
+    "copyright": "See CK COPYRIGHT.txt for copyright details", 
+    "engine": "CK", 
+    "iso_datetime": "2018-12-05T11:27:28.375954", 
+    "license": "See CK LICENSE.txt for licensing details", 
+    "version": [
+      "1", 
+      "9", 
+      "6", 
+      "1"
+    ]
+  }, 
+  "data_name": "lib-openmpi-2.1.5-universal"
+}

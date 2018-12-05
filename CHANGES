@@ -1,5 +1,6 @@
 * 2018.12.05 - [FGG] moved xsmm and netcdf soft and package from ck-scc18
                [FGG] added detection of libraries via .settings and spack yaml
+               [FGG] added different OpenMPI packages
 
 * 2018.12.05 - [FGG] added --search_dir (search only in this dir)
                      useful for Spack and EasyBuild

@@ -47,6 +47,7 @@
       "tags": "lib,hdf5-static,vparallel,vmpi"
     }, 
     "lib-mpi": {
+      "add_to_path":"yes",
       "local": "yes", 
       "name": "MPI Library", 
       "repeat_at_the_end": "yes", 
