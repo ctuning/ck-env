@@ -2951,3 +2951,78 @@ def add(i):
        ck.out(' * https://github.com/ctuning/ck/wiki/Adding-new-workflows')
 
     return ck.access(ii)
+
+##############################################################################
+# search for soft version in some files
+
+def search_version(i):
+    """
+    Input:  {
+              path - path to file (where to start search)
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+
+              (version) - version string if detected
+            }
+
+    """
+
+    import os
+
+    o=i.get('out','')
+
+    ver=''
+
+    p0=i['path']
+
+    f=os.path.basename(p0)
+    p=os.path.dirname(p0)
+
+    # Searching for spack info
+    while True:
+       p1=os.path.join(p, '.spack/spec.yaml')
+       if os.path.isfile(p1):
+          # Read file and search for version
+          r=ck.load_text_file({'text_file':p1})
+          if r['return']==0:
+             s=r['string']
+
+             # Find first version
+             j=s.find('version: ')
+             if j>=0:
+                j1=s.find('\n',j)
+                if j1>=0:
+                   ver=s[j+9:j1].strip()
+
+          break
+
+       pp=os.path.dirname(p)
+       if pp==p:
+          break
+
+       p=pp
+
+    # If not found, search for .settings
+    if ver=='' and f!='' and f!='/' and f!='\\':
+       f1=os.path.splitext(f)[0]+'.settings'
+       p=os.path.dirname(p0)
+       p1=os.path.join(p,f1)
+
+       if os.path.isfile(p1):
+          # Read file and search for version
+          r=ck.load_text_file({'text_file':p1})
+          if r['return']==0:
+             s=r['string']
+
+             # Find first version
+             j=s.lower().find(' version:')
+             if j>=0:
+                j1=s.find('\n',j)
+                if j1>=0:
+                   ver=s[j+9:j1].strip()
+
+    return {'return':0, 'version':ver}

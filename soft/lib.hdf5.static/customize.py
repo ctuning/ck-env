@@ -35,20 +35,28 @@ def version_cmd(i):
     fp=i['full_path']
 
     ver=''
-    if len(fp)>0:
-       j=fp.rfind('.')
-       if j>0:
-          fps=fp[:j]+'.settings'
-          if os.path.isfile(fps):
-             # Load file and find setting
-             r=ck.load_text_file({'text_file':fps, 'split_to_list':'yes'})
-             if r['return']>0: return r
 
-             for l in r['lst']:
-                 l=l.strip()
-                 if l.startswith('HDF5 Version:'):
-                    ver=l[14:].strip()
-                    break
+    r = ck.access({'action': 'search_version', 
+                   'module_uoa': 'soft', 
+                   'path': fp})
+    if r['return']>0: return r
+    ver=r.get('version','')
+
+    if ver=='':
+       if len(fp)>0:
+          j=fp.rfind('.')
+          if j>0:
+             fps=fp[:j]+'.settings'
+             if os.path.isfile(fps):
+                # Load file and find setting
+                r=ck.load_text_file({'text_file':fps, 'split_to_list':'yes'})
+                if r['return']>0: return r
+
+                for l in r['lst']:
+                    l=l.strip()
+                    if l.startswith('HDF5 Version:'):
+                       ver=l[14:].strip()
+                       break
 
     return {'return':0, 'cmd':'', 'version':ver}
 

@@ -23,13 +23,20 @@ def version_cmd(i):
     p0=os.path.basename(fp)
     p1=os.path.dirname(fp)
 
-    lst=os.listdir(p1)
-    for fn in lst:
-        if fn.startswith(p0):
-           x=fn[len(p0):]
-           if x.startswith('.'):
-              ver=x[1:]
-              break
+    r = ck.access({'action': 'search_version', 
+                   'module_uoa': 'soft', 
+                   'path': fp})
+    if r['return']>0: return r
+    ver=r.get('version','')
+
+    if ver=='':
+       lst=os.listdir(p1)
+       for fn in lst:
+           if fn.startswith(p0):
+              x=fn[len(p0):]
+              if x.startswith('.'):
+                 ver=x[1:]
+                 break
 
     return {'return':0, 'cmd':'', 'version':ver}
 
