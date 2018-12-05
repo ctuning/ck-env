@@ -1424,6 +1424,7 @@ def check(i):
                                      all dependencies of other software ...
 
               (search_dirs)        - extra directories where to search soft (string separated by comma)
+              (search_dir)         - search only in this directory (useful for Spack and EasyBuild)
 
               (search_depth)       - force directory recursive search depth when detecting installed software
 
@@ -1716,6 +1717,10 @@ def check(i):
     x=ck.cfg.get('soft_search_dirs','')
     if x!='':
        dirs=x.split(',')
+
+    # Check if substitute by 1 dir
+    if i.get('search_dir','')!='':
+       dirs=[i['search_dir'].strip()]
 
     # Check which file to search for
     sname=i.get('soft_name','')
