@@ -1,0 +1,26 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "add_to_path": "yes", 
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_NETCDF", 
+    "limit_recursion_dir_search": {
+      "linux": 4, 
+      "win": 4
+    }, 
+    "soft_file": {
+      "linux": "libnetcdf.a"
+    }, 
+    "soft_path_example": {
+      "linux": "", 
+      "win": ""
+    }
+  }, 
+  "deps": {}, 
+  "soft_name": "NetCDF library", 
+  "tags": [
+    "lib", 
+    "netcdf"
+  ]
+}
