@@ -306,25 +306,25 @@ def snapshot(i):
               ck.out(' * '+repo)
               ck.out('')
 
-              an='ckr-'+repo
+           an='ckr-'+repo
 
-              if pp2[repo].get('branch','')!='':
-                 an+='--'+pp2[repo]['branch']
+           if pp2[repo].get('branch','')!='':
+              an+='--'+pp2[repo]['branch']
 
-              if pp2[repo].get('checkout','')!='':
-                 an+='--'+pp2[repo]['checkout']
+           if pp2[repo].get('checkout','')!='':
+              an+='--'+pp2[repo]['checkout']
 
-              an+='.zip'
+           an+='.zip'
 
-              zips.append(an)
+           zips.append(an)
 
-              r=ck.access({'action':'zip',
-                           'module_uoa':cfg['module_deps']['repo'],
-                           'data_uoa':repo,
-                           'archive_name':an,
-                           'overwrite':'yes',
-                           'out':o})
-              if r['return']>0: return r
+           r=ck.access({'action':'zip',
+                        'module_uoa':cfg['module_deps']['repo'],
+                        'data_uoa':repo,
+                        'archive_name':an,
+                        'overwrite':'yes',
+                        'out':o})
+           if r['return']>0: return r
 
        # Print sequence of adding CK repos (for self-sustainable virtual CK artifact)
        if o=='con':
