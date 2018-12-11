@@ -38,6 +38,12 @@ def recursive_repos(i):
     repo=i['repo']
     repo_deps=i.get('repo_deps',[])
     level=i.get('level','')
+    ilevel=i.get('ilevel',0)
+
+    if ilevel>8:
+       # Somewhere got into loop - quit
+#       ck.out('Warning: you have a cyclic dependency in your repositories ...')
+       return {'return':0, 'repo_deps':repo_deps}
 
     # Load repo
     r=ck.access({'action':'load',
@@ -62,10 +68,11 @@ def recursive_repos(i):
     for q in rd:
         drepo=q['repo_uoa']
 
-        repo_deps.append(drepo)
+        if drepo!=repo:
+           repo_deps.append(drepo)
 
-        r=recursive_repos({'repo':drepo, 'repo_deps':repo_deps, 'level':level+'   '})
-        if r['return']>0: return r
+           r=recursive_repos({'repo':drepo, 'repo_deps':repo_deps, 'level':level+'   ', 'ilevel':ilevel+1})
+           if r['return']>0: return r
 
     return {'return':0, 'repo_deps':repo_deps}
 
@@ -112,7 +119,7 @@ def snapshot(i):
 
 #    ptmp=os.path.join(curdir0, 'tmp')
     import tempfile
-    ptmp=os.path.join(tempfile.gettempdir(),'tmp-proceedings')
+    ptmp=os.path.join(tempfile.gettempdir(),'tmp-snapshot')
     if o=='con':
        ck.out('Temp directory: '+ptmp)
        ck.out('')
@@ -128,8 +135,8 @@ def snapshot(i):
 
        x=r['string'].strip().lower()
        if x=='' or x=='y' or x=='yes': 
-          import shutil
-          shutil.rmtree(ptmp)
+          r=ck.delete_directory({'path':ptmp})
+          if r['return']>0: return r
 
     if not os.path.isdir(ptmp):
        os.makedirs(ptmp)
@@ -152,7 +159,8 @@ def snapshot(i):
            if q not in final_repo_deps:
               final_repo_deps.append(q)
 
-    final_repo_deps.append(repo)
+    if repo not in final_repo_deps:
+       final_repo_deps.append(repo)
 
     if o=='con':
        ck.out('')
@@ -194,9 +202,9 @@ def snapshot(i):
 
         t=d.get('shared','')
 
-        if t!='':
-           duoa=qq['data_uoa']
+        duoa=qq['data_uoa']
 
+        if t!='':
            if len(duoa)>il: il=len(duoa)
 
            url=d.get('url','')
@@ -223,8 +231,12 @@ def snapshot(i):
               os.chdir(pc)
 
            x={'branch':branch, 'checkout':checkout, 'path':p, 'type':t, 'url':url, 'data_uoa':duoa}
-           pp.append(x)
-           pp2[duoa]=x
+        else:
+           x={'path':p, 'type':t, 'data_uoa':duoa}
+
+        pp.append(x)
+        pp2[duoa]=x
+
 
         if copy_repos:
            pu=os.path.join(ptmp,'CK')

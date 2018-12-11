@@ -501,6 +501,21 @@
       "url": "https://github.com/ctuning/ck-crowd-scenarios-arc"
     }
   },
+  "4c6addb72a4806ad": {
+    "data_uoa": "ctuning-programs",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ctuning-datasets-min"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ctuning-programs"
+    }
+  },
   "4e58bd6003fc6875": {
     "data_uoa": "reproduce-fgg-2010",
     "dict": {
