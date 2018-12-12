@@ -587,8 +587,8 @@ def detect(i):
                 ck.out('Some support tools and scripts may be available for your target platform in CK:')
                 ck.out('')
 
-                plat_options = []
-                data_uids = []
+                plat_options = [ 'Skip selection and do not ask this question again for your target OS']
+                data_uids = [ '-' ]
                 for z1 in sorted(lrx, key=lambda v: (v.get('meta',{}).get('sort',0),v['data_uoa'])):
                     duid=z1['data_uid']
                     duoa=z1['data_uoa']
@@ -599,18 +599,12 @@ def detect(i):
                 select_adict = ck.access({'action': 'select_string',
                                         'module_uoa': 'misc',
                                         'options': plat_options,
-                                        'default': '',
-                                        'question': 'Select option (or Enter to skip selection and do not ask this question again for your target OS)',
+                                        'default': '0',
                 })
                 if select_adict['return']>0: return select_adict
 
-                response = select_adict['response']
-
-                if response=='':
-                    pi_uoa = '-'
-                else:
-                    selected_index = select_adict['selected_index']
-                    pi_uoa = data_uids[selected_index]
+                selected_index = select_adict['selected_index']
+                pi_uoa = data_uids[selected_index]
 
        # Record if new
        if pi_uoa!='':
