@@ -28,8 +28,8 @@
     "soft_file_from_host_os": "yes",
     "soft_file_not_tool": "yes", 
     "soft_path_example": {
-      "linux": "/opt/android-ndk-r13b//ndk-build", 
-      "win": "C:\\android-ndk-r13b\\ndk-build.cmd"
+      "linux": "/opt/android-ndk-r18b//ndk-build", 
+      "win": "C:\\android-ndk-r18b\\ndk-build.cmd"
     },
     "soft_version_cmd": {
       "linux": "--version > $#filename#$ 2>&1",
@@ -40,7 +40,7 @@
   "deps": {
     "ndk-gcc": {
       "local": "yes",
-      "name": "Android NDK GCC",
+      "name": "Android NDK GCC toolchain",
       "only_for_target_os_tags": [
         "android"
       ],

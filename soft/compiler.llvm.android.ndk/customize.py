@@ -205,6 +205,25 @@ def setup(i):
 
     arch=target_d.get('android_ndk_arch','')
 
+    # Check NDK
+    ndk_gcc=deps.get('ndk-gcc', {})
+    ndk_gcc_env=ndk_gcc.get('dict',{}).get('env',{})
+
+    ndk=ndk_gcc_env.get('CK_SYS_ROOT','')
+    ndk_ver=''
+    ndk_iver=0
+
+    j=ndk.find('android-ndk-r')
+    if j>=0:
+       j1=ndk.find('/', j+1)
+       j2=ndk.find('\\', j+1)
+       if j2>=0 and j1>j2:
+          j1=j2
+       ndk_ver=ndk[j+13:j1]
+
+       if len(ndk_ver)==3:
+          ndk_iver=ck.safe_int(ndk_ver[:2],0)
+
     # Need to check that if path has spaces on Windows, then convert to non-space format, 
     # otherwise many issues with CMAKE ...
     if winh=='yes' and ' ' in fp:
@@ -229,7 +248,7 @@ def setup(i):
           pp4=os.path.dirname(pp3) # since later will need real long name (to detect arch)
 
           fp=y
-           
+
           ck.out('')
           ck.out('  Removed spaces from Windows path: '+fp)
           ck.out('')
@@ -245,25 +264,52 @@ def setup(i):
        p5=os.path.dirname(p4)
 
        ndk_path=p5
-       ndk_gcc=deps.get('ndk-gcc', {})
-       ndk_gcc_env=ndk_gcc.get('dict',{}).get('env',{})
        ver=ndk_gcc.get('ver', '')[:-2]
        abi=target_d.get('abi','')
 
        env[ep]=pi
        env[ep+'_BIN']=p1
-       env['CK_ENV_LIB_STDCPP_INCLUDE']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'include')
-       env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'include')
-       env['CK_ENV_LIB_STDCPP_STATIC']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_static.a')
+
+       if ndk_iver>=17:
+          ck.out('')
+          ck.out('NDK version '+str(ndk_iver)+' >= 17 - using LLVM C++ library ...')
+
+          pxi=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'include')
+          if not os.path.isdir(pxi):
+             return {'return':1, 'error':'LLVM C++ include path not found: '+pxi}
+
+          env['CK_ENV_LIB_STDCPP_INCLUDE']=pxi
+          env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=' '
+
+          pxl=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++_static.a')
+          if not os.path.isfile(pxl):
+             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl}
+
+          pxl2=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++abi.a')
+          if not os.path.isfile(pxl2):
+             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl2}
+
+          env['CK_ENV_LIB_STDCPP_STATIC']=pxl+' '+pxl2
+
+          pxl=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++_shared.so')
+          if not os.path.isfile(pxl):
+             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl}
+
+          env['CK_ENV_LIB_STDCPP_DYNAMIC']=pxl
+       else:
+          env['CK_ENV_LIB_STDCPP_INCLUDE']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'include')
+          env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'include')
+          env['CK_ENV_LIB_STDCPP_STATIC']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_static.a')
+          env['CK_ENV_LIB_STDCPP_DYNAMIC']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_shared.so')
        cus['path_lib']=pi+sdirs+'lib'
        cus['path_include']=pi+sdirs+'include'
 
-       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_STATIC','')!='':
-          env['CK_ENV_LIB_STDCPP_STATIC']=ndk_gcc_env['CK_ENV_LIB_STDCPP_STATIC']
-       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_DYNAMIC','')!='':
-          env['CK_ENV_LIB_STDCPP_DYNAMIC']=ndk_gcc_env['CK_ENV_LIB_STDCPP_DYNAMIC']
-       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')!='':
-          env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=ndk_gcc_env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']
+#       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_STATIC','')!='':
+#          env['CK_ENV_LIB_STDCPP_STATIC']=ndk_gcc_env['CK_ENV_LIB_STDCPP_STATIC']
+#       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_DYNAMIC','')!='':
+#          env['CK_ENV_LIB_STDCPP_DYNAMIC']=ndk_gcc_env['CK_ENV_LIB_STDCPP_DYNAMIC']
+#       if ndk_gcc_env.get('CK_ENV_LIB_STDCPP_INCLUDE_EXTRA','')!='':
+#          env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=ndk_gcc_env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']
 
        if hplat=='linux':
           sname=cus.get('soft_file',{}).get(hplat,'')
