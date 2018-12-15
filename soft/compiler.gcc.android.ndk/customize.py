@@ -190,6 +190,20 @@ def setup(i):
     fp=cus.get('full_path','')
     pp4=''
 
+    ndk_ver=''
+    ndk_iver=0
+
+    j=fp.find('android-ndk-r')
+    if j>=0:
+       j1=fp.find('/', j+1)
+       j2=fp.find('\\', j+1)
+       if j2>=0 and j1>j2:
+          j1=j2
+       ndk_ver=fp[j+13:j1]
+
+       if len(ndk_ver)==3:
+          ndk_iver=ck.safe_int(ndk_ver[:2],0)
+
     # Need to check that if path has spaces on Windows, then convert to non-space format, 
     # otherwise many issues with CMAKE ...
     if winh=='yes' and ' ' in fp:
@@ -214,7 +228,7 @@ def setup(i):
           pp4=os.path.dirname(pp3) # since later will need real long name (to detect arch)
 
           fp=y
-           
+
           ck.out('')
           ck.out('  Removed spaces from Windows path: '+fp)
           ck.out('')
@@ -260,6 +274,9 @@ def setup(i):
 
     # Check path
     ep=cus.get('env_prefix','')
+    if fp=='':
+       return {'return':1, 'error':'full path to tool is not defined'}
+
     if fp!='':
        p1=os.path.dirname(fp)
        p2=os.path.dirname(p1)
@@ -523,6 +540,7 @@ def setup(i):
     if sysroot not in x:
        x=sysroot+' '+x
 
+
     # Starting from NDK v16 there is no more usr/include path under platform dir,
     # so we have to add it as explicit -Isysroot/usr/include under ndk root dir.
     include_dir = os.path.join(psysroot, 'usr', 'include')
@@ -560,6 +578,15 @@ def setup(i):
 #    if sysroot not in x:
 #       x=sysroot+' '+x
 #    env['CK_LD_FLAGS_EXTRA']=x
+
+    # Check if LLVM in fact
+    if ndk_iver>=18:
+       x=env.get('CK_LD_FLAGS_EXTRA','')
+       p=os.path.join(pi,'toolchains',atc+'-4.9','prebuilt','linux-x86_64','lib','gcc',atc,'4.9.x')
+       y='-L'+p
+       if y not in x:
+          x+=' '+y
+          env['CK_LD_FLAGS_EXTRA']=x
 
     # Otherwise may be problems on Windows during cross-compiling
     env['CK_OPT_UNWIND']=' '
