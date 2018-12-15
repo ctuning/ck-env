@@ -58,7 +58,9 @@ def limit(i):
        return {'return':1, 'error':'android_compiler_prefix is not specified in target OS meta'}
 
     fn=acp+'-gcc'
+    fn1=''
     if phosd=='win':
+       fn1=fn+'.cmd' # After NDK 18b, no more gcc
        fn+='.exe'
 
     atc=tosd.get('android_toolchain','')
@@ -83,6 +85,10 @@ def limit(i):
                   p2=os.path.join(p1,f,'prebuilt',prebuilt,'bin',fn)
                   if os.path.isfile(p2):
                      drx.append(p2)
+                  elif fn1!='':
+                     p2=os.path.join(p1,f,'prebuilt',prebuilt,'bin',fn1)
+                     if os.path.isfile(p2):
+                        drx.append(p2)
 
     return {'return':0, 'list':drx}
 
@@ -95,6 +101,8 @@ def parse_version(i):
 
     ver=''
 
+    fp=i.get('full_path','')
+
     for q in lst:
         q=q.strip()
         if q!='':
@@ -106,6 +114,9 @@ def parse_version(i):
                  q=q[:j]
               ver=q
               break
+
+    if ver=='' and fp.endswith('.cmd'):
+       ver='unused'
 
     return {'return':0, 'version':ver}
 

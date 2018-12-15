@@ -2203,6 +2203,7 @@ def get_version(i):
        # Calling customized script to parse version
        ii={'output':lst,
            'host_os_dict':hosd,
+           'full_path':fp,
            'ck_kernel':ck}
        rx=cs.parse_version(ii)
        if rx['return']>0 and rx['return']!=16: return rx

@@ -1,4 +1,5 @@
 * 2018.12.15 - [FGG] fixed registration of Clang from Android NDK >= 17 with LLVM C++ lib
+                     fixed detection of GCC from Android NDK >= 18b (+windows)
 
 * 2018.12.11 - [FGG] fixed ck snapshot artifact (with Leo's feedback)
 
