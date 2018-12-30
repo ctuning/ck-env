@@ -147,6 +147,7 @@ def setup(i):
        return {'return':1, 'error':'can\'t find root dir of this installation'}
 
     if win!='yes':
+       env[ep+'_LFLAG_IMGCODECS']='-lopencv_imgcodecs'
        env[ep+'_LFLAG_IMGPROC']='-lopencv_imgproc'
        env[ep+'_LFLAG_HIGHGUI']='-lopencv_highgui'
        env[ep+'_LFLAG_CORE']='-lopencv_core'
