@@ -1,5 +1,5 @@
 {
-  "comment":"RECOMMENDED",
+  "comment": "RECOMMENDED",
   "customize": {
     "extra_dir": "",
     "git_src_dir": "src",
@@ -21,8 +21,8 @@
       "PACKAGE_SKIP_CMAKE_TARGET": "NO",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_SUB_DIR1": "src",
-      "SUBSTITUTE_ORIGINAL_PACKAGE_DIR":"$#path_to_cid=package:29bda32a8e0f465a#$",
-      "PACKAGE_URL": "https://github.com/DaveGamble/cJSON.git"
+      "PACKAGE_URL": "https://github.com/DaveGamble/cJSON.git",
+      "SUBSTITUTE_ORIGINAL_PACKAGE_DIR": "$#path_to_cid=package:29bda32a8e0f465a#$"
     },
     "use_git_revision": "yes",
     "version": "1.6.0"

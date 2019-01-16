@@ -17,14 +17,12 @@
       "win": "expr.exe"
     },
     "soft_file_from_host_os": "yes",
-    "soft_path_example": {
-    },
+    "soft_path_example": {},
     "soft_version_cmd": {
       "win": "--version > $#filename#$ 2>&1"
     }
   },
-  "env": {
-  },
+  "env": {},
   "soft_name": "Unix Utils for Windows",
   "tags": [
     "utils",

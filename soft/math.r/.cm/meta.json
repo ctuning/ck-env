@@ -1,49 +1,49 @@
 {
   "customize": {
-    "add_only_with_version": "yes", 
-    "add_to_path": "yes", 
-    "build_dir_name": "r", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_COMPILER_R", 
+    "add_only_with_version": "yes",
+    "add_to_path": "yes",
+    "build_dir_name": "r",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_COMPILER_R",
     "languages": [
       "R"
-    ], 
+    ],
     "limit_recursion_dir_search": {
-      "linux": 3, 
+      "linux": 3,
       "win": 4
-    }, 
+    },
     "only_for_host_os_tags": [
-      "windows", 
+      "windows",
       "linux"
-    ], 
+    ],
     "only_for_target_os_tags": [
-      "windows", 
+      "windows",
       "linux"
-    ], 
+    ],
     "soft_file": {
-      "linux": "r", 
+      "linux": "r",
       "win": "R.exe"
-    }, 
-    "soft_file_from_host_os": "yes", 
+    },
+    "soft_file_from_host_os": "yes",
     "soft_version_cmd": {
-      "linux": "--version > $#filename#$ 2>&1", 
+      "linux": "--version > $#filename#$ 2>&1",
       "win": "--version > $#filename#$ 2>&1"
     }
-  }, 
+  },
   "env": {
-    "CK_RC": "r", 
+    "CK_RC": "r",
     "CK_R_RT": "r"
-  }, 
-  "soft_name": "R language", 
+  },
+  "soft_name": "R language",
   "tags": [
-    "tool", 
-    "math", 
-    "r", 
-    "machine learing", 
-    "data mining", 
-    "statistics", 
-    "predictive analytics", 
+    "tool",
+    "math",
+    "r",
+    "machine learing",
+    "data mining",
+    "statistics",
+    "predictive analytics",
     "lang-r"
   ]
 }

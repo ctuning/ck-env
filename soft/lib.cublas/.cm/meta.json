@@ -1,26 +1,26 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_CUBLAS", 
-    "include_file": "cublas.h", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_CUBLAS",
+    "include_file": "cublas.h",
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 4
-    }, 
+    },
     "soft_file": {
-      "linux": "libcublas.so", 
+      "linux": "libcublas.so",
       "win": "cublas.lib"
-    }, 
+    },
     "soft_path_example": {
-      "linux": "/usr/lib/libcublas.so", 
+      "linux": "/usr/lib/libcublas.so",
       "win": ""
     }
-  }, 
-  "soft_name": "cuBLAS library", 
+  },
+  "soft_name": "cuBLAS library",
   "tags": [
-    "lib", 
+    "lib",
     "cuda",
     "cublas",
     "cuda-blas",

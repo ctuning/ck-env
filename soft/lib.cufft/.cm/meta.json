@@ -1,28 +1,28 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_CUFFT", 
-    "include_file": "cufft.h", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_CUFFT",
+    "include_file": "cufft.h",
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 4
-    }, 
+    },
     "soft_file": {
-      "linux": "libcufft.so", 
+      "linux": "libcufft.so",
       "win": "cufft.lib"
-    }, 
+    },
     "soft_path_example": {
-      "linux": "/usr/lib/libcufft.so", 
+      "linux": "/usr/lib/libcufft.so",
       "win": ""
     }
-  }, 
-  "soft_name": "cuFFT library", 
+  },
+  "soft_name": "cuFFT library",
   "tags": [
-    "lib", 
-    "cuda", 
-    "cufft", 
+    "lib",
+    "cuda",
+    "cufft",
     "fft"
   ]
 }

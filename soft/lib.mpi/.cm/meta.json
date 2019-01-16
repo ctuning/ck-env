@@ -1,7 +1,7 @@
 {
   "auto_detect": "yes",
   "customize": {
-    "add_to_path": "yes", 
+    "add_to_path": "yes",
     "check_that_exists": "yes",
     "ck_version": 10,
     "env_prefix": "CK_ENV_LIB_MPI",

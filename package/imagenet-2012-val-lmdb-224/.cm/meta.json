@@ -56,5 +56,6 @@
     "resnet",
     "channel-stable"
   ],
-  "template": "yes"
+  "template": "yes",
+  "template_type": "Dataset (ImageNet images)"
 }

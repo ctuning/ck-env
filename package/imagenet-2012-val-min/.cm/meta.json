@@ -31,5 +31,6 @@
     "small_dataset",
     "channel-stable"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "ImageNet dataset (val, min)"
 }

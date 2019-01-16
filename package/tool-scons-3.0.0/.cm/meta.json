@@ -1,23 +1,23 @@
 {
   "customize": {
-    "extra_dir": "", 
-    "git_src_dir": "src", 
+    "extra_dir": "",
+    "git_src_dir": "src",
     "install_env": {
-      "PACKAGE_NAME": "scons-3.0.0.zip", 
-      "PACKAGE_RENAME": "NO", 
-      "PACKAGE_SKIP_LINUX_MAKE":"YES",
-      "PACKAGE_SKIP_CLEAN_INSTALL": "NO", 
-      "PACKAGE_SKIP_CLEAN_OBJ": "NO", 
-      "PACKAGE_SKIP_CLEAN_PACKAGE": "NO", 
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
+      "PACKAGE_NAME": "scons-3.0.0.zip",
       "PACKAGE_PATCH": "YES",
+      "PACKAGE_RENAME": "NO",
+      "PACKAGE_SKIP_CLEAN_INSTALL": "NO",
+      "PACKAGE_SKIP_CLEAN_OBJ": "NO",
+      "PACKAGE_SKIP_CLEAN_PACKAGE": "NO",
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_SUB_DIR": "scons-3.0.0",
-      "PACKAGE_UNZIP": "YES", 
-      "PACKAGE_URL": "https://downloads.sourceforge.net/project/scons/scons/3.0.0", 
+      "PACKAGE_UNZIP": "YES",
+      "PACKAGE_URL": "https://downloads.sourceforge.net/project/scons/scons/3.0.0",
       "PACKAGE_WGET": "YES"
-    }, 
+    },
     "version": "3.0.0"
-  }, 
+  },
   "deps": {
     "python": {
       "add_to_path": "yes",
@@ -28,26 +28,27 @@
     }
   },
   "end_full_path": {
-    "linux": "install/bin/scons", 
+    "linux": "install/bin/scons",
     "win": "install\\bin\\scons.bat"
-  }, 
-  "only_for_host_os_tags": [
-    "linux", 
-    "windows"
-  ], 
-  "process_script": "install", 
-  "soft_uoa": "4ae081cd23741160", 
-  "suggested_path": "tool-scons", 
-  "tags": [
-    "tool", 
-    "scons", 
-    "v3.0.0", 
-    "v3.0", 
-    "v3" 
-  ], 
-  "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
-    "module_uoa": "script"
   },
-  "template":"yes"
+  "only_for_host_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "process_script": "install",
+  "soft_uoa": "4ae081cd23741160",
+  "suggested_path": "tool-scons",
+  "tags": [
+    "tool",
+    "scons",
+    "v3.0.0",
+    "v3.0",
+    "v3"
+  ],
+  "template": "yes",
+  "template_type": "Scons (stable version)",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
 }

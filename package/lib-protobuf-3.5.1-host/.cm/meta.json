@@ -64,6 +64,8 @@
     "v3",
     "channel-stable"
   ],
+  "template": "yes",
+  "template_type": "ProtoBuf library",
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",
     "module_uoa": "84e27ad9dd12e734"
@@ -71,6 +73,5 @@
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
-  },
-  "template":"yes"
+  }
 }

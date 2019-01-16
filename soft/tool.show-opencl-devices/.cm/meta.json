@@ -1,13 +1,5 @@
 {
   "auto_detect": "yes",
-  "deps": {
-    "lib-opencl": {
-      "local": "yes", 
-      "name": "OpenCL library", 
-      "sort": 20, 
-      "tags": "lib,opencl"
-    }
-  }, 
   "customize": {
     "build_dir_name": "show-opencl-devices",
     "check_that_exists": "yes",
@@ -21,11 +13,19 @@
       "windows",
       "linux"
     ],
+    "skip_version": "yes",
     "soft_file": {
       "linux": "show-opencl-devices",
       "win": "show-opencl-devices.exe"
-    },
-    "skip_version":"yes"
+    }
+  },
+  "deps": {
+    "lib-opencl": {
+      "local": "yes",
+      "name": "OpenCL library",
+      "sort": 20,
+      "tags": "lib,opencl"
+    }
   },
   "soft_name": "show-opencl-devices",
   "tags": [

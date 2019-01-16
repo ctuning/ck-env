@@ -1,26 +1,26 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_GBENCHMARK", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_GBENCHMARK",
     "limit_recursion_dir_search": {
-      "linux": 3, 
+      "linux": 3,
       "win": 3
-    }, 
+    },
     "soft_file": {
-      "linux": "libbenchmark.a", 
+      "linux": "libbenchmark.a",
       "win": "benchmark.lib"
-    }, 
+    },
     "soft_path_example": {
-      "linux": "/usr/lib/x86_64-linux-gnu/libbenchmark.a", 
+      "linux": "/usr/lib/x86_64-linux-gnu/libbenchmark.a",
       "win": ""
     }
-  }, 
-  "deps": {}, 
-  "soft_name": "Google Benchmark library", 
+  },
+  "deps": {},
+  "soft_name": "Google Benchmark library",
   "tags": [
-    "lib", 
+    "lib",
     "gbenchmark"
   ]
 }

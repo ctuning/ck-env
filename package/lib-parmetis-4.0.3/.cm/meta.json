@@ -1,69 +1,69 @@
 {
   "customize": {
-    "extra_dir": "", 
-    "git_src_dir": "src", 
+    "extra_dir": "",
+    "git_src_dir": "src",
     "install_env": {
-      "CMAKE_CONFIG": "Release", 
-      "PACKAGE_BUILD_TYPE": "make", 
-      "PACKAGE_CONFIGURE_FLAGS": "", 
-      "PACKAGE_NAME": "parmetis-4.0.3.tar.gz", 
-      "PACKAGE_NAME1": "parmetis-4.0.3.tar.gz", 
-      "PACKAGE_PATCH": "NO", 
-      "PACKAGE_RENAME": "NO", 
-      "PACKAGE_SKIP_CLEAN_INSTALL": "NO", 
-      "PACKAGE_SKIP_CLEAN_OBJ": "NO", 
-      "PACKAGE_SKIP_CLEAN_PACKAGE": "NO", 
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_SUB_DIR": "parmetis-4.0.3", 
-      "PACKAGE_SUB_DIR1": "parmetis-4.0.3", 
-      "PACKAGE_UNBZIP": "NO", 
-      "PACKAGE_UNGZIP": "NO", 
-      "PACKAGE_UNTAR": "YES", 
-      "PACKAGE_UNTAR_SKIP_ERROR_WIN": "YES", 
-      "PACKAGE_URL": "http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/", 
+      "CMAKE_CONFIG": "Release",
+      "PACKAGE_BUILD_TYPE": "make",
+      "PACKAGE_CONFIGURE_FLAGS": "",
+      "PACKAGE_NAME": "parmetis-4.0.3.tar.gz",
+      "PACKAGE_NAME1": "parmetis-4.0.3.tar.gz",
+      "PACKAGE_PATCH": "NO",
+      "PACKAGE_RENAME": "NO",
+      "PACKAGE_SKIP_CLEAN_INSTALL": "NO",
+      "PACKAGE_SKIP_CLEAN_OBJ": "NO",
+      "PACKAGE_SKIP_CLEAN_PACKAGE": "NO",
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_SUB_DIR": "parmetis-4.0.3",
+      "PACKAGE_SUB_DIR1": "parmetis-4.0.3",
+      "PACKAGE_UNBZIP": "NO",
+      "PACKAGE_UNGZIP": "NO",
+      "PACKAGE_UNTAR": "YES",
+      "PACKAGE_UNTAR_SKIP_ERROR_WIN": "YES",
+      "PACKAGE_URL": "http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/",
       "PACKAGE_WGET": "YES"
-    }, 
+    },
     "version": "4.0.3"
-  }, 
+  },
   "deps": {
     "compiler": {
-      "local": "yes", 
-      "name": "C++ compiler", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 10,
       "tags": "compiler,lang-cpp"
     },
     "lib-mpi": {
-      "local": "yes", 
-      "name": "MPI Library", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "MPI Library",
+      "sort": 10,
       "tags": "lib,mpi"
     }
-  }, 
+  },
   "end_full_path": {
     "linux": "install/lib/libparmetis.so"
-  }, 
-  "need_cpu_info": "yes", 
+  },
+  "need_cpu_info": "yes",
   "only_for_host_os_tags": [
-    "linux", 
+    "linux",
     "windows"
-  ], 
+  ],
   "only_for_target_os_tags": [
-    "linux", 
+    "linux",
     "windows"
-  ], 
-  "process_script": "install", 
-  "soft_uoa": "5901406bb184088e", 
-  "suggested_path": "lib-parmetis", 
+  ],
+  "process_script": "install",
+  "soft_uoa": "5901406bb184088e",
+  "suggested_path": "lib-parmetis",
   "tags": [
-    "lib", 
-    "parmetis", 
-    "v4.0.3", 
-    "v4.0", 
+    "lib",
+    "parmetis",
+    "v4.0.3",
+    "v4.0",
     "vmaster"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

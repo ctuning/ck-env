@@ -1,64 +1,64 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "add_only_with_version": "yes", 
-    "build_dir_name": "icc", 
-    "can_strip_dynamic_lib": "yes", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_COMPILER_ICC", 
+    "add_only_with_version": "yes",
+    "build_dir_name": "icc",
+    "can_strip_dynamic_lib": "yes",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_COMPILER_ICC",
     "languages": [
-      "C", 
-      "CPP", 
-      "F77", 
-      "F90", 
+      "C",
+      "CPP",
+      "F77",
+      "F90",
       "F95"
-    ], 
+    ],
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 4
-    }, 
+    },
     "only_for_target_os_tags": [
-      "linux", 
+      "linux",
       "windows"
-    ], 
-    "skip_soft_file_is_asked": "yes", 
+    ],
+    "skip_soft_file_is_asked": "yes",
     "soft_file": {
-      "linux": "compilervars.sh", 
+      "linux": "compilervars.sh",
       "win": "compilervars.bat"
-    }, 
-    "soft_file_as_env": "CK_CC", 
-    "soft_file_from_host_os": "yes", 
-    "soft_file_not_tool": "yes", 
+    },
+    "soft_file_as_env": "CK_CC",
+    "soft_file_from_host_os": "yes",
+    "soft_file_not_tool": "yes",
     "soft_path_example": {
-      "linux": "/opt/intel/composer_xe_2015//bin//compilervars.sh", 
+      "linux": "/opt/intel/composer_xe_2015//bin//compilervars.sh",
       "win": "C:\\Program Files (x86)\\Intel\\Composer XE 2015\\bin\\compilervars.bat"
-    }, 
+    },
     "soft_version_cmd": {
-      "linux": "--version > $#filename#$ 2>&1", 
+      "linux": "--version > $#filename#$ 2>&1",
       "win": " > $#filename#$ 2>&1"
     }
-  }, 
+  },
   "deps": {
     "mvsc": {
-      "local": "yes", 
-      "name": "microsoft C compiler", 
+      "local": "yes",
+      "name": "microsoft C compiler",
       "only_for_target_os_tags": [
         "windows"
-      ], 
+      ],
       "tags": "microsoft,compiler"
     }
-  }, 
-  "env": {}, 
-  "soft_name": "Intel compiler", 
+  },
+  "env": {},
+  "soft_name": "Intel compiler",
   "tags": [
-    "compiler", 
-    "icc", 
+    "compiler",
+    "icc",
     "fortran",
-    "lang-c", 
-    "lang-cpp", 
-    "lang-f77", 
-    "lang-f90", 
+    "lang-c",
+    "lang-cpp",
+    "lang-f77",
+    "lang-f90",
     "lang-f95"
   ]
 }

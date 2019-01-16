@@ -32,8 +32,7 @@
       "win": "-version > $#filename#$ 2>&1"
     }
   },
-  "env": {
-  },
+  "env": {},
   "soft_name": "Perl",
   "tags": [
     "compiler",

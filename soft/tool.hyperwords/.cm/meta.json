@@ -22,8 +22,7 @@
       "win": "corpus2sgns_params.py"
     },
     "soft_file_from_host_os": "yes",
-    "soft_path_example": {
-    }
+    "soft_path_example": {}
   },
   "soft_name": "hyperwords",
   "tags": [

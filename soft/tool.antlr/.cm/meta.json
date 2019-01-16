@@ -1,19 +1,19 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_TOOL_ANTLR", 
+    "env_prefix": "CK_ENV_TOOL_ANTLR",
     "only_for_host_os_tags": [
-      "windows", 
+      "windows",
       "linux"
-    ], 
+    ],
     "only_for_target_os_tags": [
-      "windows", 
+      "windows",
       "linux"
     ]
-  }, 
-  "env": {}, 
-  "soft_name": "ANTLR tool", 
+  },
+  "env": {},
+  "soft_name": "ANTLR tool",
   "tags": [
-    "tool", 
+    "tool",
     "antlr"
   ]
 }

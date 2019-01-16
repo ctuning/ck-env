@@ -1,29 +1,30 @@
 {
-  "aux_uoa": "4e3e9dd897f125bb", 
-  "check_exit_status": "yes", 
+  "aux_uoa": "4e3e9dd897f125bb",
+  "check_exit_status": "yes",
   "customize": {
-    "extra_dir": "", 
+    "extra_dir": "",
     "install_env": {
       "IMAGENET_TRAIN_MD5": "1d675b47d978889d74fa0da5fadfb00e",
       "IMAGENET_TRAIN_URL": "http://www.image-net.org/challenges/LSVRC/2012/nnoupb/ILSVRC2012_img_train.tar"
-    }, 
-    "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "yes", 
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
     "version": "2012"
-  }, 
-  "deps": {}, 
+  },
+  "deps": {},
   "end_full_path_universal": "n01440764/n01440764_10026.JPEG",
-  "need_cpu_info": "no", 
-  "process_script": "install", 
-  "soft_uoa": "138c3d446dad2783", 
-  "suggested_path": "dataset-imagenet-ilsvrc2012-train", 
+  "need_cpu_info": "no",
+  "process_script": "install",
+  "soft_uoa": "138c3d446dad2783",
+  "suggested_path": "dataset-imagenet-ilsvrc2012-train",
   "tags": [
-    "dataset", 
-    "imagenet", 
-    "raw", 
-    "train", 
-    "ilsvrc2012", 
+    "dataset",
+    "imagenet",
+    "raw",
+    "train",
+    "ilsvrc2012",
     "channel-stable"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "ImageNet dataset (train)"
 }

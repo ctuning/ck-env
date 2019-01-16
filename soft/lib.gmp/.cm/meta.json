@@ -1,23 +1,23 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_GMP", 
-    "include_file": "gmp.h", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_GMP",
+    "include_file": "gmp.h",
     "limit_recursion_dir_search": {
       "linux": 3
-    }, 
+    },
     "soft_file": {
       "linux": "libgmp.so"
-    }, 
+    },
     "soft_path_example": {
       "linux": ""
     }
-  }, 
-  "soft_name": "GMP library", 
+  },
+  "soft_name": "GMP library",
   "tags": [
-    "lib", 
+    "lib",
     "gmp"
   ]
 }

@@ -2507,6 +2507,7 @@ def show(i):
        h+=' <tr>\n'
        h+='  <td nowrap><b>#</b></td>\n'
        h+='  <td nowrap><b>Soft UOA</b></td>\n'
+       h+='  <td nowrap><b>Template?</b></td>\n'
        h+='  <td nowrap><b>Repo UOA</b></td>\n'
        h+='  <td><b>Tags</b></td>\n'
        h+='  <td><b>Host OS</b></td>\n'
@@ -2558,6 +2559,11 @@ def show(i):
 
            xhos=cus.get('only_for_host_os_tags',[])
            xtos=cus.get('only_for_target_os_tags',[])
+
+           tmpl=lm.get('template','')
+           template=lm.get('template_type','')
+           if tmpl=='yes' and template=='':
+              template='yes'
 
            tags=lm.get('tags',[])
            ytags=','.join(tags)
@@ -2619,6 +2625,8 @@ def show(i):
               h+='  <td nowrap valign="top"><a name="'+ln+'">'+str(num)+'</b></td>\n'
 
               h+='  <td nowrap valign="top">'+z1+ln+x2+'</b> <i>('+z11+'CK meta'+x2+')</i></td>\n'
+
+              h+='  <td nowrap valign="top">'+template+'</td>\n'
 
               h+='  <td nowrap valign="top">'+x1+lr+x2+'</td>\n'
 

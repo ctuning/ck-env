@@ -18,7 +18,7 @@
     "requests"
   ],
   "use_customize_script_from_another_entry": {
-    "module_uoa":   "soft",
-    "data_uoa":     "4460bdb0ade2a3df"
+    "data_uoa": "4460bdb0ade2a3df",
+    "module_uoa": "soft"
   }
 }

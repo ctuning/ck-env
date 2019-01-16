@@ -1,46 +1,45 @@
 {
-    "customize": {
-        "extra_dir": "",
-            "install_env": {
-            "PACKAGE_WGET":             "YES",
-            "PACKAGE_URL":              "https://github.com/google/leveldb/archive",
-            "PACKAGE_NAME":             "v1.20.zip",
-            "PACKAGE_UNZIP":            "YES",
-            "PACKAGE_SUB_DIR":          "leveldb-1.20",
-
-            "PACKAGE_SKIP_LINUX_MAKE":  "YES"
-        },
-        "version": "1.20"
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "PACKAGE_NAME": "v1.20.zip",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_SUB_DIR": "leveldb-1.20",
+      "PACKAGE_UNZIP": "YES",
+      "PACKAGE_URL": "https://github.com/google/leveldb/archive",
+      "PACKAGE_WGET": "YES"
     },
-    "deps": {
-        "compiler": {
-            "local":    "yes",
-            "name":     "C compiler",
-            "sort":     10,
-            "tags":     "compiler,lang-c"
-        }
-    },
-    "end_full_path": {
-        "linux": "install$#sep#$lib$#sep#$libleveldb$#file_ext_dll#$"
-    },
-    "need_cpu_info": "yes",
-    "only_for_host_os_tags": [
-        "linux"
-    ],
-    "only_for_target_os_tags": [
-        "linux"
-    ],
-    "process_script": "install",
-    "soft_uoa": "lib.leveldb",
-    "suggested_path": "lib-leveldb",
-    "tags": [
-        "lib",
-        "leveldb",
-        "v1.20",
-        "v1"
-    ],
-    "use_scripts_from_another_entry": {
-        "data_uoa":     "download-and-install-package",
-        "module_uoa":   "script"
+    "version": "1.20"
+  },
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C compiler",
+      "sort": 10,
+      "tags": "compiler,lang-c"
     }
+  },
+  "end_full_path": {
+    "linux": "install$#sep#$lib$#sep#$libleveldb$#file_ext_dll#$"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "lib.leveldb",
+  "suggested_path": "lib-leveldb",
+  "tags": [
+    "lib",
+    "leveldb",
+    "v1.20",
+    "v1"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "download-and-install-package",
+    "module_uoa": "script"
+  }
 }

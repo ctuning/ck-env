@@ -1,6 +1,6 @@
 {
-  "comment":"build LLVM from SVN trunk (very long)",
   "check_exit_status": "yes",
+  "comment": "build LLVM from SVN trunk (very long)",
   "customize": {
     "add_m32": "no",
     "add_target_on_win": "--target=$#arch#$-pc-windows-msvc",
@@ -38,5 +38,6 @@
     "llvm",
     "vtrunk"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "LLVM compiler trunk"
 }

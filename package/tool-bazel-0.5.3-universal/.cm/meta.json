@@ -1,53 +1,53 @@
 {
-  "check_exit_status": "yes", 
+  "check_exit_status": "yes",
   "customize": {
-    "extra_dir": "", 
+    "extra_dir": "",
     "install_env": {
-      "PACKAGE_NAME_TEMPLATE": "bazel-0.5.3-", 
-      "PACKAGE_RUN_EXTRA_WINDOWS": "call pacman -S gcc git curl zip unzip zlib-devel", 
-      "PACKAGE_URL": "https://github.com/bazelbuild/bazel/releases/download/0.5.3", 
-      "PACKAGE_WGET": "YES", 
+      "PACKAGE_NAME_TEMPLATE": "bazel-0.5.3-",
+      "PACKAGE_RUN_EXTRA_WINDOWS": "call pacman -S gcc git curl zip unzip zlib-devel",
+      "PACKAGE_URL": "https://github.com/bazelbuild/bazel/releases/download/0.5.3",
+      "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies"
-    }, 
+    },
     "version": "0.5.3"
-  }, 
+  },
   "deps": {
     "env-msys2": {
-      "local": "yes", 
-      "name": "MSYS2 env", 
+      "local": "yes",
+      "name": "MSYS2 env",
       "only_for_target_os_tags": [
         "windows"
-      ], 
-      "sort": 20, 
+      ],
+      "sort": 20,
       "tags": "env,msys2"
-    }, 
+    },
     "java-compiler": {
-      "local": "yes", 
-      "name": "Java compiler", 
-      "skip_default": "yes", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "Java compiler",
+      "skip_default": "yes",
+      "sort": 10,
       "tags": "compiler,lang-java,v1.8"
     }
-  }, 
+  },
   "end_full_path": {
-    "android": "bin/bazel", 
-    "linux": "bin/bazel", 
+    "android": "bin/bazel",
+    "linux": "bin/bazel",
     "win": "bazel.exe"
-  }, 
-  "need_cpu_info": "yes", 
-  "process_script": "install", 
-  "soft_uoa": "359f7730bd23ec60", 
-  "suggested_path": "tool-bazel", 
+  },
+  "need_cpu_info": "yes",
+  "process_script": "install",
+  "soft_uoa": "359f7730bd23ec60",
+  "suggested_path": "tool-bazel",
   "tags": [
-    "tool", 
-    "bazel", 
-    "v0.5.3", 
-    "v0.5", 
+    "tool",
+    "bazel",
+    "v0.5.3",
+    "v0.5",
     "v0",
     "channel-stable"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

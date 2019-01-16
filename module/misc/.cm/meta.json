@@ -3,6 +3,9 @@
     "add_key": {
       "desc": "add key to meta/files of different entries"
     },
+    "clone_server_repo": {
+      "desc": "download a whole repository from the server"
+    },
     "list_kernel_functions": {
       "desc": "list CK kernel functions"
     },
@@ -44,9 +47,6 @@
     },
     "transfer": {
       "desc": "download or upload a bunch of CK entries between a local and a remote repo"
-    },
-    "clone_server_repo": {
-      "desc": "download a whole repository from the server"
     }
   },
   "cfg-list-of-repos": "list-of-repos",

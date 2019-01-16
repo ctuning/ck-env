@@ -32,6 +32,7 @@
     "channel-stable"
   ],
   "template": "yes",
+  "template_type": "LLVM compiler",
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"

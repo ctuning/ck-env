@@ -58,6 +58,8 @@
     "v3",
     "channel-stable"
   ],
+  "template": "yes",
+  "template_type": "ProtoBuf library for Android",
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",
     "module_uoa": "84e27ad9dd12e734"

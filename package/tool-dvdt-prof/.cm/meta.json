@@ -13,11 +13,15 @@
     "boost": {
       "local": "yes",
       "name": "Boost C++ libraries",
+      "skip_default": "yes",
       "skip_from_bat": "yes",
       "sort": 10,
       "tags": "lib,boost",
-      "skip_default": "yes",
-      "version_from":[1,64,0]
+      "version_from": [
+        1,
+        64,
+        0
+      ]
     },
     "cmake": {
       "local": "yes",

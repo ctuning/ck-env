@@ -22,5 +22,6 @@
     "val",
     "caffe"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "dataset (imagenet, val images)"
 }

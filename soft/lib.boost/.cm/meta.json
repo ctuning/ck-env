@@ -1,27 +1,26 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_BOOST", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_BOOST",
     "limit_recursion_dir_search": {
-      "linux": 3, 
+      "linux": 3,
       "win": 4
-    }, 
+    },
     "soft_file": {
       "linux": "libboost_system$#file_ext_dll#$",
       "win": "libboost_system*-mt*$#file_ext_lib#$"
-    }, 
+    },
     "soft_path_example": {
-      "linux": "/usr/lib/x86_64-linux-gnu/libboost_system.so", 
+      "linux": "/usr/lib/x86_64-linux-gnu/libboost_system.so",
       "win": ""
     }
-  }, 
-  "deps": {
-  }, 
-  "soft_name": "Boost library", 
+  },
+  "deps": {},
+  "soft_name": "Boost library",
   "tags": [
-    "lib", 
+    "lib",
     "boost"
   ]
 }

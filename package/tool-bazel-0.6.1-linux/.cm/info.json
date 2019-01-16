@@ -1,15 +1,15 @@
 {
-  "backup_data_uid": "4d6541819898c796", 
-  "backup_module_uid": "1dc07ee0f4742028", 
-  "backup_module_uoa": "package", 
+  "backup_data_uid": "4d6541819898c796",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
   "control": {
-    "engine": "CK", 
-    "iso_datetime": "2017-10-13T13:43:40.935563", 
+    "engine": "CK",
+    "iso_datetime": "2017-10-13T13:43:40.935563",
     "version": [
-      "1", 
-      "9", 
+      "1",
+      "9",
       "2"
     ]
-  }, 
+  },
   "data_name": "tool-bazel-0.6.1-linux"
 }

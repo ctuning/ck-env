@@ -36,7 +36,7 @@
       "linux": "--version > $#filename#$ 2>&1",
       "win": " --version > $#filename#$ 2>&1"
     },
-    "sort":100
+    "sort": 100
   },
   "soft_name": "GNU Fortran compiler",
   "tags": [

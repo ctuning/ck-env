@@ -12,11 +12,11 @@
     "linux": "bin/clang-4.0",
     "win": "bin\\clang.exe"
   },
+  "need_cpu_info": "yes",
   "only_for_target_os_tags": [
     "linux",
     "windows"
   ],
-  "need_cpu_info": "yes",
   "process_script": "install",
   "soft_uoa": "1c2eb494b8ae3bc4",
   "suggested_path": "llvm-4.0.0",

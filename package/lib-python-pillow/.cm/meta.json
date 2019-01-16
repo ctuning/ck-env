@@ -16,8 +16,7 @@
     }
   },
   "end_full_path_universal": "build$#sep#$PIL$#sep#$__init__.py",
-  "only_for_host_os_tags": [
-  ],
+  "only_for_host_os_tags": [],
   "only_for_target_os_tags": [
     "windows",
     "linux"

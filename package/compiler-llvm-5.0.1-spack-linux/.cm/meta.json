@@ -1,40 +1,40 @@
 {
-  "check_exit_status": "yes", 
+  "check_exit_status": "yes",
   "customize": {
     "install_env": {
-      "PACKAGE_BUILD_TYPE": "", 
-      "PACKAGE_GIT": "YES", 
-      "PACKAGE_SUB_DIR": "src",
+      "PACKAGE_BUILD_TYPE": "",
+      "PACKAGE_GIT": "YES",
       "PACKAGE_PATCH": "YES",
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/spack/spack"
-    }, 
+    },
     "version": "5.0.1"
-  }, 
+  },
   "end_full_path": {
-    "linux": "spack/llvm/bin/clang" 
-  }, 
-  "need_cpu_info": "yes", 
+    "linux": "spack/llvm/bin/clang"
+  },
+  "need_cpu_info": "yes",
   "only_for_target_os_tags": [
-    "linux" 
-  ], 
-  "process_script": "install", 
-  "soft_uoa": "1c2eb494b8ae3bc4", 
-  "suggested_path": "llvm-5.0.1", 
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "1c2eb494b8ae3bc4",
+  "suggested_path": "llvm-5.0.1",
   "tags": [
-    "compiler", 
-    "llvm", 
-    "lang-c", 
-    "lang-cpp", 
-    "v5.0.1-spack", 
-    "v5.0.1", 
-    "v5.0", 
-    "v5", 
+    "compiler",
+    "llvm",
+    "lang-c",
+    "lang-cpp",
+    "v5.0.1-spack",
+    "v5.0.1",
+    "v5.0",
+    "v5",
     "vspack"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

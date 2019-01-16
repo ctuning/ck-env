@@ -1,16 +1,16 @@
 {
   "customize": {
     "env_prefix": "CK_ENV_LIB_RTL_XOPENME"
-  }, 
-  "soft_name": "xOpenME run-time library", 
+  },
+  "soft_name": "xOpenME run-time library",
   "tags": [
-    "lib", 
-    "rtl", 
-    "xopenme", 
-    "lang-c", 
-    "lang-cpp", 
-    "lang-f77", 
-    "lang-f90", 
+    "lib",
+    "rtl",
+    "xopenme",
+    "lang-c",
+    "lang-cpp",
+    "lang-f77",
+    "lang-f90",
     "lang-f95"
   ]
 }

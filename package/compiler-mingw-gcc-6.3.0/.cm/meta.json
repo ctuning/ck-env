@@ -5,12 +5,12 @@
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies"
     },
-    "sort":200,
+    "sort": 200,
     "version": "6.3.0"
   },
   "end_full_path": {
-    "win": "mingw64\\bin\\gcc.exe",
-    "mingw": "mingw64\\bin\\gcc.exe"
+    "mingw": "mingw64\\bin\\gcc.exe",
+    "win": "mingw64\\bin\\gcc.exe"
   },
   "need_cpu_info": "yes",
   "only_for_host_os_tags": [

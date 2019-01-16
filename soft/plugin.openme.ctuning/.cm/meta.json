@@ -1,22 +1,22 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_PLUGIN_OPENME_CTUNING", 
-    "skip_add_to_bin": "yes", 
+    "env_prefix": "CK_ENV_PLUGIN_OPENME_CTUNING",
+    "skip_add_to_bin": "yes",
     "skip_add_to_path": "yes"
-  }, 
+  },
   "deps": {
     "lib-openme": {
-      "local": "yes", 
-      "name": "OpenME library", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "OpenME library",
+      "sort": 10,
       "tags": "lib,plugins,openme,lang-c"
     }
-  }, 
-  "soft_name": "cTuning OpenME plugin", 
+  },
+  "soft_name": "cTuning OpenME plugin",
   "tags": [
-    "plugin", 
-    "openme", 
-    "ctuning", 
+    "plugin",
+    "openme",
+    "ctuning",
     "auto-tuning"
   ]
 }

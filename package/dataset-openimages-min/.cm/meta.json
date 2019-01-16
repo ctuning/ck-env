@@ -1,16 +1,16 @@
-  {
+{
   "check_exit_status": "yes",
   "customize": {
     "extra_dir": "",
     "force_ask_path": "yes",
     "install_env": {
       "ANNOTATION_URL": "https://www.dropbox.com/s/y73j7o8f3xvzy6k/validation-annotations-bbox-min.csv",
-      "VAL_FILE": "validation-annotations-bbox-min.csv",
-      "VAL_DIR": "validation-min",
-      "IMAGE_URL": "https://www.dropbox.com/s/1pe7y4xi66wsmpk/OpenImages2018-val-min.tar.gz",
-      "CLASSES_URL": "https://www.dropbox.com/s/3kcftx4h7tmfu8m/class-descriptions-boxable.csv",
       "CLASSES_FILE": "class-descriptions-boxable.csv",
+      "CLASSES_URL": "https://www.dropbox.com/s/3kcftx4h7tmfu8m/class-descriptions-boxable.csv",
+      "IMAGE_URL": "https://www.dropbox.com/s/1pe7y4xi66wsmpk/OpenImages2018-val-min.tar.gz",
       "LABELS_DIR": "/",
+      "VAL_DIR": "validation-min",
+      "VAL_FILE": "validation-annotations-bbox-min.csv",
       "VAL_IMAGE_ARCHIVE": "OpenImages2018-val-min.tar.gz"
     },
     "no_os_in_suggested_path": "yes",

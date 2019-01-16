@@ -16,5 +16,6 @@
     "show-cuda-devices",
     "channel-stable"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "tool to show CUDA devices"
 }

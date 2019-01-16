@@ -1,9 +1,9 @@
 {
   "auto_detect": "yes",
   "customize": {
-    "env_prefix": "CK_ENV_LIB_CLBLAS",
     "check_that_exists": "yes",
     "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_CLBLAS",
     "include_file": "clBLAS.h",
     "limit_recursion_dir_search": {
       "linux": 3
@@ -14,7 +14,7 @@
     "soft_path_example": {
       "linux": ""
     }
-  }, 
+  },
   "soft_name": "clBLAS library",
   "tags": [
     "lib",

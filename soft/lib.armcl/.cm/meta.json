@@ -12,8 +12,7 @@
       "linux": "libarm_compute.a",
       "win": "arm_compute.lib"
     },
-    "soft_path_example": {
-    }
+    "soft_path_example": {}
   },
   "soft_name": "ARM Compute Library",
   "tags": [
@@ -22,5 +21,6 @@
     "armcl",
     "arm-compute-library"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "ArmCL library"
 }

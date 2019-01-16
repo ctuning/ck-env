@@ -29,5 +29,6 @@
     "ilsvrc2012",
     "channel-stable"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "ImageNet dataset (val)"
 }

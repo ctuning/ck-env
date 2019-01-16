@@ -1,16 +1,16 @@
 {
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_GLEW", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_GLEW",
     "only_for_target_os_tags": [
-      "linux", 
+      "linux",
       "windows"
     ]
-  }, 
-  "soft_name": "GLEW library", 
+  },
+  "soft_name": "GLEW library",
   "tags": [
-    "lib", 
+    "lib",
     "glew"
   ]
 }

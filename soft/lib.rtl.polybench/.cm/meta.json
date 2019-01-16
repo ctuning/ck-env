@@ -1,11 +1,11 @@
 {
   "customize": {
     "env_prefix": "CK_ENV_LIB_RTL_POLYBENCH"
-  }, 
-  "soft_name": "Polybench run-time library (outdated)", 
+  },
+  "soft_name": "Polybench run-time library (outdated)",
   "tags": [
-    "lib", 
-    "rtl", 
+    "lib",
+    "rtl",
     "polybench"
   ]
 }

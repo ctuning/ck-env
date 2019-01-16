@@ -1,11 +1,11 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_SCRIPT_CK", 
+    "env_prefix": "CK_ENV_SCRIPT_CK",
     "skip_add_to_ld_path": "yes"
-  }, 
-  "soft_name": "CK misc script (outdated)", 
+  },
+  "soft_name": "CK misc script (outdated)",
   "tags": [
-    "script", 
+    "script",
     "ck"
   ]
 }

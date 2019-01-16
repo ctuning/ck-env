@@ -1,39 +1,39 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "add_only_with_version": "yes", 
-    "add_to_path": "yes", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_TOOL_TEXINFO", 
+    "add_only_with_version": "yes",
+    "add_to_path": "yes",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_TOOL_TEXINFO",
     "limit_recursion_dir_search": {
-      "linux": 3, 
+      "linux": 3,
       "win": 3
-    }, 
+    },
     "only_for_host_os_tags": [
-      "windows", 
+      "windows",
       "linux"
-    ], 
+    ],
     "only_for_target_os_tags": [
       "linux"
-    ], 
+    ],
     "soft_file": {
-      "linux": "info", 
+      "linux": "info",
       "win": "info.exe"
-    }, 
-    "soft_file_from_host_os": "yes", 
+    },
+    "soft_file_from_host_os": "yes",
     "soft_path_example": {
-      "linux": "/usr/bin/info", 
+      "linux": "/usr/bin/info",
       "win": "C:\\Program Files (x86)\\texinfo\\bin\\info.exe"
-    }, 
+    },
     "soft_version_cmd": {
-      "linux": "--version > $#filename#$ 2>&1", 
+      "linux": "--version > $#filename#$ 2>&1",
       "win": "--version > $#filename#$ 2>&1"
     }
-  }, 
-  "soft_name": "texinfo", 
+  },
+  "soft_name": "texinfo",
   "tags": [
-    "tool", 
+    "tool",
     "texinfo"
   ]
 }

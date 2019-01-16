@@ -1,25 +1,25 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "env_prefix": "CK_ENV_PYTHON_PACKAGE_PILLOW", 
-    "version_module_name":      "_version",
-    "version_variable_name":    "__version__",
+    "check_that_exists": "yes",
+    "env_prefix": "CK_ENV_PYTHON_PACKAGE_PILLOW",
     "limit_recursion_dir_search": {
-      "linux": 5, 
+      "linux": 5,
       "win": 5
-    }, 
-    "soft_file_universal": "PIL$#sep#$__init__.py"
-  }, 
-  "soft_name": "Pillow Python library", 
+    },
+    "soft_file_universal": "PIL$#sep#$__init__.py",
+    "version_module_name": "_version",
+    "version_variable_name": "__version__"
+  },
+  "soft_name": "Pillow Python library",
   "tags": [
-    "lib", 
-    "python-package", 
+    "lib",
+    "python-package",
     "pillow",
     "PIL"
   ],
   "use_customize_script_from_another_entry": {
-    "module_uoa":   "soft",
-    "data_uoa":     "4460bdb0ade2a3df"
+    "data_uoa": "4460bdb0ade2a3df",
+    "module_uoa": "soft"
   }
 }

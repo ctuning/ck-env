@@ -1,33 +1,33 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "add_to_path": "yes", 
-    "build_dir_name": "valgrind", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
+    "add_to_path": "yes",
+    "build_dir_name": "valgrind",
+    "check_that_exists": "yes",
+    "ck_version": 10,
     "cmd_prefix": {
       "linux": "valgrind"
-    }, 
-    "env_prefix": "CK_ENV_TOOL_VALGRIND", 
+    },
+    "env_prefix": "CK_ENV_TOOL_VALGRIND",
     "limit_recursion_dir_search": {
       "linux": 4
-    }, 
+    },
     "only_for_host_os_tags": [
       "linux"
-    ], 
+    ],
     "soft_file": {
       "linux": "valgrind"
-    }, 
+    },
     "soft_path_example": {
       "linux": "/usr/bin/valgrind"
-    }, 
+    },
     "soft_version_cmd": {
       "linux": "--version > $#filename#$ 2>&1"
     }
-  }, 
-  "soft_name": "valgrind", 
+  },
+  "soft_name": "valgrind",
   "tags": [
-    "tool", 
+    "tool",
     "valgrind"
   ]
 }

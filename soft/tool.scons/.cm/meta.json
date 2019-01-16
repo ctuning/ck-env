@@ -1,43 +1,43 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "add_to_path": "yes", 
-    "build_dir_name": "scons", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_TOOL_SCONS", 
+    "add_to_path": "yes",
+    "build_dir_name": "scons",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_TOOL_SCONS",
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 4
-    }, 
+    },
     "only_for_host_os_tags": [
-      "windows", 
+      "windows",
       "linux"
-    ], 
+    ],
     "soft_file": {
-      "linux": "scons", 
+      "linux": "scons",
       "win": "scons.bat"
-    }, 
-    "soft_file_from_host_os": "yes", 
+    },
+    "soft_file_from_host_os": "yes",
     "soft_path_example": {
       "linux": "/usr/bin/scons"
-    }, 
+    },
     "soft_version_cmd": {
-      "linux": "-v > $#filename#$ 2>&1", 
+      "linux": "-v > $#filename#$ 2>&1",
       "win": "-v > $#filename#$ 2>&1"
     }
-  }, 
+  },
   "deps": {
     "python": {
-      "local": "yes", 
+      "local": "yes",
       "name": "Python interpreter",
-      "sort": 10, 
+      "sort": 10,
       "tags": "compiler,lang-python"
     }
-  }, 
-  "soft_name": "scons", 
+  },
+  "soft_name": "scons",
   "tags": [
-    "tool", 
+    "tool",
     "scons"
   ]
 }

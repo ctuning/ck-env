@@ -1,48 +1,48 @@
 {
   "customize": {
-    "extra_dir": "", 
-    "git_src_dir": "src", 
+    "extra_dir": "",
+    "git_src_dir": "src",
     "install_env": {
-      "BAZEL_PATCH1": "aarch64.patch", 
-      "BAZEL_PATCH2": "aarch64-is-64bit.patch", 
-      "BAZEL_PATCH3": "javac-max-heap-500mb.patch", 
-      "BAZEL_PATCH4": "non-64bit-unix-warning.patch", 
-      "BAZEL_URL": "https://github.com/bazelbuild/bazel/releases/download/0.5.4/bazel-0.5.4-dist.zip", 
+      "BAZEL_PATCH1": "aarch64.patch",
+      "BAZEL_PATCH2": "aarch64-is-64bit.patch",
+      "BAZEL_PATCH3": "javac-max-heap-500mb.patch",
+      "BAZEL_PATCH4": "non-64bit-unix-warning.patch",
+      "BAZEL_URL": "https://github.com/bazelbuild/bazel/releases/download/0.5.4/bazel-0.5.4-dist.zip",
       "BAZEL_ZIP": "bazel-0.5.4-dist.zip"
-    }, 
-    "use_git_revision": "no", 
+    },
+    "use_git_revision": "no",
     "version": "0.5.4"
-  }, 
+  },
   "deps": {
     "java-compiler": {
-      "local": "yes", 
-      "name": "Java compiler", 
-      "skip_default": "yes", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "Java compiler",
+      "skip_default": "yes",
+      "sort": 10,
       "tags": "compiler,lang-java,v1.8"
     }
-  }, 
+  },
   "end_full_path": {
     "linux": "install/bin/bazel"
-  }, 
-  "need_cpu_info": "yes", 
+  },
+  "need_cpu_info": "yes",
   "only_for_host_os_tags": [
     "linux"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "process_script": "install", 
-  "soft_uoa": "359f7730bd23ec60", 
-  "suggested_path": "tool-bazel", 
+  ],
+  "process_script": "install",
+  "soft_uoa": "359f7730bd23ec60",
+  "suggested_path": "tool-bazel",
   "tags": [
-    "tool", 
-    "bazel", 
-    "v0.5.4", 
-    "v0.5", 
+    "tool",
+    "bazel",
+    "v0.5.4",
+    "v0.5",
     "v0",
     "channel-stable"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
     "data_uoa": "4d6541819898c796"
   }

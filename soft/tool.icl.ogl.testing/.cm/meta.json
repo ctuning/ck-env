@@ -13,34 +13,16 @@
   },
   "deps": {
     "java_compiler": {
-      "local": "yes", 
-      "name": "Java compiler", 
-      "sort": 1, 
+      "local": "yes",
+      "name": "Java compiler",
+      "sort": 1,
       "tags": "compiler,java"
-    }, 
-    "tool-antlr": {
-      "local": "yes", 
-      "name": "ANTLR tool", 
-      "sort": 5, 
-      "tags": "tool,antlr"
     },
     "lib-commons-io": {
       "local": "yes",
       "name": "Commons IO library",
       "sort": 6,
       "tags": "lib,commons-io"
-    },
-    "lib-junit": {
-      "local": "yes",
-      "name": "Junit library",
-      "sort": 7,
-      "tags": "lib,junit"
-    },
-    "tool-thrift": {
-      "local": "yes",
-      "name": "Thrift compiler",
-      "sort": 8,
-      "tags": "tool,thrift"
     },
     "lib-freeglut": {
       "local": "yes",
@@ -54,11 +36,29 @@
       "sort": 20,
       "tags": "lib,glew"
     },
+    "lib-junit": {
+      "local": "yes",
+      "name": "Junit library",
+      "sort": 7,
+      "tags": "lib,junit"
+    },
+    "tool-antlr": {
+      "local": "yes",
+      "name": "ANTLR tool",
+      "sort": 5,
+      "tags": "tool,antlr"
+    },
     "tool-glslangvalidator": {
       "local": "yes",
       "name": "GLS language validator",
       "sort": 40,
       "tags": "tool,glslangvalidator"
+    },
+    "tool-thrift": {
+      "local": "yes",
+      "name": "Thrift compiler",
+      "sort": 8,
+      "tags": "tool,thrift"
     }
   },
   "soft_name": "ICL OGL testing tool",

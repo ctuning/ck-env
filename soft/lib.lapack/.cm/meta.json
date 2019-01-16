@@ -1,10 +1,10 @@
 {
   "auto_detect": "yes",
   "customize": {
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_LIB_LAPACK",
-    "ck_version": 10,
+    "add_include_path": "yes",
     "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_LAPACK",
     "limit_recursion_dir_search": {
       "linux": 4,
       "win": 4
@@ -13,10 +13,10 @@
       "linux": "liblapack$#file_ext_dll#$",
       "win": "liblapack.lib"
     }
-  }, 
-  "soft_name": "LAPACK library", 
+  },
+  "soft_name": "LAPACK library",
   "tags": [
-    "lib", 
+    "lib",
     "lapack"
   ]
 }

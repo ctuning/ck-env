@@ -1284,6 +1284,7 @@ def list_modules(i):
        h+='  <td nowrap><b>#</b></td>\n'
        h+='  <td nowrap><b>Module&nbsp;UOA with JSON API<br>(Python module/wrapper/plugin)</b></td>\n'
        h+='  <td nowrap><b>Repo UOA</b></td>\n'
+       h+='  <td nowrap><b>Workflow (pipeline)?</b></td>\n'
        h+='  <td><b>Description and actions</b></td>\n'
        h+=' </tr>\n'
 
@@ -1320,6 +1321,11 @@ def list_modules(i):
 
            lm=l['meta']
            ld=lm.get('desc','')
+
+           xworkflow=lm.get('workflow','')
+           workflow=lm.get('workflow_type','')
+           if xworkflow=='yes' and workflow=='':
+              workflow='yes'
 
            actions=lm.get('actions',{})
 
@@ -1362,6 +1368,8 @@ def list_modules(i):
               h+='  <td nowrap valign="top">'+z1+ln+x2+'</b> <i>('+z11+'CK meta'+x2+')</i></td>\n'
 
               h+='  <td nowrap valign="top"><b>'+x1+lr+x2+'</b></td>\n'
+
+              h+='  <td nowrap valign="top">'+workflow+'</td>\n'
 
               h+='  <td valign="top">'+ld+'\n'
 

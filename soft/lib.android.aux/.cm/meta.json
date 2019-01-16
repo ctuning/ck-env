@@ -1,17 +1,17 @@
 {
   "customize": {
-    "env_prefix": "CK_ENV_LIB_ANDROID_AUX", 
+    "env_prefix": "CK_ENV_LIB_ANDROID_AUX",
     "only_for_target_os_tags": [
       "android"
-    ], 
-    "skip_add_to_bin": "yes", 
-    "skip_add_to_ld_path": "yes", 
+    ],
+    "skip_add_to_bin": "yes",
+    "skip_add_to_ld_path": "yes",
     "skip_add_to_path": "yes"
-  }, 
-  "soft_name": "Android auxilary libraries and tools (outdated)", 
+  },
+  "soft_name": "Android auxilary libraries and tools (outdated)",
   "tags": [
-    "lib", 
-    "android", 
+    "lib",
+    "android",
     "aux"
   ]
 }

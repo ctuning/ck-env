@@ -14,5 +14,7 @@
   "license": "See CK LICENSE.txt for licensing details",
   "module_deps": {
     "repo": "befd7892b0d469e9"
-  }
+  },
+  "workflow": "yes",
+  "workflow_type": "HotCRP automation pipeline"
 }

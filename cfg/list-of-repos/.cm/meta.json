@@ -1099,6 +1099,18 @@
       "url": "https://github.com/ctuning/ck-wa-workloads"
     }
   },
+  "d03f001de4248a2a": {
+    "data_uoa": "ck-dnndk",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        }
+      ],
+      "shared": "git",
+      "url": "http://github.com/ctuning/ck-dnndk"
+    }
+  },
   "d5849a2a4cdf999d": {
     "data_uoa": "reproduce-ck-paper-large-experiments",
     "dict": {

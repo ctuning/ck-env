@@ -1,31 +1,31 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_ISL", 
-    "include_file": "isl/aff.h", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_ISL",
+    "include_file": "isl/aff.h",
     "limit_recursion_dir_search": {
       "linux": 3
-    }, 
+    },
     "soft_file": {
       "linux": "libisl.so"
-    }, 
+    },
     "soft_path_example": {
       "linux": ""
     }
-  }, 
+  },
   "deps": {
     "lib-gmp": {
-      "local": "yes", 
-      "name": "GMP library", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "GMP library",
+      "sort": 10,
       "tags": "lib,gmp"
     }
-  }, 
-  "soft_name": "ISL library", 
+  },
+  "soft_name": "ISL library",
   "tags": [
-    "lib", 
+    "lib",
     "isl"
   ]
 }

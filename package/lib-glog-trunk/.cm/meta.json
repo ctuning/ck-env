@@ -23,8 +23,8 @@
     "cmake": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "skip_from_bat": "yes",
       "name": "cmake",
+      "skip_from_bat": "yes",
       "sort": 5,
       "tags": "tool,cmake"
     },

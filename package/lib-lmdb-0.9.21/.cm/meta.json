@@ -1,60 +1,60 @@
 {
   "customize": {
-    "extra_dir": "", 
-    "git_src_dir": "src", 
+    "extra_dir": "",
+    "git_src_dir": "src",
     "install_env": {
-      "PACKAGE_GIT": "YES", 
-      "PACKAGE_SKIP_BUILD_ERROR": "YES", 
-      "PACKAGE_SKIP_CLEAN_INSTALL": "NO", 
-      "PACKAGE_SKIP_CLEAN_OBJ": "NO", 
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_SUB_DIR": "src", 
-      "PACKAGE_SUB_DIR1": "src", 
+      "PACKAGE_GIT": "YES",
       "PACKAGE_GIT_CHECKOUT": "LMDB_0.9.21",
-      "PACKAGE_URL": "https://github.com/LMDB/lmdb", 
-      "SUBSTITUTE_ORIGINAL_PACKAGE_DIR":"$#path_to_cid=package:5f41ddacc856c14d#$"
-    }, 
+      "PACKAGE_SKIP_BUILD_ERROR": "YES",
+      "PACKAGE_SKIP_CLEAN_INSTALL": "NO",
+      "PACKAGE_SKIP_CLEAN_OBJ": "NO",
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_SUB_DIR": "src",
+      "PACKAGE_SUB_DIR1": "src",
+      "PACKAGE_URL": "https://github.com/LMDB/lmdb",
+      "SUBSTITUTE_ORIGINAL_PACKAGE_DIR": "$#path_to_cid=package:5f41ddacc856c14d#$"
+    },
     "skip_file_check": "yes",
-    "use_git_revision": "yes", 
+    "use_git_revision": "yes",
     "version": "0.9.21"
-  }, 
+  },
   "deps": {
     "compiler": {
-      "local": "yes", 
-      "name": "C compiler", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "C compiler",
+      "sort": 10,
       "tags": "compiler,lang-c"
     }
-  }, 
+  },
   "end_full_path": {
-    "android": "install$#sep#$lib$#sep#$liblmdb.a", 
-    "linux": "install$#sep#$lib$#sep#$liblmdb.a", 
+    "android": "install$#sep#$lib$#sep#$liblmdb.a",
+    "linux": "install$#sep#$lib$#sep#$liblmdb.a",
     "win": "lib$#sep#$lmdb.lib"
-  }, 
-  "need_cpu_info": "yes", 
+  },
+  "need_cpu_info": "yes",
   "only_for_host_os_tags": [
-    "linux", 
+    "linux",
     "windows"
-  ], 
+  ],
   "only_for_target_os_tags": [
-    "android", 
-    "linux", 
+    "android",
+    "linux",
     "windows"
-  ], 
-  "process_script": "install", 
-  "soft_uoa": "a249f58927ceefa5", 
-  "suggested_path": "lib-lmdb", 
+  ],
+  "process_script": "install",
+  "soft_uoa": "a249f58927ceefa5",
+  "suggested_path": "lib-lmdb",
   "tags": [
-    "lib", 
-    "lmdb", 
-    "v0.9.21", 
-    "v0.9", 
+    "lib",
+    "lmdb",
+    "v0.9.21",
+    "v0.9",
     "v0",
     "channel-stable"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

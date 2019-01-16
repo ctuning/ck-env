@@ -1,10 +1,10 @@
 {
   "customize": {
     "env_prefix": "CK_ENV_LIB_CJSON"
-  }, 
-  "soft_name": "cJSON library", 
+  },
+  "soft_name": "cJSON library",
   "tags": [
-    "lib", 
+    "lib",
     "cjson"
   ]
 }

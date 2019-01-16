@@ -1,28 +1,28 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "add_to_path": "yes", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_MPI", 
+    "add_to_path": "yes",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_MPI",
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 4
-    }, 
+    },
     "soft_file": {
-      "linux": "libmpi.so", 
+      "linux": "libmpi.so",
       "win": "libmpi.dll"
-    }, 
+    },
     "soft_path_example": {
-      "linux": "", 
+      "linux": "",
       "win": ""
     }
-  }, 
-  "deps": {}, 
-  "soft_name": "MPI library", 
+  },
+  "deps": {},
+  "soft_name": "MPI library",
   "tags": [
-    "lib", 
-    "mpi", 
+    "lib",
+    "mpi",
     "openmpi"
   ]
 }

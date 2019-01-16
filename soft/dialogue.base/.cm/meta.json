@@ -1,27 +1,27 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "detect_in_soft_dir": "yes", 
+    "check_that_exists": "yes",
+    "detect_in_soft_dir": "yes",
     "env_mapping": [
       {
-        "display_name": "your name", 
+        "display_name": "your name",
         "variable": "CK_MY_NAME"
-      }, 
+      },
       {
-        "default_value": "apple", 
-        "display_name": "your favourite fruit", 
+        "default_value": "apple",
+        "display_name": "your favourite fruit",
         "variable": "CK_MY_FRUIT"
       }
-    ], 
-    "env_prefix": "CK_ENV_DIALOGUE_BASE", 
+    ],
+    "env_prefix": "CK_ENV_DIALOGUE_BASE",
     "limit_recursion_dir_search": {
-      "linux": 0, 
+      "linux": 0,
       "win": 0
-    }, 
+    },
     "soft_file_universal": ".cm/meta.json"
-  }, 
-  "soft_name": "Base Dialogue", 
+  },
+  "soft_name": "Base Dialogue",
   "tags": [
     "base",
     "dialogue"

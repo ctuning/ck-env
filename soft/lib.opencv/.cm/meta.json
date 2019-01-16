@@ -1,25 +1,26 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_OPENCV", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_OPENCV",
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 5
-    }, 
+    },
     "soft_file": {
       "linux": "libopencv_core$#file_ext_dll#$",
       "win": "opencv_annotation.exe"
-    }, 
+    },
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/libopencv_core.so"
     }
-  }, 
-  "soft_name": "OpenCV library", 
+  },
+  "soft_name": "OpenCV library",
   "tags": [
-    "lib", 
+    "lib",
     "opencv"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "OpenCV library"
 }

@@ -1,47 +1,48 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "add_only_with_version": "yes", 
-    "build_dir_name": "python", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_COMPILER_PYTHON", 
+    "add_only_with_version": "yes",
+    "build_dir_name": "python",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_COMPILER_PYTHON",
     "languages": [
       "PYTHON"
-    ], 
+    ],
     "limit_recursion_dir_search": {
-      "linux": 3, 
+      "linux": 3,
       "win": 4
-    }, 
+    },
     "only_for_host_os_tags": [
-      "windows", 
+      "windows",
       "linux"
-    ], 
+    ],
     "only_for_target_os_tags": [
-      "windows", 
-      "android", 
+      "windows",
+      "android",
       "linux"
-    ], 
+    ],
     "soft_file": {
-      "linux": "python*", 
+      "linux": "python*",
       "win": "python*.exe"
-    }, 
-    "soft_file_from_host_os": "yes", 
+    },
+    "soft_file_from_host_os": "yes",
     "soft_version_cmd": {
-      "linux": "--version > $#filename#$ 2>&1", 
+      "linux": "--version > $#filename#$ 2>&1",
       "win": "--version > $#filename#$ 2>&1"
     }
-  }, 
+  },
   "env": {
-    "CK_PYC": "python", 
-    "CK_PY_OBJ_EXT": ".pyc", 
+    "CK_PYC": "python",
+    "CK_PY_OBJ_EXT": ".pyc",
     "CK_PY_RT": "python"
-  }, 
-  "soft_name": "python", 
+  },
+  "soft_name": "python",
   "tags": [
-    "compiler", 
-    "python", 
+    "compiler",
+    "python",
     "lang-python"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "python"
 }

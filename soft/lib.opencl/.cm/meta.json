@@ -1,26 +1,27 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_OPENCL", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_OPENCL",
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 4
-    }, 
+    },
     "soft_file": {
-      "linux": "libOpenCL.so", 
+      "linux": "libOpenCL.so",
       "win": "OpenCL.lib"
-    }, 
+    },
     "soft_path_example": {
-      "linux": "/usr/lib/libOpenCL.so", 
+      "linux": "/usr/lib/libOpenCL.so",
       "win": "C:\\Program Files (x86)\\Intel\\OpenCL SDK\\4.6\\lib\\x64\\OpenCL.lib"
     }
-  }, 
-  "soft_name": "OpenCL library", 
+  },
+  "soft_name": "OpenCL library",
   "tags": [
-    "lib", 
+    "lib",
     "opencl"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "OpenCL library"
 }

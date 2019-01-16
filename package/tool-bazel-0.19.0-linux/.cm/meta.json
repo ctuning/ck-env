@@ -33,5 +33,6 @@
     "v0",
     "channel-stable"
   ],
-  "template": "yes"
+  "template": "yes",
+  "template_type": "Bazel"
 }

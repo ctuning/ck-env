@@ -1,49 +1,49 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "add_only_with_version": "yes", 
-    "add_to_path": "yes", 
-    "build_dir_name": "android-ndk", 
-    "can_strip_dynamic_lib": "yes", 
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_COMPILER_GCC", 
+    "add_only_with_version": "yes",
+    "add_to_path": "yes",
+    "build_dir_name": "android-ndk",
+    "can_strip_dynamic_lib": "yes",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_COMPILER_GCC",
     "languages": [
-      "C", 
+      "C",
       "CPP"
-    ], 
+    ],
     "limit_recursion_dir_search": {
-      "linux": 4, 
+      "linux": 4,
       "win": 4
-    }, 
+    },
     "only_for_target_os_tags": [
       "android"
-    ], 
-    "skip_soft_file_is_asked": "yes", 
+    ],
+    "skip_soft_file_is_asked": "yes",
     "soft_file": {
-      "linux": "ndk-build", 
+      "linux": "ndk-build",
       "win": "ndk-build.cmd"
-    }, 
-    "soft_file_as_env": "CK_CC", 
-    "soft_file_from_host_os": "yes", 
-    "soft_file_not_tool": "yes", 
+    },
+    "soft_file_as_env": "CK_CC",
+    "soft_file_from_host_os": "yes",
+    "soft_file_not_tool": "yes",
     "soft_path_example": {
-      "linux": "/opt/android-ndk-r13b/ndk-build", 
+      "linux": "/opt/android-ndk-r13b/ndk-build",
       "win": "D:\\android-ndk-r13b\\ndk-build.cmd"
-    }, 
+    },
     "soft_version_cmd": {
-      "linux": "--version > $#filename#$ 2>&1", 
+      "linux": "--version > $#filename#$ 2>&1",
       "win": " --version > $#filename#$ 2>&1"
     },
-    "sort":100
-  }, 
-  "soft_name": "Android NDK GCC compiler", 
+    "sort": 100
+  },
+  "soft_name": "Android NDK GCC compiler",
   "tags": [
-    "compiler", 
-    "gcc", 
-    "android", 
-    "ndk", 
-    "lang-c", 
+    "compiler",
+    "gcc",
+    "android",
+    "ndk",
+    "lang-c",
     "lang-cpp"
   ]
 }

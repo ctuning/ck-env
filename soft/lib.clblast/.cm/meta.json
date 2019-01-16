@@ -9,9 +9,9 @@
       "linux": 3
     },
     "soft_file": {
+      "android": "libclblast.so",
       "linux": "libclblast.so",
-      "android": "libclblast.so", 
-      "mingw": "libclblast.so", 
+      "mingw": "libclblast.so",
       "win": "clblast.dll"
     },
     "soft_path_example": {
@@ -25,5 +25,6 @@
     "opencl-blas",
     "clblast"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "CLBlast library"
 }

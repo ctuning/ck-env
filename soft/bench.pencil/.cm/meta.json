@@ -1,19 +1,19 @@
 {
   "customize": {
-    "add_include_path": "yes", 
-    "env_prefix": "CK_ENV_BENCH_PENCIL", 
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_BENCH_PENCIL",
     "only_for_host_os_tags": [
       "linux"
-    ], 
-    "skip_add_to_bin": "yes", 
-    "skip_add_to_ld_path": "yes", 
+    ],
+    "skip_add_to_bin": "yes",
+    "skip_add_to_ld_path": "yes",
     "skip_add_to_path": "yes"
-  }, 
-  "soft_name": "Pencil benchmark", 
+  },
+  "soft_name": "Pencil benchmark",
   "tags": [
-    "benchmark", 
-    "pencil", 
-    "lang-c", 
+    "benchmark",
+    "pencil",
+    "lang-c",
     "lang-cpp"
   ]
 }

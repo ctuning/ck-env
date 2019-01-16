@@ -1,29 +1,29 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_FREEGLUT", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_FREEGLUT",
     "limit_recursion_dir_search": {
-      "linux": 3, 
+      "linux": 3,
       "win": 4
-    }, 
+    },
     "only_for_target_os_tags": [
-      "linux", 
+      "linux",
       "windows"
-    ], 
+    ],
     "soft_file": {
-      "linux": "libfreeglut.so", 
+      "linux": "libfreeglut.so",
       "win": "freeglut.lib"
-    }, 
+    },
     "soft_path_example": {
-      "linux": "", 
+      "linux": "",
       "win": ""
     }
-  }, 
-  "soft_name": "FreeGLUT library", 
+  },
+  "soft_name": "FreeGLUT library",
   "tags": [
-    "lib", 
+    "lib",
     "freeglut"
   ]
 }

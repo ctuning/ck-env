@@ -1,37 +1,37 @@
 {
   "customize": {
-    "build_dir_name": "pencilcc", 
-    "env_prefix": "CK_ENV_COMPILER_PENCIL", 
+    "build_dir_name": "pencilcc",
+    "env_prefix": "CK_ENV_COMPILER_PENCIL",
     "languages": [
-      "C", 
+      "C",
       "CPP"
-    ], 
+    ],
     "only_for_host_os_tags": [
       "linux"
-    ], 
+    ],
     "only_for_target_os_tags": [
       "linux"
-    ], 
+    ],
     "source_to_source": "yes"
-  }, 
+  },
   "env": {
-    "CK_PENCILCC": "pencilcc", 
-    "CK_PPCG": "ppcg", 
+    "CK_PENCILCC": "pencilcc",
+    "CK_PPCG": "ppcg",
     "PENCIL_COMPILER_BINARY": "ppcg"
-  }, 
-  "soft_name": "PENCIL C compiler", 
+  },
+  "soft_name": "PENCIL C compiler",
   "tags": [
-    "source-to-source-compiler", 
-    "pencilcc", 
-    "polyhedral", 
-    "lang-c", 
+    "source-to-source-compiler",
+    "pencilcc",
+    "polyhedral",
+    "lang-c",
     "lang-cpp"
-  ], 
-  "tool": "pencilcc", 
+  ],
+  "tool": "pencilcc",
   "version": {
-    "cmd": "--version > $#filename#$ 2>&1", 
-    "split": ".", 
-    "string_after": "", 
+    "cmd": "--version > $#filename#$ 2>&1",
+    "split": ".",
+    "string_after": "",
     "string_before": "version "
   }
 }

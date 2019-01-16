@@ -18,5 +18,6 @@
     "aux",
     "caffe"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "dataset (imagenet, aux)"
 }

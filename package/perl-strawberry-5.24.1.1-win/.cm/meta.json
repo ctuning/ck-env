@@ -2,7 +2,7 @@
   "check_exit_status": "yes",
   "customize": {
     "install_env": {
-      "PACKAGE_URL":"http://strawberryperl.com/download/5.24.1.1/",
+      "PACKAGE_URL": "http://strawberryperl.com/download/5.24.1.1/",
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies"
     },

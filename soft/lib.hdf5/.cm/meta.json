@@ -1,23 +1,23 @@
 {
-  "auto_detect": "yes", 
+  "auto_detect": "yes",
   "customize": {
-    "check_that_exists": "yes", 
-    "ck_version": 10, 
-    "env_prefix": "CK_ENV_LIB_HDF5", 
-    "include_file": "hdf5.h", 
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_HDF5",
+    "include_file": "hdf5.h",
     "limit_recursion_dir_search": {
       "linux": 6
-    }, 
+    },
     "soft_file": {
       "linux": "libhdf5$#file_ext_dll#$"
-    }, 
+    },
     "soft_path_example": {
       "linux": "/usr/lib/x86_64-linux-gnu/hdf5/serial/libhdf5.so"
     }
-  }, 
-  "soft_name": "HDF5 library", 
+  },
+  "soft_name": "HDF5 library",
   "tags": [
-    "lib", 
+    "lib",
     "hdf5"
   ]
 }

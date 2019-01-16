@@ -1,76 +1,80 @@
 {
   "customize": {
-    "extra_dir": "", 
+    "extra_dir": "",
     "install_env": {
-      "PACKAGE_BRANCH": "master", 
-      "PACKAGE_NAME": "dvdt-prof", 
-      "PACKAGE_URL": "https://github.com/dividiti/dvdt-prof.git", 
+      "PACKAGE_BRANCH": "master",
+      "PACKAGE_NAME": "dvdt-prof",
+      "PACKAGE_URL": "https://github.com/dividiti/dvdt-prof.git",
       "TOOL_NAME": "tool-dvdt-prof"
-    }, 
+    },
     "version": "trunk"
-  }, 
+  },
   "deps": {
     "boost": {
-      "local": "yes", 
-      "name": "Boost C++ libraries", 
-      "skip_from_bat": "yes", 
-      "sort": 10, 
-      "tags": "lib,boost",
+      "local": "yes",
+      "name": "Boost C++ libraries",
       "skip_default": "yes",
-      "version_from":[1,64,0]
-    }, 
+      "skip_from_bat": "yes",
+      "sort": 10,
+      "tags": "lib,boost",
+      "version_from": [
+        1,
+        64,
+        0
+      ]
+    },
     "cmake": {
-      "local": "yes", 
-      "name": "CMake", 
-      "skip_from_bat": "yes", 
-      "sort": 5, 
+      "local": "yes",
+      "name": "CMake",
+      "skip_from_bat": "yes",
+      "sort": 5,
       "tags": "tool,cmake"
-    }, 
+    },
     "compiler": {
-      "local": "yes", 
-      "name": "C++ compiler", 
-      "skip_from_bat": "yes", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "C++ compiler",
+      "skip_from_bat": "yes",
+      "sort": 20,
       "tags": "compiler,lang-cpp"
-    }, 
+    },
     "lib-cjson": {
-      "local": "yes", 
-      "name": "cJSON library", 
-      "sort": 15, 
+      "local": "yes",
+      "name": "cJSON library",
+      "sort": 15,
       "tags": "lib,cjson,vmaster"
-    }, 
+    },
     "opencl": {
-      "local": "yes", 
-      "name": "OpenCL library", 
-      "skip_from_bat": "yes", 
-      "sort": 30, 
+      "local": "yes",
+      "name": "OpenCL library",
+      "skip_from_bat": "yes",
+      "sort": 30,
       "tags": "lib,opencl"
     }
-  }, 
+  },
   "end_full_path": {
     "linux": "lib/tool-dvdt-prof.so"
-  }, 
+  },
   "only_for_host_os_tags": [
     "linux"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "package_extra_name": " (cjson)", 
-  "process_script": "install", 
-  "soft_uoa": "4b024aad9147b043", 
-  "suggested_path": "tool-dvdt-prof-cjson", 
+  ],
+  "package_extra_name": " (cjson)",
+  "process_script": "install",
+  "soft_uoa": "4b024aad9147b043",
+  "suggested_path": "tool-dvdt-prof-cjson",
   "tags": [
-    "tool", 
-    "opencl", 
-    "dvdt", 
-    "prof", 
-    "dvdt-prof2", 
-    "dividiti", 
-    "profiler", 
-    "cjson", 
+    "tool",
+    "opencl",
+    "dvdt",
+    "prof",
+    "dvdt-prof2",
+    "dividiti",
+    "profiler",
+    "cjson",
     "vmaster"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
     "data_uoa": "29e0ebd1d7c49e6b"
   }

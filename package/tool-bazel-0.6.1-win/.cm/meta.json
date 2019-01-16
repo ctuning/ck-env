@@ -11,9 +11,6 @@
     },
     "version": "0.6.1"
   },
-  "only_for_host_os_tags": [
-    "windows"
-  ],
   "deps": {
     "env-msys2": {
       "local": "yes",
@@ -38,6 +35,9 @@
     "win": "bazel.exe"
   },
   "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "windows"
+  ],
   "process_script": "install",
   "soft_uoa": "359f7730bd23ec60",
   "suggested_path": "tool-bazel",
