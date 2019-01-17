@@ -58,6 +58,7 @@ def validate(i):
     # Checking entry with DTD if needed
     p=''
     duoa=i.get('data_uoa','')
+    dd={}
     if duoa!='':
        muoa=i.get('dtd_module_uoa','')
        if muoa=='': muoa=i.get('module_uoa','')
@@ -68,9 +69,12 @@ def validate(i):
        if r['return']>0: return r
 
        p=r['path']
+       dd=r['dict']
 
     # Checking DTD file
     dtd_file=i.get('dtd_file','')
+    if dtd_file=='': 
+       dtd_file=dd.get('dtd_file','')
     if dtd_file=='': 
        return {'return':1, 'error':'"dtd_file" is not specified'}
 
