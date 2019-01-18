@@ -107,7 +107,7 @@ def validate(i):
        return {'return':1, 'error':'XML was not validated:\n'+str(DTD.error_log.filter_from_errors())}
 
     if ocon:
-       ck.out('XML files was successfully validated against DTD!')
+       ck.out('XML file was successfully validated against DTD!')
 
     return {'return':0}
 
