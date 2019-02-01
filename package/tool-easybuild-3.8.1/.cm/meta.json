@@ -1,0 +1,26 @@
+{
+  "customize": {
+    "install_env": {
+      "EASYBUILD_BOOTSTRAP_FORCE_VERSION":"3.8.1"
+    }
+  }, 
+  "end_full_path_universal": "software/EasyBuild/3.8.1/bin/eb", 
+  "need_cpu_info": "no", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "c3bd00fd0c41a025", 
+  "suggested_path": "tool-easybuild", 
+  "tags": [
+    "tool", 
+    "eb", 
+    "eeasybuild",
+    "v3.8.1",
+    "v3.8",
+    "v3"
+  ] 
+}

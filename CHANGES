@@ -1,3 +1,5 @@
+* 2019.02.01 - [FGG] added EasyBuild soft
+
 * 2018.12.15 - [FGG] fixed registration of Clang from Android NDK >= 17 with LLVM C++ lib
                      fixed detection of GCC from Android NDK >= 18b (+windows)
 

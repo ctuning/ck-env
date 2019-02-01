@@ -18,7 +18,7 @@
     },
     "soft_file_from_host_os": "yes",
     "soft_path_example": {
-      "linux": "/usr/bin/cmake"
+      "linux": "/usr/bin/spack"
     },
     "soft_version_cmd": {
       "linux": "--version > $#filename#$ 2>&1"
