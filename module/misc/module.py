@@ -972,7 +972,8 @@ def list_repos(i):
        h+='}\n'
        h+='</pre>\n'
 
-       h+='<p>Feel free to add description of your own CK repository in <a href="https://github.com/ctuning/ck-env/blob/master/cfg/list-of-repos/.cm/meta.json">this JSON file</a>.\n'
+       h+='<p>Feel free to add description of your own CK repository to <a href="https://github.com/ctuning/ck-env/blob/master/cfg/list-of-repos/.cm/meta.json">this JSON file</a> - just open a PR on this <a href="https://github.com/ctuning/ck-env">GitHub repo</a>.\n'
+       h+='You can obtain the main key for your entry (DATA UID) as well as data_uoa (DATA ALIAS) using this command: ck info repo:{my repo name}. You can then obtain and add "dict" using this command: ck load repo:{my repo name} --min .\n'
 
        h+='<p>See <a href="https://github.com/ctuning/ck/wiki">CK documentation</a>,\n'
        h+=' <a href="https://github.com/ctuning/ck/wiki#contributing">"how to contribute" guide</a>\n'
