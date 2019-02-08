@@ -7,6 +7,26 @@
 # Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
 #
 
+import re
+
+def version_cmd(i):
+
+    full_path           = i['full_path']
+    ver_detection_cmd   = "strings {0} | grep arm_compute_version >$#filename#$".format(full_path)
+
+
+    return {'return':0, 'cmd': ver_detection_cmd}
+
+
+def parse_version(i):
+
+    first_line = i.get('output',[''])[0]
+
+    match_obj       = re.match('arm_compute_version=v(\d+\.\d+)\s', first_line)
+    version_string  = match_obj.group(1) if match_obj else 'unknown'
+
+    return {'return':0, 'version': version_string}
+
 ##############################################################################
 # setup environment setup
 
