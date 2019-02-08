@@ -2924,6 +2924,7 @@ def add(i):
     dd=r['dict']
 
     if 'template' in dd: del(dd['template'])
+    if 'template_type' in dd: del(dd['template_type'])
 
     xtags=i.get('tags','')
     if xtags=='':

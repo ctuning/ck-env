@@ -1066,6 +1066,42 @@
       "url": "https://github.com/ctuning/ck-tiny-dnn"
     }
   },
+  "b36d630c0028470c": {
+    "data_uoa": "reproduce-pamela-project",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-math"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-pamela-project"
+    }
+  },
+  "b448401ef94e3cbd": {
+    "data_uoa": "ck-scc18",
+    "dict": {
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-autotuning"
+        },
+        {
+          "repo_uoa": "ck-dissemination-modules"
+        },
+        {
+          "repo_uoa": "ck-artifact-evaluation"
+        },
+        {
+          "repo_uoa": "ck-docker"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/ck-scc18"
+    }
+  },
   "b674321852dd4dd6": {
     "data_uoa": "ck-wa-extra",
     "dict": {

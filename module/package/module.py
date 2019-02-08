@@ -2354,7 +2354,7 @@ def add(i):
     # Check related soft first
     suoa=i.get('soft','')
     if suoa=='':
-       return {'return':1, 'error':'related softwre detection plugin is not specified. Use --soft={name from http://cKnowledge.org/shared-soft-detection-plugins.html}'}
+       return {'return':1, 'error':'related software detection plugin is not specified. Specify the existing one using --soft={name from http://cKnowledge.org/shared-soft-detection-plugins.html} or create a new one using "ck add soft {repo}:soft:{name}"'}
 
     # Load soft to get UID and tags
     r=ck.access({'action':'load',
@@ -2385,6 +2385,7 @@ def add(i):
     dd=r['dict']
 
     if 'template' in dd: del(dd['template'])
+    if 'template_type' in dd: del(dd['template_type'])
 
     # Process tags
     xtags=i.get('tags','')
@@ -2405,10 +2406,11 @@ def add(i):
 
     x=sd.get('customize',{}).get('soft_file_universal','')
     if x!='':
-       dd['end_full_path_universal_FROM_SOFT_TO_FIX_ABOVE']=x
+       dd['end_full_path_universal']=x
     else:
        x=sd.get('customize',{}).get('soft_file',{})
-       dd['end_full_path__FROM_SOFT_TO_FIX_ABOVE']=x
+       if x!='':
+          dd['end_full_path']=x
 
     # Update new entry
     ii={'action':'update',

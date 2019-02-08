@@ -370,6 +370,14 @@ def prepare_entry_template(i):
     ruoa=i.get('repo_uoa','')
     duoa=i.get('data_uoa','')
 
+    # Check user-friendly name
+    if duoa=='' and o=='con':
+       r=ck.inp({'text': 'Enter alias for your entry without spaces such as "tool.cmake": '})
+       if r['return']>0: return r
+       duoa=r['string'].strip()
+       i['data_uoa']=duoa
+       ck.out('')
+
     # Search templates
     tuoa=i.get('template','')
     truoa=i.get('template_repo','')
@@ -387,6 +395,7 @@ def prepare_entry_template(i):
               'module_uoa':omuoa,
               'data_uoa':tuoa,
               'add_info':'yes',
+              'add_meta':'yes',
               'search_dict':{'template':'yes'}}
           r=ck.access(ii)
           if r['return']>0: return r
@@ -461,7 +470,7 @@ def prepare_entry_template(i):
     # Print info about customization
     if i.get('skip_custom_note', '')!='yes' and oo=='con':
        ck.out('')
-       ck.out('You can continue customizing this entry (tags, dependencies, etc):')
+       ck.out('DO NOT FORGET to finish manually updating this JSON meta (tags, paths, dependencies, etc):')
        ck.out('')
        ck.out(' * JSON meta:   '+os.path.join(pnew, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta']))
        ck.out(' * Other files: '+pnew)
