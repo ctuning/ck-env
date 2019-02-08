@@ -1,4 +1,5 @@
 * 2019.02.08 - [FGG] improved handling of templates
+             - [FGG] improved problem reporting in third-party packages
 
 * 2019.02.01 - [FGG] added EasyBuild soft
 

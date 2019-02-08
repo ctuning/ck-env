@@ -2461,42 +2461,49 @@ def print_warning(i):
        pc=pie.get('PACKAGE_GIT_CHECKOUT','')
 
        ck.out('')
-       ck.out('***************************************************************')
-       ck.out('***************************************************************')
-       ck.out('***************************************************************')
+       ck.out('   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 
-       ck.out('CK packages are developed, shared and improved by the community')
-       ck.out('to help users automate installation and customization')
-       ck.out('of code and data across diverse and evolving platforms:')
-       ck.out('* http://cKnowledge.org/shared-packages.html')
+       ck.out('   CK detected a PROBLEM in the third-party CK package:')
 
-       ck.out('')
-       ck.out('Therefore, they may sometimes fail with newer code versions,')
-       ck.out('under new settings or in previously unseen environments.')
+#       ck.out('CK packages are developed, shared and improved by the community')
+#       ck.out('to help users automate installation and customization')
+#       ck.out('of code and data across diverse and evolving platforms:')
+#       ck.out('* http://cKnowledge.org/shared-packages.html')
+#
+#       ck.out('')
+#       ck.out('Therefore, they may sometimes fail with newer code versions,')
+#       ck.out('under new settings or in previously unseen environments.')
+#
+#       ck.out('')
+#       ck.out('In such case, please help the community by fixing the problem')
+#       ck.out('and/or reporting it via CK mailing list and related repository:')
+#       ck.out('(please provide all details about how to reproduce it):')
+#
+#       ck.out('')
+#       ck.out('* https://groups.google.com/forum/#!forum/collective-knowledge')
+#
+#       ck.out('')
+#       ck.out('You can turn off this message as follows:')
+#       ck.out('$ ck set kernel --var.skip_message_when_package_fails=yes')
 
-       ck.out('')
-       ck.out('In such case, please help the community by fixing the problem')
-       ck.out('and/or reporting it via CK mailing list and related repository:')
-       ck.out('(please provide all details about how to reproduce it):')
+       # sometimes pruoa can still be UID -> check
+       r=ck.access({'action':'load', 'module_uoa':work['self_module_uid'], 'data_uoa':pduoa})
+       if r['return']==0:
+          pduoa=r['data_uoa']
 
-       ck.out('')
-       ck.out('* https://groups.google.com/forum/#!forum/collective-knowledge')
-
-       ck.out('')
-       ck.out('You can turn off this message as follows:')
-       ck.out('$ ck set kernel --var.skip_message_when_package_fails=yes')
+       url2=''
 
        if pduoa!='' or pruoa!='':
           ck.out('')
-          ck.out('Failed(?) CK package: '+pduoa)
+          ck.out('   CK package:           '+pduoa)
 
           if purl!='':
-             ck.out('Original package URL: '+purl)
+             ck.out('   Native package URL:   '+purl)
              if pc!='':
-                ck.out('Git checkout:         '+pc)
+                ck.out('   Git checkout:         '+pc)
 
           if pruoa!='':
-             ck.out('CK repo:              '+pruoa)
+             ck.out('   CK repo:              '+pruoa)
 
              # Attempt to read info about this repo
              r=ck.access({'action':'load',
@@ -2508,13 +2515,19 @@ def print_warning(i):
                 if url!='':
                    url1=url+'/tree/master/package/'+pduoa
                    url2=url+'/issues'
-                   ck.out('CK repo URL:          '+url)
-                   ck.out('CK package URL:       '+url1)
-                   ck.out('Issues URL:           '+url2)
+                   ck.out('   CK repo URL:          '+url)
+                   ck.out('   CK package URL:       '+url1)
+                   ck.out('   Issues URL:           '+url2)
 
-       ck.out('***************************************************************')
-       ck.out('***************************************************************')
-       ck.out('***************************************************************')
+       ck.out('   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
+       x1='the community'
+       x2='https://groups.google.com/forum/#!forum/collective-knowledge'
+       if url2!='':
+          x1='the authors'
+          x2=url2
+
+       ck.out('   Please, submit the log to '+x1+' of this external CK package at "'+x2+'" to collaboratively fix this problem!')
        ck.out('')
 
-    return {}
+    return {'return':0}
