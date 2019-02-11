@@ -1002,7 +1002,18 @@ def list_repos(i):
     repo_url={}
     repo_private={}
 
-    # Checking installed repos
+    # Check which already manually added from cfg:list-of-repos
+    rruoa=i.get('repo_uoa','')
+
+    r=ck.access({'action':'load',
+                 'module_uoa':cfg['module_deps']['cfg'],
+                 'data_uoa':cfg['cfg-list-of-repos']})
+    if r['return']>0 and r['return']!=16: return r
+    if r['return']==0:
+       repos=r['dict']
+       if rruoa=='': rruoa=r['repo_uid']
+
+    # Going through already described repos and add missing ones
     private=''
     remote=''
     for l in ll:
@@ -1022,41 +1033,66 @@ def list_repos(i):
            remote=rx.get('dict',{}).get('remote','')
 
         if lr not in cfg.get('skip_repos',[]) and remote!='yes' and private!='yes' and url!='':
-           repos[lr_uid]={'data_uoa':lr}
+           if lr_uid not in repos:
+              repos[lr_uid]={'data_uoa':lr}
 
-    # Check which already manually added from cfg:list-of-repos
-    rruoa=i.get('repo_uoa','')
+    # Try to fill in missing information or find duplicates
+    to_delete=[]
+    for repo_uid in list(repos.keys()):
+        x=repos[repo_uid]
 
-    r=ck.access({'action':'load',
-                 'module_uoa':cfg['module_deps']['cfg'],
-                 'data_uoa':cfg['cfg-list-of-repos']})
-    if r['return']>0 and r['return']!=16: return r
-    if r['return']==0:
-       repos.update(r['dict'])
-       if rruoa=='': rruoa=r['repo_uid']
-
-    # Try to fill in missing information
-    for repo in repos:
-        x=repos[repo]
+        repo_uoa=x['data_uoa']
 
         d=x.get('dict',{})
-        if len(d)==0:
-           # Find real repo and get .ckr.json
-           rx=ck.access({'action':'where',
-                         'module_uoa':cfg['module_deps']['repo'],
-                         'data_uoa':repo})
-           if rx['return']==0: 
-              pckr=os.path.join(rx['path'], ck.cfg['repo_file'])
-              if os.path.isfile(pckr):
-                 rx=ck.load_json_file({'json_file':pckr})
-                 if rx['return']>0: return rx
+      
+        # Find real repo and get .ckr.json
+        rx=ck.access({'action':'where',
+                      'module_uoa':cfg['module_deps']['repo'],
+                      'data_uoa':repo_uoa})
+        if rx['return']==0: 
+           pckr=os.path.join(rx['path'], ck.cfg['repo_file'])
+           if os.path.isfile(pckr):
+              rx=ck.load_json_file({'json_file':pckr})
+              if rx['return']>0: return rx
 
-                 d=rx['dict']['dict']
+              rxd=rx['dict']
 
-                 if 'path' in d:
-                    del(d['path'])
+              dx=rxd['dict']
 
-                 x['dict']=d
+              if 'path' in dx:
+                 del(dx['path'])
+
+              real_repo_uid=rxd['data_uid']
+
+              # Check if mismatch of real uid and current one (old bug - should be fixed now)
+              if real_repo_uid!=repo_uid:
+                 ck.out('')
+                 ck.out('WARNING: repo UID mismatch for '+repo_uoa+' ('+real_repo_uid+' != '+repo_uid+')')
+                 ck.out('')
+
+#                 r=ck.inp({'text':'  update correct one and remove old (Y/n)?'})
+#                 if r['return']>0: return r
+#                 xx=r['string'].strip().lower()
+                 if True: #xx!='n':
+                    if real_repo_uid not in repos:
+                       repos[real_repo_uid]=copy.deepcopy(repos[repo_uid])
+                    else:
+                       if not 'dict' in repos[real_repo_uid]:
+                          repos[real_repo_uid]['dict']={}
+                       repos[real_repo_uid]['dict'].update(d)
+
+                    to_delete.append(repo_uid)
+              else:
+                 # light update
+                 for k in dx:
+                     if k not in d:
+                        d[k]=dx[k]
+
+    # Delete duplicates (old bug)
+    for tod in to_delete:
+        if tod in repos: 
+           ck.out('* Deleting '+tod)
+           del(repos[tod])
 
     # Record list
     if rruoa=='': rruoa='ck-env'
@@ -1066,6 +1102,7 @@ def list_repos(i):
                  'data_uoa':cfg['cfg-list-of-repos'],
                  'repo_uoa':rruoa,
                  'dict':repos,
+                 'substitute':'yes',
                  'sort_keys':'yes',
                  'ignore_update':'yes'})
     if r['return']>0: return r
