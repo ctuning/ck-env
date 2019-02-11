@@ -930,7 +930,7 @@ def install(i):
 #             if cus.get('no_ver_in_suggested_path','')!='yes' and cus.get('version','')!='':
 #                nm+='-'+cus.get('version','')
              if cus.get('no_ver_in_suggested_path','')!='yes' and ver!='':
-                nm+='-'+ver
+                nm+='-'+ver.strip('-')
 
              # Then if compiler
              bdn=udeps.get('compiler',{}).get('build_dir_name','')
