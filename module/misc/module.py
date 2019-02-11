@@ -1180,7 +1180,7 @@ def list_repos(i):
            if url!='':
               x5='<br><ul>( '+x1readme+'README'+x2+' ; '+z1+'JSON meta</a> )'
 
-           h+='  <td nowrap valign="top"><b>'+x1+lr+x2+'</b>'+x5+'</td>\n'
+           h+='  <td nowrap valign="top">'+x1+lr+x2+''+x5+'</td>\n'
 
            # TD
            workflow_desc=workflow_desc.replace('$#repo_url#$',url2)
