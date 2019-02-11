@@ -460,9 +460,7 @@ def setup(i):
 
     csp=d.get('can_skip_path','')
 
-    ev=i.get('extra_version','')
-    if ev=='':
-       ev=cus.get('extra_version','')
+    extra_version=i.get('extra_version', cus.get('extra_version',''))
 
     # Add tags from the search!
     for q in tags.split(','):
@@ -741,11 +739,11 @@ def setup(i):
        ver_to_search=ver
 
     # Add extra, if needed (useful for changing trunks)
-    if ev!='':
-       ver+=ev
-       ver_to_search+=ev
+    if extra_version!='':
+       ver+=extra_version
+       ver_to_search+=extra_version
 
-    # If cutomized version has changed, try to check env again ...
+    # If customized version has changed, try to check env again ...
     if vercus!=ver:
        env_new='no'
 
@@ -1548,9 +1546,7 @@ def check(i):
     duoa=r['data_uoa']
     duid=r['data_uid']
 
-    ev=i.get('extra_version','')
-    if ev=='':
-       ev=cus.get('extra_version','')
+    extra_version=i.get('extra_version', cus.get('extra_version',''))
 
     ########################################################################
     # Check env from input
@@ -1954,7 +1950,7 @@ def check(i):
 
        cus=dx.get('customize',{})
 
-       ev=dx.get('extra_version','')
+       extra_version=dx.get('extra_version','')
 
        if dx.get('env_data_uoa','')!='' and env_data_uoa=='':
           env_data_uoa=dx['env_data_uoa']
@@ -2011,7 +2007,7 @@ def check(i):
         'soft_name':dname,
         'soft_add_name':en,
         'package_uoa':puoa,
-        'extra_version':ev,
+        'extra_version':extra_version,
         'tags':xtags,
         'out':oo}
 
