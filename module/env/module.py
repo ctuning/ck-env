@@ -1154,6 +1154,43 @@ def show(i):
 
     return {'return':0, 'lst':lst, 'view':sorted_dicts}
 
+
+###############################################################################
+## A helper function to compute a given DNF on a given dictionary of attributes
+##
+## The assumed structure of the DNF is:
+#
+# [
+#     {   # either one combination:
+#         'left_hand': [ 'up', 'UP', 'raised', 'RAISED', '1' ],
+#         'right_hand': [ 'down', 'DOWN', 'lowered', 'LOWERED', '0']
+#     },
+#     {   # or another:
+#         'right_hand': [ 'up', 'UP', 'raised', 'RAISED', '1' ],
+#         'left_hand': [ 'down', 'DOWN', 'lowered', 'LOWERED', '0']
+#     }
+# ]
+
+def match_attrib_DNF( attribs, conjunctions ):
+
+    def match_one_conjunction( conjunction ):
+        def match_one_attrib( attrib_name, values ):
+            value_list = values if isinstance(values, list) else [ values ]     # the general case is a list of matching values
+            return attribs.get(attrib_name,'') in value_list
+
+        for attrib_name, value_list in conjunction.items():                     # AND: a single False makes everything False
+            if not match_one_attrib( attrib_name, value_list ):
+                return False
+        return True
+
+    dnf = conjunctions if isinstance(conjunctions, list) else [ conjunctions ]  # the general case is a list of conjunctions
+
+    for conjunction in dnf:                                                     # OR: a single True makes everything True
+        if match_one_conjunction( conjunction ):
+            return True
+    return False
+
+
 ##############################################################################
 # resolve all dependencies
 
@@ -1303,35 +1340,18 @@ def resolve(i):
            continue
 
         if q.get('enabled','')!='yes':
-           check_env=q.get('enable_if_env',{})
-           if len(check_env)>0:
-              enable=True
-              for j in check_env:
-                  v=check_env[j]
-                  if install_env.get(j,'').lower()!=v.lower():
-                     enable=False
-                     break
-
-              if enable:
-                 q['enabled']='yes'
-              else:
-                 q['skipped']='yes'
-                 continue
+            enable_DNF = q.get('enable_if_env')
+            if enable_DNF:
+                if match_attrib_DNF( install_env, enable_DNF ):
+                    q['enabled']='yes'
+                else:
+                    q['skipped']='yes'
+                    continue
 
         if q.get('skipped','')!='yes':
-            check_env=q.get('disable_if_env',{})
-            if len(check_env)>0:
-                disable=True
-                for unwanted_variable_name in check_env:
-                    unwanted_variable_values = check_env[unwanted_variable_name]
-                    if not isinstance(unwanted_variable_values, list):
-                        unwanted_variable_values = [ unwanted_variable_values ]
-
-                    if install_env.get(unwanted_variable_name,'').lower() not in [uvv.lower() for uvv in unwanted_variable_values]:
-                        disable=False
-                        break
-
-                if disable:
+            disable_DNF = q.get('disable_if_env')
+            if disable_DNF:
+                if match_attrib_DNF( install_env, disable_DNF ):
                     q['skipped']='yes'
                     continue
                 else:
