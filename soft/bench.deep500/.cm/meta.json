@@ -1,0 +1,23 @@
+{
+  "auto_detect": "no", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_BENCH_DEEP500", 
+    "only_for_host_os_tags": [
+      "linux"
+    ], 
+    "skip_version": "yes", 
+    "soft_file": {
+      "linux": "setup.py"
+    }, 
+    "soft_path_example": {
+      "linux": "/usr/bin/deep500/setup.py"
+    } 
+  }, 
+  "soft_name": "deep500", 
+  "tags": [
+    "bench", 
+    "deep500"
+  ]
+}
