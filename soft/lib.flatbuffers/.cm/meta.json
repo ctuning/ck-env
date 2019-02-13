@@ -1,0 +1,25 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_FLATBUFFERS", 
+    "file_root_name": "libflatbuffers", 
+    "limit_recursion_dir_search": {
+      "linux": 4, 
+      "win": 4
+    }, 
+    "soft_file": {
+      "linux": "libflatbuffers$#file_ext_lib#$"
+    }, 
+    "soft_path_example": {
+      "linux": "/usr/local/lib/libflatbuffers.a"
+    }
+  }, 
+  "deps": {}, 
+  "soft_name": "FlatBuffers library", 
+  "tags": [
+    "lib", 
+    "flatbuffers"
+  ]
+}
