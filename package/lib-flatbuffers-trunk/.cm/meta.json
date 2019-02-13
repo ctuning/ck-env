@@ -1,0 +1,48 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "PACKAGE_BUILD_TYPE": "skip", 
+      "PACKAGE_GIT": "YES", 
+      "PACKAGE_SKIP_CLEAN_OBJ": "YES", 
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
+      "PACKAGE_SUB_DIR": "src", 
+      "PACKAGE_URL": "https://github.com/google/flatbuffers.git"
+    }
+  }, 
+  "deps": {
+    "compiler": {
+      "local": "yes", 
+      "name": "C++ compiler", 
+      "sort": 50, 
+      "tags": "compiler,lang-cpp",
+      "update_tags_by_target_os_uoa": {
+        "macos-64": "llvm"
+      }
+    }
+  }, 
+  "end_full_path_universal": "install$#sep#$lib$#sep#$libflatbuffers$#file_ext_lib#$", 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "lib.flatbuffers", 
+  "suggested_path": "lib-flatbuffers-trunk", 
+  "tags": [
+    "lib", 
+    "flatbuffers"
+  ], 
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "process-compiler-for-cmake", 
+    "module_uoa": "script"
+  }, 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "download-and-install-package", 
+    "module_uoa": "script"
+  }
+}
