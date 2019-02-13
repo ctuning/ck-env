@@ -9,7 +9,8 @@
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/google/flatbuffers.git"
-    }
+    },
+    "version": "master"
   }, 
   "deps": {
     "compiler": {
@@ -32,7 +33,7 @@
   ], 
   "process_script": "install", 
   "soft_uoa": "lib.flatbuffers", 
-  "suggested_path": "lib-flatbuffers-trunk", 
+  "suggested_path": "lib-flatbuffers",
   "tags": [
     "lib", 
     "flatbuffers"
