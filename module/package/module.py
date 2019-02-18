@@ -274,11 +274,33 @@ def install(i):
     else:
        # First, search by tags
        if xtags!='':
-          r=ck.access({'action':'search',
+
+          required_tags_list = xtags
+          if not type(required_tags_list)==list:
+                required_tags_list = required_tags_list.split(',')
+
+          required_tags_set = set(required_tags_list)   # NB: this variable gets locked in the closure for efficiency of the following function:
+
+          def tags_and_variations_merging_callback(i):
+                """ A callback function that knows how to merge tags and variations
+                    and how to match the resulting set against the query.
+                """
+
+                meta = i.get('meta',{})
+                supported_variations_set    = set(meta.get('variations',{}).keys())
+                tags_and_variations         = set(meta.get('tags',{})) | supported_variations_set
+
+                matched_bool                = tags_and_variations >= required_tags_set
+                i['required_variations']    = list( supported_variations_set & required_tags_set )
+
+                return { 'return': 0, 'skip': ( '' if matched_bool else 'yes' ) }
+
+          r=ck.access({'action':'list',
                        'module_uoa':work['self_module_uid'],
                        'add_info':'yes',
                        'add_meta':'yes',
-                       'tags':xtags})
+                       'filter_func_addr': tags_and_variations_merging_callback,
+          })
           if r['return']>0: return r
           l=r['lst']
           if len(l)>0:
@@ -350,7 +372,10 @@ def install(i):
                         declared_comment = dmeta.get('comment','')
                         comment_in_braces = (declared_comment + ', ' if declared_comment else '') + this_data_uid
 
-                        display_line = '{}{} ({})'.format(data_name_or_uoa, version_if_defined, comment_in_braces)
+                        required_variations = package_entry.get('required_variations')
+                        variations_to_display = ', Variations: {}'.format(','.join(required_variations)) if required_variations else ''
+
+                        display_line = '{}{} ({}){}'.format(data_name_or_uoa, version_if_defined, comment_in_braces, variations_to_display)
 
                         display_to_idx[ display_line ] = list_idx
                         ver_options.append( display_line )
@@ -430,6 +455,9 @@ def install(i):
     # Get main params
     tags=copy.deepcopy(d.get('tags',[]))
 
+    if required_variations:
+        tags.extend( required_variations )
+
     x=i.get('extra_tags','').strip()
     if x!='':
        tags.extend(x.split(','))
@@ -494,6 +522,13 @@ def install(i):
 
     # Update this env from CK kernel (for example, to decide what to use, git or https)
     pr_env.update(ck.cfg.get('install_env',{}))
+
+    # Update this env from all the supported variations (hoping there are no common env.vars, since we have no way to guarantee order in a dictionary)
+    if required_variations:
+        supported_variations = d.get('variations', {})
+        for req_variation in required_variations:
+            extra_env = supported_variations[req_variation].get('extra_env',{})
+            pr_env.update( extra_env )
 
     # Update this env from customize meta (for example to pass URL to download package)
 #    pr_env.update(cus.get('install_env',{}))
@@ -692,7 +727,8 @@ def install(i):
     # Check installation path
     pre_path=i.get('path','')
     pi=i.get('install_path','')
-    ep=i.get('extra_path','')
+    vari_path = '-'.join([''] + required_variations) if required_variations else ''
+    extra_path=i.get('extra_path','')
     fp=i.get('full_path','')
 
     x=cus.get('input_path_example','')
@@ -963,7 +999,8 @@ def install(i):
              nm += cus.get('extra_suggested_path','')
 
              # Then another extra path, if non-empty
-             nm += ep
+             nm += vari_path
+             nm += extra_path
 
              # Finally OS
              if cus.get('no_os_in_suggested_path','')!='yes':
