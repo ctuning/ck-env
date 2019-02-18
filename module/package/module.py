@@ -252,6 +252,7 @@ def install(i):
     dname=''
     package_repo_uoa=''
     d={}
+    required_variations = []
 
     if duoa=='' and xtags=='':
        # Try to detect CID in current path
@@ -400,13 +401,15 @@ def install(i):
 
                     ck.out('')
 
-                duid=l[selected_index].get('data_uid','')
+                package_entry = l[selected_index]
+                duid=package_entry.get('data_uid','')
                 duoa=duid
-                duoax=l[selected_index].get('data_uoa','')
-                package_repo_uoa=l[selected_index].get('repo_uoa','')
+                duoax=package_entry.get('data_uoa','')
+                package_repo_uoa=package_entry.get('repo_uoa','')
 
-                d=l[selected_index]['meta']
-                p=l[selected_index]['path']
+                d=package_entry['meta']
+                p=package_entry['path']
+                required_variations = package_entry.get('required_variations',[])
 
                 if o=='con':
                    ck.out('')
