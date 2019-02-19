@@ -55,12 +55,16 @@ def add(i):
                                                  "ssh"
                                                  "rpc"
                                                  "avro"
+                                                 "cluster"
                                                  "quantum"
 
                  Extra options per access type:
 
                    * avro:
                        avro_config         - full path to JSON configuration file
+
+                   * cluster:
+                       cluster_config      - full path to JSON configuration file
 
                    * quantum:
                        access_key          - full path to access key file if needed - will be available via env CK_QCK_ACCESS_KEY_FILE
@@ -487,7 +491,49 @@ def add(i):
 
         dd['device_cfg']['update_target_os_dict']=uod
 
-    ########################################################## Additional questions for Apache AVRO distributed platforms
+    ########################################################## Additional questions for any CLUSTER platform
+    if at=='cluster':
+        if 'device_cfg' not in dd:
+            dd['device_cfg']={}
+
+        dx={}
+        henv={}
+
+        #####################
+        cluster_config=i.get('cluster_config','')
+        if cluster_config=='':
+           ck.out('')
+           r=ck.inp({'text':'Enter path to CLUSTER JSON file with configuration of all nodes: '})
+           cluster_config=r['string'].strip()
+
+        # Check if exists
+        if not os.path.isfile(cluster_config):
+           return {'return':1, 'error':'CLUSTER configuration file not found ('+cluster_config+')'}
+
+        # Add to files to save to machine dir
+        r=ck.load_json_file({'json_file':cluster_config})
+        if r['return']>0: return r
+
+        dx['cluster_config']=r['dict']
+
+#        henv['CK_MACHINE_HOST']=dx.get('host','')
+
+        r=ck.load_text_file({'text_file':cluster_config})
+        if r['return']>0: return r
+        files['ip']=r['string']
+
+        dd['device_cfg']['remote_params']=dx
+
+        uod={
+             'preset_host_env':henv,
+             'skip_platform_detection':'yes'
+           }
+
+        tosd.update(uod)
+
+        dd['device_cfg']['update_target_os_dict']=uod
+
+    ########################################################## Additional questions for Quantum platforms
     if at=='quantum':
         if 'device_cfg' not in dd:
             dd['device_cfg']={}
@@ -904,7 +950,7 @@ def machine_init(i):
         if r['return']>0: return r
 
         dd=r['dict']
-        pp=r['path'] # can be useful to get access to machine specific files (such as for Apache Avro ip configuration)
+        pp=r['path'] # can be useful to get access to machine specific files (such as for Apache Avro or CLUSTER IP configuration)
 
         # Get main parameters
         host_os_uoa=dd.get('host_os_uoa','')
@@ -1002,7 +1048,7 @@ def check(i):
         except:
            pass
 
-    elif at=='avro' or at=='quantum':
+    elif at=='avro' or at=='quantum' or at=='cluster':
         connected='yes'
 
     else:
