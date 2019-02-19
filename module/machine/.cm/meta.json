@@ -42,6 +42,15 @@
         "android-with-arch"
       ]
     },
+    "cluster": {
+      "detect_platform": "no",
+      "name": "CLUSTER: generic configuration of multiple remote machines",
+      "sort": 85,
+      "tags": [
+        "linux",
+        "windows"
+      ]
+    },
     "avro": {
       "detect_platform": "no",
       "name": "AVRO: multiple remote machines accessed via Apache AVRO",

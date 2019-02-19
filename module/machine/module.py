@@ -46,6 +46,8 @@ def add(i):
 
               (use_host)                   - if 'yes', configure host as target
 
+              (type) 
+                or
               (access_type)                - access type to the machine: 
                                                  "android"
                                                  "mingw"
@@ -65,6 +67,8 @@ def add(i):
 
                    * cluster:
                        cluster_config      - full path to JSON configuration file
+                           or
+                       config_file
 
                    * quantum:
                        access_key          - full path to access key file if needed - will be available via env CK_QCK_ACCESS_KEY_FILE
@@ -96,6 +100,7 @@ def add(i):
     tdid=i.get('device_id', '')
 
     at=i.get('access_type','')
+    if at=='': at=i.get('type','')
 
     if i.get('use_host','')=='yes':
        at='host'
@@ -501,6 +506,7 @@ def add(i):
 
         #####################
         cluster_config=i.get('cluster_config','')
+        if cluster_config=='': cluster_config=i.get('config_file','')
         if cluster_config=='':
            ck.out('')
            r=ck.inp({'text':'Enter path to CLUSTER JSON file with configuration of all nodes: '})
