@@ -24,8 +24,9 @@ def parse_version(i):
     # Example output to be parsed:
     #
     # arm_compute_version=v18.11 Build options: {'benchmark_tests': '0', 'neon': '1', 'validation_tests': '0', 'extra_cxx_flags': '-fPIC', 'arch': 'arm64-v8a'} Git hash=3d2d44ef55ab6b08afda8be48301ce3c55c7bc67
+    # arm_compute_version=v0.0-unreleased Build options: {'benchmark_tests': '0', 'neon': '1', 'validation_tests': '0', 'extra_cxx_flags': '-fPIC', 'arch': 'arm64-v8a'} Git hash=e46a7beb6b3d89b7cc6a96faeab19ee4478d4e2e
 
-    match_obj       = re.match('arm_compute_version=v(\d+\.\d+)\s+.+uild options:\s+({.+})', first_line)
+    match_obj       = re.match('arm_compute_version=v(\d+\.\d+[\-\w]*)\s+.+uild options:\s+({.+})', first_line)
     version_string  = match_obj.group(1) if match_obj else 'unknown'
     build_options   = eval(match_obj.group(2) if match_obj else '{}')
 
