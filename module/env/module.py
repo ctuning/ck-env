@@ -1396,8 +1396,20 @@ def resolve(i):
             ytosx=hosx
             ytosd=hosd
 
-        # Updating tags if needed based on host/target
+        # Extra tags to be added conditionally:
+        #
         xtags=[]
+
+        # Adding extra tags based on environment DNF:
+        #
+        update_tags_if_env = q.get('update_tags_if_env')
+        if update_tags_if_env:
+            for candidate_tag, add_tag_DNF in update_tags_if_env.items():
+                if match_attrib_DNF( install_env, add_tag_DNF ):
+                    xtags.append( candidate_tag )
+
+        # Adding extra tags depending on host/target platform:
+        #
         tx=q.get('update_tags_by_host_platform',{}).get(hplat,'')
         if tx!='': xtags.append(tx)
         tx=q.get('update_tags_by_host_platform2',{}).get(hplat2,'')
