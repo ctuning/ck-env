@@ -201,6 +201,23 @@
       "workflow_desc": "programs"
     }
   },
+  "1ddab3e1f40f7b8c": {
+    "data_uoa": "reproduce-sysml19-paper-p3",
+    "dict": {
+      "desc": "Reproducibility report and the Collective Knowledge workflow for the SysML'19 paper \"Priority-based Parameter Propagation for Distributed DNN Training\"",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        },
+        {
+          "repo_uoa": "ck-mxnet"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-sysml19-paper-p3",
+      "workflow_desc": "programs"
+    }
+  },
   "1e884df489890fa1": {
     "data_uoa": "gemmbench",
     "dict": {
@@ -734,7 +751,21 @@
     }
   },
   "76d81ee9a38d4679": {
-    "data_uoa": "reproduce-sysml19-paper-aggregathor"
+    "data_uoa": "reproduce-sysml19-paper-aggregathor",
+    "dict": {
+      "desc": "Reproducibility report and the Collective Knowledge workflow for the SysML'19 paper \"AggregaThor: Byzantine Machine Learning via Robust Gradient Aggregation\"",
+      "repo_deps": [
+        {
+          "repo_uoa": "ck-env"
+        },
+        {
+          "repo_uoa": "ck-tensorflow"
+        }
+      ],
+      "shared": "git",
+      "url": "https://github.com/ctuning/reproduce-sysml19-paper-aggregathor",
+      "workflow_desc": "programs"
+    }
   },
   "7d60433aa9fd29fe": {
     "data_uoa": "reproduce-carp-project",
