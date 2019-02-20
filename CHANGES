@@ -1,4 +1,5 @@
 * 2019.02.19 - [FGG] added "CLUSTER" machine to describe any cluster configuration (SysML'19)
+               [FGG] added imagenet.min package and a few soft detection plugins for Imagenet
 
 * 2019.02.12 - added Deep500 package and soft detection plugin
 

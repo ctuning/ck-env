@@ -1,0 +1,20 @@
+{
+  "backup_data_uid": "b20aff77947d0b59", 
+  "backup_module_uid": "5e1100048ab875d7", 
+  "backup_module_uoa": "soft", 
+  "control": {
+    "author": "cTuning foundation", 
+    "author_email": "admin@cTuning.org", 
+    "author_webpage": "http://cTuning.org", 
+    "copyright": "See CK COPYRIGHT.txt for copyright details", 
+    "engine": "CK", 
+    "iso_datetime": "2018-08-08T15:09:05.444380", 
+    "license": "See CK LICENSE.txt for licensing details", 
+    "version": [
+      "1", 
+      "9", 
+      "4"
+    ]
+  }, 
+  "data_name": "dataset.imagenet.train.cntk"
+}
