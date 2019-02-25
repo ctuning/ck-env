@@ -493,11 +493,24 @@ def install(i):
 
     dname=d.get('package_name','')
 
-    ver=cus.get('version','')+extra_version     # FIXME: probably misplaced - may spoil PACKAGE_VERSION variable
     extra_dir=cus.get('extra_dir','')
 
     # This environment will be passed to process scripts (if any)
     pr_env=cus.get('install_env',{})
+
+    # Update this env from CK kernel (for example, to decide what to use, git or https). FIXME: check the desired precedence between cus and ck.cfg
+    pr_env.update(ck.cfg.get('install_env',{}))
+
+    # Update this env from all the supported variations (hoping there are no common env.vars, since we have no way to guarantee order in a dictionary)
+    if required_variations:
+        supported_variations = d.get('variations', {})
+        for req_variation in required_variations:
+            extra_env = supported_variations[req_variation].get('extra_env',{})
+            pr_env.update( extra_env )
+
+    # 'version' could have been set either directly in cus or selected via supported_versions
+    # It may also be passed in via PACKAGE_VERSION (either in cus['install_env'] or via variations..['extra_env'])
+    ver=cus.get('version', pr_env.get('PACKAGE_VERSION',''))  # FIXME: check the desired precedence between PACKAGE_VERSION and 'version'
 
     # Check if need to ask version - this is useful when
     # a package downloads specific file depending on the version
@@ -515,6 +528,8 @@ def install(i):
 
     pr_env['PACKAGE_VERSION']=ver
 
+    ver += extra_version      # extra_version is normally added for disambiguation on CK side, so we add it later to avoid spoiling PACKAGE_VERSION
+
     tags.append('host-os-'+hosx)
     tags.append('target-os-'+tosx)
     tags.append(tbits+'bits')
@@ -523,15 +538,6 @@ def install(i):
     enduoa=i.get('env_data_uoa','')
     enduid=i.get('env_data_uid','')
 
-    # Update this env from CK kernel (for example, to decide what to use, git or https)
-    pr_env.update(ck.cfg.get('install_env',{}))
-
-    # Update this env from all the supported variations (hoping there are no common env.vars, since we have no way to guarantee order in a dictionary)
-    if required_variations:
-        supported_variations = d.get('variations', {})
-        for req_variation in required_variations:
-            extra_env = supported_variations[req_variation].get('extra_env',{})
-            pr_env.update( extra_env )
 
     # Update this env from customize meta (for example to pass URL to download package)
 #    pr_env.update(cus.get('install_env',{}))
