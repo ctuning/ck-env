@@ -3,6 +3,7 @@
     "extra_dir": "", 
     "git_src_dir": "src", 
     "install_env": {
+      "EXTRA_FLAGS": "-fPIC",
       "PACKAGE_BUILD_TYPE": "skip", 
       "PACKAGE_GIT": "YES", 
       "PACKAGE_SKIP_CLEAN_OBJ": "YES", 
