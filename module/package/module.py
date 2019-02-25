@@ -508,9 +508,14 @@ def install(i):
             extra_env = supported_variations[req_variation].get('extra_env',{})
             pr_env.update( extra_env )
 
-    # 'version' could have been set either directly in cus or selected via supported_versions
-    # It may also be passed in via PACKAGE_VERSION (either in cus['install_env'] or via variations..['extra_env'])
-    ver=cus.get('version', pr_env.get('PACKAGE_VERSION',''))  # FIXME: check the desired precedence between PACKAGE_VERSION and 'version'
+    # Conservatively setting cus['version'] to PACKAGE_VERSION only if it was previously unset.
+    # FIXME: review the desired precedence between 'version' and PACKAGE_VERSION , taking into account that
+    #        1) 'version' could have been set either directly in cus or selected via supported_versions and
+    #        2) PACKAGE_VERSION could have been set either in cus['install_env'] or via variations..['extra_env']
+    if not cus.get('version') and pr_env.get('PACKAGE_VERSION'):
+        cus['version'] = pr_env.get('PACKAGE_VERSION')
+
+    ver=cus.get('version', '')
 
     # Check if need to ask version - this is useful when
     # a package downloads specific file depending on the version
