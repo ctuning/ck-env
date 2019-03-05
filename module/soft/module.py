@@ -2458,6 +2458,9 @@ def show(i):
     ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
 
     if html:
+       h+='<h2>Please check our new <a href="http://ReuseResearch.com/c.php?c=soft">beta browser</a> for CK components!</h2>\n'
+
+       h+='<br>\n'
        h+='You can detect installed software and register it in the CK as follows:\n'
        h+='<pre>\n'
        h+=' ck pull repo:{Repo UOA - see below}\n'

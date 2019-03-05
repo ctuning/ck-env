@@ -1716,6 +1716,10 @@ def show(i):
     ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
 
     if html:
+       h+='<h2>Please check our new <a href="http://ReuseResearch.com/c.php?c=package">beta browser</a> for CK components!</h2>\n'
+
+       h+='<br>\n'
+
        h+='<p>CK package manager unifies installation of code, data and models across different platforms and operating systems\n'
        h+='using the most appropriate solutions including wget, make, cmake, scons, spack, vcpkg, conan, easybuild, etc.\n'
 

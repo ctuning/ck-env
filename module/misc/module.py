@@ -953,6 +953,10 @@ def list_repos(i):
     ll=rx['lst']
 
     if html:
+       h+='<h2>Please check our new <a href="http://ReuseResearch.com/c.php?c=repo">beta browser</a> for CK components!</h2>\n'
+
+       h+='<br>\n'
+
        h+='<p>Users share their reusable CK components (code, data, models) and workflows/pipelines using CK-compatible repositories and archives\n'
        h+='(for example, see this <a href="https://github.com/dividiti/ck-rpi-optimization">CK repository</a>\n'
        h+='with a complete compiler crowd-tuning workflow, an <a href="http://cKnowledge.org/rpi-crowd-tuning">automatically generated interactive article</a>,\n'
@@ -1299,6 +1303,10 @@ def list_modules(i):
     ll=sorted(rx['lst'], key=lambda k: k['data_uoa'])
 
     if html:
+       h+='<h2>Please check our new <a href="http://ReuseResearch.com/c.php?c=program">beta browser</a> for CK components!</h2>\n'
+
+       h+='<br>\n'
+
        h+='You can install and reuse CK modules as follows:\n'
        h+='<pre>\n'
        h+=' ck pull repo:{Repo UOA - see below}\n'
