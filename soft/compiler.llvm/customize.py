@@ -390,6 +390,7 @@ def setup(i):
        env.update({
           "CK_AR": "$#tool_prefix#$ar", 
           "CK_CC": "$#tool_prefix#$clang$#tool_postfix#$",
+          "CK_LLC": "$#tool_prefix#$llc$#tool_postfix#$",
           "CK_CC_FULL_PATH": os.path.join(compiler_bin_dir, "$#tool_prefix#$clang$#tool_postfix#$"),
           "CK_LLVM_CONFIG": "$#tool_prefix#$llvm-config$#tool_postfix#$", 
           "CK_COMPILER_FLAGS_OBLIGATORY": "", 
