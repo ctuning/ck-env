@@ -1,3 +1,5 @@
+* 2019.03.18 - [FGG] added OpenJDK packages; removed broken Oracle JDK
+
 * 2019.03.08 - [FGG] added LLC to soft:compiler.llvm
 
 * 2019.03.05 - [FGG] added link to http://ReuseResearch.com

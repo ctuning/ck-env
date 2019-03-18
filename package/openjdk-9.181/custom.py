@@ -89,44 +89,18 @@ def setup(i):
     # Update vars
     f=ie['PACKAGE_NAME_TEMPLATE']
 
-    if macos=='yes':
-       f+='macosx'
-       if hbits=='64':
-          f+='-x64.dmg'
-       else:
-          return {'return':1, 'error':'this package doesn\'t support non 64-bit MacOS'}
-       return {'return':1, 'error':'we do not know how to install .dmg packages - please help us!'}
+    if hbits=='32':
+       return {'return':1, 'error':'this package doesn\'t support 32-bit OS'}
 
-    elif hname=='win':
-       f+='windows'
-       if hbits=='64':
-          f+='-x64.exe'
-       else:
-          f+='-i586.exe'
+    if hname=='win':
+       f+='windows-x64_ri.zip'
 
        nie['PACKAGE_WGET_EXTRA']=ie['PACKAGE_WGET_EXTRA']+' -O '+f
-       nie['PACKAGE_RUN']='YES'
-       nie['PACKAGE_CMD']='/s INSTALLDIR="'+pi+'"'
-
+       nie['PACKAGE_UNZIP']='YES'
     else:
-       f+='linux'
-       if hbits=='64':
-          if habi.startswith('arm') or habi.startswith('aarch64'):
-             f+='-arm64-vfp-hflt.tar'
-          else:
-             f+='-x64.tar'
-       else:
-          if habi.startswith('arm') or habi.startswith('aarch64'):
-             f+='-arm32-vfp-hflt.tar'
-          else:
-             f+='-i586.tar'
+       f+='linux-x64_ri.zip'
 
-       nie['PACKAGE_UNGZIP']='YES'
-       nie['PACKAGE_UNTAR']='YES'
-       nie['PACKAGE_SKIP_LINUX_MAKE']='YES'
-
-       nie['PACKAGE_NAME1']=f
-       f+='.gz'
+       nie['PACKAGE_UNZIP']='YES'
 
     nie['PACKAGE_NAME']=f
 
