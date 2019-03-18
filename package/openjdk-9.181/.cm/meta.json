@@ -5,6 +5,7 @@
     "install_env": {
       "PACKAGE_NAME_TEMPLATE": "jdk-9+181_",
       "PACKAGE_URL": "https://download.java.net/openjdk/jdk9/ri/",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "--no-cookies",
       "PACKAGE_WGET_HEADER": "Cookie: oraclelicense=accept-securebackup-cookie"

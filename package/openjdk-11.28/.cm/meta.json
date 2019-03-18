@@ -1,0 +1,38 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "PACKAGE_NAME_TEMPLATE": "openjdk-11+28_", 
+      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_URL": "https://download.java.net/openjdk/jdk11/ri", 
+      "PACKAGE_WGET": "YES", 
+      "PACKAGE_WGET_EXTRA": "--no-cookies", 
+      "PACKAGE_WGET_HEADER": "Cookie: oraclelicense=accept-securebackup-cookie"
+    }, 
+    "version": "11.28"
+  }, 
+  "end_full_path": {
+    "android": "jdk-11/bin/javac", 
+    "linux": "jdk-11/bin/javac", 
+    "win": "jdk-11\\bin\\javac.exe"
+  }, 
+  "need_cpu_info": "yes", 
+  "process_script": "install", 
+  "soft_uoa": "0129a3b82235cbc0", 
+  "suggested_path": "openjdk", 
+  "tags": [
+    "compiler", 
+    "java", 
+    "lang-java", 
+    "jdk", 
+    "openjdk", 
+    "v11.28", 
+    "v11", 
+    "channel-stable"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}
