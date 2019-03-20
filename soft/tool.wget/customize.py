@@ -45,14 +45,12 @@ def setup(i):
     path_bin                = os.path.dirname(full_path)
     path_install            = os.path.dirname(path_bin)
 
-        # storing the paths in the "customize" section (higher level) :
+        # storing the "path_bin" in the "customize" section (higher level) :
     cus['path_bin']         = path_bin
-    cus['path_install']     = path_install
 
-        # storing the paths in the environment (lower level) :
+        # storing the "path_install" in the environment (lower level) :
     env                     = i['env']
     env_prefix              = cus['env_prefix']
     env[env_prefix]         = path_install
-    env[env_prefix+'_BIN']  = path_bin
 
     return {'return':0, 'bat':''}
