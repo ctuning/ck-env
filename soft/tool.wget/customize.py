@@ -8,6 +8,7 @@
 #
 
 import os
+import re
 
 ##############################################################################
 # a shell command to obtain the version
