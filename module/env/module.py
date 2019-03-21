@@ -2374,6 +2374,57 @@ def virtual(i):
 
 
 ##############################################################################
+# return the install_location
+
+def locate(i):
+    """
+    Input:  {
+              data_uoa or uoa   - environment entry
+              tags              - tags to define a subset of environment entries
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    duoa        = i.get('data_uoa', i.get('uoa', '*') )
+    tags_csv    = i.get('tags')
+
+    if duoa.find('*')!=-1 or duoa.find('?')!=-1 or tags_csv:
+        searched_adict = ck.access( dict(i, action='search', out='') )
+        if searched_adict['return']>0: return rx
+
+        list_of_uoa = [ entry['data_uoa'] for entry in searched_adict['lst'] ]
+    else:
+        list_of_uoa = [ duoa ]
+
+    install_locations = {}
+
+    for uoa in list_of_uoa:
+
+        loaded_adict = ck.access({'action':'load',
+            'module_uoa':   'env',
+            'data_uoa':     uoa,
+        })
+        if loaded_adict['return']>0: return loaded_adict
+
+        install_location = loaded_adict.get('dict', {}).get('install_location', '')
+        install_locations[uoa] = install_location
+
+        if i.get('out')=='con':
+            if len(list_of_uoa)>1:
+                ck.out("env:{} -> {}".format(uoa, install_location))
+            else:
+                ck.out(install_location)
+
+    return {'return': 0, 'install_locations': install_locations}
+
+
+##############################################################################
 # show the shell script for setting up this env
 
 def cat(i):

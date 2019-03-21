@@ -1155,6 +1155,11 @@ def setup(i):
           if pduoa!='':
              dd['package_uoa']=pduoa
 
+          # Probably should have come from pi, but there are too many sources of pi !
+          #
+          install_location = i.get('install_path', i.get('full_path_install', ''))
+          dd['install_location'] = install_location
+
           ii={'action':'add',
               'module_uoa':cfg['module_deps']['env'],
               'dict':dd,

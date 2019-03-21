@@ -15,6 +15,9 @@
     "get_all_versions_in_deps": {
       "desc": "get all versions from deps (recursively)"
     },
+    "locate": {
+      "desc": "return the install_location (if known)"
+    },
     "prune_search_list": {
       "desc": "prune search list by no_tags"
     },
