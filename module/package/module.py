@@ -206,6 +206,7 @@ def install(i):
 
     ck_os_name=hosd['ck_name']
     tname2=tosd['ck_name2']
+    macos = tosd.get('macos') == 'yes'
 
     vfrom=i.get('version_from',[])
     vto=i.get('version_to',[])
@@ -1197,7 +1198,8 @@ def install(i):
        # Check if there is already library or tool exists
        x=d.get('end_full_path_universal','')
        if x=='':
-          x=d.get('end_full_path',{}).get(tname2,'')
+          efp = d.get('end_full_path', {})
+          x = efp['macos'] if (macos and 'macos' in efp) else efp.get(tname2,'')
        fp=pi
        cont=True
        if x!='':
@@ -1470,7 +1472,9 @@ def install(i):
 
        x=d.get('end_full_path_universal','')
        if x=='':
-          x=d.get('end_full_path',{}).get(tname2,'')
+          efp = d.get('end_full_path', {})
+          x = efp['macos'] if (macos and 'macos' in efp) else efp.get(tname2,'')
+
        fp=pi
        if x!='': 
           x=x.replace('$#sep#$', sdirs)
