@@ -45,6 +45,9 @@
     "sort_json_file": {
       "desc": "sort JSON file"
     },
+    "substitute_from_dict": {
+      "desc": "substitute values from a dictionary"
+    },
     "transfer": {
       "desc": "download or upload a bunch of CK entries between a local and a remote repo"
     }

@@ -1806,3 +1806,43 @@ def clone_server_repo(i):   # FIXME: it's probably better to zip the whole thing
     if r['return']>0: return r
 
     return {'return':0}
+
+
+def substitute_from_dict(i):
+    """
+    Input:  {
+                input_string        - the original string with placeholders for substitution
+                mapping             - the dictionary to subsitute from
+                (tolerant)          - if "yes", do not fail if a keyword is missing from mapping
+            }
+
+    Output: {
+                return      - return code =  0, if successful
+                                          >  0, if error
+                (error)     - error text if return > 0
+            }
+    Test:
+        ck substitute_from_dict misc --input_string='alpha $<<FOO>>$ gamma' "@@@{'mapping': {'FOO': 'beta'}}"
+    """
+
+    import re
+
+    input_string    = i['input_string']
+    mapping         = i['mapping']
+    tolerant        = i.get('tolerant') == 'yes'
+
+    output_string   = input_string
+
+    for match in re.finditer('(\$<<(\w+)>>\$)', input_string):
+        expression, keyword = match.group(1), match.group(2)
+        if keyword in mapping:
+            output_string = output_string.replace(expression, mapping[keyword])
+        elif tolerant:
+            output_string = output_string.replace(expression, "")
+        else:
+            return {'return':1, 'error': "Could not map {} from the given dictionary".format(expression) }
+
+    if i.get('out') == 'con':
+        ck.out(output_string)
+
+    return {'return': 0, 'output_string': output_string}
