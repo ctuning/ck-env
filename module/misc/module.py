@@ -1811,8 +1811,10 @@ def clone_server_repo(i):   # FIXME: it's probably better to zip the whole thing
 def substitute_from_dict(i):
     """
     Input:  {
-                input_string        - the original string with placeholders for substitution
-                mapping             - the dictionary to subsitute from
+                input_string        - original string with placeholders for substitution
+                mapping             - dictionary to subsitute from
+                (input_open)        - opening marker for the keyword in the input_string
+                (input_close)       - closing marker for the keyword in the input_string
                 (tolerant)          - if "yes", do not fail if a keyword is missing from mapping
             }
 
@@ -1821,19 +1823,26 @@ def substitute_from_dict(i):
                                           >  0, if error
                 (error)     - error text if return > 0
             }
-    Test:
+    Tests:
         ck substitute_from_dict misc --input_string='alpha $<<FOO>>$ gamma' "@@@{'mapping': {'FOO': 'beta'}}"
+
+        ck substitute_from_dict misc --input_string='alpha$#dir_sep#$gamma $#foo#$X' \
+            "@@@{'mapping': {'dir_sep': '/'}}" --input_open='$#' --input_close='#$' --tolerant
     """
 
     import re
 
     input_string    = i['input_string']
     mapping         = i['mapping']
+
+    input_open      = i.get('input_open', '$<<')
+    input_close     = i.get('input_close', '>>$')
     tolerant        = i.get('tolerant') == 'yes'
 
+    pattern         = re.compile( '({}(\w+){})'.format(re.escape(input_open), re.escape(input_close)) )
     output_string   = input_string
 
-    for match in re.finditer('(\$<<(\w+)>>\$)', input_string):
+    for match in re.finditer(pattern, input_string):
         expression, keyword = match.group(1), match.group(2)
         if keyword in mapping:
             output_string = output_string.replace(expression, mapping[keyword])
