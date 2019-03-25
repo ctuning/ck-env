@@ -142,56 +142,69 @@ def run(i):
 def _run_external(i):
     """
     Input:  {
-              data_uoa            - data UOA of the script entry
-              which_python        - path to the desired Python interpreter
-              (script_module_uoa) - module UOA of the script entry
-              (keep_tmp_files)    - "yes" will keep them, deleted otherwise
+                data_uoa            - data UOA of the script-containing entry
+                (script_module_uoa) - module UOA of the script-containing entry ('script' by default)
+                (prewrapper_lines)  - lines of the environment-setting pre-wrapper
+                (script_module_uoa) - module UOA of the script entry
+                (keep_tmp_files)    - "yes" will keep them, deleted otherwise
 
-              (code)              - Python script name (without .py)
-              (func)              - Python function name in this script
-              (dict)              - dict to pass to script
-              (output_json_file)  - filename to save the output dictionary into
+                (code)              - Python script name (without .py)
+                (func)              - Python function name in this script
+                (dict)              - dict to pass to script
+                (output_json_file)  - filename to save the output dictionary into
 
             }
 
     Output: {
-              return        - return code =  0, if successful
-                                          >  0, if error
-              (error)       - error text if return > 0
+                return              - return code =  0, if successful
+                                                  >  0, if error
+                (error)             - error text if return > 0
 
-              (return_code) - script's return code
+                (return_code)       - script's return code
             }
+    Test:
+            ck _run_external script:debug @@@"{'prewrapper_lines': ['export CK_PYTHON=python3'], 'dict': {'alpha': 777}}"
 
     """
 
-    module_uoa      = i.get('script_module_uoa', work['self_module_uoa'])
-    data_uoa        = i['data_uoa']
-    which_python    = i['which_python']
-    keep_tmp_files  = i.get('keep_tmp_files', 'no')
-    code            = i.get('code','')
-    func            = i.get('func','')
+    module_uoa          = i.get('script_module_uoa', work['self_module_uoa'])
+    data_uoa            = i['data_uoa']
+    prewrapper_lines    = i.get('prewrapper_lines', [])
+    keep_tmp_files      = i.get('keep_tmp_files', 'no')
+    code                = i.get('code','')
+    func                = i.get('func','')
+    func_input_data     = i.get('dict', {})
 
     code = '--code=' + code if code else ''
     func = '--func=' + func if func else ''
 
-    ## Generate two temporary names for JSON files:
+    ## Generate one common seed for two temporary names for JSON files:
     #
     gentmp_adict = ck.gen_tmp_file({'prefix': 'ck_call_', 'suffix': '.json'})
     if gentmp_adict['return']>0: return gentmp_adict
 
+    ## Keeping the second name in sync with the first one:
+    #
     input_json_file = gentmp_adict['file_name']
     output_json_file = input_json_file.replace('ck_call_', 'ck_response_')
 
     ## Fill in the input_json_file with input parameters:
     #
-    input_adict = ck.save_json_to_file( {'json_file': input_json_file, 'dict': {'dict': i.get('dict',{})} } )
+    input_adict = ck.save_json_to_file( {'json_file': input_json_file, 'dict': {'dict': func_input_data} } )
     if input_adict['return']>0: return input_adict
 
     ## Form and run the external ck command with the given Python:
     #
-    cmd = "CK_PYTHON={} ck run {}:{} {} {} @{} --output_json_file={}".format(which_python, module_uoa, data_uoa, code, func, input_json_file, output_json_file)
+    shell_cmd = "ck run {}:{} {} {} @{} --output_json_file={}".format(module_uoa, data_uoa, code, func, input_json_file, output_json_file)
 
-    return_code = os.system(cmd)
+    ck.out("RPC call: {}".format(shell_cmd))
+    envsecute_adict = ck.access({'action':'envsecute',
+        'module_uoa':           'env',
+        'prewrapper_lines':     prewrapper_lines,
+        'shell_cmd':            shell_cmd,
+    })
+    ck.out("RPC returned: {}".format(envsecute_adict))
+    return_code = envsecute_adict['return']
 
     if keep_tmp_files=='yes':
         ck.out("Temporary JSON files' generated: {} and {}".format(input_json_file, output_json_file))

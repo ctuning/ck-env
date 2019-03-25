@@ -40,7 +40,7 @@ def show(i):
 
         ## Using experimental _run_external() method to run a script under any given Python:
         #
-        ck _run_external script:debug --which_python=python3 --keep_tmp_files @input1.json @input2.json
+        ck _run_external script:debug @@@"{'prewrapper_lines': ['export CK_PYTHON=python3'], 'dict': {'alpha': 777}}" --keep_tmp_files
     }
 
     """
