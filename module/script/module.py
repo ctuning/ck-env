@@ -188,6 +188,10 @@ def _run_external(i):
     input_json_file = gentmp_adict['file_name']
     output_json_file = input_json_file.replace('ck_call_', 'ck_response_')
 
+    ## Avoiding to serialize the kernel:
+    #
+    func_input_data.pop('ck_kernel')
+
     ## Fill in the input_json_file with input parameters:
     #
     input_adict = ck.save_json_to_file( {'json_file': input_json_file, 'dict': {'dict': func_input_data} } )
