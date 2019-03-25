@@ -12,6 +12,9 @@
     "deps_summary": {
       "desc": "extracting summary of all deps"
     },
+    "envsecute": {
+      "desc": "execute a shell command in the context of a given environment-setting prewrapper"
+    },
     "get_all_versions_in_deps": {
       "desc": "get all versions from deps (recursively)"
     },

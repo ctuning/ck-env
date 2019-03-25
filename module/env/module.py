@@ -2254,6 +2254,7 @@ def xset(i):
 
     return env_set(i)
 
+
 ##############################################################################
 # pre-load environment for the shell
 
@@ -2275,6 +2276,8 @@ def virtual(i):
                                          >  0, if error
               (error)      - error text if return > 0
             }
+    Test:
+        ck virtual env --tags=model,onnx,resnet --shell_cmd='echo $CK_MODEL_DATA_LAYOUT'
 
     """
 
@@ -2316,7 +2319,7 @@ def virtual(i):
     if not len(list_of_updates):    # if nothing else matched, let the user choose one env from the list
         list_of_updates.append( { 'uoa' : '*'} )
 
-    shell_script_lines  = []
+    prewrapper_lines  = []
 
     for dict_update in list_of_updates:
         env_set_alist = copy.deepcopy( i )
@@ -2325,19 +2328,44 @@ def virtual(i):
         r=env_set( env_set_alist )
         if r['return']>0: return r
 
-        shell_script_lines.append( r['bat'].strip() )
+        prewrapper_lines.append( r['bat'].strip() )
 
-    if i.get('verbose', '')=='yes':
-        ck.out("*** Loading the following environment:\n")
-        ck.out("\n".join(shell_script_lines))
-        ck.out('')
+    return envsecute({ 'prewrapper_lines': prewrapper_lines, 'shell_cmd': i.get('shell_cmd'), 'verbose': i.get('verbose') })
+
+
+################################################################################
+# execute a shell command pre-wrapped with a given environment-modifying script
+
+def envsecute(i):
+    """
+    Input:  {
+                (prewrapper_lines)  - lines of the environment-setting pre-wrapper
+                (shell_cmd)         - command line to run in the pre-wrapped shell (make sure it is suitably quoted)
+                (verbose)           - set to 'yes' to see the pre_wrapper
+            }
+
+    Output: {
+                return              - return code =  0, if successful
+                                                  >  0, if error
+                (error)             - error text if return > 0
+            }
+    Test:
+        ck envsecute env @@@"{'prewrapper_lines': ['export ALPHA=alpha','echo 12345']}" --shell_cmd='echo $ALPHA $BETA'
+
+    """
 
     # Run shell
     import platform
     import os
     import subprocess
 
-    shell_cmd        = i.get('shell_cmd', None)
+    shell_cmd           = i.get('shell_cmd', None)
+    prewrapper_lines    = i.get('prewrapper_lines', [])
+
+    if i.get('verbose', '')=='yes':
+        ck.out("*** Preloading the following environment:\n")
+        ck.out("\n".join(prewrapper_lines))
+        ck.out('')
 
     if not shell_cmd:
         ck.out('')
@@ -2346,12 +2374,12 @@ def virtual(i):
     if platform.system().lower().startswith('win'): # pragma: no cover
 
         if shell_cmd:
-            shell_script_lines.append( shell_cmd )
+            prewrapper_lines.append( shell_cmd )
             termination_flag = '/C'     # terminate the CMD shell when the environment script & shell_cmd are over
         else:
             termination_flag = '/K'     # remain in the CMD shell
 
-        shell_script_contents = ' & '.join( shell_script_lines )
+        shell_script_contents = ' & '.join( prewrapper_lines )
 
         p = subprocess.Popen(['cmd', termination_flag, shell_script_contents], shell = True, env=os.environ)
         p.wait()
@@ -2359,14 +2387,14 @@ def virtual(i):
     else:
         rx=ck.gen_tmp_file({})
         if rx['return']>0: return rx
-        file_name=rx['file_name']
+        prewrapper_filename=rx['file_name']
 
-        shell_script_contents = '\n\n'.join( shell_script_lines ) + '\n'
+        shell_script_contents = '\n\n'.join( prewrapper_lines ) + '\n'
 
-        rx=ck.save_text_file({'text_file':file_name, 'string':shell_script_contents })
+        rx=ck.save_text_file({'text_file':prewrapper_filename, 'string':shell_script_contents })
         if rx['return']>0: return rx
 
-        full_cmd_list    = ['/bin/bash','--rcfile', file_name, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )
+        full_cmd_list    = ['/bin/bash','--rcfile', prewrapper_filename, '-i'] + ( ['-c', shell_cmd] if shell_cmd else [] )
 
         return_code = subprocess.call(full_cmd_list, shell = False)
 
