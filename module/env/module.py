@@ -2350,7 +2350,7 @@ def envsecute(i):
                 (error)             - error text if return > 0
             }
     Test:
-        ck envsecute env @@@"{'prewrapper_lines': ['export ALPHA=alpha','echo 12345']}" --shell_cmd='echo $ALPHA $BETA'
+            ck envsecute env @@@"{'prewrapper_lines': ['export ALPHA=alpha','echo 12345']}" --shell_cmd='echo $ALPHA $BETA'
 
     """
 
@@ -2385,7 +2385,7 @@ def envsecute(i):
         p.wait()
         return_code  = p.returncode
     else:
-        rx=ck.gen_tmp_file({})
+        rx=ck.gen_tmp_file({'prefix': 'ck_envsecute_', 'suffix': '.sh'})
         if rx['return']>0: return rx
         prewrapper_filename=rx['file_name']
 
