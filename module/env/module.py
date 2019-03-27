@@ -2277,7 +2277,7 @@ def virtual(i):
               (error)      - error text if return > 0
             }
     Test:
-        ck virtual env --tags=model,onnx,resnet --shell_cmd='echo $CK_MODEL_DATA_LAYOUT'
+        ck virtual env --tags=model,onnx,resnet --shell_cmd='echo $ML_MODEL_DATA_LAYOUT'
 
     """
 
