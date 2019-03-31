@@ -3,17 +3,17 @@
   "customize": {
     "add_only_with_version": "yes",
     "add_to_path": "yes",
-    "build_dir_name": "llvm-android-ndk",
+    "build_dir_name": "android-ndk",
     "can_strip_dynamic_lib": "yes",
     "check_that_exists": "yes",
     "ck_version": 10,
-    "env_prefix": "CK_ENV_COMPILER_LLVM",
+    "env_prefix": "CK_ENV_COMPILER_GCC",
     "languages": [
       "C",
       "CPP"
     ],
     "limit_recursion_dir_search": {
-      "linux": 3,
+      "linux": 4,
       "win": 4
     },
     "only_for_target_os_tags": [
@@ -28,33 +28,19 @@
     "soft_file_from_host_os": "yes",
     "soft_file_not_tool": "yes",
     "soft_path_example": {
-      "linux": "/opt/android-ndk-r18b//ndk-build",
-      "win": "C:\\android-ndk-r18b\\ndk-build.cmd"
+      "linux": "/opt/android-ndk-r19c/ndk-build",
+      "win": "D:\\android-ndk-r19c\\ndk-build.cmd"
     },
     "soft_version_cmd": {
       "linux": "--version > $#filename#$ 2>&1",
       "win": " --version > $#filename#$ 2>&1"
     },
-    "sort": 50
+    "sort": 100
   },
-  "deps": {
-    "ndk": {
-      "local": "yes",
-      "name": "Android NDK toolchain",
-      "only_for_target_os_tags": [
-        "android"
-      ],
-      "tags": "android,ndk,toolchain"
-    }
-  },
-  "env": {},
-  "soft_name": "Android NDK LLVM compiler",
+  "soft_name": "Android NDK toolchain",
   "tags": [
-    "compiler",
-    "llvm",
     "android",
     "ndk",
-    "lang-c",
-    "lang-cpp"
+    "toolchain"
   ]
 }

@@ -1,3 +1,6 @@
+* 2019.03.30 - [FGG] added soft:android.ndk.toolchain (to support new Android NDKs with LLVM)
+                     and packages compiler-llvm-7.0.1-universal & compiler-llvm-8.0.0-universal
+
 * 2019.03.18 - [FGG] added OpenJDK packages; removed broken Oracle JDK
 
 * 2019.03.08 - [FGG] added LLC to soft:compiler.llvm

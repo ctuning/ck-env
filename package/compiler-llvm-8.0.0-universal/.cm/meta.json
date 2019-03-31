@@ -1,0 +1,40 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PACKAGE_URL": "http://releases.llvm.org/8.0.0/",
+      "PACKAGE_WGET": "YES",
+      "PACKAGE_WGET_EXTRA": "--no-cookies"
+    },
+    "version": "8.0.0"
+  },
+  "end_full_path": {
+    "linux": "bin/clang-7",
+    "win": "bin\\clang.exe"
+  },
+  "need_cpu_info": "yes",
+  "only_for_target_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "process_script": "install",
+  "soft_uoa": "1c2eb494b8ae3bc4",
+  "suggested_path": "llvm-8.0.0",
+  "tags": [
+    "compiler",
+    "llvm",
+    "lang-c",
+    "lang-cpp",
+    "v8.0.0-ck-package",
+    "v8.0.0",
+    "v8.0",
+    "v8",
+    "channel-stable"
+  ],
+  "template": "yes",
+  "template_type": "LLVM compiler",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

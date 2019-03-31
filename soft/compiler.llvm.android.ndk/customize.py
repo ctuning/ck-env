@@ -80,7 +80,8 @@ def limit(i):
         p0=os.path.dirname(q)
         p1=os.path.join(p0,'toolchains','llvm','prebuilt',prebuilt,'bin',fn)
         if os.path.isfile(p1):
-           drx.append(p1)
+           if p1 not in drx:
+              drx.append(p1)
 
     return {'return':0, 'list':drx}
 

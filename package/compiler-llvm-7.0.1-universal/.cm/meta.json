@@ -1,0 +1,40 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PACKAGE_URL": "http://releases.llvm.org/7.0.1/",
+      "PACKAGE_WGET": "YES",
+      "PACKAGE_WGET_EXTRA": "--no-cookies"
+    },
+    "version": "7.0.1"
+  },
+  "end_full_path": {
+    "linux": "bin/clang-7",
+    "win": "bin\\clang.exe"
+  },
+  "need_cpu_info": "yes",
+  "only_for_target_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "process_script": "install",
+  "soft_uoa": "1c2eb494b8ae3bc4",
+  "suggested_path": "llvm-7.0.1",
+  "tags": [
+    "compiler",
+    "llvm",
+    "lang-c",
+    "lang-cpp",
+    "v7.0.1-ck-package",
+    "v7.0.1",
+    "v7.0",
+    "v7",
+    "channel-stable"
+  ],
+  "template": "yes",
+  "template_type": "LLVM compiler",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

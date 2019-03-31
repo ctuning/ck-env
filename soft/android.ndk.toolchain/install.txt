@@ -1,0 +1,2 @@
+You can download and install Native Android NDK for your platform from
+* http://developer.android.com/ndk/downloads/index.html

@@ -1,0 +1,21 @@
+{
+  "backup_data_uid": "f29343dd902b857a",
+  "backup_module_uid": "5e1100048ab875d7",
+  "backup_module_uoa": "soft",
+  "control": {
+    "author": "Grigori Fursin",
+    "author_email": "Grigori.Fursin@cTuning.org",
+    "author_webpage": "http://fursin.net",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2019-03-30T12:27:26.360429",
+    "license": "See CK LICENSE.txt for licensing details",
+    "version": [
+      "1",
+      "9",
+      "7",
+      "1"
+    ]
+  },
+  "data_name": "android.ndk.toolchain"
+}
