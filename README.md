@@ -32,6 +32,10 @@ Further info:
   * [Shared CK programs (workflows)](http://cKnowledge.org/shared-programs.html)
 * [Reproducible SW/HW co-design competitions for deep learning and other emerging workloads using CK](http://cKnowledge.org/request)
 
+Maintainers
+===========
+* [dividiti](http://dividiti.com)
+
 Contributors
 ============
 * General Motors and dividiti use CK to crowdsource benchmarking and optimization of deep learning with different versions of compilers, libraries, models and data sets: [public CK repo](https://github.com/dividiti/ck-caffe)
