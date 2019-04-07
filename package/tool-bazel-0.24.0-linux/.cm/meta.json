@@ -1,0 +1,38 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "BAZEL_PATCH1": "javac-max-heap-500mb.patch", 
+      "BAZEL_PATCH2": "non-64bit-unix-warning.patch", 
+      "BAZEL_URL": "https://github.com/bazelbuild/bazel/releases/download/0.24.0/bazel-0.24.0-dist.zip", 
+      "BAZEL_ZIP": "bazel-0.24.0-dist.zip"
+    }, 
+    "use_git_revision": "no", 
+    "version": "0.24.0"
+  }, 
+  "deps": {}, 
+  "end_full_path": {
+    "linux": "install/bin/bazel"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "359f7730bd23ec60", 
+  "suggested_path": "tool-bazel", 
+  "tags": [
+    "tool", 
+    "bazel", 
+    "v0.24.0", 
+    "v0.24", 
+    "v0", 
+    "channel-stable"
+  ], 
+  "template": "yes", 
+  "template_type": "Bazel"
+}
