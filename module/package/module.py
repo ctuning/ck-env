@@ -490,8 +490,6 @@ def install(i):
 
     suoa=d.get('soft_uoa','')
 
-    dname=d.get('package_name','')
-
     # This environment will be passed to process scripts (if any)
     pr_env=cus.get('install_env',{})
 
@@ -533,6 +531,7 @@ def install(i):
 
     ver=cus.get('version', '')
 
+    dname=cus.get('package_name', d.get('package_name', ''))
 
     extra_version=i.get('extra_version', cus.get('extra_version','') )
 
