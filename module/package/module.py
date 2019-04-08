@@ -469,8 +469,6 @@ def install(i):
     cus=d.get('customize',{})
     env=d.get('env',{})
 
-    extra_version=i.get('extra_version', cus.get('extra_version','') )
-
     udeps=d.get('deps',{})
 
     depsx=i.get('deps',{})
@@ -494,8 +492,6 @@ def install(i):
 
     dname=d.get('package_name','')
 
-    extra_dir=cus.get('extra_dir','')
-
     # This environment will be passed to process scripts (if any)
     pr_env=cus.get('install_env',{})
 
@@ -508,6 +504,8 @@ def install(i):
     #
     if required_variations:
         extra_env_from_variations = {}
+        extra_cus_from_variations = {}
+
         supported_variations = d.get('variations', {})
         for req_variation in required_variations:
             extra_env = supported_variations[req_variation].get('extra_env',{})
@@ -517,9 +515,14 @@ def install(i):
                     return { 'return':1,
                              'error':'contradiction on variable ({}) detected when adding "{}" variation tag'.format(coll_var,req_variation)}
 
+            extra_cus = supported_variations[req_variation].get('extra_customize',{}) # FIXME: replicate the collision-avoidance for extra_cus, similar to the one above
+
+
             extra_env_from_variations.update( extra_env )   # merge of one particular variation
+            extra_cus_from_variations.update( extra_cus )
 
         pr_env.update( extra_env_from_variations )  # merge of all variations
+        cus.update( extra_cus_from_variations )
 
     # Conservatively setting cus['version'] to PACKAGE_VERSION only if it was previously unset.
     # FIXME: review the desired precedence between 'version' and PACKAGE_VERSION , taking into account that
@@ -529,6 +532,12 @@ def install(i):
         cus['version'] = pr_env.get('PACKAGE_VERSION')
 
     ver=cus.get('version', '')
+
+
+    extra_version=i.get('extra_version', cus.get('extra_version','') )
+
+    extra_dir=cus.get('extra_dir','')
+
 
     # Check if need to ask version - this is useful when
     # a package downloads specific file depending on the version
