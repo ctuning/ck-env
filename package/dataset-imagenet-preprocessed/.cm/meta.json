@@ -11,27 +11,33 @@
     "skip_file_check": "yes"
   }, 
   "deps": {
-    "source-dataset": {
+    "dataset-source": {
       "local": "yes", 
       "name": "Original ImageNet dataset", 
       "sort": 10, 
       "tags": "dataset,imagenet,val"
     },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 100,
+      "tags": "compiler,lang-python"
+    },
     "lib-python-numpy": {
       "local": "yes",
-      "name": "NumPy python library",
+      "name": "Python NumPy library",
       "sort": 110,
       "tags": "lib,python-package,numpy"
     },
     "lib-python-scipy": {
       "local": "yes",
-      "name": "SciPy python library",
+      "name": "Python SciPy library",
       "sort": 120,
       "tags": "lib,python-package,scipy"
     },
     "lib-python-pillow": {
       "local": "yes",
-      "name": "Pillow python library",
+      "name": "Python Pillow library",
       "sort": 130,
       "tags": "lib,python-package,pillow"
     }
@@ -41,7 +47,7 @@
   "only_for_target_os_tags": [], 
   "process_script": "shell_wrapper", 
   "soft_uoa": "dataset.imagenet.preprocessed", 
-  "suggested_path": "dataset_imagenet_preprocessed",
+  "suggested_path": "dataset-imagenet-preprocessed",
   "tags": [
     "dataset", 
     "imagenet",
