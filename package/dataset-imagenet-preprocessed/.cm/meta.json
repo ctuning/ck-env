@@ -74,6 +74,16 @@
         "_INPUT_SQUARE_SIDE": "224"
       }
     },
+    "side.192": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "192"
+      }
+    },
+    "side.160": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "160"
+      }
+    },
     "side.128": {
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "128"
