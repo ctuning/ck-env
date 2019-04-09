@@ -1,0 +1,77 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "install_env": {
+        "_INPUT_SQUARE_SIDE": "224",
+        "_CROP_FACTOR": "87.5",
+        "PACKAGE_VERSION": "2012"
+    }, 
+    "no_os_in_suggested_path": "yes", 
+    "no_ver_in_suggested_path": "yes", 
+    "skip_file_check": "yes"
+  }, 
+  "deps": {
+    "source-dataset": {
+      "local": "yes", 
+      "name": "Original ImageNet dataset", 
+      "sort": 10, 
+      "tags": "dataset,imagenet,val"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 110,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-scipy": {
+      "local": "yes",
+      "name": "SciPy python library",
+      "sort": 120,
+      "tags": "lib,python-package,scipy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 130,
+      "tags": "lib,python-package,pillow"
+    }
+  }, 
+  "end_full_path_universal": "ILSVRC2012_val_00000001.JPEG",
+  "only_for_host_os_tags": [], 
+  "only_for_target_os_tags": [], 
+  "process_script": "shell_wrapper", 
+  "soft_uoa": "dataset.imagenet.preprocessed", 
+  "suggested_path": "dataset_imagenet_preprocessed",
+  "tags": [
+    "dataset", 
+    "imagenet",
+    "preprocessed"
+  ], 
+  "variations": {
+    "crop.875": {
+      "extra_env": {
+        "_CROP_FACTOR": "87.5"
+      }
+    }, 
+    "crop.1000": {
+      "extra_env": {
+        "_CROP_FACTOR": "100.0"
+      }
+    },
+    "side.256": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "256"
+      }
+    },
+    "side.224": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "224"
+      }
+    },
+    "side.128": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "128"
+      }
+    }
+  }
+}
