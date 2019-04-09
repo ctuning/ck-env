@@ -33,11 +33,13 @@ function uncompress {
 VAL_IMG_NAME="COCO 2014 validation dataset"
 download "${VAL_IMG_NAME}" ${IMAGE_URL} "${VAL_IMAGE_ARCHIVE}"
 uncompress "${VAL_IMAGE_ARCHIVE}"
+rm "${VAL_IMAGE_ARCHIVE}"
 
 # #####################################################################
 
 TRAINVAL_OBJ_INSTANCES_NAME="COCO 2014 Train/Val object instances"
 download "${TRAINVAL_OBJ_INSTANCES_NAME}" ${ANNOTATION_URL} "${TRAINVAL_OBJ_INSTANCES_ARCHIVE}"
 uncompress "${TRAINVAL_OBJ_INSTANCES_ARCHIVE}"
+rm "${TRAINVAL_OBJ_INSTANCES_ARCHIVE}"
 
 exit 0
