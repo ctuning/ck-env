@@ -507,7 +507,7 @@ def install(i):
         supported_variations = d.get('variations', {})
         for req_variation in required_variations:
             extra_env = supported_variations[req_variation].get('extra_env',{})
-            colliding_vars = extra_env_from_variations.keys() & extra_env.keys() # non-empty intersection means undefined behaviour
+            colliding_vars = set(extra_env_from_variations.keys()) & set(extra_env.keys()) # non-empty intersection means undefined behaviour
             for coll_var in colliding_vars:     # have to check actual values to detect a mismatch
                 if extra_env_from_variations[coll_var] != extra_env[coll_var]:
                     return { 'return':1,
