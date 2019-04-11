@@ -1,0 +1,37 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PIP_INSTALL_OPTIONS": "--ignore-installed",
+      "PYTHON_PACKAGE_NAME": "cython"
+    }
+  },
+  "deps": {
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 10,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path_universal": "build$#sep#$Cython$#sep#$__init__.py",
+  "only_for_host_os_tags": [],
+  "only_for_target_os_tags": [
+    "windows",
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "8af9e4342b34e3bf",
+  "suggested_path": "lib-python-cython",
+  "tags": [
+    "lib",
+    "python-package",
+    "cython",
+    "vmaster"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "e4d8d3d2c4c67902",
+    "module_uoa": "package"
+  }
+}

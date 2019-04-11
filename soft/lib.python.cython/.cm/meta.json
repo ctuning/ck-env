@@ -1,0 +1,24 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "env_prefix": "CK_ENV_PYTHON_PACKAGE_CYTHON",
+    "limit_recursion_dir_search": {
+      "linux": 5,
+      "win": 5
+    },
+    "soft_file_universal": "Cython$#sep#$__init__.py",
+    "version_module_name": "Shadow",
+    "version_variable_name": "__version__"
+  },
+  "soft_name": "Python Cython library",
+  "tags": [
+    "lib",
+    "python-package",
+    "cython"
+  ],
+  "use_customize_script_from_another_entry": {
+    "data_uoa": "4460bdb0ade2a3df",
+    "module_uoa": "soft"
+  }
+}
