@@ -1210,6 +1210,9 @@ def resolve(i):
               (reuse_deps)           - if 'yes' reuse all deps if found in cache by tags
               (deps_cache)           - list with resolved deps
 
+              (dep_add_tags)         - a dictionary that maps extra tags to be added to specific subdictionaries of deps{}
+                                       for this particular resolution
+
               (env)                  - env
 
               (install_env)          - env during installation
@@ -1263,6 +1266,15 @@ def resolve(i):
     sar=i.get('skip_auto_resolution','')
 
     deps=i.get('deps',{})
+
+    dep_add_tags = i.get('dep_add_tags', {})
+    for a_dep in dep_add_tags:
+        if a_dep in deps:
+            tags_to_be_added = dep_add_tags[a_dep]
+            if tags_to_be_added:
+                deps[a_dep]['tags'] += ',' + tags_to_be_added
+        else:   # I'd rather raise() here, but we are in CK
+            ck.out("\n!!! Warning: dependency '{}' has not been found in the original entry - please check your input !!!\n".format(a_dep))
 
     deps_cache=i.get('deps_cache',[])
     reuse_deps=i.get('reuse_deps','')
