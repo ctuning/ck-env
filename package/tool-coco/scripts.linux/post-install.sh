@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Installation script for pycocotools (Python API for COCO-dataset)
+# Installation script for pycocotools (Python API for the COCO dataset)
 #
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
@@ -32,10 +32,18 @@ set >> ${BLD_LOG}
 cp ${ORIGINAL_PACKAGE_DIR}/Makefile ${SRC_DIR}/PythonAPI/
 cd ${SRC_DIR}/PythonAPI
 make
-if [ ! -d "${API_DIR}" ]; then
-  mkdir ${API_DIR}
+if [ "${?}" != "0" ] ; then
+  echo "Error: make failed!"
+  exit 1
 fi
+
+################################################################################
+mkdir -p ${API_DIR}
 cp -r pycocotools/* ${API_DIR}
+if [ "${?}" != "0" ] ; then
+  echo "Error: copy failed!"
+  exit 1
+fi
 
 ################################################################################
 echo ""
