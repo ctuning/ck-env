@@ -483,7 +483,8 @@ def install(i):
     preset_deps=i.get('preset_deps', {})
     for q in i:
         if q.startswith('deps.'):
-           preset_deps[q[5:]]=i[q]
+           preset_deps[q[5:]]=i[q].split(':')[-1]
+
     for q in preset_deps:
         if q in udeps:
            udeps[q]['uoa']=preset_deps[q]
