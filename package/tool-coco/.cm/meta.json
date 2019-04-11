@@ -15,26 +15,32 @@
     "compiler": {
       "local": "yes",
       "name": "C compiler",
-      "sort": 0,
+      "sort": 10,
       "tags": "compiler,lang-c,gcc"
+    },
+    "lib-python-cython": {
+      "local": "yes",
+      "name": "Python Cython library",
+      "sort": 50,
+      "tags": "lib,python-package,cython"
     },
     "lib-python-matplotlib": {
       "local": "yes",
-      "name": "Matplotlib python library",
-      "sort": 60,
+      "name": "Python Matplotlib library",
+      "sort": 40,
       "tags": "lib,python-package,matplotlib"
     },
     "lib-python-numpy": {
       "local": "yes",
-      "name": "NumPy python library",
-      "sort": 60,
+      "name": "Python NumPy library",
+      "sort": 30,
       "tags": "lib,python-package,numpy"
     },
     "python": {
       "add_to_path": "yes",
       "local": "yes",
       "name": "Python interpreter",
-      "sort": 10,
+      "sort": 20,
       "tags": "compiler,python"
     }
   },

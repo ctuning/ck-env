@@ -20,7 +20,7 @@ export CFLAGS="${CFLAGS} ${SUPPRESS_WARNINGS}"
 ################################################################################
 echo ""
 echo "Logging into '${BLD_LOG}' ..."
-rm ${BLD_LOG} && touch ${BLD_LOG}
+rm -f ${BLD_LOG} && touch ${BLD_LOG}
 
 echo "** DATE **" >> ${BLD_LOG}
 date >> ${BLD_LOG}
