@@ -4,6 +4,9 @@
     "install_env": {
         "_INPUT_SQUARE_SIDE": "224",
         "_CROP_FACTOR": "87.5",
+        "_SUBSET_OFFSET": "0",
+        "_SUBSET_VOLUME": "",
+        "_SUBSET_FOF": "image_list.txt",
         "PACKAGE_VERSION": "2012"
     }, 
     "no_os_in_suggested_path": "yes", 
@@ -87,6 +90,24 @@
     "side.128": {
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "128"
+      }
+    },
+    "first.20": {
+      "extra_env": {
+        "_SUBSET_OFFSET": "0",
+        "_SUBSET_VOLUME": "20"
+      },
+      "extra_customize": {
+        "package_extra_name": " (first 20)"
+      }
+    },
+    "last.20": {
+      "extra_env": {
+        "_SUBSET_OFFSET": "-20",
+        "_SUBSET_VOLUME": ""
+      },
+      "extra_customize": {
+        "package_extra_name": " (last 20)"
       }
     }
   }
