@@ -11,14 +11,14 @@
     "version_module_name": "version",
     "version_variable_name": "version"
   },
-  "soft_name": "NumPy Python library",
+  "soft_name": "Python NumPy library",
   "tags": [
     "lib",
     "python-package",
     "numpy"
   ],
   "template": "yes",
-  "template_type": "Python library (numpy)",
+  "template_type": "Python library (NumPy)",
   "use_customize_script_from_another_entry": {
     "data_uoa": "4460bdb0ade2a3df",
     "module_uoa": "soft"

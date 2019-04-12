@@ -11,7 +11,7 @@
     "version_module_name": "_version",
     "version_variable_name": "version_json"
   },
-  "soft_name": "Matplotlib Python library",
+  "soft_name": "Python Matplotlib library",
   "tags": [
     "lib",
     "python-package",

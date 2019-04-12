@@ -11,7 +11,7 @@
     "version_module_name": "__version__",
     "version_variable_name": "__version__"
   },
-  "soft_name": "Requests Python library",
+  "soft_name": "Python Requests library",
   "tags": [
     "lib",
     "python-package",

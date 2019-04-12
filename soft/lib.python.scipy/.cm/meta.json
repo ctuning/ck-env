@@ -11,7 +11,7 @@
     "version_module_name": "version",
     "version_variable_name": "version"
   },
-  "soft_name": "SciPy Python library",
+  "soft_name": "Python SciPy library",
   "tags": [
     "lib",
     "python-package",

@@ -11,7 +11,7 @@
     "version_module_name": "_version",
     "version_variable_name": "__version__"
   },
-  "soft_name": "Pillow Python library",
+  "soft_name": "Python Pillow library",
   "tags": [
     "lib",
     "python-package",
