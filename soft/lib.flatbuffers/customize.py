@@ -72,6 +72,7 @@ def setup(i):
     env[env_prefix+'_BIN']      = path_bin
     env[env_prefix+'_LIB']      = path_lib
     env[env_prefix+'_INCLUDE']  = path_include
+    env[env_prefix+'_LFLAG']    = '-lflatbuffers'
 
     r = ck.access({'action': 'lib_path_export_script', 
                    'module_uoa': 'os', 
