@@ -763,7 +763,7 @@ def install(i):
     # Check installation path
     pre_path=i.get('path','')
     pi=i.get('install_path','')
-    vari_path = '-'.join([''] + required_variations) if required_variations else ''
+    vari_path = '-'.join([''] + sorted(required_variations) ) if required_variations else ''
     extra_path=i.get('extra_path','')
     fp=i.get('full_path','')
 
