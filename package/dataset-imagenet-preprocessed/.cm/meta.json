@@ -4,6 +4,7 @@
     "install_env": {
         "_INPUT_SQUARE_SIDE": "224",
         "_CROP_FACTOR": "87.5",
+        "_GUENTHERIZE": "no",
         "_SUBSET_OFFSET": "0",
         "_SUBSET_VOLUME": "",
         "_SUBSET_FOF": "image_list.txt",
@@ -57,6 +58,16 @@
     "preprocessed"
   ], 
   "variations": {
+    "guentherized.yes": {
+      "extra_env": {
+        "_GUENTHERIZE": "yes"
+      }
+    },
+    "guentherized.no": {
+      "extra_env": {
+        "_GUENTHERIZE": "no"
+      }
+    },
     "crop.875": {
       "extra_env": {
         "_CROP_FACTOR": "87.5"
@@ -110,13 +121,13 @@
         "package_extra_name": " (last 20)"
       }
     },
-    "all": {
+    "full": {
       "extra_env": {
         "_SUBSET_OFFSET": "0",
         "_SUBSET_VOLUME": ""
       },
       "extra_customize": {
-        "package_extra_name": " (all)"
+        "package_extra_name": " (full)"
       }
     }
   }
