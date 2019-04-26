@@ -115,21 +115,8 @@ def load_image(image_path,            # Full path to processing image
   return img
 
 
-def preprocess_directory(source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type):
-    "Go through the given directory and preprocess all the files"
-
-    sorted_filenames = [filename for filename in sorted(os.listdir(source_dir)) if any(filename.lower().endswith(extension) for extension in supported_extensions) ]
-
-    total_volume = len(sorted_filenames)
-
-    if offset<0:        # support offsets "from the right"
-        offset += total_volume
-
-    volume = int(volume_str) if len(volume_str)>0 else total_volume-offset
-
-
-#    selected_filenames = sorted_filenames[offset:min(offset+volume,total_volume)]
-    selected_filenames = sorted_filenames[offset:offset+volume]
+def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type):
+    "Go through the selected_filenames and preprocess all the files"
 
     for current_idx in range(len(selected_filenames)):
         filename = selected_filenames[current_idx]
@@ -148,16 +135,12 @@ def preprocess_directory(source_dir, destination_dir, crop_percentage, square_si
 
         print("[{}]:  Stored {}".format(current_idx+1, full_output_path) )
 
-    fof_full_path = os.path.join(destination_dir, fof_name)
-    with open(fof_full_path, 'w') as fof:
-        for filename in selected_filenames:
-            fof.write(filename + '\n')
 
 if __name__ == '__main__':
     import sys
 
-    source_dir      = sys.argv[1]
-    destination_dir = sys.argv[2]
+    source_dir              = sys.argv[1]   # ignored if CK_IMAGE_FILE points to a file
+    destination_dir         = sys.argv[2]
 
     square_side             = int( os.environ['_INPUT_SQUARE_SIDE'] )
     crop_percentage         = float( os.environ['_CROP_FACTOR'] )
@@ -168,8 +151,31 @@ if __name__ == '__main__':
     volume_str              = os.getenv('_SUBSET_VOLUME', '' )
     fof_name                = os.getenv('_SUBSET_FOF', 'fof.txt')
     data_type               = os.getenv('_DATA_TYPE', 'uint8')
+    image_file              = os.getenv('CK_IMAGE_FILE', '')
 
-    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2GU: {},  2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}".format(
-        source_dir, destination_dir, square_side, crop_percentage, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type) )
+    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2GU: {},  2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, IMG: {}".format(
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type, image_file) )
 
-    preprocess_directory(source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type)
+    if image_file:
+        source_dir          = os.path.dirname(image_file)
+        selected_filenames  = [ os.path.basename(image_file) ]
+
+    elif os.path.isdir(source_dir):
+        sorted_filenames = [filename for filename in sorted(os.listdir(source_dir)) if any(filename.lower().endswith(extension) for extension in supported_extensions) ]
+
+        total_volume = len(sorted_filenames)
+
+        if offset<0:        # support offsets "from the right"
+            offset += total_volume
+
+        volume = int(volume_str) if len(volume_str)>0 else total_volume-offset
+
+        selected_filenames = sorted_filenames[offset:offset+volume]
+
+
+    preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type)
+
+    fof_full_path = os.path.join(destination_dir, fof_name)
+    with open(fof_full_path, 'w') as fof:
+        for filename in selected_filenames:
+            fof.write(filename + '\n')
