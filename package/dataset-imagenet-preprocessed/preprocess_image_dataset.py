@@ -16,10 +16,10 @@ def resize_img(img, target_size):
 
 
 # Crop the central region of the image
-def crop_img(img, crop_percent):
-  if crop_percent > 0 and crop_percent < 1.0:
-    new_w = int(img.shape[0] * crop_percent)
-    new_h = int(img.shape[1] * crop_percent)
+def crop_img(img, crop_percentage):
+  if crop_percentage > 0 and crop_percentage < 1.0:
+    new_w = int(img.shape[0] * crop_percentage)
+    new_h = int(img.shape[1] * crop_percentage)
     offset_w = int((img.shape[0] - new_w)/2)
     offset_h = int((img.shape[1] - new_h)/2)
     return img[offset_w:new_w+offset_w, offset_h:new_h+offset_h, :]
@@ -29,15 +29,15 @@ def crop_img(img, crop_percent):
 
 # Mimic Guenther Schuelling's preprocessing steps
 # FIXME: check whether we can get the same results by setting intermediate_size to 256
-def guentherize(img, out_height, out_width, data_type, guentherization_mode):
+def guentherize(img, out_height, out_width, data_type, guentherization_mode, crop_percentage):
 
     import numpy as np
     from PIL import Image
 
-    def resize_with_aspectratio(img, scale=87.5):
+    def resize_with_aspectratio(img):
         width, height = img.size
-        new_height = int(100. * out_height / scale)
-        new_width = int(100. * out_width / scale)
+        new_height = int(100. * out_height / crop_percentage)
+        new_width = int(100. * out_width / crop_percentage)
         if height > width:
             w = new_width
             if guentherization_mode==1:
@@ -96,7 +96,7 @@ def load_image(image_path,            # Full path to processing image
 
   # Resize and crop
   if guentherization_mode>0:
-    img = guentherize(img, target_size, target_size, data_type, guentherization_mode)
+    img = guentherize(img, target_size, target_size, data_type, guentherization_mode, crop_percentage)
   elif intermediate_size > target_size:
     img = resize_img(img, intermediate_size)
     img = crop_img(img, float(target_size)/float(intermediate_size))
@@ -115,7 +115,7 @@ def load_image(image_path,            # Full path to processing image
   return img
 
 
-def preprocess_directory(source_dir, destination_dir, crop_factor, square_side, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type):
+def preprocess_directory(source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type):
     "Go through the given directory and preprocess all the files"
 
     sorted_filenames = [filename for filename in sorted(os.listdir(source_dir)) if any(filename.lower().endswith(extension) for extension in supported_extensions) ]
@@ -140,7 +140,7 @@ def preprocess_directory(source_dir, destination_dir, crop_factor, square_side, 
         image_data = load_image(image_path = full_input_path,
                               target_size = square_side,
                               intermediate_size = inter_size,
-                              crop_percentage = crop_factor,
+                              crop_percentage = crop_percentage,
                               data_type = data_type,
                               guentherization_mode = guentherization_mode,
                               convert_to_bgr = convert_to_bgr)
@@ -159,17 +159,17 @@ if __name__ == '__main__':
     source_dir      = sys.argv[1]
     destination_dir = sys.argv[2]
 
-    square_side     = int( os.environ['_INPUT_SQUARE_SIDE'] )
-    crop_factor     = float( os.environ['_CROP_FACTOR'] )
-    inter_size      = int( os.getenv('_INTERMEDIATE_SIZE', 0) )
-    guentherization_mode   = int(os.getenv('_GUENTHERIZE', '0'))
-    convert_to_bgr  = os.getenv('_CONVERT_TO_BGR', '').lower() == 'yes'
-    offset          = int( os.getenv('_SUBSET_OFFSET', 0) )
-    volume_str      = os.getenv('_SUBSET_VOLUME', '' )
-    fof_name        = os.getenv('_SUBSET_FOF', 'fof.txt')
-    data_type       = os.getenv('_DATA_TYPE', 'uint8')
+    square_side             = int( os.environ['_INPUT_SQUARE_SIDE'] )
+    crop_percentage         = float( os.environ['_CROP_FACTOR'] )
+    inter_size              = int( os.getenv('_INTERMEDIATE_SIZE', 0) )
+    guentherization_mode    = int(os.getenv('_GUENTHERIZE', '0'))
+    convert_to_bgr          = os.getenv('_CONVERT_TO_BGR', '').lower() == 'yes'
+    offset                  = int( os.getenv('_SUBSET_OFFSET', 0) )
+    volume_str              = os.getenv('_SUBSET_VOLUME', '' )
+    fof_name                = os.getenv('_SUBSET_FOF', 'fof.txt')
+    data_type               = os.getenv('_DATA_TYPE', 'uint8')
 
     print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2GU: {},  2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}".format(
-        source_dir, destination_dir, square_side, crop_factor, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type) )
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type) )
 
-    preprocess_directory(source_dir, destination_dir, crop_factor, square_side, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type)
+    preprocess_directory(source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type)
