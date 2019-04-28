@@ -1,7 +1,7 @@
 This is a rather outdated cTuning CC framework to add 
-self-tuning machine-learning based capabilities to any compiler. 
+self-tuning machine-learning based capabilities to any compiler.
 
-You can find more info here:
+You must install CK repository "reproduce-milepost-project" 
+to be able to use it:
 
-* http://cTuning.org/tools.html
-* http://fursin.net/research.html
+$ ck pull repo:reproduce-milepost-project
