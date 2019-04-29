@@ -35,7 +35,6 @@ guentherized.0,crop.875:
 ----------------------------
 
 
-Creating single-image datasets:
-    ck install package --tags=dataset,preprocessed,external_file --env.CK_IMAGE_FILE=~/Desktop/lenny_kite.JPG --extra_tags=lenny_kite
-    ck install package --tags=dataset,preprocessed,external_file --env.CK_IMAGE_FILE=~/Desktop/lenny_canopy.JPG --extra_tags=lenny_canopy
-
+Creating single-image datasets (need disambiguation in filename, extra tags and extra path) :
+    ck install package --tags=dataset,preprocessed,external_file --env.CK_IMAGE_FILE=~/Desktop/lenny_kite.JPG --extra_tags=lenny_kite --extra_path=_lenny_kite
+    ck install package --tags=dataset,preprocessed,external_file --env.CK_IMAGE_FILE=~/Desktop/lenny_canopy.JPG --extra_tags=lenny_canopy --extra_path=_lenny_canopy
