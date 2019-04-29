@@ -250,7 +250,7 @@ def install(i):
     duoa=i.get('uoa','')
     if duoa=='': duoa=i.get('data_uoa','')
     duid=''
-    dname=''
+    env_display_name=''
     package_repo_uoa=''
     d={}
     required_variations = []
@@ -532,7 +532,7 @@ def install(i):
 
     ver=cus.get('version', '')
 
-    dname=cus.get('package_name', d.get('package_name', ''))
+    env_display_name=cus.get('package_name', d.get('package_name', ''))
 
     extra_version=i.get('extra_version', cus.get('extra_version','') )
 
@@ -1079,14 +1079,22 @@ def install(i):
        deps=dx.get('deps',{})
 
     # Check package names
-    if dname=='':
-       dname=dx.get('soft_name','')
+    if env_display_name=='':
+       env_display_name=dx.get('soft_name','')
 
        if d.get('package_extra_name','')!='':
           cus['package_extra_name']=d['package_extra_name']
 
        if cus.get('package_extra_name','')!='':
-          dname+=cus['package_extra_name']
+          env_display_name+=cus['package_extra_name']
+
+    rx = ck.access({'action':'substitute_from_dict',
+        'module_uoa': 'misc',
+        'input_string': env_display_name,
+        'mapping': pr_env,
+    })
+    if rx['return']>0: return rx
+    env_display_name = rx['output_string']
 
     # Save package UOA to the cus
     cus['used_package_uoa']=duoa
@@ -1444,7 +1452,7 @@ def install(i):
     soft_registration_action_dict={'action':'setup',
         'module_uoa':cfg['module_deps']['soft'],
         'data_uoa':suoa,
-        'soft_name':dname,
+        'soft_name':env_display_name,
         'host_os':hos,
         'target_os':tos,
         'target_device_id':tdid,
