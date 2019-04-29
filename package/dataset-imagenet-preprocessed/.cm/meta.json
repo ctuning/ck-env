@@ -17,6 +17,9 @@
   }, 
   "deps": {
     "dataset-source": {
+      "enable_if_env": [
+        { "CK_IMAGE_FILE": [ "" ] }
+      ],
       "local": "yes", 
       "name": "Original ImageNet dataset", 
       "sort": 10, 
@@ -65,7 +68,7 @@
         "_SUBSET_VOLUME": ""
       },
       "extra_customize": {
-        "package_name": "Pre-processed single image file"
+        "package_name": "Pre-processed single image ($<<CK_IMAGE_FILE>>$)"
       }
     },
     "guentherized.0": {

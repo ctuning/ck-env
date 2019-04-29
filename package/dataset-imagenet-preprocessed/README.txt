@@ -34,3 +34,8 @@ guentherized.0,crop.875:
 "accuracy_top5": 0.89366,
 ----------------------------
 
+
+Creating single-image datasets:
+    ck install package --tags=dataset,preprocessed,external_file --env.CK_IMAGE_FILE=~/Desktop/lenny_kite.JPG --extra_tags=lenny_kite
+    ck install package --tags=dataset,preprocessed,external_file --env.CK_IMAGE_FILE=~/Desktop/lenny_canopy.JPG --extra_tags=lenny_canopy
+
