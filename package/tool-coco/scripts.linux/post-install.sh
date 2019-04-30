@@ -14,8 +14,10 @@ export BLD_LOG=${INSTALL_DIR}/${PACKAGE_NAME}.log
 
 SUPPRESS_WARNINGS="-Wno-misleading-indentation -Wno-maybe-uninitialized"
 
+OSX_SDK=`xcrun --show-sdk-path`
+
 export CC=${CK_CC}
-export CFLAGS="${CFLAGS} ${SUPPRESS_WARNINGS}"
+export CFLAGS="${CFLAGS} ${SUPPRESS_WARNINGS} ${OSX_SDK:+"-I${OSX_SDK}/usr/include"}"
 
 ################################################################################
 echo ""
