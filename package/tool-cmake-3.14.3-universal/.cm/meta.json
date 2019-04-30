@@ -1,0 +1,56 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "PACKAGE_BUILD_TYPE": "",
+      "PACKAGE_COPY": "NO",
+      "PACKAGE_DETECT_VARS": "YES",
+      "PACKAGE_GIT": "NO",
+      "PACKAGE_NAME1_LINUX": "cmake-3.14.3-Linux-x86_64.tar",
+      "PACKAGE_NAME1_MACOS": "cmake-3.14.3-Darwin-x86_64.tar",
+      "PACKAGE_NAME_LINUX": "cmake-3.14.3-Linux-x86_64.tar.gz",
+      "PACKAGE_NAME_MACOS": "cmake-3.14.3-Darwin-x86_64.tar.gz",
+      "PACKAGE_NAME_WINDOWS": "cmake-3.14.3-win32-x86.zip",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_UNGZIP_LINUX": "YES",
+      "PACKAGE_UNGZIP_MACOS": "YES",
+      "PACKAGE_UNTAR_LINUX": "YES",
+      "PACKAGE_UNTAR_MACOS": "YES",
+      "PACKAGE_UNZIP_WINDOWS": "YES",
+      "PACKAGE_URL_LINUX": "https://cmake.org/files/v3.14",
+      "PACKAGE_URL_MACOS": "https://cmake.org/files/v3.14",
+      "PACKAGE_URL_WINDOWS": "https://cmake.org/files/v3.14",
+      "PACKAGE_WGET": "YES"
+    },
+    "version": "3.14.3"
+  },
+  "end_full_path": {
+    "linux": "cmake-3.14.3-Linux-x86_64/bin/cmake",
+    "macos": "cmake-3.14.3-Darwin-x86_64/CMake.app/Contents/bin/cmake",
+    "win": "cmake-3.14.3-win32-x86\\bin\\cmake.exe"
+  },
+  "only_for_host_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "only_for_target_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "process_script": "install",
+  "soft_uoa": "77ef5e31404d9589",
+  "suggested_path": "tool-cmake",
+  "tags": [
+    "tool",
+    "cmake",
+    "v3.14.3",
+    "v3.14",
+    "v3",
+    "channel-stable"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}
