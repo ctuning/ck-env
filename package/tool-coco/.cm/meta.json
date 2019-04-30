@@ -16,7 +16,12 @@
       "local": "yes",
       "name": "C compiler",
       "sort": 10,
-      "tags": "compiler,lang-c,gcc"
+      "tags": "compiler,lang-c",
+      "update_tags_by_target_os_uoa": {
+        "linux-32": "gcc",
+        "linux-64": "gcc",
+        "macos-64": "llvm"
+      }
     },
     "lib-python-cython": {
       "local": "yes",
