@@ -14,6 +14,12 @@
     "version": "master"
   }, 
   "deps": {
+    "cmake": {
+      "local": "yes",
+      "name": "cmake",
+      "sort": 10,
+      "tags": "tool,cmake"
+    },
     "compiler": {
       "local": "yes", 
       "name": "C++ compiler", 
