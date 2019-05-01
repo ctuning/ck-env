@@ -434,10 +434,29 @@ def setup(i):
        elif mac=='yes':		# non-Android and Mac
           env["CK_LB"]="$#tool_prefix#$ar -rcs"
           env["CK_LB_OUTPUT"]=""
-          env["CK_AR_PATH_FOR_CMAKE"]       = os.path.join(compiler_bin_dir, 'llvm-ar')
-          env["CK_RANLIB_PATH_FOR_CMAKE"]   = os.path.join(compiler_bin_dir, 'llvm-ranlib')
+
+          ar_path_candidate     = os.path.join(compiler_bin_dir, 'llvm-ar')
+          ranlib_path_candidate = os.path.join(compiler_bin_dir, 'llvm-ranlib')
+
+          if os.path.isfile( ar_path_candidate ):
+            env["CK_AR_PATH_FOR_CMAKE"]     = ar_path_candidate
+
+          if os.path.isfile( ranlib_path_candidate ):
+            env["CK_RANLIB_PATH_FOR_CMAKE"] = ranlib_path_candidate
+
           env["CK_COMPILER_OWN_LIB_LOC"]    = '-L' + path_lib
-          env["CK_CXX_COMPILER_STDLIB"]     = '-stdlib=libstdc++'
+
+          r=ck.access({'action': 'capture_command_output',
+                        'module_uoa': 'misc',
+                        'cmd': 'xcrun --show-sdk-version',
+          })
+          if r['return']==0:
+              sdk_version_string = r['output_lines'][0]
+              sdk_version_component = [int(comp) for comp in sdk_version_string.split('.')]
+
+              if sdk_version_component[0]==10 and sdk_version_component[1]<14:
+                  env["CK_CXX_COMPILER_STDLIB"]     = '-stdlib=libstdc++'
+
        else:				# non-Android and Linux
           env["CK_LB"]="$#tool_prefix#$ar rcs"
           env["CK_LB_OUTPUT"]="-o "
