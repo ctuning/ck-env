@@ -3,6 +3,9 @@
     "add_key": {
       "desc": "add key to meta/files of different entries"
     },
+    "capture_command_output": {
+      "desc": "run a shell command and return its captured output"
+    },
     "clone_server_repo": {
       "desc": "download a whole repository from the server"
     },

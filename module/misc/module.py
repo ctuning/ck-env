@@ -1855,3 +1855,41 @@ def substitute_from_dict(i):
         ck.out(output_string)
 
     return {'return': 0, 'output_string': output_string}
+
+
+def capture_command_output(i):
+    """
+    Input:  {
+                cmd                 - shell command with parameters to run
+            }
+
+    Output: {
+                output_lines        - an array of lines of the command's output
+
+                return              - return code =  0, if successful
+                                                  >  0, if error
+                (error)             - error text if return > 0
+            }
+    Tests:
+        ck capture_command_output misc --cmd='ls -1'
+    """
+
+    import subprocess
+
+    cmd = i['cmd']
+
+    if type(cmd)!=list:
+        cmd = cmd.split()   # split on general whitespace
+
+    try:
+        out = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+
+        stdout_lines = out.communicate()[0].decode("utf8").split("\n")
+
+        if stdout_lines[-1] == '':
+            stdout_lines.pop()  # remove the last empty element
+
+        return {'return': 0, 'output_lines': stdout_lines}
+
+    except:
+        return {'return': 1, 'error': "Could not run the command '{}'".format(cmd) }
