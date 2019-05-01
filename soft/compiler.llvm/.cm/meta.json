@@ -58,6 +58,8 @@
     "CK_ASM_EXT": ".s",
     "CK_COMPILER_FLAG_CPP0X": "-std=c++0x",
     "CK_COMPILER_FLAG_CPP11": "-std=c++11",
+    "CK_COMPILER_FLAG_CPP14": "-std=c++14",
+    "CK_COMPILER_FLAG_CPP17": "-std=c++17",
     "CK_COMPILER_FLAG_OPENMP": "-fopenmp",
     "CK_COMPILER_FLAG_PTHREAD_LIB": "-lpthread",
     "CK_COMPILER_FLAG_STD90": "-std=c90",
