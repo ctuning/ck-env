@@ -1,0 +1,33 @@
+#! /bin/bash
+
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developers: Grigori Fursin, Flavio Vella, Anton Lokhmotov.
+
+if [ "$CK_GPU_FREQ_GOVERNOR" != "" ]; then
+  governor=$CK_GPU_FREQ_GOVERNOR
+else
+  governor=userspace
+fi
+
+if [ "$CK_GPU_FREQ_INDEX" != "" ]; then
+  index=$CK_GPU_FREQ_INDEX
+else
+  index=0
+fi
+
+echo "    Setting governor policy to '$governor' ..."
+echo $governor | sudo tee /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/governor
+
+all_freqs=(`cat /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/available_frequencies`)
+echo "    Listing all available frequencies ..."
+cat /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/available_frequencies
+
+freq=${all_freqs[$index]}
+echo "    Setting frequency to $freq (Hz) ..."
+echo $freq | sudo tee /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/userspace/set_freq
+
+echo

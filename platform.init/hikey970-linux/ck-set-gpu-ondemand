@@ -1,0 +1,12 @@
+#! /bin/bash
+
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developers: Grigori Fursin, Flavio Vella, Anton Lokhmotov.
+
+export governor=simple_ondemand
+echo "    Setting governor policy to '$governor' ..."
+echo $governor | sudo tee /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/governor

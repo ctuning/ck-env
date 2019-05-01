@@ -1,0 +1,32 @@
+#! /bin/bash
+
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developers:
+# - Grigori Fursin
+# - Flavio Vella
+# - Anton Lokhmotov
+
+echo "*** Available GPU frequencies:"
+cat /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/available_frequencies
+
+echo "*** Current GPU frequency:"
+cat /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/cur_freq
+
+all_freqs=(`cat /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/available_frequencies`)
+echo "*** Min GPU frequency:"
+echo ${all_freqs[0]}
+
+echo "*** Max GPU frequency:"
+len=${#all_freqs[@]}
+((len=len-1))
+echo ${all_freqs[${len}]}
+
+echo "*** Available GPU governors:"
+cat /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/available_governors
+
+echo "*** Current GPU governor:"
+cat /sys/devices/platform/e82c0000.mali/devfreq/e82c0000.mali/governor
