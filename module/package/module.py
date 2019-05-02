@@ -75,6 +75,8 @@ def install(i):
               (deps.{KEY})        - set deps[KEY]["uoa']=value (user-friendly interface via CMD to set any given dependency)
               (preset_deps)       - dict with {"KEY":"UOA"} to preset dependencies
 
+              (dep_add_tags.{KEY})   - extra tags added to specific subdictionary of deps{} for this particular resolution session
+
               (param)             - string converted into CK_PARAM and passed to processing script
               (params)            - dict, keys are converted into <KEY>=<VALUE> and passed to processing script
 
@@ -480,10 +482,15 @@ def install(i):
                 udeps[k]=depsx[k]
 #        udeps.update(depsx)
 
-    preset_deps=i.get('preset_deps', {})
+    preset_deps   = i.get('preset_deps', {})
+    dep_add_tags  = i.get('dep_add_tags', {})
     for q in i:
         if q.startswith('deps.'):
            preset_deps[q[5:]]=i[q].split(':')[-1]
+        elif q.startswith('dep_add_tags.'):
+           _ , dep_name    = q.split('.')
+           dep_add_tags[dep_name] = i[q]
+
 
     for q in preset_deps:
         if q in udeps:
@@ -746,6 +753,7 @@ def install(i):
            'install_env':pr_env,
            'reuse_deps':reuse_deps,
            'deps_cache':deps_cache,
+           'dep_add_tags': dep_add_tags,
            'safe':safe,
            'deps':udeps}
        if o=='con': env_resolve_action_dict['out']='con'
@@ -1122,6 +1130,7 @@ def install(i):
            'install_to_env':iev,
            'reuse_deps':reuse_deps,
            'deps_cache':deps_cache,
+           'dep_add_tags': dep_add_tags,
            'safe':safe,
            'deps':udeps}
        if o=='con': env_resolve_action_dict['out']='con'
