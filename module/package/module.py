@@ -805,26 +805,27 @@ def install(i):
 
     dep_tags = []
 
-    # Iterate through all dependencies and check which tags we need to create from them,
+    # Iterate through all resolved dependencies and check which tags we need to create from them,
     #   preserving the desired sort order:
     #
     for dep_name, dep_dict in sorted(udeps.items(), key=lambda pair: pair[1].get('sort',0)) :
-        if dep_name in ('compiler', 'host-compiler') :
-            dep_tag_prefix  = 'compiled-by-'
-        elif dep_dict.get('add_to_tags', dep_dict.get('add_to_path','') )=='yes':
-            dep_tag_prefix = 'needs-'
-        else:
-            dep_tag_prefix = ''
+        if dep_dict.get('uoa',''):
+            if dep_name in ('compiler', 'host-compiler') :
+                dep_tag_prefix  = 'compiled-by-'
+            elif dep_dict.get('add_to_tags', dep_dict.get('add_to_path','') )=='yes':
+                dep_tag_prefix = 'needs-'
+            else:
+                dep_tag_prefix = ''
 
-        # Empty prefix means we don't want this dependency to appear in tags:
-        #
-        if dep_tag_prefix:
-            dep_tag     = dep_tag_prefix + dep_dict.get('build_dir_name','unknown_' + dep_name)
-            dep_tags.append( dep_tag )
+            # Empty prefix means we don't want this dependency to appear in tags:
+            #
+            if dep_tag_prefix:
+                dep_tag     = dep_tag_prefix + dep_dict.get('build_dir_name','unknown_' + dep_name)
+                dep_tags.append( dep_tag )
 
-            dep_version = dep_dict.get('ver')
-            if dep_version:
-                dep_tags.append( dep_tag + '-' + dep_version )
+                dep_version = dep_dict.get('ver')
+                if dep_version:
+                    dep_tags.append( dep_tag + '-' + dep_version )
 
     # Join stripped tags and compiler tags into a CSV string:
     stripped_tags   = [t.strip() for t in tags if t.strip()]
