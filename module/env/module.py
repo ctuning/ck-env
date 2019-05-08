@@ -1212,6 +1212,7 @@ def resolve(i):
 
               (dep_add_tags)         - a dictionary that maps extra tags to be added to specific subdictionaries of deps{}
                                        for this particular resolution
+              (dep_add_tags.{KEY})   - extra tags added to specific subdictionary of deps{} for this particular resolution session
 
               (env)                  - env
 
@@ -1246,6 +1247,23 @@ def resolve(i):
               deps         - updated deps (with uoa)
               env          - updated env
             }
+    Test:
+            cat deps_only.json
+            {
+                  "deps": {
+                    "weights": {
+                      "force_target_as_host": "yes",
+                      "local": "yes",
+                      "name": "TensorFlow Lite model and weights",
+                      "no_tags": "mobilenet-all",
+                      "sort": 30,
+                      "tags": "model,tflite,image-classification"
+                    },
+              ...
+            }
+
+            ck resolve env @deps_only.json "@@@{'dep_add_tags': {'weights':'resnet'}}" --out=json
+            ck resolve env @deps_only.json --dep_add_tags.weights=mobilenet --out=json
 
     """
 
@@ -1268,6 +1286,11 @@ def resolve(i):
     deps=i.get('deps',{})
 
     dep_add_tags = i.get('dep_add_tags', {})
+    for combi_opt in i:
+        if combi_opt.startswith('dep_add_tags.'):
+           _ , dep_name    = combi_opt.split('.')
+           dep_add_tags[dep_name] = i[combi_opt]
+
     for a_dep in dep_add_tags:
         if a_dep in deps:
             tags_to_be_added = dep_add_tags[a_dep]
