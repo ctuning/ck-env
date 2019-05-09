@@ -21,7 +21,7 @@
         { "CK_IMAGE_FILE": [ "" ] }
       ],
       "local": "yes", 
-      "name": "Original ImageNet dataset", 
+      "name": "ImageNet dataset (original)",
       "sort": 10, 
       "tags": "dataset,imagenet,val"
     },

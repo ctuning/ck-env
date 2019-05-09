@@ -9,7 +9,7 @@
     "soft_file_universal": "ILSVRC2012_val_00000001.JPEG"
   }, 
   "deps": {}, 
-  "soft_name": "Pre-processed ImageNet dataset", 
+  "soft_name": "ImageNet dataset (preprocessed)",
   "tags": [
     "dataset", 
     "imagenet",
