@@ -115,14 +115,15 @@ def load_image(image_path,            # Full path to processing image
   return img
 
 
-def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type):
+def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type, new_file_extension):
     "Go through the selected_filenames and preprocess all the files"
 
-    for current_idx in range(len(selected_filenames)):
-        filename = selected_filenames[current_idx]
+    output_filenames = []
 
-        full_input_path     = os.path.join(source_dir, filename)
-        full_output_path    = os.path.join(destination_dir, filename)
+    for current_idx in range(len(selected_filenames)):
+        input_filename = selected_filenames[current_idx]
+
+        full_input_path     = os.path.join(source_dir, input_filename)
 
         image_data = load_image(image_path = full_input_path,
                               target_size = square_side,
@@ -131,9 +132,17 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
                               data_type = data_type,
                               guentherization_mode = guentherization_mode,
                               convert_to_bgr = convert_to_bgr)
+
+        output_filename = input_filename.rsplit('.', 1)[0] + '.' + new_file_extension if new_file_extension else input_filename
+
+        full_output_path    = os.path.join(destination_dir, output_filename)
         image_data.tofile(full_output_path)
 
         print("[{}]:  Stored {}".format(current_idx+1, full_output_path) )
+
+        output_filenames.append(output_filename)
+
+    return output_filenames
 
 
 if __name__ == '__main__':
@@ -151,10 +160,11 @@ if __name__ == '__main__':
     volume_str              = os.getenv('_SUBSET_VOLUME', '' )
     fof_name                = os.getenv('_SUBSET_FOF', 'fof.txt')
     data_type               = os.getenv('_DATA_TYPE', 'uint8')
+    new_file_extension      = os.getenv('_NEW_EXTENSION', '')
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
-    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2GU: {},  2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, IMG: {}".format(
-        source_dir, destination_dir, square_side, crop_percentage, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type, image_file) )
+    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2GU: {},  2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, EXT: {}, IMG: {}".format(
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type, new_file_extension, image_file) )
 
     if image_file:
         source_dir          = os.path.dirname(image_file)
@@ -173,9 +183,9 @@ if __name__ == '__main__':
         selected_filenames = sorted_filenames[offset:offset+volume]
 
 
-    preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type)
+    output_filenames = preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type, new_file_extension)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
     with open(fof_full_path, 'w') as fof:
-        for filename in selected_filenames:
+        for filename in output_filenames:
             fof.write(filename + '\n')

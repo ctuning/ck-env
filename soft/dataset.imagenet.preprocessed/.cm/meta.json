@@ -6,7 +6,7 @@
       "linux": 3, 
       "win": 3
     }, 
-    "soft_file_universal": "ILSVRC2012_val_00000001.JPEG"
+    "soft_file_universal": "ILSVRC2012_val_00000001.rgb8"
   }, 
   "deps": {}, 
   "soft_name": "ImageNet dataset (preprocessed)",
