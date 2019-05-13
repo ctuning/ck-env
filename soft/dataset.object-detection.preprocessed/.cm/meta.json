@@ -1,0 +1,19 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "env_prefix": "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED",
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 3
+    },
+    "soft_file_universal": "000000000139.jpg",
+    "_soft_file_universal": "better create a metadata file for all preprocessed images with a relatively unique name, and use it for detection"
+  },
+  "deps": {},
+  "soft_name": "Object Detection dataset (preprocessed)",
+  "tags": [
+    "dataset",
+    "object-detection",
+    "preprocessed"
+  ]
+}
