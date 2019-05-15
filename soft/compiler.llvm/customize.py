@@ -457,6 +457,13 @@ def setup(i):
               if sdk_version_component[0]==10 and sdk_version_component[1]<14:
                   env["CK_CXX_COMPILER_STDLIB"]     = '-stdlib=libstdc++'
 
+          r=ck.access({'action': 'capture_command_output',
+                        'module_uoa': 'misc',
+                        'cmd': 'xcrun --show-sdk-path',
+          })
+          if r['return']==0:
+              env["CK_COMPILER_XCODE_SDK_INCLUDE"] = r['output_lines'][0] + '/usr/include'
+
        else:				# non-Android and Linux
           env["CK_LB"]="$#tool_prefix#$ar rcs"
           env["CK_LB_OUTPUT"]="-o "
