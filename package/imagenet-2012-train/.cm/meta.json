@@ -18,9 +18,13 @@
   "soft_uoa": "138c3d446dad2783",
   "suggested_path": "dataset-imagenet-ilsvrc2012-train",
   "tags": [
+    "image-classification",
     "dataset",
     "imagenet",
+    "2012",
     "raw",
+    "original",
+    "jpg",
     "train",
     "ilsvrc2012",
     "channel-stable"
