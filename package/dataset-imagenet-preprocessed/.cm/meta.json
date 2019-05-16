@@ -58,8 +58,11 @@
   "soft_uoa": "dataset.imagenet.preprocessed", 
   "suggested_path": "dataset-imagenet-preprocessed",
   "tags": [
+    "image-classificaion",
     "dataset", 
     "imagenet",
+    "2012",
+    "val",
     "preprocessed"
   ], 
   "variations": {
