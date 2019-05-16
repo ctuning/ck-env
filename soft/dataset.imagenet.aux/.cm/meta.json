@@ -13,8 +13,10 @@
   "deps": {},
   "soft_name": "ImageNet dataset (aux)",
   "tags": [
+    "image-classification",
     "dataset",
     "imagenet",
+    "2012",
     "aux",
     "caffe"
   ],
