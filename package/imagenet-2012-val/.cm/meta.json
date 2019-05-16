@@ -21,10 +21,15 @@
   "soft_uoa": "ff47fc6a33b4b03b",
   "suggested_path": "dataset-imagenet-ilsvrc2012-val",
   "tags": [
+    "image-classification",
     "dataset",
     "imagenet",
-    "raw",
+    "2012",
     "val",
+    "full",
+    "raw",
+    "original",
+    "jpg",
     "caffe",
     "ilsvrc2012",
     "channel-stable"

@@ -16,10 +16,14 @@
   "deps": {},
   "soft_name": "ImageNet dataset (validation)",
   "tags": [
+    "image-classification",
     "dataset",
     "imagenet",
-    "raw",
+    "2012",
     "val",
+    "raw",
+    "original",
+    "jpg",
     "caffe"
   ],
   "template": "yes",

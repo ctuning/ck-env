@@ -21,16 +21,21 @@
   "soft_uoa": "ff47fc6a33b4b03b",
   "suggested_path": "dataset-imagenet-ilsvrc2012-val-min-resized",
   "tags": [
+    "image-classification",
     "dataset",
     "imagenet",
-    "raw",
+    "2012",
     "val",
+    "min",
+    "resized",
+    "raw",
+    "original",
+    "jpg",
     "caffe",
     "ilsvrc2012",
     "ilsvrc2012min",
     "ilsvrc2012resized",
     "small_dataset",
-    "resized",
     "channel-stable"
   ]
 }
