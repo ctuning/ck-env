@@ -28,12 +28,14 @@
   "suggested_path": "dataset-coco-2014-val",
   "tags": [
     "dataset",
+    "object-detection",
     "coco",
     "COCO",
     "2014",
     "val",
     "full",
-    "object-detection",
+    "original",
+    "jpg",
     "channel-stable"
   ]
 }

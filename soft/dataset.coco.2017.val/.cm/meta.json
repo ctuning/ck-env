@@ -14,12 +14,14 @@
   "deps": {}, 
   "soft_name": "COCO 2017 validation dataset", 
   "tags": [
-    "dataset", 
-    "coco", 
+    "object-detection",
+    "dataset",
+    "coco",
     "COCO",
     "2017",
     "val",
-    "object-detection", 
+    "original",
+    "jpg",
     "images"
   ]
 }

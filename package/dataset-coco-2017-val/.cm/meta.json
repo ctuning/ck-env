@@ -27,13 +27,15 @@
   "soft_uoa": "f80a27f548effb8c", 
   "suggested_path": "dataset-coco-2017-val", 
   "tags": [
-    "dataset", 
-    "coco", 
-    "COCO", 
-    "2017", 
-    "val", 
-    "full", 
-    "object-detection", 
+    "object-detection",
+    "dataset",
+    "coco",
+    "COCO",
+    "2017",
+    "val",
+    "full",
+    "original",
+    "jpg",
     "channel-stable"
   ]
 }
