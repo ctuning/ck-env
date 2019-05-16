@@ -13,9 +13,12 @@
   "deps": {},
   "soft_name": "ImageNet dataset (train)",
   "tags": [
+    "image-classification",
     "dataset",
     "imagenet",
     "raw",
+    "original",
+    "jpg",
     "train"
   ],
   "template": "yes",
