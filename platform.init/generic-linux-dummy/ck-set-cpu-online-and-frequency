@@ -9,4 +9,4 @@
 # Developer: Grigori Fursin
 #
 
-echo "WARNING: this is a dummy script to set CPU and GPU frequency! Note that performance may vary! You can modify scripts for your platform!"
+echo "WARNING: this is a dummy script to set CPU and GPU frequency! Note that performance may vary! You should modify scripts for your platform!"
