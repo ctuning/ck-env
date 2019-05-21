@@ -1,0 +1,39 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PIP_INSTALL_OPTIONS": "--ignore-installed",
+      "PYTHON_PACKAGE_NAME": "imageio"
+    }
+  },
+  "deps": {
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 10,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path_universal": "build$#sep#$imageio$#sep#$__init__.py",
+  "only_for_host_os_tags": [],
+  "only_for_target_os_tags": [
+    "windows",
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "724ad3a417f41607",
+  "suggested_path": "lib-python-imageio",
+  "tags": [
+    "lib",
+    "python-package",
+    "imageio",
+    "vmaster"
+  ],
+  "template": "yes",
+  "template_type": "Python library",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "e4d8d3d2c4c67902",
+    "module_uoa": "package"
+  }
+}
