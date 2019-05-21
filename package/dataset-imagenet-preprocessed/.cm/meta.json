@@ -58,7 +58,7 @@
   "soft_uoa": "dataset.imagenet.preprocessed", 
   "suggested_path": "dataset-imagenet-preprocessed",
   "tags": [
-    "image-classificaion",
+    "image-classification",
     "dataset", 
     "imagenet",
     "2012",
