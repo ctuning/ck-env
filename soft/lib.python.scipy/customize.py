@@ -18,12 +18,15 @@ def version_cmd(i):
     ck                      = i['ck_kernel']
     cus                     = i['customize']
 
+    version_recursive_import= cus.get('version_recursive_import', False)
     version_module_name     = cus.get('version_module_name', '__init__')
     version_variable_name   = cus.get('version_variable_name', '__version__')
 
-    #sys.path.insert(0, site_dir)    # temporarily prepend site_dir to allow the potential recursive imports to work
+    if version_recursive_import:
+        sys.path.insert(0, site_dir)    # temporarily prepend site_dir to allow the potential recursive imports to work
     rx=ck.load_module_from_path({'path':path_without_init_py, 'module_code_name':version_module_name, 'skip_init':'yes'})
-    #sys.path.pop(0)                 # retain the original module search path
+    if version_recursive_import:
+        sys.path.pop(0)                 # restore the original module search path
 
     if rx['return']==0:
         loaded_package  = rx['code']
