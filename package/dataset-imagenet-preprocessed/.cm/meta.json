@@ -42,7 +42,12 @@
       "local": "yes",
       "name": "Python SciPy library",
       "sort": 120,
-      "tags": "lib,python-package,scipy"
+      "tags": "lib,python-package,scipy",
+      "version_to": [
+        1,
+        2,
+        2
+      ]
     },
     "lib-python-pillow": {
       "local": "yes",
