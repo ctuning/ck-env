@@ -24,7 +24,7 @@
       "local": "yes", 
       "name": "ImageNet dataset (original)",
       "sort": 10, 
-      "tags": "dataset,imagenet,val"
+      "tags": "dataset,imagenet,original"
     },
     "python": {
       "local": "yes",
