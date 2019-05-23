@@ -65,5 +65,10 @@ def setup(i):
         if varname.startswith('_'):
             env[env_prefix + varname] = install_env[varname]
 
+    def dep_env(dep, var): return i['deps'][dep]['dict']['env'].get(var)
+
+    for varname in ['CK_ENV_DATASET_TYPE', 'CK_ENV_DATASET_ANNOTATIONS']:
+        env[varname] = dep_env('dataset-source', varname)
+
     return {'return':0, 'bat':''}
 
