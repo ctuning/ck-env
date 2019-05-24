@@ -46,20 +46,12 @@ def limit(i):
     tosd=i.get('target_os_dict',{})
 
     phosd=hosd.get('ck_name','')
+    macos=hosd.get('macos', '')
     hbits=hosd.get('bits','')
     tbits=tosd.get('bits','')
 
-    prebuilt=''
-    if phosd=='win':
-       if hbits=='64':
-          prebuilt='windows-x86_64'
-       else:
-          prebuilt='windows-x86'
-    else:
-       if hbits=='64':
-          prebuilt='linux-x86_64'
-       else:
-          prebuilt='linux-x86'
+    long_os_name = 'windows' if phosd=='win' else ('darwin' if macos else 'linux')
+    prebuilt     = long_os_name + '-x86' + ('_64' if hbits=='64' else '')
 
     acp=tosd.get('android_compiler_prefix','')
     if acp=='':
@@ -193,9 +185,8 @@ def setup(i):
 
     sdirs=hosd.get('dir_sep','')
 
-    mac=target_d.get('macos','')
-
     hplat=hosd.get('ck_name','')
+    macos=hosd.get('macos','')
 
     envp=cus.get('env_prefix','')
     pi=cus.get('path_install','')
@@ -547,7 +538,7 @@ def setup(i):
              "CK_LD_FLAGS_EXTRA": "", 
              "CK_OBJDUMP": "${CK_ANDROID_COMPILER_PREFIX}-objdump -d",
              "CK_PROFILER": "gprof"})
-       elif mac=='yes':
+       elif macos=='yes':
           env["CK_LB"]="$#tool_prefix#$ar -rcs"
           env["CK_LB_OUTPUT"]=""
        else:
