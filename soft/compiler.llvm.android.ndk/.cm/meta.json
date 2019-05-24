@@ -45,6 +45,14 @@
         "android"
       ],
       "tags": "android,ndk,toolchain"
+    },
+    "ndk-gcc": {
+      "local": "yes",
+      "name": "Android NDK GCC",
+      "only_for_target_os_tags": [
+        "android"
+      ],
+      "tags": "compiler,gcc,ndk"
     }
   },
   "env": {},
