@@ -2442,8 +2442,10 @@ def envsecute(i):
 def locate(i):
     """
     Input:  {
-              data_uoa or uoa   - environment entry
-              tags              - tags to define a subset of environment entries
+              (data_uoa or uoa) - environment entry/entries
+              (tags)            - prune by tags
+              (target_os)       - prune by target OS
+
             }
 
     Output: {
@@ -2456,6 +2458,19 @@ def locate(i):
 
     duoa        = i.get('data_uoa', i.get('uoa', '*') )
     tags_csv    = i.get('tags')
+
+    tos_uoa     = i.get('target_os','')
+    if tos_uoa!='':
+        # Load OS
+        ry=ck.access({'action':'load',
+                     'module_uoa':cfg['module_deps']['os'],
+                     'data_uoa':tos_uoa})
+        if ry['return']>0: return ry
+
+        tos_uoa = ry['dict'].get('base_uoa','') or ry['data_uoa']
+
+        target_os_tag = 'target-os-'+tos_uoa
+        i['tags'] = (tags_csv + ',' if tags_csv else '') + target_os_tag
 
     if duoa.find('*')!=-1 or duoa.find('?')!=-1 or tags_csv:
         searched_adict = ck.access( dict(i, action='search', out='') )
