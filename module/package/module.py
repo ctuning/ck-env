@@ -1234,17 +1234,12 @@ def install(i):
           if pi=='':
              return {'return':1, 'error':'installation path is not specified'}
 
-       # Check if there is already library or tool exists
-       x=d.get('end_full_path_universal','')
-       if x=='':
-          efp = d.get('end_full_path', {})
-          x = efp['macos'] if (macos and 'macos' in efp) else efp.get(tname2,'')
-       fp=pi
-       cont=True
-       if x!='':
-          x=x.replace('$#sep#$', sdirs)
-          x=x.replace('$#abi#$', tosd.get('abi',''))
-          x=x.replace('$#processor#$', tosd.get('processor',''))
+
+       def efp_substitute(efp):
+
+          efp=efp.replace('$#sep#$', sdirs)
+          efp=efp.replace('$#abi#$', tosd.get('abi',''))
+          efp=efp.replace('$#processor#$', tosd.get('processor',''))
 
             # NOTE: adapted from module/soft/module.py/prepare_target_name()
             #       After successful testing this function should be moved out
@@ -1254,18 +1249,32 @@ def install(i):
           file_extensions=tosd.get('file_extensions',{})
           for k in file_extensions:
               v=file_extensions[k]
-              x=x.replace('$#file_ext_'+k+'#$',v)
+              efp=efp.replace('$#file_ext_'+k+'#$',v)
 
           host_file_extensions=hosd.get('host_file_extensions',{})
           for k in host_file_extensions:
               v=host_file_extensions[k]
-              x=x.replace('$#host_file_ext_'+k+'#$',v)
+              efp=efp.replace('$#host_file_ext_'+k+'#$',v)
 
-          fp=os.path.join(fp,x)
-          if os.path.isfile(fp):
-             if o=='con':
+          return efp
+
+
+       # Check if there is already library or tool exists
+       efp=d.get('end_full_path_universal')
+       if efp==None or len(efp)==0:
+          efpd = d.get('end_full_path', {})
+          efp = efpd['macos'] if (macos and 'macos' in efpd) else efpd.get(tname2,[])
+
+       efp_or_list    = efp if type(efp)==list else [ efp ]                             # enforce list
+       fp_candidates  = [ os.path.join( pi, efp_substitute(x) ) for x in efp_or_list ]  # apply substitution and create full paths
+       fp_matches     = [ x for x in fp_candidates if os.path.exists(x) ]               # find all matches
+
+       cont=True
+
+       if len(fp_matches)>0:
+          if o=='con':
                 ck.out('')
-                ck.out('It appears that package is already installed or at least file from the package is already found in path: '+fp)
+                ck.out('It appears that package is already installed or at least file from the package already found in path: {}'.format(fp_matches))
 
                 if (rebuild!='yes' and reinstall!='yes') or ask=='yes':
                    ck.out('')
@@ -1458,6 +1467,10 @@ def install(i):
           rx = internal_run_if_present(original_customization_script, 'post_setup', param_dict_for_post_setup, {})
           if rx['return']>0: return rx
 
+
+    fp_matches  = [ x for x in fp_candidates if os.path.exists(x) ]               # find all matches again
+    fp          = fp_matches[0] if len(fp_matches) else fp_candidates[0] if len(fp_candidates) else pi
+
     # Preparing soft registration
     soft_registration_action_dict={'action':'setup',
         'module_uoa':cfg['module_deps']['soft'],
@@ -1505,20 +1518,6 @@ def install(i):
     if xsetup:
        if suoa=='':
           return {'return':1, 'error':'Software environment UOA is not defined in this package (soft_uoa)'}
-
-#       if extra_dir!='':
-#          pi+=sdirs+extra_dir
-
-       x=d.get('end_full_path_universal','')
-       if x=='':
-          efp = d.get('end_full_path', {})
-          x = efp['macos'] if (macos and 'macos' in efp) else efp.get(tname2,'')
-
-       fp=pi
-       if x!='': 
-          x=x.replace('$#sep#$', sdirs)
-          x=x.replace('$#abi#$', tosd.get('abi',''))
-          fp=os.path.join(fp,x)
 
        if suoa!='':
           if o=='con':
