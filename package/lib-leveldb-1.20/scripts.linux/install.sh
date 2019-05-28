@@ -24,7 +24,7 @@ cd $BUILD_DIR
     # on a Mac and compiling with LLVM:
 if [ -n "$CK_ENV_COMPILER_LLVM_SET" ] && [ "$CK_DLL_EXT" = ".dylib" ]
 then
-    INSTALL_PATH='@rpath' make CXX="${CK_CXX_FULL_PATH} -stdlib=libstdc++" CC=$CK_CC_FULL_PATH LDFLAGS="-lstdc++"
+    INSTALL_PATH='@rpath' make CXX="${CK_CXX_FULL_PATH} ${CK_CXX_COMPILER_STDLIB}" CC=$CK_CC_FULL_PATH LDFLAGS="-lstdc++"
 else
     # NOTE: the obvious AR=$CK_AR won't work for this Makefile, because:
     #   (1) llvm-ar refuses to take -rs argument
