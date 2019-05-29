@@ -6,7 +6,7 @@
       "linux": 3,
       "win": 3
     },
-    "soft_file_universal": "000000000139.jpg",
+    "soft_file_universal": "000000000139.rgb8",
     "_soft_file_universal": "better create a metadata file for all preprocessed images with a relatively unique name, and use it for detection"
   },
   "deps": {},
