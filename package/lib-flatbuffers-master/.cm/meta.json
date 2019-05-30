@@ -36,7 +36,8 @@
     "linux"
   ], 
   "only_for_target_os_tags": [
-    "linux"
+    "linux",
+    "android"
   ], 
   "process_script": "install", 
   "soft_uoa": "lib.flatbuffers", 
