@@ -15,6 +15,7 @@
   }, 
   "deps": {
     "cmake": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "cmake",
       "sort": 10,
