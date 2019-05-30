@@ -8,6 +8,7 @@
       "PACKAGE_GIT": "YES", 
       "PACKAGE_SKIP_CLEAN_OBJ": "YES", 
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
+      "PACKAGE_SKIP_LINUX_MAKE_FOR_ANDROID": "YES",
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/google/flatbuffers.git"
     },
