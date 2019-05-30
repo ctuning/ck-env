@@ -26,10 +26,10 @@
       "local": "yes",
       "name": "COCO dataset (original)",
       "sort": 10,
-      "tags": "dataset,coco,val",
+      "tags": "dataset,coco",
       "update_tags_if_env" : {
-        "coco,2017":  [ { "INPUT_DATASET": "coco.2017" } ],
-        "coco,2014":  [ { "INPUT_DATASET": "coco.2014" } ]
+        "coco,2017,val": [ { "INPUT_DATASET": "coco.2017" } ],
+        "coco,2014,val": [ { "INPUT_DATASET": "coco.2014" } ]
       }
     },
     "lib-python-numpy": {
@@ -103,6 +103,15 @@
         "_SUBSET_VOLUME": "20"
       }
     },
+    "first.50": {
+      "extra_customize": {
+        "package_extra_name": " (first 50)"
+      },
+      "extra_env": {
+        "_SUBSET_OFFSET": "0",
+        "_SUBSET_VOLUME": "50"
+      }
+    },
     "full": {
       "extra_customize": {
         "package_extra_name": " (full)"
@@ -118,6 +127,15 @@
       },
       "extra_env": {
         "_SUBSET_OFFSET": "-20",
+        "_SUBSET_VOLUME": ""
+      }
+    },
+    "last.50": {
+      "extra_customize": {
+        "package_extra_name": " (last 50)"
+      },
+      "extra_env": {
+        "_SUBSET_OFFSET": "-50",
         "_SUBSET_VOLUME": ""
       }
     }
