@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #
-# See CK LICENSE for licensing details.
-# See CK COPYRIGHT for copyright details.
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
 #
 # Developer(s):
 # - Leo Gordon, 2018
@@ -23,7 +23,7 @@ echo ""
 
 ############################################################
 echo ""
-echo "Running cmake for FlatBuffers ..."
+echo "Running CMake for FlatBuffers ..."
 echo ""
 
 rm -rf "${FLATBUFFERS_BUILD_DIR}"

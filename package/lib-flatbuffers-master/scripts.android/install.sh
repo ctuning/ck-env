@@ -1,11 +1,12 @@
 #!/bin/bash
 
 #
-# See CK LICENSE for licensing details.
-# See CK COPYRIGHT for copyright details.
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
 #
 # Developer(s):
 # - Leo Gordon, 2018
+# - Ivan Osipov, 2019
 #
 
 # for example,
@@ -23,14 +24,12 @@ echo ""
 
 ############################################################
 echo ""
-echo "Running cmake for FlatBuffers ..."
+echo "Running CMake for FlatBuffers ..."
 echo ""
 
 rm -rf "${FLATBUFFERS_BUILD_DIR}"
 mkdir ${FLATBUFFERS_BUILD_DIR}
 cd ${FLATBUFFERS_BUILD_DIR}
-# NDK
-#. /home/ivan/CK/local/env/4a5ae3c16a48a4a4/env.sh
 
 CXX=${CK_CXX} \
 CC="${CK_CC} ${CK_COMPILER_FLAGS_OBLIGATORY} ${CK_CC_FLAGS_FOR_CMAKE} ${CK_CC_FLAGS_ANDROID_TYPICAL} ${EXTRA_FLAGS}" \
