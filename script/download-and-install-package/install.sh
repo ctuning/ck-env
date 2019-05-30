@@ -501,6 +501,12 @@ if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/post-install.sh" ] ;
   fi
 fi
 
+##### NB: to avoid confusion, treat "LINUX_MAKE" as the name of the program, not as "make for Linux"
+#
+if [ "$PACKAGE_SKIP_LINUX_MAKE_FOR_ANDROID" == "YES" ] && [ "$CK_TARGET_OS_ID" == "android" ] ; then
+    PACKAGE_SKIP_LINUX_MAKE=YES
+fi
+
 if [ "${PACKAGE_SKIP_LINUX_MAKE}" != "YES" ] ; then 
 
   ############################################################
