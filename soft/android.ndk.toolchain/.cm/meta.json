@@ -31,10 +31,6 @@
       "linux": "/opt/android-ndk-r19c/ndk-build",
       "win": "D:\\android-ndk-r19c\\ndk-build.cmd"
     },
-    "soft_version_cmd": {
-      "linux": "--version > $#filename#$ 2>&1",
-      "win": " --version > $#filename#$ 2>&1"
-    },
     "sort": 100
   },
   "soft_name": "Android NDK toolchain",

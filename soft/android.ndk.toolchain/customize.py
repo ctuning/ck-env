@@ -9,6 +9,22 @@
 
 import os
 
+
+obligatory_properties_filename = 'source.properties'    # assume it *must* be present in the distribution's root
+
+
+def get_ndk_root(input_path):
+    dirname, basename = os.path.split(input_path)
+
+    if basename=='':
+        return None                             # BailOut-: reached the root of the filesystem and haven't found anything
+    elif os.path.isdir(input_path):
+        properties_file_candidate = os.path.join(input_path, obligatory_properties_filename)
+        if os.path.isfile(properties_file_candidate):
+            return input_path                   # BailOut+: found the properties_file
+
+    return get_ndk_root(dirname)                # recursion
+
 ##############################################################################
 # customize directories to automatically find and register software
 
@@ -23,19 +39,29 @@ def dirs(i):
     return {'return':0, 'dirs':dirs}
 
 ##############################################################################
-# prepare env
 
 def version_cmd(i):
 
-    fp=i['full_path']
-    cmdx=i['cmd']
+    import re
+    import string
 
-    if ' ' in fp:
-       fp='"'+fp+'"'
+    full_path           = i['full_path']
+    ndk_root            = get_ndk_root(full_path)
+    properties_path     = os.path.join(ndk_root, obligatory_properties_filename)
 
-    cmd=fp+' '+cmdx
+    with open(properties_path, 'r') as properties_file:
+        output_lines = properties_file.readlines()
 
-    return {'return':0, 'cmd':cmd}
+    for line in output_lines:
+        match_obj   = re.match('Pkg.Revision \= (\d+)\.(\d+)', line)
+        if match_obj:
+            major_number    = match_obj.group(1)
+            minor_number    = match_obj.group(2)
+            minor_letter    = string.ascii_lowercase[int(minor_number)]
+            # In fact, we have detected major_number+minor_letter , however CK doesn't like letters in versions...
+            return {'return': 0, 'version': major_number+'.'+minor_number }
+
+    return {'return': 0, 'version': 'Unknown'}
 
 ##############################################################################
 # limit directories 
@@ -94,33 +120,6 @@ def limit(i):
 
     return {'return':0, 'list':drx}
 
-##############################################################################
-# parse software version
-
-def parse_version(i):
-
-    lst=i['output']
-
-    ver=''
-
-    fp=i.get('full_path','')
-
-    for q in lst:
-        q=q.strip()
-        if q!='':
-           j=q.lower().find(') ')
-           if j>0:
-              q=q[j+2:]
-              j=q.find(' ')
-              if j>0:
-                 q=q[:j]
-              ver=q
-              break
-
-    if ver=='' and fp.endswith('.cmd'):
-       ver='unused'
-
-    return {'return':0, 'version':ver}
 
 ##############################################################################
 # setup environment setup
