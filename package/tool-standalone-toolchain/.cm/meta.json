@@ -2,13 +2,13 @@
   "check_exit_status": "yes",
   "customize": {
     "install_env": {
+      "PACKAGE_VERSION": "24",
       "_API_LEVEL": "24",
       "_TARGET_ARCH": "arm64"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
-    "skip_file_check": "yes",
-    "version":"24"
+    "skip_file_check": "yes"
   },
   "deps": {
     "ndk-toolchain": {
@@ -70,12 +70,14 @@
     },
     "api.24": {
       "extra_env": {
-        "_API_LEVEL": "24"
+        "_API_LEVEL": "24",
+        "PACKAGE_VERSION": "24"
       }
     },
     "api.28": {
       "extra_env": {
-        "_API_LEVEL": "28"
+        "_API_LEVEL": "28",
+        "PACKAGE_VERSION": "28"
       }
     }
   }
