@@ -6,7 +6,9 @@
   "deps": {},
   "soft_name": "NDK standalone toolchain",
   "tags": [
+    "android",
     "ndk",
-    "standalone-toolchain"
+    "standalone-toolchain",
+    "tool"
   ]
 }

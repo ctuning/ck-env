@@ -55,18 +55,18 @@ def setup(i):
     env_prefix      = cus.get('env_prefix','')
     install_env     = cus.get('install_env', {})
 
-    path_install    = full_path if os.path.isdir(full_path) else os.path.dirname(full_path)
+    print("FULL_PATH="+full_path)
+
+    path_tc_root    = full_path if os.path.isdir(full_path) else os.path.dirname(full_path)
     env             = i.get('env', {})
-    env[env_prefix + '_DIR'] = path_install
+    env[env_prefix + '_ROOT'] = path_tc_root
+    env[env_prefix] = os.path.dirname(path_tc_root)
 
     ## Prepend the hidden variables with env_prefix
     #
     for varname in install_env.keys():
         if varname.startswith('_'):
             env[env_prefix + varname] = install_env[varname]
-
-        if varname in ['_X86', '_X86_64', '_ARM', '_ARM64', '_MIPS', '_MIPS64']:
-            env[env_prefix + varname + '_DIR'] = os.path.join(path_install, varname.lower()[1:])
 
     return {'return':0, 'bat':''}
 

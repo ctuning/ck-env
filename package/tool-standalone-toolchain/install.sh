@@ -8,51 +8,14 @@
 
 # PACKAGE_DIR
 # INSTALL_DIR
+#
+# internal variables defined by variations:
+#
+#   _TARGET_ARCH    ("arm64" by default)
+#   _API_LEVEL      ("24" by default -- corresponds to Android 7.0)
 
-if [ "${_ARM}" == "yes" ]
-then
-    ${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py \
-        --arch arm \
-        --api ${_API_VERSION} \
-        --install-dir ${INSTALL_DIR}/arm
-fi
+${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py \
+    --arch ${_TARGET_ARCH} \
+    --api ${_API_LEVEL} \
+    --install-dir ${INSTALL_DIR}/install
 
-if [ "${_ARM64}" == "yes" ]
-then
-    ${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py \
-        --arch arm64 \
-        --api ${_API_VERSION} \
-        --install-dir ${INSTALL_DIR}/arm64
-fi
-
-if [ "${_MIPS}" == "yes" ]
-then
-    ${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py \
-        --arch mips \
-        --api ${_API_VERSION} \
-        --install-dir ${INSTALL_DIR}/mips
-fi
-
-if [ "${_MIPS64}" == "yes" ]
-then
-    ${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py \
-        --arch mips64 \
-        --api ${_API_VERSION} \
-        --install-dir ${INSTALL_DIR}/mips64
-fi
-
-if [ "${_X86}" == "yes" ]
-then
-    ${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py \
-        --arch x86 \
-        --api ${_API_VERSION} \
-        --install-dir ${INSTALL_DIR}/x86
-fi
-
-if [ "${_X86_64}" == "yes" ]
-then
-    ${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py \
-        --arch x86_64 \
-        --api ${_API_VERSION} \
-        --install-dir ${INSTALL_DIR}/x86_64
-fi
