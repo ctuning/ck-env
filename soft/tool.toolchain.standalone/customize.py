@@ -55,8 +55,6 @@ def setup(i):
     env_prefix      = cus.get('env_prefix','')
     install_env     = cus.get('install_env', {})
 
-    print("FULL_PATH="+full_path)
-
     path_tc_root    = full_path if os.path.isdir(full_path) else os.path.dirname(full_path)
     env             = i.get('env', {})
     env[env_prefix + '_ROOT'] = path_tc_root
