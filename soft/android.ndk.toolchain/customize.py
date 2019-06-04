@@ -202,19 +202,7 @@ def setup(i):
     fp=cus.get('full_path','')
     pp4=''
 
-    ndk_ver=''
-    ndk_iver=0
-
-    j=fp.find('android-ndk-r')
-    if j>=0:
-       j1=fp.find('/', j+1)
-       j2=fp.find('\\', j+1)
-       if j2>=0 and j1>j2:
-          j1=j2
-       ndk_ver=fp[j+13:j1]
-
-       if len(ndk_ver)==3:
-          ndk_iver=ck.safe_int(ndk_ver[:2],0)
+    ndk_iver = i['version_split'][0]    # using the major_version that we have parsed from obligatory_properties_filename
 
     # Need to check that if path has spaces on Windows, then convert to non-space format, 
     # otherwise many issues with CMAKE ...
