@@ -1,0 +1,69 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "_API_VERSION": "24"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "skip_file_check": "yes",
+    "version":"24"
+  },
+  "deps": {
+    "ndk-toolchain": {
+      "local": "yes",
+      "name": "NDK toolchain",
+      "sort": 10,
+      "tags": "ndk,toolchain"
+    },
+    "python": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 100,
+      "tags": "compiler,lang-python"
+    }
+  },
+  "end_full_path_universal": "make",
+  "only_for_host_os_tags": [],
+  "only_for_target_os_tags": [],
+  "process_script": "install",
+  "soft_uoa": "tool.toolchain.standalone",
+  "suggested_path": "tool-standalone-toolchain",
+  "tags": [
+    "ndk",
+    "standalone-toolchain"
+  ],
+  "variations": {
+    "arm": {
+      "extra_env": {
+        "_ARM": "yes"
+      }
+    },
+    "arm64": {
+      "extra_env": {
+        "_ARM64": "yes"
+      }
+    },
+    "mips": {
+      "extra_env": {
+        "_MIPS": "yes"
+      }
+    },
+    "mips64": {
+      "extra_env": {
+        "_MIPS64": "yes"
+      }
+    },
+    "x86": {
+      "extra_env": {
+        "_X86": "yes"
+      }
+    },
+    "x86_64": {
+      "extra_env": {
+        "_X86_64": "yes"
+      }
+    }
+  }
+}

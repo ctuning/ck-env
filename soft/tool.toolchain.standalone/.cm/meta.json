@@ -1,0 +1,12 @@
+{
+  "auto_detect": "no",
+  "customize": {
+    "env_prefix": "CK_ENV_STANDALONE_TOOLCHAIN"
+  },
+  "deps": {},
+  "soft_name": "NDK standalone toolchain",
+  "tags": [
+    "ndk",
+    "standalone-toolchain"
+  ]
+}
