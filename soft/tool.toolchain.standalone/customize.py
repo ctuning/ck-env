@@ -60,6 +60,10 @@ def setup(i):
     env[env_prefix + '_ROOT'] = path_tc_root
     env[env_prefix] = os.path.dirname(path_tc_root)
 
+    cus['path_lib']     = os.path.join(path_tc_root, 'lib')
+    cus['path_bin']     = os.path.join(path_tc_root, 'bin')
+    cus['path_include'] = os.path.join(path_tc_root, 'include')
+
     ## Prepend the hidden variables with env_prefix
     #
     for varname in install_env.keys():
