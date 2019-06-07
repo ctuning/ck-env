@@ -4,7 +4,8 @@
     "install_env": {
       "PACKAGE_VERSION": "24",
       "_API_LEVEL": "24",
-      "_TARGET_ARCH": "arm64"
+      "_TARGET_ARCH": "arm64",
+      "_WHICH_STL": ""
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -78,6 +79,21 @@
       "extra_env": {
         "_API_LEVEL": "28",
         "PACKAGE_VERSION": "28"
+      }
+    },
+    "gnustl": {
+      "extra_env": {
+        "_WHICH_STL": "gnustl"
+      }
+    },
+    "libc++": {
+      "extra_env": {
+        "_WHICH_STL": "libc++"
+      }
+    },
+    "stlport": {
+      "extra_env": {
+        "_WHICH_STL": "stlport"
       }
     }
   }
