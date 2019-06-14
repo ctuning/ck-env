@@ -361,15 +361,19 @@ fi
 
 ############################################################
 if [ "${PACKAGE_PATCH}" == "YES" ] ; then
-  if [ -d ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID} ] ; then
-    echo ""
-    echo "Patching source directory ..."
+  echo ""
+  echo "Patching of the original code enabled"
+
+  DIRECTORY_WITH_PATCHES=${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID}
+
+  if [ -d "$DIRECTORY_WITH_PATCHES" ] ; then
+    echo "Directory $DIRECTORY_WITH_PATCHES exists, patching source directory ..."
 
     cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 
-    for i in ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID}/*
+    for i in ${DIRECTORY_WITH_PATCHES}/*
     do
-      echo "$i"
+      echo "Applying patch $i"
       patch -p1 < $i
 
       if [ "${?}" != "0" ] ; then
@@ -377,6 +381,8 @@ if [ "${PACKAGE_PATCH}" == "YES" ] ; then
         exit 1
       fi
     done
+  else
+    echo "Directory $DIRECTORY_WITH_PATCHES does not exist - not applying any patches"
   fi
 fi
 
