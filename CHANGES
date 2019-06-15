@@ -1,3 +1,6 @@
+* 2019.06.15 - [FGG] added "CK_COMPILER_FLAG_STD_GNU89" to Android NDK GCC and MILEPOS GCC
+                     https://groups.google.com/forum/#!msg/collective-knowledge/ZmhJy48XhDE/HmT7-18bBgAJ
+
 * 2019.03.30 - [FGG] added soft:android.ndk.toolchain (to support new Android NDKs with LLVM)
                      and packages compiler-llvm-7.0.1-universal & compiler-llvm-8.0.0-universal
 
