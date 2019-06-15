@@ -65,10 +65,16 @@ def setup(i):
         if varname.startswith('_'):
             env[env_prefix + varname] = install_env[varname]
 
+    dataset_source_name = 'dataset-source'
+    dataset_source_is_available = dataset_source_name in i['deps']
+
     def dep_env(dep, var): return i['deps'][dep]['dict']['env'].get(var)
 
     for varname in ['CK_ENV_DATASET_TYPE', 'CK_ENV_DATASET_ANNOTATIONS']:
-        env[varname] = dep_env('dataset-source', varname)
+        if dataset_source_is_available:
+            env[varname] = dep_env('dataset-source', varname)
+        else:
+            r=ck.inp({'text':'Dependency "{}" is not available, please enter the value for variable {}: '.format(dataset_source_name, varname)})
+            env[varname] = r['string'].strip()
 
     return {'return':0, 'bat':''}
-
