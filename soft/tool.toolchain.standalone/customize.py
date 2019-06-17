@@ -55,14 +55,30 @@ def setup(i):
     env_prefix      = cus.get('env_prefix','')
     install_env     = cus.get('install_env', {})
 
-    path_tc_root    = full_path if os.path.isdir(full_path) else os.path.dirname(full_path)
-    env             = i.get('env', {})
-    env[env_prefix + '_ROOT'] = path_tc_root
-    env[env_prefix] = os.path.dirname(path_tc_root)
+    hosd            = i['host_os_dict']
+    tosd            = i['target_os_dict']
+    winh            = hosd.get('windows_base','')
 
-    cus['path_lib']     = os.path.join(path_tc_root, 'lib')
-    cus['path_bin']     = os.path.join(path_tc_root, 'bin')
-    cus['path_include'] = os.path.join(path_tc_root, 'include')
+    toolchain_name  = tosd['android_toolchain']
+
+    path_tc_root    = full_path if os.path.isdir(full_path) else os.path.dirname(full_path)     # 'install/'
+    path_tools      = os.path.join(path_tc_root, toolchain_name, 'bin') # readelf etc
+    path_lib        = os.path.join(path_tc_root, toolchain_name, 'lib') # libc++_shared.so or libgnustl_shared.so
+    path_bin        = os.path.join(path_tc_root, 'bin')
+    path_include    = os.path.join(path_tc_root, 'include')
+
+    env                         = i.get('env', {})
+    env[env_prefix]             = os.path.dirname(path_tc_root)
+    env[env_prefix + '_ROOT']   = path_tc_root
+    env[env_prefix + '_TOOLS']  = path_tools
+    cus['path_lib']             = path_lib
+    cus['path_bin']             = path_bin
+    cus['path_include']         = path_include
+
+    if winh=='yes':
+        shell_script    = '\nset PATH=' + ';'.join([path_bin, path_tools, '%PATH%']) + '\n\n'
+    else:
+        shell_script    = '\nexport PATH=' + ':'.join([path_bin, path_tools, '$PATH']) + '\n\n'
 
     ## Prepend the hidden variables with env_prefix
     #
@@ -70,5 +86,5 @@ def setup(i):
         if varname.startswith('_'):
             env[env_prefix + varname] = install_env[varname]
 
-    return {'return':0, 'bat':''}
+    return {'return':0, 'bat':shell_script}
 
