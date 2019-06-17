@@ -20,7 +20,7 @@ if [ -n "$_WHICH_STL" ]; then
 	STL_OPT="--stl ${_WHICH_STL}"
 fi
 
-${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py ${STL_OPT} \
+${CK_ENV_COMPILER_PYTHON_FILE} ${CK_ANDROID_NDK_ROOT_DIR}/build/tools/make_standalone_toolchain.py ${STL_OPT} \
     --arch ${_TARGET_ARCH} \
     --api ${_API_LEVEL} \
     --install-dir ${INSTALL_DIR}/install
