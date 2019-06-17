@@ -262,6 +262,9 @@ def setup(i):
        env[ep]=pi
        env[ep+'_BIN']=p1
 
+       pxl_gnustl_static = os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_static.a')
+       pxl_gnustl_shared = os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_shared.so')
+
        if ndk_iver>=17:
           ck.out('')
           ck.out('NDK version '+str(ndk_iver)+' >= 17 - using LLVM C++ library ...')
@@ -271,28 +274,36 @@ def setup(i):
              return {'return':1, 'error':'LLVM C++ include path not found: '+pxi}
 
           env['CK_ENV_LIB_STDCPP_INCLUDE']=pxi
-          env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=' '
+          pxai=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++abi', 'include')
+          if not os.path.isdir(pxai):
+             return {'return':1, 'error':'LLVM C++ include path not found: '+pxai}
 
-          pxl=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++_static.a')
-          if not os.path.isfile(pxl):
-             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl}
+          env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=pxai
 
-          pxl2=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++abi.a')
-          if not os.path.isfile(pxl2):
-             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl2}
+          pxl_static=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++_static.a')
+          if not os.path.isfile(pxl_static):
+             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl_static}
 
-          env['CK_ENV_LIB_STDCPP_STATIC']=pxl+' '+pxl2
+          pxla_static=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++abi.a')
+          if not os.path.isfile(pxla_static):
+             return {'return':1, 'error':'LLVM C++ lib not found: '+pxla_static}
 
-          pxl=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++_shared.so')
-          if not os.path.isfile(pxl):
-             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl}
+          env['CK_ENV_LIB_STDCPP_STATIC']   = pxl_static+' '+pxla_static
 
-          env['CK_ENV_LIB_STDCPP_DYNAMIC']=pxl
+          pxl_shared=os.path.join(ndk_path, 'sources', 'cxx-stl', 'llvm-libc++', 'libs', abi, 'libc++_shared.so')
+          if not os.path.isfile(pxl_shared):
+             return {'return':1, 'error':'LLVM C++ lib not found: '+pxl_shared}
+
+          env['CK_ENV_LIB_STDCPP_DYNAMIC']  = pxl_shared
+
+          env['CK_ENV_LIB_GNUSTL_STATIC']   = pxl_gnustl_static
+          env['CK_ENV_LIB_GNUSTL_DYNAMIC']  = pxl_gnustl_shared
+
        else:
           env['CK_ENV_LIB_STDCPP_INCLUDE']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'include')
           env['CK_ENV_LIB_STDCPP_INCLUDE_EXTRA']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'include')
-          env['CK_ENV_LIB_STDCPP_STATIC']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_static.a')
-          env['CK_ENV_LIB_STDCPP_DYNAMIC']=os.path.join(ndk_path, 'sources', 'cxx-stl', 'gnu-libstdc++', ver, 'libs', abi, 'libgnustl_shared.so')
+          env['CK_ENV_LIB_STDCPP_STATIC']   = pxl_gnustl_static
+          env['CK_ENV_LIB_STDCPP_DYNAMIC']  = pxl_gnustl_shared
        cus['path_lib']=pi+sdirs+'lib'
        cus['path_include']=pi+sdirs+'include'
 
@@ -633,11 +644,14 @@ def setup(i):
 
     # Starting from NDK v16 there is no more usr/include path under platform dir,
     # so we have to add it as explicit -Isysroot/usr/include under ndk root dir.
-    x=env.get('CK_COMPILER_FLAGS_OBLIGATORY','')
 
-    include_dir = os.path.join(ndk_path, 'sysroot', 'usr', 'include')
-    if os.path.isdir(include_dir):
-        x += ' -I' + include_dir
+    sysroot_include_dir = os.path.join(ndk_path, 'sysroot', 'usr', 'include')
+    env['CK_ENV_LIB_SYSROOT_INCLUDE']=sysroot_include_dir
+
+    # Trying to form a correct ORDER of include directories to satisfy the #include_next mechanism:
+    #
+    env['CK_COMPILER_FLAGS_OBLIGATORY'] += ' -I'+env['CK_ENV_LIB_STDCPP_INCLUDE']+' -I'+env['CK_ENV_LIB_SYSROOT_INCLUDE']
+    if os.path.isdir(sysroot_include_dir):
         asm_include_dirs = {
             'arm64': 'aarch64-linux-android',
             'arm': 'arm-linux-androideabi',
@@ -647,8 +661,7 @@ def setup(i):
             'mips64': 'mips64el-linux-android',
         }
         if arch in asm_include_dirs:
-            x += ' -I' + os.path.join(include_dir, asm_include_dirs[arch])
-    env['CK_COMPILER_FLAGS_OBLIGATORY']=x
+            env['CK_COMPILER_FLAGS_OBLIGATORY'] += ' -I' + os.path.join(sysroot_include_dir, asm_include_dirs[arch])
 
     # Update global
     env['CK_COMPILER_TOOLCHAIN_NAME']='clang'
