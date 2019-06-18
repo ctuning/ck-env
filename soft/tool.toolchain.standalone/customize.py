@@ -76,9 +76,9 @@ def setup(i):
     cus['path_include']         = path_include
 
     if winh=='yes':
-        shell_script    = '\nset PATH=' + ';'.join([path_bin, path_tools, '%PATH%']) + '\n\n'
+        shell_script    = '\nset PATH=' + ';'.join([path_bin, '%PATH%']) + '\n\n'
     else:
-        shell_script    = '\nexport PATH=' + ':'.join([path_bin, path_tools, '$PATH']) + '\n\n'
+        shell_script    = '\nexport PATH=' + ':'.join([path_bin, '$PATH']) + '\n\n'
 
     ## Prepend the hidden variables with env_prefix
     #
