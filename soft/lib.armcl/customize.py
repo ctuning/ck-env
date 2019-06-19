@@ -100,7 +100,6 @@ def setup(i):
     tbits=tosd.get('bits','')
 
     envp=cus.get('env_prefix','')
-    pi=cus.get('path_install','')
 
     hosd=i.get('host_os_dict',{})
     sdirs=hosd.get('dir_sep','')
@@ -109,38 +108,41 @@ def setup(i):
 
     fp=cus.get('full_path','')
 
-    p1=os.path.dirname(fp)
-    pi=os.path.dirname(p1)
+    p1, pname = os.path.split(fp)
+    pi        = os.path.dirname(p1)
+    inst_root = os.path.dirname(pi)
 
-    ep=cus['env_prefix']
-    env[ep]=pi
-
-    pname=os.path.basename(fp)
     j=pname.rfind('.')
     if j>0:
        pname=pname[:j]
 
-    # Get short name for -l
-    spname=pname
-    if pname.startswith('lib'):
-       spname=pname[3:]
+    ep=cus['env_prefix']
+    env[ep]=inst_root
 
-    plib=pi+sdirs+'lib'
-    cus['path_lib']=plib
+    path_lib=os.path.join(inst_root, 'install', 'lib')
+    cus['path_lib']=path_lib
 
-    pinclude=pi+sdirs+'include'
-    cus['path_include']=pinclude
-    cus['path_includes']=[pinclude]
+    path_include=os.path.join(inst_root, 'install', 'include')
+    cus['path_include']=path_include
+    cus['path_includes']=[path_include]
 
-    psrc=os.path.join(os.path.dirname(pi),'src')
+    psrc=os.path.join(inst_root,'src')
     if os.path.isdir(psrc):
-       env[ep+'_SRC']=psrc
-       cus['path_includes'].append(psrc)
+        env[ep+'_SRC']=psrc
+        cus['path_includes'].append(psrc)
 
-    psrci=os.path.join(psrc,'include')
-    if os.path.isdir(psrci):
-       env[ep+'_SRC_INCLUDE']=psrci
-       cus['path_includes'].append(psrci)
+        psrci=os.path.join(psrc,'include')
+        if os.path.isdir(psrci):
+            env[ep+'_SRC_INCLUDE']=psrci
+            cus['path_includes'].append(psrci)
+
+        pkernels=os.path.join(psrc,'src', 'core', 'CL', 'cl_kernels/')
+        if os.path.isdir(pkernels):
+            env[ep+'_CL_KERNELS']=pkernels
+
+        stub_dir=os.path.join(psrc, 'build', 'opencl-1.2-stubs')
+        if os.path.isdir(stub_dir):
+            env[ep+'_CL_STUB_RPATH_LINK'] = '-Wl,--rpath-link=' + stub_dir
 
     ptests=os.path.join(psrc,'tests')
     if os.path.isdir(ptests):
@@ -151,10 +153,6 @@ def setup(i):
     if os.path.isdir(putils):
        env[ep+'_UTILS']=putils
        cus['path_includes'].append(putils)
-
-    pkernels=os.path.join(os.path.dirname(pi),'src/src/core/CL/cl_kernels/')
-    if os.path.isdir(pkernels):
-       env[ep+'_CL_KERNELS']=pkernels
 
     ################################################################
     if win=='yes':
@@ -175,26 +173,26 @@ def setup(i):
     if r['return']>0: return r
     s += r['script']
 
-    x=os.path.join(plib, pname+sext)
+    for x in (pname, pname+'-static'):
+      if os.path.isfile(os.path.join(path_lib, x)+sext):
+          cus['static_lib']           = x + sext
+          env[ep+'_STATIC_NAME']      = x + sext
+          trunc_name = x[3:] if x.startswith('lib') else x
+          env[ep+'_LFLAG']            = '-l'+trunc_name
+
+    for x in (pname+'_core', pname+'_core-static'):
+      if os.path.isfile(os.path.join(path_lib, x)+sext):
+          env[ep+'_STATIC_CORE_NAME'] = x + sext
+          trunc_name = x[3:] if x.startswith('lib') else x
+          env[ep+'_LFLAG_CORE']       = '-l'+trunc_name
+
+    x=os.path.join(path_lib, pname+dext)
     if os.path.isfile(x):
-       cus['static_lib']=pname+sext
-       env[ep+'_STATIC_NAME']=pname+sext
-       env[ep+'_LFLAG']='-l'+spname
+        cus['dynamic_lib']            = pname + dext
+        env[ep+'_DYNAMIC_NAME']       = pname + dext
 
-    x=os.path.join(plib, pname+'_core'+sext)
+    x=os.path.join(path_lib, pname+'_core'+dext)
     if os.path.isfile(x):
-       env[ep+'_STATIC_CORE_NAME']=pname+'_core'+sext
-       env[ep+'_LFLAG_CORE']='-l'+spname+'_core'
-
-    x=os.path.join(plib, pname+dext)
-    if os.path.isfile(x):
-       cus['dynamic_lib']=pname+dext
-       env[ep+'_DYNAMIC_NAME']=pname+dext
-
-    x=os.path.join(plib, pname+'_core'+dext)
-    if os.path.isfile(x):
-       env[ep+'_DYNAMIC_CORE_NAME']=pname+'_core'+dext
-
-
+        env[ep+'_DYNAMIC_CORE_NAME']  = pname + '_core' + dext
 
     return {'return':0, 'bat':s}
