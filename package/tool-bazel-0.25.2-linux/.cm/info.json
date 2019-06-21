@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "5449492b471e073d", 
+  "backup_module_uid": "1dc07ee0f4742028", 
+  "backup_module_uoa": "package", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2019-06-21T12:07:19.622035", 
+    "version": [
+      "1", 
+      "9", 
+      "8", 
+      "1"
+    ]
+  }, 
+  "data_name": "tool-bazel-0.25.2-linux"
+}
