@@ -1,0 +1,113 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "CK_IMAGE_FILE": "",
+      "PACKAGE_VERSION": "2012",
+      "_INPUT_SQUARE_SIDE": "224",
+      "_NEW_EXTENSION": "rgb8",
+      "_SUBSET_FOF": "image_list.txt",
+      "_SUBSET_OFFSET": "0",
+      "_SUBSET_VOLUME": ""
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "skip_file_check": "yes"
+  },
+  "deps": {
+    "dataset-source": {
+      "enable_if_env": [
+        {
+          "CK_IMAGE_FILE": [
+            ""
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "ImageNet dataset (original)",
+      "sort": 10,
+      "tags": "dataset,imagenet,original"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "Python TensorFlow library",
+      "sort": 110,
+      "tags": "lib,tensorflow,vprebuilt,v1.12"
+    },
+    "tensorflow-api": {
+      "local": "yes",
+      "name": "TensorFlow API",
+      "sort": 120,
+      "tags": "tensorflow,api,r1.12.0"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 100,
+      "tags": "compiler,lang-python"
+    }
+  },
+  "end_full_path_universal": "ILSVRC2012_val_00000001.JPEG",
+  "only_for_host_os_tags": [],
+  "only_for_target_os_tags": [],
+  "process_script": "shell_wrapper",
+  "soft_uoa": "dataset.imagenet.preprocessed",
+  "suggested_path": "dataset-imagenet-preprocessed",
+  "tags": [
+    "image-classification",
+    "dataset",
+    "imagenet",
+    "2012",
+    "val",
+    "preprocessed",
+    "using-tf"
+  ],
+  "variations": {
+    "external_file": {
+      "extra_customize": {
+        "package_name": "Pre-processed single image ($<<CK_IMAGE_FILE>>$)"
+      },
+      "extra_env": {
+        "_SUBSET_OFFSET": "0",
+        "_SUBSET_VOLUME": ""
+      }
+    },
+    "first.20": {
+      "extra_customize": {
+        "package_extra_name": " (first 20)"
+      },
+      "extra_env": {
+        "_SUBSET_OFFSET": "0",
+        "_SUBSET_VOLUME": "20"
+      }
+    },
+    "full": {
+      "extra_customize": {
+        "package_extra_name": " (full)"
+      },
+      "extra_env": {
+        "_SUBSET_OFFSET": "0",
+        "_SUBSET_VOLUME": ""
+      }
+    },
+    "last.20": {
+      "extra_customize": {
+        "package_extra_name": " (last 20)"
+      },
+      "extra_env": {
+        "_SUBSET_OFFSET": "-20",
+        "_SUBSET_VOLUME": ""
+      }
+    },
+    "side.224": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "224"
+      }
+    },
+    "side.1200": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "1200"
+      }
+    }
+  }
+}
