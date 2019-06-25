@@ -52,7 +52,7 @@
   "only_for_target_os_tags": [],
   "process_script": "shell_wrapper",
   "soft_uoa": "dataset.imagenet.preprocessed",
-  "suggested_path": "dataset-imagenet-preprocessed",
+  "suggested_path": "dataset-imagenet-preprocessed-using-tensorflow",
   "tags": [
     "image-classification",
     "dataset",

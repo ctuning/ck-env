@@ -61,14 +61,15 @@
   "only_for_target_os_tags": [], 
   "process_script": "shell_wrapper", 
   "soft_uoa": "dataset.imagenet.preprocessed", 
-  "suggested_path": "dataset-imagenet-preprocessed",
+  "suggested_path": "dataset-imagenet-preprocessed-using-scipy-PIL",
   "tags": [
     "image-classification",
     "dataset", 
     "imagenet",
     "2012",
     "val",
-    "preprocessed"
+    "preprocessed",
+    "using-scipy-PIL"
   ], 
   "variations": {
     "external_file": {
