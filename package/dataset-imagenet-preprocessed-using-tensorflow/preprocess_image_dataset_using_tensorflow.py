@@ -13,12 +13,15 @@ def load_image(image_path,            # Full path to processing image
                target_size            # Desired size of resulting image
                ):
 
-  image_raw     = tf.read_file(image_path)
-  image_tensor  = tf.image.decode_image(image_raw)
+    image_raw     = tf.read_file(image_path)
+    image_tensor  = tf.image.decode_image(image_raw)
 
-  preprocessed_float_numpy  = prep.preprocess_image(image_tensor, target_size, target_size).numpy()
+    if image_tensor.get_shape()[2]==1:
+        image_tensor = tf.image.grayscale_to_rgb( image_tensor )
 
-  return preprocessed_float_numpy
+    preprocessed_float_numpy  = prep.preprocess_image(image_tensor, target_size, target_size).numpy()
+
+    return preprocessed_float_numpy
 
 
 def preprocess_files(selected_filenames, source_dir, destination_dir, square_side, data_type, new_file_extension):
