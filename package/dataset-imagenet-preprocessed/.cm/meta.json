@@ -9,6 +9,7 @@
         "_SUBSET_VOLUME": "",
         "_SUBSET_FOF": "image_list.txt",
         "_NEW_EXTENSION": "rgb8",
+        "_DATA_TYPE": "uint8",
         "PACKAGE_VERSION": "2012",
         "CK_IMAGE_FILE": ""
     }, 

@@ -16,11 +16,9 @@ def load_image(image_path,            # Full path to processing image
   image_raw     = tf.read_file(image_path)
   image_tensor  = tf.image.decode_image(image_raw)
 
-  preprocessed_float = prep.preprocess_for_eval(image_tensor, target_size, target_size, target_size)
+  preprocessed_float_numpy  = prep.preprocess_image(image_tensor, target_size, target_size).numpy()
 
-  preprocessed_numpy = tf.cast(preprocessed_float, tf.uint8).numpy()
-
-  return preprocessed_numpy
+  return preprocessed_float_numpy
 
 
 def preprocess_files(selected_filenames, source_dir, destination_dir, square_side, data_type, new_file_extension):
