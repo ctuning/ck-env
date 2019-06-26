@@ -82,6 +82,15 @@
         "_SUBSET_VOLUME": "20"
       }
     },
+    "first.50": {
+      "extra_customize": {
+        "package_extra_name": " (first 50)"
+      },
+      "extra_env": {
+        "_SUBSET_OFFSET": "0",
+        "_SUBSET_VOLUME": "50"
+      }
+    },
     "full": {
       "extra_customize": {
         "package_extra_name": " (full)"
