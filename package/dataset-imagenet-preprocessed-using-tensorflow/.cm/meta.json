@@ -6,7 +6,7 @@
       "PACKAGE_VERSION": "2012",
       "_DATA_TYPE": "float32",
       "_INPUT_SQUARE_SIDE": "224",
-      "_NEW_EXTENSION": "rgb8",
+      "_NEW_EXTENSION": "rgbf32",
       "_SUBSET_FOF": "image_list.txt",
       "_SUBSET_OFFSET": "0",
       "_SUBSET_VOLUME": ""
