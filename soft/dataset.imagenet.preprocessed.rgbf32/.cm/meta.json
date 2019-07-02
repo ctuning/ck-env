@@ -1,0 +1,19 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "env_prefix": "CK_ENV_DATASET_IMAGENET_PREPROCESSED",
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 3
+    },
+    "soft_file_universal": "ILSVRC2012_val_00000001.rgbf32"
+  },
+  "deps": {},
+  "soft_name": "ImageNet dataset (preprocessed float32)",
+  "tags": [
+    "dataset",
+    "imagenet",
+    "preprocessed",
+    "rgbf32"
+  ]
+}
