@@ -1,0 +1,17 @@
+#! /bin/bash
+
+# Collective Knowledge (CK)
+#
+# See CK LICENSE.txt for licensing details.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# Developers: Grigori Fursin, Flavio Vella, Anton Lokhmotov.
+
+# FIXME: Would userspace or ondemand be more appropriate here? Or leaving just the LITTLE cores (0..3) on?
+export governor=ondemand
+
+echo "    Setting CPU 0..3 governor policy to '$governor' ..."
+sudo /usr/bin/cpufreq-set --governor $governor --cpu 0
+
+echo "    Setting CPU 4..7 governor policy to '$governor' ..."
+sudo /usr/bin/cpufreq-set --governor $governor --cpu 4
