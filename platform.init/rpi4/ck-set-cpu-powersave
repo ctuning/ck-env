@@ -7,11 +7,11 @@
 #
 # Developers: Grigori Fursin, Flavio Vella, Anton Lokhmotov.
 
-# FIXME: Would userspace or ondemand be more appropriate here? Or leaving just the LITTLE cores (0..3) on?
-export governor=ondemand
+export governor=powersave
 
-echo "    Setting CPU 0..3 governor policy to '$governor' ..."
-sudo /usr/bin/cpufreq-set --governor $governor --cpu 0
+export CK_CPU_FREQ_GOVERNOR=$governor
+export CK_CPU_FREQ_FILE=cpuinfo_min_freq
+export CK_CPU_ONLINE=1
 
-echo "    Setting CPU 4..7 governor policy to '$governor' ..."
-sudo /usr/bin/cpufreq-set --governor $governor --cpu 4
+cd "$(dirname "${BASH_SOURCE[0]}")"
+. ck-set-cpu-online-and-frequency

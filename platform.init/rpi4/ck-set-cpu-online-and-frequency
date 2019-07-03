@@ -9,9 +9,9 @@
 # Developer: Grigori Fursin
 #
 
-governer=powersave
-if [ "$CK_CPU_FREQ_GOVERNER" != "" ]; then
- governer=$CK_CPU_FREQ_GOVERNER
+governor=powersave
+if [ "$CK_CPU_FREQ_GOVERNOR" != "" ]; then
+ governor=$CK_CPU_FREQ_GOVERNOR
 fi
 
 freqfile=cpuinfo_max_freq
@@ -29,7 +29,7 @@ if [ "$online" == "1" ] ; then
 
   for cpudir in /sys/devices/system/cpu/cpu*
   do
-    if [ -f "$cpudir/online" ] ; then
+    if [ -f "$cpudir/cpu_capacity" ] ; then
       # Check individual cores
       XONLINE=$online
 
@@ -41,7 +41,7 @@ if [ "$online" == "1" ] ; then
 
       echo "      * CPU $CPU_NUM = ${XONLINE}"
 
-      echo $XONLINE | sudo tee $cpudir/online >/dev/null
+      #echo $XONLINE | sudo tee $cpudir/online >/dev/null
     fi
   done
 fi
@@ -53,13 +53,13 @@ do
 
   if [ -d "$cpudir/cpufreq" ] && 
      [ -f "$cpudir/cpufreq/scaling_governor" ] &&
-     [ -f "$cpudir/online" ] && 
+     [ -f "$cpudir/cpu_capacity" ] && 
      [ "${!VAR_CPU_NUM}" != "0" ]; then
 
      echo "*** Processing $cpudir ..."
 
-     echo "    Setting $governer state ..."
-     echo $governer | sudo tee $cpudir/cpufreq/scaling_governor
+     echo "    Setting $governor state ..."
+     echo $governor | sudo tee $cpudir/cpufreq/scaling_governor
 
      frequency=$(cat $cpudir/cpufreq/$freqfile)
      if [ "$1" != "" ]; then
@@ -69,7 +69,6 @@ do
         frequency=$CK_CPU_FREQ
      fi
 
-
      echo "    Setting min/max frequency=$frequency ..."
      echo $frequency | sudo tee $cpudir/cpufreq/scaling_max_freq
      echo $frequency | sudo tee $cpudir/cpufreq/scaling_min_freq
@@ -77,9 +76,9 @@ do
 
      echo "$(cat $cpudir/cpufreq/scaling_cur_freq)"
 
-     if [ "$online" == "0" ]; then
-        echo "    Bringing CPU offline ..."
-        echo $online | sudo tee $cpudir/online
-     fi
+#     if [ "$online" == "0" ]; then
+#        echo "    Bringing CPU offline ..."
+#        echo $online | sudo tee $cpudir/online
+#     fi
   fi
 done
