@@ -44,12 +44,16 @@ def guentherize(img, out_height, out_width, data_type, guentherization_mode, cro
                 h = int(out_height * width / new_width)
             elif guentherization_mode==2:
                 h = int(height * new_width / width)
+            elif guentherization_mode==3:
+                h = int(new_height * height / width)
         else:
             h = new_height
             if guentherization_mode==1:
                 w = int(out_width * height / new_height)
             elif guentherization_mode==2:
                 w = int(width * new_height / height)
+            elif guentherization_mode==3:
+                w = int(new_width * width / height)
 
         img = img.resize((w, h))
         return img

@@ -83,18 +83,27 @@
       }
     },
     "guentherized.0": {
+      "comment": "Simplistic crop-and-resize or resize-and-crop",
       "extra_env": {
         "_GUENTHERIZE": "0"
       }
     },
     "guentherized.1": {
+      "comment": "Suggested by Guenther Schmuelling",
       "extra_env": {
         "_GUENTHERIZE": "1"
       }
     },
     "guentherized.2": {
+      "comment": "Suggested by Leo Gordon",
       "extra_env": {
         "_GUENTHERIZE": "2"
+      }
+    },
+    "guentherized.3": {
+      "comment": "Suggested by ClarkChin08 in https://github.com/mlperf/inference/pull/243",
+      "extra_env": {
+        "_GUENTHERIZE": "3"
       }
     },
     "crop.875": {
