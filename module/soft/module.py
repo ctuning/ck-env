@@ -274,6 +274,8 @@ def setup(i):
 
               (env)               - update default env with this dict
 
+              (ienv)              - supply extra install_env overrides via this mechanism
+
               (deps)              - list with dependencies (in special format, possibly resolved (from package))
 
               (install_path)      - path with soft is installed
@@ -508,6 +510,12 @@ def setup(i):
 
     ucus=i.get('customize',{})
     cus.update(ucus)
+
+    ienv=i.get('ienv',{}) # override install_env using command-line options
+    for ienv_key in ienv:
+      if 'install_env' not in cus: # manual vivification
+        cus['install_env'] = {}
+      cus['install_env'][ienv_key] = ienv[ienv_key]
 
     pi1=i.get('install_path','')
     if pi1!='': pi=pi1
@@ -1556,9 +1564,14 @@ def check(i):
     ########################################################################
     # Check env from input
     envx=copy.deepcopy(i.get('env',{}))
+    ienv=copy.deepcopy(i.get('install_env',i.get('ienv',{})))   # parse install_env overrides out of install_env{}, install_env.XXX and ienv.XXX CLI options
     for q in i:
         if q.startswith('env.'):
-           envx[q[4:]]=i[q]
+           envx[q[len('env.'):]]=i[q]
+        elif q.startswith('ienv.'):
+           ienv[q[len('ienv.'):]]=i[q]
+        elif q.startswith('install_env.'):
+           ienv[q[len('install_env.'):]]=i[q]
 
     # Check if restricts dependency to a given host or target OS
     rx=check_target({'dict':cus,
@@ -2008,6 +2021,7 @@ def check(i):
         'target_device_id':tdid,
         'deps':deps,
         'env':envx,
+        'ienv':ienv,
         'env_data_uoa':env_data_uoa,
         'soft_name':dname,
         'soft_add_name':en,
