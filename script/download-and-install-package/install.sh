@@ -362,28 +362,43 @@ fi
 ############################################################
 if [ "${PACKAGE_PATCH}" == "YES" ] ; then
   echo ""
-  echo "Patching of the original code enabled"
+  echo "[Patcher] Patching of the original code enabled"
 
-  DIRECTORY_WITH_PATCHES=${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID}
+    # Only set to default if it was undefined,
+    # but leave it empty if it was defined and empty:
+    #
+  if [ "${PACKAGE_PATCH_LIST+set}" != "set" ]; then
+    PACKAGE_PATCH_LIST='${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID}/*'
+  fi
 
-  if [ -d "$DIRECTORY_WITH_PATCHES" ] ; then
-    echo "Directory $DIRECTORY_WITH_PATCHES exists, patching source directory ..."
+  if [ -n "${PACKAGE_PATCH_LIST}" ]; then
+    echo "[Patcher] Original patch patterns: ${PACKAGE_PATCH_LIST}"
+
+    RESOLVED_PATCH_FILENAMES=`eval echo ${PACKAGE_PATCH_LIST}`
+    echo "[Patcher] Resolved patch filenames: ${RESOLVED_PATCH_FILENAMES}"
 
     cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 
-    for i in ${DIRECTORY_WITH_PATCHES}/*
+    for patch_filename in ${RESOLVED_PATCH_FILENAMES}
     do
-      echo "Applying patch $i"
-      patch -p1 < $i
+      if [ -f "$patch_filename" ]; then
+        echo "[Patcher] Applying patch $patch_filename"
+        patch -p1 < $patch_filename
 
-      if [ "${?}" != "0" ] ; then
-        echo "Error: patching failed!"
-        exit 1
+        if [ "${?}" != "0" ] ; then
+          echo "[Patcher] Error: patching failed!"
+          exit 1
+        fi
+      else
+        echo "[Patcher] Name $patch_filename did not resolve to a file. This may or may not be an error"
       fi
     done
   else
-    echo "Directory $DIRECTORY_WITH_PATCHES does not exist - not applying any patches"
+    echo "[Patcher] Empty PACKAGE_PATCH_LIST ==> nothing to do here, bailing out"
   fi
+else
+  echo ""
+  echo "[Patcher] Patching of the original code disabled"
 fi
 
 cd ${INSTALL_DIR}
