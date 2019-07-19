@@ -18,24 +18,33 @@ def version_cmd(i):
     ck                      = i['ck_kernel']
     cus                     = i['customize']
 
-    version_recursive_import= cus.get('version_recursive_import', False)
-    version_module_name     = cus.get('version_module_name', '__init__')
-    version_variable_name   = cus.get('version_variable_name', '__version__')
+    detect_version_externally   = cus.get('detect_version_externally', 'no') == 'yes'
+    version_variable_name       = cus.get('version_variable_name', '__version__')
 
-    if version_recursive_import:
-        sys.path.insert(0, site_dir)    # temporarily prepend site_dir to allow the potential recursive imports to work
-    rx=ck.load_module_from_path({'path':path_without_init_py, 'module_code_name':version_module_name, 'skip_init':'yes'})
-    if version_recursive_import:
-        sys.path.pop(0)                 # restore the original module search path
+    if detect_version_externally:
+        current_python  = sys.executable;
+        version_cmd     = '{} -c "import sys; sys.path.insert(0,\'{}\'); import {}; print({}.{})" >$#filename#$'.format(
+            current_python, site_dir, package_name, package_name, version_variable_name);
 
-    if rx['return']==0:
-        loaded_package  = rx['code']
-        version_string  = getattr(loaded_package, version_variable_name)
+        return {'return':0, 'cmd':version_cmd}
     else:
-        ck.out('Failed to import package '+package_name+' : '+rx['error'])
-        version_string  = ''
+        version_recursive_import  = cus.get('version_recursive_import', 'no') == 'yes'
+        version_module_name       = cus.get('version_module_name', '__init__')
 
-    return {'return':0, 'cmd':'', 'version':version_string}
+        if version_recursive_import:
+            sys.path.insert(0, site_dir)    # temporarily prepend site_dir to allow the potential recursive imports to work
+        rx=ck.load_module_from_path({'path':path_without_init_py, 'module_code_name':version_module_name, 'skip_init':'yes'})
+        if version_recursive_import:
+            sys.path.pop(0)                 # restore the original module search path
+
+        if rx['return']==0:
+            loaded_package  = rx['code']
+            version_string  = getattr(loaded_package, version_variable_name)
+        else:
+            ck.out('Failed to import package '+package_name+' : '+rx['error'])
+            version_string  = ''
+
+        return {'return':0, 'cmd':'', 'version':version_string}
 
 ##############################################################################
 
