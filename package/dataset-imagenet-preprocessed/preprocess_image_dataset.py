@@ -16,10 +16,10 @@ def resize_img(img, target_size):
 
 
 # Crop the central region of the image
-def crop_img(img, crop_percentage):
-  if crop_percentage > 0 and crop_percentage < 1.0:
-    new_w = int(img.shape[0] * crop_percentage)
-    new_h = int(img.shape[1] * crop_percentage)
+def crop_img(img, crop_rate):
+  if crop_rate > 0 and crop_rate < 1.0:
+    new_w = int(img.shape[0] * crop_rate)
+    new_h = int(img.shape[1] * crop_rate)
     offset_w = int((img.shape[0] - new_w)/2)
     offset_h = int((img.shape[1] - new_h)/2)
     return img[offset_w:new_w+offset_w, offset_h:new_h+offset_h, :]
@@ -36,24 +36,28 @@ def guentherize(img, out_height, out_width, data_type, guentherization_mode, cro
 
     def resize_with_aspectratio(img):
         width, height = img.size
-        new_height = int(100. * out_height / crop_percentage)
-        new_width = int(100. * out_width / crop_percentage)
+        new_height = int(100. * out_height / crop_percentage)   # intermediate oversized image from which to crop
+        new_width = int(100. * out_width / crop_percentage)     # ---------------------- ,, ---------------------
         if height > width:
             w = new_width
             if guentherization_mode==1:
                 h = int(out_height * width / new_width)
             elif guentherization_mode==2:
-                h = int(height * new_width / width)
+                h = int(new_width * height / width)
             elif guentherization_mode==3:
                 h = int(new_height * height / width)
+            elif guentherization_mode==4:
+                h = int(new_height * width / height)
         else:
             h = new_height
             if guentherization_mode==1:
                 w = int(out_width * height / new_height)
             elif guentherization_mode==2:
-                w = int(width * new_height / height)
+                w = int(new_height * width / height)
             elif guentherization_mode==3:
                 w = int(new_width * width / height)
+            elif guentherization_mode==4:
+                w = int(new_width * height / width)
 
         img = img.resize((w, h))
         return img

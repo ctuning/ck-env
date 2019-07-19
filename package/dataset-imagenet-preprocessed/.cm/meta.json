@@ -106,6 +106,12 @@
         "_GUENTHERIZE": "3"
       }
     },
+    "guentherized.4": {
+      "comment": "Suggested by Leo Gordon",
+      "extra_env": {
+        "_GUENTHERIZE": "4"
+      }
+    },
     "crop.875": {
       "extra_env": {
         "_CROP_FACTOR": "87.5"
