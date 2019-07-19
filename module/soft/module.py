@@ -2147,8 +2147,6 @@ def get_version(i):
              cmd+=fp+' '+soft_version_cmd
 
     if ver=='':
-       if 'parse_version' not in dir(cs):
-          return {'return':22, 'error':'do not know how to detect version of a given software'}
 
        # Generate tmp file
        rx=ck.gen_tmp_file({})
@@ -2215,15 +2213,20 @@ def get_version(i):
           for q in lst:
               ck.out('         '+q)
 
-       # Calling customized script to parse version
-       ii={'output':lst,
-           'host_os_dict':hosd,
-           'full_path':fp,
-           'ck_kernel':ck}
-       rx=cs.parse_version(ii)
-       if rx['return']>0 and rx['return']!=16: return rx
+       if 'parse_version' in dir(cs):
+         # Calling customized script to parse version
+         ii={'output':lst,
+             'host_os_dict':hosd,
+             'full_path':fp,
+             'ck_kernel':ck}
+         rx=cs.parse_version(ii)
+         if rx['return']>0 and rx['return']!=16: return rx
 
-       ver=rx.get('version','')
+         ver=rx.get('version','')
+
+       else:
+          ck.out('parse_version() method is not defined => attempting to parse it trivially')
+          ver = lst[0].strip()
 
     if ver=='':
        return {'return':16, 'error':'version was not detected'}
