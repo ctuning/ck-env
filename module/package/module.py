@@ -511,6 +511,7 @@ def install(i):
     if required_variations:
         extra_env_from_variations = {}
         extra_cus_from_variations = {}
+        extra_tags_from_variations = []
 
         supported_variations = d.get('variations', {})
         for req_variation in required_variations:
@@ -523,12 +524,17 @@ def install(i):
 
             extra_cus = supported_variations[req_variation].get('extra_customize',{}) # FIXME: replicate the collision-avoidance for extra_cus, similar to the one above
 
+            extra_tagz = supported_variations[req_variation].get('extra_tags',[])     # FIXME: replicate the collision-avoidance for extra_tagz
+            if extra_tagz and type(extra_tagz)!=list:
+              extra_tagz=extra_tagz.split(',')
 
             extra_env_from_variations.update( extra_env )   # merge of one particular variation
             extra_cus_from_variations.update( extra_cus )
+            extra_tags_from_variations.extend( extra_tagz )
 
         pr_env.update( extra_env_from_variations )  # merge of all variations
         cus.update( extra_cus_from_variations )
+        tags.extend( extra_tags_from_variations )
 
     # Conservatively setting cus['version'] to PACKAGE_VERSION only if it was previously unset.
     # FIXME: review the desired precedence between 'version' and PACKAGE_VERSION , taking into account that
