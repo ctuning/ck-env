@@ -85,14 +85,19 @@ def load_image(image_path,            # Full path to processing image
                intermediate_size = 0, # Scale to this size then crop to target size
                crop_percentage = 0,   # Crop to this percentage then scale to target size
                data_type = 'uint8',   # Data type to store
-               guentherization_mode = 0, # 0 = Off, 1 = Mimic Guenther Schuelling's preprocessing steps, 2 = Leo's fix
-               convert_to_bgr = False # Swap image channel RGB -> BGR
+               guentherization_mode = 0,  # 0 = Off, 1 = Mimic Guenther Schuelling's preprocessing steps, 2 = Leo's fix
+               convert_to_bgr = False,    # Swap image channel RGB -> BGR
+               pilload = False            # use pillow to load images
                ):
 
   import numpy as np
-  import scipy.io
 
-  img = scipy.misc.imread(image_path)
+  if pilload:
+      from PIL import Image
+      img = np.asarray(Image.open(image_path))
+  else:
+      import scipy.io
+      img = scipy.misc.imread(image_path)
 
   # check if grayscale and convert to RGB
   if len(img.shape) == 2:
@@ -123,7 +128,7 @@ def load_image(image_path,            # Full path to processing image
   return img
 
 
-def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type, new_file_extension):
+def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type, new_file_extension, pilload):
     "Go through the selected_filenames and preprocess all the files"
 
     output_filenames = []
@@ -139,7 +144,8 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
                               crop_percentage = crop_percentage,
                               data_type = data_type,
                               guentherization_mode = guentherization_mode,
-                              convert_to_bgr = convert_to_bgr)
+                              convert_to_bgr = convert_to_bgr,
+                              pilload = pilload)
 
         output_filename = input_filename.rsplit('.', 1)[0] + '.' + new_file_extension if new_file_extension else input_filename
 
@@ -170,9 +176,10 @@ if __name__ == '__main__':
     data_type               = os.getenv('_DATA_TYPE', 'uint8')
     new_file_extension      = os.getenv('_NEW_EXTENSION', '')
     image_file              = os.getenv('CK_IMAGE_FILE', '')
+    pilload                 = os.getenv('_PILLOW_LOAD', '') == 'yes'
 
-    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2GU: {},  2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, EXT: {}, IMG: {}".format(
-        source_dir, destination_dir, square_side, crop_percentage, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type, new_file_extension, image_file) )
+    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2GU: {},  2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, EXT: {}, IMG: {}, PilLoad: {}".format(
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, guentherization_mode, convert_to_bgr, offset, volume_str, fof_name, data_type, new_file_extension, image_file, pilload) )
 
     if image_file:
         source_dir          = os.path.dirname(image_file)
@@ -191,7 +198,7 @@ if __name__ == '__main__':
         selected_filenames = sorted_filenames[offset:offset+volume]
 
 
-    output_filenames = preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type, new_file_extension)
+    output_filenames = preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, guentherization_mode, convert_to_bgr, data_type, new_file_extension, pilload)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
     with open(fof_full_path, 'w') as fof:
