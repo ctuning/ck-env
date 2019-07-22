@@ -10,7 +10,6 @@
         "_SUBSET_FOF": "image_list.txt",
         "_NEW_EXTENSION": "rgb8",
         "_DATA_TYPE": "uint8",
-        "_PILLOW_LOAD": "",
         "PACKAGE_VERSION": "2012",
         "CK_IMAGE_FILE": ""
     }, 
@@ -81,18 +80,6 @@
       },
       "extra_customize": {
         "package_name": "Pre-processed single image ($<<CK_IMAGE_FILE>>$)"
-      }
-    },
-    "pilload": {
-      "comment": "Load images using Pillow library",
-      "extra_env": {
-        "_PILLOW_LOAD": "yes"
-      }
-    },
-    "scipyload": {
-      "comment": "Load images using SciPy (deprecated, have to use scipy 1.2.1)",
-      "extra_env": {
-        "_PILLOW_LOAD": ""
       }
     },
     "guentherized.0": {
