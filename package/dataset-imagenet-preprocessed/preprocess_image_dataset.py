@@ -90,9 +90,9 @@ def load_image(image_path,            # Full path to processing image
                ):
 
   import numpy as np
-  import scipy.io
+  from PIL import Image
 
-  img = scipy.misc.imread(image_path)
+  img = np.asarray(Image.open(image_path))
 
   # check if grayscale and convert to RGB
   if len(img.shape) == 2:
