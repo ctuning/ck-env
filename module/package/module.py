@@ -464,9 +464,12 @@ def install(i):
     if required_variations:
         tags.extend( required_variations )
 
-    x=i.get('extra_tags','').strip()
-    if x!='':
-       tags.extend(x.split(','))
+    extra_cli_tags = i.get('extra_tags','').strip()
+    if extra_cli_tags!='':
+        extra_cli_tags = extra_cli_tags.split(',')
+        tags.extend(extra_cli_tags)
+    else:
+        extra_cli_tags = []
 
     cus=d.get('customize',{})
     env=d.get('env',{})
@@ -524,13 +527,13 @@ def install(i):
 
             extra_cus = supported_variations[req_variation].get('extra_customize',{}) # FIXME: replicate the collision-avoidance for extra_cus, similar to the one above
 
-            extra_tagz = supported_variations[req_variation].get('extra_tags',[])     # FIXME: replicate the collision-avoidance for extra_tagz
-            if extra_tagz and type(extra_tagz)!=list:
-              extra_tagz=extra_tagz.split(',')
+            extra_var_tags = supported_variations[req_variation].get('extra_tags',[])     # FIXME: replicate the collision-avoidance for extra_var_tags
+            if extra_var_tags and type(extra_var_tags)!=list:
+              extra_var_tags=extra_var_tags.split(',')
 
             extra_env_from_variations.update( extra_env )   # merge of one particular variation
             extra_cus_from_variations.update( extra_cus )
-            extra_tags_from_variations.extend( extra_tagz )
+            extra_tags_from_variations.extend( extra_var_tags )
 
         pr_env.update( extra_env_from_variations )  # merge of all variations
         cus.update( extra_cus_from_variations )
@@ -777,7 +780,8 @@ def install(i):
     # Check installation path
     pre_path=i.get('path','')
     pi=i.get('install_path','')
-    vari_path = '-'.join([''] + sorted(required_variations) ) if required_variations else ''
+    vari_and_cli_tags = set(required_variations) | set(extra_cli_tags)  # weed out potential repeats
+    vari_and_cli_path = '-'.join([''] + sorted(list(vari_and_cli_tags)) ) if vari_and_cli_tags else ''
     extra_path=i.get('extra_path','')
     fp=i.get('full_path','')
 
@@ -1050,8 +1054,7 @@ def install(i):
              nm += cus.get('extra_suggested_path','')
 
              # Then another extra path, if non-empty
-             nm += vari_path
-             nm += extra_path
+             nm += vari_and_cli_path + extra_path
 
              # Finally OS
              if cus.get('no_os_in_suggested_path','')!='yes':
