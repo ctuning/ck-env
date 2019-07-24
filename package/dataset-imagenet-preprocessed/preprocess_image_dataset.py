@@ -59,7 +59,7 @@ def guentherize(img, out_height, out_width, data_type, guentherization_mode, cro
             elif guentherization_mode==4:
                 w = int(new_width * height / width)
 
-        img = img.resize((w, h))
+        img = img.resize((w, h), Image.BILINEAR)
         return img
 
     def center_crop(img):
