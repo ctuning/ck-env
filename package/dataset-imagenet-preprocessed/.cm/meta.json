@@ -4,7 +4,7 @@
     "install_env": {
         "_INPUT_SQUARE_SIDE": "224",
         "_CROP_FACTOR": "87.5",
-        "_GUENTHERIZE": "0",
+        "_GUENTHERIZE": "3",
         "_SUBSET_OFFSET": "0",
         "_SUBSET_VOLUME": "",
         "_SUBSET_FOF": "image_list.txt",
