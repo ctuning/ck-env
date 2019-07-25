@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "4932bbdd2ac7a17b",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2019-07-25T10:13:06.920727",
+    "version": [
+      "1",
+      "9",
+      "7"
+    ]
+  },
+  "data_name": "dataset-imagenet-preprocessed-using-opencv"
+}
