@@ -32,8 +32,17 @@ guentherized.0,crop.875:
 
 "accuracy_top1": 0.69968,
 "accuracy_top5": 0.89366,
-----------------------------
+-----------------------------------------------------------------------------
+bilinear interpolation on resize,guentherized.3,crop.875,model=mobilenet:
 
+Accuracy top 1: 0.71226 (35613 of 50000)
+Accuracy top 5: 0.89834 (44917 of 50000)
+-----------------------------------------------------------------------------
+bilinear interpolation on resize,guentherized.3,crop.875,model=resnet:
+
+Accuracy top 1: 0.7617 (38085 of 50000)
+Accuracy top 5: 0.92866 (46433 of 50000)
+-----------------------------------------------------------------------------
 
 Creating single-image datasets (need disambiguation in filename, extra tags and extra path) :
     ck install package --tags=dataset,preprocessed,external_file --env.CK_IMAGE_FILE=~/Desktop/lenny_kite.JPG --extra_tags=lenny_kite --extra_path=_lenny_kite
