@@ -31,12 +31,6 @@
       "sort": 10,
       "tags": "dataset,imagenet,original"
     },
-    "lib-python-numpy": {
-      "local": "yes",
-      "name": "Python NumPy library",
-      "sort": 110,
-      "tags": "lib,python-package,numpy"
-    },
     "lib-python-cv2": {
       "local": "yes",
       "name": "Python OpenCV library",
