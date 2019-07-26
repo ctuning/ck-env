@@ -4,7 +4,6 @@
     "install_env": {
         "_INPUT_SQUARE_SIDE": "224",
         "_CROP_FACTOR": "87.5",
-        "_GUENTHERIZE": "3",
         "_SUBSET_OFFSET": "0",
         "_SUBSET_VOLUME": "",
         "_SUBSET_FOF": "image_list.txt",
@@ -39,12 +38,6 @@
       "sort": 110,
       "tags": "lib,python-package,numpy"
     },
-    "lib-python-scipy": {
-      "local": "yes",
-      "name": "Python SciPy library",
-      "sort": 120,
-      "tags": "lib,python-package,scipy"
-    },
     "lib-python-pillow": {
       "local": "yes",
       "name": "Python Pillow library",
@@ -57,7 +50,7 @@
   "only_for_target_os_tags": [], 
   "process_script": "shell_wrapper", 
   "soft_uoa": "dataset.imagenet.preprocessed", 
-  "suggested_path": "dataset-imagenet-preprocessed-using-scipy-PIL",
+  "suggested_path": "dataset-imagenet-preprocessed-using-pillow",
   "tags": [
     "image-classification",
     "dataset", 
@@ -65,7 +58,7 @@
     "2012",
     "val",
     "preprocessed",
-    "using-scipy-PIL"
+    "using-pillow"
   ], 
   "variations": {
     "external_file": {
@@ -75,36 +68,6 @@
       },
       "extra_customize": {
         "package_name": "Pre-processed single image ($<<CK_IMAGE_FILE>>$)"
-      }
-    },
-    "guentherized.0": {
-      "comment": "Simplistic crop-and-resize or resize-and-crop",
-      "extra_env": {
-        "_GUENTHERIZE": "0"
-      }
-    },
-    "guentherized.1": {
-      "comment": "Suggested by Guenther Schmuelling",
-      "extra_env": {
-        "_GUENTHERIZE": "1"
-      }
-    },
-    "guentherized.2": {
-      "comment": "Suggested by Leo Gordon",
-      "extra_env": {
-        "_GUENTHERIZE": "2"
-      }
-    },
-    "guentherized.3": {
-      "comment": "Suggested by ClarkChin08 in https://github.com/mlperf/inference/pull/243",
-      "extra_env": {
-        "_GUENTHERIZE": "3"
-      }
-    },
-    "guentherized.4": {
-      "comment": "Suggested by Leo Gordon",
-      "extra_env": {
-        "_GUENTHERIZE": "4"
       }
     },
     "crop.875": {
