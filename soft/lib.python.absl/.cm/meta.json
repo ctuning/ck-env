@@ -1,0 +1,26 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "env_prefix": "CK_ENV_PYTHON_PACKAGE_ABSL",
+    "limit_recursion_dir_search": {
+      "linux": 5,
+      "win": 5
+    },
+    "soft_file_universal": "absl$#sep#$__init__.py",
+    "detect_version_as": "unversioned"
+  },
+  "soft_name": "Python Abseil library",
+  "tags": [
+    "lib",
+    "python-package",
+    "absl",
+    "absl-py"
+  ],
+  "template": "yes",
+  "template_type": "Python library (Abseil)",
+  "use_customize_script_from_another_entry": {
+    "data_uoa": "4460bdb0ade2a3df",
+    "module_uoa": "soft"
+  }
+}
