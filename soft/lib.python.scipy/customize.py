@@ -18,15 +18,20 @@ def version_cmd(i):
     ck                      = i['ck_kernel']
     cus                     = i['customize']
 
+    detect_version_as           = cus.get('detect_version_as', '')
     detect_version_externally   = cus.get('detect_version_externally', 'no') == 'yes'
     version_variable_name       = cus.get('version_variable_name', '__version__')
 
-    if detect_version_externally:
+    if detect_version_as:
+        return {'return':0, 'version':detect_version_as}
+
+    elif detect_version_externally:
         current_python  = sys.executable;
         version_cmd     = '{} -c "import sys; sys.path.insert(0,\'{}\'); import {}; print({}.{})" >$#filename#$'.format(
             current_python, site_dir, package_name, package_name, version_variable_name);
 
         return {'return':0, 'cmd':version_cmd}
+
     else:
         version_recursive_import  = cus.get('version_recursive_import', 'no') == 'yes'
         version_module_name       = cus.get('version_module_name', '__init__')
