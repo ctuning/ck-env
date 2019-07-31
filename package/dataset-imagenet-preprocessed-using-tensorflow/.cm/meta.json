@@ -33,13 +33,18 @@
       "local": "yes",
       "name": "Python TensorFlow library",
       "sort": 110,
-      "tags": "lib,tensorflow,vprebuilt,v1.12"
+      "tags": "lib,tensorflow,vprebuilt",
+      "version_from": [
+        1,
+        12,
+        0
+      ]
     },
     "tensorflow-api": {
       "local": "yes",
       "name": "TensorFlow API",
       "sort": 120,
-      "tags": "tensorflow,api,r1.12.0"
+      "tags": "tensorflow,api"
     },
     "python": {
       "local": "yes",
@@ -62,6 +67,7 @@
     "val",
     "preprocessed",
     "vgg",
+    "using-tensorflow",
     "using-tf"
   ],
   "variations": {
