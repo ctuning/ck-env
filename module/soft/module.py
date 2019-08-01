@@ -2083,7 +2083,7 @@ def get_version(i):
 
     fp=i.get('full_path','')
     sb=i.get('bat','')
-    soft_version_cmd=i.get('cmd','')
+    soft_version_cmd=i.get('cmd')
     data_uid    = i.get('data_uid')
 
     cs=i.get('custom_script_obj', None)
@@ -2110,6 +2110,7 @@ def get_version(i):
 
     ver=''
     lst=[]
+    cmd=''
 
     # Attempt to check via CK config file
     if i.get('skip_existing','')!='yes':
@@ -2132,11 +2133,10 @@ def get_version(i):
           if rx['return']>0: return rx
           cmd=rx.get('cmd','')
           ver=rx.get('version','')
-       else:    
+
+       elif soft_version_cmd:
           if eifsc!='' and fp.find(' ')>=0 and not fp.startswith(eifsc):
              fp=eifsc+fp+eifsc
-
-          cmd=''
 
           if o!='con':
              cmd+=nout
@@ -2146,7 +2146,7 @@ def get_version(i):
           else:
              cmd+=fp+' '+soft_version_cmd
 
-    if ver=='':
+    if ver=='' and cmd:
 
        # Generate tmp file
        rx=ck.gen_tmp_file({})
