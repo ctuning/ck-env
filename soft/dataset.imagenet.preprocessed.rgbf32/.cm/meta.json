@@ -1,6 +1,10 @@
 {
   "auto_detect": "yes",
   "customize": {
+    "detect_preprocessed_ext": "rgbf32",
+    "detect_data_type": "float32",
+    "detect_bytes_per_pixel": "12",
+    "detect_file_index_name": "image_list.txt",
     "env_prefix": "CK_ENV_DATASET_IMAGENET_PREPROCESSED",
     "limit_recursion_dir_search": {
       "linux": 3,

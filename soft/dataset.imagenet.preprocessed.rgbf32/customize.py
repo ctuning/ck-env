@@ -67,8 +67,10 @@ def setup(i):
     env[env_prefix + '_DIR'] = path_install
 
     if detection_mode:
-        file_index_name     = 'image_list.txt'
-        preprocessed_ext    = 'rgbf32'
+        preprocessed_ext    = cus.get("detect_preprocessed_ext")
+        data_type           = cus.get("detect_data_type")
+        bytes_per_pixel     = cus.get("detect_bytes_per_pixel")
+        file_index_name     = cus.get("detect_file_index_name")
         full_index_path     = os.path.join(path_install, file_index_name)
 
         if os.path.exists(full_index_path):
@@ -82,11 +84,11 @@ def setup(i):
 
         install_env.update({
             '_NEW_EXTENSION':       preprocessed_ext,
-            '_DATA_TYPE':           'float32',
+            '_DATA_TYPE':           data_type,
             '_SUBSET_FOF':          file_index_name,
             '_SUBSET_OFFSET':       0,
             '_SUBSET_VOLUME':       len(file_index),
-            '_INPUT_SQUARE_SIDE':   int(sqrt( os.path.getsize(os.path.join(path_install,file_index[0]))/12.0 )),
+            '_INPUT_SQUARE_SIDE':   int(sqrt( os.path.getsize(os.path.join(path_install,file_index[0]))/float(bytes_per_pixel) )),
         })
 
     ## Prepend the hidden variables with env_prefix
