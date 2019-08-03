@@ -6,7 +6,6 @@
       "PACKAGE_VERSION": "2012",
       "_CROP_FACTOR": "87.5",
       "_DATA_TYPE": "uint8",
-      "_GUENTHERIZE": "3",
       "_INPUT_SQUARE_SIDE": "224",
       "_NEW_EXTENSION": "rgb8",
       "_SUBSET_FOF": "image_list.txt",
@@ -95,30 +94,6 @@
       "extra_env": {
         "_SUBSET_OFFSET": "0",
         "_SUBSET_VOLUME": ""
-      }
-    },
-    "guentherized.1": {
-      "comment": "Suggested by Guenther Schmuelling",
-      "extra_env": {
-        "_GUENTHERIZE": "1"
-      }
-    },
-    "guentherized.2": {
-      "comment": "Suggested by Leo Gordon",
-      "extra_env": {
-        "_GUENTHERIZE": "2"
-      }
-    },
-    "guentherized.3": {
-      "comment": "Suggested by ClarkChin08 in https://github.com/mlperf/inference/pull/243",
-      "extra_env": {
-        "_GUENTHERIZE": "3"
-      }
-    },
-    "guentherized.4": {
-      "comment": "Suggested by Leo Gordon",
-      "extra_env": {
-        "_GUENTHERIZE": "4"
       }
     },
     "last.20": {
