@@ -1,6 +1,7 @@
 {
   "check_exit_status": "yes",
   "customize": {
+    "comment": "Read about available variations here:  https://pypi.org/project/opencv-python-headless/",
     "install_env": {
       "PIP_INSTALL_OPTIONS": "--ignore-installed",
       "PYTHON_PACKAGE_NAME": "opencv-python"
@@ -29,6 +30,44 @@
     "opencv",
     "cv2"
   ],
+  "variations": {
+    "opencv-python": {
+        "extra_tags": [ "with-gui", "without-contribs" ],
+        "extra_env": {
+            "PYTHON_PACKAGE_NAME": "opencv-python"
+        },
+        "extra_customize": {
+            "package_name": "(OpenCV with GUI only)"
+        }
+    },
+    "opencv-contrib-python": {
+        "extra_tags": [ "with-gui", "with-contribs" ],
+        "extra_env": {
+            "PYTHON_PACKAGE_NAME": "opencv-contrib-python"
+        },
+        "extra_customize": {
+            "package_name": "(OpenCV with contribs and GUI)"
+        }
+    },
+    "opencv-python-headless": {
+        "extra_tags": [ "without-gui", "without-contribs", "headless" ],
+        "extra_env": {
+            "PYTHON_PACKAGE_NAME": "opencv-python-headless"
+        },
+        "extra_customize": {
+            "package_name": "(OpenCV without contribs or GUI)"
+        }
+    },
+    "opencv-contrib-python-headless": {
+        "extra_tags": [ "without-gui", "with-contribs", "headless" ],
+        "extra_env": {
+            "PYTHON_PACKAGE_NAME": "opencv-contrib-python-headless"
+        },
+        "extra_customize": {
+            "package_name": "(OpenCV with contribs only)"
+        }
+    }
+  },
   "template": "yes",
   "template_type": "Python library",
   "use_scripts_from_another_entry": {
