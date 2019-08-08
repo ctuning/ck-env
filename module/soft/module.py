@@ -2595,7 +2595,7 @@ def show(i):
            lm=l['meta']
            ld=lm.get('desc','')
 
-           name=lm.get('soft_name','')
+           soft_name=lm.get('soft_name','')
 
            cus=lm.get('customize',{})
 
@@ -2698,7 +2698,7 @@ def show(i):
               s=''
 
               s+='\n'
-              s+='=== '+ln+' ('+name+') ===\n'
+              s+='=== '+ln+' ('+soft_name+') ===\n'
               s+='\n'
               s+='Auto-detect?: '+ad+'\n'
               s+='<br>Environment variable: <b>'+ep+'</b>\n'
