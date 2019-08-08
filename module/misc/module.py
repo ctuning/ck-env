@@ -580,6 +580,68 @@ def select_string(i):
 
     return { 'return':0, 'response': response, 'selected_index': selected_index, 'selected_value': selected_value }
 
+
+##############################################################################
+# Search for of a specific type using both tags AND variations
+#
+
+def search_in_variations(i):
+    """
+    Input:  {
+                tags                - the query, a mixture of tags and variations
+                (query_module_uoa)  - entries of which type to search for
+                (add_info)          - each entry found will also contain 'info' dictionary ('meta' is obligatory)
+            }
+
+    Output: {
+                selected_index  - an index < len(options)
+                selected_value  - the string value at selected_index
+
+                return          - return code =  0, if successful
+                                              >  0, if error
+                (error)         - error text if return > 0
+            }
+
+    """
+
+    tags        = i.get('tags')
+    module_uoa  = i.get('query_module_uoa', '*')
+    add_info    = i.get('add_info', '')
+
+    required_tags_list = tags
+    if not type(required_tags_list)==list:
+        required_tags_list = required_tags_list.split(',')
+
+    required_tags_set = set(required_tags_list)   # NB: this variable gets locked in the closure for efficiency of the following function:
+
+    def tags_and_variations_merging_callback(i):
+        """ A callback function that knows how to merge tags and variations
+            and how to match the resulting set against the query.
+        """
+
+        meta = i.get('meta',{})
+        supported_variations_set    = set(meta.get('variations',{}).keys())
+        tags_and_variations         = set(meta.get('tags',{})) | supported_variations_set
+
+        matched_bool                = tags_and_variations >= required_tags_set
+        i['required_variations']    = list( supported_variations_set & required_tags_set )
+
+        return { 'return': 0, 'skip': ( '' if matched_bool else 'yes' ) }
+
+    r=ck.access({'action':'list',
+                   'module_uoa': module_uoa,
+                   'add_meta':'yes',
+                   'add_info':add_info,
+                   'filter_func_addr': tags_and_variations_merging_callback,
+    })
+
+    if r['return']>0: return r
+    if i.get('out')=='con':
+        for entry in r['lst']:
+            print("{}:{}:{}".format(entry['repo_uoa'], entry['module_uoa'], entry['data_uoa']))
+
+    return r
+
 ##############################################################################
 # Universal UOA selector (improved version forked 
 # from ck-autotuning:module:choice and ck.kernel)

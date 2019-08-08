@@ -39,6 +39,9 @@
     "replace_strings_in_file": {
       "desc": "replace multiple strings in a given file"
     },
+    "search_in_variations": {
+      "desc": "given a query of tags, find entries that match both from tags and variations"
+    },
     "select_string": {
       "desc": "given a list of strings, pick one by index OR substring match"
     },
