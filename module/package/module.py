@@ -279,31 +279,11 @@ def install(i):
        # First, search by tags
        if xtags!='':
 
-          required_tags_list = xtags
-          if not type(required_tags_list)==list:
-                required_tags_list = required_tags_list.split(',')
-
-          required_tags_set = set(required_tags_list)   # NB: this variable gets locked in the closure for efficiency of the following function:
-
-          def tags_and_variations_merging_callback(i):
-                """ A callback function that knows how to merge tags and variations
-                    and how to match the resulting set against the query.
-                """
-
-                meta = i.get('meta',{})
-                supported_variations_set    = set(meta.get('variations',{}).keys())
-                tags_and_variations         = set(meta.get('tags',{})) | supported_variations_set
-
-                matched_bool                = tags_and_variations >= required_tags_set
-                i['required_variations']    = list( supported_variations_set & required_tags_set )
-
-                return { 'return': 0, 'skip': ( '' if matched_bool else 'yes' ) }
-
-          r=ck.access({'action':'list',
-                       'module_uoa':work['self_module_uid'],
-                       'add_info':'yes',
-                       'add_meta':'yes',
-                       'filter_func_addr': tags_and_variations_merging_callback,
+          r=ck.access({'action':            'search_in_variations',
+                       'module_uoa':        'misc',
+                       'query_module_uoa':  work['self_module_uid'],
+                       'tags':              xtags,
+                       'add_info':          'yes',
           })
           if r['return']>0: return r
           l=r['lst']
