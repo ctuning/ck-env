@@ -449,16 +449,6 @@ def setup(i):
     envp=cus.get('env_prefix','')
     envps=envp+'_SET'
 
-    san=i.get('soft_add_name','')
-
-    dname=d.get('soft_name','')
-    if i.get('soft_name','')!='': 
-       dname=i['soft_name']
-    else:
-       if cus.get('package_extra_name','')!='':
-          dname+=cus['package_extra_name']
-    if san!='':
-       dname+=san
 
     csp=d.get('can_skip_path','')
 
@@ -510,6 +500,16 @@ def setup(i):
 
     ucus=i.get('customize',{})
     cus.update(ucus)
+
+
+    if i.get('soft_name','')!='':   # (direct input overrides meta-data)
+       dname = i['soft_name']
+
+    else:
+       dname = d.get('soft_name','') + cus.get('package_extra_name', '')
+
+    dname += i.get('soft_add_name','')
+
 
     ienv=i.get('ienv',{}) # override install_env using command-line options
     for ienv_key in ienv:
