@@ -766,7 +766,7 @@ def install(i):
     fp=i.get('full_path','')
 
     x=cus.get('input_path_example','')
-    if x!='': pie=' (example: '+ye+')'
+    if x!='': pie=' (example: '+x+')'
     else: pie=''
 
     # If rebuild option, try to set vars to avoid download 
