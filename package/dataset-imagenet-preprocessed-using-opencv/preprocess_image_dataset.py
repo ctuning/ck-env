@@ -4,7 +4,7 @@ supported_extensions = ['jpeg', 'jpg', 'gif', 'png']
 
 import os
 import cv2
-
+import numpy as np
 
 # Load and preprocess image
 def load_image(image_path,            # Full path to processing image
@@ -60,8 +60,9 @@ def load_image(image_path,            # Full path to processing image
     return img
 
 
-def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr, data_type, new_file_extension):
-    "Go through the selected_filenames and preprocess all the files"
+def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
+    data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means):
+    "Go through the selected_filenames and preprocess all the files (optionally normalize and subtract mean)"
 
     output_filenames = []
 
@@ -76,6 +77,19 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
                               crop_percentage = crop_percentage,
                               data_type = data_type,
                               convert_to_bgr = convert_to_bgr)
+
+        image_data = np.asarray(image_data, dtype=data_type)
+
+        # Normalize
+        if normalize_data:
+            image_data = image_data/127.5 - 1.0
+
+        # Subtract mean value
+        if subtract_mean:
+            if len(given_channel_means):
+                image_data -= given_channel_means
+            else:
+                image_data -= np.mean(image_data)
 
         output_filename = input_filename.rsplit('.', 1)[0] + '.' + new_file_extension if new_file_extension else input_filename
 
@@ -98,16 +112,25 @@ if __name__ == '__main__':
     square_side             = int( os.environ['_INPUT_SQUARE_SIDE'] )
     crop_percentage         = float( os.environ['_CROP_FACTOR'] )
     inter_size              = int( os.getenv('_INTERMEDIATE_SIZE', 0) )
-    convert_to_bgr          = os.getenv('_CONVERT_TO_BGR', '').lower() == 'yes'
+    convert_to_bgr          = os.getenv('_CONVERT_TO_BGR', '').lower() in ('yes', 'true', 'on', '1')
     offset                  = int( os.getenv('_SUBSET_OFFSET', 0) )
     volume_str              = os.getenv('_SUBSET_VOLUME', '' )
-    fof_name                = os.getenv('_SUBSET_FOF', 'fof.txt')
-    data_type               = os.getenv('_DATA_TYPE', 'uint8')
+    fof_name                = os.getenv('_SUBSET_FOF', '')
+    data_type               = os.getenv('_DATA_TYPE', '')
     new_file_extension      = os.getenv('_NEW_EXTENSION', '')
+    normalize_data          = os.getenv('_NORMALIZE_DATA', '').lower() in ('yes', 'true', 'on', '1')
+    subtract_mean           = os.getenv('_SUBTRACT_MEAN', '').lower() in ('yes', 'true', 'on', '1')
+    given_channel_means     = os.getenv('_GIVEN_CHANNEL_MEANS', '')
+
+    if given_channel_means:
+        given_channel_means = [float(x) for x in given_channel_means.split(' ') ]
+
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
-    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, EXT: {}, IMG: {}".format(
-        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, offset, volume_str, fof_name, data_type, new_file_extension, image_file) )
+    print(("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, OFF: {}, VOL: '{}', FOF: {},"+
+        " DTYPE: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, IMG: {}").format(
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, offset, volume_str, fof_name,
+        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, image_file) )
 
     if image_file:
         source_dir          = os.path.dirname(image_file)
@@ -126,7 +149,9 @@ if __name__ == '__main__':
         selected_filenames = sorted_filenames[offset:offset+volume]
 
 
-    output_filenames = preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr, data_type, new_file_extension)
+    output_filenames = preprocess_files(
+        selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
+        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
     with open(fof_full_path, 'w') as fof:
