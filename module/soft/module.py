@@ -1517,9 +1517,12 @@ def check(i):
        if rx['return']>0: return rx
        vto=rx['version_split']
 
+    tags=i.get('tags','')
+
     # Check soft UOA
     duoa=i.get('uoa', '')
     if duoa=='': duoa=i.get('data_uoa','')
+
 
     if duoa:    # Load
         r=ck.access({'action':'load',
@@ -1529,42 +1532,46 @@ def check(i):
         if r['return']>0: return r
 
         soft_entry_dict=r['dict']
-        required_variations=''  # FIXME: we may want to combine data_uoa and variations in future
+        required_variations=[]
+        if tags:
+            required_variations = tags.split(',')
 
-    else:       # Search
-        tags=i.get('tags','')
+    elif tags!='':  # Search
+        r=ck.access({'action':          'search_in_variations',
+                    'module_uoa':       'misc',
+                    'query_module_uoa': work['self_module_uid'],
+                    'tags':             tags,
+        })
+        if r['return']>0: return r
+        l=r['lst']
+        if len(l)>1:    # FIXME: we could be smarter and assume several soft_candidates from the very start,
+                        #           merging all the options found into one big selector.
 
-        if tags!='':
-            r=ck.access({'action':            'search_in_variations',
-                        'module_uoa':       'misc',
-                        'query_module_uoa': work['self_module_uid'],
-                        'tags':             tags,
-            })
-            if r['return']>0: return r
-            l=r['lst']
-            if len(l)>1:    # FIXME: we could be smarter and assume several soft_candidates from the very start,
-                            #           merging all the options found into one big selector.
-
-                ck.out("Found {} soft candidate entries matching tags '{}' :".format(len(l), tags))
-                for candidate in l:
-                    candidate_tags      = candidate['meta']['tags']
-                    required_variations = candidate['required_variations']
-                    ck.out("\tck detect soft:{:<42}    # --tags={}".format(candidate['data_uoa'], ','.join(candidate_tags+required_variations)) )
-                return {'return':1, 'error': "Please use a command that uniquely defines a soft: entry"}
-            elif len(l)==1:
-                r=l[0]
-                soft_entry_dict=r['meta']
-                required_variations=r['required_variations']
-            else:
-                return {'return':1, 'error':'software entry was not found'}
+            ck.out("Found {} soft candidate entries matching tags '{}' :".format(len(l), tags))
+            for candidate in l:
+                candidate_tags      = candidate['meta']['tags']
+                required_variations = candidate['required_variations']
+                ck.out("\tck detect soft:{:<42}    # --tags={}".format(candidate['data_uoa'], ','.join(candidate_tags+required_variations)) )
+            return {'return':1, 'error': "Please use a command that uniquely defines a soft: entry"}
+        elif len(l)==1:
+            r=l[0]
+            soft_entry_dict=r['meta']
+            required_variations=r['required_variations']
         else:
-            return {'return':1, 'error':'please either define --data_uoa or --tags to get going'}
+            return {'return':1, 'error':'software entry was not found'}
+    else:
+        return {'return':1, 'error':'please define either --data_uoa or --tags or both to get going'}
 
     duoa=r['data_uoa']
     duid=r['data_uid']
     soft_entry_path=r['path']
 
     cus=soft_entry_dict.get('customize',{})
+
+    supported_variations = soft_entry_dict.get('variations', {})
+    missing_variations = set(required_variations) - set(supported_variations)
+    if missing_variations:
+        return {'return':1, 'error':'Variations {} are not supported by soft:{}'.format(missing_variations, duoa)}
 
     # Update this cus from all the supported variations.
     # Detect if an incompatible mix of variation tags was required
@@ -1573,7 +1580,6 @@ def check(i):
     if required_variations:
         extra_cus_from_variations = {}
 
-        supported_variations = r['meta'].get('variations', {})
         for req_variation in required_variations:
             extra_cus = supported_variations[req_variation].get('extra_customize',{})
             colliding_cuss = set(extra_cus_from_variations.keys()) & set(extra_cus.keys()) # non-empty intersection means undefined behaviour
