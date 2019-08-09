@@ -2542,9 +2542,9 @@ def print_warning(i):
        pruoa=i['package_repo_uoa']
        pmeta=i['package_meta']
 
-       pie=pmeta.get('customize',{}).get('install_env',{})
-       purl=pie.get('PACKAGE_URL','')
-       pc=pie.get('PACKAGE_GIT_CHECKOUT','')
+       package_ie=pmeta.get('customize',{}).get('install_env',{})
+       purl=package_ie.get('PACKAGE_URL','')
+       pc=package_ie.get('PACKAGE_GIT_CHECKOUT','')
 
        ck.out('')
        ck.out('   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
