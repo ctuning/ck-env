@@ -6,7 +6,7 @@ import os
 
 
 # Load and preprocess image:
-# mimic Guenther Schmuelling's preprocessing steps
+# Mimic preprocessing steps from the official reference code.
 def load_image(image_path,            # Full path to processing image
                target_size,           # Desired size of resulting image
                intermediate_size = 0, # Scale to this size then crop to target size

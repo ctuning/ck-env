@@ -49,7 +49,7 @@ def load_image(image_path,            # Full path to processing image
     else:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-    # Mimic Guenther Schuelling's preprocessing steps
+    # Mimic preprocessing steps from the official reference code.
     img = resize_with_aspectratio(img, cv2.INTER_AREA)
     img = center_crop(img)
 
