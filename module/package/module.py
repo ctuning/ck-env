@@ -479,8 +479,6 @@ def install(i):
         if q in udeps:
            udeps[q]['uoa']=preset_deps[q]
 
-    suoa=d.get('soft_uoa','')
-
     # This environment will be passed to process scripts (if any)
     pr_env=cus.get('install_env',{})
 
@@ -1064,6 +1062,9 @@ def install(i):
 
        if pi=='' and cus.get('skip_path','')!='yes':
           return {'return':1, 'error':'installation path is not specified'}
+
+
+    suoa=d.get('soft_uoa','') or cus.get('soft_uoa', '')
 
     # Check dependencies
     deps={}
