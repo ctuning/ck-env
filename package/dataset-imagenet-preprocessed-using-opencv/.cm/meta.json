@@ -94,7 +94,7 @@
         "_NEW_EXTENSION": "rgbf32",
         "_NORMALIZE_DATA": "0",
         "_SUBTRACT_MEAN": "YES",
-        "_GIVEN_CHANNEL_MEANS": "123.68 116.6 103.94"
+        "_GIVEN_CHANNEL_MEANS": "123.68 116.78 103.94"
       },
       "extra_customize": {
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
