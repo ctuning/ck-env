@@ -12,13 +12,14 @@ def load_image(image_path,            # Full path to processing image
                intermediate_size = 0, # Scale to this size then crop to target size
                crop_percentage = 87.5,# Crop to this percentage then scale to target size
                data_type = 'uint8',   # Data type to store
-               convert_to_bgr = False # Swap image channel RGB -> BGR
+               convert_to_bgr = False,# Swap image channel RGB -> BGR
+               interpolation_method = cv2.INTER_LINEAR # Interpolation method.
                ):
 
     out_height = target_size
     out_width  = target_size
 
-    def resize_with_aspectratio(img, inter_pol=cv2.INTER_LINEAR):
+    def resize_with_aspectratio(img):
         height, width, _ = img.shape
         new_height = int(100. * out_height / crop_percentage)   # intermediate oversized image from which to crop
         new_width = int(100. * out_width / crop_percentage)     # ---------------------- ,, ---------------------
@@ -28,7 +29,7 @@ def load_image(image_path,            # Full path to processing image
         else:
             h = new_height
             w = int(new_width * width / height)
-        img = cv2.resize(img, (w, h), interpolation = inter_pol)
+        img = cv2.resize(img, (w, h), interpolation = interpolation_method)
         return img
 
     def center_crop(img):
@@ -49,7 +50,7 @@ def load_image(image_path,            # Full path to processing image
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     # Mimic preprocessing steps from the official reference code.
-    img = resize_with_aspectratio(img, cv2.INTER_AREA)
+    img = resize_with_aspectratio(img)
     img = center_crop(img)
 
     # Convert to BGR.
@@ -60,7 +61,7 @@ def load_image(image_path,            # Full path to processing image
 
 
 def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
-    data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means):
+    data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method):
     "Go through the selected_filenames and preprocess all the files (optionally normalize and subtract mean)"
 
     output_filenames = []
@@ -75,7 +76,8 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
                               intermediate_size = inter_size,
                               crop_percentage = crop_percentage,
                               data_type = data_type,
-                              convert_to_bgr = convert_to_bgr)
+                              convert_to_bgr = convert_to_bgr,
+                              interpolation_method = interpolation_method)
 
         image_data = np.asarray(image_data, dtype=data_type)
 
@@ -120,16 +122,24 @@ if __name__ == '__main__':
     normalize_data          = os.getenv('_NORMALIZE_DATA', '').lower() in ('yes', 'true', 'on', '1')
     subtract_mean           = os.getenv('_SUBTRACT_MEAN', '').lower() in ('yes', 'true', 'on', '1')
     given_channel_means     = os.getenv('_GIVEN_CHANNEL_MEANS', '')
-
     if given_channel_means:
-        given_channel_means = [float(x) for x in given_channel_means.split(' ') ]
+        given_channel_means = [ float(x) for x in given_channel_means.split(' ') ]
+
+    interpolation_method    = os.getenv('_INTERPOLATION_METHOD', '')
 
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
     print(("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, OFF: {}, VOL: '{}', FOF: {},"+
-        " DTYPE: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, IMG: {}").format(
+        " DTYPE: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, INTER: {}, IMG: {}").format(
         source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, offset, volume_str, fof_name,
-        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, image_file) )
+        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method, image_file) )
+
+    if interpolation_method == 'INTER_AREA':
+        # Used for ResNet in pre_process_vgg.
+        interpolation_method = cv2.INTER_AREA
+    else:
+        # Default interpolation method.
+        interpolation_method = cv2.INTER_LINEAR
 
     if image_file:
         source_dir          = os.path.dirname(image_file)
@@ -150,7 +160,7 @@ if __name__ == '__main__':
 
     output_filenames = preprocess_files(
         selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
-        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means)
+        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
     with open(fof_full_path, 'w') as fof:

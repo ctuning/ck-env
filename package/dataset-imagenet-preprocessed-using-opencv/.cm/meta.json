@@ -5,8 +5,9 @@
       "CK_IMAGE_FILE": "",
       "PACKAGE_VERSION": "2012",
       "_CROP_FACTOR": "87.5",
-      "_INPUT_SQUARE_SIDE": "224",
       "_DATA_TYPE": "uint8",
+      "_INPUT_SQUARE_SIDE": "224",
+      "_INTERPOLATION_METHOD": "INTER_LINEAR",
       "_NEW_EXTENSION": "rgb8",
       "_NORMALIZE_DATA": "0",
       "_SUBTRACT_MEAN": "0",
@@ -82,7 +83,8 @@
         "_DATA_TYPE": "float32",
         "_NEW_EXTENSION": "rgbf32",
         "_NORMALIZE_DATA": "YES",
-        "_SUBTRACT_MEAN": "0"
+        "_SUBTRACT_MEAN": "0",
+        "_INTERPOLATION_METHOD": "INTER_LINEAR"
       },
       "extra_customize": {
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
@@ -94,7 +96,8 @@
         "_NEW_EXTENSION": "rgbf32",
         "_NORMALIZE_DATA": "0",
         "_SUBTRACT_MEAN": "YES",
-        "_GIVEN_CHANNEL_MEANS": "123.68 116.78 103.94"
+        "_GIVEN_CHANNEL_MEANS": "123.68 116.78 103.94",
+        "_INTERPOLATION_METHOD": "INTER_AREA"
       },
       "extra_customize": {
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
