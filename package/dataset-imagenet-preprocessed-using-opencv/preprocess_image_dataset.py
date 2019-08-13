@@ -10,13 +10,13 @@ import numpy as np
 def load_image(image_path,            # Full path to processing image
                target_size,           # Desired size of resulting image
                intermediate_size = 0, # Scale to this size then crop to target size
-               crop_percentage = 0,   # Crop to this percentage then scale to target size
+               crop_percentage = 87.5,# Crop to this percentage then scale to target size
                data_type = 'uint8',   # Data type to store
                convert_to_bgr = False # Swap image channel RGB -> BGR
                ):
 
-    out_height  = target_size
-    out_width   = target_size
+    out_height = target_size
+    out_width  = target_size
 
     def resize_with_aspectratio(img, inter_pol=cv2.INTER_LINEAR):
         height, width, _ = img.shape
@@ -28,7 +28,6 @@ def load_image(image_path,            # Full path to processing image
         else:
             h = new_height
             w = int(new_width * width / height)
-
         img = cv2.resize(img, (w, h), interpolation = inter_pol)
         return img
 
@@ -38,7 +37,7 @@ def load_image(image_path,            # Full path to processing image
         right = int((width + out_width) / 2)
         top = int((height - out_height) / 2)
         bottom = int((height + out_height) / 2)
-        img = img[top : bottom, left : right]
+        img = img[top:bottom, left:right]
         return img
 
 
@@ -53,7 +52,7 @@ def load_image(image_path,            # Full path to processing image
     img = resize_with_aspectratio(img, cv2.INTER_AREA)
     img = center_crop(img)
 
-    # Convert to BGR
+    # Convert to BGR.
     if convert_to_bgr:
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 
@@ -69,7 +68,7 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
     for current_idx in range(len(selected_filenames)):
         input_filename = selected_filenames[current_idx]
 
-        full_input_path     = os.path.join(source_dir, input_filename)
+        full_input_path = os.path.join(source_dir, input_filename)
 
         image_data = load_image(image_path = full_input_path,
                               target_size = square_side,
@@ -80,11 +79,11 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
 
         image_data = np.asarray(image_data, dtype=data_type)
 
-        # Normalize
+        # Normalize.
         if normalize_data:
             image_data = image_data/127.5 - 1.0
 
-        # Subtract mean value
+        # Subtract mean value.
         if subtract_mean:
             if len(given_channel_means):
                 image_data -= given_channel_means
@@ -93,7 +92,7 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
 
         output_filename = input_filename.rsplit('.', 1)[0] + '.' + new_file_extension if new_file_extension else input_filename
 
-        full_output_path    = os.path.join(destination_dir, output_filename)
+        full_output_path = os.path.join(destination_dir, output_filename)
         image_data.tofile(full_output_path)
 
         print("[{}]:  Stored {}".format(current_idx+1, full_output_path) )
