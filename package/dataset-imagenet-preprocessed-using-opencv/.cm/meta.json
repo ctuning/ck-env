@@ -69,7 +69,7 @@
     "using-opencv"
   ],
   "variations": {
-    "unnormalized": {
+    "universal": {
       "extra_env": {
         "_DATA_TYPE": "uint8",
         "_NEW_EXTENSION": "rgb8"
@@ -78,7 +78,7 @@
         "soft_uoa": "dataset.imagenet.preprocessed"
       }
     },
-    "normalized-for.mobilenet": {
+    "for-mobilenet": {
       "extra_env": {
         "_DATA_TYPE": "float32",
         "_NEW_EXTENSION": "rgbf32",
@@ -90,7 +90,7 @@
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
       }
     },
-    "normalized-for.resnet": {
+    "for-resnet": {
       "extra_env": {
         "_DATA_TYPE": "float32",
         "_NEW_EXTENSION": "rgbf32",
