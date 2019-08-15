@@ -43,8 +43,8 @@ The table below shows the accuracy on the ImageNet 2012 validation set
 |                         |  Top5  | 0.93074          | 0.93016           | N/A                  |
 | MobileNet non-quantized |  Top1  | 0.71676          | N/A               | 0.71676              |
 |                         |  Top5  | 0.90118          | N/A               | 0.90118              |
-| MobileNet quantized     |  Top1  | 0.70762          | N/A               | N/A (bug?)           |
-|                         |  Top5  | 0.89266          | N/A               | N/A (bug?)           |
+| MobileNet quantized     |  Top1  | 0.70762          | N/A               | N/A ([bug?](https://github.com/ctuning/ck-mlperf/issues/40)) |
+|                         |  Top5  | 0.89266          | N/A               | N/A ([bug?](https://github.com/ctuning/ck-mlperf/issues/40)) |
 
 ##### Additional notes
 
