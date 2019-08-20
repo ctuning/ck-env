@@ -44,12 +44,6 @@
       "sort": 130,
       "tags": "lib,python-package,pillow"
     },
-    "lib-python-scipy": {
-      "local": "yes",
-      "name": "Python SciPy library",
-      "sort": 120,
-      "tags": "lib,python-package,scipy"
-    },
     "python": {
       "local": "yes",
       "name": "Python interpreter",
@@ -62,11 +56,12 @@
   "only_for_target_os_tags": [],
   "process_script": "shell_wrapper",
   "soft_uoa": "dataset.object-detection.preprocessed",
-  "suggested_path": "dataset-object-detection-preprocessed",
+  "suggested_path": "dataset-object-detection-preprocessed-using-pillow",
   "tags": [
     "dataset",
     "object-detection",
-    "preprocessed"
+    "preprocessed",
+    "using-pillow"
   ],
   "variations": {
     "external_file": {
@@ -79,16 +74,16 @@
       }
     },
     "coco.2017": {
-      "extra_customize": {
-      },
+      "extra_customize": {},
+      "extra_tags": [ "coco", "COCO", "2017", "v2017" ],
       "extra_env": {
           "INPUT_DATASET": "coco.2017",
           "PACKAGE_VERSION": "2017"
       }
     },
     "coco.2014": {
-      "extra_customize": {
-      },
+      "extra_customize": {},
+      "extra_tags": [ "coco", "COCO", "2014", "v2014" ],
       "extra_env": {
           "INPUT_DATASET": "coco.2014",
           "PACKAGE_VERSION": "2014"
