@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "0e8375f3bf70bafa",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2019-08-20T17:04:54.486232",
+    "version": [
+      "1",
+      "9",
+      "7"
+    ]
+  },
+  "data_name": "dataset-coco-preprocessed-using-opencv"
+}
