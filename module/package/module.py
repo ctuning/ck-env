@@ -80,6 +80,8 @@ def install(i):
               (param)             - string converted into CK_PARAM and passed to processing script
               (params)            - dict, keys are converted into <KEY>=<VALUE> and passed to processing script
 
+              (env_prefix)        - alternative env_prefix (overrides the one in soft entry)
+
               (env)               - add environment vars
               (env.{KEY})         - set env[KEY]=value (user-friendly interface via CMD)
 
@@ -1460,6 +1462,9 @@ def install(i):
 
     fp_matches  = [ x for x in fp_candidates if os.path.exists(x) ]               # find all matches again
     fp          = fp_matches[0] if len(fp_matches) else fp_candidates[0] if len(fp_candidates) else pi
+
+    if 'env_prefix' in i:
+      cus['env_prefix'] = i['env_prefix']
 
     # Preparing soft registration
     soft_registration_action_dict={'action':'setup',

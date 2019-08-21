@@ -446,9 +446,6 @@ def setup(i):
     env=d.get('env',{})
     cus=d.get('customize',{})
     pi=''
-    envp=cus.get('env_prefix','')
-    envps=envp+'_SET'
-
 
     csp=d.get('can_skip_path','')
 
@@ -500,6 +497,9 @@ def setup(i):
 
     ucus=i.get('customize',{})
     cus.update(ucus)
+
+    envp=cus.get('env_prefix','')
+    envps=envp+'_SET'
 
 
     if i.get('soft_name','')!='':   # (direct input overrides meta-data)
