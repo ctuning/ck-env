@@ -1,6 +1,9 @@
 {
   "auto_detect": "yes",
   "customize": {
+    "detect_file_index_name": "original_dimensions.txt",
+    "detect_preprocessed_ext": "rgb8",
+    "detect_bytes_per_pixel": "3",
     "env_prefix": "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED",
     "limit_recursion_dir_search": {
       "linux": 3,
