@@ -49,8 +49,9 @@ def setup(i):
     cus['path_bin']         = path_bin
 
         # storing the "path_install" in the environment (lower level) :
-    env                     = i['env']
-    env_prefix              = cus['env_prefix']
-    env[env_prefix]         = path_install
+    env                         = i['env']
+    env_prefix                  = cus['env_prefix']
+    env[env_prefix]             = path_install
+    env[env_prefix+'_BIN_FULL'] = full_path
 
     return {'return':0, 'bat':''}
