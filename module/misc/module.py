@@ -30,6 +30,32 @@ def init(i):
     """
     return {'return':0}
 
+
+##############################################################################
+# Just a centralized place to get a home directory
+
+def get_home_dir(i):
+    """
+
+    Input:  {}
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    from os.path import expanduser
+    home_dir = expanduser("~")
+
+    if i.get('out', '') == 'con':
+        ck.out(home_dir)
+
+    return {'return':0, 'home_dir':home_dir}
+
+
 ##############################################################################
 # Replace string in file
 

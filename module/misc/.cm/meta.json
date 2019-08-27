@@ -9,6 +9,9 @@
     "clone_server_repo": {
       "desc": "download a whole repository from the server"
     },
+    "get_home_dir": {
+      "desc": "get the home directory of the current user"
+    },
     "list_kernel_functions": {
       "desc": "list CK kernel functions"
     },
