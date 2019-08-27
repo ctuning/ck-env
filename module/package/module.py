@@ -1164,6 +1164,12 @@ def install(i):
     rx = internal_run_if_present(original_customization_script, 'post_deps', param_dict_for_post_deps, pr_env)
     if rx['return']>0: return rx
 
+    hd_r=ck.access({'action':       'get_home_dir',
+                    'module_uoa':    'misc',
+    })
+    if hd_r['return']>0: return r
+    home_dir=hd_r['home_dir']
+
     soft_cfg={}
 
     # Check if continue processing
@@ -1229,6 +1235,7 @@ def install(i):
 
        def efp_substitute(efp):
 
+          efp=efp.replace('$#home#$', home_dir)
           efp=efp.replace('$#sep#$', sdirs)
           efp=efp.replace('$#abi#$', tosd.get('abi',''))
           efp=efp.replace('$#processor#$', tosd.get('processor',''))
