@@ -2230,11 +2230,23 @@ def get_version(i):
           if i.get('use_locale','')=='yes':
              en=locale.getdefaultlocale()[1]
 
-          rx=ck.load_text_file({'text_file':ftmp, 'split_to_list':'yes', 'encoding':en})
-          if rx['return']>0: return rx
-          lst=rx['lst']
+          success=True
+          for xen in [en, sys.stdout.encoding, locale.getdefaultlocale()[1]]:
 
-          os.remove(ftmp)
+             try:
+                rx=ck.load_text_file({'text_file':ftmp, 'split_to_list':'yes', 'encoding':en})
+             except UnicodeDecodeError:
+                success=False
+
+             if success:
+                break
+
+          if success:
+             if rx['return']>0: return rx
+             lst=rx['lst']
+
+          if os.path.isfile(ftmp):
+             os.remove(ftmp)
 
        if len(lst)==0:
           return {'return':16, 'error':'version output file is empty'}
