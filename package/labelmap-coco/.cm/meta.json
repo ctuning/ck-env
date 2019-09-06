@@ -1,0 +1,41 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "DATASET_TYPE": "coco", 
+      "LABELMAP_FILE": "mscoco_label_map.pbtxt", 
+      "PACKAGE_BUILD_TYPE": "none", 
+      "PACKAGE_COPY": "YES", 
+      "PACKAGE_SKIP_LINUX_MAKE": "YES"
+    }, 
+    "no_os_in_suggested_path": "yes", 
+    "no_ver_in_suggested_path": "yes", 
+    "version": "master"
+  }, 
+  "deps": {}, 
+  "end_full_path": {
+    "linux": "mscoco_label_map.pbtxt"
+  }, 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "package_extra_name": " (COCO dataset labelmap)", 
+  "process_script": "install", 
+  "soft_uoa": "048ce42fdbca2f43", 
+  "suggested_path": "dataset-coco-labelmap", 
+  "tags": [
+    "object-detection", 
+    "tf", 
+    "tensorflow", 
+    "labelmap", 
+    "vcoco"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}
