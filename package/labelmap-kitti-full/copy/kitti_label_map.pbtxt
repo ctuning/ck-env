@@ -1,0 +1,34 @@
+item {
+  id: 1
+  name: 'car'
+}
+
+item {
+  id: 2
+  name: 'van'
+}
+
+item {
+  id: 3
+  name: 'truck'
+}
+
+item {
+  id: 4
+  name: 'pedestrian'
+}
+
+item {
+  id: 5
+  name: 'person_sitting'
+}
+
+item {
+  id: 6
+  name: 'cyclist'
+}
+
+item {
+  id: 7
+  name: 'tram'
+}

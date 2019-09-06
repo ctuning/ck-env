@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "9f99da2fde40f9d0", 
+  "backup_module_uid": "1dc07ee0f4742028", 
+  "backup_module_uoa": "package", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2019-09-05T11:53:48.307451", 
+    "version": [
+      "1", 
+      "9", 
+      "8", 
+      "1"
+    ]
+  }, 
+  "data_name": "labelmap-kitti-full"
+}
