@@ -1,3 +1,6 @@
+* 2019.09.10 - [FGG] started working on Sphinx documentation for CK kernel
+                     fixed minor error in module:os
+
 * 2019.06.15 - [FGG] added "CK_COMPILER_FLAG_STD_GNU89" to Android NDK GCC and MILEPOS GCC
                      https://groups.google.com/forum/#!msg/collective-knowledge/ZmhJy48XhDE/HmT7-18bBgAJ
 

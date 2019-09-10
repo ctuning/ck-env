@@ -91,7 +91,7 @@ def find_close(i):
 
        lst=rx['lst']
        if len(lst)==0:
-          return {'return':0, 'error':'most close platform was not found in CK'}
+          return {'return':1, 'error':'most close platform was not found in CK'}
 
        pl=lst[0]
 

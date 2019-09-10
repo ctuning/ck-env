@@ -1981,3 +1981,220 @@ def capture_command_output(i):
 
     except:
         return {'return': 1, 'error': "Could not run the command '{}'".format(cmd) }
+
+##############################################################################
+# list CK kernel functions (md format)
+
+def list_kernel_functions_md(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    import os
+    import copy
+
+    o=i.get('out','')
+
+    of=i.get('out_file','')
+
+    h=''
+    h2=''
+    hcfg=''
+
+    p=ck.work['env_root'] # Internal CK path
+
+    pk=os.path.join(p, 'ck', 'kernel.py')
+    if not os.path.isfile(pk):
+       return {'return':1, 'error':'Can\'t find kernel in '+pk}
+
+    r=ck.load_text_file({'text_file':pk, 'split_to_list':'yes'})
+    if r['return']>0: return r
+
+    l=r['lst']
+
+    funcs={}
+    desc=[]
+    ld=0
+    target=''
+
+    cfg=[]
+    cfg_start=False
+
+    ll=len(l)
+    for k in range(0, ll):
+        x=l[k]
+
+        if x.startswith('cfg={'):
+           cfg_start=True
+
+        if cfg_start:
+           cfg.append(x)
+           if x=='    }':
+              cfg_start=False
+
+        if x.startswith('##################'):
+           desc=[]
+           ld=k
+
+        if x.startswith('# '):
+           x1=x[2:].strip()
+           if x1.startswith('TARGET: '):
+              target=x1[8:]
+           else:
+              desc.append(x1)
+
+        if x.startswith('def '):
+           j1=x.find('(')
+           j2=x.find(')', j1+1)
+           j3=x.find(':')
+
+           fn=x[4:j1]
+           i=x[j1+1:j2]
+           rem=x[j3+1:]
+
+           api=[]
+
+           k+=1
+
+           found=False
+           first=False
+           while not found or k<ll:
+              x=l[k]
+              if x.strip().startswith('"""'):
+                 if first:
+                    found=True
+                    break
+                 else:
+                    first=True
+              elif first:
+                 api.append(x)
+              k+=1
+           
+           if found:
+              funcs[fn]={'api':api,
+                         'input':i,
+                         'rem':rem,
+                         'desc':desc,
+                         'line':ld,
+                         'target':target}
+
+           api=[]
+           desc=[]
+           target=''
+
+    # Process functions
+    h+='# CK kernel functions for end-users\n'
+    h+='\n'
+    h+='We encourage you to reuse these portable productivity functions (Python 2.6+ and 3+) from the CK modules or in your own Python scripts:\n'
+    h+='\n'
+    h+='```python\n'
+    h+='    import ck.kernel as ck\n'
+    h+='\n'
+    h+='    ck.out("Hello world")\n'
+    h+='\n'
+    h+='    r=ck.access({"action":"ls", "module_uoa":"env", "out":"con"})\n'
+    h+='    if r["return"]>0: ck.err(r)\n'
+    h+='    print (r["lst"])\n'
+    h+='\n'
+    h+='    r=ck.load_json_file({"json_file":"my_file.json", "dict":{"test":"yes"}})\n'
+    h+='    if r["return"]>0: return r\n'
+    h+='\n'
+    h+='    r=ck.save_text_file({"text_file":"my_file.txt", "string":"test=yes\\n"})\n'
+    h+='    if r["return"]>0: return r\n'
+    h+='\n'
+    h+='```\n'
+
+    hdev=h
+
+    num1=0
+    num2=0
+    for f in sorted(funcs):
+        x=funcs[f]
+
+        api=x['api']
+        i=x['input']
+        rem=x['rem']
+        line=x['line']
+        desc=x['desc']
+        target=x['target']
+
+        xapi='<i>'
+        for y in desc:
+            j=y.find('\\n=')
+            if j>=0: 
+               y=y[:j]
+            xapi+=y
+        xapi+='</i>\n'
+
+        xapi+='\n'
+        xapi+='```python\n'
+        for y in api:
+            xapi+=y+'\n'
+        xapi+='```\n'
+
+        url='https://github.com/ctuning/ck/blob/master/ck/kernel.py'
+
+        x=''
+        if target!='':
+           x+='<p>&nbsp;&nbsp;&nbsp;<i>for '+target+'</i>'
+
+        if 'end users' in target or 'end-users' in target:
+           num1+=1
+           num=num1
+        else:
+           num2+=1
+           num=num2
+
+        zh='\n## ck.'+f+'('+i+')\n\n'
+
+        zh+=xapi+'\n'
+#  <td nowrap valign="top"><a name="'+f+'">'+str(num)+'</td>\n'
+#        zh+='  <td nowrap valign="top"><a href="'+url+'#L'+str(line+1)+'"><b>ck.'+f+'('+i+')</b></a>'+x+'</b></td>\n'
+#        zh+='  <td nowrap valign="top">'+xapi+'</td>\n'
+#        zh+=' </tr>\n'
+
+        if 'end users' in target or 'end-users' in target:
+           h+=zh
+        else:
+           hdev+=zh
+
+    # Prepare config
+    hcfg+='You can access the following CK internal variables:\n'
+    hcfg+='\n'
+    hcfg+='```python\n'
+    hcfg+='    import ck.kernel as ck\n'
+    hcfg+='\n'
+    hcfg+='    print (ck.cfg)\n'
+    hcfg+='```\n\n'
+
+    hcfg+='See <a href="https://github.com/ctuning/ck/wiki">CK documentation for further details</a>.\n'
+
+    hcfg+='\n'
+    hcfg+='```python\n'
+    for x in cfg:
+        hcfg+=x+'\n'
+    hcfg+='```\n'
+    hcfg+=h2
+
+    h+=h2
+    hdev+=h2
+
+    if of!='':
+       r=ck.save_text_file({'text_file':of+'.md', 'string':h})
+       if r['return']>0: return r
+
+       r=ck.save_text_file({'text_file':of+'-dev.md', 'string':hdev})
+       if r['return']>0: return r
+
+       r=ck.save_text_file({'text_file':of+'-dev-cfg.md', 'string':hcfg})
+       if r['return']>0: return r
+
+    return {'return':0}
