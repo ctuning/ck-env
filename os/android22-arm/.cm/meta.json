@@ -17,6 +17,7 @@
   ],
   "change_dir": "cd",
   "ck_name": "linux",
+  "ck_name3": "android", 
   "ck_name2": "android",
   "cm_tool_prefix": "./",
   "delete_file": "rm ",

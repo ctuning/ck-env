@@ -1,3 +1,7 @@
+* 2019.10.06 - [FGG] added extra keys to OS descriptions; 
+                     added Android29;
+                     improved --quiet in ck detect soft
+
 * 2019.09.10 - [FGG] started working on Sphinx documentation for CK kernel
                      fixed minor error in module:os
 

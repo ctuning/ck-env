@@ -18,7 +18,7 @@
   "change_dir": "cd",
   "ck_name": "linux",
   "ck_name2": "android",
-  "cm_tool_prefix": "./",
+  "ck_name3": "android", 
   "delete_file": "rm ",
   "dir_sep": "/",
   "env_call": ".",

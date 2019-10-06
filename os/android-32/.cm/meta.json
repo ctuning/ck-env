@@ -12,6 +12,7 @@
   "change_dir": "cd", 
   "ck_name": "linux", 
   "ck_name2": "android", 
+  "ck_name3": "android", 
   "cm_tool_prefix": "./", 
   "default_compile_type": "static", 
   "delete_file": "rm ", 

@@ -826,8 +826,12 @@ def setup(i):
              if not update:
                 if o=='con':
                    ck.out('')
-                   r=ck.inp({'text':'Would you like to delete this entry and re-register environment (Y/n): '})
-                   dl=r['string'].strip().lower()
+
+                   if i.get('quiet','')=='yes':
+                      dl='y'
+                   else:
+                      r=ck.inp({'text':'Would you like to delete this entry and re-register environment (Y/n): '})
+                      dl=r['string'].strip().lower()
 
                    if dl=='' or dl=='y' or dl=='yes':
                       update=False

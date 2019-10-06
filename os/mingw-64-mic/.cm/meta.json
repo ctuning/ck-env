@@ -10,6 +10,7 @@
   "change_dir": "cd /D",
   "ck_name": "win",
   "ck_name2": "mingw",
+  "ck_name3": "mingw", 
   "cmd_for_detached_console": "start $#cmd#$",
   "delete_file": "del ",
   "dir_sep": "\\",

@@ -11,6 +11,7 @@
   "change_dir": "cd /D",
   "ck_name": "win",
   "ck_name2": "win",
+  "ck_name3": "windows", 
   "cmd_for_detached_console": "start $#cmd#$",
   "delete_file": "del ",
   "dir_sep": "\\",

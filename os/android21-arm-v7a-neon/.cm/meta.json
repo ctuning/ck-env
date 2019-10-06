@@ -18,6 +18,7 @@
   "change_dir": "cd",
   "ck_name": "linux",
   "ck_name2": "android",
+  "ck_name3": "android", 
   "cm_tool_prefix": "./",
   "cpu_features": {
     "arm_fp_neon": "yes"

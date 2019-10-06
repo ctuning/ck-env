@@ -11,6 +11,7 @@
   "change_dir": "cd",
   "ck_name": "linux",
   "ck_name2": "linux",
+  "ck_name3": "macos", 
   "cmd_for_detached_console": "xterm -hold -e \"$#cmd#$\"",
   "delete_file": "rm ",
   "dir_sep": "/",
