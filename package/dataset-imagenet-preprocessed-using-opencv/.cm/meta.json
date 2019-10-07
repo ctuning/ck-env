@@ -173,6 +173,16 @@
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "224"
       }
+    },
+    "inter.linear": {
+      "extra_env": {
+        "_INTERPOLATION_METHOD": "INTER_LINEAR"
+      }
+    },
+    "inter.area": {
+      "extra_env": {
+        "_INTERPOLATION_METHOD": "INTER_AREA"
+      }
     }
   }
 }
