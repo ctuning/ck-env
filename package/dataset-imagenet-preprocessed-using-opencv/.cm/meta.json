@@ -149,6 +149,11 @@
         "_SUBSET_VOLUME": ""
       }
     },
+    "side.96": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "96"
+      }
+    },
     "side.128": {
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "128"
@@ -167,11 +172,6 @@
     "side.224": {
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "224"
-      }
-    },
-    "side.256": {
-      "extra_env": {
-        "_INPUT_SQUARE_SIDE": "256"
       }
     }
   }
