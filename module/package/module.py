@@ -544,6 +544,23 @@ def install(i):
         cus[cus_key] = rx['output_string']
         ck.out("customize substitution: [{}] '{}' -> '{}'".format(cus_key, raw_cus_value, cus[cus_key]))
 
+    # Environment keys that start with a '*' are requesting environment substitution.
+    for raw_env_key  in [ k for k in pr_env.keys() if k[0]=='*' ]:
+        raw_env_value = pr_env.pop(raw_env_key)
+
+        rx = ck.access({'action':'substitute_from_dict',
+            'module_uoa': 'misc',
+            'input_string': raw_env_value,
+            'mapping': pr_env,
+            'tolerant': 'no',
+        })
+        if rx['return']>0: return rx
+        env_key = raw_env_key[1:]
+        pr_env[env_key] = rx['output_string']
+        ck.out("install_env substitution: [{}] '{}' -> '{}'".format(env_key, raw_env_value, pr_env[env_key]))
+
+
+
     # Conservatively setting cus['version'] to PACKAGE_VERSION only if it was previously unset.
     # FIXME: review the desired precedence between 'version' and PACKAGE_VERSION , taking into account that
     #        1) 'version' could have been set either directly in cus or selected via supported_versions and
