@@ -254,7 +254,6 @@ def install(i):
     duoa=i.get('uoa','')
     if duoa=='': duoa=i.get('data_uoa','')
     duid=''
-    env_display_name=''
     package_repo_uoa=''
     d={}
     required_variations = []
@@ -453,9 +452,6 @@ def install(i):
     else:
         extra_cli_tags = []
 
-    cus=d.get('customize',{})
-    env=d.get('env',{})
-
     udeps=d.get('deps',{})
 
     depsx=i.get('deps',{})
@@ -476,16 +472,29 @@ def install(i):
            _ , dep_name    = q.split('.')
            dep_add_tags[dep_name] = i[q]
 
-
     for q in preset_deps:
         if q in udeps:
            udeps[q]['uoa']=preset_deps[q]
+
+
+    cus=d.get('customize',{})
+    env=d.get('env',{})
 
     # This environment will be passed to process scripts (if any)
     pr_env=cus.get('install_env',{})
 
     # Update this env from CK kernel (for example, to decide what to use, git or https). FIXME: check the desired precedence between cus and ck.cfg
     pr_env.update(ck.cfg.get('install_env',{}))
+
+
+    # Some main dictionary keys have been previously living there,
+    # but now that we have variations it is more practical to move them to 'customize' subdictionary
+    # which can be more flexibly edited based on variations.
+    # If you need this functionality, please add these keys into the following tuple:
+
+    for moving_key in ('package_name', 'package_extra_name'):
+        if (moving_key not in cus) and (moving_key in d):
+            cus[moving_key]=d[moving_key]
 
     # Update this env from all the supported variations.
     # Detect if an incompatible mix of variation tags was required
@@ -528,7 +537,7 @@ def install(i):
 
     ver=cus.get('version', '')
 
-    env_display_name=cus.get('package_name', d.get('package_name', ''))
+    env_display_name=cus.get('package_name', '')
 
     extra_version=i.get('extra_version', cus.get('extra_version','') )
 
@@ -1079,15 +1088,12 @@ def install(i):
        soft_dict=rx['dict']
        deps=soft_dict.get('deps',{})
 
-    # Check package names
+    # In case 'package_name' was missing from the package, use the default from soft entry
     if env_display_name=='':
        env_display_name=soft_dict.get('soft_name','')
 
-       if d.get('package_extra_name','')!='':
-          cus['package_extra_name']=d['package_extra_name']
 
-       if cus.get('package_extra_name','')!='':
-          env_display_name+=cus['package_extra_name']
+    env_display_name+=cus.get('package_extra_name', '')
 
     rx = ck.access({'action':'substitute_from_dict',
         'module_uoa': 'misc',
