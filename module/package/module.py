@@ -1128,6 +1128,9 @@ def install(i):
 
     env_display_name+=cus.get('package_extra_name', '')
 
+    # TODO: instead of this application-specific substitute, start using generic
+    # "*package_extra_name" or "*package_name" substitute - then the following
+    # paragraph could be removed:
     rx = ck.access({'action':'substitute_from_dict',
         'module_uoa': 'misc',
         'input_string': env_display_name,
@@ -1135,6 +1138,8 @@ def install(i):
     })
     if rx['return']>0: return rx
     env_display_name = rx['output_string']
+
+
 
     # Save package UOA to the cus
     cus['used_package_uoa']=duoa
