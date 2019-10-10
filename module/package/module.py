@@ -1070,18 +1070,18 @@ def install(i):
 
     # Check dependencies
     deps={}
-    dx={}
+    soft_dict={}
     if suoa!='':
        rx=ck.access({'action':'load',
                      'module_uoa':cfg['module_deps']['soft'],
                      'data_uoa':suoa})
        if rx['return']>0: return rx
-       dx=rx['dict']
-       deps=dx.get('deps',{})
+       soft_dict=rx['dict']
+       deps=soft_dict.get('deps',{})
 
     # Check package names
     if env_display_name=='':
-       env_display_name=dx.get('soft_name','')
+       env_display_name=soft_dict.get('soft_name','')
 
        if d.get('package_extra_name','')!='':
           cus['package_extra_name']=d['package_extra_name']
