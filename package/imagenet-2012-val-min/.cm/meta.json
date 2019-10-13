@@ -34,6 +34,7 @@
     "ilsvrc2012",
     "ilsvrc2012min",
     "small_dataset",
+    "non-resized",
     "channel-stable"
   ],
   "template": "yes",
