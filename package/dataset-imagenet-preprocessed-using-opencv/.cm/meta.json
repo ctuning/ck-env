@@ -4,6 +4,7 @@
     "install_env": {
       "CK_IMAGE_FILE": "",
       "PACKAGE_VERSION": "2012",
+      "_AUDIT_TEST03": "",
       "_CROP_FACTOR": "87.5",
       "_DATA_TYPE": "uint8",
       "_INPUT_SQUARE_SIDE": "224",
@@ -101,6 +102,11 @@
       },
       "extra_customize": {
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
+      }
+    },
+    "audit.test03": {
+      "extra_env": {
+        "_AUDIT_TEST03": "YES"
       }
     },
     "crop.1000": {
