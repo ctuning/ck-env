@@ -1424,6 +1424,8 @@ def check(i):
 
               (deps)              - already resolved deps (if called from env)
 
+              (dep_add_tags.{KEY})   - extra tags added to specific subdictionary of deps{} for this particular resolution session
+
               (extra_version)     - add extra version, when registering software 
                                     (for example, -trunk-20160421)
                                     Be careful - if there is auto version detection,
@@ -1620,8 +1622,18 @@ def check(i):
                      'target_os_dict':tosd})
     if rx['return']>0: return rx
 
+
     # Check if need to resolve dependencies
     deps=i.get('deps',{})
+
+    dep_add_tags  = i.get('dep_add_tags', {})
+    for q in i:
+        if q.startswith('deps.'):
+           preset_deps[q[5:]]=i[q].split(':')[-1]
+        elif q.startswith('dep_add_tags.'):
+           _ , dep_name    = q.split('.')
+           dep_add_tags[dep_name] = i[q]
+
     sbat=''
     if len(deps)==0:
        deps=soft_entry_dict.get('deps',{})
@@ -1634,6 +1646,7 @@ def check(i):
               'target_device_id':tdid,
               'deps':deps,
 #              'env':envx,
+              'dep_add_tags': dep_add_tags,
               'env':copy.deepcopy(envx),
               'out':oo}
           rx=ck.access(ii)
