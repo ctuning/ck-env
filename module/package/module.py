@@ -514,7 +514,12 @@ def install(i):
                     return { 'return':1,
                              'error':'contradiction on variable ({}) detected when adding "{}" variation tag'.format(coll_var,req_variation)}
 
-            extra_cus = supported_variations[req_variation].get('extra_customize',{}) # FIXME: replicate the collision-avoidance for extra_cus, similar to the one above
+            extra_cus = supported_variations[req_variation].get('extra_customize',{})
+            colliding_cuss = set(extra_cus_from_variations.keys()) & set(extra_cus.keys()) # non-empty intersection means undefined behaviour
+            for coll_cus in colliding_cuss:     # have to check actual values to detect a mismatch
+                if extra_cus_from_variations[coll_cus] != extra_env[coll_cus]:
+                    return { 'return':1,
+                             'error':'contradiction on customize ({}) detected when adding "{}" variation tag'.format(coll_cus,req_variation)}
 
             extra_var_tags = supported_variations[req_variation].get('extra_tags',[])     # FIXME: replicate the collision-avoidance for extra_var_tags
             if extra_var_tags and type(extra_var_tags)!=list:
