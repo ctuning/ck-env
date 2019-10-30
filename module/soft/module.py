@@ -1574,34 +1574,6 @@ def check(i):
 
     cus=soft_entry_dict.get('customize',{})
 
-    supported_variations = soft_entry_dict.get('variations', {})
-    missing_variations = set(required_variations) - set(supported_variations)
-    if missing_variations:
-        return {'return':1, 'error':'Variations {} are not supported by soft:{}'.format(missing_variations, duoa)}
-
-    # Update this cus from all the supported variations.
-    # Detect if an incompatible mix of variation tags was required
-    # that would lead to undefined behaviour, and bail out if so.
-    #
-    if required_variations:
-        extra_cus_from_variations = {}
-
-        for req_variation in required_variations:
-            extra_cus = supported_variations[req_variation].get('extra_customize',{})
-            colliding_cuss = set(extra_cus_from_variations.keys()) & set(extra_cus.keys()) # non-empty intersection means undefined behaviour
-            for coll_cus in colliding_cuss:     # have to check actual values to detect a mismatch
-                if extra_cus_from_variations[coll_cus] != extra_env[coll_cus]:
-                    return { 'return':1,
-                             'error':'contradiction on customize ({}) detected when adding "{}" variation tag'.format(coll_cus,req_variation)}
-
-            extra_cus_from_variations.update( extra_cus )
-
-        cus.update( extra_cus_from_variations )
-
-
-
-    extra_version=i.get('extra_version', cus.get('extra_version',''))
-
     ########################################################################
     # Check env from input
     envx=copy.deepcopy(i.get('env',{}))
@@ -1613,6 +1585,44 @@ def check(i):
            ienv[q[len('ienv.'):]]=i[q]
         elif q.startswith('install_env.'):
            ienv[q[len('install_env.'):]]=i[q]
+
+    supported_variations = soft_entry_dict.get('variations', {})
+    missing_variations = set(required_variations) - set(supported_variations)
+    if missing_variations:
+        return {'return':1, 'error':'Variations {} are not supported by soft:{}'.format(missing_variations, duoa)}
+
+    # Update this cus from all the supported variations.
+    # Detect if an incompatible mix of variation tags was required
+    # that would lead to undefined behaviour, and bail out if so.
+    #
+    if required_variations:
+        extra_env_from_variations = {}
+        extra_cus_from_variations = {}
+
+        for req_variation in required_variations:
+            extra_env = supported_variations[req_variation].get('extra_env',{})
+            colliding_vars = set(extra_env_from_variations.keys()) & set(extra_env.keys()) # non-empty intersection means undefined behaviour
+            for coll_var in colliding_vars:     # have to check actual values to detect a mismatch
+                if extra_env_from_variations[coll_var] != extra_env[coll_var]:
+                    return { 'return':1,
+                             'error':'contradiction on variable ({}) detected when adding "{}" variation tag'.format(coll_var,req_variation)}
+
+            extra_cus = supported_variations[req_variation].get('extra_customize',{})
+            colliding_cuss = set(extra_cus_from_variations.keys()) & set(extra_cus.keys()) # non-empty intersection means undefined behaviour
+            for coll_cus in colliding_cuss:     # have to check actual values to detect a mismatch
+                if extra_cus_from_variations[coll_cus] != extra_env[coll_cus]:
+                    return { 'return':1,
+                             'error':'contradiction on customize ({}) detected when adding "{}" variation tag'.format(coll_cus,req_variation)}
+
+            extra_env_from_variations.update( extra_env )   # merge of one particular variation
+            extra_cus_from_variations.update( extra_cus )
+
+        ienv.update( extra_env_from_variations )  # merge of all variations
+        cus.update( extra_cus_from_variations )
+
+
+    extra_version=i.get('extra_version', cus.get('extra_version',''))
+
 
     # Check if restricts dependency to a given host or target OS
     rx=check_target({'dict':cus,
@@ -1648,6 +1658,7 @@ def check(i):
 #              'env':envx,
               'dep_add_tags': dep_add_tags,
               'env':copy.deepcopy(envx),
+              'install_env':ienv,
               'out':oo}
           rx=ck.access(ii)
           if rx['return']>0: return rx
