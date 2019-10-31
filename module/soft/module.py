@@ -1780,6 +1780,7 @@ def check(i):
            "target_device_id":tdid,
            "soft_entry_path":soft_entry_path,   # This is also a valid path suitable for soft detection (but not by default)
            "cfg":soft_entry_dict,
+           "install_env":ienv,
            "self_cfg":cfg,
            "ck_kernel":ck,
            "dirs":dirs,
