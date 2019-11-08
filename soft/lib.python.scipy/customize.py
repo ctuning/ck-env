@@ -26,7 +26,7 @@ def version_cmd(i):
         return {'return':0, 'version':detect_version_as}
 
     elif detect_version_externally:
-        desired_python_path     = i.get('deps', {}).deps.get('python', {}).get('dict', {}).get('env', {}).get('CK_ENV_COMPILER_PYTHON_FILE', sys.executable)
+        desired_python_path     = i.get('deps', {}).get('python', {}).get('dict', {}).get('env', {}).get('CK_ENV_COMPILER_PYTHON_FILE', sys.executable)
 
         version_cmd     = '{} -c "import sys; sys.path.insert(0,\'{}\'); import {}; print({}.{})" >$#filename#$'.format(
             desired_python_path, site_dir, package_name, package_name, version_variable_name);
