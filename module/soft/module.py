@@ -643,7 +643,8 @@ def setup(i):
               'skip_existing':skip_existing,
               'skip_add_target_file':cus.get('soft_version_skip_add_target_file',''),
               'use_locale':cus.get('use_locale_for_version',''),
-              'data_uid': duid
+              'data_uid': duid,
+              'deps': deps,
           }
           if ck.cfg.get('minimize_soft_detect_output','')!='yes':
              ii['out']=o
@@ -1914,7 +1915,8 @@ def check(i):
                'use_locale':cus.get('use_locale_for_version',''),
                'customize':cus,
                'custom_script_obj':cs,
-               'data_uid': duid
+               'data_uid': duid,
+               'deps': deps
            }
            if ck.cfg.get('minimize_soft_detect_output','')!='yes':
               ii['out']=o
@@ -2166,6 +2168,7 @@ def get_version(i):
     sext=hosd.get('script_ext','')
     eifsc=hosd.get('env_quotes_if_space_in_call','')
     nout=hosd.get('no_output','')
+    deps=i.get('deps',{})
 
     sb=bprefix+sb
 
@@ -2190,7 +2193,8 @@ def get_version(i):
                              'cmd':soft_version_cmd,
                              'ck_kernel':ck,
                              'customize':cus,
-                             'out':o})
+                             'out':o,
+                             'deps':deps})
           if rx['return']>0: return rx
           cmd=rx.get('cmd','')
           ver=rx.get('version','')
