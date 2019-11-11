@@ -20,6 +20,12 @@
       "name": "CUDA compiler",
       "sort": 20,
       "tags": "compiler,cuda"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "Python NumPy library",
+      "sort": 30,
+      "tags": "lib,python-package,numpy"
     }
   }, 
   "end_full_path_universal": "build$#sep#$pycuda$#sep#$__init__.py", 
