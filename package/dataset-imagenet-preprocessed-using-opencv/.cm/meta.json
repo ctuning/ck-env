@@ -4,15 +4,7 @@
     "install_env": {
       "CK_IMAGE_FILE": "",
       "PACKAGE_VERSION": "2012",
-      "_AUDIT_TEST03": "",
-      "_CROP_FACTOR": "87.5",
-      "_DATA_TYPE": "uint8",
-      "_INPUT_SQUARE_SIDE": "224",
-      "_INTERPOLATION_METHOD": "INTER_LINEAR",
-      "_NEW_EXTENSION": "rgb8",
-      "_NORMALIZE_DATA": "0",
-      "_SUBTRACT_MEAN": "0",
-      "_GIVEN_CHANNEL_MEANS": "",
+
       "_SUBSET_FOF": "image_list.txt",
       "_SUBSET_OFFSET": "0",
       "_SUBSET_VOLUME": ""
@@ -71,9 +63,13 @@
   ],
   "variations": {
     "universal": {
+      "on_by_default": "yes",
       "extra_env": {
         "_DATA_TYPE": "uint8",
-        "_NEW_EXTENSION": "rgb8"
+        "_NEW_EXTENSION": "rgb8",
+        "_NORMALIZE_DATA": "0",
+        "_SUBTRACT_MEAN": "0",
+        "_GIVEN_CHANNEL_MEANS": ""
       },
       "extra_customize": {
         "soft_uoa": "dataset.imagenet.preprocessed"
@@ -85,6 +81,7 @@
         "_NEW_EXTENSION": "rgbf32",
         "_NORMALIZE_DATA": "YES",
         "_SUBTRACT_MEAN": "0",
+        "_GIVEN_CHANNEL_MEANS": "",
         "_INTERPOLATION_METHOD": "INTER_LINEAR"
       },
       "extra_customize": {
@@ -104,6 +101,12 @@
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
       }
     },
+    "unmutilated": {
+      "on_by_default": "yes",
+      "extra_env": {
+        "_AUDIT_TEST03": ""
+      }
+    },
     "audit.test03": {
       "extra_env": {
         "_AUDIT_TEST03": "YES"
@@ -115,6 +118,7 @@
       }
     },
     "crop.875": {
+      "on_by_default": "yes",
       "extra_env": {
         "_CROP_FACTOR": "87.5"
       }
@@ -129,6 +133,7 @@
       }
     },
     "first.20": {
+      "on_by_default": "yes",
       "extra_customize": {
         "package_extra_name": " (first 20)"
       },
@@ -176,11 +181,13 @@
       }
     },
     "side.224": {
+      "on_by_default": "yes",
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "224"
       }
     },
     "inter.linear": {
+      "on_by_default": "yes",
       "extra_env": {
         "_INTERPOLATION_METHOD": "INTER_LINEAR"
       }
