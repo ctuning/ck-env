@@ -442,9 +442,6 @@ def install(i):
     # Get main params
     tags=copy.deepcopy(d.get('tags',[]))
 
-    if required_variations:
-        tags.extend( required_variations )
-
     extra_cli_tags = i.get('extra_tags','').strip()
     if extra_cli_tags!='':
         extra_cli_tags = extra_cli_tags.split(',')
@@ -496,38 +493,53 @@ def install(i):
         if (moving_key not in cus) and (moving_key in d):
             cus[moving_key]=d[moving_key]
 
+
+    supported_variations  = d.get('variations', {})
+    required_vari_pairs   = [ (variation_name, False) for variation_name in required_variations ]
+    default_vari_pairs    = [ (variation_name, True) for variation_name in supported_variations if supported_variations[variation_name].get('on_by_default', '')=='yes' ]
+    vari_pairs            = required_vari_pairs + default_vari_pairs    # NB: the order is important!
+
     # Update this env from all the supported variations.
     # Detect if an incompatible mix of variation tags was required
     # that would lead to undefined behaviour, and bail out if so.
     #
-    if required_variations:
+
+    if vari_pairs:
         extra_env_from_variations = {}
         extra_cus_from_variations = {}
         extra_tags_from_variations = []
 
         supported_variations = d.get('variations', {})
-        for req_variation in required_variations:
-            extra_env = supported_variations[req_variation].get('extra_env',{})
+        for (curr_variation, optional_variation) in vari_pairs:
+            extra_env = supported_variations[curr_variation].get('extra_env',{})
             colliding_vars = set(extra_env_from_variations.keys()) & set(extra_env.keys()) # non-empty intersection means undefined behaviour
+
+            if colliding_vars and optional_variation:   # a non-critical collision of env means we simply skip the optional_variation
+                continue
+
             for coll_var in colliding_vars:     # have to check actual values to detect a mismatch
                 if extra_env_from_variations[coll_var] != extra_env[coll_var]:
                     return { 'return':1,
-                             'error':'contradiction on variable ({}) detected when adding "{}" variation tag'.format(coll_var,req_variation)}
+                             'error':'contradiction on variable ({}) detected when adding "{}" variation tag'.format(coll_var,curr_variation)}
 
-            extra_cus = supported_variations[req_variation].get('extra_customize',{})
+            extra_cus = supported_variations[curr_variation].get('extra_customize',{})
             colliding_cuss = set(extra_cus_from_variations.keys()) & set(extra_cus.keys()) # non-empty intersection means undefined behaviour
+
+            if colliding_cuss and optional_variation:   # a non-critical collision of cus means we simply skip the optional_variation
+                continue
+
             for coll_cus in colliding_cuss:     # have to check actual values to detect a mismatch
                 if extra_cus_from_variations[coll_cus] != extra_env[coll_cus]:
                     return { 'return':1,
-                             'error':'contradiction on customize ({}) detected when adding "{}" variation tag'.format(coll_cus,req_variation)}
+                             'error':'contradiction on customize ({}) detected when adding "{}" variation tag'.format(coll_cus,curr_variation)}
 
-            extra_var_tags = supported_variations[req_variation].get('extra_tags',[])     # FIXME: replicate the collision-avoidance for extra_var_tags
+            extra_var_tags = supported_variations[curr_variation].get('extra_tags',[])
             if extra_var_tags and type(extra_var_tags)!=list:
               extra_var_tags=extra_var_tags.split(',')
 
             extra_env_from_variations.update( extra_env )   # merge of one particular variation
             extra_cus_from_variations.update( extra_cus )
-            extra_tags_from_variations.extend( extra_var_tags )
+            extra_tags_from_variations.extend( [curr_variation] + extra_var_tags )
 
         pr_env.update( extra_env_from_variations )  # merge of all variations
         cus.update( extra_cus_from_variations )
