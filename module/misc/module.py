@@ -615,6 +615,7 @@ def search_in_variations(i):
     """
     Input:  {
                 tags                - the query, a mixture of tags and variations
+                (data_uoa)          - restrict the search to a specific entry
                 (query_module_uoa)  - entries of which type to search for
                 (add_info)          - each entry found will also contain 'info' dictionary ('meta' is obligatory)
             }
@@ -631,6 +632,8 @@ def search_in_variations(i):
     """
 
     tags        = i.get('tags')
+
+    data_uoa    = i.get('data_uoa', '')
     module_uoa  = i.get('query_module_uoa', '*')
     add_info    = i.get('add_info', '')
 
@@ -655,6 +658,7 @@ def search_in_variations(i):
         return { 'return': 0, 'skip': ( '' if matched_bool else 'yes' ) }
 
     r=ck.access({'action':'list',
+                   'data_uoa': data_uoa,
                    'module_uoa': module_uoa,
                    'add_meta':'yes',
                    'add_info':add_info,

@@ -253,34 +253,24 @@ def install(i):
     # Check package description
     duoa=i.get('uoa','')
     if duoa=='': duoa=i.get('data_uoa','')
+    requested_muoa=i.get('module_uoa','')
+
     duid=''
     package_repo_uoa=''
     d={}
     required_variations = []
 
-    if duoa=='' and xtags=='':
+    if duoa=='' and requested_muoa=='':
        # Try to detect CID in current path
        rx=ck.detect_cid_in_current_path({})
        if rx['return']==0:
           duoa=rx.get('data_uoa','')
           package_repo_uoa=rx.get('repo_uoa','')
 
-    if duoa!='':
-       rx=ck.access({'action':'load',
-                     'module_uoa':work['self_module_uid'],
-                     'data_uoa':duoa})
-       if rx['return']>0: return rx
-       d=rx['dict']
-       p=rx['path']
-
-       duoa=rx['data_uoa']
-       duid=rx['data_uid']
-       package_repo_uoa=rx.get('repo_uoa','')
-    else:
-       # First, search by tags
-       if xtags!='':
+    if xtags:	# it tags are available, try searching both in tags and variations
 
           r=ck.access({'action':            'search_in_variations',
+                       'data_uoa':			duoa,
                        'module_uoa':        'misc',
                        'query_module_uoa':  work['self_module_uid'],
                        'tags':              xtags,
@@ -400,34 +390,26 @@ def install(i):
                    ck.out('  Package found: '+duoax+' ('+duid+')')
                    ck.out('')
 
-       if duoa=='' and xtags=='':
-          found=False
+          if duoa=='':
+             x=''
+             if xor_tags!='':
+                x='and with or_tags="'+xor_tags+'" '
+             if xno_tags!='':
+                x='and with no_tags="'+xno_tags+'" '
+             return {'return':16, 'error':'package with tags "'+xtags+'" '+x+'for your environment was not found!'}
 
-          # Attempt to load configuration from the current directory
-          try:
-              p=os.getcwd()
-          except OSError:
-              os.chdir('..')
-              p=os.getcwd()
+    elif duoa:	# if tags were not available, try to load directly
+       rx=ck.access({'action':'load',
+                     'module_uoa':work['self_module_uid'],
+                     'data_uoa':duoa})
+       if rx['return']>0: return rx
+       d=rx['dict']
+       p=rx['path']
 
-          pc=os.path.join(p, ck.cfg['subdir_ck_ext'], ck.cfg['file_meta'])
+       duoa=rx['data_uoa']
+       duid=rx['data_uid']
+       package_repo_uoa=rx.get('repo_uoa','')
 
-          if os.path.isfile(pc):
-             r=ck.load_json_file({'json_file':pc})
-             if r['return']==0:
-                d=r['dict']
-                found=True
-
-          if not found:
-             return {'return':1, 'error':'package UOA (data_uoa) is not defined'}
-
-       if duoa=='':
-          x=''
-          if xor_tags!='':
-             x='and with or_tags="'+xor_tags+'" '
-          if xno_tags!='':
-             x='and with no_tags="'+xno_tags+'" '
-          return {'return':16, 'error':'package with tags "'+xtags+'" '+x+'for your environment was not found!'}
 
     # Check if restricts dependency to a given host or target OS
     rx=ck.access({'action':'check_target',
