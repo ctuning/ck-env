@@ -430,6 +430,7 @@ def install(i):
         tags.extend(extra_cli_tags)
     else:
         extra_cli_tags = []
+    vari_and_cli_tags = set(extra_cli_tags)		# to be topped up with variations, serialized and added to the install path
 
     udeps=d.get('deps',{})
 
@@ -522,6 +523,7 @@ def install(i):
             extra_env_from_variations.update( extra_env )   # merge of one particular variation
             extra_cus_from_variations.update( extra_cus )
             extra_tags_from_variations.extend( [curr_variation] + extra_var_tags )
+            vari_and_cli_tags.add(curr_variation)
 
         pr_env.update( extra_env_from_variations )  # merge of all variations
         cus.update( extra_cus_from_variations )
@@ -801,7 +803,6 @@ def install(i):
     # Check installation path
     pre_path=i.get('path','')
     pi=i.get('install_path','')
-    vari_and_cli_tags = set(required_variations) | set(extra_cli_tags)  # weed out potential repeats
     vari_and_cli_path = '-'.join([''] + sorted(list(vari_and_cli_tags)) ) if vari_and_cli_tags else ''
     extra_path=i.get('extra_path','')
     fp=i.get('full_path','')
