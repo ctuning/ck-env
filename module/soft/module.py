@@ -1531,7 +1531,6 @@ def check(i):
     if duoa=='': duoa=i.get('data_uoa','')
     requested_muoa=i.get('module_uoa','')
 
-    print(i)
 
     if duoa=='' and requested_muoa=='':
        # Try to detect CID in current path
