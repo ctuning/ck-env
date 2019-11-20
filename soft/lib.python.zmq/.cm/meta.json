@@ -13,6 +13,16 @@
     "version_module_name": "sugar/version",
     "_version_variable_name": "__version__"
   }, 
+  "deps": {
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 10,
+      "tags": "compiler,python",
+      "version_from": [ 3, 5, 0 ]
+    }
+  },
   "soft_name": "Python ZeroMQ library", 
   "tags": [
     "lib", 
