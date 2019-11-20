@@ -1529,22 +1529,19 @@ def check(i):
     # Check soft UOA
     duoa=i.get('uoa', '')
     if duoa=='': duoa=i.get('data_uoa','')
+    requested_muoa=i.get('module_uoa','')
 
+    print(i)
 
-    if duoa:    # Load
-        r=ck.access({'action':'load',
-                    'module_uoa':work['self_module_uid'],
-                    'data_uoa':duoa,
-        })
-        if r['return']>0: return r
+    if duoa=='' and requested_muoa=='':
+       # Try to detect CID in current path
+       rx=ck.detect_cid_in_current_path({})
+       if rx['return']==0:
+          duoa=rx.get('data_uoa','')
 
-        soft_entry_dict=r['dict']
-        required_variations=[]
-        if tags:
-            required_variations = tags.split(',')
-
-    elif tags!='':  # Search
+    if tags:  # if tags are available, try searching both in tags and variations
         r=ck.access({'action':          'search_in_variations',
+                    'data_uoa':         duoa,
                     'module_uoa':       'misc',
                     'query_module_uoa': work['self_module_uid'],
                     'tags':             tags,
@@ -1566,6 +1563,16 @@ def check(i):
             required_variations=r['required_variations']
         else:
             return {'return':1, 'error':'software entry was not found'}
+
+    elif duoa:  # if tags were not available, try to load directly
+        r=ck.access({'action':'load',
+                    'module_uoa':work['self_module_uid'],
+                    'data_uoa':duoa,
+        })
+        if r['return']>0: return r
+
+        soft_entry_dict=r['dict']
+        required_variations = []
     else:
         return {'return':1, 'error':'please define either --data_uoa or --tags or both to get going'}
 
