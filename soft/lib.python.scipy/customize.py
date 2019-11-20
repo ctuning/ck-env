@@ -18,11 +18,11 @@ def version_cmd(i):
     ck                      = i['ck_kernel']
     cus                     = i['customize']
 
-    detect_version_as           = cus.get('detect_version_as', '')
+    detect_version_as           = str(cus.get('detect_version_as', ''))
     detect_version_externally   = cus.get('detect_version_externally', 'no') == 'yes'
     version_variable_name       = cus.get('version_variable_name', '__version__')
 
-    if detect_version_as:
+    if detect_version_as!='':   # sic: otherwise version 0 cannot be suggested
         return {'return':0, 'version':detect_version_as}
 
     elif detect_version_externally:
