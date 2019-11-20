@@ -267,7 +267,7 @@ def install(i):
           duoa=rx.get('data_uoa','')
           package_repo_uoa=rx.get('repo_uoa','')
 
-    if xtags:	# it tags are available, try searching both in tags and variations
+    if xtags:	# if tags are available, try searching both in tags and variations
 
           r=ck.access({'action':            'search_in_variations',
                        'data_uoa':			duoa,
