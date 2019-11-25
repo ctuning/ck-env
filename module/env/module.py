@@ -2346,7 +2346,7 @@ def virtual(i):
             list_of_updates.append( {'uoa': uoa} )
 
     if tag_groups and len(tag_groups)>0:    # tag_groups are always added on top
-        list_of_updates += [ {'or_tags': or_tags} for or_tags in tag_groups.split(' ')]
+        list_of_updates += [ {'or_tags': or_tags} for or_tags in tag_groups.split()]
 
     if not len(list_of_uoa) and ( i.get('tags') or i.get('or_tags') ):  # but make sure tags were seen at least once
         list_of_updates.append( {} )
