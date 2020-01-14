@@ -3,12 +3,8 @@
   "customize": {
     "install_env": {
       "CK_IMAGE_FILE": "",
-      "PACKAGE_VERSION": "2017",
-      "_INPUT_SQUARE_SIDE": "300",
       "_NEW_EXTENSION": "rgb8",
-      "_SUBSET_FOF": "original_dimensions.txt",
-      "_SUBSET_OFFSET": "0",
-      "_SUBSET_VOLUME": ""
+      "_SUBSET_FOF": "original_dimensions.txt"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -55,6 +51,7 @@
     "dataset",
     "object-detection",
     "preprocessed",
+    "rgb8",
     "using-opencv"
   ],
   "variations": {
@@ -76,6 +73,7 @@
       }
     },
     "coco.2017": {
+      "on_by_default": "yes",
       "extra_customize": {},
       "extra_tags": [ "coco", "COCO", "2017", "v2017" ],
       "extra_env": {
@@ -84,6 +82,7 @@
       }
     },
     "first.20": {
+      "on_by_default": "yes",
       "extra_customize": {
         "package_extra_name": " (first 20)"
       },
@@ -134,6 +133,7 @@
       }
     },
     "side.300": {
+      "on_by_default": "yes",
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "300"
       }
