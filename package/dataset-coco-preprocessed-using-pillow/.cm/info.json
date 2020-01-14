@@ -11,5 +11,5 @@
       "7"
     ]
   },
-  "data_name": "dataset-object-detection-preprocessed"
+  "data_name": "dataset-coco-preprocessed-using-pillow"
 }
