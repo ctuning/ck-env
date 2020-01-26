@@ -1,15 +1,16 @@
 {
-  "data_uid": "1ff43ae88715a8c1", 
-  "data_name": "ck-env", 
+  "data_alias": "ck-env",
+  "data_name": "ck-env",
+  "data_uid": "1ff43ae88715a8c1",
+  "data_uoa": "ck-env",
   "dict": {
-    "url": "https://github.com/ctuning/ck-env", 
-    "shared": "git",
+    "desc": "Portable CK package manager with a unified JSON API and with virtual environment allowing automatic detection, installation and rebuilding of a given software or data sets across diverse platforms, environments, compilers and libraries with easy co-existence of multiple tools (see <a href=\"http://cKnowledge.org/shared-packages.html\">shared packages</a>, <a href=\"http://cKnowledge.org/shared-soft-detection-plugins.html\">software detection plugins</a> and <a href=\"https://github.com/ctuning/ck/wiki/Portable-workflows\">other details</a>).",
     "repo_deps": [
       {
         "repo_uoa": "ck-web"
       }
-    ] 
-  }, 
-  "data_alias": "ck-env", 
-  "data_uoa": "ck-env"
+    ],
+    "shared": "git",
+    "url": "https://github.com/ctuning/ck-env"
+  }
 }

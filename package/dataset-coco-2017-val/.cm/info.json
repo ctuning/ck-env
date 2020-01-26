@@ -1,16 +1,16 @@
 {
-  "backup_data_uid": "04622c746f287473", 
-  "backup_module_uid": "1dc07ee0f4742028", 
-  "backup_module_uoa": "package", 
+  "backup_data_uid": "04622c746f287473",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
   "control": {
-    "engine": "CK", 
-    "iso_datetime": "2019-04-05T03:52:10.905910", 
+    "engine": "CK",
+    "iso_datetime": "2019-04-05T03:52:10.905910",
     "version": [
-      "1", 
-      "9", 
-      "6", 
+      "1",
+      "9",
+      "6",
       "1"
     ]
-  }, 
+  },
   "data_name": "dataset-coco-2017-val"
 }

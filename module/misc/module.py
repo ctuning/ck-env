@@ -2010,6 +2010,7 @@ def list_kernel_functions_md(i):
     of=i.get('out_file','')
 
     h=''
+    hdev=''
     h2=''
     hcfg=''
 
@@ -2116,7 +2117,7 @@ def list_kernel_functions_md(i):
     h+='\n'
     h+='```\n'
 
-    hdev=h
+    hdev+='# CK kernel functions for the CK developers\n'
 
     num1=0
     num2=0
@@ -2157,7 +2158,7 @@ def list_kernel_functions_md(i):
            num2+=1
            num=num2
 
-        zh='\n## ck.'+f+'('+i+')\n\n'
+        zh='\n### ck.'+f+'('+i+')\n\n'
 
         zh+=xapi+'\n'
 #  <td nowrap valign="top"><a name="'+f+'">'+str(num)+'</td>\n'
