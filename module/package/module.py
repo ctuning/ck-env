@@ -2654,7 +2654,7 @@ def print_warning(i):
           if purl!='':
              ck.out('   Native package URL:   '+purl)
              if pc!='':
-                ck.out('   Git checkout:         '+pc)
+                ck.out('   Git checkout:   '+pc)
 
           if pruoa!='':
              ck.out('   CK repo:              '+pruoa)
@@ -2669,9 +2669,16 @@ def print_warning(i):
                 if url!='':
                    url1=url+'/tree/master/package/'+pduoa
                    url2=url+'/issues'
+
+                   ck.out('')
                    ck.out('   CK repo URL:          '+url)
                    ck.out('   CK package URL:       '+url1)
-                   ck.out('   Issues URL:           '+url2)
+ 
+                   crurl=ck.cfg.get('wiki_data_web','')
+                   if crurl!='':
+                      crurl+='package/'+pduoa
+                      ck.out('')
+                      ck.out('   CodeReef stable package URL: '+crurl)
 
        ck.out('   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 
@@ -2681,7 +2688,9 @@ def print_warning(i):
           x1='the authors'
           x2=url2
 
-       ck.out('   Please, submit the log to '+x1+' of this external CK package at "'+x2+'" to collaboratively fix this problem!')
+       ck.out('')
+       ck.out('   Please, submit the *full* log to '+x1+' of this external CK package')
+       ck.out('   at '+x2+' to collaboratively fix this problem!')
        ck.out('')
 
     return {'return':0}
