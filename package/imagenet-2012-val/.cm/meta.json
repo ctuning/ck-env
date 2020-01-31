@@ -17,6 +17,7 @@
     "win": "ILSVRC2012_val_00000001.JPEG"
   },
   "need_cpu_info": "no",
+  "problem":"yes",
   "process_script": "install",
   "soft_uoa": "ff47fc6a33b4b03b",
   "suggested_path": "dataset-imagenet-ilsvrc2012-val",

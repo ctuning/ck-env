@@ -1,53 +1,57 @@
-* 2019.10.06 - [FGG] added extra keys to OS descriptions; 
+* 2020.01.31 - [gfursin] added "problem":"yes" key in package meta to be able to stop
+                     problematic packages such as imagenet-2012. In such case
+                     a message is printed from problem.txt!
+
+* 2019.10.06 - [gfursin] added extra keys to OS descriptions; 
                      added Android29;
                      improved --quiet in ck detect soft
 
-* 2019.09.10 - [FGG] started working on Sphinx documentation for CK kernel
+* 2019.09.10 - [gfursin] started working on Sphinx documentation for CK kernel
                      fixed minor error in module:os
 
-* 2019.06.15 - [FGG] added "CK_COMPILER_FLAG_STD_GNU89" to Android NDK GCC and MILEPOS GCC
+* 2019.06.15 - [gfursin] added "CK_COMPILER_FLAG_STD_GNU89" to Android NDK GCC and MILEPOS GCC
                      https://groups.google.com/forum/#!msg/collective-knowledge/ZmhJy48XhDE/HmT7-18bBgAJ
 
-* 2019.03.30 - [FGG] added soft:android.ndk.toolchain (to support new Android NDKs with LLVM)
+* 2019.03.30 - [gfursin] added soft:android.ndk.toolchain (to support new Android NDKs with LLVM)
                      and packages compiler-llvm-7.0.1-universal & compiler-llvm-8.0.0-universal
 
-* 2019.03.18 - [FGG] added OpenJDK packages; removed broken Oracle JDK
+* 2019.03.18 - [gfursin] added OpenJDK packages; removed broken Oracle JDK
 
-* 2019.03.08 - [FGG] added LLC to soft:compiler.llvm
+* 2019.03.08 - [gfursin] added LLC to soft:compiler.llvm
 
-* 2019.03.05 - [FGG] added link to http://ReuseResearch.com
+* 2019.03.05 - [gfursin] added link to http://ReuseResearch.com
 
-* 2019.02.19 - [FGG] added "CLUSTER" machine to describe any cluster configuration (SysML'19)
-               [FGG] added imagenet.min package and a few soft detection plugins for Imagenet
+* 2019.02.19 - [gfursin] added "CLUSTER" machine to describe any cluster configuration (SysML'19)
+               [gfursin] added imagenet.min package and a few soft detection plugins for Imagenet
 
 * 2019.02.12 - added Deep500 package and soft detection plugin
 
-* 2019.02.11 - [FGG] fixed listing of repos
+* 2019.02.11 - [gfursin] fixed listing of repos
 
-* 2019.02.08 - [FGG] improved handling of templates
-             - [FGG] improved problem reporting in third-party packages
+* 2019.02.08 - [gfursin] improved handling of templates
+             - [gfursin] improved problem reporting in third-party packages
 
-* 2019.02.01 - [FGG] added EasyBuild soft
+* 2019.02.01 - [gfursin] added EasyBuild soft
 
-* 2018.12.15 - [FGG] fixed registration of Clang from Android NDK >= 17 with LLVM C++ lib
+* 2018.12.15 - [gfursin] fixed registration of Clang from Android NDK >= 17 with LLVM C++ lib
                      fixed detection of GCC from Android NDK >= 18b (+windows)
 
-* 2018.12.11 - [FGG] fixed ck snapshot artifact (with Leo's feedback)
+* 2018.12.11 - [gfursin] fixed ck snapshot artifact (with Leo's feedback)
 
-* 2018.12.05 - [FGG] moved xsmm and netcdf soft and package from ck-scc18
-               [FGG] added detection of libraries via .settings and spack yaml
-               [FGG] added different OpenMPI packages
+* 2018.12.05 - [gfursin] moved xsmm and netcdf soft and package from ck-scc18
+               [gfursin] added detection of libraries via .settings and spack yaml
+               [gfursin] added different OpenMPI packages
 
-* 2018.12.05 - [FGG] added --search_dir (search only in this dir)
+* 2018.12.05 - [gfursin] added --search_dir (search only in this dir)
                      useful for Spack and EasyBuild
 
-* 2018.12.03 - [FGG] improved reuse_deps with different tags
+* 2018.12.03 - [gfursin] improved reuse_deps with different tags
                      improved detection of Intel MPI
                      added HDF5 package for seissol compatibility
 
-* 2018.12.02 - [FGG] added "ck set kernel var.minimize_soft_detect_output=yes"
+* 2018.12.02 - [gfursin] added "ck set kernel var.minimize_soft_detect_output=yes"
                      to minimize soft detection output (off by default)
-             - [FGG] added "ck detect soft --search_depth={num}"
+             - [gfursin] added "ck detect soft --search_depth={num}"
                      and "ck set kernel var.force_soft_search_depth={num}"
 
 * 2018.11.29 - added workflow description for repository listing
@@ -62,84 +66,84 @@
 * 2018.11.14 - [FGG and Stephen Herbein] improved soft search in HPC 
                (ck set kernel var.soft_search_dirs=dir1,dir2,...)
 
-* 2018.09.25 - [FGG] added package cmake 3.12.2
-               [FGG] fixed bug reported in https://github.com/ctuning/ck-env/issues/77
+* 2018.09.25 - [gfursin] added package cmake 3.12.2
+               [gfursin] fixed bug reported in https://github.com/ctuning/ck-env/issues/77
 
-* 2018.09.24 - [FGG] added packages for LLVM 6.0.1 and 7.0.0
+* 2018.09.24 - [gfursin] added packages for LLVM 6.0.1 and 7.0.0
 
-* 2018.09.02 - [FGG] added missing customize.py for lapack
+* 2018.09.02 - [gfursin] added missing customize.py for lapack
 
-* 2018.08.16 - [FGG] added Python deps to Scons
+* 2018.08.16 - [gfursin] added Python deps to Scons
 
 * 2018.08.14 - [Leo] added first automated tests
-               [FGG] moved outdated JDK 9 to ck-old-packages repo, and added JDK 8.181 and JDK 10.0.2
+               [gfursin] moved outdated JDK 9 to ck-old-packages repo, and added JDK 8.181 and JDK 10.0.2
 
 * 2018.07.27 - [Leo] adding support for permanent entries
-               [FGG] added support to clean/rm entries from local repo by default
+               [gfursin] added support to clean/rm entries from local repo by default
 
-* 2018.07.21 - [FGG] added "ck replace_strings_in_file misc"
+* 2018.07.21 - [gfursin] added "ck replace_strings_in_file misc"
                      to customize text files like config.cmake in a new TVM package
 
-* 2018.07.19 - [FGG] added soft and package for Python matplotlib and requests 
+* 2018.07.19 - [gfursin] added soft and package for Python matplotlib and requests 
                      needed for VTA workflow from TVM
 
-* 2018.07.17 - [FGG] added support for new website when generating lists of components
+* 2018.07.17 - [gfursin] added support for new website when generating lists of components
 
-* 2018.07.14 - [FGG] added platform.npu (while keeping platform.nn for any neural network even biological)
+* 2018.07.14 - [gfursin] added platform.npu (while keeping platform.nn for any neural network even biological)
 
-* 2018.07.09 - [FGG] fixed intel mpi detection
+* 2018.07.09 - [gfursin] fixed intel mpi detection
                      fixed compilation of HDF5 parallel version with intel mpi
                      renamed soft:lib.mpiicc to soft:lib.mpi.intel
                      moved package:lib-openmpi-1.10.3-universal from ck-math repo
                      unified vars for soft:lib.mpi
 
-* 2018.06.28 - [FGG] added basic templates for package plugins
+* 2018.06.28 - [gfursin] added basic templates for package plugins
 
-* 2018.06.27 - [FGG] added basic templates for soft plugins
+* 2018.06.27 - [gfursin] added basic templates for soft plugins
 
-* 2018.06.22 - [FGG] added support for the latest Android NDK in libjpeg 
+* 2018.06.22 - [gfursin] added support for the latest Android NDK in libjpeg 
                      (needed for our Android app to crowdsource DNN benchmarking)
 
-* 2018.06.19 - [FGG] added NumPy package/soft and cleaned up other Python packages meta ...
+* 2018.06.19 - [gfursin] added NumPy package/soft and cleaned up other Python packages meta ...
 
-* 2018.06.18 - [FGG] added ck list_kernel_functions misc to generate docs about CK functions
-               [FGG] added automatic generation of a list of repositories
+* 2018.06.18 - [gfursin] added ck list_kernel_functions misc to generate docs about CK functions
+               [gfursin] added automatic generation of a list of repositories
 
-* 2018.06.16 - [FGG] added detection of OpenCL library on Linux
+* 2018.06.16 - [gfursin] added detection of OpenCL library on Linux
 
-* 2018.06.13 - [FGG] added support for remote quantum machines 
+* 2018.06.13 - [gfursin] added support for remote quantum machines 
                      in the "machine" module
 
-* 2018.06.08 - [FGG] added xml module to validate XML files via DTD
+* 2018.06.08 - [gfursin] added xml module to validate XML files via DTD
                      (needed to generate ACM DL proceedings for ReQuEST tournament)
-               [FGG] added universal XML generator from special dict
+               [gfursin] added universal XML generator from special dict
                      (to automate generation of ACM proceedings)
 
-* 2018.06.07 - [FGG] fixing GCC stdlib++ detection on Windows 
+* 2018.06.07 - [gfursin] fixing GCC stdlib++ detection on Windows 
                      (see https://github.com/BVLC/caffe/issues/5631#issuecomment-395323054)
-             - [FGG] automatically generate _CYGWIN for _BIN,_LIB,_INCLUDE paths 
+             - [gfursin] automatically generate _CYGWIN for _BIN,_LIB,_INCLUDE paths 
                      on Windows (useful to build Caffe)
 
-* 2018.06.01 - [FGG] added support for os:android26* android27* and android28*
+* 2018.06.01 - [gfursin] added support for os:android26* android27* and android28*
                      improved detection of correct Android NDK GCC
 
-* 2018.05.30 - [FGG] fixed soft auto-detect when have no_tags (see #68)
+* 2018.05.30 - [gfursin] fixed soft auto-detect when have no_tags (see #68)
 
-* 2018.05.29 - [FGG] added "ck snapshot artifact --repo={name of repo}" to prepare a zip file
+* 2018.05.29 - [gfursin] added "ck snapshot artifact --repo={name of repo}" to prepare a zip file
                with selected repo, all dependencies, ck-master and 2 scripts 
                to prepare virtual CK environment with repo snapshots 
                and to start a shell - needed to automatically prepare a snapshot of 
                CK ReQuEST workflows and artifacts for ACM Digital Library.
 
-* 2018.05.24 - [FGG] added universal handling of templates for new entries in misc module
+* 2018.05.24 - [gfursin] added universal handling of templates for new entries in misc module
 
-* 2018.05.21 - [FGG] added support for host separator via $#sep#$ in soft_file_universal
+* 2018.05.21 - [gfursin] added support for host separator via $#sep#$ in soft_file_universal
 
-* 2018.05.16 - [FGG] added soft/package for spack: https://github.com/spack/spack
+* 2018.05.16 - [gfursin] added soft/package for spack: https://github.com/spack/spack
 
-* 2018.05.15 - [FGG] added ImageNet train dataset package/soft
+* 2018.05.15 - [gfursin] added ImageNet train dataset package/soft
 
-* 2018.05.14 - [FGG] moved here imagenet soft/packages for imagenet (aux,val) from ck-caffe
+* 2018.05.14 - [gfursin] moved here imagenet soft/packages for imagenet (aux,val) from ck-caffe
                to be able to reuse across different AI frameworks (TF, Caffe, Caffe2, MXNet, CNTK
 
 * 2018.05.03 - added support to machine module (target configuration) for Apache AVRO farms of machines

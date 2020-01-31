@@ -410,6 +410,17 @@ def install(i):
        duid=rx['data_uid']
        package_repo_uoa=rx.get('repo_uoa','')
 
+    # Meta of the package should be in d, and path in p
+    # Check if print message
+    fproblem=os.path.join(p, 'problem.txt')
+    if os.path.isfile(fproblem):
+       rx=ck.load_text_file({'text_file':fproblem})
+       if rx['return']==0:
+          ck.out(rx['string'])
+
+    # Check if stop after message
+    if d.get('problem','')=='yes':
+       return {'return':11, 'error':'this package has a known problem - see the message above'}
 
     # Check if restricts dependency to a given host or target OS
     rx=ck.access({'action':'check_target',
