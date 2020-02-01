@@ -1,6 +1,6 @@
 =============================================================================================
 Unfortunately, ImageNet 2012 validation set is no longer publicly available
-and this CK meta-package can not automatically download it!
+and this CK meta-package cannot automatically download it!
 
 See the related discussions:
 * https://CodeReef.ai/portal/c/package/imagenet-2012-val
