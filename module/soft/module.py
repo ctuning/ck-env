@@ -1581,17 +1581,11 @@ def check(i):
 
     cus=soft_entry_dict.get('customize',{})
 
-    ########################################################################
-    # Check env from input
+    ## Two types of environment that can be supplied (in dictionary form) from the input
+    #
     envx=copy.deepcopy(i.get('env',{}))
     ienv=copy.deepcopy(i.get('install_env',i.get('ienv',{})))   # parse install_env overrides out of install_env{}, install_env.XXX and ienv.XXX CLI options
-    for q in i:
-        if q.startswith('env.'):
-           envx[q[len('env.'):]]=i[q]
-        elif q.startswith('ienv.'):
-           ienv[q[len('ienv.'):]]=i[q]
-        elif q.startswith('install_env.'):
-           ienv[q[len('install_env.'):]]=i[q]
+
 
     supported_variations = soft_entry_dict.get('variations', {})
     missing_variations = set(required_variations) - set(supported_variations)
@@ -1628,8 +1622,20 @@ def check(i):
         cus.update( extra_cus_from_variations )
 
 
-    extra_version=i.get('extra_version', cus.get('extra_version',''))
+    ## Now apply individual per-parameter overrides supplied from command line
+    #  (they have the highest priority, even after the changes that come from variations)
+    #
+    for q in i:
+        if q.startswith('env.'):
+           envx[q[len('env.'):]]=i[q]
+        elif q.startswith('ienv.'):
+           ienv[q[len('ienv.'):]]=i[q]
+        elif q.startswith('install_env.'):
+           ienv[q[len('install_env.'):]]=i[q]
+        elif q.startswith('cus.'):
+           cus[q[len('cus.'):]]=i[q]
 
+    extra_version=i.get('extra_version', cus.get('extra_version',''))
 
     # Check if restricts dependency to a given host or target OS
     rx=check_target({'dict':cus,
