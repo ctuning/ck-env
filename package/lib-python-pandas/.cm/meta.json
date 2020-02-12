@@ -22,7 +22,7 @@
     "linux"
   ],
   "process_script": "install",
-  "soft_uoa": "6a10047b1bcd16fc",
+  "soft_uoa": "393a48858556f889",
   "suggested_path": "lib-python-pandas",
   "tags": [
     "lib",
@@ -30,8 +30,6 @@
     "pandas",
     "vmaster"
   ],
-  "template": "yes",
-  "template_type": "Python library",
   "use_scripts_from_another_entry": {
     "data_uoa": "e4d8d3d2c4c67902",
     "module_uoa": "package"
