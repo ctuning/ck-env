@@ -18,6 +18,7 @@
   "end_full_path_universal": "build$#sep#$cv2$#sep#$__init__.py",
   "only_for_host_os_tags": [],
   "only_for_target_os_tags": [
+    "windows",
     "linux"
   ],
   "process_script": "install",
