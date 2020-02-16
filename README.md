@@ -35,7 +35,7 @@ Contributors
 Installation
 ============
 
-First install CK framework as described [here](https://github.com/ctuning/ck#installation).
+First install the CK framework as described [here](https://github.com/ctuning/ck#installation).
 
 Then install this CK repository as follows:
 
