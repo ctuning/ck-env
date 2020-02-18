@@ -16,6 +16,7 @@ Multiple versions of code, data and models can now co-exist in a user or system 
 similar to Python virtualenv. 
 
 Further info:
+* [Open CodeReef platform to publish and download stable CK components](https://CodeReef.ai/portal/static/docs)
 * [Documentation about portable CK workflows](https://github.com/ctuning/ck/wiki/Portable-workflows)
 * [Shared portable CK program workflows](https://codereef.ai/portal/c/program)
 * [Related CK publications](https://github.com/ctuning/ck/wiki/Publications)
