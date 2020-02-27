@@ -46,7 +46,7 @@ echo Extracting individual classes ...
 for %%f in ("n*.tar") do (
  mkdir %%~nf
  tar xvf %%f -C %%~nf
- del /Q %%~nf
+ del /Q %%f
 )
 
 rem #####################################################################
