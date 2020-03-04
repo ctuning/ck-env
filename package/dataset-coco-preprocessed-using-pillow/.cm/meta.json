@@ -16,7 +16,7 @@
       "local": "yes",
       "name": "COCO dataset (original)",
       "sort": 10,
-      "tags": "dataset,coco",
+      "tags": "dataset,object-detection,original",
       "update_tags_if_env" : {
         "coco,2017,val": [ { "INPUT_DATASET": "coco.2017" } ],
         "coco,2014,val": [ { "INPUT_DATASET": "coco.2014" } ]

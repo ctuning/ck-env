@@ -2,7 +2,9 @@
 
 supported_extensions = ['jpeg', 'jpg', 'gif', 'png']
 
+import errno
 import os
+import json
 
 import numpy as np
 import PIL.Image
@@ -88,17 +90,30 @@ if __name__ == '__main__':
         source_dir          = os.path.dirname(image_file)
         selected_filenames  = [ os.path.basename(image_file) ]
 
-    elif os.path.isdir(source_dir):
-        sorted_filenames = [filename for filename in sorted(os.listdir(source_dir)) if any(filename.lower().endswith(extension) for extension in supported_extensions) ]
+    else:
+        annotations_filepath = os.getenv('CK_ENV_DATASET_ANNOTATIONS')
 
-        total_volume = len(sorted_filenames)
+        if annotations_filepath:            # get the "coco-natural" filename order (not necessarily alphabetic)
+            with open(annotations_filepath, "r") as annotations_fh:
+                annotations_struct = json.load(annotations_fh)
+
+            ordered_filenames = [ image_entry['file_name'] for image_entry in annotations_struct['images'] ]
+
+        elif os.path.isdir(source_dir):     # in the absence of "coco-natural", use alphabetic order
+
+            ordered_filenames = [filename for filename in sorted(os.listdir(source_dir)) if any(filename.lower().endswith(extension) for extension in supported_extensions) ]
+
+        else:
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), source_dir)
+
+        total_volume = len(ordered_filenames)
 
         if offset<0:        # support offsets "from the right"
             offset += total_volume
 
         volume = int(volume_str) if len(volume_str)>0 else total_volume-offset
 
-        selected_filenames = sorted_filenames[offset:offset+volume]
+        selected_filenames = ordered_filenames[offset:offset+volume]
 
 
     output_signatures = preprocess_files(selected_filenames, source_dir, destination_dir, square_side, data_type, new_file_extension)
