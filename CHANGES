@@ -1,3 +1,6 @@
+* 2020.03.10 - [gfursin] removed cfg:list-of-repos . The list of all components 
+                         and repos is now available at https://CodeReef.ai/portal
+
 * 2020.02.16 - [gfursin] added module:log to abstract logs
 
 * 2020.01.31 - [gfursin] added "problem":"yes" key in package meta to be able to stop
