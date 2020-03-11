@@ -21,17 +21,40 @@ Further info:
 * [Shared portable CK program workflows](https://codereef.ai/portal/c/program)
 * [Related CK publications](https://github.com/ctuning/ck/wiki/Publications)
 
-Current maintainers
-===================
-* [dividiti](http://dividiti.com)
-
-Authors
-=======
-* [Grigori Fursin](https://fursin.net) and the [cTuning foundation](https://cTuning.org)
+Author
+======
+* [Grigori Fursin](https://fursin.net)
 
 Contributors
 ============
 * See the list of [contributors](https://github.com/ctuning/ck-env/blob/master/CONTRIBUTIONS)
+
+Shared CK modules with actions
+==============================
+
+* [apk](https://codereef.ai/portal/c/module/apk)
+* [artifact](https://codereef.ai/portal/c/module/artifact)
+* [crowdnode](https://codereef.ai/portal/c/module/crowdnode)
+* [device](https://codereef.ai/portal/c/module/device)
+* [env](https://codereef.ai/portal/c/module/env)
+* [log](https://codereef.ai/portal/c/module/log)
+* [machine](https://codereef.ai/portal/c/module/machine)
+* [me](https://codereef.ai/portal/c/module/me)
+* [misc](https://codereef.ai/portal/c/module/misc)
+* [os](https://codereef.ai/portal/c/module/os)
+* [package](https://codereef.ai/portal/c/module/package)
+* [platform](https://codereef.ai/portal/c/module/platform)
+* [platform.cpu](https://codereef.ai/portal/c/module/platform.cpu)
+* [platform.dsp](https://codereef.ai/portal/c/module/platform.dsp)
+* [platform.gpu](https://codereef.ai/portal/c/module/platform.gpu)
+* [platform.init](https://codereef.ai/portal/c/module/platform.init)
+* [platform.nn](https://codereef.ai/portal/c/module/platform.nn)
+* [platform.npu](https://codereef.ai/portal/c/module/platform.npu)
+* [platform.os](https://codereef.ai/portal/c/module/platform.os)
+* [result](https://codereef.ai/portal/c/module/result)
+* [script](https://codereef.ai/portal/c/module/script)
+* [soft](https://codereef.ai/portal/c/module/soft)
+* [xml](https://codereef.ai/portal/c/module/xml)
 
 Installation
 ============
