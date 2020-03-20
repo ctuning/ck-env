@@ -2,7 +2,6 @@
   "check_exit_status": "yes",
   "customize": {
     "extra_dir": "",
-    "force_ask_path": "yes",
     "install_env": {
       "ANNOTATION_URL": "http://images.cocodataset.org/annotations",
       "IMAGE_URL": "http://images.cocodataset.org/zips",
