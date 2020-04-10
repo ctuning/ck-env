@@ -2,7 +2,8 @@
   "auto_detect": "yes", 
   "customize": {
     "check_that_exists": "yes", 
-    "detect_version_as": "unversioned", 
+    "detect_version_externally": "yes",
+    "version_variable_name": "__version__",
     "env_prefix": "CK_ENV_PYTHON_PACKAGE_NETWORKX", 
     "limit_recursion_dir_search": {
       "linux": 5, 
