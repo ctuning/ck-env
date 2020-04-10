@@ -149,9 +149,9 @@ if [ "${PACKAGE_WGET}" == "YES" ] ; then
   fi
 
   if [ "${PACKAGE_WGET_HEADER}" != "" ] ; then
-     wget --no-check-certificate -O "${PACKAGE_NAME}" ${PACKAGE_WGET_EXTRA} --header="${PACKAGE_WGET_HEADER}" ${PF}
+     wget --no-check-certificate ${PACKAGE_WGET_EXTRA} --header="${PACKAGE_WGET_HEADER}" ${PF}
   else
-     wget --no-check-certificate -O "${PACKAGE_NAME}" ${PACKAGE_WGET_EXTRA} ${PF}
+     wget --no-check-certificate ${PACKAGE_WGET_EXTRA} ${PF}
   fi
 
   if [ "${?}" != "0" ] ; then
