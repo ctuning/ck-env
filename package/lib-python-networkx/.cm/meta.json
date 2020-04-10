@@ -22,7 +22,7 @@
     "linux"
   ],
   "process_script": "install",
-  "soft_uoa": "13fe4a2c64a49824",
+  "soft_uoa": "f74f8a3bf408fa14",
   "suggested_path": "lib-python-networkx",
   "tags": [
     "lib",
