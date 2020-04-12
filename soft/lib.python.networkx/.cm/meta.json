@@ -1,0 +1,26 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "detect_version_externally": "yes",
+    "version_variable_name": "__version__",
+    "env_prefix": "CK_ENV_PYTHON_PACKAGE_NETWORKX", 
+    "limit_recursion_dir_search": {
+      "linux": 5, 
+      "win": 5
+    }, 
+    "soft_file_universal": "networkx$#sep#$__init__.py"
+  }, 
+  "soft_name": "Python NetworkX library", 
+  "tags": [
+    "lib", 
+    "python-package", 
+    "networkx"
+  ], 
+  "template": "yes", 
+  "template_type": "Python library (NetworkX)", 
+  "use_customize_script_from_another_entry": {
+    "data_uoa": "4460bdb0ade2a3df", 
+    "module_uoa": "soft"
+  }
+}

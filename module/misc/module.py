@@ -615,7 +615,6 @@ def search_in_variations(i):
     """
     Input:  {
                 tags                - the query, a mixture of tags and variations
-                (data_uoa)          - restrict the search to a specific entry
                 (query_module_uoa)  - entries of which type to search for
                 (add_info)          - each entry found will also contain 'info' dictionary ('meta' is obligatory)
             }
@@ -632,8 +631,6 @@ def search_in_variations(i):
     """
 
     tags        = i.get('tags')
-
-    data_uoa    = i.get('data_uoa', '')
     module_uoa  = i.get('query_module_uoa', '*')
     add_info    = i.get('add_info', '')
 
@@ -658,7 +655,6 @@ def search_in_variations(i):
         return { 'return': 0, 'skip': ( '' if matched_bool else 'yes' ) }
 
     r=ck.access({'action':'list',
-                   'data_uoa': data_uoa,
                    'module_uoa': module_uoa,
                    'add_meta':'yes',
                    'add_info':add_info,
@@ -2010,7 +2006,6 @@ def list_kernel_functions_md(i):
     of=i.get('out_file','')
 
     h=''
-    hdev=''
     h2=''
     hcfg=''
 
@@ -2117,7 +2112,7 @@ def list_kernel_functions_md(i):
     h+='\n'
     h+='```\n'
 
-    hdev+='# CK kernel functions for the CK developers\n'
+    hdev=h
 
     num1=0
     num2=0
@@ -2158,7 +2153,7 @@ def list_kernel_functions_md(i):
            num2+=1
            num=num2
 
-        zh='\n### ck.'+f+'('+i+')\n\n'
+        zh='\n## ck.'+f+'('+i+')\n\n'
 
         zh+=xapi+'\n'
 #  <td nowrap valign="top"><a name="'+f+'">'+str(num)+'</td>\n'
