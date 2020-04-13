@@ -3,7 +3,7 @@ Unfortunately, ImageNet 2012 validation set is no longer publicly available
 and this CK meta-package cannot automatically download it!
 
 See the related discussions:
-* https://CodeReef.ai/portal/c/package/imagenet-2012-val
+* https://cKnowledge.io/c/package/imagenet-2012-val
 * https://github.com/pytorch/vision/issues/1453
 * https://github.com/ctuning/ck-env/issues/101
 

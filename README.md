@@ -10,15 +10,15 @@ Windows: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/g
 This is a [Collective Knowledge](https://github.com/ctuning/ck) repository
 with the functionality to support portable, customizable, reusable and automated workflows.
 It lets users automatically detect the target platform with already installed software, data and models
-required for a given workflow using [CK software detection plugins](https://codereef.ai/portal/c/soft)
-and install missing [packages](https://codereef.ai/portal/c/package) in a unified way.
+required for a given workflow using [CK software detection plugins](https://cKnowledge.io/c/soft)
+and install missing [packages](https://cKnowledge.io/c/package) in a unified way.
 Multiple versions of code, data and models can now co-exist in a user or system environment
 similar to Python virtualenv. 
 
 Further info:
-* [Open CodeReef platform to publish and download stable CK components](https://CodeReef.ai/portal/static/docs)
+* [Open CK platform to publish and download stable CK components](https://cKnowledge.io)
 * [Documentation about portable CK workflows](https://github.com/ctuning/ck/wiki/Portable-workflows)
-* [Shared portable CK program workflows](https://codereef.ai/portal/c/program)
+* [Reproducible program workflows](https://cKnowledge.io/c/program)
 * [Related CK publications](https://github.com/ctuning/ck/wiki/Publications)
 
 Author
@@ -32,29 +32,29 @@ Contributors
 Shared CK modules with actions
 ==============================
 
-* [apk](https://codereef.ai/portal/c/module/apk)
-* [artifact](https://codereef.ai/portal/c/module/artifact)
-* [crowdnode](https://codereef.ai/portal/c/module/crowdnode)
-* [device](https://codereef.ai/portal/c/module/device)
-* [env](https://codereef.ai/portal/c/module/env)
-* [log](https://codereef.ai/portal/c/module/log)
-* [machine](https://codereef.ai/portal/c/module/machine)
-* [me](https://codereef.ai/portal/c/module/me)
-* [misc](https://codereef.ai/portal/c/module/misc)
-* [os](https://codereef.ai/portal/c/module/os)
-* [package](https://codereef.ai/portal/c/module/package)
-* [platform](https://codereef.ai/portal/c/module/platform)
-* [platform.cpu](https://codereef.ai/portal/c/module/platform.cpu)
-* [platform.dsp](https://codereef.ai/portal/c/module/platform.dsp)
-* [platform.gpu](https://codereef.ai/portal/c/module/platform.gpu)
-* [platform.init](https://codereef.ai/portal/c/module/platform.init)
-* [platform.nn](https://codereef.ai/portal/c/module/platform.nn)
-* [platform.npu](https://codereef.ai/portal/c/module/platform.npu)
-* [platform.os](https://codereef.ai/portal/c/module/platform.os)
-* [result](https://codereef.ai/portal/c/module/result)
-* [script](https://codereef.ai/portal/c/module/script)
-* [soft](https://codereef.ai/portal/c/module/soft)
-* [xml](https://codereef.ai/portal/c/module/xml)
+* [apk](https://cKnowledge.io/c/module/apk)
+* [artifact](https://cKnowledge.io/c/module/artifact)
+* [crowdnode](https://cKnowledge.io/c/module/crowdnode)
+* [device](https://cKnowledge.io/c/module/device)
+* [env](https://cKnowledge.io/c/module/env)
+* [log](https://cKnowledge.io/c/module/log)
+* [machine](https://cKnowledge.io/c/module/machine)
+* [me](https://cKnowledge.io/c/module/me)
+* [misc](https://cKnowledge.io/c/module/misc)
+* [os](https://cKnowledge.io/c/module/os)
+* [package](https://cKnowledge.io/c/module/package)
+* [platform](https://cKnowledge.io/c/module/platform)
+* [platform.cpu](https://cKnowledge.io/c/module/platform.cpu)
+* [platform.dsp](https://cKnowledge.io/c/module/platform.dsp)
+* [platform.gpu](https://cKnowledge.io/c/module/platform.gpu)
+* [platform.init](https://cKnowledge.io/c/module/platform.init)
+* [platform.nn](https://cKnowledge.io/c/module/platform.nn)
+* [platform.npu](https://cKnowledge.io/c/module/platform.npu)
+* [platform.os](https://cKnowledge.io/c/module/platform.os)
+* [result](https://cKnowledge.io/c/module/result)
+* [script](https://cKnowledge.io/c/module/script)
+* [soft](https://cKnowledge.io/c/module/soft)
+* [xml](https://cKnowledge.io/c/module/xml)
 
 Installation
 ============

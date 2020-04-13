@@ -1,8 +1,11 @@
+* 2020.04.13 - [gfursin] added module:ck-action and ck-repo to share 
+                         info about actions and repositories at cKnowledge.io
+
 * 2020.04.10 - [gfursin] added module:solution to keep universal solutions
                          with automated installation of dependencies and benchmarking
 
 * 2020.03.10 - [gfursin] removed cfg:list-of-repos . The list of all components 
-                         and repos is now available at https://CodeReef.ai/portal
+                         and repos is now available at https://cKnowledge.io
 
 * 2020.02.16 - [gfursin] added module:log to abstract logs
 

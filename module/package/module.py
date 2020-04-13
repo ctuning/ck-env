@@ -2660,7 +2660,14 @@ def print_warning(i):
                    url2=url+'/issues'
                    ck.out('   CK repo URL:          '+url)
                    ck.out('   CK package URL:       '+url1)
+
                    ck.out('   Issues URL:           '+url2)
+
+                   crurl=ck.cfg.get('wiki_data_web','')
+                   if crurl!='':
+                      crurl+='package/'+pduoa
+                      ck.out('')
+                      ck.out('   CK stable package URL: '+crurl)
 
        ck.out('   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 
