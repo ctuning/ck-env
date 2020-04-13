@@ -1,5 +1,4 @@
-* 2020.04.13 - [gfursin] added module:ck-action and ck-repo to share 
-                         info about actions and repositories at cKnowledge.io
+* 2020.04.13 - [gfursin] a few clean ups for cKnowledge.io
 
 * 2020.04.10 - [gfursin] added module:solution to keep universal solutions
                          with automated installation of dependencies and benchmarking
