@@ -8,8 +8,8 @@
       "win": 5
     },
     "soft_file_universal": "pandas$#sep#$__init__.py",
-    "version_module_name": "version",
-    "version_variable_name": "version"
+    "detect_version_externally": "yes",
+    "version_variable_name": "__version__"
   },
   "soft_name": "Python pandas library",
   "tags": [
