@@ -2636,6 +2636,7 @@ def print_warning(i):
 
        url2=''
 
+       crurl=''
        if pduoa!='' or pruoa!='':
           ck.out('')
           ck.out('   CK package:           '+pduoa)
@@ -2666,18 +2667,26 @@ def print_warning(i):
                    crurl=ck.cfg.get('wiki_data_web','')
                    if crurl!='':
                       crurl+='package/'+pduoa
-                      ck.out('')
-                      ck.out('   CK stable package URL: '+crurl)
-
-       ck.out('   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+#                      ck.out('')
+ #                     ck.out('   CK stable package URL: '+crurl)
 
        x1='the community'
        x2='https://groups.google.com/forum/#!forum/collective-knowledge'
-       if url2!='':
-          x1='the authors'
-          x2=url2
+       x3='https://github.com/ctuning/ck/issues'
+#       if url2!='':
+#          x1='the authors'
+#          x2=url2
 
-       ck.out('   Please, submit the log to '+x1+' of this external CK package at "'+x2+'" to collaboratively fix this problem!')
+       if crurl!='':
+          ck.out('')
+          ck.out('   Please, check that there is no discussion about this issue at '+crurl)
+          ck.out('')
+
+       ck.out('   Please, submit the *full* log to:')
+       ck.out('     * '+x2)
+       ck.out('     * '+x3)
+
+       ck.out('   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
        ck.out('')
 
     return {'return':0}
