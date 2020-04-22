@@ -1169,6 +1169,7 @@ def install(i):
            'dep_add_tags': dep_add_tags,
            'safe':safe,
            'deps':udeps}
+       if rebuild=='yes': env_resolve_action_dict['rebuild']='yes'
        if o=='con': env_resolve_action_dict['out']='con'
 
        rx=ck.access(env_resolve_action_dict)

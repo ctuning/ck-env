@@ -96,6 +96,8 @@ def env_set(i):
 
               (package_uoa)          - force installation package
                                        (also useful to rebuild deps during replay)
+
+              (rebuild)              - if 'yes', attempt to set env to avoid downloading package again, just rebuild (if supported)
             }
 
     Output: {
@@ -125,6 +127,8 @@ def env_set(i):
     quiet=i.get('quiet','')
 
     name=i.get('name','')
+
+    rebuild=i.get('rebuild','')
 
     skip_cache=i.get('skip_cache','')
 
@@ -429,6 +433,7 @@ def env_set(i):
              'version_from':vfrom,
              'version_to':vto,
              'deps':cdeps,
+             'rebuild':rebuild,
              'sub_deps': i.get('current_deps',{}) if try_to_reinstall else {},
        })
        if rx['return']>0 and rx['return']!=16: return rx
@@ -712,6 +717,7 @@ def env_set(i):
                                        'deps_cache':deps_cache,
                                        'version_from':vfrom,
                                        'version_to':vto,
+                                       'rebuild':rebuild,
                                        'deps':cdeps})
           if rx['return']>0: return rx
 
@@ -1235,6 +1241,8 @@ def resolve(i):
 
               (safe)                 - safe mode when searching packages first instead of detecting already installed soft
                                        (to have more deterministic build)
+
+              (rebuild)              - if 'yes', attempt to set env to avoid downloading package again, just rebuild (if supported)
             }
 
     Output: {
@@ -1280,6 +1288,8 @@ def resolve(i):
     alternative_combined_env_script_body=''
 
     install_env=i.get('install_env',{})
+
+    rebuild=i.get('rebuild','')
 
     sar=i.get('skip_auto_resolution','')
 
@@ -1515,6 +1525,7 @@ def resolve(i):
             'safe':safe
            }
 
+        if rebuild=='yes': ii['rebuild']='yes'
         if o=='con': ii['out']='con'
 
         rx=env_set(ii)
@@ -2152,6 +2163,8 @@ def internal_install_package(i):
               (version_to)           - check version up to ... (list of numbers)
 
               (add_hint)             - if 'yes', can skip package installation
+
+              (rebuild)              - if 'yes', attempt to set env to avoid downloading package again, just rebuild (if supported)
             }
 
     Output: {
@@ -2174,6 +2187,8 @@ def internal_install_package(i):
     tos=i.get('target_os','')
     tdid=i.get('device_id','')
     package_uoa=i.get('package_uoa','')
+
+    rebuild=i.get('rebuild','')
 
     deps_cache=i.get('deps_cache',[])
     reuse_deps=i.get('reuse_deps','')
@@ -2243,6 +2258,8 @@ def internal_install_package(i):
         'version_from':vfrom,
         'version_to':vto,
         'add_hint':ah}
+
+    if rebuild=='yes': install_adict['rebuild']='yes'
 
     # Check if there is a compiler in resolved deps to reuse it
     sub_deps=i.get('sub_deps',{})

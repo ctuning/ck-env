@@ -1,3 +1,5 @@
+* 2020.04.22 - [gfursin] pass --rebuild to dependencies (see #104)
+
 * 2020.04.13 - [gfursin] a few clean ups for cKnowledge.io
 
 * 2020.04.10 - [gfursin] added module:solution to keep universal solutions
