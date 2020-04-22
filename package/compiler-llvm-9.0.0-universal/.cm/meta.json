@@ -1,0 +1,40 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PACKAGE_URL": "https://releases.llvm.org/9.0.0/",
+      "PACKAGE_WGET": "YES",
+      "PACKAGE_WGET_EXTRA": "--no-cookies"
+    },
+    "version": "9.0.0"
+  },
+  "end_full_path": {
+    "linux": "bin/clang-9",
+    "win": "bin\\clang.exe"
+  },
+  "need_cpu_info": "yes",
+  "only_for_target_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "process_script": "install",
+  "soft_uoa": "1c2eb494b8ae3bc4",
+  "suggested_path": "llvm-9.0.0",
+  "tags": [
+    "compiler",
+    "llvm",
+    "lang-c",
+    "lang-cpp",
+    "v9.0.0-ck-package",
+    "v9.0.0",
+    "v9.0",
+    "v9",
+    "channel-stable"
+  ],
+  "template": "yes",
+  "template_type": "LLVM compiler",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}
