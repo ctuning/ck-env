@@ -8,21 +8,25 @@ matching the file names and the class labels on the same line.
 
 ## Accuracy with [OpenVINO "pre-release"](https://github.com/openvinotoolkit/openvino/tree/pre-release)
 
-| Model     | Number of images |Calibration option |  Top 1 accuracy |
-| -         | -                | -                 | -               | 
-| MobileNet | 500              |`first.500`        |  72.800%        |
-| MobileNet | 500              |`mlperf.option1`   |  72.400%        |
-| MobileNet | 500              |`mlperf.option2`   |  72.600%        |
-| MobileNet | 50,000           |`first.500`        |  -              |
-| MobileNet | 50,000           |`mlperf.option1`   |  -              |
-| MobileNet | 50,000           |`mlperf.option2`   |  -              |
-| ResNet    | 500              |`first.500`        |  75.600%        |
-| ResNet    | 500              |`mlperf.option1`   |  -              |
-| ResNet    | 500              |`mlperf.option2`   |  -              |
-| ResNet    | 50,000           |`first.500`        |  76.268%        |
-| ResNet    | 50,000           |`mlperf.option1`   |  -              |
-| ResNet    | 50,000           |`mlperf.option2`   |  -              |
+| Model     | Number of images | Calibration option | Top 1 accuracy | Ranking for each group of 3 |
+| -         | -                |  -                 | -              | -       |
+| MobileNet | 500              | `first.500`        | 72.800%        | 1       |
+| MobileNet | 500              | `mlperf.option1`   | 72.400%        | 3       |
+| MobileNet | 500              | `mlperf.option2`   | 72.600%        | 2       |
+| MobileNet | 50,000           | `first.500`        | 71.466%        | 2       |
+| MobileNet | 50,000           | `mlperf.option1`   | 71.460%        | 3       |
+| MobileNet | 50,000           | `mlperf.option2`   | 71.500%        | 1       |
+| ResNet    | 500              | `first.500`        | 75.600%        | 2       |
+| ResNet    | 500              | `mlperf.option1`   | 75.400%        | 3       |
+| ResNet    | 500              | `mlperf.option2`   | 76.000%        | 1       |
+| ResNet    | 50,000           | `first.500`        | 76.268%        | 1       |
+| ResNet    | 50,000           | `mlperf.option1`   | 76.226%        | 2       |
+| ResNet    | 50,000           | `mlperf.option2`   | 76.160%        | 3       |
 
+**NB:** For official MLPerf Inference submissions on 50,000 images,
+`mlperf.option2` should be used for MobileNet and `mlperf.option1` should be
+used for ResNet. Surprisingly, `first.500` is never the worst, and is actually
+the best for ResNet on 50,000 images.
 
 ## Variations
 
