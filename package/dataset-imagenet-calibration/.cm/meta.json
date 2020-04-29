@@ -1,0 +1,106 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "CK_CALIBRATION_VAL_MAP_FILE": "val_map.txt",
+      "PACKAGE_VERSION": "1"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "package_name": "ImageNet calibration dataset",
+    "skip_file_check": "yes"
+  },
+  "deps": {
+    "imagenet-aux": {
+      "local": "yes",
+      "name": "ImageNet labels",
+      "sort": 100,
+      "tags": "dataset,imagenet,aux"
+    },
+    "imagenet-val": {
+      "local": "yes",
+      "name": "ImageNet validation dataset",
+      "sort": 110,
+      "tags": "dataset,imagenet,val,original,raw",
+      "update_tags_if_env": {
+        "ilsvrc2012": [
+          {
+            "PACKAGE_VERSION": "first.500"
+          },
+          {
+            "PACKAGE_VERSION": "mlperf.option1"
+          },
+          {
+            "PACKAGE_VERSION": "mlperf.option2"
+          }
+        ],
+        "ilsvrc2012min,non-resized": [
+          {
+            "PACKAGE_VERSION": "all.500"
+          }
+        ]
+      }
+    }
+  },
+  "end_full_path_universal": "val_map.txt",
+  "process_script": "install",
+  "soft_uoa": "dataset.imagenet.calibration",
+  "suggested_path": "dataset-imagenet-calibration",
+  "tags": [
+    "dataset",
+    "imagenet",
+    "calibration"
+  ],
+  "variations": {
+    "all.500": {
+      "extra_customize": {
+        "package_name": "ImageNet calibration dataset (all.500)"
+      },
+      "extra_env": {
+        "PACKAGE_VERSION": "all.500"
+      },
+      "extra_tags": [
+        "min"
+      ],
+      "on_by_default": "no"
+    },
+    "first.500": {
+      "extra_customize": {
+        "package_name": "ImageNet calibration dataset (first.500)"
+      },
+      "extra_env": {
+        "PACKAGE_VERSION": "first.500"
+      },
+      "extra_tags": [
+        "first.500"
+      ],
+      "on_by_default": "yes"
+    },
+    "mlperf.option1": {
+      "extra_customize": {
+        "package_name": "ImageNet calibration dataset (MLPerf Inference option 1)"
+      },
+      "extra_env": {
+        "CK_CALIBRATION_IMAGE_LIST_IN": "cal_image_list_option_1.txt",
+        "PACKAGE_VERSION": "mlperf.option1"
+      },
+      "extra_tags": [
+        "full"
+      ],
+      "on_by_default": "no"
+    },
+    "mlperf.option2": {
+      "extra_customize": {
+        "package_name": "ImageNet calibration dataset (MLPerf Inference option 2)"
+      },
+      "extra_env": {
+        "CK_CALIBRATION_IMAGE_LIST_IN": "cal_image_list_option_2.txt",
+        "PACKAGE_VERSION": "mlperf.option2"
+      },
+      "extra_tags": [
+        "full"
+      ],
+      "on_by_default": "no"
+    }
+  }
+}

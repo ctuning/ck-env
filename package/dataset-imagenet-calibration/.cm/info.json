@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "2a50d6a8a8400095",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2020-04-28T08:09:38.598337",
+    "version": [
+      "1",
+      "12",
+      "2"
+    ]
+  },
+  "data_name": "dataset-imagenet-calibration"
+}
