@@ -60,3 +60,27 @@ $ ck install package --tags=dataset,imagenet,mlperf.option2
 ```
 
 **NB:** [The official file](https://github.com/mlperf/inference/blob/master/calibration/ImageNet/cal_image_list_option_2.txt) does have class labels in the second column (despite appearing to have just the increasing numbering).
+
+
+### Unit-tests
+
+```bash
+$ ck install package --tags=dataset,imagenet,first.1
+$ ck install package --tags=dataset,imagenet,first.5
+$ ck install package --tags=dataset,imagenet,first.1.dup.5
+```
+
+**NB:** `first.1` and `first.5` use a file list (with the first and the first 5
+images, respectively) with a file name but without a class label.
+`first.1.dup.5` duplicates the same file name 5 times.
+
+#### Accuracy with [OpenVINO "pre-release"](https://github.com/openvinotoolkit/openvino/tree/pre-release)
+
+| Model     | Number of images | Calibration option | Top 1 accuracy |
+| -         | -                |  -                 | -              |
+| MobileNet | 500              | `first.1`          | 37.200%        |
+| MobileNet | 500              | `first.1.dup.5`    | 37.200%        |
+| MobileNet | 500              | `first.5`          | 70.800%        |
+| ResNet    | 500              | `first.1`          | 74.200%        |
+| ResNet    | 500              | `first.1.dup.5`    | 74.200%        |
+| ResNet    | 500              | `first.5`          | 75.800%        |
