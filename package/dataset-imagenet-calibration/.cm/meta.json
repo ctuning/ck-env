@@ -49,7 +49,8 @@
   "tags": [
     "dataset",
     "imagenet",
-    "calibration"
+    "calibration",
+    "cal"
   ],
   "variations": {
     "all.500": {
@@ -75,6 +76,45 @@
         "first.500"
       ],
       "on_by_default": "yes"
+    },
+    "first.1": {
+      "extra_customize": {
+        "package_name": "ImageNet calibration dataset (first.1)"
+      },
+      "extra_env": {
+        "CK_CALIBRATION_IMAGE_LIST_IN": "cal_image_list_first_1.txt",
+        "PACKAGE_VERSION": "first.1"
+      },
+      "extra_tags": [
+        "first.1"
+      ],
+      "on_by_default": "no"
+    },
+    "first.5": {
+      "extra_customize": {
+        "package_name": "ImageNet calibration dataset (first.5)"
+      },
+      "extra_env": {
+        "CK_CALIBRATION_IMAGE_LIST_IN": "cal_image_list_first_5.txt",
+        "PACKAGE_VERSION": "first.5"
+      },
+      "extra_tags": [
+        "first.5"
+      ],
+      "on_by_default": "no"
+    },
+    "first.1.dup.5": {
+      "extra_customize": {
+        "package_name": "ImageNet calibration dataset (first.1.dup.5)"
+      },
+      "extra_env": {
+        "CK_CALIBRATION_IMAGE_LIST_IN": "cal_image_list_first_1_dup_5.txt",
+        "PACKAGE_VERSION": "first.1.dup.5"
+      },
+      "extra_tags": [
+        "first.5.dup.5"
+      ],
+      "on_by_default": "no"
     },
     "mlperf.option1": {
       "extra_customize": {
