@@ -1716,48 +1716,53 @@ def check(i):
     extra_search_dirs = cus.get('extra_search_dirs', {}).get(hplat, [])
     dir_candidates.extend( extra_search_dirs )
 
-    if hplat=='win':
-        dir_candidates.extend([
-            os.environ.get('ProgramW6432', ''),
-            os.environ.get('ProgramFiles(x86)', ''),
-            os.environ.get('ProgramFiles', ''),
-            'C:\\Program Files',
-            'D:\\Program Files',
-            'C:\\Program Files (x86)',
-            'D:\\Program Files (x86)',
-        ])
-    else:
-        dir_candidates.extend([
-            '/usr',
-            '/opt',
-        ])
-        if hosd.get('macos'):           # MacOSX is currently treated as a flavour of Linux
-            dir_candidates.extend([
-                '/usr/local/Cellar',    # The location of software installed by brew prior to softlinking
-            ])
-
-    dir_candidates.append(
-        os.environ.get(env_install_path, '')                    # from CK_TOOLS env
-    )
-
-    dir_separator   = ';' if hplat=='win' else ':'
-    dir_candidates.extend(
-        os.environ.get(env_search, '').split( dir_separator )   # from CK_DIRS
-    )
-
-    dir_candidates.extend(
-        i.get('search_dirs', '').split(',')                     # from input
-    )
-
-    from os.path import expanduser
-    dir_candidates.append(
-        expanduser("~")                                         # from user space
-    )
-
-    if cus.get('detect_in_soft_dir', '')=='yes':
+    if cus.get('detect_in_soft_dir_only', '')=='yes':
         dir_candidates.append(
             soft_entry_path
         )
+    else:
+        if hplat=='win':
+            dir_candidates.extend([
+                os.environ.get('ProgramW6432', ''),
+                os.environ.get('ProgramFiles(x86)', ''),
+                os.environ.get('ProgramFiles', ''),
+                'C:\\Program Files',
+                'D:\\Program Files',
+                'C:\\Program Files (x86)',
+                'D:\\Program Files (x86)',
+            ])
+        else:
+            dir_candidates.extend([
+                '/usr',
+                '/opt',
+            ])
+            if hosd.get('macos'):           # MacOSX is currently treated as a flavour of Linux
+                dir_candidates.extend([
+                    '/usr/local/Cellar',    # The location of software installed by brew prior to softlinking
+                ])
+
+        dir_candidates.append(
+            os.environ.get(env_install_path, '')                    # from CK_TOOLS env
+        )
+
+        dir_separator   = ';' if hplat=='win' else ':'
+        dir_candidates.extend(
+            os.environ.get(env_search, '').split( dir_separator )   # from CK_DIRS
+        )
+
+        dir_candidates.extend(
+            i.get('search_dirs', '').split(',')                     # from input
+        )
+
+        from os.path import expanduser
+        dir_candidates.append(
+            expanduser("~")                                         # from user space
+        )
+
+        if cus.get('detect_in_soft_dir', '')=='yes':
+            dir_candidates.append(
+                soft_entry_path
+            )
 
     #
     # 2) filter through the candidates to find suitable and unique ones:
