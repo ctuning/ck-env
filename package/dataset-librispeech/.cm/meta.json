@@ -1,0 +1,101 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "DATASET_URL": "http://www.openslr.org/resources/12"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes"
+  },
+  "deps": {},
+  "end_full_path": {
+    "linux": "LibriSpeech/README.TXT",
+    "win": "LibriSpeech/README.TXT"
+  },
+  "need_cpu_info": "no",
+  "process_script": "install",
+  "soft_uoa": "438ea00879447f9d",
+  "suggested_path": "dataset-librispeech",
+  "tags": [
+    "speech-recognition",
+    "dataset",
+    "librispeech",
+    "LibriSpeech",
+    "audio"
+  ],
+  "variations": {
+    "dev-clean": {
+      "extra_env": {
+        "DATASET_ARCHIVE": "dev-clean.tar.gz",
+        "DATASET_NAME": "LibriSpeech Dev Clean dataset",
+        "DATASET_MD5": "42e2234ba48799c1f50f24a7926300a1"
+      },
+      "extra_customize": {
+        "version": "dev-clean"
+      },
+      "on_by_default": "yes"
+    },
+    "dev-other": {
+      "extra_env": {
+        "DATASET_ARCHIVE": "dev-other.tar.gz",
+        "DATASET_NAME": "LibriSpeech Dev Other dataset",
+        "DATASET_MD5": "c8d0bcc9cca99d4f8b62fcc847357931"
+      },
+      "extra_customize": {
+        "version": "dev-other"
+      }
+    },
+    "test-clean": {
+      "extra_env": {
+        "DATASET_ARCHIVE": "test-clean.tar.gz",
+        "DATASET_NAME": "LibriSpeech Test Clean dataset",
+        "DATASET_MD5": "32fa31d27d2e1cad72775fee3f4849a9"
+      },
+      "extra_customize": {
+        "version": "test-clean"
+      }
+    },
+    "test-other": {
+      "extra_env": {
+        "DATASET_ARCHIVE": "test-other.tar.gz",
+        "DATASET_NAME": "LibriSpeech Test Other dataset",
+        "DATASET_MD5": "fb5a50374b501bb3bac4815ee91d3135"
+      },
+      "extra_customize": {
+        "version": "test-other"
+      }
+    },
+    "train-clean-100": {
+      "extra_env": {
+        "DATASET_ARCHIVE": "train-clean-100.tar.gz",
+        "DATASET_NAME": "LibriSpeech Train Clean 100 dataset",
+        "DATASET_MD5": "2a93770f6d5c6c964bc36631d331a522"
+      },
+      "extra_customize": {
+        "version": "train-clean-100"
+      }
+    },
+    "train-clean-360": {
+      "extra_env": {
+        "DATASET_ARCHIVE": "train-clean-360.tar.gz",
+        "DATASET_NAME": "LibriSpeech Train Clean 360 dataset",
+        "DATASET_MD5": "c0e676e450a7ff2f54aeade5171606fa"
+      },
+      "extra_customize": {
+        "version": "train-clean-360"
+      }
+    },
+    "train-other-500": {
+      "extra_env": {
+        "DATASET_ARCHIVE": "train-other-500.tar.gz",
+        "DATASET_NAME": "LibriSpeech Train Other 500 dataset",
+        "DATASET_MD5": "d1a0fd59409feb2c614ce4d30c387708"
+      },
+      "extra_customize": {
+        "version": "train-other-500"
+      }
+    }
+  }
+}
+
