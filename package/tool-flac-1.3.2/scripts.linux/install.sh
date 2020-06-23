@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Installation script for Scons.
+# Installation script for Flac.
 #
 # See CK LICENSE for licensing details.
 # See CK COPYRIGHT for copyright details.
@@ -15,6 +15,6 @@
 
 cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 
-${CK_ENV_COMPILER_PYTHON_FILE} setup.py install --home=../install
+# DO NOTHING
 
 return 0

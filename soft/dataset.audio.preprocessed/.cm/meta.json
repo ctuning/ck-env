@@ -1,0 +1,20 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "_soft_file_universal": "better create a metadata file for all preprocessed audio clips with a relatively unique name, and use it for detection",
+    "env_prefix": "CK_ENV_DATASET_AUDIO_PREPROCESSED",
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 3
+    },
+    "soft_file_universal": "wav-list.json"
+  },
+  "deps": {},
+  "soft_name": "Audio dataset (preprocessed)",
+  "tags": [
+    "dataset",
+    "speech",
+    "audio",
+    "preprocessed"
+  ]
+}

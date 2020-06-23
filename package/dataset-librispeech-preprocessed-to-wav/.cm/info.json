@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "05b47258429e9808",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2020-06-23T09:08:32.073885",
+    "version": [
+      "1",
+      "15",
+      "0"
+    ]
+  },
+  "data_name": "dataset-librispeech-preprocessed-to-wav"
+}

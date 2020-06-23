@@ -15,6 +15,11 @@
 
 cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 
-${CK_ENV_COMPILER_PYTHON_FILE} setup.py install --home=../install
+LDFLAGS="-L${CK_ENV_TOOL_FLAC}/lib" \
+CFLAGS="-I${CK_ENV_TOOL_FLAC}/include" \
+./configure --prefix="${INSTALL_DIR}/install" ${PACKAGE_CONFIGURE_FLAGS}
+
+make
+make install
 
 return 0
