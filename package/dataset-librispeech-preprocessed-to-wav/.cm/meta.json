@@ -1,0 +1,129 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "_NEW_EXTENSION": "wav"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "skip_file_check": "yes"
+  },
+  "deps": {
+    "dataset-source": {
+      "local": "yes",
+      "name": "LibriSpeech dataset (original)",
+      "sort": 10,
+      "tags": "dataset,librispeech,original",
+      "update_tags_if_env" : {
+        "dev-clean": [ { "_DATASET_TO_CONVERT": "dev-clean" } ],
+        "dev-other": [ { "_DATASET_TO_CONVERT": "dev-other" } ],
+        "test-clean": [ { "_DATASET_TO_CONVERT": "test-clean" } ],
+        "test-other": [ { "_DATASET_TO_CONVERT": "test-other" } ],
+        "train-clean-100": [ { "_DATASET_TO_CONVERT": "train-clean-100" } ],
+        "train-clean-360": [ { "_DATASET_TO_CONVERT": "train-clean-360" } ],
+        "train-other-500": [ { "_DATASET_TO_CONVERT": "train-other-500" } ]
+      }
+    },
+    "lib-python-sox": {
+      "local": "yes",
+      "name": "Python SoX library",
+      "sort": 120,
+      "tags": "lib,python-package,sox"
+    },
+    "lib-python-pandas": {
+      "local": "yes",
+      "name": "Python Pandas library",
+      "sort": 120,
+      "tags": "lib,python-package,pandas"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 100,
+      "tags": "compiler,lang-python"
+    },
+    "tool-sox": {
+      "local": "yes",
+      "name": "SoX audio converter",
+      "sort": 50,
+      "tags": "tool,sox",
+      "version_from": [
+        14,
+        4,
+        2
+      ]
+    }
+  },
+  "end_full_path_universal": "wav-list.json",
+  "only_for_host_os_tags": [],
+  "only_for_target_os_tags": [],
+  "process_script": "shell_wrapper",
+  "soft_uoa": "dataset.audio.preprocessed",
+  "suggested_path": "dataset-librispeech-preprocessed-to-wav",
+  "tags": [
+    "dataset",
+    "librispeech",
+    "audio",
+    "preprocessed",
+    "wav"
+  ],
+  "variations": {
+    "dev-clean": {
+      "extra_customize": {
+        "version": "dev-clean"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "dev-clean"
+      },
+      "on_by_default": "yes"
+    },
+    "dev-other": {
+      "extra_customize": {
+        "version": "dev-other"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "dev-other"
+      }
+    },
+    "test-clean": {
+      "extra_customize": {
+        "version": "test-clean"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "test-clean"
+      }
+    },
+    "test-other": {
+      "extra_customize": {
+        "version": "test-other"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "test-other"
+      }
+    },
+    "train-clean-100": {
+      "extra_customize": {
+        "version": "train-clean-100"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "train-clean-100"
+      }
+    },
+    "train-clean-360": {
+      "extra_customize": {
+        "version": "train-clean-360"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "train-clean-360"
+      }
+    },
+    "train-other-500": {
+      "extra_customize": {
+        "version": "train-other-500"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "train-other-500"
+      }
+    }
+  }
+}

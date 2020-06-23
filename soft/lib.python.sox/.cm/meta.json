@@ -1,0 +1,26 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "detect_version_externally": "yes",
+    "env_prefix": "CK_ENV_PYTHON_PACKAGE_SOX",
+    "limit_recursion_dir_search": {
+      "linux": 5,
+      "win": 5
+    },
+    "soft_file_universal": "sox$#sep#$__init__.py",
+    "version_variable_name": "__version__"
+  },
+  "soft_name": "Python SoX library",
+  "tags": [
+    "lib",
+    "python-package",
+    "sox"
+  ],
+  "template": "yes",
+  "template_type": "Python library (SoX)",
+  "use_customize_script_from_another_entry": {
+    "data_uoa": "4460bdb0ade2a3df",
+    "module_uoa": "soft"
+  }
+}

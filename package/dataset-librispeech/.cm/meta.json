@@ -22,7 +22,8 @@
     "dataset",
     "librispeech",
     "LibriSpeech",
-    "audio"
+    "audio",
+    "original"
   ],
   "variations": {
     "dev-clean": {

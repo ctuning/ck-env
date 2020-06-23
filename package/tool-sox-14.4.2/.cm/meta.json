@@ -3,8 +3,7 @@
     "extra_dir": "",
     "git_src_dir": "src",
     "install_env": {
-      "PACKAGE_BUILD_TYPE": "configure",
-      "PACKAGE_CONFIGURE_FLAGS": "--with-flac1",
+      "PACKAGE_BUILD_TYPE": "none",
       "PACKAGE_NAME": "sox-14.4.2.tar.gz",
       "PACKAGE_NAME1": "sox-14.4.2.tar",
       "PACKAGE_NAME2": "sox-14.4.2",
@@ -14,7 +13,7 @@
       "PACKAGE_SKIP_CLEAN_OBJ": "NO",
       "PACKAGE_SKIP_CLEAN_PACKAGE": "NO",
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO",
-      "PACKAGE_SKIP_LINUX_MAKE": "NO",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_SUB_DIR": "sox-14.4.2",
       "PACKAGE_UNGZIP": "YES",
       "PACKAGE_UNTAR": "YES",
