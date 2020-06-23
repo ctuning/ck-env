@@ -1,0 +1,39 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "add_to_path": "yes",
+    "build_dir_name": "flac",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_TOOL_FLAC",
+    "limit_recursion_dir_search": {
+      "linux": 4
+    },
+    "only_for_host_os_tags": [
+      "linux"
+    ],
+    "soft_file": {
+      "linux": "flac"
+    },
+    "soft_file_from_host_os": "yes",
+    "soft_path_example": {
+      "linux": "/usr/bin/flac"
+    },
+    "soft_version_cmd": {
+      "linux": "--version > $#filename#$ 2>&1"
+    }
+  },
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C compiler",
+      "sort": 10,
+      "tags": "compiler,lang-c"
+    }
+  },
+  "soft_name": "flac",
+  "tags": [
+    "tool",
+    "flac"
+  ]
+}
