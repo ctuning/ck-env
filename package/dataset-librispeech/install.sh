@@ -28,7 +28,7 @@ function download {
 function uncompress {
   ARCH=${1}
   echo ""
-  echo "Utarring archive ..."
+  echo "Untarring archive ..."
 
   tar -xzf ${ARCH}
   if [ "${?}" != "0" ] ; then
