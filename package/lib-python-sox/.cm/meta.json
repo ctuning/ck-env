@@ -13,6 +13,17 @@
       "name": "Python interpreter",
       "sort": 10,
       "tags": "compiler,python"
+    },
+    "tool-sox": {
+      "local": "yes",
+      "name": "SoX audio converter",
+      "sort": 20,
+      "tags": "tool,sox",
+      "version_from": [
+        14,
+        4,
+        2
+      ]
     }
   },
   "end_full_path_universal": "build$#sep#$sox$#sep#$__init__.py",
