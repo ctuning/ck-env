@@ -42,6 +42,5 @@ fi
     # and $PACKAGE_LIB64_DIR or $PACKAGE_LIB_DIR depends on the Python version,
     # we solve it by creating a symbolic link with a fixed name.
     #
-FOUND_PACKAGE_DIR=`find $EXTRA_PYTHON_SITE -name $PYTHON_PACKAGE_NAME -type d`
-FOUND_PACKAGE_LIB_DIR=`dirname $FOUND_PACKAGE_DIR`
+FOUND_PACKAGE_LIB_DIR=`find $EXTRA_PYTHON_SITE -name site-packages -type d | sort -r | head -1`
 ln -s $FOUND_PACKAGE_LIB_DIR ${INSTALL_DIR}/build
