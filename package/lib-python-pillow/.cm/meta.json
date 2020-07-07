@@ -3,7 +3,8 @@
   "customize": {
     "install_env": {
       "PIP_INSTALL_OPTIONS": "--ignore-installed",
-      "PYTHON_PACKAGE_NAME": "pillow"
+      "PYTHON_PACKAGE_NAME": "pillow",
+      "PYTHON_PACKAGE_DIR_NAME": "PIL"
     }
   },
   "deps": {
