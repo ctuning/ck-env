@@ -4,8 +4,7 @@
     "detect_version_externally": "yes",
     "install_env": {
       "PIP_INSTALL_OPTIONS": "--ignore-installed", 
-      "PYTHON_PACKAGE_NAME": "pyzmq",
-      "PYTHON_PACKAGE_DIR_NAME": "zmq"
+      "PYTHON_PACKAGE_NAME": "pyzmq"
     }
   }, 
   "deps": {
