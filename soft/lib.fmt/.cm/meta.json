@@ -1,0 +1,21 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "env_prefix": "CK_ENV_LIB_FMT",
+    "limit_recursion_dir_search": {
+      "linux": 2
+    },
+    "soft_file": {
+      "linux": "libfmt.a"
+    },
+    "soft_path_example": {
+      "linux": ""
+    }
+  },
+  "soft_name": "fmt formatting library",
+  "tags": [
+    "lib",
+    "fmt"
+  ]
+}

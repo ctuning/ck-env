@@ -1,0 +1,118 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "git_src_dir": "glow",
+    "install_env": {
+      "PACKAGE_BUILD_TYPE": "skip",
+      "PACKAGE_GIT": "NO",
+      "PACKAGE_GIT_SUBMODULES": "NO",
+      "PACKAGE_PATCH__DISABLE_WERROR": "",
+      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_SUB_DIR": "glow",
+      "PACKAGE_SUB_DIR1": "glow",
+      "PACKAGE_URL": "https://github.com/pytorch/glow"
+    },
+    "no_ver_in_suggested_path": "yes",
+    "version": "master"
+  },
+  "deps": {
+    "cmake": {
+      "add_to_path": "no",
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "CMake tool",
+      "skip_from_bat": "yes",
+      "sort": 20,
+      "tags": "tool,cmake",
+      "version_from": [
+        3,
+        14,
+        3
+      ]
+    },
+    "lib-glog": {
+      "local": "yes",
+      "add_to_path": "no",
+      "name": "Glog library",
+      "sort": 20,
+      "tags": "lib,glog,vmaster"
+    },
+    "lib-fmt": {
+      "local": "yes",
+      "add_to_path": "no",
+      "name": "fmt library",
+      "sort": 20,
+      "tags": "lib,fmt"
+    },
+    "compiler": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 20,
+      "tags": "compiler,lang-cpp"
+    },
+    "llvm": {
+      "add_to_path": "no",
+      "local": "no",
+      "name": "C++ compiler",
+      "sort": 20,
+      "tags": "llvm",
+      "version": [
+        7,
+        0,
+        1
+      ]
+    },
+    "gflags": {
+      "local": "yes",
+      "name": "GFlags library",
+      "sort": 20,
+      "tags": "lib,gflags,vtrunk"
+    },
+    "protobuf": {
+      "local": "yes",
+      "name": "ProtoBuf host library 3.0.x (Linux)",
+      "tags": "lib,protobuf-host",
+      "update_tags_by_target_os_uoa": {
+        "linux-32": "v3.0",
+        "linux-64": "v3.0"
+      }
+    },
+    "boost": {
+      "local": "yes", 
+      "name": "Boost library", 
+      "sort": 60,
+      "tags": "lib,boost,channel-stable",
+      "version_from": [
+        1,
+        65,
+        1
+      ]
+    }
+  },
+  "end_full_path_universal": "bin/<TODO>",
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "4e4466d8f3331aa4",
+  "suggested_path": "compiler-glow",
+  "tags": [
+    "compiler",
+    "glow"
+  ],
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "fd44428fbc77f77f",
+    "module_uoa": "84e27ad9dd12e734"
+  },
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "git_src_dir": "fmt",
+    "install_env": {
+      "PACKAGE_BUILD_TYPE": "cmake",
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_GIT_SUBMODULES": "YES",
+      "PACKAGE_PATCH__DISABLE_WERROR": "",
+      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "NO",
+      "PACKAGE_SUB_DIR": "fmt",
+      "PACKAGE_SUB_DIR1": "fmt",
+      "PACKAGE_URL": "https://github.com/fmtlib/fmt"
+    },
+    "no_ver_in_suggested_path": "yes",
+    "version": "7.0.1"
+  },
+  "deps": {
+    "cmake": {
+      "add_to_path": "no",
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "CMake tool",
+      "skip_from_bat": "yes",
+      "sort": 20,
+      "tags": "tool,cmake",
+      "version_from": [
+        3,
+        7,
+        2
+      ]
+    },
+    "compiler": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 40,
+      "tags": "compiler,lang-cpp"
+    }
+  },
+  "end_full_path_universal": "obj/libfmt.a",
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "ab480619f41d1a63",
+  "suggested_path": "lib-fmt",
+  "tags": [
+    "lib",
+    "fmt",
+    "v7.0.1",
+    "v7.0",
+    "v7"
+  ],
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "fd44428fbc77f77f",
+    "module_uoa": "84e27ad9dd12e734"
+  },
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

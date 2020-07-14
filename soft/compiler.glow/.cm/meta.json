@@ -1,0 +1,36 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "add_only_with_version": "yes",
+    "add_to_path": "yes",
+    "build_dir_name": "perl",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_COMPILER_GLOW",
+    "languages": [
+      "Glow"
+    ],
+    "limit_recursion_dir_search": {
+      "linux": 3
+    },
+    "only_for_target_os_tags": [
+      "windows"
+    ],
+    "soft_file": {
+      "linux": "glow"
+    },
+    "soft_file_from_host_os": "yes",
+    "soft_path_example": {
+      "linux": "/usr/bin/glow"
+    },
+    "soft_version_cmd": {
+      "linux": "-version > $#filename#$ 2>&1"
+    }
+  },
+  "env": {},
+  "soft_name": "Glow",
+  "tags": [
+    "compiler",
+    "glow"
+  ]
+}
