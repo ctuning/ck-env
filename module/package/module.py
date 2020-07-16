@@ -1284,6 +1284,9 @@ def install(i):
           efp=efp.replace('$#sep#$', sdirs)
           efp=efp.replace('$#abi#$', tosd.get('abi',''))
           efp=efp.replace('$#processor#$', tosd.get('processor',''))
+          for k in pr_env:
+              v=str(pr_env[k])
+              efp=efp.replace('$<<' +k+ '>>$',v)
 
             # NOTE: adapted from module/soft/module.py/prepare_target_name()
             #       After successful testing this function should be moved out
