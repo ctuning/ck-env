@@ -56,7 +56,7 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
   -DGLOG_LIBRARY=${CK_ENV_LIB_GLOG_LIB}/libglog.so \
   -DGLOG_INCLUDE_DIR=${CK_ENV_LIB_GLOG_INCLUDE} \
   -Dfmt_DIR=${CK_ENV_LIB_FMT_OBJ_DIR} \
-  -DLLVM_DIR=/opt/rh/llvm-toolset-7.0/root/usr/lib64/cmake/llvm \
+  -DLLVM_DIR=/homes/gavin/CK-TOOLS/compiler-glow-gcc-7.3.1-linux-64/glow/llvm_install/lib/cmake/llvm \
   "${SRC_DIR}"
 EO_CMK_CMD
 
@@ -69,7 +69,6 @@ echo "Configuring the package with 'CMake' ..."
 echo ${CMK_CMD}
 
 echo
-
 
 # Now, run it from the build directory.
 cd ${BUILD_DIR} && eval ${CMK_CMD}

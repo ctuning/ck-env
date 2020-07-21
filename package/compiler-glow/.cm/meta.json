@@ -53,18 +53,6 @@
       "sort": 20,
       "tags": "compiler,lang-cpp"
     },
-    "llvm": {
-      "add_to_path": "no",
-      "local": "no",
-      "name": "C++ compiler",
-      "sort": 20,
-      "tags": "llvm",
-      "version": [
-        7,
-        0,
-        1
-      ]
-    },
     "gflags": {
       "local": "yes",
       "name": "GFlags library",
