@@ -12,7 +12,6 @@
 # PACKAGE_DIR
 # INSTALL_DIR
 
-
 function exit_if_error() {
   message=${1:-"unknown"}
   if [ "${?}" != "0" ]; then
@@ -22,20 +21,20 @@ function exit_if_error() {
 }
 
 
-export SRC_DIR=${INSTALL_DIR}/glow
-export BUILD_DIR=${INSTALL_DIR}/build
+SRC_DIR=${INSTALL_DIR}/glow
+BUILD_DIR=${INSTALL_DIR}/install
 
 # Update the submodules
 echo "Updating submodules ..."
 cd ${SRC_DIR}
 git submodule update --init --recursive
 
-# Create the build dir
-cd ${INSTALL_DIR}
 
-if [ ! -d build ] ; then
-  mkdir build
-fi
+mkdir =p ${BUILD_DIR}
+
+
+# Create the build and install dirs
+cd ${INSTALL_DIR}
 
 # Configure the package.
 read -d '' CMK_CMD <<EO_CMK_CMD
@@ -56,13 +55,10 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
   -DGLOG_LIBRARY=${CK_ENV_LIB_GLOG_LIB}/libglog.so \
   -DGLOG_INCLUDE_DIR=${CK_ENV_LIB_GLOG_INCLUDE} \
   -Dfmt_DIR=${CK_ENV_LIB_FMT_OBJ_DIR} \
-  -DLLVM_DIR=/homes/gavin/CK-TOOLS/compiler-glow-gcc-7.3.1-linux-64/glow/llvm_install/lib/cmake/llvm \
+  -DLLVM_DIR=${CK_ENV_COMPILER_LLVM_LIB}/cmake/llvm \
   "${SRC_DIR}"
 EO_CMK_CMD
 
-#  -DLLVM_DIR=${CK_ENV_COMPILER_LLVM} \
-#  -DBOOST_INCLUDEDIR=${CK_ENV_LIB_BOOST_INCLUDE} \
-#  -DBOOST_LIBRARYDIR==${CK_ENV_LIB_BOOST_LIB} \
 
 # First, print the EXACT command we are about to run
 echo "Configuring the package with 'CMake' ..."
@@ -77,7 +73,7 @@ exit_if_error "CMake failed"
 
 # Now, run the ninja command to build
 eval ninja all
-exit_if_error "ninja all"
+exit_if_error "Ninja build failed"
 
 return 0
 

@@ -1,0 +1,91 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PACKAGE_GIT_LLVM": "https://github.com/llvm-mirror/llvm.git",
+      "PACKAGE_GIT_CLANG": "https://github.com/llvm-mirror/clang.git"
+    }
+  },
+  "deps": {
+    "cmake": {
+      "add_to_path": "no",
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "CMake tool",
+      "skip_from_bat": "yes",
+      "sort": 20,
+      "tags": "tool,cmake",
+      "version_from": [
+        3,
+        14,
+        3
+      ]
+    },
+    "compiler": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 20,
+      "tags": "compiler,lang-cpp,gcc"
+    }
+  },
+  "end_full_path": {
+    "linux": "install/bin/clang"
+  },
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "process_script": "install",
+  "soft_uoa": "1c2eb494b8ae3bc4",
+  "suggested_path": "llvm-from-source",
+  "tags": [
+    "compiler",
+    "llvm",
+    "lang-c",
+    "lang-cpp",
+    "source"
+  ],
+  "variations": {
+    "stable": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "stable"
+      },
+      "extra_customize": {
+        "version": "stable"
+      },
+      "on_by_default": "yes"
+    },
+    "v9": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "release_90"
+      },
+      "extra_customize": {
+        "version": "9.0"
+      }
+    },
+    "v8": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "release_80"
+      },
+      "extra_customize": {
+        "version": "8.0"
+      }
+    },
+    "v7": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "release_70"
+      },
+      "extra_customize": {
+        "version": "7.0"
+      }
+    }
+  },
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "process-compiler-for-cmake",
+    "COMMENT data_uid": "fd44428fbc77f77f",
+    "module_uoa": "script"
+  }
+}

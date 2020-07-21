@@ -53,6 +53,18 @@
       "sort": 20,
       "tags": "compiler,lang-cpp"
     },
+    "llvm": {
+      "add_to_path": "no",
+      "local": "no",
+      "name": "C++ compiler",
+      "sort": 20,
+      "tags": "llvm,source",
+      "version": [
+        8,
+        0,
+        0
+      ]
+    },
     "gflags": {
       "local": "yes",
       "name": "GFlags library",
@@ -80,12 +92,8 @@
       ]
     }
   },
-  "end_full_path_universal": "bin/<TODO>",
-  "need_cpu_info": "yes",
+  "end_full_path_universal": "install/bin/model-compiler",
   "only_for_host_os_tags": [
-    "linux"
-  ],
-  "only_for_target_os_tags": [
     "linux"
   ],
   "process_script": "install",
