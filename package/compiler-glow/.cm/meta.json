@@ -4,7 +4,7 @@
     "git_src_dir": "glow",
     "install_env": {
       "PACKAGE_BUILD_TYPE": "skip",
-      "PACKAGE_GIT": "NO",
+      "PACKAGE_GIT": "YES",
       "PACKAGE_GIT_SUBMODULES": "NO",
       "PACKAGE_PATCH__DISABLE_WERROR": "",
       "PACKAGE_SKIP_CLEAN_OBJ": "YES",
@@ -58,12 +58,7 @@
       "local": "no",
       "name": "C++ compiler",
       "sort": 20,
-      "tags": "llvm,source",
-      "version": [
-        8,
-        0,
-        0
-      ]
+      "tags": "llvm,source,v8"
     },
     "gflags": {
       "local": "yes",

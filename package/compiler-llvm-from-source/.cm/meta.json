@@ -49,12 +49,12 @@
     "source"
   ],
   "variations": {
-    "stable": {
+    "master": {
       "extra_env": {
-        "PACKAGE_GIT_CHECKOUT": "stable"
+        "PACKAGE_GIT_CHECKOUT": "master"
       },
       "extra_customize": {
-        "version": "stable"
+        "version": "master"
       },
       "on_by_default": "yes"
     },
