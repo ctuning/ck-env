@@ -4,7 +4,8 @@
     "install_env": {
       "PACKAGE_GIT_LLVM": "https://github.com/llvm-mirror/llvm.git",
       "PACKAGE_GIT_CLANG": "https://github.com/llvm-mirror/clang.git"
-    }
+    },
+    "no_ver_in_suggested_path": "yes"
   },
   "deps": {
     "cmake": {
@@ -17,7 +18,7 @@
       "tags": "tool,cmake",
       "version_from": [
         3,
-        14,
+        13,
         3
       ]
     },
@@ -26,7 +27,7 @@
       "local": "yes",
       "name": "C++ compiler",
       "sort": 20,
-      "tags": "compiler,lang-cpp,gcc"
+      "tags": "compiler,lang-cpp"
     }
   },
   "end_full_path": {
@@ -40,7 +41,7 @@
   ],
   "process_script": "install",
   "soft_uoa": "1c2eb494b8ae3bc4",
-  "suggested_path": "llvm-from-source",
+  "suggested_path": "compiler-llvm-from-source",
   "tags": [
     "compiler",
     "llvm",
