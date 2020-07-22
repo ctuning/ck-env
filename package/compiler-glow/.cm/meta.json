@@ -18,6 +18,13 @@
     "version": "master"
   },
   "deps": {
+    "compiler": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 10,
+      "tags": "compiler,lang-cpp"
+    },
     "cmake": {
       "add_to_path": "no",
       "force_target_as_host": "yes",
@@ -32,48 +39,10 @@
         3
       ]
     },
-    "lib-glog": {
-      "local": "yes",
-      "add_to_path": "no",
-      "name": "Glog library",
-      "sort": 20,
-      "tags": "lib,glog",
-      "version_from": [
-        0,
-        3,
-        5
-      ],
-      "version_to": [
-        0,
-        3,
-        5
-      ]
-    },
-    "lib-fmt": {
-      "local": "yes",
-      "add_to_path": "no",
-      "name": "fmt library",
-      "sort": 20,
-      "tags": "lib,fmt"
-    },
-    "compiler": {
-      "add_to_path": "no",
-      "local": "yes",
-      "name": "C++ compiler",
-      "sort": 20,
-      "tags": "compiler,lang-cpp"
-    },
-    "llvm": {
-      "add_to_path": "no",
-      "local": "no",
-      "name": "C++ compiler",
-      "sort": 20,
-      "tags": "llvm,source,v8"
-    },
-    "gflags": {
+    "lib-gflags": {
       "local": "yes",
       "name": "GFlags library",
-      "sort": 20,
+      "sort": 30,
       "tags": "lib,gflags",
       "version_from": [
         2,
@@ -83,28 +52,61 @@
       "version_to": [
         2,
         2,
-        0
+	99
       ]
     },
-    "protobuf": {
+    "lib-glog": {
+      "local": "yes",
+      "add_to_path": "no",
+      "name": "GLog library",
+      "sort": 40,
+      "tags": "lib,glog",
+      "version_from": [
+        0,
+        3,
+        5
+      ],
+      "version_to": [
+        0,
+        3,
+	5,
+        99
+      ]
+    },
+    "lib-protobuf": {
       "local": "yes",
       "name": "ProtoBuf host library 3.0.x (Linux)",
+      "sort": 60,
       "tags": "lib,protobuf-host",
       "update_tags_by_target_os_uoa": {
         "linux-32": "v3.0",
         "linux-64": "v3.0"
       }
     },
-    "boost": {
+    "lib-boost": {
       "local": "yes", 
       "name": "Boost library", 
-      "sort": 60,
-      "tags": "lib,boost,channel-stable",
+      "sort": 70,
+      "tags": "lib,boost,without-python",
       "version_from": [
         1,
         65,
         1
       ]
+    },
+    "lib-fmt": {
+      "local": "yes",
+      "add_to_path": "no",
+      "name": "fmt library",
+      "sort": 80,
+      "tags": "lib,fmt"
+    },
+    "lib-llvm": {
+      "add_to_path": "no",
+      "local": "no",
+      "name": "LLVM libraries",
+      "sort": 90,
+      "tags": "llvm,source,v8"
     }
   },
   "end_full_path_universal": "install/bin/model-compiler",
