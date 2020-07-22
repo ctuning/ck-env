@@ -75,12 +75,12 @@
     },
     "lib-protobuf": {
       "local": "yes",
-      "name": "ProtoBuf host library 3.0.x (Linux)",
+      "name": "ProtoBuf host library 3.5.x (Linux)",
       "sort": 60,
       "tags": "lib,protobuf-host",
       "update_tags_by_target_os_uoa": {
-        "linux-32": "v3.0",
-        "linux-64": "v3.0"
+        "linux-32": "v3.5",
+        "linux-64": "v3.5"
       }
     },
     "lib-boost": {
