@@ -30,7 +30,7 @@ cd ${SRC_DIR}
 git submodule update --init --recursive
 
 
-mkdir =p ${BUILD_DIR}
+mkdir -p ${BUILD_DIR}
 
 
 # Create the build and install dirs
@@ -56,6 +56,7 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
   -DGLOG_INCLUDE_DIR=${CK_ENV_LIB_GLOG_INCLUDE} \
   -Dfmt_DIR=${CK_ENV_LIB_FMT_OBJ_DIR} \
   -DLLVM_DIR=${CK_ENV_COMPILER_LLVM_LIB}/cmake/llvm \
+  -DGLOW_BUILD_TESTS=OFF \
   "${SRC_DIR}"
 EO_CMK_CMD
 

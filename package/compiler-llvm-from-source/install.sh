@@ -43,5 +43,9 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
 
 cmake --build . --target install
 
+# Delete build files
+cd ${INSTALL_DIR}
+rm -rf build
+
 echo "Built LLVM into " "${INSTALL_DIR}/install"
 
