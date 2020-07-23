@@ -17,7 +17,7 @@
       "PACKAGE_URL": "https://github.com/google/glog"
     },
     "use_git_revision": "yes",
-    "version": "development"
+    "version": "-1"
   },
   "deps": {
     "cmake": {
