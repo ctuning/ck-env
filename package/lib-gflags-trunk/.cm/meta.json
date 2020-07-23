@@ -16,7 +16,7 @@
       "PACKAGE_URL": "https://github.com/gflags/gflags"
     },
     "use_git_revision": "yes",
-    "version": "-1"
+    "version": "0"
   },
   "deps": {
     "cmake": {
