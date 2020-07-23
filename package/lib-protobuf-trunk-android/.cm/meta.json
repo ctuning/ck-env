@@ -15,7 +15,7 @@
       "PACKAGE_URL": "https://github.com/google/protobuf"
     },
     "use_git_revision": "yes",
-    "version": "development"
+    "version": "0"
   },
   "deps": {
     "cmake": {
