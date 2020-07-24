@@ -40,13 +40,25 @@ parser.add_argument('--overwrite', action='store_true',
                     help='Overwrite file if exists')
 parser.add_argument('--parallel', type=int, default=multiprocessing.cpu_count(),
                     help='Number of threads to use when processing audio files')
+parser.add_argument('--subset_list', type=str, required=False, default=None,
+                    help='A subset of files to include, otherwise all are included.')
 args = parser.parse_args()
 
 args.input_dir = args.input_dir.rstrip('/')
 args.dest_dir = args.dest_dir.rstrip('/')
 
+subset = None
 
-def build_input_arr(input_dir):
+def build_subset_dict(subset_file):
+    subset = set()
+    with open(subset_file) as fp:
+        for line in fp:
+            unique=os.path.splitext(os.path.basename(line))[0]
+            subset.add(unique)
+
+    return subset
+
+def build_input_arr(input_dir, subset):
     txt_files = glob.glob(os.path.join(input_dir, '**', '*.trans.txt'),
                           recursive=True)
     input_data = []
@@ -55,14 +67,19 @@ def build_input_arr(input_dir):
         with open(txt_file) as fp:
             for line in fp:
                 fname, _, transcript = line.partition(' ')
+                if (subset is not None) and (fname not in subset):
+                    continue
                 input_data.append(dict(input_relpath=os.path.dirname(rel_path),
                                        input_fname=fname + '.flac',
                                        transcript=transcript))
     return input_data
 
+if args.subset_list is not None:
+    print("[%s] Reading subset list..." % os.path.basename(args.subset_list))
+    subset = build_subset_dict(args.subset_list)
 
 print("[%s] Scaning input dir..." % args.output_json)
-dataset = build_input_arr(input_dir=args.input_dir)
+dataset = build_input_arr(input_dir=args.input_dir, subset=subset)
 
 print("[%s] Converting audio files..." % args.output_json)
 dataset = parallel_preprocess(dataset=dataset,
