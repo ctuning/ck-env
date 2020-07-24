@@ -58,7 +58,7 @@
   "only_for_host_os_tags": [],
   "only_for_target_os_tags": [],
   "process_script": "shell_wrapper",
-  "soft_uoa": "dataset.audio.preprocessed",
+  "soft_uoa": "dataset.librispeech.preprocessed",
   "suggested_path": "dataset-librispeech-preprocessed-to-wav",
   "tags": [
     "dataset",
@@ -124,6 +124,15 @@
       },
       "extra_env": {
         "_DATASET_TO_CONVERT": "train-other-500"
+      }
+    },
+    "calibration": {
+      "extra_customize": {
+        "version": "calibration"
+      },
+      "extra_env": {
+        "_DATASET_TO_CONVERT": "train-clean-100",
+        "_DATASET_SUBSET": "calibration_files.txt"
       }
     }
   }
