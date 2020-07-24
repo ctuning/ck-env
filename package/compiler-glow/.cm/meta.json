@@ -127,5 +127,25 @@
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
+  },
+  "variations": {
+    "from.pytorch": {
+      "extra_env": {
+        "PACKAGE_URL": "https://github.com/pytorch/glow"
+      },
+      "extra_tags": [
+	"from.pytorch"
+      ],
+      "on_by_default": "yes"
+    },
+    "from.dividiti": {
+      "extra_env": {
+        "PACKAGE_URL": "https://github.com/dividiti/glow"
+      },
+      "extra_tags": [
+	"from.dividiti"
+      ],
+      "on_by_default": "no"
+    }
   }
 }
