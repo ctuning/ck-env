@@ -140,7 +140,7 @@
     },
     "from.dividiti": {
       "extra_env": {
-        "PACKAGE_URL": "https://github.com/dividiti/glow"
+        "PACKAGE_URL": "git@github.com:dividiti/glow"
       },
       "extra_tags": [
 	"from.dividiti"
