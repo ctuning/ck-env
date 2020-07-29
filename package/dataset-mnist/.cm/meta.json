@@ -1,0 +1,31 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "DATASETS_URL": "http://yann.lecun.com/exdb/mnist/",
+      "TRAIN_IMAGES": "train-images-idx3-ubyte.gz",
+      "TRAIN_LABELS": "train-labels-idx1-ubyte.gz",
+      "T10K_IMAGES": "t10k-images-idx3-ubyte.gz",
+      "T10K_LABELS": "t10k-labels-idx1-ubyte.gz",
+      "INSTALL_TO": "MNIST/raw/"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "MNIST"
+  },
+  "deps": {},
+  "end_full_path_universal": "MNIST/raw/train-images-idx3-ubyte",
+  "need_cpu_info": "no",
+  "process_script": "install",
+  "soft_uoa": "54bd19770f6307c1",
+  "suggested_path": "dataset-mnist",
+  "tags": [
+    "dataset",
+    "mnist",
+    "MNIST",
+    "images",
+    "original"
+  ]
+}
+
