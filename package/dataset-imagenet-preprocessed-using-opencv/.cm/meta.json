@@ -186,6 +186,26 @@
         "_INPUT_SQUARE_SIDE": "224"
       }
     },
+    "side.240": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "240"
+      }
+    },
+    "side.260": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "260"
+      }
+    },
+    "side.280": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "280"
+      }
+    },
+    "side.300": {
+      "extra_env": {
+        "_INPUT_SQUARE_SIDE": "300"
+      }
+    },
     "inter.linear": {
       "on_by_default": "yes",
       "extra_env": {
