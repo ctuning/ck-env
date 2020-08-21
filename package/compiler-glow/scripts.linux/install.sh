@@ -60,25 +60,23 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
   -DGLOW_WITH_CPU=ON \
   -DGLOW_WITH_OPENCL=OFF \
   -DGLOW_WITH_BUNDLES=ON \
+  ${CK_GLOW_EXTRA_FLAGS} \
   "${SRC_DIR}"
 EO_CMK_CMD
 
 
-# First, print the EXACT command we are about to run
+# First, print the EXACT command we are about to run.
 echo "Configuring the package with 'CMake' ..."
 echo ${CMK_CMD}
-
 echo
-
 # Now, run it from the build directory.
 cd ${BUILD_DIR} && eval ${CMK_CMD}
 exit_if_error "CMake failed"
 
 
-# Now, run the ninja command to build
+# Now, run the ninja command to build.
 eval ninja all
 exit_if_error "Ninja build failed"
 
+
 return 0
-
-
