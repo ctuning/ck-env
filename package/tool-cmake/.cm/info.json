@@ -1,0 +1,20 @@
+{
+  "backup_data_uid": "f16df400b9d1fd34",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "author": "cTuning foundation",
+    "author_email": "admin@cTuning.org",
+    "author_webpage": "http://cTuning.org",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2020-09-03T14:15:41.368025",
+    "license": "See CK LICENSE.txt for licensing details",
+    "version": [
+      "1",
+      "15",
+      "0"
+    ]
+  },
+  "data_name": "tool-cmake"
+}
