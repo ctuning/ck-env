@@ -21,20 +21,16 @@ function exit_if_error() {
 }
 
 
-SRC_DIR=${INSTALL_DIR}/glow
-BUILD_DIR=${INSTALL_DIR}/install
-
-# Update the submodules
-echo "Updating submodules ..."
-cd ${SRC_DIR}
-git submodule update --init --recursive
-
+SRC_DIR=${INSTALL_DIR}/tvm
+BUILD_DIR=${SRC_DIR}/build
 
 mkdir -p ${BUILD_DIR}
 
+cp ${SRC_DIR}/cmake/config.cmake ${BUILD_DIR}
+ESCAPED_LLVM_DIR=$(echo ${CK_ENV_COMPILER_LLVM}/bin/llvm-config | sed 's_/_\\/_g')
+sed -i -e "s/USE_LLVM OFF/USE_LLVM $ESCAPED_LLVM_DIR/g" ${BUILD_DIR}/config.cmake
 
-# Create the build and install dirs
-cd ${INSTALL_DIR}
+cd ${BUILD_DIR}
 
 # Configure the package.
 read -d '' CMK_CMD <<EO_CMK_CMD
@@ -47,36 +43,25 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
   -DCMAKE_AR="${CK_AR_PATH_FOR_CMAKE}" \
   -DCMAKE_RANLIB="${CK_RANLIB_PATH_FOR_CMAKE}" \
   -DCMAKE_LINKER="${CK_LD_PATH_FOR_CMAKE}" \
-  -DBoost_NO_BOOST_CMAKE=TRUE \
-  -DBoost_NO_SYSTEM_PATHS=TRUE \
-  -DBOOST_ROOT:PATHNAME=${CK_ENV_LIB_BOOST} \
-  -DBoost_LIBRARY_DIRS:FILEPATH=${CK_ENV_LIB_BOOST}/lib \
   -DCMAKE_BUILD_TYPE=Release \
-  -DGLOG_LIBRARY=${CK_ENV_LIB_GLOG_LIB}/libglog.so \
-  -DGLOG_INCLUDE_DIR=${CK_ENV_LIB_GLOG_INCLUDE} \
-  -Dfmt_DIR=${CK_ENV_LIB_FMT_OBJ_DIR} \
-  -DLLVM_DIR=${CK_ENV_COMPILER_LLVM_LIB}/cmake/llvm \
-  -DGLOW_BUILD_TESTS=OFF \
-  -DGLOW_WITH_CPU=ON \
-  -DGLOW_WITH_OPENCL=OFF \
-  -DGLOW_WITH_BUNDLES=ON \
-  ${CK_GLOW_EXTRA_FLAGS} \
   "${SRC_DIR}"
 EO_CMK_CMD
 
-
-# First, print the EXACT command we are about to run.
+# First, print the EXACT command we are about to run
 echo "Configuring the package with 'CMake' ..."
 echo ${CMK_CMD}
+
 echo
+
 # Now, run it from the build directory.
 cd ${BUILD_DIR} && eval ${CMK_CMD}
 exit_if_error "CMake failed"
 
 
-# Now, run the ninja command to build.
+# Now, run the ninja command to build
 eval ninja all
 exit_if_error "Ninja build failed"
 
-
 return 0
+
+
