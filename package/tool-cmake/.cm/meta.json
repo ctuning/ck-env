@@ -30,6 +30,7 @@
   "only_for_target_os_tags": [
     "linux"
   ],
+  "need_cpu_info": "yes",
   "process_script": "install",
   "soft_uoa": "77ef5e31404d9589",
   "suggested_path": "tool-cmake",

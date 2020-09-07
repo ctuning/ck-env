@@ -27,7 +27,7 @@ cd ${SRC_DIR}
 env CC=${CK_CC} CXX=${CK_CXX} ./bootstrap
 exit_if_error "Bootsrap failed"
 
-make -j
+make -j${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
 exit_if_error "Building CMake failed"
 
 cd ${INSTALL_DIR}
