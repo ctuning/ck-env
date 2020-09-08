@@ -678,7 +678,7 @@ def list_variations(i):
                 tags                - the query, a mixture of tags and variations
                 (query_module_uoa)  - entries of which type to search for
                 (variation_prefix)  - an optional prefix to filter the variations
-                (separator)         - an optional string to separate the results
+                (separator)         - an optional string to separate the results (BEWARE: CK does not support trailing spaces!)
             }
 
     Output: {
