@@ -608,7 +608,7 @@ def select_string(i):
 
 
 ##############################################################################
-# Search for of a specific type using both tags AND variations
+# Search for entries of a specific type using a mix of tags AND variations
 #
 
 def search_in_variations(i):
@@ -620,8 +620,7 @@ def search_in_variations(i):
             }
 
     Output: {
-                selected_index  - an index < len(options)
-                selected_value  - the string value at selected_index
+                lst             - a list of entries found (may be empty)
 
                 return          - return code =  0, if successful
                                               >  0, if error
@@ -667,6 +666,55 @@ def search_in_variations(i):
             print("{}:{}:{}".format(entry['repo_uoa'], entry['module_uoa'], entry['data_uoa']))
 
     return r
+
+
+##############################################################################
+# List variations of an entry or a group of entries
+#
+
+def list_variations(i):
+    """
+    Input:  {
+                tags                - the query, a mixture of tags and variations
+                (query_module_uoa)  - entries of which type to search for
+                (variation_prefix)  - an optional prefix to filter the variations
+                (separator)         - an optional string to separate the results
+            }
+
+    Output: {
+                return          - return code =  0, if successful
+                                              >  0, if error
+                (error)         - error text if return > 0
+            }
+
+    """
+
+    tags                = i.get('tags')
+    query_module_uoa    = i.get('query_module_uoa', '*')
+    variation_prefix    = i.get('variation_prefix', '')
+    separator           = i.get('separator', '\n')
+
+    r=ck.access({'action':'search_in_variations',
+                   'module_uoa': 'misc',
+                   'query_module_uoa': query_module_uoa,
+                   'tags': tags,
+    })
+    if r['return']>0: return r
+
+    # merge all available variations into a set:
+    variations_found = set()
+    for entry_dict in r['lst']:
+        variations_found |= entry_dict['meta'].get('variations',{}).keys()
+
+    # collect the matching ones into a list
+    variations_found = [variation for variation in variations_found if variation.startswith(variation_prefix)]
+
+    if i.get('out')=='con':
+        print(separator.join(variations_found))
+
+    return {'return':0, 'variations':variations_found}
+
+
 
 ##############################################################################
 # Universal UOA selector (improved version forked 
