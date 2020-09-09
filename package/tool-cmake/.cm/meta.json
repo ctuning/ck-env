@@ -38,6 +38,7 @@
     "tool",
     "cmake",
     "from.source",
+    "compiled",
     "source"
   ],
   "variations": {
