@@ -12,7 +12,8 @@
       "*PACKAGE_SUB_DIR": "googletest-release-$<<GTEST_VERSION_MMR>>$",
       "*PACKAGE_SUB_DIR1": "googletest-release-$<<GTEST_VERSION_MMR>>$",
 
-      "PACKAGE_BUILD_TYPE": "cmake"
+      "PACKAGE_BUILD_TYPE": "cmake",
+      "CK_EXTRA_MISC_CXX_FLAGS": "-std=c++11"
     },
     "no_ver_in_suggested_path": "yes",
     "*version": "$<<GTEST_VERSION_MMR>>$"
