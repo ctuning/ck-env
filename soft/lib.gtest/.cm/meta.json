@@ -8,15 +8,13 @@
       "linux": 3,
       "win": 3
     },
-    "soft_file": {
-      "linux": "libgtest.a",
-      "win": "gtest.lib"
-    }
+    "soft_file_universal": "gtest$#sep#$gtest.h"
   },
   "deps": {},
-  "soft_name": "GTEST library",
+  "soft_name": "GoogleTest library",
   "tags": [
     "lib",
+    "googletest",
     "gtest"
   ]
 }
