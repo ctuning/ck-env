@@ -704,7 +704,7 @@ def list_variations(i):
     # merge all available variations into a set:
     variations_found = set()
     for entry_dict in r['lst']:
-        variations_found |= entry_dict['meta'].get('variations',{}).keys()
+        variations_found |= set(entry_dict['meta'].get('variations',{}).keys())
 
     # collect the matching ones into a list
     variations_found = [variation for variation in variations_found if variation.startswith(variation_prefix)]
