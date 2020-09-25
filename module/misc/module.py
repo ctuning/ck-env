@@ -658,6 +658,7 @@ def search_in_variations(i):
                    'module_uoa': module_uoa,
                    'add_meta':'yes',
                    'add_info':add_info,
+                   'download_tags':tags, # These tags are not influencing main functionality but used for auto-download of components from the CK platform
                    'filter_func_addr': tags_and_variations_merging_callback,
     })
 
