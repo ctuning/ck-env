@@ -22,6 +22,9 @@
     "list_repos": {
       "desc": "list repositories"
     },
+    "list_variations": {
+      "desc": "given a query of tags/variation and an optional variation_prefix, return a list of supported variations"
+    },
     "merge_dicts": {
       "desc": "merge dictionaries in 2 files"
     },

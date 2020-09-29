@@ -1582,6 +1582,20 @@ def resolve(i):
         if q.get('skip_from_bat','')!='yes':
            alternative_combined_env_script_body += individual_env_script_body
 
+        pass_tags_to = q.get('pass_matching_tags_to', {})
+        if pass_tags_to:
+            resolved_tags = dd['tags']
+            for tag_prefix in pass_tags_to:
+                matching_tags = ','.join( [ matching_tag for matching_tag in resolved_tags if matching_tag.startswith(tag_prefix) ] )
+                if matching_tags:
+                    matching_tags = ','+matching_tags
+
+                receiving_deps = pass_tags_to[tag_prefix]
+                if type(receiving_deps) != list:
+                    receiving_deps = [ receiving_deps ]
+                for receiving_dep in receiving_deps:
+                    deps[receiving_dep]['tags'] += matching_tags
+
     if o=='con':
        ck.out('  -----------------------------------')
 
