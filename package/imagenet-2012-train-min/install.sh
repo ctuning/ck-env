@@ -28,7 +28,7 @@ fi
 echo ""
 echo "Downloading ILSVRC'12 train dataset from '${IMAGENET_TRAIN_URL}' ..."
 
-wget -c ${IMAGENET_TRAIN_URL} -O ${IMAGENET_TRAIN_TAR}
+wget --no-check-certificate -c ${IMAGENET_TRAIN_URL} -O ${IMAGENET_TRAIN_TAR}
 if [ "${?}" != "0" ] ; then
   echo "Error: Downloading ILSVRC'12 train set from '${IMAGENET_TRAIN_URL}' failed!"
   exit 1

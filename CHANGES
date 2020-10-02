@@ -1,3 +1,6 @@
+* 2020.10.02 - [gfursin] added --no-check-certificate to several imagenet packages
+                         https://github.com/ctuning/ck/issues/126
+
 * 2020.09.25 - [gfursin] minor update in search_in_variations -> pass download_tags to list function 
                          for auto-download from the CK platform
 

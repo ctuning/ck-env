@@ -30,7 +30,7 @@ fi
 echo ""
 echo "Downloading ${DOWNLOAD_NAME} from '${FULL_URL}' ..."
 
-wget -c ${FULL_URL} -O ${FULL_PATH}
+wget --no-check-certificate -c ${FULL_URL} -O ${FULL_PATH}
 if [ "${?}" != "0" ] ; then
   echo "Error: Downloading ${DOWNLOAD_NAME} from '${FULL_URL}' failed!"
   exit 1

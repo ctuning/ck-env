@@ -29,7 +29,7 @@ fi
 echo ""
 echo "Downloading ILSVRC'12 validation dataset from '${IMAGENET_VAL_URL}' ..."
 
-wget -c ${IMAGENET_VAL_URL} -O ${IMAGENET_VAL_TAR}
+wget --no-check-certificate -c ${IMAGENET_VAL_URL} -O ${IMAGENET_VAL_TAR}
 if [ "${?}" != "0" ] ; then
   echo "Error: Downloading ILSVRC'12 validation set from '${IMAGENET_VAL_URL}' failed!"
   exit 1
