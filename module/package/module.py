@@ -592,7 +592,7 @@ def install(i):
 
     # Force version
     if force_version is not None:
-       ver = force_version
+       ver = cus['version'] = force_version
 
     pr_env['PACKAGE_VERSION']=ver
 
