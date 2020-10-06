@@ -1,3 +1,9 @@
+* 2020.10.02 - [gfursin] added --no-check-certificate to several imagenet packages
+                         https://github.com/ctuning/ck/issues/126
+
+* 2020.09.25 - [gfursin] minor update in search_in_variations -> pass download_tags to list function 
+                         for auto-download from the CK platform
+
 * 2020.04.22 - [gfursin] pass --rebuild to dependencies (see #104)
                          added LLVM 9.0.0 & 10.0.0
 
