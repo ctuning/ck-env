@@ -250,7 +250,7 @@ def install(i):
     rebuild=i.get('rebuild','')
     reinstall=i.get('reinstall','')
 
-    force_version = i.get('force_version')
+    force_version = i.get('force_version', '')
 
     # Check package description
     duoa=i.get('uoa','')
@@ -296,7 +296,7 @@ def install(i):
                  if rx['return']==0:
                     specific_version = q.get('meta',{}).get('customize',{}).get('version','')
                     supported_versions = q.get('meta',{}).get('customize',{}).get('supported_versions')
-                    if not specific_version and supported_versions and force_version is None:
+                    if not specific_version and supported_versions and force_version=='':
                         for s_version in supported_versions:
                             q_clone = copy.deepcopy( q )
                             q_clone['meta']['customize']['version'] = s_version
@@ -584,14 +584,14 @@ def install(i):
     # a package downloads specific file depending on the version
     # and it is also reflected in the installed path 
     # (see GCC universal installation)
-    if d.get('ask_version','')=='yes' and force_version is None:
+    if d.get('ask_version','')=='yes' and force_version=='':
        ck.out('')
        r=ck.inp({'text':'Enter version of the package you would like to install: '})
        if r['return']>0: return r
        ver=r['string'].strip()
 
     # Force version
-    if force_version is not None:
+    if force_version!='':
        ver = cus['version'] = force_version
 
     pr_env['PACKAGE_VERSION']=ver
