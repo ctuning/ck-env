@@ -1,7 +1,9 @@
 Fighting the software and hardware chaos
 ========================================
 
-*This project is hosted by the [cTuning foundation (non-profit R&D organization)](https://cTuning.org)*
+**All CK components for AI and ML are now collected in [one repository](https://github.com/ctuning/ai)!**
+
+*This project is hosted by the [cTuning foundation (non-profit R&D organization)](https://cTuning.org).*
 
 [![compatibility](https://github.com/ctuning/ck-guide-images/blob/master/ck-compatible.svg)](https://github.com/ctuning/ck)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
