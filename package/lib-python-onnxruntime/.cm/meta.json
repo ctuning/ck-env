@@ -2,8 +2,7 @@
   "check_exit_status": "yes",
   "customize": {
     "install_env": {
-      "PIP_INSTALL_OPTIONS": "--ignore-installed",
-      "PYTHON_PACKAGE_NAME": "onnxruntime"
+      "PIP_INSTALL_OPTIONS": "--ignore-installed"
     }
   },
   "deps": {
@@ -27,9 +26,27 @@
   "tags": [
     "lib",
     "python-package",
-    "onnxruntime",
-    "vmaster"
+    "onnxruntime"
   ],
+  "variations": {
+    "cpu": {
+        "on_by_default": "yes",
+        "extra_env": {
+          "PYTHON_PACKAGE_NAME": "onnxruntime"
+        },
+        "extra_customize": {
+          "package_extra_name": " (CPU)"
+        }
+    },
+    "gpu": {
+        "extra_env": {
+          "PYTHON_PACKAGE_NAME": "onnxruntime-gpu"
+        },
+        "extra_customize": {
+          "package_extra_name": " (GPU)"
+        }
+    }
+  },
   "template": "yes",
   "template_type": "Python library",
   "use_scripts_from_another_entry": {
