@@ -9,7 +9,7 @@
       "_NEW_EXTENSION": "rgbf32",
       "_SUBSET_FOF": "image_list.txt",
       "_SUBSET_OFFSET": "0",
-      "_SUBSET_VOLUME": ""
+      "_SUBSET_VOLUME": "500"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -77,7 +77,7 @@
       },
       "extra_env": {
         "_SUBSET_OFFSET": "0",
-        "_SUBSET_VOLUME": ""
+        "_SUBSET_VOLUME": "1"
       }
     },
     "first.20": {
@@ -104,16 +104,7 @@
       },
       "extra_env": {
         "_SUBSET_OFFSET": "0",
-        "_SUBSET_VOLUME": ""
-      }
-    },
-    "last.20": {
-      "extra_customize": {
-        "package_extra_name": " (last 20)"
-      },
-      "extra_env": {
-        "_SUBSET_OFFSET": "-20",
-        "_SUBSET_VOLUME": ""
+        "_SUBSET_VOLUME": "50000"
       }
     },
     "side.224": {

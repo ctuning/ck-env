@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     square_side             = int( os.environ['_INPUT_SQUARE_SIDE'] )
     offset                  = int( os.getenv('_SUBSET_OFFSET', 0) )
-    volume_str              = os.getenv('_SUBSET_VOLUME', '' )
+    volume                  = int( os.environ['_SUBSET_VOLUME'] )
     fof_name                = os.getenv('_SUBSET_FOF', 'fof.txt')
     data_type               = os.getenv('_DATA_TYPE', 'uint8')
     new_file_extension      = os.getenv('_NEW_EXTENSION', '')
@@ -78,10 +78,9 @@ if __name__ == '__main__':
         if offset<0:        # support offsets "from the right"
             offset += total_volume
 
-        volume = int(volume_str) if len(volume_str)>0 else total_volume-offset
-
         selected_filenames = sorted_filenames[offset:offset+volume]
 
+    assert len(selected_filenames) == volume
 
     output_filenames = preprocess_files(selected_filenames, source_dir, destination_dir, square_side, data_type, new_file_extension)
 
