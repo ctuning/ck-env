@@ -121,7 +121,7 @@ if __name__ == '__main__':
     convert_to_bgr          = os.getenv('_CONVERT_TO_BGR', '').lower() in ('yes', 'true', 'on', '1')
     audit_test03            = os.getenv('_AUDIT_TEST03', '').lower() in ('yes', 'true', 'on', '1')
     offset                  = int( os.getenv('_SUBSET_OFFSET', 0) )
-    volume_str              = os.getenv('_SUBSET_VOLUME', '' )
+    volume                  = int( os.environ['_SUBSET_VOLUME'] )
     fof_name                = os.getenv('_SUBSET_FOF', '')
     data_type               = os.getenv('_DATA_TYPE', '')
     new_file_extension      = os.getenv('_NEW_EXTENSION', '')
@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
     print(("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, AUD: {}, OFF: {}, VOL: '{}', FOF: {},"+
         " DTYPE: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, INTER: {}, IMG: {}").format(
-        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, audit_test03, offset, volume_str, fof_name,
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, audit_test03, offset, volume, fof_name,
         data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method, image_file) )
 
     if interpolation_method == 'INTER_AREA':
@@ -159,10 +159,9 @@ if __name__ == '__main__':
         if offset<0:        # support offsets "from the right"
             offset += total_volume
 
-        volume = int(volume_str) if len(volume_str)>0 else total_volume-offset
-
         selected_filenames = sorted_filenames[offset:offset+volume]
 
+    assert len(selected_filenames) == volume
 
     output_filenames = preprocess_files(
         selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr, audit_test03,
