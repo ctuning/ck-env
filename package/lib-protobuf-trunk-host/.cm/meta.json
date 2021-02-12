@@ -17,7 +17,7 @@
       "PACKAGE_URL": "https://github.com/google/protobuf"
     },
     "use_git_revision": "yes",
-    "version": "0"
+    "no_ver_in_suggested_path": "yes"
   },
   "deps": {
     "cmake": {
@@ -50,11 +50,59 @@
   "process_script": "install",
   "soft_uoa": "57c5f409aaf1ceed",
   "suggested_path": "lib-protobuf-host",
+  "variations": {
+    "vtrunk": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "master",
+        "PACKAGE_VERSION": "master"
+      }
+    },
+    "vmaster": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "master",
+        "PACKAGE_VERSION": "master"
+      }
+    },
+    "v3.14": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "v3.14.0",
+        "PACKAGE_VERSION": "3.14.0"
+      }
+    },
+    "v3.14.0": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "v3.14.0",
+        "PACKAGE_VERSION": "3.14.0"
+      }
+    },
+    "v3.13": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "v3.13.0",
+        "PACKAGE_VERSION": "3.13.0"
+      }
+    },
+    "v3.13.0": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "v3.13.0",
+        "PACKAGE_VERSION": "3.13.0"
+      }
+    },
+    "v3.12": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "v3.12.4",
+        "PACKAGE_VERSION": "3.12.4"
+      }
+    },
+    "v3.12.4": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "v3.12.4",
+        "PACKAGE_VERSION": "3.12.4"
+      }
+    }
+  },
   "tags": [
     "lib",
-    "protobuf-host",
-    "vtrunk",
-    "vmaster"
+    "protobuf-host"
   ],
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",
