@@ -144,7 +144,7 @@
     "full": {
       "extra_env": {
         "_SUBSET_OFFSET": "0",
-        "_SUBSET_VOLUME": "5000000"
+        "_SUBSET_VOLUME": "50000"
       },
       "extra_customize": {
         "package_extra_name": " (full)"

@@ -3,7 +3,7 @@
 supported_extensions = ['jpeg', 'jpg', 'gif', 'png']
 
 import os
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from preprocessing import vgg_preprocessing as prep
 
 tf.enable_eager_execution()     # execute commands immediately, instead of creating a graph and waiting for sess.run()
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
     print("From: {} , To: {} , Size: {} , OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, EXT: {}, IMG: {}".format(
-        source_dir, destination_dir, square_side, offset, volume_str, fof_name, data_type, new_file_extension, image_file) )
+        source_dir, destination_dir, square_side, offset, volume, fof_name, data_type, new_file_extension, image_file) )
 
     if image_file:
         source_dir          = os.path.dirname(image_file)

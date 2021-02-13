@@ -117,8 +117,8 @@ if __name__ == '__main__':
     new_file_extension      = os.getenv('_NEW_EXTENSION', '')
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
-    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, EXT: {}, IMG: {}".format(
-        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, offset, volume_str, fof_name, data_type, new_file_extension, image_file) )
+    print("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, OFF: {}, VOL: {}, FOF: {}, DTYPE: {}, EXT: {}, IMG: {}".format(
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, offset, volume, fof_name, data_type, new_file_extension, image_file) )
 
     if image_file:
         source_dir          = os.path.dirname(image_file)
