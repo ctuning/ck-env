@@ -40,11 +40,11 @@
         0
       ]
     },
-    "tensorflow-api": {
+    "tensorflowmodel-api": {
       "local": "yes",
-      "name": "TensorFlow API",
+      "name": "TensorFlow model API",
       "sort": 120,
-      "tags": "tensorflow,api"
+      "tags": "tensorflowmodel,api"
     },
     "python": {
       "local": "yes",
