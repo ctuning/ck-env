@@ -25,9 +25,10 @@
         }
       ],
       "local": "yes",
-      "name": "ImageNet dataset (original)",
+      "name": "ImageNet dataset (original or calibration)",
       "sort": 10,
-      "tags": "dataset,imagenet,original"
+      "tags": "dataset,imagenet",
+      "or_tags": "original;calibration"
     },
     "lib-tensorflow": {
       "local": "yes",
