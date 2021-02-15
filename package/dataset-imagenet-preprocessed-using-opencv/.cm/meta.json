@@ -23,9 +23,10 @@
         }
       ],
       "local": "yes",
-      "name": "ImageNet dataset (original)",
+      "name": "ImageNet dataset (original or calibration)",
       "sort": 10,
-      "tags": "dataset,imagenet,original",
+      "tags": "dataset,imagenet",
+      "or_tags": "original;calibration",
       "update_tags_if_env": {
         "full": [
           {
@@ -139,7 +140,6 @@
       }
     },
     "first.20": {
-      "on_by_default": "yes",
       "extra_customize": {
         "package_extra_name": " (first 20)"
       },
@@ -149,6 +149,7 @@
       }
     },
     "first.500": {
+      "on_by_default": "yes",
       "extra_customize": {
         "package_extra_name": " (first 500)"
       },
