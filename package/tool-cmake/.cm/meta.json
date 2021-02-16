@@ -42,6 +42,16 @@
     "source"
   ],
   "variations": {
+    "v3.19.5": {
+      "on_by_default": "yes",
+      "extra_env": {
+        "PACKAGE_URL_LINUX": "https://github.com/Kitware/CMake/releases/download/v3.19.5",
+        "PACKAGE_NAME_LINUX": "cmake-3.19.5.tar.gz",
+        "PACKAGE_NAME1_LINUX": "cmake-3.19.5.tar",
+        "PACKAGE_NAME2_LINUX": "cmake-3.19.5"
+      },
+      "version": "3.19.5"
+    },
     "v3.18.2": {
       "extra_env": {
         "PACKAGE_URL_LINUX": "https://github.com/Kitware/CMake/releases/download/v3.18.2",
@@ -49,8 +59,7 @@
         "PACKAGE_NAME1_LINUX": "cmake-3.18.2.tar",
         "PACKAGE_NAME2_LINUX": "cmake-3.18.2"
       },
-      "version": "3.18.2",
-      "on_by_default": "yes"
+      "version": "3.18.2"
     },
     "v3.17.4": {
       "extra_env": {
@@ -67,4 +76,3 @@
     "module_uoa": "script"
   }
 }
-
