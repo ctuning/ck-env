@@ -129,12 +129,13 @@ def annotations_to_labels(d, f, images_dir):
 
     for image_id, image_file in images.items():
         label_file = os.path.join(d, os.path.splitext(os.path.basename(image_file))[0] + '.txt')
-        with open(label_file, 'w') as lf:
-            for ann in images_anns[image_id]:
-                name = re.sub(r'\s+', '', categories[ann['category_id']])
-                bbox = ann['bbox']
-                xmin = bbox[0]
-                ymin = bbox[1]
-                xmax = xmin + bbox[2]
-                ymax = ymin + bbox[3]
-                lf.write(name + ' 0 0 0 ' + str(xmin) + ' ' + str(ymin) + ' ' + str(xmax) + ' ' + str(ymax) + '\n')
+        if not os.path.exists(label_file):
+            with open(label_file, 'w') as lf:
+                for ann in images_anns[image_id]:
+                    name = re.sub(r'\s+', '', categories[ann['category_id']])
+                    bbox = ann['bbox']
+                    xmin = bbox[0]
+                    ymin = bbox[1]
+                    xmax = xmin + bbox[2]
+                    ymax = ymin + bbox[3]
+                    lf.write(name + ' 0 0 0 ' + str(xmin) + ' ' + str(ymin) + ' ' + str(xmax) + ' ' + str(ymax) + '\n')
