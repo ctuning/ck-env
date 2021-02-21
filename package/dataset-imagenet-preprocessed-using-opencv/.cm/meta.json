@@ -108,17 +108,6 @@
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
       }
     },
-    "unmutilated": {
-      "on_by_default": "yes",
-      "extra_env": {
-        "_AUDIT_TEST03": ""
-      }
-    },
-    "audit.test03": {
-      "extra_env": {
-        "_AUDIT_TEST03": "YES"
-      }
-    },
     "crop.1000": {
       "extra_env": {
         "_CROP_FACTOR": "100.0"

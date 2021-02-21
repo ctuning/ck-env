@@ -14,7 +14,6 @@ def load_image(image_path,            # Full path to processing image
                data_type = 'uint8',   # Data type to store
                data_layout = 'nhwc',  # Data layout to store
                convert_to_bgr = False,# Swap image channel RGB -> BGR
-               audit_test03 = False,  # Wipe out the zero-th channel of the image
                interpolation_method = cv2.INTER_LINEAR # Interpolation method.
                ):
 
@@ -46,9 +45,6 @@ def load_image(image_path,            # Full path to processing image
 
     img = cv2.imread(image_path)
 
-    if audit_test03:    # NB: since Grayscale images only have a single channel, this operation will wipe the whole image
-        img[:,:,0] = 0
-
     if len(img.shape) < 3 or img.shape[2] != 3:
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
     else:
@@ -65,7 +61,7 @@ def load_image(image_path,            # Full path to processing image
     return img
 
 
-def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr, audit_test03,
+def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
     data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method):
     "Go through the selected_filenames and preprocess all the files (optionally normalize and subtract mean)"
 
@@ -82,7 +78,6 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
                               crop_percentage = crop_percentage,
                               data_type = data_type,
                               convert_to_bgr = convert_to_bgr,
-                              audit_test03 = audit_test03,
                               interpolation_method = interpolation_method)
 
         image_data = np.asarray(image_data, dtype=data_type)
@@ -124,7 +119,6 @@ if __name__ == '__main__':
     crop_percentage         = float( os.environ['_CROP_FACTOR'] )
     inter_size              = int( os.getenv('_INTERMEDIATE_SIZE', 0) )
     convert_to_bgr          = os.getenv('_CONVERT_TO_BGR', '').lower() in ('yes', 'true', 'on', '1')
-    audit_test03            = os.getenv('_AUDIT_TEST03', '').lower() in ('yes', 'true', 'on', '1')
     offset                  = int( os.getenv('_SUBSET_OFFSET', 0) )
     volume                  = int( os.environ['_SUBSET_VOLUME'] )
     fof_name                = os.getenv('_SUBSET_FOF', '')
@@ -141,9 +135,9 @@ if __name__ == '__main__':
 
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
-    print(("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, AUD: {}, OFF: {}, VOL: '{}', FOF: {},"+
+    print(("From: {}, To: {}, Size: {}, Crop: {}, InterSize: {}, 2BGR: {}, OFF: {}, VOL: '{}', FOF: {},"+
         " DTYPE: {}, DLAYOUT: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, INTER: {}, IMG: {}").format(
-        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, audit_test03, offset, volume, fof_name,
+        source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, offset, volume, fof_name,
         data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method, image_file) )
 
     if interpolation_method == 'INTER_AREA':
@@ -170,7 +164,7 @@ if __name__ == '__main__':
     assert len(selected_filenames) == volume
 
     output_filenames = preprocess_files(
-        selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr, audit_test03,
+        selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
         data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
