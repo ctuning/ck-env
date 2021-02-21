@@ -41,7 +41,7 @@
       "tags": "compiler,lang-python"
     }
   },
-  "end_full_path_universal": "000000000139.rgb8",
+  "end_full_path_universal": "original_dimensions.txt",
   "only_for_host_os_tags": [],
   "only_for_target_os_tags": [],
   "process_script": "shell_wrapper",
@@ -136,6 +136,23 @@
       "on_by_default": "yes",
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "300"
+      }
+    },
+    "for-ssd-resnet-onnx-preprocessed": {
+      "extra_env": {
+        "_DATA_LAYOUT": "NCHW",
+        "_DATA_TYPE": "float32",
+        "_NEW_EXTENSION": "rgbf32",
+        "_INPUT_SQUARE_SIDE": "1200",
+        "_NORMALIZE_DATA": "YES",
+        "_NORMALIZE_LOWER": "0.0",
+        "_NORMALIZE_UPPER": "1.0",
+        "_SUBTRACT_MEAN": "YES",
+        "_GIVEN_CHANNEL_MEANS": "0.485 0.456 0.406",
+        "_GIVEN_CHANNEL_STDS": "0.229 0.224 0.225"
+      },
+      "extra_customize": {
+        "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
       }
     }
   }

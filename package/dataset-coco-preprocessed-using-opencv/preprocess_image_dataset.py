@@ -11,10 +11,16 @@ import cv2
 
 
 # Load and preprocess image
-def load_image(image_path,            # Full path to processing image
-               target_size,           # Desired size of resulting image
-               data_type              # Data type to store
-               ):
+def load_image(image_path,                # Full path to processing image
+               target_size,               # Desired size of resulting image
+               data_type = 'uint8',       # Data type to store
+               convert_to_bgr = False,    # Swap image channel RGB -> BGR
+               normalize_data = False,    # Normalize the data   = os.getenv('_NORMALIZE_DATA') in ('YES', 'yes', 'ON', 'on', '1')
+               normalize_lower = -1,      # Normalize - lower limit
+               normalize_upper = 1,       # Normalize - upper limit
+               subtract_mean = False,     # Subtract mean
+               given_channel_means = ''   # Given channel means
+              ):
 
     image = cv2.imread(image_path)
 
@@ -33,17 +39,55 @@ def load_image(image_path,            # Full path to processing image
 
     image = cv2.resize(image, (target_size, target_size), interpolation=cv2.INTER_LINEAR)
 
-    # Conver to NumPy array
-    img_data = np.asarray(image, dtype=data_type)
+    # Convert to NumPy array
+    img = np.asarray(image, dtype=data_type)
+
+    if convert_to_bgr:
+        img = img[...,::-1]     # swapping Red and Blue colour channels
+
+    img = img.astype(np.float32)
+
+    # Normalize
+    if normalize_data:
+        img = img*(normalize_upper-normalize_lower)/255.0+normalize_lower
+
+    # Subtract mean value
+    if subtract_mean:
+        if len(given_channel_means):
+            img -= given_channel_means
+        else:
+            img -= np.mean(img, axis=(0,1), keepdims=True)
+
+    if len(given_channel_stds):
+        img /= given_channel_stds
+
+    if data_layout == 'NCHW':
+        img = img.transpose(2,0,1)
+    elif data_layout == 'CHW4':
+        img = np.pad(img, ((0,0), (0,0), (0,1)), 'constant')
+
+    img = np.asarray(img, dtype=data_type)
 
     # Make batch from single image
     batch_shape = (1, target_size, target_size, 3)
-    batch_data = img_data.reshape(batch_shape)
+    batch_data = img.reshape(batch_shape)
 
     return batch_data, original_width, original_height
 
 
-def preprocess_files(selected_filenames, source_dir, destination_dir, square_side, data_type, new_file_extension):
+def preprocess_files(selected_filenames,
+                     source_dir,
+                     destination_dir,
+                     square_side,
+                     data_type,
+                     convert_to_bgr,
+                     normalize_data,
+                     normalize_lower,
+                     normalize_upper,
+                     subtract_mean,
+                     given_channel_means,
+                     new_file_extension):
+
     "Go through the selected_filenames and preprocess all the files"
 
     output_signatures = []
@@ -54,8 +98,14 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, square_sid
         full_input_path     = os.path.join(source_dir, input_filename)
 
         image_data, original_width, original_height = load_image(image_path = full_input_path,
-                                                                target_size = square_side,
-                                                                data_type = data_type)
+                                                                 target_size = square_side,
+                                                                 data_type = data_type,
+                                                                 convert_to_bgr = convert_to_bgr,
+                                                                 normalize_data = normalize_data,
+                                                                 normalize_lower = normalize_lower,
+                                                                 normalize_upper = normalize_upper,
+                                                                 subtract_mean = subtract_mean,
+                                                                 given_channel_means = given_channel_means)
 
         output_filename = input_filename.rsplit('.', 1)[0] + '.' + new_file_extension if new_file_extension else input_filename
 
@@ -68,6 +118,11 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, square_sid
 
     return output_signatures
 
+
+## Internal processing:
+#
+INTERMEDIATE_DATA_TYPE  = np.float32    # default for internal conversion
+#INTERMEDIATE_DATA_TYPE  = np.int8       # affects the accuracy a bit
 
 if __name__ == '__main__':
     import sys
@@ -82,6 +137,29 @@ if __name__ == '__main__':
     data_type               = os.getenv('_DATA_TYPE', 'uint8')
     new_file_extension      = os.getenv('_NEW_EXTENSION', '')
     image_file              = os.getenv('CK_IMAGE_FILE', '')
+
+    data_layout             = os.getenv('_DATA_LAYOUT', 'NHWC')
+    convert_to_bgr          = os.getenv('_COLOUR_CHANNELS_BGR', 'NO') in ('YES', 'yes', 'ON', 'on', '1')
+    input_data_type         = os.getenv('_INPUT_DATA_TYPE', 'float32')
+
+    ## Image normalization:
+    #
+    normalize_data    = os.getenv('_NORMALIZE_DATA') in ('YES', 'yes', 'ON', 'on', '1')
+    normalize_lower   = float(os.getenv('_NORMALIZE_LOWER', -1.0))
+    normalize_upper   = float(os.getenv('_NORMALIZE_UPPER',  1.0))
+    subtract_mean           = os.getenv('_SUBTRACT_MEAN', 'NO') in ('YES', 'yes', 'ON', 'on', '1')
+    given_channel_means     = os.getenv('_GIVEN_CHANNEL_MEANS', '')
+    if given_channel_means:
+        given_channel_means = np.fromstring(given_channel_means, dtype=np.float32, sep=' ').astype(INTERMEDIATE_DATA_TYPE)
+        if convert_to_bgr:
+            given_channel_means = given_channel_means[::-1]     # swapping Red and Blue colour channels
+
+    given_channel_stds      = os.getenv('_GIVEN_CHANNEL_STDS', '')
+    if given_channel_stds:
+        given_channel_stds = np.fromstring(given_channel_stds, dtype=np.float32, sep=' ').astype(INTERMEDIATE_DATA_TYPE)
+        if convert_to_bgr:
+            given_channel_stds  = given_channel_stds[::-1]      # swapping Red and Blue colour channels
+
 
     print("From: {} , To: {} , Size: {} ,  OFF: {}, VOL: '{}', FOF: {}, DTYPE: {}, EXT: {}, IMG: {}".format(
         source_dir, destination_dir, square_side, offset, volume_str, fof_name, data_type, new_file_extension, image_file) )
@@ -116,7 +194,18 @@ if __name__ == '__main__':
         selected_filenames = ordered_filenames[offset:offset+volume]
 
 
-    output_signatures = preprocess_files(selected_filenames, source_dir, destination_dir, square_side, data_type, new_file_extension)
+    output_signatures = preprocess_files(selected_filenames,
+                                         source_dir,
+                                         destination_dir,
+                                         square_side,
+                                         data_type,
+                                         convert_to_bgr,
+                                         normalize_data,
+                                         normalize_lower,
+                                         normalize_upper,
+                                         subtract_mean,
+                                         given_channel_means,
+                                         new_file_extension)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
     with open(fof_full_path, 'w') as fof:
