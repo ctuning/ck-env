@@ -12,6 +12,7 @@ def load_image(image_path,            # Full path to processing image
                intermediate_size = 0, # Scale to this size then crop to target size
                crop_percentage = 87.5,# Crop to this percentage then scale to target size
                data_type = 'uint8',   # Data type to store
+               data_layout = 'nhwc',  # Data layout to store
                convert_to_bgr = False,# Swap image channel RGB -> BGR
                audit_test03 = False,  # Wipe out the zero-th channel of the image
                interpolation_method = cv2.INTER_LINEAR # Interpolation method.
@@ -65,7 +66,7 @@ def load_image(image_path,            # Full path to processing image
 
 
 def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr, audit_test03,
-    data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method):
+    data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method):
     "Go through the selected_filenames and preprocess all the files (optionally normalize and subtract mean)"
 
     output_filenames = []
@@ -97,6 +98,10 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
             else:
                 image_data -= np.mean(image_data)
 
+        # NHWC -> NCHW.
+        if data_layout == 'nchw':
+            image_data = image_data[:,:,0:3].transpose(2, 0, 1)
+
         output_filename = input_filename.rsplit('.', 1)[0] + '.' + new_file_extension if new_file_extension else input_filename
 
         full_output_path = os.path.join(destination_dir, output_filename)
@@ -124,6 +129,7 @@ if __name__ == '__main__':
     volume                  = int( os.environ['_SUBSET_VOLUME'] )
     fof_name                = os.getenv('_SUBSET_FOF', '')
     data_type               = os.getenv('_DATA_TYPE', '')
+    data_layout             = os.getenv('_DATA_LAYOUT', '').lower()
     new_file_extension      = os.getenv('_NEW_EXTENSION', '')
     normalize_data          = os.getenv('_NORMALIZE_DATA', '').lower() in ('yes', 'true', 'on', '1')
     subtract_mean           = os.getenv('_SUBTRACT_MEAN', '').lower() in ('yes', 'true', 'on', '1')
@@ -136,9 +142,9 @@ if __name__ == '__main__':
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
     print(("From: {} , To: {} , Size: {} , Crop: {} , InterSize: {} , 2BGR: {}, AUD: {}, OFF: {}, VOL: '{}', FOF: {},"+
-        " DTYPE: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, INTER: {}, IMG: {}").format(
+        " DTYPE: {}, DLAYOUT: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, INTER: {}, IMG: {}").format(
         source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, audit_test03, offset, volume, fof_name,
-        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method, image_file) )
+        data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method, image_file) )
 
     if interpolation_method == 'INTER_AREA':
         # Used for ResNet in pre_process_vgg.
@@ -165,7 +171,7 @@ if __name__ == '__main__':
 
     output_filenames = preprocess_files(
         selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr, audit_test03,
-        data_type, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method)
+        data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
     with open(fof_full_path, 'w') as fof:

@@ -82,7 +82,7 @@
         "soft_uoa": "dataset.imagenet.preprocessed"
       }
     },
-    "for-mobilenet": {
+    "for.mobilenet": {
       "extra_env": {
         "_DATA_TYPE": "float32",
         "_NEW_EXTENSION": "rgbf32",
@@ -95,7 +95,7 @@
         "soft_uoa": "dataset.imagenet.preprocessed.rgbf32"
       }
     },
-    "for-resnet": {
+    "for.resnet": {
       "extra_env": {
         "_DATA_TYPE": "float32",
         "_NEW_EXTENSION": "rgbf32",
@@ -211,6 +211,17 @@
     "side.300": {
       "extra_env": {
         "_INPUT_SQUARE_SIDE": "300"
+      }
+    },
+    "layout.nhwc": {
+      "on_by_default": "yes",
+      "extra_env": {
+        "_DATA_LAYOUT": "NHWC"
+      }
+    },
+    "layout.nchw": {
+      "extra_env": {
+        "_DATA_LAYOUT": "NCHW"
       }
     },
     "inter.linear": {
