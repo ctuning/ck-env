@@ -1,0 +1,20 @@
+{
+  "backup_data_uid": "007a10fd5130c835",
+  "backup_module_uid": "5e1100048ab875d7",
+  "backup_module_uoa": "soft",
+  "control": {
+    "author": "Krai Ltd",
+    "author_email": "info@krai.ai",
+    "author_webpage": "http://krai.ai",
+    "copyright": "Copyright (c) 2021 Krai Ltd.",
+    "engine": "CK",
+    "iso_datetime": "2021-02-24T16:16:43.675069",
+    "license": "TBC",
+    "version": [
+      "1",
+      "55",
+      "2"
+    ]
+  },
+  "data_name": "compiler.glow.profile"
+}
