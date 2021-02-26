@@ -8,8 +8,8 @@
       "win": 5
     },
     "soft_file_universal": "cv2$#sep#$__init__.py",
-    "detect_version_externally": "yes",
-    "version_variable_name": "__version__"
+    "version_module_name": "version",
+    "version_variable_name": "opencv_version"
   },
   "soft_name": "Python OpenCV library",
   "tags": [
