@@ -1,0 +1,42 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "ANNOTATION_URL": "http://images.cocodataset.org/annotations",
+      "IMAGE_URL": "http://images.cocodataset.org/zips",
+      "LABELS_DIR": "annotations",
+      "TRAINVAL_OBJ_INSTANCES_ARCHIVE": "annotations_trainval2017.zip",
+      "TRAIN_DIR": "train2017",
+      "TRAIN_IMAGE_ARCHIVE": "train2017.zip"
+    },
+    "instances_train_file": "instances_train2017.json",
+    "instances_val_file": "instances_val2017.json",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "2017"
+  },
+  "deps": {},
+  "end_full_path": {
+    "linux": "train2017/000000000009.jpg",
+    "win": "train2017/000000000009.jpg"
+  },
+  "need_cpu_info": "no",
+  "process_script": "install",
+  "soft_uoa": "9407fc540dd95069",
+  "suggested_path": "dataset-coco-2017-train",
+  "tags": [
+    "object-detection",
+    "dataset",
+    "coco",
+    "COCO",
+    "2017",
+    "coco.2017",
+    "COCO.2017",
+    "train",
+    "full",
+    "original",
+    "jpg",
+    "channel-stable"
+  ]
+}
