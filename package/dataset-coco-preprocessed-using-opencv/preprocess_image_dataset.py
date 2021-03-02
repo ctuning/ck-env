@@ -170,8 +170,9 @@ if __name__ == '__main__':
 
     else:
         annotations_filepath = os.getenv('CK_ENV_DATASET_ANNOTATIONS')
+        calibration = os.path.exists( os.path.join( os.getenv('CK_ENV_DATASET_IMAGE_DIR'), 'coco_cal_images_list.txt' ) )
 
-        if annotations_filepath:            # get the "coco-natural" filename order (not necessarily alphabetic)
+        if annotations_filepath and not calibration:  # get the "coco-natural" filename order (not necessarily alphabetic)
             with open(annotations_filepath, "r") as annotations_fh:
                 annotations_struct = json.load(annotations_fh)
 
