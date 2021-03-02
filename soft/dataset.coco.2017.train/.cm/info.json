@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "9407fc540dd95069",
+  "backup_module_uid": "5e1100048ab875d7",
+  "backup_module_uoa": "soft",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2021-03-02T11:58:21.917330",
+    "version": [
+      "1",
+      "55",
+      "2"
+    ]
+  },
+  "data_name": "dataset.coco.2017.train"
+}
