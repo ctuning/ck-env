@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "f72413287588725c",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2021-03-02T15:04:51.522185",
+    "version": [
+      "1",
+      "55",
+      "2"
+    ]
+  },
+  "data_name": "dataset-coco-calibration"
+}
