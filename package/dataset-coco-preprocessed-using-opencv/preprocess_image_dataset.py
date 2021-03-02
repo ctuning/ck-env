@@ -30,11 +30,11 @@ def load_image(image_path,                # Full path to processing image
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     original_height, original_width, _ = image.shape
-    
+
 #    image_id = ck_utils.filename_to_id(image_file, DATASET_TYPE)
 #    processed_image_ids.append(image_id)
 
-    # The array based representation of the image will be used later 
+    # The array based representation of the image will be used later
     # in order to prepare the result image with boxes and labels on it.
 
     image = cv2.resize(image, (target_size, target_size), interpolation=cv2.INTER_LINEAR)
