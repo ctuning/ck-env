@@ -62,7 +62,7 @@ def load_image(image_path,            # Full path to processing image
 
 
 def preprocess_files(selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
-    data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method):
+    data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, quantize, scale, offset, convert_to_unsigned, interpolation_method):
     "Go through the selected_filenames and preprocess all the files (optionally normalize and subtract mean)"
 
     output_filenames = []
@@ -96,6 +96,14 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
         # NHWC -> NCHW.
         if data_layout == 'nchw':
             image_data = image_data[:,:,0:3].transpose(2, 0, 1)
+        
+        # int8 quantization
+        if quantize == 1:
+            image_data = quantizeINT8(image_data, scale, offset)
+
+        # int8 to uint8
+        if convert_to_unsigned == 1:
+            image_data = int8_TO_uint8(image_data)
 
         output_filename = input_filename.rsplit('.', 1)[0] + '.' + new_file_extension if new_file_extension else input_filename
 
@@ -108,6 +116,24 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, crop_perce
 
     return output_filenames
 
+def quantizeINT8(image, scale, offset):
+    quan_image = (image/scale + offset).astype(np.float32)
+    output = np.copy(quan_image)
+    gtZero = (quan_image > 0).astype(int)
+    gtZero = gtZero * 0.5
+    output=output+gtZero
+    ltZero = (quan_image < 0).astype(int)
+    ltZero = ltZero * (-0.5)
+    output=output+ltZero
+    return output.astype(np.int8)
+
+def dequantize(image, scale, offset):
+    dequan_img = scale*(image-offset).astype(np.float32)
+    return dequan_img
+
+def int8_TO_uint8(image):
+    image = (image+128).astype(np.uint8)
+    return image
 
 if __name__ == '__main__':
     import sys
@@ -128,6 +154,11 @@ if __name__ == '__main__':
     normalize_data          = os.getenv('_NORMALIZE_DATA', '').lower() in ('yes', 'true', 'on', '1')
     subtract_mean           = os.getenv('_SUBTRACT_MEAN', '').lower() in ('yes', 'true', 'on', '1')
     given_channel_means     = os.getenv('_GIVEN_CHANNEL_MEANS', '')
+    scale                   = float( os.environ['_SCALE'] )
+    offset_quantize         = float( os.environ['_OFFSET'] )
+    quantize                = int( os.environ['_QUANTIZE'] )
+    convert_to_unsigned     = int( os.environ['_CONVERT_TO_UNSIGNED'] )
+    
     if given_channel_means:
         given_channel_means = [ float(x) for x in given_channel_means.split(' ') ]
 
@@ -136,9 +167,9 @@ if __name__ == '__main__':
     image_file              = os.getenv('CK_IMAGE_FILE', '')
 
     print(("From: {}, To: {}, Size: {}, Crop: {}, InterSize: {}, 2BGR: {}, OFF: {}, VOL: '{}', FOF: {},"+
-        " DTYPE: {}, DLAYOUT: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, INTER: {}, IMG: {}").format(
+        " DTYPE: {}, DLAYOUT: {}, EXT: {}, NORM: {}, SMEAN: {}, GCM: {}, QUANTIZE: {}, SCALE: {}, OFFSET_QUANT: {}, CONV_UNSIGNED: {}, INTER: {}, IMG: {}").format(
         source_dir, destination_dir, square_side, crop_percentage, inter_size, convert_to_bgr, offset, volume, fof_name,
-        data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method, image_file) )
+        data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, quantize, scale, offset_quantize, convert_to_unsigned, interpolation_method, image_file) )
 
     if interpolation_method == 'INTER_AREA':
         # Used for ResNet in pre_process_vgg.
@@ -165,7 +196,7 @@ if __name__ == '__main__':
 
     output_filenames = preprocess_files(
         selected_filenames, source_dir, destination_dir, crop_percentage, square_side, inter_size, convert_to_bgr,
-        data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, interpolation_method)
+        data_type, data_layout, new_file_extension, normalize_data, subtract_mean, given_channel_means, quantize, scale, offset_quantize, convert_to_unsigned, interpolation_method)
 
     fof_full_path = os.path.join(destination_dir, fof_name)
     with open(fof_full_path, 'w') as fof:
