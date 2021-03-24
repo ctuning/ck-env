@@ -1,3 +1,5 @@
+* 2021.03.24 - [sztaylor] fix cpu & gpu set_freq commands
+
 * 2020.10.02 - [gfursin] added --no-check-certificate to several imagenet packages
                          https://github.com/ctuning/ck/issues/126
 
