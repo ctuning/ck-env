@@ -1,3 +1,6 @@
+* 2021.04.16 - [gfursin] extended module:package to ask a user to select a variation 
+                         for a given package when there are multiple versions available.
+
 * 2021.03.24 - [sztaylor] fix cpu & gpu set_freq commands
 
 * 2020.10.02 - [gfursin] added --no-check-certificate to several imagenet packages
