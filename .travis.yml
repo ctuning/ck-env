@@ -7,22 +7,26 @@ language:   python
 python:
     - 2.7
     - 3.6
+    - 3.7
 
 env:
     matrix:
         - TRAVIS_CK_CXX_COMPILER=llvm
         - TRAVIS_CK_CXX_COMPILER=gcc
 
-matrix:
-    include:
-        - os: osx
-          language: generic
-          python:   2.7
-          env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=2.7
-        - os: osx
-          language: generic
-          python:   3.7
-          env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=3.7
+# gfursin: I have an issue with Travis: it takes ages to install deps and it fails
+#  need to find a solution at some point
+
+#matrix:
+#    include:
+#        - os: osx
+#          language: generic
+#          python:   2.7
+#          env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=2.7
+#        - os: osx
+#          language: generic
+#          python:   3.7
+#          env:      TRAVIS_CK_CXX_COMPILER=llvm WANTED_PYTHON_VERSION=3.7
 # Too slow installing (building) gcc or llvm
 #        - os: osx
 #          osx_image: xcode9.2
