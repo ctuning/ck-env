@@ -1,3 +1,5 @@
+* 2021.04.18 - [gfursin] added --quiet flag to automatically enter default anser to most questions.
+
 * 2021.04.16 - [gfursin] extended module:package to ask a user to select a variation 
                          for a given package when there are multiple versions available.
 
