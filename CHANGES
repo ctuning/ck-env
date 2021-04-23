@@ -1,3 +1,6 @@
+* 2021.04.23 - [gfursin] do not ask to select variations in "ck install package" 
+                         when there are 2 or more variations!
+
 * 2021.04.22 - [gfursin] added --force_version to "ck detect soft" to force version.
                          Useful to automate autodetection of imagenet, for example.
 
