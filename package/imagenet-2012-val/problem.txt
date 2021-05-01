@@ -1,14 +1,13 @@
 =============================================================================================
-Unfortunately, ImageNet 2012 validation set is no longer publicly available
+ImageNet 2012 validation set is no longer publicly available
 and this CK meta-package cannot automatically download it!
 
-See the related discussions:
-* https://cKnowledge.io/c/package/imagenet-2012-val
-* https://github.com/pytorch/vision/issues/1453
-* https://github.com/ctuning/ck-env/issues/101
-
-However, if you already have it installed on your machine, you can detect
+If you already have it installed on your machine, you can detect
 and register it to work with CK workflows using this command:
 
 $ ck detect soft:dataset.imagenet.val --search_dir={directory where the dataset is installed}
+
+You can also download it via Academic Torrents 
+at https://academictorrents.com/details/5d6d0df7ed81efd49ca99ea4737e0ae5e3a5f2e5
+and then register in the CK using above command
 =============================================================================================
