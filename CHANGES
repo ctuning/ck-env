@@ -1,3 +1,5 @@
+* 2021.05.02 - [gfursin] fixed a bug in module:package when reinstalling existing package
+
 * 2021.05.01 - [gfursin] print how to solve ImageNet 2012 installation issue
 
 * 2021.04.23 - [gfursin] do not ask to select variations in "ck install package" 
