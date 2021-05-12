@@ -5,7 +5,7 @@
     "extra_dir": "", 
     "install_env": {
       "IMAGENET_TRAIN_MD5": "bf3f7b41ca2ec88c2b7c44a5773e0d06", 
-      "IMAGENET_TRAIN_URL": "http://cKnowledge.org/ai/data/ILSVRC2012_img_train_min.tar"
+      "IMAGENET_TRAIN_URL": "https://www.dropbox.com/s/3w4uzmdeq5eb9o4/ILSVRC2012_img_train_min.tar"
     }, 
     "no_os_in_suggested_path": "yes", 
     "no_ver_in_suggested_path": "yes", 

@@ -5,7 +5,7 @@
     "extra_dir": "",
     "install_env": {
       "IMAGENET_VAL_MD5": "8627befdd8c2bcf305729020e9db354e",
-      "IMAGENET_VAL_URL": "http://cKnowledge.org/ai/data/ILSVRC2012_img_val_500_resized.tar"
+      "IMAGENET_VAL_URL": "https://www.dropbox.com/s/b0t0lj5ks1mpxxx/ILSVRC2012_img_val_500_resized.tar"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
