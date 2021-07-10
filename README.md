@@ -1,7 +1,7 @@
 Fighting the software and hardware chaos
 ========================================
 
-**All CK components for AI and ML are now collected in [one repository](https://github.com/ctuning/ai)!**
+**All CK components for AI and ML are now collected in [one repository](https://github.com/ctuning/ck-mlops)!**
 
 *This project is hosted by the [cTuning foundation (non-profit R&D organization)](https://cTuning.org).*
 
