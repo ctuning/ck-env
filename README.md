@@ -1,3 +1,5 @@
+***Note that this repository is outdated: we are now using the next generation of the MLCommons CK workflow automation meta-framework (Collective Mind aka CM) developed by the [open working group](https://github.com/mlcommons/ck/blob/master/docs/mlperf-education-workgroup.md). Feel free to [join this community effort](https://forms.gle/i5gCDtBC8gMtcvRw6) to learn how to modularize ML Systems and automate their benchmarking, optimization and deployment in the real world!***
+
 Fighting the software and hardware chaos
 ========================================
 
